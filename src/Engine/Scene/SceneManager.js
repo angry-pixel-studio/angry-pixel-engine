@@ -27,8 +27,6 @@ export default class SceneManager {
     }
 
     unloadCurrentScene() {
-        console.log('unloading');
-
         if (this.currentScene !== null) {
             this.currentScene.destroy();
             this.currentScene = null;

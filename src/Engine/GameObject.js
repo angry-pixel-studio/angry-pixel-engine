@@ -39,7 +39,7 @@ export default class GameObject {
     gameLoop() { }
 
     destroy() {
-        this.components.forEach(component, key => {
+        this.components.forEach((component, key) => {
             component.destroy();
             this.components[key] = null;
         });

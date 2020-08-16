@@ -38,7 +38,7 @@ export default class Scene {
     }
 
     destroy() {
-        this.gameObjects.forEach(object, key => {
+        this.gameObjects.forEach((object, key) => {
             object.destroy();
             this.gameObjects[key] = null;
         });
