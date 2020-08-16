@@ -19,6 +19,7 @@ export default class Scene {
             gameObject = gameObject();
         }
         
+        gameObject.scene = this;
         this.gameObjects = [...this.gameObjects, gameObject];
 
         return this;

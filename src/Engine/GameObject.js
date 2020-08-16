@@ -2,7 +2,8 @@ import Transform from "./Components/Transform";
 
 export default class GameObject {
     components = [];
-    transform = null
+    transform = null;
+    scene = null;
 
     constructor() {
         this.addComponent(() => new Transform(this, { position: { x: 0, y: 0 } }));
