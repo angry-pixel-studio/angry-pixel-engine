@@ -34,7 +34,5 @@ export default class CryptoMotorsRace extends Scene {
             // tool for finding circuit spots
             new SpotPointer()
         ]);
-
-        this.addGameObject(new Vehicle('image/vehicle1.png', circuit, 1.9))
     }
 }
