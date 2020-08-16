@@ -6,9 +6,7 @@ export default class Sandbox extends Scene {
     constructor(id, game) {
         super(id, game);
 
-        this.addGameObjects([
-            new Circuit('image/sun-peak.png'),
-            new Vehicle('image/vehicle1.png', 1.9)
-        ]);
+        this.addGameObject(() => new Circuit('image/sun-peak.png'))
+            .addGameObject(() => new Vehicle('image/vehicle1.png', 1.9));
     }
 }

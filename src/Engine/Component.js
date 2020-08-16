@@ -1,9 +1,3 @@
-export const
-    CAMERA = 'camera',
-    SPRITE_RENDERER = 'spriteRenderer',
-    TRANSFORM = 'transform'
-    ;
-
 export default class Component {
     gameObject = null;
 

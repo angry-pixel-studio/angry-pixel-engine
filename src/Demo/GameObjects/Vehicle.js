@@ -1,5 +1,4 @@
 import GameObject from "../../Engine/GameObject";
-import { SPRITE_RENDERER } from '../../Engine/Component';
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 
 export default class Vehicle extends GameObject {
@@ -9,13 +8,14 @@ export default class Vehicle extends GameObject {
     constructor(spritePath, speed) {
         super();
 
-        this.sprite.src = spritePath;
         this.speed = speed;
-
         this.transform.position.x = 50;
         this.transform.position.y = 50;
 
-        this.components[SPRITE_RENDERER] = new SpriteRenderer(this, { sprite: this.sprite });
+        let sprite = new Image();
+        sprite.src = spritePath;
+        
+        this.addComponent(() => new SpriteRenderer(this, {sprite: sprite}));
     }
 
     gameLoop(event) {
