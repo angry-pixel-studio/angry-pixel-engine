@@ -1,24 +1,21 @@
+import Input from "./Input/Input";
+import SceneManager from "./Scene/SceneManager";
+
 const CANVAS_ID = 'miniEngineCanvas';
 
 export default class Game {
-    canvas;
-    canvasContext;
-    mouse = {
-        position: {
-            x: 0,
-            y: 0
-        },
-        leftButtonPressed: false,
-        scrollButonPressed: false,
-        rightButtonPressed: false
-    }
+    canvas = null;
+    canvasContext = null;
+    input = null;
+    sceneManager = null;
 
     constructor(containerId, width, height) {
         this.createCanvas(document.getElementById(containerId), width, height);
         this.canvasContext = this.canvas.getContext('2d');
+        this.sceneManager = new SceneManager();
     }
 
-    createCanvas(container, width, height) {
+    createCanvas = (container, width, height) => {
         this.canvas = document.createElement('canvas');
         this.canvas.id = CANVAS_ID;
         this.canvas.width = width;
@@ -27,33 +24,17 @@ export default class Game {
         container.appendChild(this.canvas);
     }
 
-    run() {
-        this.canvas.addEventListener('mousemove', (e) => this.updateMousePosition(e), false);
-        this.canvas.addEventListener('mousedown', (e) => this.updateMouseDown(e));
-        this.canvas.addEventListener('mouseup', (e) => this.updateMouseUp(e));
+    addScene = (sceneId, sceneFunction, openingScene = false) => {
+        this.sceneManager.addScene(sceneId, sceneFunction, openingScene);
+    }
+
+    run = () => {
+        this.input = new Input(this);
+        this.sceneManager.loadOpeningScene();
         this.gameLoop();
     }
 
-    updateMouseDown(event) {
-        this.mouse.leftButtonPressed = event.button === 0;
-        this.mouse.scrollButonPressed = event.button === 1;
-        this.mouse.rightButtonPressed = event.button === 2;
-    }
-    
-    updateMouseUp(event) {
-        this.mouse.leftButtonPressed = event.button === 0 ? false : this.mouse.leftButtonPressed;
-        this.mouse.scrollButonPressed = event.button === 1 ? false : this.mouse.scrollButonPressed;
-        this.mouse.rightButtonPressed = event.button === 2 ? false : this.mouse.rightButtonPressed;
-    }
-
-    updateMousePosition(event) {
-        let rect = this.canvas.getBoundingClientRect();
-
-        this.mouse.position.x = event.clientX - rect.left;
-        this.mouse.position.y = event.clientY - rect.top;
-    }
-
-    gameLoop() {
+    gameLoop = () => {
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         window.dispatchEvent(new CustomEvent(
@@ -63,7 +44,7 @@ export default class Game {
                     game: this,
                     canvas: this.canvas,
                     canvasContext: this.canvasContext,
-                    mouse: this.mouse,
+                    input: this.input,
                 }
             }
         ));
@@ -71,5 +52,5 @@ export default class Game {
         window.requestAnimationFrame(() => this.gameLoop());
     }
 
-    
+
 }

@@ -1,6 +1,6 @@
-import GameObject from "./Engine/GameObject";
-import { SPRITE_RENDERER } from './Engine/Component';
-import SpriteRenderer from './Engine/Components/SpriteRenderer';
+import GameObject from "../../Engine/GameObject";
+import { SPRITE_RENDERER } from '../../Engine/Component';
+import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 
 export default class Vehicle extends GameObject {
     circuit;
@@ -26,16 +26,16 @@ export default class Vehicle extends GameObject {
         this.transform.position.x = this.currentSpot.x;
         this.transform.position.y = this.currentSpot.y;
 
-        this.components[SPRITE_RENDERER] = new SpriteRenderer(this, {sprite: this.sprite});
+        this.components[SPRITE_RENDERER] = new SpriteRenderer(this, { sprite: this.sprite });
     }
 
-    gameLoop = () => {
+    gameLoop = event => {
         this.updateCurrentAndNextSpot();
 
-        this.moveVehicle();
+        this.moveVehicle(event.input.keyboard);
     }
 
-    updateCurrentAndNextSpot() {
+    updateCurrentAndNextSpot = () => {
         let minX = this.nextSpot.x - 2;
         let maxX = this.nextSpot.x + 2;
         let minY = this.nextSpot.y - 2;
@@ -51,7 +51,27 @@ export default class Vehicle extends GameObject {
         }
     }
 
-    moveVehicle() {
+    /*moveVehicle = (keyboard) => {
+        let deltaX = 0;
+        let deltaY = 0;
+        
+        if (keyboard.isPressed('ArrowUp')) {
+            deltaY = -this.speed;
+        } else if (keyboard.isPressed('ArrowDown')) {
+            deltaY = this.speed;
+        }
+
+        if (keyboard.isPressed('ArrowLeft')) {
+            deltaX = -this.speed;
+        } else if (keyboard.isPressed('ArrowRight')) {
+            deltaX = +this.speed;
+        }
+        
+        this.transform.position.x += deltaX;
+        this.transform.position.y += deltaY;
+    }*/
+
+    moveVehicle = () => {
         let angle = Math.atan2(this.nextSpot.y - this.transform.position.y, this.nextSpot.x - this.transform.position.x);
 
         this.transform.position.x += Math.cos(angle) * this.speed;

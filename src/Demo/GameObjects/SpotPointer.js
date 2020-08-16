@@ -1,4 +1,4 @@
-import GameObject from "./Engine/GameObject";
+import GameObject from "../../Engine/GameObject";
 
 export default class SpotPointer extends GameObject {
     mousePressed = false;
@@ -8,7 +8,7 @@ export default class SpotPointer extends GameObject {
     }
 
     gameLoop = event => {
-        let mouse = event.mouse;
+        let mouse = event.input.mouse;
         
         if (mouse.leftButtonPressed && this.mousePressed === false) {
             console.log(mouse.position);

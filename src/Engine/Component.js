@@ -1,4 +1,5 @@
 export const
+    CAMERA = 'camera',
     SPRITE_RENDERER = 'spriteRenderer',
     TRANSFORM = 'transform'
 ;
