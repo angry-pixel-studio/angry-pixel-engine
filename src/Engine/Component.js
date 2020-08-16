@@ -2,7 +2,7 @@ export const
     CAMERA = 'camera',
     SPRITE_RENDERER = 'spriteRenderer',
     TRANSFORM = 'transform'
-;
+    ;
 
 export default class Component {
     gameObject = null;
@@ -10,10 +10,15 @@ export default class Component {
     constructor(gameObject) {
         this.gameObject = gameObject;
 
-        window.addEventListener('gameLoop', (e) => {
-            this.gameLoop(e.detail);
-        });
+        window.addEventListener('gameLoop', this.gameLoopEventHandler);
     }
 
-    gameLoop = event => {};
+    gameLoopEventHandler = event => this.gameLoop(event.detail);
+
+    gameLoop() { }
+
+    destroy() {
+        Object.keys(this).forEach(key => this[key] = null);
+        window.removeEventListener('gameLoop', this.gameLoopEventHandler);
+    }
 }

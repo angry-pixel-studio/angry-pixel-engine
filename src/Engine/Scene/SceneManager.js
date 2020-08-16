@@ -9,7 +9,7 @@ export default class SceneManager {
         this.game = game;
     }
 
-    addScene = (sceneId, sceneFunction, openingScene = false) => {
+    addScene(sceneId, sceneFunction, openingScene = false) {
         this.scenes[sceneId] = sceneFunction;
         
         if (openingScene === true || this.openingSceneId === null) {
@@ -17,17 +17,22 @@ export default class SceneManager {
         }
     }
 
-    loadOpeningScene = () => {
+    loadOpeningScene() {
         this.loadScene(this.openingSceneId);
     }
 
-    loadScene = sceneId => {
+    loadScene(sceneId) {
         this.unloadCurrentScene();
         this.currentScene = this.scenes[sceneId](sceneId, this.game);
     }
 
-    unloadCurrentScene = () => {
-        this.currentScene = null;
-        this.currentSceneId = null;
+    unloadCurrentScene() {
+        console.log('unloading');
+
+        if (this.currentScene !== null) {
+            this.currentScene.destroy();
+            this.currentScene = null;
+            this.currentSceneId = null;
+        }   
     }
 }

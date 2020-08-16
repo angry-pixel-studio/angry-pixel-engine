@@ -7,7 +7,7 @@ export default class SpotPointer extends GameObject {
         super();
     }
 
-    gameLoop = event => {
+    gameLoop(event) {
         let mouse = event.input.mouse;
         
         if (mouse.leftButtonPressed && this.mousePressed === false) {

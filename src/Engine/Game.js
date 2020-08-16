@@ -3,6 +3,12 @@ import SceneManager from "./Scene/SceneManager";
 
 const CANVAS_ID = 'miniEngineCanvas';
 
+(function () {
+    let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame;
+})();
+
 export default class Game {
     canvas = null;
     canvasContext = null;
@@ -15,7 +21,7 @@ export default class Game {
         this.sceneManager = new SceneManager();
     }
 
-    createCanvas = (container, width, height) => {
+    createCanvas(container, width, height) {
         this.canvas = document.createElement('canvas');
         this.canvas.id = CANVAS_ID;
         this.canvas.width = width;
@@ -24,17 +30,17 @@ export default class Game {
         container.appendChild(this.canvas);
     }
 
-    addScene = (sceneId, sceneFunction, openingScene = false) => {
+    addScene(sceneId, sceneFunction, openingScene = false) {
         this.sceneManager.addScene(sceneId, sceneFunction, openingScene);
     }
 
-    run = () => {
+    run() {
         this.input = new Input(this);
         this.sceneManager.loadOpeningScene();
         this.gameLoop();
     }
 
-    gameLoop = () => {
+    gameLoop() {
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         window.dispatchEvent(new CustomEvent(
@@ -42,6 +48,7 @@ export default class Game {
             {
                 detail: {
                     game: this,
+                    sceneManager: this.sceneManager,
                     canvas: this.canvas,
                     canvasContext: this.canvasContext,
                     input: this.input,
@@ -51,6 +58,4 @@ export default class Game {
 
         window.requestAnimationFrame(() => this.gameLoop());
     }
-
-
 }
