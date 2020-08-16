@@ -1,3 +1,5 @@
+import GameCamera from "../GameObjects/GameCamera";
+
 export default class Scene {
     game = null;
     id = null;
@@ -6,6 +8,8 @@ export default class Scene {
     constructor(id, game) {
         this.id = id;
         this.game = game;
+
+        this.addGameObject(() => new GameCamera());
 
         window.addEventListener('gameLoop', this.gameLoopEventHandler);
     }

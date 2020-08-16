@@ -35,6 +35,10 @@ export default class GameObject {
         return this.components;
     }
 
+    hasComponent(type) {
+        return this.getComponent(type) !== null;
+    }
+
     gameLoopEventHandler = event => this.gameLoop(event.detail);
 
     gameLoop() { }

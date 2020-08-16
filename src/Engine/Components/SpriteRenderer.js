@@ -2,10 +2,9 @@ import Component from '../Component';
 
 export default class SpriteRenderer extends Component {
     sprite = null;
-    loaded = false;
+    spriteLoaded = false;
     width = null;
     height = null;
-    gameObject = null;
 
     constructor(gameObject, config) {
         super(gameObject);
@@ -19,14 +18,7 @@ export default class SpriteRenderer extends Component {
         this.sprite.onload = () => {
             this.width = this.width === null ? this.sprite.naturalWidth : this.width;
             this.height = this.height === null ? this.sprite.naturalHeight : this.height;
-            this.loaded = true;
+            this.spriteLoaded = true;
         }
     }
-
-    gameLoop(e) {
-        if (this.loaded === true) {
-            let position = this.gameObject.transform.position;
-            e.canvasContext.drawImage(this.sprite, position.x, position.y, this.width, this.height);
-        }
-    };
 }
