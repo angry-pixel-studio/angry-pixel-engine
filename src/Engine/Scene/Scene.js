@@ -38,7 +38,7 @@ export default class Scene {
     }
 
     getGameObject(type) {
-        let objects = this.getGameObjects(type);
+        const objects = this.getGameObjects(type);
         return objects.length > 0 ? objects[0] : null;
     }
 

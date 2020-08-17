@@ -29,9 +29,9 @@ export default class Camera extends Component {
     }
 
     updateWorldCameraRect() {
-        let vpHalfWidth = (this.viewportRect.x2 - this.viewportRect.x1) / 2;
-        let vpHalfHeight = (this.viewportRect.y2 - this.viewportRect.y1) / 2;
-        let position = this.gameObject.transform.position;
+        const vpHalfWidth = (this.viewportRect.x2 - this.viewportRect.x1) / 2;
+        const vpHalfHeight = (this.viewportRect.y2 - this.viewportRect.y1) / 2;
+        const position = this.gameObject.transform.position;
 
         this.worldCameraRect.x1 = position.x - vpHalfWidth;
         this.worldCameraRect.x2 = position.x + vpHalfWidth;
@@ -50,8 +50,8 @@ export default class Camera extends Component {
     }
 
     renderGameObject(gameObject, canvasContext) {
-        let spriteRenderer = gameObject.getComponent(SpriteRenderer.name);
-        let viewportPosition= this.getGameObjectViewportPosition(gameObject);
+        const spriteRenderer = gameObject.getComponent(SpriteRenderer.name);
+        const viewportPosition= this.getGameObjectViewportPosition(gameObject);
 
         if (spriteRenderer.spriteLoaded === true) {
             canvasContext.drawImage(
@@ -65,7 +65,7 @@ export default class Camera extends Component {
     }
 
     getGameObjectViewportPosition(gameObject) {
-        let position = gameObject.transform.position;
+        const position = gameObject.transform.position;
 
         return {
             x: position.x - this.worldCameraRect.x1,

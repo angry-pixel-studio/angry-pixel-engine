@@ -12,7 +12,7 @@ export default class MovingCamera extends Component {
     }
 
     gameLoop(event)  {
-        let keyboard = event.input.keyboard;
+        const keyboard = event.input.keyboard;
         let deltaX = 0;
         let deltaY = 0;
         

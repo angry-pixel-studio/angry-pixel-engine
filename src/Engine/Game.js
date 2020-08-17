@@ -41,8 +41,8 @@ export default class Game {
     }
 
     gameLoop() {
-        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+        this.clearCanvas();
+        
         window.dispatchEvent(new CustomEvent(
             'gameLoop',
             {
@@ -57,5 +57,11 @@ export default class Game {
         ));
 
         window.requestAnimationFrame(() => this.gameLoop());
+    }
+
+    clearCanvas() {
+        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvasContext.fillStyle = '#000000';
+        this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }

@@ -1,11 +1,19 @@
 import Component from '../Component';
 
+export const
+    PIVOT_CENTER = 'center',
+    PIVOT_TOP_LEFT = 'topLeft',
+    PIVOT_TOP_RIGHT = 'topRight',
+    PIVOT_BOTTOM_LEFT = 'bottomLeft',
+    PIVOT_BOTTOM_RIGHT = 'bottomRight'
+;
+
 export default class SpriteRenderer extends Component {
     sprite = null;
     spriteLoaded = false;
     width = null;
     height = null;
-    pivot = 'center';
+    pivot = PIVOT_CENTER;
 
     constructor(gameObject, config) {
         super(gameObject);

@@ -23,7 +23,7 @@ export default class GameObject {
     }
 
     getComponent(type) {
-        let components = this.getComponents(type);
+        const components = this.getComponents(type);
         return components.length > 0 ? components[0] : null;
     }
 

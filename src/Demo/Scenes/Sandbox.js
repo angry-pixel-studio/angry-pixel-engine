@@ -4,6 +4,7 @@ import Vehicle from "../GameObjects/Vehicle";
 import SpotPointer from "../GameObjects/SpotPointer";
 import GameCamera from "../../Engine/GameObjects/GameCamera";
 import MovingCamera from "../Components/MovingCamera";
+import FollowPlayerCamera from "../Components/FollowPlayerCamera";
 
 export default class Sandbox extends Scene {
     constructor(id, game) {
@@ -13,7 +14,8 @@ export default class Sandbox extends Scene {
             .addGameObject(() => new Vehicle('image/vehicle1.png', 1.9))
             .addGameObject(() => new SpotPointer());
 
-        let camera = this.getGameObject(GameCamera.name);
-        camera.addComponent(() => new MovingCamera(camera));
+        const camera = this.getGameObject(GameCamera.name);
+        //camera.addComponent(() => new MovingCamera(camera));
+        camera.addComponent(() => new FollowPlayerCamera(camera));
     }
 }

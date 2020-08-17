@@ -9,17 +9,17 @@ export default class Vehicle extends GameObject {
         super();
 
         this.speed = speed;
-        this.transform.position.x = 200;
-        this.transform.position.y = 50;
+        this.transform.position.x = 0;
+        this.transform.position.y = 0;
 
-        let sprite = new Image();
+        const sprite = new Image();
         sprite.src = spritePath;
         
         this.addComponent(() => new SpriteRenderer(this, {sprite: sprite}));
     }
 
     gameLoop(event) {
-        //this.moveVehicle(event.input.keyboard);
+        this.moveVehicle(event.input.keyboard);
     }
 
     moveVehicle(keyboard) {
@@ -27,9 +27,9 @@ export default class Vehicle extends GameObject {
         let deltaY = 0;
         
         if (keyboard.isPressed('ArrowUp')) {
-            deltaY = -this.speed;
-        } else if (keyboard.isPressed('ArrowDown')) {
             deltaY = this.speed;
+        } else if (keyboard.isPressed('ArrowDown')) {
+            deltaY = -this.speed;
         }
 
         if (keyboard.isPressed('ArrowLeft')) {

@@ -28,7 +28,7 @@ export default class Mouse {
     }
 
     updatePosition(event) {
-        let rect = this.game.canvas.getBoundingClientRect();
+        const rect = this.game.canvas.getBoundingClientRect();
 
         this.viewportPosition.x = event.clientX - rect.left;
         this.viewportPosition.y = event.clientY - rect.top;
