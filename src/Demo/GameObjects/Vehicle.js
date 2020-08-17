@@ -9,7 +9,7 @@ export default class Vehicle extends GameObject {
         super();
 
         this.speed = speed;
-        this.transform.position.x = 50;
+        this.transform.position.x = 200;
         this.transform.position.y = 50;
 
         let sprite = new Image();

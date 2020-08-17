@@ -1,17 +1,18 @@
 export default class Mouse {
-    position = { x: 0, y: 0 };
+    viewportPosition = { x: 0, y: 0 };
+
     leftButtonPressed = false;
     scrollButonPressed = false;
     rightButtonPressed = false;
 
-    canvas = null;
+    game = null;
 
     constructor(game) {
-        this.canvas = game.canvas;
-
-        this.canvas.addEventListener('mousemove', e => this.updatePosition(e));
-        this.canvas.addEventListener('mousedown', e => this.updateButtonDown(e));
-        this.canvas.addEventListener('mouseup', e => this.updateButtonUp(e));
+        this.game = game;
+        
+        this.game.canvas.addEventListener('mousemove', e => this.updatePosition(e));
+        this.game.canvas.addEventListener('mousedown', e => this.updateButtonDown(e));
+        this.game.canvas.addEventListener('mouseup', e => this.updateButtonUp(e));
     }
 
     updateButtonDown(event) {
@@ -27,9 +28,9 @@ export default class Mouse {
     }
 
     updatePosition(event) {
-        let rect = this.canvas.getBoundingClientRect();
+        let rect = this.game.canvas.getBoundingClientRect();
 
-        this.position.x = event.clientX - rect.left;
-        this.position.y = event.clientY - rect.top;
+        this.viewportPosition.x = event.clientX - rect.left;
+        this.viewportPosition.y = event.clientY - rect.top;
     }
 }

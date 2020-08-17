@@ -5,15 +5,19 @@ export default class SpriteRenderer extends Component {
     spriteLoaded = false;
     width = null;
     height = null;
+    pivot = 'center';
 
     constructor(gameObject, config) {
         super(gameObject);
 
+        // required
         this.gameObject = gameObject;
         this.sprite = config.sprite;
 
-        this.width = config.width !== undefined ? config.width : null;
-        this.height = config.height !== undefined ? config.height : null;
+        // optional
+        this.width = config.width !== undefined ? config.width : this.width;
+        this.height = config.height !== undefined ? config.height : this.height;
+        this.pivot = config.pivot !== undefined ? config.pivot : this.pivot;
 
         this.sprite.onload = () => {
             this.width = this.width === null ? this.sprite.naturalWidth : this.width;
