@@ -1,5 +1,6 @@
 import Input from "./Input/Input";
 import SceneManager from "./Scene/SceneManager";
+import RenderManager from "./Rendering/RenderManager";
 
 const CANVAS_ID = 'miniEngineCanvas';
 
@@ -14,11 +15,13 @@ export default class Game {
     canvasContext = null;
     input = null;
     sceneManager = null;
+    renderManager = null;
 
     constructor(containerId, width, height) {
         this.createCanvas(document.getElementById(containerId), width, height);
         this.canvasContext = this.canvas.getContext('2d');
         this.sceneManager = new SceneManager();
+        this.renderManager = new RenderManager();
     }
 
     createCanvas(container, width, height) {
@@ -49,6 +52,7 @@ export default class Game {
                 detail: {
                     game: this,
                     sceneManager: this.sceneManager,
+                    renderManager: this.renderManager,
                     canvas: this.canvas,
                     canvasContext: this.canvasContext,
                     input: this.input,

@@ -17,7 +17,7 @@ export default class Camera extends Component {
         }
 
         this.updateWorldCameraRect();
-        this.renderGameObjects(event.canvasContext);
+        this.render(event.canvasContext, event.renderManager);
     }
 
     setupViewportRect(canvas) {
@@ -39,37 +39,38 @@ export default class Camera extends Component {
         this.worldCameraRect.y2 = position.y - vpHalfHeight;
     }
 
-    renderGameObjects(canvasContext) {
-        this.gameObject.scene
-            .getGameObjects()
-            .forEach(object => {
-                if (object.hasComponent(SpriteRenderer.name)) {
-                    this.renderGameObject(object, canvasContext);
+    render(canvasContext, renderManager) {
+        renderManager.getRenderStack().forEach(
+            renderData => {
+                if (renderData.image !== undefined && renderData.image !== null) {
+                    this.renderImage(renderData, canvasContext)
                 }
-            });
+            }
+        );
+        renderManager.clearRenderStack();
     }
 
-    renderGameObject(gameObject, canvasContext) {
-        const spriteRenderer = gameObject.getComponent(SpriteRenderer.name);
-        const viewportPosition= this.getGameObjectViewportPosition(gameObject);
-
-        if (spriteRenderer.spriteLoaded === true) {
+    renderImage(renderData, canvasContext) {
+        if (renderData.slice !== undefined && renderData.slice !== null) {
             canvasContext.drawImage(
-                spriteRenderer.sprite,
-                viewportPosition.x,
-                viewportPosition.y,
-                spriteRenderer.width,
-                spriteRenderer.height
+                renderData.slice.x1,
+                renderData.slice.y1,
+                renderData.slice.x2,
+                renderData.slice.y2,
+                renderData.image, // sprite
+                renderData.position.x - this.worldCameraRect.x1, // viewport position x
+                this.worldCameraRect.y1 - renderData.position.y, // viewport position y
+                renderData.width, // sprite width
+                renderData.height // sprite height
             );
-        }
-    }
-
-    getGameObjectViewportPosition(gameObject) {
-        const position = gameObject.transform.position;
-
-        return {
-            x: position.x - this.worldCameraRect.x1,
-            y: this.worldCameraRect.y1 - position.y
+        } else {
+            canvasContext.drawImage(
+                renderData.image, // sprite
+                renderData.position.x - this.worldCameraRect.x1, // viewport position x
+                this.worldCameraRect.y1 - renderData.position.y, // viewport position y
+                renderData.width, // sprite width
+                renderData.height // sprite height
+            );
         }
     }
 }

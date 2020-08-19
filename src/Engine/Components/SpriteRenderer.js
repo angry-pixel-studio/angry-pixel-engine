@@ -33,4 +33,15 @@ export default class SpriteRenderer extends Component {
             this.spriteLoaded = true;
         }
     }
+
+    gameLoop(event) {
+        if (this.spriteLoaded === true) {
+            event.renderManager.addToRenderStack({
+                image: this.sprite,
+                position: this.gameObject.transform.position,
+                width: this.width,
+                height: this.height
+            });
+        }
+    }
 }
