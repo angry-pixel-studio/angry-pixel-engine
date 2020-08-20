@@ -1,18 +1,13 @@
 import Component from '../Component';
-
-export const
-    PIVOT_CENTER = 'center',
-    PIVOT_TOP_LEFT = 'topLeft',
-    PIVOT_TOP_RIGHT = 'topRight',
-    PIVOT_BOTTOM_LEFT = 'bottomLeft',
-    PIVOT_BOTTOM_RIGHT = 'bottomRight'
-;
+import { PIVOT_CENTER } from '../Rendering/RenderPivots';
 
 export default class SpriteRenderer extends Component {
     sprite = null;
     spriteLoaded = false;
     width = null;
     height = null;
+    ofssetX = 0;
+    offsetY = 0;
     pivot = PIVOT_CENTER;
 
     constructor(gameObject, config) {
@@ -26,6 +21,8 @@ export default class SpriteRenderer extends Component {
         this.width = config.width !== undefined ? config.width : this.width;
         this.height = config.height !== undefined ? config.height : this.height;
         this.pivot = config.pivot !== undefined ? config.pivot : this.pivot;
+        this.offsetX = config.offsetX !== undefined ? config.offsetX : this.offsetX;
+        this.offsetY = config.offsetY !== undefined ? config.offsetY : this.offsetY;
 
         this.sprite.onload = () => {
             this.width = this.width === null ? this.sprite.naturalWidth : this.width;
@@ -38,9 +35,12 @@ export default class SpriteRenderer extends Component {
         if (this.spriteLoaded === true) {
             event.renderManager.addToRenderStack({
                 image: this.sprite,
+                pivot: this.pivot,
                 position: this.gameObject.transform.position,
                 width: this.width,
-                height: this.height
+                height: this.height,
+                offsetX: this.offsetX,
+                offsetY: this.offsetY
             });
         }
     }

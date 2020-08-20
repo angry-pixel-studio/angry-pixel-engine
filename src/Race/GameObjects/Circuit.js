@@ -1,13 +1,17 @@
 import GameObject from '../../Engine/GameObject';
-import SpriteRenderer, { PIVOT_TOP_LEFT } from '../../Engine/Components/SpriteRenderer';
+import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
+import { PIVOT_TOP_LEFT } from '../../Engine/Rendering/RenderPivots';
 
 export default class Circuit extends GameObject {
     width = 1600;
     height = 800;
+    spots = [];
 
-    constructor(spritePath) {
+    constructor(spritePath, spots) {
         super();
         
+        this.spots = spots;
+
         const sprite = new Image();
         sprite.src = spritePath;
 
@@ -18,7 +22,7 @@ export default class Circuit extends GameObject {
             sprite: sprite,
             width: this.width,
             height: this.height,
-            pivot: PIVOT_TOP_LEFT
+            pivot: PIVOT_TOP_LEFT,
         }));
     }
 }

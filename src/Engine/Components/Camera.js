@@ -1,5 +1,5 @@
 import Component from "../Component";
-import SpriteRenderer from "./SpriteRenderer";
+import { PIVOT_TOP_LEFT, PIVOT_CENTER } from "../Rendering/RenderPivots";
 
 const RECT = { x1: 0, x2: 0, y1: 0, y2: 0 };
 
@@ -51,6 +51,8 @@ export default class Camera extends Component {
     }
 
     renderImage(renderData, canvasContext) {
+        let renderPosition = this.calcuateRendrPosition(renderData);
+        
         if (renderData.slice !== undefined && renderData.slice !== null) {
             canvasContext.drawImage(
                 renderData.slice.x1,
@@ -58,19 +60,36 @@ export default class Camera extends Component {
                 renderData.slice.x2,
                 renderData.slice.y2,
                 renderData.image, // sprite
-                renderData.position.x - this.worldCameraRect.x1, // viewport position x
-                this.worldCameraRect.y1 - renderData.position.y, // viewport position y
+                renderPosition.x, // viewport position x
+                renderPosition.y, // viewport position y
                 renderData.width, // sprite width
                 renderData.height // sprite height
             );
         } else {
             canvasContext.drawImage(
                 renderData.image, // sprite
-                renderData.position.x - this.worldCameraRect.x1, // viewport position x
-                this.worldCameraRect.y1 - renderData.position.y, // viewport position y
+                renderPosition.x, // viewport position x
+                renderPosition.y, // viewport position y
                 renderData.width, // sprite width
                 renderData.height // sprite height
             );
         }
+    }
+
+    calcuateRendrPosition(renderData) {
+        // PIVOT_TOP_LEFT is the canvas default position
+        let renderPosition = { 
+            x: renderData.position.x - this.worldCameraRect.x1 + (renderData.offsetX !== undefined ? renderData.offsetX : 0),
+            y: this.worldCameraRect.y1 - renderData.position.y + (renderData.offsetY !== undefined ? renderData.offsetY : 0)
+        };
+        
+        switch (renderData.pivot) {
+            case PIVOT_CENTER:
+                renderPosition.x -= (Math.floor(renderData.width / 2));
+                renderPosition.y -= (Math.floor(renderData.height / 2));
+                break;
+        }
+
+        return renderPosition;
     }
 }

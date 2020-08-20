@@ -1,11 +1,11 @@
 import Game from './Engine/Game';
-import Sandbox from './Demo/Scenes/Sandbox';
+import Race from './Race/Scenes/Race';
 
 // Create the Game
 const game = new Game('app', 800, 400);
 
 // Add Sencenes
-game.addScene(Sandbox.name, (sceneId, game) => new Sandbox(sceneId, game));
+game.addScene(Race.name, (sceneId, game) => new Race(sceneId, game));
 
 // Run the game
 game.run();

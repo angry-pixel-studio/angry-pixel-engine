@@ -42,6 +42,15 @@ export default class Scene {
         return objects.length > 0 ? objects[0] : null;
     }
 
+    getGameObjectsByTag(tag) {
+        return this.gameObjects.filter(object => object.tag === tag);
+    }
+
+    getGameObjectByTag(tag) {
+        const objects = this.getGameObjectsByTag(tag);
+        return objects.length > 0 ? objects[0] : null;
+    }
+
     destroy() {
         this.gameObjects.forEach((object, key) => {
             object.destroy();

@@ -1,6 +1,7 @@
 import Transform from "./Components/Transform";
 
 export default class GameObject {
+    tag = null;
     components = [];
     transform = null;
     scene = null;
