@@ -5,20 +5,29 @@ import Circuit from "../GameObjects/Circuit";
 
 export default class FollowPlayerCamera extends Component {
     camera = null;
-    
+    vehicle = null;
+    circuit = null;
+
     constructor(gameObject) {
         super(gameObject);
 
         this.camera = gameObject.getComponent(Camera.name);
     }
 
-    gameLoop(event)  {
-        const vehicle = this.gameObject.scene.getGameObjectByTag('player');
-        const circuit = this.gameObject.scene.getGameObject(Circuit.name);
+    start() {
+        this.vehicle = this.gameObject.scene.getGameObjectByTag('player');
+        this.circuit = this.gameObject.scene.getGameObject(Circuit.name);
+    }
+
+    update(event)  {
+        let x = (this.circuit.width - event.canvas.width) / 2
+        let y = (this.circuit.height - event.canvas.height) / 2
+
+        x = x < 0 ? event.canvas.width / 2 : x;
+        y = x < 0 ? event.canvas.height / 2 : x;
         
-        // TODO: calcular los boundaries en base al tamaño del circuit y la mitad del viewport
-        this.gameObject.transform.position.x = this.clamp(vehicle.transform.position.x, -400, 400);
-        this.gameObject.transform.position.y = this.clamp(vehicle.transform.position.y, -200, 200);
+        this.gameObject.transform.position.x = this.clamp(this.vehicle.transform.position.x, -x, x);
+        this.gameObject.transform.position.y = this.clamp(this.vehicle.transform.position.y, -y, y);
     }
 
     clamp (number, min, max) {

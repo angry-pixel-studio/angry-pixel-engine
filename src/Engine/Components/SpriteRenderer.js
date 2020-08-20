@@ -9,6 +9,8 @@ export default class SpriteRenderer extends Component {
     ofssetX = 0;
     offsetY = 0;
     pivot = PIVOT_CENTER;
+    flipHorizontal = false;
+    flipVertical = false;
 
     constructor(gameObject, config) {
         super(gameObject);
@@ -31,7 +33,7 @@ export default class SpriteRenderer extends Component {
         }
     }
 
-    gameLoop(event) {
+    update(event) {
         if (this.spriteLoaded === true) {
             event.renderManager.addToRenderStack({
                 image: this.sprite,
@@ -40,7 +42,9 @@ export default class SpriteRenderer extends Component {
                 width: this.width,
                 height: this.height,
                 offsetX: this.offsetX,
-                offsetY: this.offsetY
+                offsetY: this.offsetY,
+                flipHorizontal: this.flipHorizontal,
+                flipVertical: this.flipVertical
             });
         }
     }

@@ -6,13 +6,13 @@ import SpotPointer from "../GameObjects/SpotPointer";
 import Vehicle from "../GameObjects/Vehicle";
 import raceData from "../race-result.json";
 
-const MAX_VELOCITY = 3;
+const BASE_VELOCITY = 3;
 const DELTA_VELOCITY = 0.1;
 
 export default class Sandbox extends Scene {
     raceData = null;
     currentLapData = {};
-    player = 'a6ec8a';
+    player = 'Player';
 
     constructor(id, game) {
         super(id, game);
@@ -86,7 +86,7 @@ export default class Sandbox extends Scene {
                 0
             );
 
-        vehicle.speed = MAX_VELOCITY + (currentLapData.position - nextPosition) * DELTA_VELOCITY;
+        vehicle.speed = BASE_VELOCITY + (currentLapData.position - nextPosition) * DELTA_VELOCITY;
 
         this.currentLapData[vehicle.username].speed = vehicle.speed;
         this.currentLapData[vehicle.username].lap += 1;

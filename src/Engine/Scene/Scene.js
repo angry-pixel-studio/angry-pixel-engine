@@ -1,4 +1,5 @@
 import GameCamera from "../GameObjects/GameCamera";
+import { EVENT_START, EVENT_UPDATE } from "../Game";
 
 export default class Scene {
     game = null;
@@ -11,12 +12,21 @@ export default class Scene {
 
         this.addGameObject(() => new GameCamera());
 
-        window.addEventListener('gameLoop', this.gameLoopEventHandler);
+        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
-    gameLoopEventHandler = event => this.gameLoop(event.detail);
+    gameLoopEventHandler = event => {
+        if (event.type === EVENT_START) {
+            this.start(event.detail);
+        } else if (event.type === EVENT_UPDATE) {
+            this.update(event.detail);
+        }
+    }
 
-    gameLoop() { }
+    start() { }
+
+    update() { }
 
     addGameObject(gameObject) {
         if (typeof gameObject === 'function') {

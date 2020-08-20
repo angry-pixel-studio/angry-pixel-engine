@@ -6,11 +6,13 @@ export const TAG_PLAYER = 'player';
 
 const PLAYER_SPRITE = 'image/vehicle1.png';
 const RIVAL_SPRITE = 'image/vehicle2.png';
+const SPOT_RADIUS = 2;
 
 export default class Vehicle extends GameObject {
     sprite = new Image();
     speed = 0;
     stop = false;
+    direction = 1;
 
     // Circuit spots
     circuitSpots = null;
@@ -33,27 +35,31 @@ export default class Vehicle extends GameObject {
         this.addComponent(() => new SpriteRenderer(this, {sprite: sprite, offsetY: isPlayer ? -5 : 0}));
     }
 
-    gameLoop = () => {
-        if (this.circuitSpots === null) {
-            this.circuitSpots = this.scene.getGameObject(Circuit.name).spots;
-            this.currentSpot = this.circuitSpots[this.nextSpotIndex];
-            this.nextSpot = this.circuitSpots[this.nextSpotIndex];
+    start() {
+        this.circuitSpots = this.scene.getGameObject(Circuit.name).spots;
+        this.currentSpot = this.circuitSpots[this.nextSpotIndex];
+        this.nextSpot = this.circuitSpots[this.nextSpotIndex];
 
-            this.transform.position.x = this.currentSpot.x;
-            this.transform.position.y = this.currentSpot.y;
-        }
+        this.transform.position.x = this.currentSpot.x;
+        this.transform.position.y = this.currentSpot.y;
+    }
 
+    update () {
         this.updateCurrentAndNextSpot();
 
         this.moveVehicle();
+
+        this.getComponent(SpriteRenderer.name).flipHorizontal = this.direction < 0;
     }
 
-    updateCurrentAndNextSpot = () => {
-        let minX = this.nextSpot.x - 2;
-        let maxX = this.nextSpot.x + 2;
-        let minY = this.nextSpot.y - 2;
-        let maxY = this.nextSpot.y + 2;
+    updateCurrentAndNextSpot() {
+        let minX = this.nextSpot.x - SPOT_RADIUS;
+        let maxX = this.nextSpot.x + SPOT_RADIUS;
+        let minY = this.nextSpot.y - SPOT_RADIUS;
+        let maxY = this.nextSpot.y + SPOT_RADIUS;
         let position = this.transform.position;
+
+        this.direction = this.nextSpot.x > position.x ? -1 : 1;
 
         if (position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY) {
             if (this.nextSpotIndex === 0) {
@@ -67,7 +73,7 @@ export default class Vehicle extends GameObject {
         }
     }
 
-    moveVehicle = () => {
+    moveVehicle () {
         if (this.stop === true) {
             this.speed -= 0.05;
             

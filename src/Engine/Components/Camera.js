@@ -11,10 +11,11 @@ export default class Camera extends Component {
         super(gameObject);
     }
 
-    gameLoop(event) {
-        if (this.viewportRect === null) {
-            this.setupViewportRect(event.canvas);
-        }
+    start(event) {
+        this.setupViewportRect(event.canvas);
+    }
+
+    update(event) {
 
         this.updateWorldCameraRect();
         this.render(event.canvasContext, event.renderManager);
@@ -53,6 +54,10 @@ export default class Camera extends Component {
     renderImage(renderData, canvasContext) {
         let renderPosition = this.calcuateRendrPosition(renderData);
         
+        canvasContext.save();
+        
+        canvasContext.translate(renderPosition.x, renderPosition.y)
+
         if (renderData.slice !== undefined && renderData.slice !== null) {
             canvasContext.drawImage(
                 renderData.slice.x1,
@@ -60,20 +65,22 @@ export default class Camera extends Component {
                 renderData.slice.x2,
                 renderData.slice.y2,
                 renderData.image, // sprite
-                renderPosition.x, // viewport position x
-                renderPosition.y, // viewport position y
+                0, // viewport position x
+                0, // viewport position y
                 renderData.width, // sprite width
                 renderData.height // sprite height
             );
         } else {
             canvasContext.drawImage(
                 renderData.image, // sprite
-                renderPosition.x, // viewport position x
-                renderPosition.y, // viewport position y
+                0, // viewport position x
+                0, // viewport position y
                 renderData.width, // sprite width
                 renderData.height // sprite height
             );
         }
+
+        canvasContext.restore();
     }
 
     calcuateRendrPosition(renderData) {

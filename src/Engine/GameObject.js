@@ -1,4 +1,5 @@
 import Transform from "./Components/Transform";
+import { EVENT_START, EVENT_UPDATE } from "./Game";
 
 export default class GameObject {
     tag = null;
@@ -10,8 +11,21 @@ export default class GameObject {
         this.addComponent(() => new Transform(this, { position: { x: 0, y: 0 } }));
         this.transform = this.getComponent(Transform.name);
 
-        window.addEventListener('gameLoop', this.gameLoopEventHandler);
+        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
+
+    gameLoopEventHandler = event => {
+        if (event.type === EVENT_START) {
+            this.start(event.detail);
+        } else if (event.type === EVENT_UPDATE) {
+            this.update(event.detail);
+        }
+    }
+
+    start() { }
+
+    update() { }
 
     addComponent(component) {
         if (typeof component === 'function') {
@@ -39,10 +53,6 @@ export default class GameObject {
     hasComponent(type) {
         return this.getComponent(type) !== null;
     }
-
-    gameLoopEventHandler = event => this.gameLoop(event.detail);
-
-    gameLoop() { }
 
     destroy() {
         this.components.forEach((component, key) => {

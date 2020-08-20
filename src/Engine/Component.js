@@ -1,15 +1,27 @@
+import { EVENT_START, EVENT_UPDATE } from "./Game";
+
 export default class Component {
     gameObject = null;
 
     constructor(gameObject) {
         this.gameObject = gameObject;
 
-        window.addEventListener('gameLoop', this.gameLoopEventHandler);
+        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+        this.gameLoopEventHandler.bind(this);
     }
 
-    gameLoopEventHandler = event => this.gameLoop(event.detail);
+    gameLoopEventHandler = event => {
+        if (event.type === EVENT_START) {
+            this.start(event.detail);
+        } else if (event.type === EVENT_UPDATE) {
+            this.update(event.detail);
+        }
+    }
 
-    gameLoop() { }
+    start() { }
+
+    update() { }
 
     destroy() {
         Object.keys(this).forEach(key => this[key] = null);

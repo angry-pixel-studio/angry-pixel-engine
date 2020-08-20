@@ -2,7 +2,7 @@ import Game from './Engine/Game';
 import Race from './Race/Scenes/Race';
 
 // Create the Game
-const game = new Game('app', 800, 400);
+const game = new Game('app', 900, 506);
 
 // Add Sencenes
 game.addScene(Race.name, (sceneId, game) => new Race(sceneId, game));
