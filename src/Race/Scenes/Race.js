@@ -20,38 +20,35 @@ export default class Sandbox extends Scene {
         this.raceData = raceData;
 
         const spots = [
-            { x: -106, y: -118 },
-            { x: -580, y: -93 },
-            { x: -620, y: -74 },
-            { x: -572, y: -59 },
-            { x: -155, y: -63 },
-            { x: -93, y: -44 },
-            { x: -139, y: -22 },
-            { x: -402, y: -15 },
-            { x: -452, y: 10 },
-            { x: -306, y: 83 },
-            { x: -244, y: 84 },
-            { x: -23, y: 14 },
-            { x: 70, y: 29 },
-            { x: 100, y: 66 },
-            { x: 103, y: 106 },
-            { x: 186, y: 131 },
-            { x: 384, y: 127 },
-            { x: 445, y: 107 },
-            { x: 309, y: -79 },
-            { x: 209, y: -125 },
-            { x: 137, y: -133 }
+            {x: -38, y: -157},
+            {x: -341, y: -128},
+            {x: -382, y: -103},
+            {x: -343, y: -78},
+            {x: -85, y: -81},
+            {x: -38, y: -52},
+            {x: -74, y: -29},
+            {x: -235, y: -22},
+            {x: -271, y: 13},
+            {x: -150, y: 114},
+            {x: 19, y: 14},
+            {x: 71, y: 42},
+            {x: 89, y: 83},
+            {x: 93, y: 135},
+            {x: 147, y: 172},
+            {x: 290, y: 164},
+            {x: 316, y: 123},
+            {x: 206, y: -134},
+            {x: 118, y: -173}
         ];
 
-        this.addGameObject(() => new Circuit('image/sun-peak.png', spots))
+        this.addGameObject(() => new Circuit('image/sunpeak.png', spots))
             .addGameObject(() => new SpotPointer());
 
         this.setupVehicles();
         //this.startRace();
 
         const camera = this.getGameObject(GameCamera.name);
-        camera.addComponent(() => new FollowPlayerCamera(camera));
-        //camera.addComponent(() => new MovingCamera(camera));
+        //camera.addComponent(() => new FollowPlayerCamera(camera));
     }
 
     setupVehicles() {

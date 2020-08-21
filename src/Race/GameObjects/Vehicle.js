@@ -4,8 +4,8 @@ import Circuit from "./Circuit";
 
 export const TAG_PLAYER = 'player';
 
-const PLAYER_SPRITE = 'image/vehicle1.png';
-const RIVAL_SPRITE = 'image/vehicle2.png';
+const PLAYER_SPRITE = 'image/circle-player.png';
+const RIVAL_SPRITE = 'image/circle-rival.png';
 const SPOT_RADIUS = 2;
 
 export default class Vehicle extends GameObject {
@@ -29,10 +29,10 @@ export default class Vehicle extends GameObject {
 
         const sprite = new Image();
         sprite.src = isPlayer ? PLAYER_SPRITE : RIVAL_SPRITE;
-        
+
         this.username = username,
 
-        this.addComponent(() => new SpriteRenderer(this, {sprite: sprite, offsetY: isPlayer ? -5 : 0}));
+            this.addComponent(() => new SpriteRenderer(this, { sprite: sprite }));
     }
 
     start() {
@@ -44,7 +44,7 @@ export default class Vehicle extends GameObject {
         this.transform.position.y = this.currentSpot.y;
     }
 
-    update () {
+    update() {
         this.updateCurrentAndNextSpot();
 
         this.moveVehicle();
@@ -73,13 +73,13 @@ export default class Vehicle extends GameObject {
         }
     }
 
-    moveVehicle () {
+    moveVehicle() {
         if (this.stop === true) {
             this.speed -= 0.05;
-            
+
             if (this.speed <= 0) {
                 this.speed = 0;
-                this.stop =  false;
+                this.stop = false;
             }
         }
 
