@@ -5,6 +5,7 @@ import Circuit from "../GameObjects/Circuit";
 import SpotPointer from "../GameObjects/SpotPointer";
 import Vehicle from "../GameObjects/Vehicle";
 import raceData from "../race-result.json";
+import CIRCUITS from "../Config/Circuits";
 
 const BASE_VELOCITY = 3;
 const DELTA_VELOCITY = 0.1;
@@ -14,41 +15,20 @@ export default class Sandbox extends Scene {
     currentLapData = {};
     player = 'Player';
 
-    constructor(id, game) {
-        super(id, game);
+    constructor() {
+        super();
 
         this.raceData = raceData;
 
-        const spots = [
-            {x: -38, y: -157},
-            {x: -341, y: -128},
-            {x: -382, y: -103},
-            {x: -343, y: -78},
-            {x: -85, y: -81},
-            {x: -38, y: -52},
-            {x: -74, y: -29},
-            {x: -235, y: -22},
-            {x: -271, y: 13},
-            {x: -150, y: 114},
-            {x: 19, y: 14},
-            {x: 71, y: 42},
-            {x: 89, y: 83},
-            {x: 93, y: 135},
-            {x: 147, y: 172},
-            {x: 290, y: 164},
-            {x: 316, y: 123},
-            {x: 206, y: -134},
-            {x: 118, y: -173}
-        ];
+        const circuitSpots = CIRCUITS[raceData.circuitUuid].spots;
+        const circuitImage = CIRCUITS[raceData.circuitUuid].image;
 
-        this.addGameObject(() => new Circuit('image/sunpeak.png', spots))
+        this.addGameObject(() => new Circuit(circuitImage, circuitSpots))
             .addGameObject(() => new SpotPointer());
 
         this.setupVehicles();
-        //this.startRace();
 
         const camera = this.getGameObject(GameCamera.name);
-        //camera.addComponent(() => new FollowPlayerCamera(camera));
     }
 
     setupVehicles() {

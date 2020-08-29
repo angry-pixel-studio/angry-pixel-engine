@@ -6,10 +6,7 @@ export default class Scene {
     id = null;
     gameObjects = [];
 
-    constructor(id, game) {
-        this.id = id;
-        this.game = game;
-
+    constructor() {
         this.addGameObject(() => new GameCamera());
 
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);

@@ -5,7 +5,7 @@ import Race from './Race/Scenes/Race';
 const game = new Game('app', 900, 502);
 
 // Add Sencenes
-game.addScene(Race.name, (sceneId, game) => new Race(sceneId, game));
+game.addScene(Race.name, () => new Race());
 
 // Run the game
 game.run();

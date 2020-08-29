@@ -24,6 +24,8 @@ export default class SceneManager {
     loadScene(sceneId) {
         this.unloadCurrentScene();
         this.currentScene = this.scenes[sceneId](sceneId, this.game);
+        this.currentScene.id = sceneId;
+        this.currentScene.game = this.game;
     }
 
     unloadCurrentScene() {
