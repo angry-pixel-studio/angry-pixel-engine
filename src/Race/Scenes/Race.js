@@ -1,6 +1,5 @@
 import GameCamera from "../../Engine/GameObjects/GameCamera";
 import Scene from "../../Engine/Scene/Scene";
-import FollowPlayerCamera from "../Components/FollowPlayerCamera";
 import Circuit from "../GameObjects/Circuit";
 import SpotPointer from "../GameObjects/SpotPointer";
 import Vehicle from "../GameObjects/Vehicle";
@@ -10,7 +9,7 @@ import CIRCUITS from "../Config/Circuits";
 const BASE_VELOCITY = 3;
 const DELTA_VELOCITY = 0.1;
 
-export default class Sandbox extends Scene {
+export default class Race extends Scene {
     raceData = null;
     currentLapData = {};
     player = 'Player';
@@ -27,8 +26,6 @@ export default class Sandbox extends Scene {
             .addGameObject(() => new SpotPointer());
 
         this.setupVehicles();
-
-        const camera = this.getGameObject(GameCamera.name);
     }
 
     setupVehicles() {

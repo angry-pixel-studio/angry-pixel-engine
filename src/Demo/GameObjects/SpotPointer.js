@@ -7,7 +7,7 @@ export default class SpotPointer extends GameObject {
     camera = null;
     vpPos = null;
 
-    gameLoop(event) {
+    update(event) {
         const mouse = event.input.mouse;
         
         if (mouse.leftButtonPressed && this.mousePressed === false) {

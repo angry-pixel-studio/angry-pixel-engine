@@ -3,10 +3,7 @@ import { PIVOT_CENTER } from '../Rendering/RenderPivots';
 
 export default class SpriteRenderer extends Component {
     sprite = null;
-    spriteLoaded = false;
-    width = null;
-    height = null;
-    ofssetX = 0;
+    offsetX = 0;
     offsetY = 0;
     pivot = PIVOT_CENTER;
     flipHorizontal = false;
@@ -20,27 +17,23 @@ export default class SpriteRenderer extends Component {
         this.sprite = config.sprite;
 
         // optional
-        this.width = config.width !== undefined ? config.width : this.width;
-        this.height = config.height !== undefined ? config.height : this.height;
-        this.pivot = config.pivot !== undefined ? config.pivot : this.pivot;
-        this.offsetX = config.offsetX !== undefined ? config.offsetX : this.offsetX;
-        this.offsetY = config.offsetY !== undefined ? config.offsetY : this.offsetY;
-
-        this.sprite.onload = () => {
-            this.width = this.width === null ? this.sprite.naturalWidth : this.width;
-            this.height = this.height === null ? this.sprite.naturalHeight : this.height;
-            this.spriteLoaded = true;
-        }
+        this.pivot = config.pivot ? config.pivot : this.pivot;
+        this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
+        this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
+        this.smooth = config.smooth ? config.smooth : this.smooth
     }
 
     update(event) {
-        if (this.spriteLoaded === true) {
+        if (this.sprite.loaded === true) {
+            
             event.renderManager.addToRenderStack({
-                image: this.sprite,
+                ui: false,
+                image: this.sprite.image,
+                width: this.sprite.width * this.gameObject.transform.scale.x,
+                height: this.sprite.height * this.gameObject.transform.scale.y,
+                slice: this.sprite.slice,
                 pivot: this.pivot,
                 position: this.gameObject.transform.position,
-                width: this.width,
-                height: this.height,
                 offsetX: this.offsetX,
                 offsetY: this.offsetY,
                 flipHorizontal: this.flipHorizontal,

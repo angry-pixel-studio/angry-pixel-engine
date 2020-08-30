@@ -8,7 +8,7 @@ export default class GameObject {
     scene = null;
 
     constructor() {
-        this.addComponent(() => new Transform(this, { position: { x: 0, y: 0 } }));
+        this.addComponent(() => new Transform(this));
         this.transform = this.getComponent(Transform.name);
 
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);

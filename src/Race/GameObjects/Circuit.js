@@ -1,6 +1,7 @@
 import GameObject from '../../Engine/GameObject';
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 import { PIVOT_CENTER } from '../../Engine/Rendering/RenderPivots';
+import Sprite from '../../Engine/Rendering/Sprite';
 
 export default class Circuit extends GameObject {
     width = 900;
@@ -12,17 +13,18 @@ export default class Circuit extends GameObject {
         
         this.spots = spots;
 
-        const sprite = new Image();
-        sprite.src = spritePath;
+        const image = new Image();
+        image.src = spritePath;
 
         this.transform.position.x = 0;
         this.transform.position.y = 0;
 
         this.addComponent(() => new SpriteRenderer(this, {
-            sprite: sprite,
-            width: this.width,
-            height: this.height,
-            pivot: PIVOT_CENTER,
+            sprite: new Sprite({
+                image: image,
+                width: this.width,
+                height: this.height
+            })
         }));
     }
 }
