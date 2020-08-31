@@ -17,8 +17,8 @@ export default class SpotPointer extends GameObject {
             this.vpPos = mouse.viewportPosition;
 
             console.log( {
-                x: Math.floor(this.vpPos.x + this.camera.worldCameraRect.x),
-                y: Math.floor(this.camera.worldCameraRect.y - this.vpPos.y)
+                x: Math.floor(this.vpPos.x + this.camera.worldSpaceRect.x),
+                y: Math.floor(this.camera.worldSpaceRect.y - this.vpPos.y)
             })
         }
         

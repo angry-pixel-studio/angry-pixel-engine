@@ -11,6 +11,3 @@ game.addScene(Sandbox.name, () => new Sandbox());
 
 // Run the game
 game.run();
-
-//setTimeout(() => game.sceneManager.loadScene(Sandbox.name), 3000);
-//game.sceneManager.loadScene(Sandbox.name);

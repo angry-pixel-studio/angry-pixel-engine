@@ -31,7 +31,7 @@ export default class Game {
         this.createCanvas(document.getElementById(containerId), width, height);
         this.canvasContext = this.canvas.getContext('2d');
         this.sceneManager = new SceneManager(this);
-        this.renderManager = new RenderManager();
+        this.renderManager = new RenderManager(this);
     }
 
     createCanvas(container, width, height) {

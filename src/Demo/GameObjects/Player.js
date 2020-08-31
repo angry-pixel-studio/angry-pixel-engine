@@ -8,7 +8,6 @@ const SPRITE_PATH = 'image/demo/player.png';
 export const LAYER_PLAYER = 'Player';
 
 export default class Player extends GameObject {
-    sprite = null;
     walkSpeed = 2.5;
     direction = 1;
     walkingAnimation = false;
@@ -19,9 +18,6 @@ export default class Player extends GameObject {
         this.layer = LAYER_PLAYER;
         this.transform.position.x = 0;
         this.transform.position.y = 0;
-
-        this.transform.scale.x = 1;
-        this.transform.scale.y = 1;
 
         const image = new Image();
         image.src = SPRITE_PATH;

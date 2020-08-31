@@ -5,10 +5,9 @@ import GameCamera from "../../Engine/GameObjects/GameCamera";
 import Camera from "../../Engine/Components/Camera";
 
 export default class Sandbox extends Scene {
-    mousePressed = false;
-
-    constructor(id, game) {
-        super(id, game);
+    
+    constructor() {
+        super();
 
         this.addGameObject(() => new Player())
             .addGameObject(() => new SpotPointer());
