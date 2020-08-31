@@ -1,7 +1,6 @@
 import GameObject from '../../Engine/GameObject';
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
-import { PIVOT_CENTER } from '../../Engine/Rendering/RenderPivots';
-import Sprite from '../../Engine/Rendering/Sprite';
+import Sprite from '../../Engine/Sprite';
 
 export default class Circuit extends GameObject {
     width = 900;
@@ -23,7 +22,7 @@ export default class Circuit extends GameObject {
             sprite: new Sprite({
                 image: image,
                 width: this.width,
-                height: this.height
+                height: this.height,
             })
         }));
     }

@@ -7,7 +7,10 @@ const game = new Game('app', 900, 502);
 
 // Add Sencenes
 //game.addScene(Race.name, () => new Race());
-game.addScene(Sandbox, () => new Sandbox());
+game.addScene(Sandbox.name, () => new Sandbox());
 
 // Run the game
 game.run();
+
+//setTimeout(() => game.sceneManager.loadScene(Sandbox.name), 3000);
+//game.sceneManager.loadScene(Sandbox.name);

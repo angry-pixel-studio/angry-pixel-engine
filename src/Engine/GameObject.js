@@ -1,15 +1,20 @@
 import Transform from "./Components/Transform";
 import { EVENT_START, EVENT_UPDATE } from "./Game";
 
+export const LAYER_DEFAULT = 'Default';
+
 export default class GameObject {
     tag = null;
-    components = [];
-    transform = null;
+    layer = LAYER_DEFAULT;
+        
     scene = null;
+    parent = null;
+
+    components = [];
+    gameObjects = [];
 
     constructor() {
         this.addComponent(() => new Transform(this));
-        this.transform = this.getComponent(Transform.name);
 
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
@@ -26,6 +31,10 @@ export default class GameObject {
     start() { }
 
     update() { }
+
+    get transform() {
+        return this.getComponent(Transform.name);
+    }
 
     addComponent(component) {
         if (typeof component === 'function') {
@@ -54,14 +63,64 @@ export default class GameObject {
         return this.getComponent(type) !== null;
     }
 
-    destroy() {
-        this.components.forEach((component, key) => {
-            component.destroy();
-            this.components[key] = null;
-        });
+    removeComponent(component) {
+        const index = this.components.indexOf(component);
+        if (index !== -1) {
+            component._destroy();
+            delete this.components[index];
+        }
+    }
 
-        Object.keys(this).forEach(key => this[key] = null);
+    addChild(gameObject) {
+        if (typeof gameObject === 'function') {
+            gameObject = gameObject();
+        }
+        
+        gameObject.parent = this;
+        gameObject.scene = this.scene;
+        this.gameObjects = [...this.gameObjects, gameObject];
 
-        window.removeEventListener('gameLoop', this.gameLoopEventHandler);
+        return this;
+    }
+
+    getChildren(type) {
+        if (type !== undefined) {
+            return this.gameObjects.filter(object => object.constructor.name === type);
+        }
+
+        return this.gameObjects;
+    }
+
+    getChild(type) {
+        const objects = this.getGameObjects(type);
+        return objects.length > 0 ? objects[0] : null;
+    }
+
+    getChildrenByTag(tag) {
+        return this.gameObjects.filter(object => object.tag === tag);
+    }
+
+    getChildtByTag(tag) {
+        const objects = this.getGameObjectsByTag(tag);
+        return objects.length > 0 ? objects[0] : null;
+    }
+
+    destroyChild(gameObject) {
+        const index = this.gameObjects.indexOf(gameObject);
+        if (index !== -1) {
+            gameObject._destroy();
+            delete this.gameObjects[index];
+        }
+    }
+
+    _destroy() {
+        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+
+        this.components.forEach(component => this.removeComponent(component));
+
+        this.gameObjects.forEach(gameObject => this.destroyChild(gameObject));
+
+        Object.keys(this).forEach(key => delete this[key]);
     }
 }

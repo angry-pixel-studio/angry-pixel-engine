@@ -22,17 +22,29 @@ export default class SceneManager {
     }
 
     loadScene(sceneId) {
+        const resetLoop = this.game.running;
+        
+        if (resetLoop) {
+            this.game.stopLoop();
+        }
+        
         this.unloadCurrentScene();
-        this.currentScene = this.scenes[sceneId](sceneId, this.game);
+        this.currentScene = this.scenes[sceneId]();
         this.currentScene.id = sceneId;
         this.currentScene.game = this.game;
+        
+        if (resetLoop) {
+            this.game.resumeLoop(true);
+        }
     }
 
     unloadCurrentScene() {
         if (this.currentScene !== null) {
-            this.currentScene.destroy();
+            this.currentScene._destroy();
             this.currentScene = null;
             this.currentSceneId = null;
+
+            this.game.renderManager.clearRenderStack();
         }   
     }
 }

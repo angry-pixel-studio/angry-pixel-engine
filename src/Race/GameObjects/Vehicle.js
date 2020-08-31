@@ -1,7 +1,7 @@
 import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 import Circuit from "./Circuit";
-import Sprite from "../../Engine/Rendering/Sprite";
+import Sprite from "../../Engine/Sprite";
 
 export const TAG_PLAYER = 'player';
 

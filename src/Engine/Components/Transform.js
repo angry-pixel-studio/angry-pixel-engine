@@ -1,13 +1,14 @@
 import Component from "../Component";
+import Vector2 from "../Helper/Vector2";
 
 export default class Transform extends Component {
-    position = { x: 0, y: 0 }
-    scale = {x: 1, y: 1}
+    position = null;
+    scale = null;
 
-    constructor(gameObject, config) {
+    constructor(gameObject) {
         super(gameObject);
 
-        //this.position = config.position !== undefined ? config.position : this.position;
-        //this.scale = config.scale !== undefined ? config.scale : this.scale;
+        this.position = new Vector2(0, 0);
+        this.scale = new Vector2(1, 1);
     }
 }

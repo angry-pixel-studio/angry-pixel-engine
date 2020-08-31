@@ -1,6 +1,6 @@
-import Input from "./Input/Input";
-import SceneManager from "./Scene/SceneManager";
-import RenderManager from "./Rendering/RenderManager";
+import Input from "./Core/Input/Input";
+import SceneManager from "./Core/Scene/SceneManager";
+import RenderManager from "./Core/Rendering/RenderManager";
 
 const CANVAS_ID = 'miniEngineCanvas';
 
@@ -11,6 +11,9 @@ export const EVENT_UPDATE = 'mini-engine-update';
     let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
+
+    let cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+    window.cancelAnimationFrame = cancelAnimationFrame;
 })();
 
 export default class Game {
@@ -19,12 +22,15 @@ export default class Game {
     input = null;
     sceneManager = null;
     renderManager = null;
+    
+    running = false;
     firstFrame = false;
+    frameRequestId = null;
 
     constructor(containerId, width, height) {
         this.createCanvas(document.getElementById(containerId), width, height);
         this.canvasContext = this.canvas.getContext('2d');
-        this.sceneManager = new SceneManager();
+        this.sceneManager = new SceneManager(this);
         this.renderManager = new RenderManager();
     }
 
@@ -45,10 +51,12 @@ export default class Game {
         this.firstFrame = true;
         this.input = new Input(this);
         this.sceneManager.loadOpeningScene();
+        
         this.gameLoop();
     }
 
     gameLoop() {
+        this.running = true;
         this.clearCanvas();
         
         if (this.firstFrame === true) {
@@ -58,7 +66,20 @@ export default class Game {
             this.dispatchFrameEvent(EVENT_UPDATE);
         }
         
-        window.requestAnimationFrame(() => this.gameLoop());
+        this.frameRequestId = window.requestAnimationFrame(() => this.gameLoop());
+    }
+
+    stopLoop() {
+        window.cancelAnimationFrame(this.frameRequestId);
+        this.running = false;
+        this.frameRequestId = null;
+    }
+
+    resumeLoop(resetFrames = false) {
+        if (this.running == false && this.frameRequestId === null) {
+            this.firstFrame = resetFrames ? true : this.firstFrame;
+            this.gameLoop();
+        }
     }
 
     clearCanvas() {

@@ -1,5 +1,5 @@
-import Sprite from "../../Engine/Rendering/Sprite";
-import Animation from "../../Engine/Rendering/Animation";
+import Sprite from "../../Engine/Sprite";
+import Animation from "../../Engine/Animation";
 
 const image = new Image();
 image.src = 'image/demo/player.png';

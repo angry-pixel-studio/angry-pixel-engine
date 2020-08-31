@@ -1,5 +1,5 @@
 import GameCamera from "../../Engine/GameObjects/GameCamera";
-import Scene from "../../Engine/Scene/Scene";
+import Scene from "../../Engine/Scene";
 import Circuit from "../GameObjects/Circuit";
 import SpotPointer from "../GameObjects/SpotPointer";
 import Vehicle from "../GameObjects/Vehicle";

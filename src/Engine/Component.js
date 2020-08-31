@@ -23,8 +23,10 @@ export default class Component {
 
     update() { }
 
-    destroy() {
-        Object.keys(this).forEach(key => this[key] = null);
-        window.removeEventListener('gameLoop', this.gameLoopEventHandler);
+    _destroy() {
+        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+
+        Object.keys(this).forEach(key => delete this[key]);
     }
 }

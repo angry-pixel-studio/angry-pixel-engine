@@ -1,5 +1,5 @@
-import GameCamera from "../GameObjects/GameCamera";
-import { EVENT_START, EVENT_UPDATE } from "../Game";
+import GameCamera from "./GameObjects/GameCamera";
+import { EVENT_START, EVENT_UPDATE } from "./Game";
 
 export default class Scene {
     game = null;
@@ -58,14 +58,20 @@ export default class Scene {
         return objects.length > 0 ? objects[0] : null;
     }
 
-    destroy() {
-        this.gameObjects.forEach((object, key) => {
-            object.destroy();
-            this.gameObjects[key] = null;
-        });
+    destroyGameObject(gameObject) {
+        const index = this.gameObjects.indexOf(gameObject);
+        if (index !== -1) {
+            gameObject._destroy();
+            delete this.gameObjects[index];
+        }
+    }
 
-        Object.keys(this).forEach(key => this[key] = null);
+    _destroy() {
+        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
-        window.removeEventListener('gameLoop', this.gameLoopEventHandler);
+        this.gameObjects.forEach(object => this.destroyGameObject(object));
+
+        Object.keys(this).forEach(key => delete this[key]);
     }
 }

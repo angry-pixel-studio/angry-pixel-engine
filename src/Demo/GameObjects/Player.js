@@ -1,10 +1,11 @@
 import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
-import Sprite from "../../Engine/Rendering/Sprite";
+import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerAnimations";
 
-const SPRITE_PATH = 'image/demo/player.png'
+const SPRITE_PATH = 'image/demo/player.png';
+export const LAYER_PLAYER = 'Player';
 
 export default class Player extends GameObject {
     sprite = null;
@@ -15,6 +16,7 @@ export default class Player extends GameObject {
     constructor() {
         super();
 
+        this.layer = LAYER_PLAYER;
         this.transform.position.x = 0;
         this.transform.position.y = 0;
 

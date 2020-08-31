@@ -1,5 +1,7 @@
 import Component from '../Component';
-import { PIVOT_CENTER } from '../Rendering/RenderPivots';
+import { PIVOT_CENTER } from '../Core/Rendering/RenderPivots';
+
+export * from '../Core/Rendering/RenderPivots'
 
 export default class SpriteRenderer extends Component {
     sprite = null;
@@ -25,9 +27,9 @@ export default class SpriteRenderer extends Component {
 
     update(event) {
         if (this.sprite.loaded === true) {
-            
             event.renderManager.addToRenderStack({
                 ui: false,
+                layer: this.gameObject.layer,
                 image: this.sprite.image,
                 width: this.sprite.width * this.gameObject.transform.scale.x,
                 height: this.sprite.height * this.gameObject.transform.scale.y,
