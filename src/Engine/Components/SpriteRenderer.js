@@ -1,7 +1,8 @@
 import Component from '../Component';
+import RenderData from '../Core/Rendering/RenderData';
 import { PIVOT_CENTER } from '../Core/Rendering/RenderPivots';
 
-export * from '../Core/Rendering/RenderPivots'
+export * from '../Core/Rendering/RenderPivots';
 
 export default class SpriteRenderer extends Component {
     sprite = null;
@@ -10,12 +11,16 @@ export default class SpriteRenderer extends Component {
     pivot = PIVOT_CENTER;
     flipHorizontal = false;
     flipVertical = false;
+    renderData = null;
 
     constructor(gameObject, config) {
         super(gameObject);
 
+        this.renderData = new RenderData();
+        this.renderData.ui = false;
+        this.renderData.layer = this.gameObject.layer;
+
         // required
-        this.gameObject = gameObject;
         this.sprite = config.sprite;
 
         // optional
@@ -25,22 +30,21 @@ export default class SpriteRenderer extends Component {
         this.smooth = config.smooth ? config.smooth : this.smooth
     }
 
+
     update(event) {
         if (this.sprite.loaded === true) {
-            event.renderManager.addToRenderStack({
-                ui: false,
-                layer: this.gameObject.layer,
-                image: this.sprite.image,
-                width: this.sprite.width * this.gameObject.transform.scale.x,
-                height: this.sprite.height * this.gameObject.transform.scale.y,
-                slice: this.sprite.slice,
-                pivot: this.pivot,
-                position: this.gameObject.transform.position,
-                offsetX: this.offsetX,
-                offsetY: this.offsetY,
-                flipHorizontal: this.flipHorizontal,
-                flipVertical: this.flipVertical
-            });
+            this.renderData.image = this.sprite.image;
+            this.renderData.width = this.sprite.width * this.gameObject.transform.scale.x;
+            this.renderData.height = this.sprite.height * this.gameObject.transform.scale.y;
+            this.renderData.slice = this.sprite.slice;
+            this.renderData.pivot = this.pivot;
+            this.renderData.position = this.gameObject.transform.position;
+            this.renderData.offsetX = this.offsetX;
+            this.renderData.offsetY = this.offsetY;
+            this.renderData.flipHorizontal = this.flipHorizontal;
+            this.renderData.flipVertical = this.flipVertical;
+
+            event.renderManager.addToRenderStack(this.renderData);
         }
     }
 }

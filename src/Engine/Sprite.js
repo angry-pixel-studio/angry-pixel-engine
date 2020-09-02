@@ -21,8 +21,6 @@ export default class Sprite {
         } else {
             this.image.addEventListener('load', e => this.onLoad());
         }
-
-        
     }
 
     onLoad() {

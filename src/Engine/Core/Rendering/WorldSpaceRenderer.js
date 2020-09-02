@@ -17,7 +17,11 @@ export default class WorldSapceRenderer {
                 }
 
                 if (renderData.image) {
-                    this.renderImageInWorldSpace(renderData, worldSpaceRect)
+                    this.renderImageInWorldSpace(renderData, worldSpaceRect);
+                }
+
+                if (renderData.text) {
+                    this.renderTextInWorldSpace(renderData, worldSpaceRect);
                 }
             }
         );
@@ -61,12 +65,58 @@ export default class WorldSapceRenderer {
         this.canvasContext.restore();
     }
 
+    renderTextInWorldSpace(renderData, worldSpaceRect) {
+        let renderPosition = this.calcuateWorldSpacePosition(renderData, worldSpaceRect);
+
+        this.canvasContext.save();
+       
+        let font = [
+            renderData.bold ? 'bold' : '',
+            renderData.italic ? 'italic' : '',
+            renderData.textSize + 'px',
+            renderData.font
+        ];
+
+        this.canvasContext.font = font.join(' ');
+        this.canvasContext.fillStyle = renderData.color;
+
+        if (Array.isArray(renderData.text)) {
+            let first = true;    
+            let lineSeparation = 0;
+
+            renderData
+                .text
+                .forEach(text => {
+                    lineSeparation = first 
+                        ? lineSeparation
+                        : (renderData.lineSeparation + renderData.textSize);
+
+                    this.canvasContext
+                        .fillText(
+                            text,
+                            renderPosition.x,
+                            renderPosition.y + lineSeparation
+                        );
+                    
+                    first = false;
+                });
+        } else {
+            this.canvasContext.fillText(renderData.text, renderPosition.x, renderPosition.y);
+        }
+        
+        this.canvasContext.restore();
+    }
+
     calcuateWorldSpacePosition(renderData, worldSpaceRect) {
         // PIVOT_TOP_LEFT is the canvas default position
         let renderPosition = {
             x: renderData.position.x - worldSpaceRect.x,
             y: worldSpaceRect.y - renderData.position.y
         };
+
+        if (renderData.pivot === null) {
+            return renderPosition;
+        }
 
         switch (renderData.pivot) {
             case PIVOT_CENTER:

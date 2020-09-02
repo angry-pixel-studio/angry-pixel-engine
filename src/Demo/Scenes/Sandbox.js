@@ -3,17 +3,23 @@ import Player, { LAYER_PLAYER } from "../GameObjects/Player";
 import SpotPointer from "../GameObjects/SpotPointer";
 import GameCamera from "../../Engine/GameObjects/GameCamera";
 import Camera from "../../Engine/Components/Camera";
+import Foreground from "../GameObjects/Foreground";
+import FollowPlayerCamera from "../Components/FollowPlayerCamera";
 
 export default class Sandbox extends Scene {
-    
+
     constructor() {
         super();
 
-        this.addGameObject(() => new Player())
+        this.addGameObject(() => new Foreground())
+            .addGameObject(() => new Player())
             .addGameObject(() => new SpotPointer());
 
-        this.getGameObject(GameCamera.name)
-            .getComponent(Camera.name)
+        let camera = this.getGameObject(GameCamera.name);
+
+        camera.getComponent(Camera.name)
             .addLayerToRender(LAYER_PLAYER);
+
+        //camera.addComponent(() => new FollowPlayerCamera(camera));
     }
 }

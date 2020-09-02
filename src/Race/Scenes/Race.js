@@ -2,9 +2,10 @@ import GameCamera from "../../Engine/GameObjects/GameCamera";
 import Scene from "../../Engine/Scene";
 import Circuit from "../GameObjects/Circuit";
 import SpotPointer from "../GameObjects/SpotPointer";
-import Vehicle from "../GameObjects/Vehicle";
+import Vehicle, { TAG_PLAYER } from "../GameObjects/Vehicle";
 import raceData from "../race-result.json";
 import CIRCUITS from "../Config/Circuits";
+import PlayerStats from "../GameObjects/PlayerStats";
 
 const BASE_VELOCITY = 3;
 const DELTA_VELOCITY = 0.1;
@@ -23,7 +24,8 @@ export default class Race extends Scene {
         const circuitImage = CIRCUITS[raceData.circuitUuid].image;
 
         this.addGameObject(() => new Circuit(circuitImage, circuitSpots))
-            .addGameObject(() => new SpotPointer());
+            .addGameObject(() => new SpotPointer())
+            .addGameObject(() => new PlayerStats());
 
         this.setupVehicles();
     }
@@ -46,8 +48,14 @@ export default class Race extends Scene {
 
     processLap(vehicle) {
         const currentLapData = this.currentLapData[vehicle.username];
-        
+        const lastPosition = currentLapData.position;
+        const lastLap = currentLapData.lap;
+
         if (this.raceData.laps.length === currentLapData.lap) {
+            if (vehicle.tag === TAG_PLAYER) {
+                this.getGameObject(PlayerStats.name).updateStats(currentLapData.lap, currentLapData.lap, lastPosition);
+            }
+
             vehicle.stopVehicle();
             return;
         }
@@ -65,6 +73,14 @@ export default class Race extends Scene {
         this.currentLapData[vehicle.username].speed = vehicle.speed;
         this.currentLapData[vehicle.username].lap += 1;
         this.currentLapData[vehicle.username].position = nextPosition;
+        
+        if (vehicle.tag === TAG_PLAYER) {
+            this.getGameObject(PlayerStats.name).updateStats(
+                currentLapData.lap,
+                lastLap,
+                lastPosition
+            );
+        }
 
         console.log(this.currentLapData[vehicle.username]);
     }
