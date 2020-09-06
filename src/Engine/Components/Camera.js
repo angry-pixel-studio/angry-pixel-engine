@@ -11,7 +11,7 @@ export default class Camera extends Component {
     worldSpaceRect = null;
     renderLayers = [LAYER_DEFAULT]
 
-    // size = 1; to implement
+    zoom = 1;
 
     start(event) {
         this.worldSpaceRect = new Rectangle(0, 0, 0, 0);

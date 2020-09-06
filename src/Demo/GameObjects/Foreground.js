@@ -1,6 +1,7 @@
 import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from "../../Engine/Components/SpriteRenderer";
 import Sprite from "../../Engine/Sprite";
+import Vector2 from "../../Engine/Helper/Vector2";
 
 export const TAG_FOREGROUND = 'Foreground';
 export const LAYER_FOREGROUND = 'Foreground';
@@ -20,15 +21,13 @@ export default class Foreground extends GameObject {
         this.transform.position.x = 0;
         this.transform.position.y = 0;
 
-        this.transform.scale.x = 3;
-        this.transform.scale.y = 3;
-
         const image = new Image();
         image.src = SPRITE_PATH;
         
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image,
+                scale: new Vector2(3, 3),
                 smooth: false
             }),
         }), 'SpriteRenderer');

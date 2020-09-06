@@ -3,6 +3,7 @@ export default class Sprite {
     width = null;
     height = null;
     slice = null;
+    scale = null;
     smooth = true;
     loaded=  false;
     canvas = null;
@@ -11,9 +12,14 @@ export default class Sprite {
         this.image = config.image
 
         // optional
-        this.width = config.width !== undefined ? config.width : this.width;
-        this.height = config.height !== undefined ? config.height : this.height;
         this.slice = config.slice !== undefined ? config.slice : this.slice;
+        
+        if (this.slice) {
+            this.width = this.slice.width;
+            this.height = this.slice.height;
+        }
+
+        this.scale = config.scale !== undefined ? config.scale : this.scale;
         this.smooth = config.smooth !== undefined ? config.smooth : this.smooth;
 
         if (this.image.naturalWidth) {
@@ -26,6 +32,11 @@ export default class Sprite {
     onLoad() {
         this.width = this.width === null ? this.image.naturalWidth : this.width;
         this.height = this.height === null ? this.image.naturalHeight : this.height;
+
+        if (this.scale !== null) {
+            this.width *= this.scale.x;
+            this.height *= this.scale.y;
+        }
 
         this.loaded = true;
     }

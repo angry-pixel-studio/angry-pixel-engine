@@ -6,7 +6,7 @@ import Sandbox from './Demo/Scenes/Sandbox';
 const game = new Game('app', 900, 502);
 
 // Add Sencenes
-game.addScene('Race', () => new Race());
+//game.addScene('Race', () => new Race());
 game.addScene('Sandbox', () => new Sandbox());
 
 // Run the game

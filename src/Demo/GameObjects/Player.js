@@ -4,6 +4,7 @@ import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerAnimations";
 import Rectangle from "../../Engine/Helper/Rectangle";
+import Vector2 from "../../Engine/Helper/Vector2";
 
 const SPRITE_PATH = 'image/demo/player.png';
 
@@ -29,9 +30,8 @@ export default class Player extends GameObject {
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image,
-                width: 64,
-                height: 64,
                 slice: new Rectangle(16, 0, 16, 16),
+                scale: new Vector2(4, 4),
                 smooth: false
             }),
         }), 'SpriteRenderer');

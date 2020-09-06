@@ -1,13 +1,13 @@
 import Sprite from "../../Engine/Sprite";
 import Animation from "../../Engine/Animation";
+import Vector2 from "../../Engine/Helper/Vector2";
 
 const image = new Image();
 image.src = 'image/demo/player.png';
 
 const config = {
     image: image,
-    width: 64,
-    height: 64,
+    scale: new Vector2(4, 4),
     smooth: false
 }
 
