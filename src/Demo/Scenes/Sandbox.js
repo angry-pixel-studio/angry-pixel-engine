@@ -12,7 +12,7 @@ export default class Sandbox extends Scene {
         super();
 
         this.addGameObject(() => new Foreground())
-            .addGameObject(() => new Player())
+            .addGameObject(() => new Player(), 'Player')
             .addGameObject(() => new SpotPointer());
 
         this.gameCamera.camera.addLayerToRender(LAYER_PLAYER);

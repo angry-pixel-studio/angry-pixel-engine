@@ -3,6 +3,7 @@ import { EVENT_START, EVENT_UPDATE } from "./Game";
 export default class Component {
     id = null;
     gameObject = null;
+    active = true;
 
     constructor() {
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);
@@ -11,6 +12,10 @@ export default class Component {
     }
 
     gameLoopEventHandler = event => {
+        if (this.active === false) {
+            return;
+        }
+
         if (event.type === EVENT_START) {
             this.start(event.detail);
         } else if (event.type === EVENT_UPDATE) {

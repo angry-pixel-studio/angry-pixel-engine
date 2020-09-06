@@ -23,6 +23,10 @@ export default class Animator extends Component {
             this.playingAnimationId = null;
             this.spriteRenderer.sprite = this.defaultSprite;   
         }
+
+        if (this.playingAnimationId === null) {
+            this.defaultSprite = this.spriteRenderer.sprite;
+        }
     }
 
     addAnimation(id, animation) {
@@ -32,6 +36,10 @@ export default class Animator extends Component {
     }
 
     playAnimation(id) {
+        if (this.active === false) {
+            return;
+        }
+
         if (this.playingAnimationId != id && this.animations[id] !== undefined) {
             this.stopAnimation();
 
@@ -41,6 +49,10 @@ export default class Animator extends Component {
     }
 
     stopAnimation() {
+        if (this.active === false) {
+            return;
+        }
+
         if (this.playingAnimationId !== null) {
             this.animations[this.playingAnimationId].stop();
         }

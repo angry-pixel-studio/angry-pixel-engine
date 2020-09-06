@@ -8,12 +8,13 @@ export default class GameObject {
     id = null;
     tag = null;
     layer = LAYER_DEFAULT;
-        
+    active = true;
     scene = null;
     parent = null;
-
     components = [];
     gameObjects = [];
+    inactiveComponents = [];
+    inactiveGameObjects = [];
 
     constructor() {
         this.addComponent(() => new Transform(), TRANSFORM_ID);
@@ -23,6 +24,10 @@ export default class GameObject {
     }
 
     gameLoopEventHandler = event => {
+        if (this.active === false) {
+            return;
+        }
+
         if (event.type === EVENT_START) {
             this.start(event.detail);
         } else if (event.type === EVENT_UPDATE) {
@@ -138,6 +143,77 @@ export default class GameObject {
             gameObject._destroy();
             return delete this.gameObjects[index];
         });
+    }
+
+    /**
+     * @param {boolean} value 
+     */
+    setActive(value) {
+        if (typeof value !== 'boolean') {
+            throw 'Method parameter must be boolean.'
+        }
+        
+        this.components
+            .filter(component => this.inactiveComponents.indexOf(component.id) === -1)
+            .forEach(component => component.active = value);
+
+        this.gameObjects
+            .filter(gameObject => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
+            .forEach(gameObject => gameObject.setActive(value));
+
+        this.active = value;
+    }
+
+    /**
+     * @param {string} id 
+     * @param {boolean} active 
+     */
+    setComponentActive(id, active) {
+        if (typeof active !== 'boolean') {
+            throw 'Method parameter "active" must be boolean.'
+        }
+
+        const component = this.getComponent(id);
+        
+        if (component === null) {
+            throw `Component ith id ${id} does not exists`;
+        }
+
+        const inactiveIndex = this.inactiveComponents.indexOf(id);
+
+        if (active === false && inactiveIndex === -1) {
+            this.inactiveComponents.push(id);
+        } else if (active === true && inactiveIndex !== -1) {
+            delete this.inactiveComponents[inactiveIndex];
+        }
+
+        component.active = active;
+    }
+
+    /**
+     * @param {string} id 
+     * @param {boolean} active 
+     */
+    setChildActive(id, active) {
+        if (typeof active !== 'boolean') {
+            throw 'Method parameter "active" must be boolean.'
+        }
+
+        const gameObject = this.getChild(id);
+        
+        if (gameObject === null) {
+            throw `GameObject with id ${id} does not exists`;
+        }
+
+        const inactiveIndex = this.inactiveGameObjects.indexOf(id);
+
+        if (active === false && inactiveIndex === -1) {
+            this.inactiveGameObjects.push(id);
+        } else if (active === true && inactiveIndex !== -1) {
+            delete this.inactiveGameObjects[inactiveIndex];
+        }
+
+        gameObject.setActive(active);
     }
 
     _destroy() {
