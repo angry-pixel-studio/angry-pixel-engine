@@ -1,4 +1,3 @@
-import GameCamera from "../../Engine/GameObjects/GameCamera";
 import Scene from "../../Engine/Scene";
 import Circuit from "../GameObjects/Circuit";
 import SpotPointer from "../GameObjects/SpotPointer";
@@ -25,7 +24,7 @@ export default class Race extends Scene {
 
         this.addGameObject(() => new Circuit(circuitImage, circuitSpots))
             .addGameObject(() => new SpotPointer())
-            .addGameObject(() => new PlayerStats());
+            .addGameObject(() => new PlayerStats(), 'PlayerStats');
 
         this.setupVehicles();
     }
@@ -53,7 +52,7 @@ export default class Race extends Scene {
 
         if (this.raceData.laps.length === currentLapData.lap) {
             if (vehicle.tag === TAG_PLAYER) {
-                this.getGameObject(PlayerStats.name).updateStats(currentLapData.lap, currentLapData.lap, lastPosition);
+                this.getGameObject('PlayerStats').updateStats(currentLapData.lap, currentLapData.lap, lastPosition);
             }
 
             vehicle.stopVehicle();
@@ -75,11 +74,7 @@ export default class Race extends Scene {
         this.currentLapData[vehicle.username].position = nextPosition;
         
         if (vehicle.tag === TAG_PLAYER) {
-            this.getGameObject(PlayerStats.name).updateStats(
-                currentLapData.lap,
-                lastLap,
-                lastPosition
-            );
+            this.getGameObject('PlayerStats').updateStats(currentLapData.lap, lastLap, lastPosition);
         }
 
         console.log(this.currentLapData[vehicle.username]);

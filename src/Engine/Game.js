@@ -44,6 +44,10 @@ export default class Game {
     }
 
     addScene(sceneId, sceneFunction, openingScene = false) {
+        if (typeof sceneFunction !== 'function') {
+            throw 'Method parameter sceneFunction must be a function.';
+        }
+
         this.sceneManager.addScene(sceneId, sceneFunction, openingScene);
     }
 

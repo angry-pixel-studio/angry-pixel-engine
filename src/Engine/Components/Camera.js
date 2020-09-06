@@ -13,14 +13,6 @@ export default class Camera extends Component {
 
     // size = 1; to implement
 
-    constructor(gameObject) {
-        super(gameObject);
-
-        if (gameObject.hasComponent(Transform.name) === false) {
-            throw 'Transform is required in the GameObject'
-        }
-    }
-
     start(event) {
         this.worldSpaceRect = new Rectangle(0, 0, 0, 0);
         this.setupViewportRect(event.canvas);

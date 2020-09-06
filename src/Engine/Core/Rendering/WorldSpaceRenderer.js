@@ -109,10 +109,15 @@ export default class WorldSapceRenderer {
 
     calcuateWorldSpacePosition(renderData, worldSpaceRect) {
         // PIVOT_TOP_LEFT is the canvas default position
+        
         let renderPosition = {
             x: renderData.position.x - worldSpaceRect.x,
             y: worldSpaceRect.y - renderData.position.y
         };
+
+        // offset
+        renderPosition.x += renderData.offsetX !== undefined ? renderData.offsetX : 0;
+        renderPosition.y += renderData.offsetY !== undefined ? renderData.offsetY : 0;
 
         if (renderData.pivot === null) {
             return renderPosition;
@@ -124,10 +129,6 @@ export default class WorldSapceRenderer {
                 renderPosition.y -= (Math.floor(renderData.height / 2));
                 break;
         }
-
-        // offset
-        renderPosition.x += renderData.offsetX !== undefined ? renderData.offsetX : 0;
-        renderPosition.y += renderData.offsetY !== undefined ? renderData.offsetY : 0;
 
         return renderPosition;
     }

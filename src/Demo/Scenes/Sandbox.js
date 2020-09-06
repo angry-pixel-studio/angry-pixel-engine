@@ -15,11 +15,7 @@ export default class Sandbox extends Scene {
             .addGameObject(() => new Player())
             .addGameObject(() => new SpotPointer());
 
-        let camera = this.getGameObject(GameCamera.name);
-
-        camera.getComponent(Camera.name)
-            .addLayerToRender(LAYER_PLAYER);
-
-        //camera.addComponent(() => new FollowPlayerCamera(camera));
+        this.gameCamera.camera.addLayerToRender(LAYER_PLAYER);
+        this.gameCamera.addComponent(() => new FollowPlayerCamera());
     }
 }

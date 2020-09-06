@@ -26,7 +26,7 @@ export default class Player extends GameObject {
         const image = new Image();
         image.src = SPRITE_PATH;
         
-        this.addComponent(() => new SpriteRenderer(this, {
+        this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image,
                 width: 64,
@@ -34,15 +34,16 @@ export default class Player extends GameObject {
                 slice: new Rectangle(16, 0, 16, 16),
                 smooth: false
             }),
-        }));
+        }), 'SpriteRenderer');
 
-        this.addComponent(() => new Animator(this));
-        this.components.forEach(c => console.log(c.constructor.name));
-        this.getComponent(Animator.name).addAnimation('PlayerWalking', PlayerWalking);
+        this.addComponent(() => new Animator({
+            spriteRenderer: this.getComponent('SpriteRenderer')
+        }), 'Animator');
+        this.getComponent('Animator').addAnimation('PlayerWalking', PlayerWalking);
     }
 
     update(event) {
-        this.getComponent(SpriteRenderer.name).flipHorizontal = this.direction < 0;
+        this.getComponent('SpriteRenderer').flipHorizontal = this.direction < 0;
         this.walk(event.input.keyboard);
     }
 
@@ -57,10 +58,10 @@ export default class Player extends GameObject {
         
         if (deltaX && this.walkingAnimation === false) {
             this.walkingAnimation = true;
-            this.getComponent(Animator.name).playAnimation("PlayerWalking");
+            this.getComponent('Animator').playAnimation("PlayerWalking");
         } else if (!deltaX && this.walkingAnimation === true) {
             this.walkingAnimation = false;
-            this.getComponent(Animator.name).stopAnimation();
+            this.getComponent('Animator').stopAnimation();
         }
 
         this.direction = deltaX !== 0 ? (deltaX < 0 ? -1 : 1) : this.direction;

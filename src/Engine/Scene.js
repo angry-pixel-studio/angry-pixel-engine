@@ -1,13 +1,15 @@
 import GameCamera from "./GameObjects/GameCamera";
 import { EVENT_START, EVENT_UPDATE } from "./Game";
 
+export const GAME_CAMERA_ID = 'GameCamera';
+
 export default class Scene {
     game = null;
     id = null;
     gameObjects = [];
 
     constructor() {
-        this.addGameObject(() => new GameCamera());
+        this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
 
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
@@ -25,28 +27,34 @@ export default class Scene {
 
     update() { }
 
-    addGameObject(gameObject) {
-        if (typeof gameObject === 'function') {
-            gameObject = gameObject();
+    get gameCamera() {
+        return this.getGameObject(GAME_CAMERA_ID);
+    }
+
+    addGameObject(gameObjectFunction, id = null) {
+        if (typeof gameObjectFunction !== 'function') {
+            throw 'Method parameter must be a function.';
         }
         
+        const gameObject = gameObjectFunction();
+        gameObject.id = id;
         gameObject.scene = this;
         this.gameObjects = [...this.gameObjects, gameObject];
 
         return this;
     }
 
-    getGameObjects(type) {
-        if (type !== undefined) {
-            return this.gameObjects.filter(object => object.constructor.name === type);
-        }
-
+    getGameObjects() {
         return this.gameObjects;
     }
 
-    getGameObject(type) {
-        const objects = this.getGameObjects(type);
-        return objects.length > 0 ? objects[0] : null;
+    getGameObject(id) {
+        return this.gameObjects.reduce(
+            (prev, child) => child.id === id
+                ? child
+                : prev
+            , null
+        );
     }
 
     getGameObjectsByTag(tag) {
@@ -58,19 +66,29 @@ export default class Scene {
         return objects.length > 0 ? objects[0] : null;
     }
 
-    destroyGameObject(gameObject) {
-        const index = this.gameObjects.indexOf(gameObject);
-        if (index !== -1) {
+    destroyGameObject(id) {
+        this.gameObjects.every((gameObject, index) => {
+            if (gameObject.id === id) {
+                gameObject._destroy();
+                delete this.gameObjects[index];
+
+                return false;
+            }
+        });
+    }
+
+    destroyGameObject() {
+        this.gameObjects.every((gameObject, index) => {
             gameObject._destroy();
             delete this.gameObjects[index];
-        }
+        });
     }
 
     _destroy() {
         window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
-        this.gameObjects.forEach(object => this.destroyGameObject(object));
+        this.destroyGameObjects();
 
         Object.keys(this).forEach(key => delete this[key]);
     }

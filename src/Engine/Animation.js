@@ -41,12 +41,12 @@ export default class Animation {
                 }, Math.floor(1000 / (FRAME_RATE * this.speed)));
             });
         }
+
+        this.playing = false;
     }
 
     stop() {
         this.playing = false;
         clearInterval(this.currentInterval);
-        this.currentFrame = 1;
-        this.currentSprite = null;
     }
 }

@@ -1,6 +1,6 @@
 import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
-import Circuit from "./Circuit";
+import { CIRCUIT_TAG } from "./Circuit";
 import Sprite from "../../Engine/Sprite";
 
 export const TAG_PLAYER = 'player';
@@ -33,7 +33,7 @@ export default class Vehicle extends GameObject {
 
         this.username = username,
 
-        this.addComponent(() => new SpriteRenderer(this, {
+        this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image
             })
@@ -41,7 +41,7 @@ export default class Vehicle extends GameObject {
     }
 
     start() {
-        this.circuitSpots = this.scene.getGameObject(Circuit.name).spots;
+        this.circuitSpots = this.scene.getGameObjectByTag(CIRCUIT_TAG).spots;
         this.currentSpot = this.circuitSpots[this.nextSpotIndex];
         this.nextSpot = this.circuitSpots[this.nextSpotIndex];
 
@@ -53,8 +53,6 @@ export default class Vehicle extends GameObject {
         this.updateCurrentAndNextSpot();
 
         this.moveVehicle();
-
-        //this.getComponent(SpriteRenderer.name).flipHorizontal = this.direction < 0;
     }
 
     updateCurrentAndNextSpot() {

@@ -2,8 +2,10 @@ import Transform from "./Components/Transform";
 import { EVENT_START, EVENT_UPDATE } from "./Game";
 
 export const LAYER_DEFAULT = 'Default';
+export const TRANSFORM_ID = 'Transform';
 
 export default class GameObject {
+    id = null;
     tag = null;
     layer = LAYER_DEFAULT;
         
@@ -14,7 +16,7 @@ export default class GameObject {
     gameObjects = [];
 
     constructor() {
-        this.addComponent(() => new Transform(this));
+        this.addComponent(() => new Transform(), TRANSFORM_ID);
 
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
@@ -33,49 +35,64 @@ export default class GameObject {
     update() { }
 
     get transform() {
-        return this.getComponent(Transform.name);
+        return this.getComponent(TRANSFORM_ID);
     }
 
-    addComponent(component) {
-        if (typeof component === 'function') {
-            component = component();
+    addComponent(componentFunction, id = null) {
+        if (typeof componentFunction !== 'function') {
+            throw 'Method parameter must be a function.';
         }
 
+        const component = componentFunction();
+        component.id = id;
+        component.gameObject = this;
         this.components = [...this.components, component];
 
         return this;
     }
 
-    getComponent(type) {
-        const components = this.getComponents(type);
-        return components.length > 0 ? components[0] : null;
-    }
-
-    getComponents(type) {
-        if (type !== undefined) {
-            return this.components.filter(component => component.constructor.name === type);
-        }
-
+    getComponents() {
         return this.components;
     }
 
-    hasComponent(type) {
-        return this.getComponent(type) !== null;
+    getComponent(id) {
+        return this.components.reduce(
+            (prev, component) => component.id === id
+                ? component
+                : prev
+            , null
+        );
     }
 
-    removeComponent(component) {
-        const index = this.components.indexOf(component);
-        if (index !== -1) {
+    hasComponent(id) {
+        return this.getComponent(id) !== null;
+    }
+
+    removeComponent(id) {
+        this.components.every((component, index) => {
+            if (component.id === id) {
+                component._destroy();
+                delete this.components[index];
+
+                return false;
+            }
+        });
+    }
+
+    removeComponents() {
+        this.components.every((component, index) => {
             component._destroy();
             delete this.components[index];
-        }
+        });
     }
 
-    addChild(gameObject) {
-        if (typeof gameObject === 'function') {
-            gameObject = gameObject();
+    addChild(gameObjectFunction, id = null) {
+        if (typeof gameObjectFunction !== 'function') {
+            throw 'Method parameter must be a function.';
         }
         
+        const gameObject = gameObjectFunction();
+        gameObject.id = id;
         gameObject.parent = this;
         gameObject.scene = this.scene;
         this.gameObjects = [...this.gameObjects, gameObject];
@@ -83,43 +100,52 @@ export default class GameObject {
         return this;
     }
 
-    getChildren(type) {
-        if (type !== undefined) {
-            return this.gameObjects.filter(object => object.constructor.name === type);
-        }
-
+    getChildren() {
         return this.gameObjects;
     }
 
-    getChild(type) {
-        const objects = this.getGameObjects(type);
-        return objects.length > 0 ? objects[0] : null;
+    getChild(id) {
+        return this.gameObjects.reduce(
+            (prev, child) => child.id === id
+                ? child
+                : prev
+            , null
+        );
     }
 
     getChildrenByTag(tag) {
         return this.gameObjects.filter(object => object.tag === tag);
     }
 
-    getChildtByTag(tag) {
+    getChildByTag(tag) {
         const objects = this.getGameObjectsByTag(tag);
         return objects.length > 0 ? objects[0] : null;
     }
 
-    destroyChild(gameObject) {
-        const index = this.gameObjects.indexOf(gameObject);
-        if (index !== -1) {
+    destroyChild(id) {
+        this.gameObjects.every((gameObject, index) => {
+            if (gameObject.id === id) {
+                gameObject._destroy();
+                delete this.gameObjects[index];
+
+                return false;
+            }
+        });
+    }
+
+    destroyChildren() {
+        this.gameObjects.every((gameObject, index) => {
             gameObject._destroy();
             delete this.gameObjects[index];
-        }
+        });
     }
 
     _destroy() {
         window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
-        this.components.forEach(component => this.removeComponent(component));
-
-        this.gameObjects.forEach(gameObject => this.destroyChild(gameObject));
+        this.removeComponents();
+        this.destroyChildren();
 
         Object.keys(this).forEach(key => delete this[key]);
     }

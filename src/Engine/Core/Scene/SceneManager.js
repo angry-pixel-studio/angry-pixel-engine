@@ -10,6 +10,10 @@ export default class SceneManager {
     }
 
     addScene(sceneId, sceneFunction, openingScene = false) {
+        if (typeof sceneFunction !== 'function') {
+            throw 'Method parameter sceneFunction must be a function.';
+        }
+
         this.scenes[sceneId] = sceneFunction;
         
         if (openingScene === true || this.openingSceneId === null) {

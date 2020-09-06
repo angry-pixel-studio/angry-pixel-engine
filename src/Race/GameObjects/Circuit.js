@@ -2,6 +2,8 @@ import GameObject from '../../Engine/GameObject';
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 import Sprite from '../../Engine/Sprite';
 
+export const CIRCUIT_TAG = 'Circuit';
+
 export default class Circuit extends GameObject {
     width = 900;
     height = 502;
@@ -10,6 +12,7 @@ export default class Circuit extends GameObject {
     constructor(spritePath, spots) {
         super();
         
+        this.tag = CIRCUIT_TAG;
         this.spots = spots;
 
         const image = new Image();
@@ -18,7 +21,7 @@ export default class Circuit extends GameObject {
         this.transform.position.x = 0;
         this.transform.position.y = 0;
 
-        this.addComponent(() => new SpriteRenderer(this, {
+        this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image,
                 width: this.width,

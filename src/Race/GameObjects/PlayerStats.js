@@ -11,13 +11,13 @@ export default class PlayerStats extends GameObject {
         this.transform.position.x = -430;
         this.transform.position.y = -200;
 
-        this.addComponent(() => new TextRenderer(this, {
+        this.addComponent(() => new TextRenderer({
             size: 25,
             color: '#E3DFDF',
             font: 'Courier New',
             lineSeparation: 10,
             bold: true
-        }));    
+        }), 'TextRenderer');    
     }
 
     updateStats(currentLap, lastLap, lastLapPosition) {
@@ -32,6 +32,6 @@ export default class PlayerStats extends GameObject {
             );
         }
 
-        this.getComponent(TextRenderer.name).text = text;
+        this.getComponent('TextRenderer').text = text;
     }
 }

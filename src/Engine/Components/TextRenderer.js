@@ -14,8 +14,8 @@ export default class TextRenderer extends Component {
     renderData = null;
     lineSeparation = 5;
 
-    constructor(gameObject, config) {
-        super(gameObject);
+    constructor(config) {
+        super();
 
         this.renderData = new RenderData();
 
@@ -33,7 +33,8 @@ export default class TextRenderer extends Component {
         this.renderData.textSize = this.size;
         this.renderData.color = this.color;
         this.renderData.font = this.font;
-        this.renderData.position = this.gameObject.transform.position;
+        this.renderData.position.x = this.gameObject.transform.position.x;
+        this.renderData.position.y = this.gameObject.transform.position.y;
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.bold = this.bold;
         this.renderData.italic = this.italic;

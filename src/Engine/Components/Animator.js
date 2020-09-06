@@ -1,5 +1,4 @@
 import Component from "../Component";
-import SpriteRenderer from "./SpriteRenderer";
 
 export default class Animator extends Component {
     animations = [];
@@ -7,20 +6,22 @@ export default class Animator extends Component {
     spriteRenderer = null;
     defaultSprite = null;
 
-    constructor(gameObject) {
-        super(gameObject);
+    constructor(config) {
+        super();
+        
+        this.spriteRenderer = config.spriteRenderer;
+    }
 
-        this.spriteRenderer = gameObject.getComponent(SpriteRenderer.name);
-        if (this.spriteRenderer == null) {
-            throw 'SpriteRenderer is required in the GameObject'
-        }
-
+    start() {
         this.defaultSprite = this.spriteRenderer.sprite;
     }
 
     update() {
-        if (this.playingAnimationId) {
+        if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === true) {
             this.spriteRenderer.sprite = this.animations[this.playingAnimationId].currentSprite;
+        } else if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === false) {
+            this.playingAnimationId = null;
+            this.spriteRenderer.sprite = this.defaultSprite;   
         }
     }
 
@@ -42,8 +43,6 @@ export default class Animator extends Component {
     stopAnimation() {
         if (this.playingAnimationId !== null) {
             this.animations[this.playingAnimationId].stop();
-            this.playingAnimationId = null;
-            this.spriteRenderer.sprite = this.defaultSprite;
         }
     }
 }

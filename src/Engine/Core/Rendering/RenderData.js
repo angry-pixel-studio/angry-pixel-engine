@@ -1,3 +1,5 @@
+import Vector2 from "../../Helper/Vector2";
+
 /**
  * @property {boolean} ui
  * @property {string} layer
@@ -16,7 +18,7 @@ export default class RenderData {
     // general
     ui = false;
     layer = null;
-    position = null;
+    position = new Vector2(0, 0);
     pivot = null;
 
     // for images

@@ -1,11 +1,10 @@
 import { EVENT_START, EVENT_UPDATE } from "./Game";
 
 export default class Component {
+    id = null;
     gameObject = null;
 
-    constructor(gameObject) {
-        this.gameObject = gameObject;
-
+    constructor() {
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
         this.gameLoopEventHandler.bind(this);
