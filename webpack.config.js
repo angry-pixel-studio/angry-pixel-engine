@@ -21,15 +21,5 @@ module.exports = {
     },
     devServer: {
         contentBase: './dist'
-    },
-    optimization: {
-        minimizer: [
-            new TerserPlugin({
-                terserOptions: {
-                    keep_classnames: true,
-                    keep_fnames: true,
-                },
-            }),
-        ],
     }
 };
