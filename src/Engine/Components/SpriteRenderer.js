@@ -29,6 +29,9 @@ export default class SpriteRenderer extends Component {
         this.smooth = config.smooth ? config.smooth : this.smooth
     }
 
+    start(event) {
+        this.update(event);
+    }
 
     update(event) {
         if (this.sprite.loaded === true) {
