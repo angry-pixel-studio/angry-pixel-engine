@@ -82,7 +82,7 @@ export default class GameObject {
     removeComponents() {
         this.components.every((component, index) => {
             component._destroy();
-            delete this.components[index];
+            return delete this.components[index];
         });
     }
 
@@ -136,7 +136,7 @@ export default class GameObject {
     destroyChildren() {
         this.gameObjects.every((gameObject, index) => {
             gameObject._destroy();
-            delete this.gameObjects[index];
+            return delete this.gameObjects[index];
         });
     }
 

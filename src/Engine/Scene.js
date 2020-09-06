@@ -77,10 +77,10 @@ export default class Scene {
         });
     }
 
-    destroyGameObject() {
+    destroyGameObjects() {
         this.gameObjects.every((gameObject, index) => {
             gameObject._destroy();
-            delete this.gameObjects[index];
+            return delete this.gameObjects[index];
         });
     }
 
