@@ -35,13 +35,13 @@ export default class Tileset {
     }
 
     generateTiles() {
-        let index = 1;
+        let index = 0;
 
-        for (let col = 0; col < this.gridWidth; col++) {
-            for (let row = 0; row < this.gridHeight; row++) {
+        for (let row = 0; row < this.gridHeight; row++) {
+            for (let col = 0; col < this.gridWidth; col++) {
                 this.tiles[index] = new Rectangle(
                     (col * this.tileWidth) + this.offset.x + this.tileOffset.x,
-                    (row * this.tileHeight) + this.offset.y + this.tileOffset.y,
+                    (row * this.tileHeight) - this.offset.y - this.tileOffset.y,
                     this.tileWidth,
                     this.tileHeight
                 );

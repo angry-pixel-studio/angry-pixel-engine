@@ -22,7 +22,7 @@ export default class Player extends GameObject {
         this.tag = TAG_PLAYER;
         this.layer = LAYER_PLAYER;
         this.transform.position.x = 0;
-        this.transform.position.y = -90;
+        this.transform.position.y = -32;
 
         const image = new Image();
         image.src = SPRITE_PATH;

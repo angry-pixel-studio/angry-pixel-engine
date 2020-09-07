@@ -29,7 +29,6 @@ export default class WorldSapceRenderer {
     }
 
     renderImageInWorldSpace(renderData, worldSpaceRect) {
-        //console.log(renderData.position);
         let renderPosition = this.calcuateWorldSpacePosition(renderData, worldSpaceRect);
 
         this.canvasContext.save();

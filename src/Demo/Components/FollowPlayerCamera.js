@@ -21,8 +21,11 @@ export default class FollowPlayerCamera extends Component {
         x = x < 0 ? event.canvas.width / 2 : x;
         y = x < 0 ? event.canvas.height / 2 : x;
         
-        this.gameObject.transform.position.x = this.clamp(this.player.transform.position.x, -x, x);
-        this.gameObject.transform.position.y = this.clamp(this.player.transform.position.y, -y, y);
+        //this.gameObject.transform.position.x = this.clamp(this.player.transform.position.x, -x, x);
+        //this.gameObject.transform.position.y = this.clamp(this.player.transform.position.y, -y, y);
+
+        this.gameObject.transform.position.x = this.player.transform.position.x;
+        this.gameObject.transform.position.y = this.player.transform.position.y;
     }
 
     clamp (number, min, max) {
