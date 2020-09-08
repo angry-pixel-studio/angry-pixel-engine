@@ -1,13 +1,20 @@
 import Component from '../Component';
 import RenderData from '../Core/Rendering/RenderData';
-import { PIVOT_CENTER } from '../Core/Rendering/RenderPivots';
 
 export default class TilemapRenderer extends Component {
     tileset = null;
     tilemapData = null;
-    renderData = new RenderData();
     tileScale = 1
     showTileset = false;
+    
+    tilemapProcessd = false;
+    processedData = [];
+
+    width = 0;
+    height = 0;
+
+    realWidth = 0;
+    realHeight = 0;
 
     constructor(config) {
         super();
@@ -23,39 +30,20 @@ export default class TilemapRenderer extends Component {
     }
 
     update (event) {
-        if (this.tileset.loaded) {
-            if (this.showTileset) {
-                this.renderTileset(event);
-            } else {
-                this.processTiled(event);
-            }
+        if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
+            this.processTileset();
+            this.updateTilesPosition();
+        } else if (this.tileset.loaded && this.tilemapProcessd === false) {
+            this.processTilemap();
+            this.updateTilesPosition();
+        }
+        
+        if (this.tileset.loaded && this.tilemapProcessd === true) {
+            this.processedData.forEach(renderData => event.renderManager.addToRenderStack(renderData));
         }
     }
 
-    processTiled(event) {
-        this.tilemapData.layers.forEach(
-            layer => layer.chunks.forEach(
-                chunk => this.processTiledChunk(event, chunk)
-            )
-        );
-    }
-
-    processTiledChunk(event, chunk) {
-        let dataIndex = 0;
-
-        for (let row = 0; row < chunk.height; row++) {
-            for (let col = 0; col < chunk.width; col++) {
-                const tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
-                if (tile !== null) {
-                    this.processTiledTile(event, tile, chunk, col, row);
-                }
-                
-                dataIndex++;
-            }    
-        }
-    }
-
-    renderTileset(event) {
+    processTileset() {
         let index = 0;
         
         for (let row = 0; row < this.tileset.gridHeight; row++) {
@@ -63,18 +51,61 @@ export default class TilemapRenderer extends Component {
                 const tile = this.tileset.getTile(index);
                 
                 if (tile !== null) {
-                    this.processTiledTile(event, tile, {x: 0, y: 0}, col, row);
+                    this.updateSizeInfo(col, row);
+                    this.processTile(tile, col, row);
                 }
                 
                 index++;
             }    
         }
+
+        this.tilemapProcessd = true;
     }
 
-    processTiledTile(event, tile, chunk, col, row) {
-        
+    processTilemap() {
+        const data = this.tilemapData
+            .trim()
+            .split('\n');
+
+        data.forEach((rowData, row)  => {
+            rowData = rowData.match(/.{1,5}/g);
+            if (rowData) {
+                rowData.forEach(
+                    (colData, col) => {
+                        const stringId = colData.trim().replace('[', '').replace(']', '');
+                        const tile = this.tileset.getTile(parseInt(stringId));
+                        
+                        if (tile !== null) {
+                            this.updateSizeInfo(col, row);
+                            this.processTile(tile, col, row);
+                        }
+                        
+                    }
+                )
+            }
+        });
+
+        this.tilemapProcessd = true;
+    }
+
+    updateSizeInfo(col, row) {
+        if (this.width < col) {
+            this.width = col;
+            this.realWidth = this.width * this.tileset.tileWidth * this.tileScale;
+        }
+
+        if (this.height < row) {
+            this.height = row;
+            this.realHeight = this.height * this.tileset.tileHeight * this.tileScale;
+        }
+    }
+
+    processTile(tile, col, row) {
         const renderData = new RenderData();
-        this.setPosition(renderData, chunk, col, row);
+        
+        renderData.position.x = (col * this.tileset.tileWidth * this.tileScale);
+        
+        renderData.position.y = -(row * this.tileset.tileHeight * this.tileScale);
 
         renderData.ui = false;
         renderData.image = this.tileset.image;
@@ -83,19 +114,13 @@ export default class TilemapRenderer extends Component {
         renderData.height = tile.height * this.tileScale;
         renderData.slice = tile;
 
-        event.renderManager.addToRenderStack(renderData);
+        this.processedData.push(renderData);
     }
 
-    setPosition(renderData, chunk, col, row) {
-        const basePosition = this.gameObject.transform.position;
-
-        renderData.position.x = basePosition.x
-            + (col * this.tileset.tileWidth * this.tileScale)
-            + (chunk.x * this.tileset.tileWidth * this.tileScale);
-        
-        renderData.position.y = basePosition.y
-            - (row * this.tileset.tileHeight * this.tileScale)
-            - (chunk.y * this.tileset.tileHeight * this.tileScale)
-        ;
+    updateTilesPosition() {
+        this.processedData.forEach(renderData => {
+            renderData.position.x -= (Math.floor(this.realWidth / 2));
+            renderData.position.y += (Math.floor(this.realHeight / 2));
+        });
     }
 }

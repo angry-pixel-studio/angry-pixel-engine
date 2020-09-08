@@ -3,7 +3,7 @@ import Race from './Race/Scenes/Race';
 import Sandbox from './Demo/Scenes/Sandbox';
 
 // Create the Game
-const game = new Game('app', 900, 502);
+const game = new Game('app', 1366, 768);
 
 // Add Sencenes
 //game.addScene('Race', () => new Race());
