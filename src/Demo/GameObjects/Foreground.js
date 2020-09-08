@@ -3,7 +3,7 @@ import TiledRenderer from "../../Engine/Components/TiledRenderer";
 import TilemapRenderer from '../../Engine/Components/TilemapRenderer';
 import tiledData from "../Tilemaps/Foreground.json";
 import tilemapData from "../Tilemaps/Foreground";
-import Tileset from "../../Engine/TileSet";
+import Tileset from "../../Engine/Tileset";
 
 export const TAG_FOREGROUND = 'Foreground';
 export const LAYER_FOREGROUND = 'Foreground';
@@ -23,7 +23,7 @@ export default class Foreground extends GameObject {
 
         const image = new Image();
         image.src = SPRITE_PATH;
-        
+
         /*this.addComponent(() => new TiledRenderer({
             tileset: new Tileset({
                 image: image,
@@ -47,7 +47,7 @@ export default class Foreground extends GameObject {
             tilemapData: tilemapData,
             tileScale: 4
         }), 'TilemapRenderer');
-        
+
         this.tilemapRenderer = this.getComponent('TilemapRenderer');
         //this.tilemapRenderer.showTileset = true;
     }
