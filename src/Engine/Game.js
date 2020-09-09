@@ -27,8 +27,8 @@ export default class Game {
     firstFrame = false;
     frameRequestId = null;
 
-    constructor(containerId, width, height) {
-        this.createCanvas(document.getElementById(containerId), width, height);
+    constructor(containerElement, width, height) {
+        this.createCanvas(containerElement, width, height);
         this.canvasContext = this.canvas.getContext('2d');
         this.sceneManager = new SceneManager(this);
         this.renderManager = new RenderManager(this);
@@ -57,6 +57,14 @@ export default class Game {
         this.sceneManager.loadOpeningScene();
         
         this.gameLoop();
+    }
+
+    stop() {
+        this.stopLoop();
+        setTimeout(() => {
+            this.sceneManager.unloadCurrentScene();
+            this.clearCanvas();
+        }, 100);
     }
 
     gameLoop() {

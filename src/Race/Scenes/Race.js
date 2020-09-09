@@ -6,11 +6,16 @@ import Vehicle, { TAG_PLAYER } from "../GameObjects/Vehicle";
 import CIRCUITS from "../Config/Circuits";
 import PlayerStats from "../GameObjects/PlayerStats";
 
+export const FINISHED_EVENT = 'cm-race-finished';
+
 export default class Race extends Scene {
     raceData = null;
     currentLapData = {};
     playerUsername = null;
+    
+    numberOfVehicles = 0;
     finished = false;
+    
     baseSpeed = 0;
     deltaSpeed = 0;
 
@@ -44,6 +49,7 @@ export default class Race extends Scene {
                         position: 1,
                         speed: 0
                     };
+                    this.numberOfVehicles += 1;
                 }
             );
     }
@@ -59,6 +65,12 @@ export default class Race extends Scene {
             }
 
             vehicle.stopVehicle();
+
+            if (currentLapData.position === this.numberOfVehicles) {
+                this.finished = true;
+                window.dispatchEvent(new CustomEvent(FINISHED_EVENT));
+            }
+
             return;
         }
 
@@ -80,6 +92,6 @@ export default class Race extends Scene {
             this.getGameObject('PlayerStats').updateStats(currentLapData.lap, lastLap, lastPosition);
         }
 
-        console.log(this.currentLapData[vehicle.username]);
+        //console.log(this.currentLapData[vehicle.username]);
     }
 }

@@ -1,20 +1,23 @@
 import Game from './Engine/Game';
-import Race from './Race/Scenes/Race';
-import Sandbox from './Demo/Scenes/Sandbox';
+import Race, { FINISHED_EVENT } from './Race/Scenes/Race';
 import raceData1 from "./Race/Test/race-result.json";
 import raceData2 from "./Race/Test/race-result-2.json";
 
-//const username = 'mauro';
+const username = 'mauro';
+const containerElement = document.getElementById('app');
 
 // Create the Game
-//const game = new Game('app', 900, 502);
-const game = new Game('app', 1366, 768);
+const game = new Game(containerElement, 900, 502);
 
-// Add Sencenes
-//game.addScene('Race', () => new Race(username, raceData2));
-game.addScene('Sandbox', () => new Sandbox());
+// Add a scene
+game.addScene('Race', () => new Race(username, raceData2));
 
 // Run the game
 game.run();
 
-//setTimeout(() => game.sceneManager.loadScene('Sandbox'), 3000);
+// Stop the game
+window.addEventListener(FINISHED_EVENT, () => {
+    console.log('carrera finalziada');
+    
+    setTimeout(() => game.stop(), 3000);
+});
