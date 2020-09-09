@@ -34,8 +34,8 @@ export default class Camera extends Component {
 
         this.worldSpaceRect.x = position.x - vpHalfWidth;
         this.worldSpaceRect.y = position.y + vpHalfHeight;
-        this.worldSpaceRect.width = position.x + vpHalfWidth;
-        this.worldSpaceRect.height = position.y - vpHalfHeight;
+        this.worldSpaceRect.width = this.viewportRect.width;
+        this.worldSpaceRect.height = this.viewportRect.height;
     }
 
     addLayerToRender(layer) {

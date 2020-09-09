@@ -1,6 +1,5 @@
 import Component from "../Component";
 import RenderData from "../Core/Rendering/RenderData";
-import { PIVOT_CENTER } from "../Core/Rendering/RenderPivots";
 
 export * from '../Core/Rendering/RenderPivots';
 

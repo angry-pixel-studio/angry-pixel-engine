@@ -1,4 +1,5 @@
-import { PIVOT_CENTER, PIVOT_TOP_LEFT, PIVOT_TOP_RIGHT, PIVOT_BOTTOM_LEFT, PIVOT_BOTTOM_RIGHT } from "./RenderPivots";
+import { PIVOT_CENTER } from "./RenderPivots";
+import Rectangle from "../../Helper/Rectangle";
 
 export default class WorldSapceRenderer {
     renderManager = null;
@@ -29,8 +30,12 @@ export default class WorldSapceRenderer {
     }
 
     renderImageInWorldSpace(renderData, worldSpaceRect) {
+        if (this.isInsideWorldSpaceRect(worldSpaceRect, renderData) === false) {
+            return;
+        }
+        
         let renderPosition = this.calcuateWorldSpacePosition(renderData, worldSpaceRect);
-
+        
         this.canvasContext.save();
         this.canvasContext.translate(renderPosition.x, renderPosition.y)
         this.canvasContext.imageSmoothingEnabled = renderData.smooth;
@@ -107,28 +112,22 @@ export default class WorldSapceRenderer {
         this.canvasContext.restore();
     }
 
-    calcuateWorldSpacePosition(renderData, worldSpaceRect) {
-        // PIVOT_TOP_LEFT is the canvas default position
+    isInsideWorldSpaceRect(worldSpaceRect, renderData) {
+        const cacheRect = new Rectangle(0, 0, 0, 0);
         
+        cacheRect.x = renderData.position.x;
+        cacheRect.y = renderData.position.y;
+        cacheRect.width = renderData.width;
+        cacheRect.height = renderData.height;
+
+        return worldSpaceRect.overlappingRectangle(cacheRect);
+    }
+
+    calcuateWorldSpacePosition(renderData, worldSpaceRect) {
         let renderPosition = {
             x: renderData.position.x - worldSpaceRect.x,
             y: worldSpaceRect.y - renderData.position.y
         };
-
-        // offset
-        renderPosition.x += renderData.offsetX !== undefined ? renderData.offsetX : 0;
-        renderPosition.y += renderData.offsetY !== undefined ? renderData.offsetY : 0;
-
-        if (renderData.pivot === null) {
-            return renderPosition;
-        }
-
-        switch (renderData.pivot) {
-            case PIVOT_CENTER:
-                renderPosition.x -= (Math.floor(renderData.width / 2));
-                renderPosition.y -= (Math.floor(renderData.height / 2));
-                break;
-        }
 
         return renderPosition;
     }

@@ -76,7 +76,7 @@ export default class TilemapRenderer extends Component {
                         const tile = this.tileset.getTile(parseInt(stringId));
                         
                         if (tile !== null) {
-                            this.updateSizeInfo(col, row);
+                            this.updateSizeInfo(col + 1, row + 1);
                             this.processTile(tile, col, row);
                         }
                         

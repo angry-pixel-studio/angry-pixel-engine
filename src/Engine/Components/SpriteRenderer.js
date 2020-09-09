@@ -1,6 +1,12 @@
 import Component from '../Component';
 import RenderData from '../Core/Rendering/RenderData';
-import { PIVOT_CENTER } from '../Core/Rendering/RenderPivots';
+import {
+    PIVOT_CENTER,
+    PIVOT_TOP_LEFT,
+    PIVOT_TOP_RIGHT,
+    PIVOT_BOTTOM_LEFT,
+    PIVOT_BOTTOM_RIGHT
+} from '../Core/Rendering/RenderPivots';
 import Vector2 from '../Helper/Vector2';
 
 export * from '../Core/Rendering/RenderPivots';
@@ -18,7 +24,7 @@ export default class SpriteRenderer extends Component {
         super();
 
         this.renderData.ui = false;
-        
+
         // required
         this.sprite = config.sprite;
 
@@ -40,15 +46,38 @@ export default class SpriteRenderer extends Component {
             this.renderData.width = this.sprite.width * this.gameObject.transform.scale.x;
             this.renderData.height = this.sprite.height * this.gameObject.transform.scale.y;
             this.renderData.slice = this.sprite.slice;
-            this.renderData.pivot = this.pivot;
-            this.renderData.position.x = this.gameObject.transform.position.x;
-            this.renderData.position.y = this.gameObject.transform.position.y;
-            this.renderData.offsetX = this.offsetX;
-            this.renderData.offsetY = this.offsetY;
             this.renderData.flipHorizontal = this.flipHorizontal;
             this.renderData.flipVertical = this.flipVertical;
 
+            this.calculateRenderPosition(this.renderData);
+
             event.renderManager.addToRenderStack(this.renderData);
+        }
+    }
+
+    calculateRenderPosition() {
+        this.renderData.position.x = this.gameObject.transform.position.x + this.offsetX;
+        this.renderData.position.y = this.gameObject.transform.position.y + this.offsetY;
+
+        switch (this.pivot) {
+            case PIVOT_CENTER:
+                this.renderData.position.x -= (Math.floor(this.renderData.width / 2));
+                this.renderData.position.y += (Math.floor(this.renderData.height / 2));
+                break;
+            case PIVOT_TOP_RIGHT:
+                this.renderData.position.x -= this.renderData.width;
+                break;
+            case PIVOT_BOTTOM_LEFT:
+                this.renderData.position.y += this.renderData.height;
+                break;
+            case PIVOT_BOTTOM_RIGHT:
+                this.renderData.position.x -= this.renderData.width;
+                this.renderData.position.y += this.renderData.height;
+                break;
+            case PIVOT_TOP_LEFT:
+                break;
+            default:
+                break;
         }
     }
 }

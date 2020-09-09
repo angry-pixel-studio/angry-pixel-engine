@@ -26,4 +26,19 @@ export default class Rectangle {
     set y(value) {
         this.position.y = value;
     }
+
+    get x1() {
+        return this.position.x + this.width;
+    }
+
+    get y1() {
+        return this.position.y - this.height;
+    }
+
+    overlappingRectangle(rect) {
+        return this.x1 >= rect.x
+            && this.x <= rect.x1
+            && this.y1 <= rect.y
+            && this.y >= rect.y1;
+    }
 }
