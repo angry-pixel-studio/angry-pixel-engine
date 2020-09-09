@@ -1,7 +1,7 @@
 const CIRCUITS = {
     'f046d645-93be-43b0-8a4b-ce1cfc6abb26': {
-        'image': 'image/sunpeak.png',
-        'spots': [
+        image: 'image/sunpeak.png',
+        spots: [
             {x: -38, y: -157},
             {x: -341, y: -128},
             {x: -382, y: -103},
@@ -21,8 +21,44 @@ const CIRCUITS = {
             {x: 316, y: 123},
             {x: 206, y: -134},
             {x: 118, y: -173}
-        ]
-    }
+        ],
+        baseSpeed: 3,
+        deltaSpeed: 0.1
+    },
+    'e010316c-13dd-4b9e-be64-99153a9bc4f5': {
+        image: 'image/breachfall.png',
+        spots: [
+            {x: -17, y: 163},
+            {x: -222, y: 159},
+            {x: -243, y: 52},
+            {x: -289, y: -29},
+            {x: -367, y: -81},
+            {x: -375, y: -100},
+            {x: -345, y: -172},
+            {x: -291, y: -202},
+            {x: -252, y: -196},
+            {x: -152, y: -136},
+            {x: -80, y: -172},
+            {x: -66, y: -158},
+            {x: -171, y: 63},
+            {x: -155, y: 91},
+            {x: -126, y: 87},
+            {x: 44, y: -199},
+            {x: 254, y: -204},
+            {x: 281, y: -166},
+            {x: 221, y: -22},
+            {x: 57, y: 48},
+            {x: 47, y: 69},
+            {x: 75, y: 83},
+            {x: 257, y: 19},
+            {x: 331, y: 56},
+            {x: 317, y: 136},
+            {x: 222, y: 186},
+            {x: 108, y: 162}
+        ],
+        baseSpeed: 2.5,
+        deltaSpeed: 0.03
+    },
 }
 
 export default CIRCUITS;

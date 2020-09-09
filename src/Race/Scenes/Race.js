@@ -2,22 +2,25 @@ import Scene from "../../Engine/Scene";
 import Circuit from "../GameObjects/Circuit";
 import SpotPointer from "../GameObjects/SpotPointer";
 import Vehicle, { TAG_PLAYER } from "../GameObjects/Vehicle";
-import raceData from "../race-result.json";
+
 import CIRCUITS from "../Config/Circuits";
 import PlayerStats from "../GameObjects/PlayerStats";
-
-const BASE_VELOCITY = 3;
-const DELTA_VELOCITY = 0.1;
 
 export default class Race extends Scene {
     raceData = null;
     currentLapData = {};
-    player = 'Player';
+    playerUsername = null;
+    finished = false;
+    baseSpeed = 0;
+    deltaSpeed = 0;
 
-    constructor() {
+    constructor(playerUsername, raceData) {
         super();
 
+        this.playerUsername = playerUsername;
         this.raceData = raceData;
+        this.baseSpeed = CIRCUITS[raceData.circuitUuid].baseSpeed;
+        this.deltaSpeed = CIRCUITS[raceData.circuitUuid].deltaSpeed;
 
         const circuitSpots = CIRCUITS[raceData.circuitUuid].spots;
         const circuitImage = CIRCUITS[raceData.circuitUuid].image;
@@ -34,7 +37,7 @@ export default class Race extends Scene {
         .vehicleLaps
             .forEach(
                 vehicle => {
-                    this.addGameObject(() => new Vehicle(vehicle.username, vehicle.username === this.player));
+                    this.addGameObject(() => new Vehicle(vehicle.username, vehicle.username === this.playerUsername));
                     this.currentLapData[vehicle.username] = {
                         lap: 0,
                         username: vehicle.username,
@@ -67,7 +70,7 @@ export default class Race extends Scene {
                 0
             );
 
-        vehicle.speed = BASE_VELOCITY + (currentLapData.position - nextPosition) * DELTA_VELOCITY;
+        vehicle.speed = this.baseSpeed + (currentLapData.position - nextPosition) * this.deltaSpeed;
 
         this.currentLapData[vehicle.username].speed = vehicle.speed;
         this.currentLapData[vehicle.username].lap += 1;

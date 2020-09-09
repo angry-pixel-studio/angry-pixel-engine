@@ -2,6 +2,7 @@ import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 import { CIRCUIT_TAG } from "./Circuit";
 import Sprite from "../../Engine/Sprite";
+import Vector2 from "../../Engine/Helper/Vector2";
 
 export const TAG_PLAYER = 'player';
 
@@ -35,7 +36,8 @@ export default class Vehicle extends GameObject {
 
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
-                image: image
+                image: image,
+                scale: new Vector2(0.75, 0.75)
             })
         }));
     }

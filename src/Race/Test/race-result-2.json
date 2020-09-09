@@ -1,0 +1,120 @@
+{
+    "uuid": "344711ea-73af-4ca8-b572-563e221e48c1",
+    "circuitUuid": "e010316c-13dd-4b9e-be64-99153a9bc4f5",
+    "circuitName": "Picodromo de General Paz",
+    "startAt": "2020-09-09 19:28:05",
+    "status": 5,
+    "laps": [
+        {
+            "lapNumber": 1,
+            "vehicleLaps": [
+                {
+                    "username": "bobojulsshelby",
+                    "position": 1
+                },
+                {
+                    "username": "low-bender-alains",
+                    "position": 2
+                },
+                {
+                    "username": "lupe.wall.blind",
+                    "position": 3
+                },
+                {
+                    "username": "mauro",
+                    "position": 4
+                },
+                {
+                    "username": "dogg_bender_shelby",
+                    "position": 5
+                },
+                {
+                    "username": "nawi.roxx.jorde",
+                    "position": 6
+                },
+                {
+                    "username": "guy.arrow.ozzy",
+                    "position": 7
+                },
+                {
+                    "username": "bobo.link.smath",
+                    "position": 8
+                }
+            ]
+        },
+        {
+            "lapNumber": 2,
+            "vehicleLaps": [
+                {
+                    "username": "nawi.roxx.jorde",
+                    "position": 1
+                },
+                {
+                    "username": "lupe.wall.blind",
+                    "position": 2
+                },
+                {
+                    "username": "mauro",
+                    "position": 3
+                },
+                {
+                    "username": "bobojulsshelby",
+                    "position": 4
+                },
+                {
+                    "username": "guy.arrow.ozzy",
+                    "position": 5
+                },
+                {
+                    "username": "low-bender-alains",
+                    "position": 6
+                },
+                {
+                    "username": "dogg_bender_shelby",
+                    "position": 7
+                },
+                {
+                    "username": "bobo.link.smath",
+                    "position": 8
+                }
+            ]
+        },
+        {
+            "lapNumber": 3,
+            "vehicleLaps": [
+                {
+                    "username": "lupe.wall.blind",
+                    "position": 1
+                },
+                {
+                    "username": "nawi.roxx.jorde",
+                    "position": 2
+                },
+                {
+                    "username": "bobojulsshelby",
+                    "position": 3
+                },
+                {
+                    "username": "bobo.link.smath",
+                    "position": 4
+                },
+                {
+                    "username": "mauro",
+                    "position": 5
+                },
+                {
+                    "username": "dogg_bender_shelby",
+                    "position": 6
+                },
+                {
+                    "username": "guy.arrow.ozzy",
+                    "position": 7
+                },
+                {
+                    "username": "low-bender-alains",
+                    "position": 8
+                }
+            ]
+        }
+    ]
+}
