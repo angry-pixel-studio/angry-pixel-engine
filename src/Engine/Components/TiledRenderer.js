@@ -106,10 +106,12 @@ export default class TiledRenderer extends Component {
     processTile(tile, chunk, col, row) {
         const renderData = new RenderData();
         
-        renderData.position.x = (col * this.tileset.tileWidth * this.tileScale)
+        renderData.position.x = this.gameObject.transform.position.x
+            + (col * this.tileset.tileWidth * this.tileScale)
             + (chunk.x * this.tileset.tileWidth * this.tileScale);
         
-        renderData.position.y = -(row * this.tileset.tileHeight * this.tileScale)
+        renderData.position.y = this.gameObject.transform.position.y
+            - (row * this.tileset.tileHeight * this.tileScale)
             - (chunk.y * this.tileset.tileHeight * this.tileScale);
 
         renderData.ui = false;

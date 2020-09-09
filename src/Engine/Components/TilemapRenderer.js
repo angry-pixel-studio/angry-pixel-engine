@@ -103,9 +103,8 @@ export default class TilemapRenderer extends Component {
     processTile(tile, col, row) {
         const renderData = new RenderData();
         
-        renderData.position.x = (col * this.tileset.tileWidth * this.tileScale);
-        
-        renderData.position.y = -(row * this.tileset.tileHeight * this.tileScale);
+        renderData.position.x = this.gameObject.transform.position.x + (col * this.tileset.tileWidth * this.tileScale);
+        renderData.position.y = this.gameObject.transform.position.y - (row * this.tileset.tileHeight * this.tileScale);
 
         renderData.ui = false;
         renderData.image = this.tileset.image;
