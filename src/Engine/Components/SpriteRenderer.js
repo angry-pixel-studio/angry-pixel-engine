@@ -18,6 +18,7 @@ export default class SpriteRenderer extends Component {
     pivot = PIVOT_CENTER;
     flipHorizontal = false;
     flipVertical = false;
+    rotation = 0;
     renderData = new RenderData();
 
     constructor(config) {
@@ -33,6 +34,7 @@ export default class SpriteRenderer extends Component {
         this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
         this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
         this.smooth = config.smooth ? config.smooth : this.smooth
+        this.rotation = config.rotation ? config.rotation : this.rotation;
     }
 
     start(event) {
@@ -48,6 +50,7 @@ export default class SpriteRenderer extends Component {
             this.renderData.slice = this.sprite.slice;
             this.renderData.flipHorizontal = this.flipHorizontal;
             this.renderData.flipVertical = this.flipVertical;
+            this.renderData.rotation = this.gameObject.transform.rotation + this.rotation;
 
             this.calculateRenderPosition(this.renderData);
 

@@ -34,10 +34,26 @@ export default class WorldSapceRenderer {
             return;
         }
         
-        let renderPosition = this.calcuateWorldSpacePosition(renderData, worldSpaceRect);
-        
+        const renderPosition = this.calcuateWorldSpacePosition(renderData, worldSpaceRect);
+        const imgPos = {x: 0, y: 0};
+
         this.canvasContext.save();
-        this.canvasContext.translate(renderPosition.x, renderPosition.y)
+
+        if (renderData.rotation) {
+            this.canvasContext.translate(
+                renderPosition.x + renderData.width/2,
+                renderPosition.y + renderData.height/2
+            );
+            imgPos.x = -renderData.width/2;
+            imgPos.y = -renderData.height/2;
+
+            this.canvasContext.rotate(renderData.rotation * Math.PI / 180);
+        } else {
+            this.canvasContext.translate(renderPosition.x, renderPosition.y);
+            imgPos.x = renderData.flipHorizontal ? -renderData.width : imgPos.x;
+            imgPos.y = renderData.flipVertical ? -renderData.height : imgPos.y;
+        }
+
         this.canvasContext.imageSmoothingEnabled = renderData.smooth;
 
         this.canvasContext.scale(
@@ -52,8 +68,8 @@ export default class WorldSapceRenderer {
                 renderData.slice.y,
                 renderData.slice.width,
                 renderData.slice.height,
-                renderData.flipHorizontal ? -renderData.width : 0,
-                renderData.flipVertical ? -renderData.height : 0,
+                imgPos.x,
+                imgPos.y,
                 renderData.width,
                 renderData.height
             );

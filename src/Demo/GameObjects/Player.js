@@ -33,7 +33,7 @@ export default class Player extends GameObject {
                 slice: new Rectangle(16, 0, 16, 16),
                 scale: new Vector2(4, 4),
                 smooth: false
-            }),
+            })
         }), 'SpriteRenderer');
 
         this.addComponent(() => new Animator({
@@ -45,6 +45,7 @@ export default class Player extends GameObject {
     update(event) {
         this.getComponent('SpriteRenderer').flipHorizontal = this.direction < 0;
         this.walk(event.input.keyboard);
+        this.rotate(event.input.keyboard);
     }
 
     walk(keyboard) {
@@ -67,5 +68,17 @@ export default class Player extends GameObject {
         this.direction = deltaX !== 0 ? (deltaX < 0 ? -1 : 1) : this.direction;
         
         this.transform.position.x += deltaX;
+    }
+
+    rotate (keyboard) {
+        let delta = 0;
+
+        if (keyboard.isPressed('ArrowUp')) {
+            delta -= 2;
+        } else if (keyboard.isPressed('ArrowDown')) {
+            delta += 2;
+        }
+
+        this.transform.rotation += delta;
     }
 }

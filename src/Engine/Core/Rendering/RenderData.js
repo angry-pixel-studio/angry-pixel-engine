@@ -24,6 +24,7 @@ export default class RenderData {
     slice = null;
     flipHorizontal = false;
     flipVertical = false;
+    rotation = null;
 
     // for text
     text = null;
