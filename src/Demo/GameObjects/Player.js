@@ -80,5 +80,6 @@ export default class Player extends GameObject {
         }
 
         this.transform.rotation += delta;
+        this.transform.position.y -= delta;
     }
 }

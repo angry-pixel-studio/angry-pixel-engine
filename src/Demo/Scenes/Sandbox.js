@@ -5,6 +5,7 @@ import GameCamera from "../../Engine/GameObjects/GameCamera";
 import Camera from "../../Engine/Components/Camera";
 import Foreground, { LAYER_FOREGROUND } from "../GameObjects/Foreground";
 import FollowPlayerCamera from "../Components/FollowPlayerCamera";
+import PlayerTop from "../GameObjects/PlayerTop";
 
 export default class Sandbox extends Scene {
 
@@ -12,7 +13,8 @@ export default class Sandbox extends Scene {
         super();
 
         this.addGameObject(() => new Foreground())
-            .addGameObject(() => new Player(), 'Player')
+            //.addGameObject(() => new Player(), 'Player')
+            .addGameObject(() => new PlayerTop(), 'Player')
             .addGameObject(() => new SpotPointer());
 
         this.gameCamera.camera.addLayerToRender(LAYER_PLAYER);
