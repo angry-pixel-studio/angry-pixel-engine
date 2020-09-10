@@ -15,6 +15,7 @@ export default class GameObject {
     gameObjects = [];
     inactiveComponents = [];
     inactiveGameObjects = [];
+    processingLoop = false;
 
     constructor() {
         this.addComponent(() => new Transform(), TRANSFORM_ID);
@@ -24,15 +25,19 @@ export default class GameObject {
     }
 
     gameLoopEventHandler = event => {
-        if (this.active === false) {
+        if (this.active === false || this.processingLoop === true) {
             return;
         }
 
         if (event.type === EVENT_START) {
+            this.processingLoop = true;
             this.start(event.detail);
         } else if (event.type === EVENT_UPDATE) {
+            this.processingLoop = true;
             this.update(event.detail);
         }
+
+        this.processingLoop = false;
     }
 
     start() { }

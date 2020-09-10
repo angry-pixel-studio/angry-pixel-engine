@@ -14,12 +14,12 @@ const config = {
 export const PlayerWalking = new Animation(
     {
         sprites: [
-            new Sprite({...config, slice: {x: 0, y: 0, width: 32, height: 32}}),
             new Sprite({...config, slice: {x: 32, y: 0, width: 32, height: 32}}),
             new Sprite({...config, slice: {x: 64, y: 0, width: 32, height: 32}}),
             new Sprite({...config, slice: {x: 96, y: 0, width: 32, height: 32}}),
             new Sprite({...config, slice: {x: 128, y: 0, width: 32, height: 32}}),
-            new Sprite({...config, slice: {x: 160, y: 0, width: 32, height: 32}})
+            new Sprite({...config, slice: {x: 160, y: 0, width: 32, height: 32}}),
+            new Sprite({...config, slice: {x: 0, y: 0, width: 32, height: 32}})
         ],
         speed: 0.4,
         loop: true,

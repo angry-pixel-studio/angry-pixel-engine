@@ -12,7 +12,7 @@ export default class Sandbox extends Scene {
     constructor() {
         super();
 
-        this.addGameObject(() => new Foreground())
+        this.addGameObject(() => new Foreground(), 'Foreground')
             //.addGameObject(() => new Player(), 'Player')
             .addGameObject(() => new PlayerTop(), 'Player')
             .addGameObject(() => new SpotPointer());
@@ -20,5 +20,9 @@ export default class Sandbox extends Scene {
         this.gameCamera.camera.addLayerToRender(LAYER_PLAYER);
         this.gameCamera.camera.addLayerToRender(LAYER_FOREGROUND);
         this.gameCamera.addComponent(() => new FollowPlayerCamera());
+    }
+
+    start(event) {
+        event.game.canvasBGColor = '#080500';
     }
 }

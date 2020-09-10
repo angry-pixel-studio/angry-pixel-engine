@@ -9,7 +9,7 @@ const containerElement = document.getElementById('app');
 
 // Create the Game
 //const game = new Game(containerElement, 900, 502);
-const game = new Game(containerElement, 1366, 768);
+const game = new Game(containerElement, 900, 502);
 
 // Add a scene
 //game.addScene('Race', () => new Race(username, raceData2));

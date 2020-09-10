@@ -1,5 +1,6 @@
 import Component from '../Component';
 import RenderData from '../Core/Rendering/RenderData';
+import Rectangle from '../Helper/Rectangle';
 
 export default class TilemapRenderer extends Component {
     tileset = null;
@@ -13,6 +14,7 @@ export default class TilemapRenderer extends Component {
     width = 0;
     height = 0;
 
+    realTiles = [];
     realWidth = 0;
     realHeight = 0;
 
@@ -84,7 +86,7 @@ export default class TilemapRenderer extends Component {
                 )
             }
         });
-
+        console.log(this.tiles);
         this.tilemapProcessd = true;
     }
 
@@ -116,10 +118,33 @@ export default class TilemapRenderer extends Component {
         this.processedData.push(renderData);
     }
 
+    processRealTile(renderData) {
+        this.realTiles.push(new Rectangle(
+            renderData.position.x,
+            renderData.position.y,
+            renderData.width,
+            renderData.height
+        ));
+    }
+
     updateTilesPosition() {
         this.processedData.forEach(renderData => {
             renderData.position.x -= (Math.floor(this.realWidth / 2));
             renderData.position.y += (Math.floor(this.realHeight / 2));
+            this.processRealTile(renderData);
         });
+    }
+
+    isTouchingRect(rect) {
+        let touching = false;
+        this.realTiles.every(tile => {
+            if (tile.overlappingRectangle(rect)) {
+                touching = true;
+                return false;
+            }
+            return true;
+        });
+
+        return touching;
     }
 }

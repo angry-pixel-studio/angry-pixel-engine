@@ -19,6 +19,7 @@ export const EVENT_UPDATE = 'mini-engine-update';
 export default class Game {
     canvas = null;
     canvasContext = null;
+    canvasBGColor = '#000000';
     input = null;
     sceneManager = null;
     renderManager = null;
@@ -96,7 +97,7 @@ export default class Game {
 
     clearCanvas() {
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasContext.fillStyle = '#000000';
+        this.canvasContext.fillStyle = this.canvasBGColor;
         this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
