@@ -1,4 +1,3 @@
-import { PIVOT_CENTER } from "./RenderPivots";
 import Rectangle from "../../Helper/Rectangle";
 
 export default class WorldSapceRenderer {
