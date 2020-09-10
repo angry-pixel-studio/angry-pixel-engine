@@ -140,11 +140,19 @@ export default class WorldSapceRenderer {
     }
 
     calcuateWorldSpacePosition(renderData, worldSpaceRect) {
-        let renderPosition = {
+        const renderPosition = {
             x: renderData.position.x - worldSpaceRect.x,
             y: worldSpaceRect.y - renderData.position.y
         };
 
+        if (renderData.rotation) {
+            renderPosition.x = Number((renderPosition.x).toFixed(2));
+            renderPosition.y = Number((renderPosition.y).toFixed(2));
+        } else {
+            renderPosition.x = parseInt(renderPosition.x);
+            renderPosition.y = parseInt(renderPosition.y);
+        }
+        
         return renderPosition;
     }
 }

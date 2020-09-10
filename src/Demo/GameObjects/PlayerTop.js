@@ -69,10 +69,6 @@ export default class PlayerTop extends GameObject {
         let deltaX = Math.cos(this.angle * Math.PI / 180) * delta;
         let deltaY = -Math.sin(this.angle * Math.PI / 180) * delta;
         
-        // todo: this round is nescesary in the worldspace render manager
-        deltaX = Number((deltaX).toFixed(2));
-        deltaY = Number((deltaY).toFixed(2));
-        
         this.transform.position.x += deltaX;
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
