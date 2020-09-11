@@ -54,7 +54,6 @@ export default class PlayerTop extends GameObject {
     update(event) {
         this.rotate(event.input.keyboard);
         this.walk(event.input.keyboard);
-        this.isTouchingForeground();
     }
 
     walk(keyboard) {
