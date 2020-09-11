@@ -200,7 +200,8 @@ export default class GameObject {
 
         this.removeComponents();
         this.destroyChildren();
-
-        //Object.keys(this).forEach(key => delete this[key]);
+        
+        // @ts-ignore
+        Object.keys(this).forEach(key => delete this[key]);
     }
 }

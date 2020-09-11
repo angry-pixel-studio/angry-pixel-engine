@@ -1,12 +1,3 @@
-(function () {
-    let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    window.requestAnimationFrame = requestAnimationFrame;
-
-    let cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-    window.cancelAnimationFrame = cancelAnimationFrame;
-})();
-
 import Game from './Engine/Game';
 import TopDown from './Demo/Scenes/TopDown';
 import Platformer from './Demo/Scenes/Platformer';

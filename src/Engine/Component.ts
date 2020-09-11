@@ -32,6 +32,7 @@ export default abstract class Component {
         window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
-        //Object.keys(this).forEach((key: any) => delete this[key]);
+        // @ts-ignore
+        Object.keys(this).forEach((key: any) => delete this[key]);
     }
 }

@@ -87,6 +87,7 @@ export default class Scene {
 
         this.destroyGameObjects();
 
-        //Object.keys(this).forEach(key => delete this[key]);
+        // @ts-ignore
+        Object.keys(this).forEach(key => delete this[key]);
     }
 }

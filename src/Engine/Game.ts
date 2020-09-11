@@ -7,14 +7,15 @@ const CANVAS_ID: string = 'miniEngineCanvas';
 export const EVENT_START: string = 'mini-engine-start';
 export const EVENT_UPDATE: string = 'mini-engine-update';
 
-/*(function () {
-    let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+(function () {
+    // @ts-ignore
+    let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
 
+    // @ts-ignore
     let cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     window.cancelAnimationFrame = cancelAnimationFrame;
-})();*/
+})();
 
 export default class Game {
     public canvas: HTMLCanvasElement = null;
