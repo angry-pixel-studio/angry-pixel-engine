@@ -1,21 +1,22 @@
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
+
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index',
     module: {
         rules: [
             {
-                test: /\.(js)$/,
+                test: /\.(ts|js)x?$/,
                 exclude: /node_modules/,
                 use: ['babel-loader']
             }
         ]
     },
     resolve: {
-        extensions: ['*', '.js']
+        extensions: ['*', '.ts', '.tsx', '.js', '.json']
     },
     output: {
-        path: __dirname + '/dist',
+        path: path.resolve(__dirname, 'dist'),
         publicPath: '/',
         filename: 'bundle.js'
     },

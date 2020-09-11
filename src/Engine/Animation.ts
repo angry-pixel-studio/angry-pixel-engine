@@ -1,16 +1,18 @@
-const FRAME_RATE = 24;
+import Sprite from "./Sprite";
+
+const FRAME_RATE: number = 24;
 
 export default class Animation {
-    sprites = [];
-    speed = 1;
-    loop = false;
+    private sprites: Sprite[] = [];
+    private _playing = false;
+    private currentFrame: number = 1;
+    private currentInterval: any = null;
 
-    playing = false;
-    currentFrame = 1;
-    currentSprite = null;
-    currentInterval = null;
-
-    constructor(config) {
+    public speed: number = 1;
+    public loop: boolean = false;
+    public currentSprite: Sprite = null;
+    
+    constructor(config: {[key:string]: any}) {
         this.sprites = config.sprites ? config.sprites : this.sprites;
         this.speed = config.speed !== undefined ? config.speed : this.speed;
         this.loop = config.loop !== undefined ? config.loop : this.loop;
@@ -19,9 +21,9 @@ export default class Animation {
         this.currentSprite = null;
     }
 
-    play() {
-        if (this.sprites.length > 0 && this.playing === false) {
-            this.playing = true;
+    public play(): void {
+        if (this.sprites.length > 0 && this._playing === false) {
+            this._playing = true;
             this.currentFrame = 1;
             this.currentSprite = this.sprites[this.currentFrame-1];
 
@@ -29,8 +31,8 @@ export default class Animation {
         }
     }
 
-    async update() {
-        while (this.playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
+    async update(): Promise<any> {
+        while (this._playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
             await new Promise(resolve => {
                 this.currentInterval = setTimeout(() => {
                     this.currentFrame = this.sprites.length === this.currentFrame
@@ -42,11 +44,15 @@ export default class Animation {
             });
         }
 
-        this.playing = false;
+        this._playing = false;
     }
 
-    stop() {
-        this.playing = false;
+    public stop(): void {
+        this._playing = false;
         clearInterval(this.currentInterval);
+    }
+
+    public get playing(): boolean {
+        return this._playing;
     }
 }

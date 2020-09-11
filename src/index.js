@@ -1,5 +1,6 @@
 import Game from './Engine/Game';
-import Sandbox from './Demo/Scenes/Sandbox';
+import TopDown from './Demo/Scenes/TopDown';
+import Platformer from './Demo/Scenes/Platformer';
 
 const containerElement = document.getElementById('app');
 
@@ -7,7 +8,8 @@ const containerElement = document.getElementById('app');
 const game = new Game(containerElement, 1366, 768);
 
 // Add a scene
-game.addScene('Sandbox', () => new Sandbox());
+game.addScene('TopDown', () => new TopDown(), true);
+game.addScene('Platformer', () => new Platformer());
 
 // Run the game
 game.run();

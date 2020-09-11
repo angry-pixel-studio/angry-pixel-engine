@@ -1,22 +1,25 @@
 import Component from '../Component';
 import RenderData from '../Core/Rendering/RenderData';
+import Tileset from '../Tileset';
+import Rectangle from '../Helper/Rectangle';
 
 export default class TiledRenderer extends Component {
-    tileset = null;
-    tilemapData = null;
-    tileScale = 1
-    showTileset = false;
+    public tileset: Tileset = null;
+    public tilemapData: {[key: string]: any} = null;
+    public tileScale: number = 1;
+    public showTileset: boolean = false;
     
-    tilemapProcessd = false;
-    processedData = [];
+    private tilemapProcessd:boolean = false;
+    private processedData: RenderData[] = [];
 
-    width = 0;
-    height = 0;
+    private _width: number = 0;
+    private _height: number = 0;
 
-    realWidth = 0;
-    realHeight = 0;
+    private _realTiles: Rectangle[] = [];
+    private _realWidth: number = 0;
+    private _realHeight: number = 0;
 
-    constructor(config) {
+    constructor(config: {[key: string]: any}) {
         super();
 
         this.tileset = config.tileset;
@@ -25,11 +28,11 @@ export default class TiledRenderer extends Component {
         this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
     }
 
-    start (event) {
+    start (event: object): void {
         this.update(event);
     }
 
-    update (event) {
+    update (event: {[key: string]: any}): void {
         if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();
@@ -43,7 +46,7 @@ export default class TiledRenderer extends Component {
         }
     }
 
-    processTileset() {
+    private processTileset(): void {
         let index = 0;
         
         for (let row = 0; row < this.tileset.gridHeight; row++) {
@@ -52,7 +55,7 @@ export default class TiledRenderer extends Component {
                 
                 if (tile !== null) {
                     this.updateSizeInfo({x: 0, y: 0}, col, row);
-                    this.processTile(tile, {x: 0, y: 0}, col, row);
+                    this.processTile(tile, {x: 0, y: 0}, col, row)
                 }
                 
                 index++;
@@ -62,17 +65,17 @@ export default class TiledRenderer extends Component {
         this.tilemapProcessd = true;
     }
 
-    processTilemap() {
+    private processTilemap(): void {
         this.tilemapData.layers.forEach(
-            layer => layer.chunks.forEach(
-                chunk => this.processChunk(chunk)
+            (layer: {[key: string]: any}) => layer.chunks.forEach(
+                (chunk: {[key: string]: any}) => this.processChunk(chunk)
             )
         );
 
         this.tilemapProcessd = true;
     }
 
-    processChunk(chunk) {
+    private processChunk(chunk: {[key: string]: any}): void {
         let dataIndex = 0;
 
         for (let row = 0; row < chunk.height; row++) {
@@ -88,22 +91,22 @@ export default class TiledRenderer extends Component {
         }
     }
 
-    updateSizeInfo(chunk, col, row) {
+    private updateSizeInfo(chunk: {[key: string]: any}, col: number, row: number): void {
         col += 1 + chunk.x;
         row += 1 + chunk.y;
 
-        if (this.width < col) {
-            this.width = col;
-            this.realWidth = this.width * this.tileset.tileWidth * this.tileScale;
+        if (this._width < col) {
+            this._width = col;
+            this._realWidth = this._width * this.tileset.tileWidth * this.tileScale;
         }
 
-        if (this.height < row) {
-            this.height = row;
-            this.realHeight = this.height * this.tileset.tileHeight * this.tileScale;
+        if (this._height < row) {
+            this._height = row;
+            this._realHeight = this._height * this.tileset.tileHeight * this.tileScale;
         }
     }
 
-    processTile(tile, chunk, col, row) {
+    private processTile(tile: Rectangle, chunk: {[key: string]: any}, col: number, row: number): void {
         const renderData = new RenderData();
         
         renderData.position.x = this.gameObject.transform.position.x
@@ -124,10 +127,26 @@ export default class TiledRenderer extends Component {
         this.processedData.push(renderData);
     }
 
-    updateTilesPosition() {
+    private updateTilesPosition(): void {
         this.processedData.forEach(renderData => {
-            renderData.position.x -= (Math.floor(this.realWidth / 2));
-            renderData.position.y += (Math.floor(this.realHeight / 2));
+            renderData.position.x -= (Math.floor(this._realWidth / 2));
+            renderData.position.y += (Math.floor(this._realHeight / 2));
         });
+    }
+
+    public get width(): number {
+        return this._width;
+    }
+
+    public get height(): number {
+        return this._height;
+    }
+
+    public get realWidth(): number {
+        return this._realWidth;
+    }
+
+    public get realHeight(): number {
+        return this._realHeight;
     }
 }
