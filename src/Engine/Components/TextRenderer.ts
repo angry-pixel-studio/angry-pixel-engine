@@ -4,16 +4,16 @@ import RenderData from "../Core/Rendering/RenderData";
 export * from '../Core/Rendering/RenderPivots';
 
 export default class TextRenderer extends Component {
-    text = '';
-    font = 'Sans';
-    size = 12;
-    color = '#000000';
-    bold = false;
-    italic = false;
-    renderData = null;
-    lineSeparation = 5;
+    public text: string = '';
+    public font: string = 'Sans';
+    public size: number = 12;
+    public color: string = '#000000';
+    public bold: boolean = false;
+    public italic: boolean = false;
+    public renderData: RenderData = null;
+    public lineSeparation: number = 5;
 
-    constructor(config) {
+    constructor(config: {[key: string]: any}) {
         super();
 
         this.renderData = new RenderData();
@@ -27,7 +27,11 @@ export default class TextRenderer extends Component {
         this.lineSeparation = config.lineSeparation ? config.lineSeparation : this.lineSeparation;
     }
 
-    update(event) {
+    start(event: object): void {
+        this.update(event);
+    }
+
+    update(event: {[key: string]: any}): void {
         this.renderData.text = this.text;
         this.renderData.textSize = this.size;
         this.renderData.color = this.color;

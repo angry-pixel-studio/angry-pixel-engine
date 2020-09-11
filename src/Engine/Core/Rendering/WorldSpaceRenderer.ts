@@ -1,15 +1,18 @@
 import Rectangle from "../../Helper/Rectangle";
+import RenderManager from './RenderManager';
+import RenderData from "./RenderData";
+import Vector2 from "../../Helper/Vector2";
 
 export default class WorldSapceRenderer {
-    renderManager = null;
-    canvasContext = null;
+    private renderManager: RenderManager = null;
+    private canvasContext: CanvasRenderingContext2D = null;
 
-    constructor(renderManager, canvasContext) {
+    constructor(renderManager: RenderManager, canvasContext: CanvasRenderingContext2D) {
         this.renderManager = renderManager,
         this.canvasContext = canvasContext
     }
 
-    render(renderLayers, worldSpaceRect) {
+    public render(renderLayers: Array<string>, worldSpaceRect: Rectangle): void {
         this.renderManager.getRenderStack().forEach(
             renderData => {
                 if (renderLayers.includes(renderData.layer) === false && renderData.ui === true) {
@@ -28,8 +31,8 @@ export default class WorldSapceRenderer {
         this.renderManager.clearRenderStack();
     }
 
-    renderImageInWorldSpace(renderData, worldSpaceRect) {
-        if (this.isInsideWorldSpaceRect(worldSpaceRect, renderData) === false) {
+    private renderImageInWorldSpace(renderData: RenderData, worldSpaceRect: Rectangle): void {
+        if (this.isInsideWorldSpaceRect(renderData, worldSpaceRect) === false) {
             return;
         }
         
@@ -85,7 +88,7 @@ export default class WorldSapceRenderer {
         this.canvasContext.restore();
     }
 
-    renderTextInWorldSpace(renderData, worldSpaceRect) {
+    private renderTextInWorldSpace(renderData: RenderData, worldSpaceRect: Rectangle): void {
         let renderPosition = this.calcuateWorldSpacePosition(renderData, worldSpaceRect);
 
         this.canvasContext.save();
@@ -127,30 +130,25 @@ export default class WorldSapceRenderer {
         this.canvasContext.restore();
     }
 
-    isInsideWorldSpaceRect(worldSpaceRect, renderData) {
-        const cacheRect = new Rectangle(0, 0, 0, 0);
+    private isInsideWorldSpaceRect(renderData: RenderData, worldSpaceRect: Rectangle): boolean {
+        const rect = new Rectangle(0, 0, 0, 0);
         
-        cacheRect.x = renderData.position.x;
-        cacheRect.y = renderData.position.y;
-        cacheRect.width = renderData.width;
-        cacheRect.height = renderData.height;
+        rect.x = renderData.position.x;
+        rect.y = renderData.position.y;
+        rect.width = renderData.width;
+        rect.height = renderData.height;
 
-        return worldSpaceRect.overlappingRectangle(cacheRect);
+        return worldSpaceRect.overlappingRectangle(rect);
     }
 
-    calcuateWorldSpacePosition(renderData, worldSpaceRect) {
-        const renderPosition = {
-            x: renderData.position.x - worldSpaceRect.x,
-            y: worldSpaceRect.y - renderData.position.y
-        };
+    private calcuateWorldSpacePosition(renderData: RenderData, worldSpaceRect: Rectangle): Vector2 {
+        const renderPosition = new Vector2 (
+            renderData.position.x - worldSpaceRect.x,
+            worldSpaceRect.y - renderData.position.y
+        );
 
-        if (renderData.rotation) {
-            renderPosition.x = Number((renderPosition.x).toFixed(2));
-            renderPosition.y = Number((renderPosition.y).toFixed(2));
-        } else {
-            renderPosition.x = parseInt(renderPosition.x);
-            renderPosition.y = parseInt(renderPosition.y);
-        }
+        renderPosition.x = Number((renderPosition.x).toFixed(renderData.rotation ? 2: 0));
+        renderPosition.y = Number((renderPosition.y).toFixed(renderData.rotation ? 2: 0));
         
         return renderPosition;
     }

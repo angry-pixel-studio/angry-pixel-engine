@@ -10,7 +10,7 @@ export const LAYER_FOREGROUND = 'Foreground';
 
 const SPRITE_PATH = 'image/demo/earth-cave.png';
 
-export default class Foreground extends GameObject {
+export default class ForegroundTopDown extends GameObject {
     width = 0;
     height = 0;
     tilemapRenderer = null;
@@ -23,18 +23,6 @@ export default class Foreground extends GameObject {
 
         const image = new Image();
         image.src = SPRITE_PATH;
-
-        /*this.addComponent(() => new TiledRenderer({
-            tileset: new Tileset({
-                image: image,
-                tileWidth: 16,
-                tileHeight: 16,
-                gridWidth: 11,
-                gridHeight: 10
-            }),
-            tilemapData: tiledData,
-            tileScale: 4
-        }), 'TilemapRenderer');*/
 
         this.addComponent(() => new TilemapRenderer({
             tileset: new Tileset({
@@ -49,7 +37,6 @@ export default class Foreground extends GameObject {
         }), 'TilemapRenderer');
 
         this.tilemapRenderer = this.getComponent('TilemapRenderer');
-        //this.tilemapRenderer.showTileset = true;
     }
 
     update() {

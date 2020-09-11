@@ -1,22 +1,25 @@
 import Component from "../Component";
+import SpriteRenderer from "./SpriteRenderer";
+import Sprite from "../Sprite";
+import Animation from "../Animation";
 
 export default class Animator extends Component {
-    animations = [];
-    playingAnimationId = null;
-    spriteRenderer = null;
-    defaultSprite = null;
+    private animations: {[id: string]: Animation} = {};
+    private playingAnimationId: string = null;
+    private spriteRenderer: SpriteRenderer = null;
+    private defaultSprite: Sprite = null;
 
-    constructor(config) {
+    constructor(config: {[key: string]: any}) {
         super();
         
         this.spriteRenderer = config.spriteRenderer;
     }
 
-    start() {
+    start(): void {
         this.defaultSprite = this.spriteRenderer.sprite;
     }
 
-    update() {
+    update(): void {
         if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === true) {
             this.spriteRenderer.sprite = this.animations[this.playingAnimationId].currentSprite;
         } else if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === false) {
@@ -29,13 +32,13 @@ export default class Animator extends Component {
         }
     }
 
-    addAnimation(id, animation) {
+    public addAnimation(id:string, animation: Animation): this {
         this.animations[id] = animation;
 
         return this;
     }
 
-    playAnimation(id) {
+    public playAnimation(id: string): void {
         if (this.active === false) {
             return;
         }
@@ -48,7 +51,7 @@ export default class Animator extends Component {
         }
     }
 
-    stopAnimation() {
+    public stopAnimation(): void {
         if (this.active === false) {
             return;
         }

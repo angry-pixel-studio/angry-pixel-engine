@@ -1,7 +1,6 @@
 import Component from "../../Engine/Component";
 import Camera from "../../Engine/Components/Camera";
 import { TAG_PLAYER } from "../../Demo/GameObjects/Player";
-import { TAG_FOREGROUND } from "../../Demo/GameObjects/Foreground";
 
 export default class FollowPlayerCamera extends Component {
     camera = null;
@@ -11,7 +10,7 @@ export default class FollowPlayerCamera extends Component {
     start() {
         this.camera = this.gameObject.camera;
         this.player = this.gameObject.scene.getGameObjectByTag(TAG_PLAYER);
-        this.foreground = this.gameObject.scene.getGameObjectByTag(TAG_FOREGROUND);
+        this.foreground = this.gameObject.scene.getGameObjectByTag('Foreground');
     }
 
     update(event)  {

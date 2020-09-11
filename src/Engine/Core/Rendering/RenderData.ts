@@ -8,13 +8,14 @@ export default class RenderData {
     public position: Vector2 = new Vector2(0, 0);
 
     // for images
-    public image: Object = null;
+    public image: HTMLImageElement = null;
     public width: number = 0;
     public height: number = 0;
     public slice: Rectangle = null;
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = null;
+    public smooth: boolean = false;
 
     // for text
     public text: string = null;
