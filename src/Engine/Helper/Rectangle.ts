@@ -1,7 +1,7 @@
 import Vector2 from "./Vector2";
 
 export default class Rectangle {
-    public position: Vector2 = new Vector2(0, 0);
+    private position: Vector2 = new Vector2(0, 0);
     public width: number = 0;
     public height: number = 0;
 
@@ -12,31 +12,31 @@ export default class Rectangle {
         this.height = height;
     }
 
-    get x(): number {
+    public get x(): number {
         return this.position.x;
     }
 
-    get y(): number {
+    public get y(): number {
         return this.position.y;
     }
 
-    set x(value: number) {
+    public set x(value: number) {
         this.position.x = value;
     }
 
-    set y(value: number) {
+    public set y(value: number) {
         this.position.y = value;
     }
 
-    get x1(): number {
+    public get x1(): number {
         return this.position.x + this.width;
     }
 
-    get y1(): number {
+    public get y1(): number {
         return this.position.y - this.height;
     }
 
-    overlappingRectangle(rect: Rectangle): boolean {
+    public overlappingRectangle(rect: Rectangle): boolean {
         return this.x1 >= rect.x
             && this.x <= rect.x1
             && this.y1 <= rect.y
