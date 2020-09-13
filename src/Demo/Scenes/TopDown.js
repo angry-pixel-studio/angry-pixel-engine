@@ -1,9 +1,10 @@
 import Scene from "../../Engine/Scene";
 import SpotPointer from "../GameObjects/SpotPointer";
 import FollowPlayerCamera from "../Components/FollowPlayerCamera";
-import PlayerTop, { LAYER_PLAYER } from "../GameObjects/PlayerTop";
-import ForegroundTopDown, { LAYER_FOREGROUND } from "../GameObjects/ForegroundTopDown";
-import { LAYER_PROJECTILE } from "../GameObjects/Projectile";
+import PlayerTop from "../GameObjects/PlayerTop";
+import ForegroundTopDown from "../GameObjects/ForegroundTopDown";
+import renderLayers from '../Config/renderLayers';
+import Bot from "../GameObjects/Bot";
 
 export default class TopDown extends Scene {
 
@@ -11,12 +12,11 @@ export default class TopDown extends Scene {
         super();
 
         this.addGameObject(() => new ForegroundTopDown(), 'Foreground')
-            .addGameObject(() => new PlayerTop(), 'Player');
+            //.addGameObject(() => new SpotPointer(), 'SpotPointer')
+            .addGameObject(() => new PlayerTop(), 'Player')
+            .addGameObject(() => new Bot(), 'Bot');
 
-        this.gameCamera.camera.addLayerToRender(LAYER_PLAYER);
-        this.gameCamera.camera.addLayerToRender(LAYER_FOREGROUND);
-        this.gameCamera.camera.addLayerToRender(LAYER_PROJECTILE);
-
+        this.gameCamera.camera.renderLayers = renderLayers;
         this.gameCamera.addComponent(() => new FollowPlayerCamera());
     }
 

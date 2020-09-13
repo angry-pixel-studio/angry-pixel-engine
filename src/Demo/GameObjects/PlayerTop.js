@@ -8,13 +8,15 @@ import Vector2 from "../../Engine/Helper/Vector2";
 import Movements from "../Components/Player/Movements";
 import MovementsArrows from "../Components/Player/MovementsArrows";
 import Weapon from "../Components/Player/Weapon";
+import { LAYER_PLAYER } from "../Config/renderLayers";
 
 const SPRITE_PATH = 'image/demo/player-top-down.png';
 
-export const LAYER_PLAYER = 'Player';
 export const TAG_PLAYER = 'Player';
 
 export default class PlayerTop extends GameObject {
+    collider = new Rectangle(0, 0, 32, 32);
+
     constructor() {
         super();
 
@@ -44,5 +46,16 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Movements(), 'Movements');
         //this.addComponent(() => new MovementsArrows(), 'Movements');
         this.addComponent(() => new Weapon(), 'Weapon');
+    }
+
+    update() {
+        this.updateCollidersPosition();
+    }
+
+    updateCollidersPosition() {
+        this.collider.setPosition(
+            this.transform.position.x - this.collider.width / 2,
+            this.transform.position.y + this.collider.height / 2
+        );
     }
 }

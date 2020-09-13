@@ -36,6 +36,10 @@ export default class Rectangle {
         return this.position.y - this.height;
     }
 
+    public setPosition(x: number, y: number): void {
+        this.position.set(x, y);
+    }
+
     public overlappingRectangle(rect: Rectangle): boolean {
         return this.x1 >= rect.x
             && this.x <= rect.x1

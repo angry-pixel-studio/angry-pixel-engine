@@ -16,7 +16,6 @@ export default class Movements extends Component {
     walkSpeed = 4;
     rotationSpeed = 3;
     angle = 0; // in radians
-    rect = new Rectangle(0, 0, 32, 32);
     walkingAnimation = false;
 
     start(event) {
@@ -40,31 +39,34 @@ export default class Movements extends Component {
     }
 
     walk() {
-        let deltaV = this.keyboard.isPressed('w') 
+        let deltaY = this.keyboard.isPressed('w')
             ? this.walkSpeed
             : this.keyboard.isPressed('s')
-                ? -this.walkSpeed / 2 
+                ? -this.walkSpeed
                 : 0;
 
-        let deltaX = Math.cos(this.angle) * deltaV;
-        let deltaY = Math.sin(this.angle) * deltaV;
-        
-        this.transform.position.x += deltaX;
+        let deltaX = this.keyboard.isPressed('d')
+            ? this.walkSpeed
+            : this.keyboard.isPressed('a')
+                ? -this.walkSpeed
+                : 0;
+
+        this.transform.position.x += deltaY ? deltaX / 1.4 : deltaX;
+        this.gameObject.updateCollidersPosition();
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
         }
 
-        this.transform.position.y += deltaY;
+        this.transform.position.y += deltaX ? deltaY / 1.4 : deltaY;
+        this.gameObject.updateCollidersPosition();
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
         }
         
-        this.animator.setAnimationSpeed('PlayerWalking', (deltaV > 0 ? 0.4 : 0.2));
-
-        if (deltaV && this.walkingAnimation === false) {
+        if ((deltaX || deltaY) && this.walkingAnimation === false) {
             this.walkingAnimation = true;
             this.animator.playAnimation('PlayerWalking');
-        } else if (!deltaV && this.walkingAnimation === true) {
+        } else if (!deltaX && !deltaY && this.walkingAnimation === true) {
             this.walkingAnimation = false;
             this.animator.stopAnimation();
         }
@@ -79,10 +81,7 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        this.rect.x = this.transform.position.x - this.rect.width / 2;
-        this.rect.y = this.transform.position.y + this.rect.height / 2;
-
-        return this.tilemap.isTouchingRect(this.rect);
+        return this.tilemap.isTouchingRect(this.gameObject.collider);
     }
     
 }

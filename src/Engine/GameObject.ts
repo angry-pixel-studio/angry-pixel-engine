@@ -52,6 +52,18 @@ export default class GameObject {
         return this.getComponent<Transform>(TRANSFORM_ID);
     }
 
+    public findGameObject<OType>(id: string): OType|null {
+        return this.scene.getGameObject<OType>(id);
+    }
+
+    public findGameObjectByTag<OType>(tag: string): OType|null {
+        return this.scene.getGameObjectByTag<OType>(tag);
+    }
+
+    public findGameObjectsByTag(tag: string): GameObject[] {
+        return this.scene.getGameObjectsByTag(tag);
+    }
+
     public addComponent(componentFunction: Function , id: string|null = null): this {
         const component = componentFunction();
         component.id = id;

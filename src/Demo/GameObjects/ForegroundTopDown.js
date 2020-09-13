@@ -1,12 +1,10 @@
 import GameObject from "../../Engine/GameObject";
-import TiledRenderer from "../../Engine/Components/TiledRenderer";
 import TilemapRenderer from '../../Engine/Components/TilemapRenderer';
-import tiledData from "../Tilemaps/Foreground.json";
 import tilemapData from "../Tilemaps/Foreground";
 import Tileset from "../../Engine/Tileset";
+import { LAYER_FOREGROUND } from "../Config/renderLayers";
 
 export const TAG_FOREGROUND = 'Foreground';
-export const LAYER_FOREGROUND = 'Foreground';
 
 const SPRITE_PATH = 'image/demo/earth-cave.png';
 

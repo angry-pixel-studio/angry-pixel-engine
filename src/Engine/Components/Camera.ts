@@ -9,7 +9,7 @@ const RECT = { x1: 0, x2: 0, y1: 0, y2: 0 };
 export default class Camera extends Component {
     private _viewportRect: Rectangle = null;
     private _worldSpaceRect: Rectangle = null;
-    private _renderLayers = [LAYER_DEFAULT]
+    private _renderLayers: string[] = [LAYER_DEFAULT]
 
     start(event: {[key:string]: any}): void {
         this._worldSpaceRect = new Rectangle(0, 0, 0, 0);
@@ -40,6 +40,10 @@ export default class Camera extends Component {
         this._renderLayers.push(layer);
     }
 
+    public set renderLayers(renderLayers: string[]){
+        this._renderLayers = renderLayers;
+    }
+ 
     public get renderLayer(): string[] {
         return this._renderLayers;
     }

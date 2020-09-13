@@ -3,15 +3,15 @@ import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Helper/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
+import { LAYER_PROJECTILE } from "../Config/renderLayers";
 
 const SPRITE_PATH = 'image/demo/projectile.png';
 
-export const LAYER_PROJECTILE = 'Projectile';
 export const TAG_PROJECTILE = 'Projectile';
 
 export default class Projectile extends GameObject {
     shooted = false;
-    speed = 10;
+    speed = 15;
     deltaX = 0;
     deltay = 0;
 
@@ -63,6 +63,6 @@ export default class Projectile extends GameObject {
             this.parent = this.cachedParent;            
             
             this.weapon.restoreProjectile(this);
-        }, 700);
+        }, 500);
     }
 }

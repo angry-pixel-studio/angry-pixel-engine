@@ -12,6 +12,8 @@ export default class Mouse {
     constructor(game: Game) {
         this.game = game;
         
+        this.game.canvas.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault());
+
         this.game.canvas.addEventListener('mousemove', (e: MouseEvent) => this.updatePosition(e));
         this.game.canvas.addEventListener('mousedown', (e: MouseEvent) => this.updateButtonDown(e));
         this.game.canvas.addEventListener('mouseup', (e: MouseEvent) => this.updateButtonUp(e));

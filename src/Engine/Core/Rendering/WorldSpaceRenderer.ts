@@ -15,7 +15,7 @@ export default class WorldSapceRenderer {
     public render(renderLayers: Array<string>, worldSpaceRect: Rectangle): void {
         this.renderManager.getRenderStack().forEach(
             renderData => {
-                if (renderLayers.includes(renderData.layer) === false && renderData.ui === true) {
+                if (renderLayers.includes(renderData.layer) === false || renderData.ui === true) {
                     return;
                 }
 
