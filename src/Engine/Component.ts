@@ -28,6 +28,22 @@ export default abstract class Component {
 
     protected update(event: object): void { }
 
+    public getComponent<CType>(id: string): CType|null {
+        return this.gameObject.getComponent<CType>(id);
+    }
+
+    public findGameObject<OType>(id: string): OType|null {
+        return this.gameObject.scene.getGameObject<OType>(id);
+    }
+
+    public findGameObjectByTag<OType>(tag: string): OType|null {
+        return this.gameObject.scene.getGameObjectByTag<OType>(tag);
+    }
+
+    public findGameObjectsByTag(tag: string): GameObject[] {
+        return this.gameObject.scene.getGameObjectsByTag(tag);
+    }
+
     public _destroy(): void {
         window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);

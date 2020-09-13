@@ -1,7 +1,7 @@
+import Component from "./Component";
 import Transform from "./Components/Transform";
 import { EVENT_START, EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
-import Component from "./Component";
 
 export const LAYER_DEFAULT = 'Default';
 export const TRANSFORM_ID = 'Transform';
@@ -13,7 +13,7 @@ export default class GameObject {
     public active: boolean = true;
     
     public scene: Scene = null;
-    public parent: GameObject|null = null;
+    private _parent: GameObject|null = null;
     
     private components: Array<any> = [];
     private gameObjects: Array<any> = [];
@@ -96,6 +96,15 @@ export default class GameObject {
         });
     }
 
+    public get parent(): GameObject {
+        return this._parent;
+    }
+
+    public set parent(parent: GameObject|null) {
+        this._parent = parent;
+        this.transform.update();
+    }
+
     public addChild(gameObjectFunction: Function, id: string|null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
@@ -155,6 +164,7 @@ export default class GameObject {
             .filter(gameObject => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
             .forEach(gameObject => gameObject.setActive(value));
 
+        this.transform.update();
         this.active = value;
     }
 

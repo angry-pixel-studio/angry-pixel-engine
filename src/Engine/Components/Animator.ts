@@ -60,4 +60,16 @@ export default class Animator extends Component {
             this.animations[this.playingAnimationId].stop();
         }
     }
+
+    public setCurrentAniamtionSpeed(speed: number): void {
+        if (this.playingAnimationId != null) {
+            this.animations[this.playingAnimationId].speed = speed;
+        }
+    }
+
+    public setAnimationSpeed(id: string, speed: number): void {
+        if (this.animations[id] !== undefined) {
+            this.animations[id].speed = speed;
+        }
+    }
 }

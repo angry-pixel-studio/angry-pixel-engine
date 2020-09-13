@@ -1,6 +1,6 @@
 import Component from "../../Engine/Component";
 import Camera from "../../Engine/Components/Camera";
-import { TAG_PLAYER } from "../../Demo/GameObjects/Player";
+import { TAG_PLAYER } from "../../Demo/GameObjects/PlayerTop";
 
 export default class FollowPlayerCamera extends Component {
     camera = null;

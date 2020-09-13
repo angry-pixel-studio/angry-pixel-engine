@@ -5,6 +5,9 @@ import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
 import Rectangle from "../../Engine/Helper/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
+import Movements from "../Components/Player/Movements";
+import MovementsArrows from "../Components/Player/MovementsArrows";
+import Weapon from "../Components/Player/Weapon";
 
 const SPRITE_PATH = 'image/demo/player-top-down.png';
 
@@ -12,14 +15,6 @@ export const LAYER_PLAYER = 'Player';
 export const TAG_PLAYER = 'Player';
 
 export default class PlayerTop extends GameObject {
-    walkSpeed = 4;
-    rotationSpeed = 3;
-    walkingAnimation = false;
-    angle = 0;
-
-    tilemap = null;
-    rect = new Rectangle(0, 0, 32, 32);
-
     constructor() {
         super();
 
@@ -45,65 +40,9 @@ export default class PlayerTop extends GameObject {
             spriteRenderer: this.getComponent('SpriteRenderer')
         }), 'Animator');
         this.getComponent('Animator').addAnimation('PlayerWalking', PlayerWalking);
-    }
 
-    start() {
-        this.tilemap = this.scene.getGameObject('Foreground').getComponent('TilemapRenderer');
-    }
-
-    update(event) {
-        this.rotate(event.input.keyboard);
-        this.walk(event.input.keyboard);
-    }
-
-    walk(keyboard) {
-        let delta = 0;
-
-        if (keyboard.isPressed('ArrowUp')) {
-            delta += this.walkSpeed;
-        } else if (keyboard.isPressed('ArrowDown')) {
-            delta -= this.walkSpeed;
-        }
-
-        let deltaX = Math.cos(this.angle * Math.PI / 180) * delta;
-        let deltaY = -Math.sin(this.angle * Math.PI / 180) * delta;
-        
-        this.transform.position.x += deltaX;
-        if (deltaX !== 0 && this.isTouchingForeground()) {
-            this.transform.position.x -= deltaX;
-        }
-
-        this.transform.position.y += deltaY;
-        if (deltaY !== 0 && this.isTouchingForeground()) {
-            this.transform.position.y -= deltaY;
-        }
-        
-        if (delta && this.walkingAnimation === false) {
-            this.walkingAnimation = true;
-            this.getComponent('Animator').playAnimation("PlayerWalking");
-        } else if (!delta && this.walkingAnimation === true) {
-            this.walkingAnimation = false;
-            this.getComponent('Animator').stopAnimation();
-        }
-    }
-
-    rotate (keyboard) {
-        let delta = 0;
-
-        if (keyboard.isPressed('ArrowLeft')) {
-            delta -= this.rotationSpeed;
-        } else if (keyboard.isPressed('ArrowRight')) {
-            delta += this.rotationSpeed;
-        }
-
-        this.angle += delta;
-        this.transform.rotation += delta;
-    }
-
-    isTouchingForeground() {
-        this.rect.x = this.transform.position.x - this.rect.width / 2;
-        this.rect.y = this.transform.position.y + this.rect.height / 2;
-
-        return this.tilemap.isTouchingRect(this.rect);
+        this.addComponent(() => new Movements(), 'Movements');
+        //this.addComponent(() => new MovementsArrows(), 'Movements');
+        this.addComponent(() => new Weapon(), 'Weapon');
     }
 }
