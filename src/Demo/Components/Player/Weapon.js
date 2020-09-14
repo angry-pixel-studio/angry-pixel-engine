@@ -2,13 +2,13 @@ import Component from "../../../Engine/Component";
 import Projectile from "../../GameObjects/Projectile";
 
 export default class Weapon extends Component {
-    mouse = null;
-    mousePressed = false;
+    inputManager = null;
+    firePressed = false;
     projectileAmount = 20;
     projectiles = [];
 
-    start(event) {
-        this.mouse = event.input.mouse;
+    start() {
+        this.inputManager = this.findGameObject('InputManager');
         this.setupProjectiles();
     }
 
@@ -26,13 +26,13 @@ export default class Weapon extends Component {
     }
 
     fire() {
-        if (this.projectiles.length > 0 && this.mouse.leftButtonPressed && this.mousePressed === false) {
+        if (this.projectiles.length > 0 && this.inputManager.fire && this.firePressed === false) {
             const p = this.projectiles.pop();
             this.gameObject.setChildActive(p.id, true);
             p.fire(this.getComponent('Movements').angle);
         }
 
-        this.mousePressed = this.mouse.leftButtonPressed;
+        this.firePressed = this.inputManager.fire;
     }
 
     restoreProjectile(projectile) {
