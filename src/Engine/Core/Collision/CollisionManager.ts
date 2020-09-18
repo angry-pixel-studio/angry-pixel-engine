@@ -41,7 +41,7 @@ export default class CollisionManager {
         }
 
         for (const collider of this.colliders) {
-            const colliders = this.quad.retrieve(collider);
+            const colliders = this.quad.getPossibleCollisionsWithObject(collider);
             if (collider.gameObject.id === "Player") {
                 console.log("# of possible collisions with", collider.gameObject.id, colliders.length);
             }

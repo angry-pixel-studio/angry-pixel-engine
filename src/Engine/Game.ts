@@ -11,11 +11,11 @@ export const EVENT_UPDATE: string = 'mini-engine-update';
 
 (function () {
     // @ts-ignore
-    let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
 
     // @ts-ignore
-    let cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+    const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     window.cancelAnimationFrame = cancelAnimationFrame;
 })();
 

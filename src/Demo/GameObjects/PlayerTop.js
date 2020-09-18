@@ -49,7 +49,7 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Movements(), 'Movements');
         //this.addComponent(() => new MovementsArrows(), 'Movements');
         this.addComponent(() => new Weapon(), 'Weapon');
-        this.addComponent(() => new RectangleCollider(this), 'RectangleCollider');
+        this.addComponent(() => new RectangleCollider(), 'RectangleCollider');
     }
 
     update(event) {
