@@ -1,5 +1,6 @@
 import GameObject, { LAYER_DEFAULT } from "../../Engine/GameObject";
 import SpriteRenderer from '../../Engine/Components/Renderer/SpriteRenderer';
+import RectangleCollider from '../../Engine/Components/Colliders/RectangleCollider';
 import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
@@ -29,7 +30,7 @@ export default class PlayerTop extends GameObject {
 
         const image = new Image();
         image.src = SPRITE_PATH;
-        
+
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image,
@@ -48,6 +49,7 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Movements(), 'Movements');
         //this.addComponent(() => new MovementsArrows(), 'Movements');
         this.addComponent(() => new Weapon(), 'Weapon');
+        this.addComponent(() => new RectangleCollider(this), 'RectangleCollider');
     }
 
     update(event) {

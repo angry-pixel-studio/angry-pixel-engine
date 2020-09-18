@@ -2,6 +2,7 @@ import Input from "./Core/Input/Input";
 import SceneManager from "./Core/Scene/SceneManager";
 import RenderManager from "./Core/Rendering/RenderManager";
 import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
+import CollisionManager from "./Core/Collision/CollisionManager";
 
 const CANVAS_ID: string = 'miniEngineCanvas';
 
@@ -24,11 +25,12 @@ export default class Game {
     public input: Input = null;
     public sceneManager: SceneManager = null;
     public renderManager: RenderManager = null;
+    public collisionManager: CollisionManager = null;
     public running: boolean = false;
-    
+
     private firstFrame: boolean = false;
     private frameRequestId: number = null;
-    
+
     private then: number = 0;
     private deltaTime: number = 0;
 
@@ -36,6 +38,7 @@ export default class Game {
         this.createCanvas(containerElement, width, height);
         this.sceneManager = new SceneManager(this);
         this.renderManager = new RenderManager(new Context2DRenderer(this.canvas));
+        this.collisionManager = new CollisionManager();
     }
 
     private createCanvas(container: HTMLElement, width: number, height: number): void {
@@ -55,10 +58,11 @@ export default class Game {
         this.firstFrame = true;
         this.input = new Input(this);
         this.sceneManager.loadOpeningScene();
-        
+
         this.then = Date.now();
 
         this.requestAnimationFrame();
+
     }
 
     public stop(): void {
@@ -77,14 +81,15 @@ export default class Game {
         this.then = now;
 
         this.renderManager.clearCanvas(this.canvasBGColor);
-        
+        this.collisionManager.checkCollisions();
+
         if (this.firstFrame === true) {
             this.dispatchFrameEvent(EVENT_START);
             this.firstFrame = false;
         } else {
             this.dispatchFrameEvent(EVENT_UPDATE);
         }
-        
+
         this.requestAnimationFrame();
     }
 
@@ -115,7 +120,8 @@ export default class Game {
                     renderManager: this.renderManager,
                     canvas: this.canvas,
                     input: this.input,
-                    deltaTime: this.deltaTime
+                    deltaTime: this.deltaTime,
+                    collisionManager: this.collisionManager,
                 }
             }
         ));

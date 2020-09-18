@@ -1,4 +1,5 @@
 import RenderData from "./RenderData";
+
 import Rectangle from "../../Helper/Rectangle";
 import IContextRenderer from "./IContextRenderer";
 
@@ -28,7 +29,7 @@ export default class RenderManager {
         this.renderStack = [];
     }
 
-    public clearCanvas(color: string|null = null) {
+    public clearCanvas(color: string | null = null) {
         this.contextRenderer.clearCanvas(color);
     }
 

@@ -17,8 +17,17 @@ export default class TopDown extends Scene {
             //.addGameObject(() => new SpotPointer(), 'SpotPointer')
             .addGameObject(() => new InputManager(), 'InputManager')
             .addGameObject(() => new PlayerTop(), 'Player')
-            .addGameObject(() => new Bot(), 'Bot')
-            .addGameObject(() => new PlayerStats(), 'PlayerStats');
+            .addGameObject(() => new PlayerStats(), 'PlayerStats')
+            .addGameObject(() => new Bot(690, 385), 'Bot')
+            .addGameObject(() => new Bot(710, 385), 'Bot')
+            .addGameObject(() => new Bot(-900, 550), 'Bot')
+            .addGameObject(() => new Bot(900, 550), 'Bot')
+            .addGameObject(() => new Bot(900, -550), 'Bot')
+            .addGameObject(() => new Bot(-900, -550), 'Bot');
+        /*.addGameObject(() => new Bot(), 'Bot')
+        .addGameObject(() => new Bot(), 'Bot')
+        .addGameObject(() => new Bot(), 'Bot')
+        .addGameObject(() => new Bot(), 'Bot');*/
 
         this.gameCamera.camera.renderLayers = renderLayers;
         this.gameCamera.addComponent(() => new FollowPlayerCamera());

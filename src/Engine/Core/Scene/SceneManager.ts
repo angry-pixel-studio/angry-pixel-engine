@@ -3,7 +3,7 @@ import Scene from "../../Scene";
 
 export default class SceneManager {
     private game: Game = null;
-    private scenes: {[id: string]: Function} = {};
+    private scenes: { [id: string]: Function } = {};
     private currentScene: Scene = null;
     private openingSceneId: string = null;
 
@@ -15,7 +15,7 @@ export default class SceneManager {
 
     public addScene(sceneId: string, sceneFunction: Function, openingScene: boolean = false): void {
         this.scenes[sceneId] = sceneFunction;
-        
+
         if (openingScene === true || this.openingSceneId === null) {
             this.openingSceneId = sceneId;
         }
@@ -27,16 +27,16 @@ export default class SceneManager {
 
     public loadScene(sceneId: string): void {
         const resetLoop = this.game.running;
-        
+
         if (resetLoop) {
             this.game.stopLoop();
         }
-        
+
         this.unloadCurrentScene();
         this.currentScene = this.scenes[sceneId]();
         this.currentScene.id = sceneId;
         this.currentScene.game = this.game;
-        
+
         if (resetLoop) {
             this.game.resumeLoop(true);
         }
@@ -49,6 +49,6 @@ export default class SceneManager {
             this.currentSceneId = null;
 
             this.game.renderManager.clearRenderStack();
-        }   
+        }
     }
 }

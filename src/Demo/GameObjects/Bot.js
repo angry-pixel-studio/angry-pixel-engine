@@ -1,4 +1,5 @@
 import Animator from "../../Engine/Components/Animator";
+import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Helper/Rectangle";
@@ -31,17 +32,17 @@ export default class Bot extends GameObject {
 
     avoidX = 0;
     avoidY = 0;
-    
-    constructor() {
+
+    constructor(x, y) {
         super();
 
         this.tag = TAG_BOT;
         this.layer = LAYER_BOT;
-        this.transform.position.set(-800, 250);
+        this.transform.position.set(x, y);
 
         const image = new Image();
         image.src = SPRITE_PATH;
-        
+
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
                 image: image,
@@ -56,6 +57,7 @@ export default class Bot extends GameObject {
             spriteRenderer: this.getComponent('SpriteRenderer')
         }), 'Animator');
         this.getComponent('Animator').addAnimation('PlayerWalking', PlayerWalking);
+        this.addComponent(() => new RectangleCollider(this), 'RectangleCollider');
     }
 
     start() {
@@ -67,7 +69,8 @@ export default class Bot extends GameObject {
         this.updateColliders();
         this.updateAimAngle();
         this.updateCurrentDirection();
-        this.move(event.deltaTime);
+
+        //this.move(event.deltaTime);
     }
 
     updateColliders() {
