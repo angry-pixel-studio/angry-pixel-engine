@@ -1,6 +1,7 @@
 import Input from "./Core/Input/Input";
 import SceneManager from "./Core/Scene/SceneManager";
 import RenderManager from "./Core/Rendering/RenderManager";
+import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
 
 const CANVAS_ID: string = 'miniEngineCanvas';
 
@@ -19,7 +20,6 @@ export const EVENT_UPDATE: string = 'mini-engine-update';
 
 export default class Game {
     public canvas: HTMLCanvasElement = null;
-    public canvasContext: CanvasRenderingContext2D = null;
     public canvasBGColor: string = '#000000';
     public input: Input = null;
     public sceneManager: SceneManager = null;
@@ -31,9 +31,8 @@ export default class Game {
 
     constructor(containerElement: HTMLElement, width: number, height: number) {
         this.createCanvas(containerElement, width, height);
-        this.canvasContext = this.canvas.getContext('2d');
         this.sceneManager = new SceneManager(this);
-        this.renderManager = new RenderManager(this);
+        this.renderManager = new RenderManager(new Context2DRenderer(this.canvas));
     }
 
     private createCanvas(container: HTMLElement, width: number, height: number): void {
@@ -61,13 +60,13 @@ export default class Game {
         this.stopLoop();
         setTimeout(() => {
             this.sceneManager.unloadCurrentScene();
-            this.clearCanvas();
+            this.renderManager.clearCanvas(this.canvasBGColor);
         }, 100);
     }
 
     private gameLoop(): void {
         this.running = true;
-        this.clearCanvas();
+        this.renderManager.clearCanvas(this.canvasBGColor);
         
         if (this.firstFrame === true) {
             this.dispatchFrameEvent(EVENT_START);
@@ -92,12 +91,6 @@ export default class Game {
         }
     }
 
-    private clearCanvas() {
-        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasContext.fillStyle = this.canvasBGColor;
-        this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
     dispatchFrameEvent(event: string) {
         window.dispatchEvent(new CustomEvent(
             event,
@@ -107,7 +100,6 @@ export default class Game {
                     sceneManager: this.sceneManager,
                     renderManager: this.renderManager,
                     canvas: this.canvas,
-                    canvasContext: this.canvasContext,
                     input: this.input,
                 }
             }

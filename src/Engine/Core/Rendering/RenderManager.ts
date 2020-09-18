@@ -1,14 +1,13 @@
-import WorldSapceRenderer from "./WorldSpaceRenderer";
 import RenderData from "./RenderData";
-import Game from "../../Game";
 import Rectangle from "../../Helper/Rectangle";
+import ContextRendererInterface from "./ContextRendererInterface";
 
 export default class RenderManager {
     private renderStack: Array<RenderData> = [];
-    private worldSpaceRenderer: WorldSapceRenderer = null;
+    private contextRenderer: ContextRendererInterface = null;
 
-    constructor(game: Game) {
-        this.worldSpaceRenderer = new WorldSapceRenderer(this, game.canvasContext);
+    constructor(contextRenderer: ContextRendererInterface) {
+        this.contextRenderer = contextRenderer;
     }
 
     public addToRenderStack(renderData: RenderData): void {
@@ -29,7 +28,21 @@ export default class RenderManager {
         this.renderStack = [];
     }
 
-    public renderInWorldSpace(renderLayers: Array<string>, worldSpaceRect: Rectangle) {
-        this.worldSpaceRenderer.render(renderLayers, worldSpaceRect);
+    public clearCanvas(color: string|null = null) {
+        this.contextRenderer.clearCanvas(color);
+    }
+
+    public render(renderLayers: Array<string>, worldSpaceViewRect: Rectangle) {
+        this.renderStack.forEach(renderData => {
+            if (renderLayers.includes(renderData.layer) === false) {
+                return;
+            }
+
+            if (renderData.ui === false) {
+                this.contextRenderer.renderInWorldSpace(renderData, worldSpaceViewRect);
+            }
+        });
+
+        this.clearRenderStack();
     }
 }

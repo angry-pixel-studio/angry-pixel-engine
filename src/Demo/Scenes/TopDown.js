@@ -5,7 +5,7 @@ import PlayerTop from "../GameObjects/PlayerTop";
 import ForegroundTopDown from "../GameObjects/ForegroundTopDown";
 import renderLayers from '../Config/renderLayers';
 import Bot from "../GameObjects/Bot";
-import InputManager from "../GameObjects/Inputmanager";
+import InputManager from "../GameObjects/InputManager";
 
 export default class TopDown extends Scene {
 

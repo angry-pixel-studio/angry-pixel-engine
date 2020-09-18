@@ -7,7 +7,6 @@ import {
     PIVOT_BOTTOM_LEFT,
     PIVOT_BOTTOM_RIGHT
 } from '../Core/Rendering/RenderPivots';
-import Vector2 from '../Helper/Vector2';
 import Sprite from '../Sprite';
 
 export * from '../Core/Rendering/RenderPivots';
