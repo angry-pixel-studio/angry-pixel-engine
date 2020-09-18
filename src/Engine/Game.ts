@@ -28,6 +28,9 @@ export default class Game {
     
     private firstFrame: boolean = false;
     private frameRequestId: number = null;
+    
+    private then: number = 0;
+    private deltaTime: number = 0;
 
     constructor(containerElement: HTMLElement, width: number, height: number) {
         this.createCanvas(containerElement, width, height);
@@ -53,7 +56,9 @@ export default class Game {
         this.input = new Input(this);
         this.sceneManager.loadOpeningScene();
         
-        this.gameLoop();
+        this.then = Date.now();
+
+        this.requestAnimationFrame();
     }
 
     public stop(): void {
@@ -64,8 +69,13 @@ export default class Game {
         }, 100);
     }
 
-    private gameLoop(): void {
+    private gameLoop(time: number): void {
         this.running = true;
+
+        const now = time * 0.001;
+        this.deltaTime = Math.min(0.1, now - this.then);
+        this.then = now;
+
         this.renderManager.clearCanvas(this.canvasBGColor);
         
         if (this.firstFrame === true) {
@@ -75,7 +85,7 @@ export default class Game {
             this.dispatchFrameEvent(EVENT_UPDATE);
         }
         
-        this.frameRequestId = window.requestAnimationFrame(() => this.gameLoop());
+        this.requestAnimationFrame();
     }
 
     public stopLoop() {
@@ -87,8 +97,12 @@ export default class Game {
     public resumeLoop(resetFrames = false) {
         if (this.running == false && this.frameRequestId === null) {
             this.firstFrame = resetFrames ? true : this.firstFrame;
-            this.gameLoop();
+            this.requestAnimationFrame();
         }
+    }
+
+    private requestAnimationFrame(): void {
+        this.frameRequestId = window.requestAnimationFrame((time) => this.gameLoop(time));
     }
 
     dispatchFrameEvent(event: string) {
@@ -101,6 +115,7 @@ export default class Game {
                     renderManager: this.renderManager,
                     canvas: this.canvas,
                     input: this.input,
+                    deltaTime: this.deltaTime
                 }
             }
         ));

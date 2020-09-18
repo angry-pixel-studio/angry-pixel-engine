@@ -124,7 +124,7 @@ export default class Context2DWorldSapceRenderer implements WorldSpaceRendererIn
     }
 
     private updateRenderPosition(renderData: RenderData, worldSpaceViewRect: Rectangle) {
-        this.renderPosition.x = Number((renderData.position.x - worldSpaceViewRect.x).toFixed(renderData.rotation ? 2: 0));
-        this.renderPosition.y = Number((worldSpaceViewRect.y - renderData.position.y).toFixed(renderData.rotation ? 2: 0));
+        this.renderPosition.x = Number((renderData.position.x - worldSpaceViewRect.x).toFixed(0));
+        this.renderPosition.y = Number((worldSpaceViewRect.y - renderData.position.y).toFixed(0));
     }
 }

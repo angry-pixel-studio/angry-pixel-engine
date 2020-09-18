@@ -11,7 +11,7 @@ export default class Movements extends Component {
 
     // status
     mousePosition = new Vector2(0, 0);
-    walkSpeed = 4;
+    walkSpeed = 250;
     rotationSpeed = 3;
     angle = 0; // in radians
     walkingAnimation = false;
@@ -23,14 +23,14 @@ export default class Movements extends Component {
         this.inputManager = this.findGameObject('InputManager');
     }
 
-    update() {
+    update(event) {
         this.rotate();
-        this.walk();
+        this.walk(event.deltaTime);
     }
 
-    walk() {
-        let deltaY = this.inputManager.axis.y * this.walkSpeed;
-        let deltaX = this.inputManager.axis.x * this.walkSpeed;
+    walk(deltaTime) {
+        let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * deltaTime);
+        let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
 
         this.transform.position.x += deltaY ? deltaX / 1.4 : deltaX;
         this.gameObject.updateCollidersPosition();

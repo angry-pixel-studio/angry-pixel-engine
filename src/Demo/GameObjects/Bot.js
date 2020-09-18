@@ -19,7 +19,7 @@ export default class Bot extends GameObject {
     wallDetector = new Rectangle(0, 0, 64, 64)
     playerDistance = new Rectangle(0, 0, 128, 128);
 
-    walkSpeed = 3;
+    walkSpeed = 180;
     rotationSpeed = 3;
 
     // status
@@ -63,11 +63,11 @@ export default class Bot extends GameObject {
         this.tilemap = this.findGameObject('Foreground').getComponent('TilemapRenderer');
     }
 
-    update() {
+    update(event) {
         this.updateColliders();
         this.updateAimAngle();
         this.updateCurrentDirection();
-        this.move();
+        this.move(event.deltaTime);
     }
 
     updateColliders() {
@@ -101,13 +101,13 @@ export default class Bot extends GameObject {
         this.currentDirection.y = Math.sin(this.aimAngle);
     }
 
-    move() {
+    move(deltaTime) {
         if (this.playerDistance.overlappingRectangle(this.player.collider)) {
             return;
         }
 
-        let deltaX = this.currentDirection.x * this.walkSpeed;
-        let deltaY = this.currentDirection.y * this.walkSpeed;
+        let deltaX = this.currentDirection.x * (this.walkSpeed * deltaTime);
+        let deltaY = this.currentDirection.y * (this.walkSpeed * deltaTime);
 
         this.transform.position.x += deltaX;
         this.updateColliders();

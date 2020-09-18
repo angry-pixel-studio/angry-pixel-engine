@@ -13,7 +13,7 @@ export default class TopDown extends Scene {
         super();
 
         this.addGameObject(() => new ForegroundTopDown(), 'Foreground')
-            //.addGameObject(() => new SpotPointer(), 'SpotPointer')
+            .addGameObject(() => new SpotPointer(), 'SpotPointer')
             .addGameObject(() => new InputManager(), 'InputManager')
             .addGameObject(() => new PlayerTop(), 'Player')
             .addGameObject(() => new Bot(), 'Bot');
