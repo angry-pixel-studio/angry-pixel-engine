@@ -1,12 +1,27 @@
-import Component from "../../Component";
-import ICollider from "../../Core/Collision/ICollider";
-import Rectangle from "../../Helper/Rectangle";
+import Component from "./../../Component";
+import ICollider from "./../../Core/Collision/ICollider";
+import Rectangle from "./../../Helper/Rectangle";
+
+interface Config {
+    width: number;
+    height: number;
+};
 
 export default class RectangleCollider extends Component {
     private rectangle: Rectangle;
 
+    constructor({ width, height }: Config) {
+        super();
+
+        this.rectangle = new Rectangle(
+            0,
+            0,
+            width,
+            height
+        );
+    }
+
     start(event: { [key: string]: any }): void {
-        this.rectangle = new Rectangle(0, 0, 10, 10);
         event.collisionManager.addCollider(this);
     }
 

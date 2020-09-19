@@ -1,4 +1,4 @@
-import Rectangle from "../../Helper/Rectangle";
+import Rectangle from "./../../Helper/Rectangle";
 
 export default interface ICollider {
     collidesWith(other: ICollider): boolean;

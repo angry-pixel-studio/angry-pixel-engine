@@ -5,6 +5,7 @@ export default class QuadTree {
     readonly maxObjects: number = 2;
     readonly maxLevels: number = 5;
 
+    // Quads cardinal positions
     readonly sw: number = 0;
     readonly se: number = 1;
     readonly nw: number = 2;
@@ -22,34 +23,34 @@ export default class QuadTree {
 
     public insert(object: ICollider): void {
         if (this.hasQuadChildren()) {
-            const index: number = this.getChildrenQuadrantForObject(object);
-            this.quadrants[index].insert(object);
+            this.insertIntoChildrenQuad(object);
 
+            return;
+        }
 
-        } else if (this.isQuadFull()) {
+        if (this.isQuadFull()) {
             if (this.level >= this.maxLevels) {
                 this.objects.push(object);
 
                 return;
             }
 
-            this.split();
-            this.objects.push(object);
-            for (const o of this.objects) {
-                const index: number = this.getChildrenQuadrantForObject(o);
-                this.quadrants[index].insert(o);
-            }
-
-            this.objects = [];
-        } else if (this.hasQuadChildren()) {
-            const index: number = this.getChildrenQuadrantForObject(object);
-            this.quadrants[index].insert(object);
-            this.objects.splice(this.objects.indexOf(object), 1);
+            this.splitQuad();
+            this.insertIntoChildrenQuad(object);
 
             return;
-        } else {
-            this.objects.push(object);
         }
+
+        this.objects.push(object);
+    }
+
+    public insertIntoChildrenQuad(object: ICollider) {
+        if (!this.hasQuadChildren()) {
+            throw new Error('Can not insert object into children quad. Current quadrant does not have quadrant children.');
+        }
+
+        const index: number = this.getChildrenQuadrantForObject(object);
+        this.quadrants[index].insert(object);
     }
 
     public getPossibleCollisionsWithObject(collider: ICollider): Array<ICollider> {
@@ -79,8 +80,7 @@ export default class QuadTree {
         this.quadrants = [];
     }
 
-    // splits the current quad in 4 quadrants
-    private split(): void {
+    private splitQuad(): void {
         const newLevel: number = this.level + 1;
 
         const x = this.bounds.x;
@@ -95,11 +95,21 @@ export default class QuadTree {
             new QuadTree(newLevel, new Rectangle(x, y + midY, midX, midY)),
             new QuadTree(newLevel, new Rectangle(x + midX, y + midY, midX, midY)),
         ];
+
+        this.moveObjectsToChildrenQuadrants();
+    }
+
+    private moveObjectsToChildrenQuadrants() {
+        for (const o of this.objects) {
+            this.insertIntoChildrenQuad(o);
+        }
+
+        this.objects = [];
     }
 
     private getChildrenQuadrantForObject(object: ICollider): number {
         if (this.quadrants.length === 0) {
-            throw 'Current quadrant does not have quadrant children';
+            throw new Error('Current quadrant does not have quadrant children.');
         }
 
         const verticalMid = this.bounds.x + (this.bounds.width / 2);
@@ -122,7 +132,7 @@ export default class QuadTree {
             return this.ne;
         }
 
-        throw 'Children does not fit in any children quadrant';
+        throw new Error('Children does not fit in any children quadrant');
     }
 
     private hasQuadChildren(): boolean {

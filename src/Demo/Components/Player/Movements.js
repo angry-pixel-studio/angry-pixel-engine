@@ -46,7 +46,7 @@ export default class Movements extends Component {
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
         }
-        
+
         if ((deltaX || deltaY) && this.walkingAnimation === false) {
             this.walkingAnimation = true;
             this.animator.playAnimation('PlayerWalking');
@@ -56,7 +56,7 @@ export default class Movements extends Component {
         }
     }
 
-    rotate () {
+    rotate() {
         this.angle = Math.atan2(
             this.inputManager.mousePosition.y - this.transform.position.y,
             this.inputManager.mousePosition.x - this.transform.position.x
@@ -65,7 +65,8 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
+        //console.log(this.getComponent("RectangleCollider"));
         return this.tilemap.isTouchingRect(this.gameObject.collider);
     }
-    
+
 }

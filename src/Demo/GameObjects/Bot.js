@@ -57,7 +57,7 @@ export default class Bot extends GameObject {
             spriteRenderer: this.getComponent('SpriteRenderer')
         }), 'Animator');
         this.getComponent('Animator').addAnimation('PlayerWalking', PlayerWalking);
-        this.addComponent(() => new RectangleCollider(), 'RectangleCollider');
+        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), 'RectangleCollider');
     }
 
     start() {
