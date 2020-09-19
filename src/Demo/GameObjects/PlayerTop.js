@@ -1,4 +1,4 @@
-import GameObject from "../../Engine/GameObject";
+import GameObject, { LAYER_DEFAULT } from "../../Engine/GameObject";
 import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
 import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
@@ -9,6 +9,7 @@ import Movements from "../Components/Player/Movements";
 import MovementsArrows from "../Components/Player/MovementsArrows";
 import Weapon from "../Components/Player/Weapon";
 import { LAYER_PLAYER } from "../Config/renderLayers";
+import RenderData, { GEOMETRIC_RECTANGLE } from "../../Engine/Core/Rendering/RenderData";
 
 const SPRITE_PATH = 'image/demo/player-top-down.png';
 
@@ -16,6 +17,7 @@ export const TAG_PLAYER = 'Player';
 
 export default class PlayerTop extends GameObject {
     collider = new Rectangle(0, 0, 32, 32);
+    renderData = new RenderData();
 
     constructor() {
         super();
@@ -48,8 +50,9 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Weapon(), 'Weapon');
     }
 
-    update() {
+    update(event) {
         this.updateCollidersPosition();
+        this.drawCollider(event.renderManager);
     }
 
     updateCollidersPosition() {
@@ -57,5 +60,15 @@ export default class PlayerTop extends GameObject {
             this.transform.position.x - this.collider.width / 2,
             this.transform.position.y + this.collider.height / 2
         );
+    }
+
+    drawCollider(renderManager) {
+        this.renderData.position = this.collider.position;
+        this.renderData.layer = LAYER_DEFAULT;
+        this.renderData.geometric = this.collider;
+        this.renderData.geometricType = GEOMETRIC_RECTANGLE;
+        this.renderData.color = '#7FE900';
+
+        renderManager.addToRenderStack(this.renderData);
     }
 }

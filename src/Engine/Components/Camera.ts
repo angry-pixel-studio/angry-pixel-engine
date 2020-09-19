@@ -2,7 +2,9 @@ import Component from "../Component";
 import { LAYER_DEFAULT } from "../GameObject";
 import Rectangle from "../Helper/Rectangle";
 
-const RECT = { x1: 0, x2: 0, y1: 0, y2: 0 };
+const DEFAULT_LAYERS: string[] = [
+    LAYER_DEFAULT
+]
 
 export default class Camera extends Component {
     private _viewportWidth: number = 0;
@@ -11,7 +13,7 @@ export default class Camera extends Component {
     private _vpHalfHeight: number = 0;
 
     private _worldSpaceRect: Rectangle = null;
-    private _renderLayers: string[] = [LAYER_DEFAULT]
+    private _renderLayers: string[] = DEFAULT_LAYERS;
 
     start(event: {[key:string]: any}): void {
         this._worldSpaceRect = new Rectangle(0, 0, 0, 0);
@@ -44,7 +46,7 @@ export default class Camera extends Component {
     }
 
     public set renderLayers(renderLayers: string[]){
-        this._renderLayers = renderLayers;
+        this._renderLayers = [...DEFAULT_LAYERS, ...renderLayers];
     }
  
     public get renderLayer(): string[] {

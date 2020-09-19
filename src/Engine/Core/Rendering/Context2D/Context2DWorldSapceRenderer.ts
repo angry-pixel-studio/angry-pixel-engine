@@ -1,6 +1,6 @@
 import Rectangle from "../../../Helper/Rectangle";
 import Vector2 from "../../../Helper/Vector2";
-import RenderData from "../RenderData";
+import RenderData, { GEOMETRIC_RECTANGLE } from "../RenderData";
 import WorldSpaceRendererInterface from "../WorldSpaceRendererInterface";
 
 export default class Context2DWorldSapceRenderer implements WorldSpaceRendererInterface {
@@ -109,7 +109,23 @@ export default class Context2DWorldSapceRenderer implements WorldSpaceRendererIn
     }
 
     public renderGeometric(renderData: RenderData, worldSpaceViewRect: Rectangle): void {
+        this.canvasContext.save();
 
+        this.updateRenderPosition(renderData, worldSpaceViewRect);
+
+        switch (renderData.geometricType) {
+            case GEOMETRIC_RECTANGLE:
+                this.canvasContext.strokeStyle = renderData.color;
+                this.canvasContext.strokeRect(
+                    this.renderPosition.x,
+                    this.renderPosition.y,
+                    renderData.geometric.width,
+                    renderData.geometric.height,
+                );
+                break;
+        }
+
+        this.canvasContext.restore();
     }
 
     private isInsideWorldSpaceRect(renderData: RenderData, worldSpaceViewRect: Rectangle): boolean {

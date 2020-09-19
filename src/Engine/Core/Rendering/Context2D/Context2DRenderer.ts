@@ -24,6 +24,10 @@ export default class Context2DRenderer implements ContextRendererInterface {
         if (renderData.text) {
             this.worldSpaceRenderer.renderText(renderData, worldSpaceViewRect);
         }
+
+        if (renderData.geometric) {
+            this.worldSpaceRenderer.renderGeometric(renderData, worldSpaceViewRect);
+        }
     }
 
     public clearCanvas(color: string|null = null): void {

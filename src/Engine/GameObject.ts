@@ -10,8 +10,8 @@ export default class GameObject {
     public id: string = null;
     public tag: string  = null;
     public layer: string = LAYER_DEFAULT;
-    public active: boolean = true;
     
+    public active: boolean = true;
     public scene: Scene = null;
     private _parent: GameObject|null = null;
     

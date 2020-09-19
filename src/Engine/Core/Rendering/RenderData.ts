@@ -1,6 +1,8 @@
 import Vector2 from "../../Helper/Vector2";
 import Rectangle from "../../Helper/Rectangle";
 
+export const GEOMETRIC_RECTANGLE = 'Rectangle';
+
 export default class RenderData {
     // general
     public ui: boolean = false;
@@ -17,12 +19,19 @@ export default class RenderData {
     public rotation: number = null;
     public smooth: boolean = false;
 
+    // for text and geometric
+    public color: string = null;
+    
     // for text
     public text: string = null;
     public font: string = null;
     public textSize:  number = null;
-    public color: string = null;
     public lineSeparation: number = null;
     public bold: boolean = false;
     public italic: boolean = false;
+
+    // for geometric
+    public geometric: any = null;
+    public geometricType: string = null;
+    public geometricUsePosition: boolean = false;
 }
