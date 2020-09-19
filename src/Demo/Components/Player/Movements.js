@@ -32,13 +32,16 @@ export default class Movements extends Component {
         let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * deltaTime);
         let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
 
-        this.transform.position.x += deltaY ? deltaX / 1.4 : deltaX;
+        deltaX = deltaY ? deltaX / 1.4 : deltaX;
+        deltaY = deltaX ? deltaY / 1.4 : deltaY
+
+        this.transform.position.x += deltaX;
         this.gameObject.updateCollidersPosition();
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
         }
 
-        this.transform.position.y += deltaX ? deltaY / 1.4 : deltaY;
+        this.transform.position.y += deltaY;
         this.gameObject.updateCollidersPosition();
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
