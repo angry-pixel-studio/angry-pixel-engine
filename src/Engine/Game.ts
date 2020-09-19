@@ -38,7 +38,7 @@ export default class Game {
         this.createCanvas(containerElement, width, height);
         this.sceneManager = new SceneManager(this);
         this.renderManager = new RenderManager(new Context2DRenderer(this.canvas));
-        this.collisionManager = new CollisionManager();
+        this.collisionManager = new CollisionManager(this.renderManager);
     }
 
     private createCanvas(container: HTMLElement, width: number, height: number): void {
