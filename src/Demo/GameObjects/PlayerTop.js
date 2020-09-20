@@ -49,22 +49,22 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Movements(), 'Movements');
         //this.addComponent(() => new MovementsArrows(), 'Movements');
         this.addComponent(() => new Weapon(), 'Weapon');
-        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), 'RectangleCollider');
+        this.addComponent(() => new RectangleCollider({ width: 64, height: 64 }), 'RectangleCollider');
     }
 
     update(event) {
-        this.updateCollidersPosition();
+        //this.updateCollidersPosition();
         //this.drawCollider(event.renderManager);
     }
 
-    updateCollidersPosition() {
+    /*updateCollidersPosition() {
         this.collider.setPosition(
             this.transform.position.x - this.collider.width / 2,
             this.transform.position.y + this.collider.height / 2
         );
-    }
+    }*/
 
-    drawCollider(renderManager) {
+    /*drawCollider(renderManager) {
         this.renderData.position = this.collider.position;
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.collider;
@@ -72,5 +72,5 @@ export default class PlayerTop extends GameObject {
         this.renderData.color = '#7FE900';
 
         renderManager.addToRenderStack(this.renderData);
-    }
+    }*/
 }

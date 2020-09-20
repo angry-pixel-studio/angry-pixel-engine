@@ -36,13 +36,13 @@ export default class Movements extends Component {
         deltaY = deltaX ? deltaY / 1.4 : deltaY
 
         this.transform.position.x += deltaX;
-        this.gameObject.updateCollidersPosition();
+        // this.gameObject.updateCollidersPosition();
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
         }
 
         this.transform.position.y += deltaY;
-        this.gameObject.updateCollidersPosition();
+        // this.gameObject.updateCollidersPosition();
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
         }

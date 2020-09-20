@@ -13,7 +13,7 @@ export default class CollisionManager {
 
     constructor(renderManager: RenderManager) {
         this.renderManager = renderManager;
-        this.quad = new QuadTree(0, new Rectangle(-1000, 600, 2000, 1200))
+        this.quad = new QuadTree(0, new Rectangle(-1025, 700, 2050, 1400))
     }
 
     public checkCollisions(): void {
@@ -53,10 +53,10 @@ export default class CollisionManager {
 
         for (const collider of this.colliders) {
             const colliders = this.quad.retrieve(collider);
-            if (collider.gameObject.id === "Player") {
-                console.log("# of possible collisions with", collider.gameObject.id, colliders.length);
-                // console.log(collider.gameObject.transform.position.x, collider.gameObject.transform.position.y)
-            }
+            //if (collider.gameObject.id === "Player") {
+            //    console.log("# of possible collisions with", collider.gameObject.id, colliders.length);
+            // console.log(collider.gameObject.transform.position.x, collider.gameObject.transform.position.y)
+            //}
         }
     }
 
@@ -69,7 +69,7 @@ export default class CollisionManager {
         renderData.layer = LAYER_DEFAULT;
         renderData.geometric = quad.bounds;
         renderData.geometricType = GEOMETRIC_RECTANGLE;
-        renderData.color = '#7FE900';
+        renderData.color = '#0000FF';
 
         this.renderManager.addToRenderStack(renderData);
 

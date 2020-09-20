@@ -2,6 +2,7 @@ import GameObject from "../../Engine/GameObject";
 import TilemapRenderer from '../../Engine/Components/Renderer/TilemapRenderer';
 import tilemapData from "../Tilemaps/Foreground";
 import Tileset from "../../Engine/Tileset";
+import TilemapCollider from "./../../Engine/Components/Colliders/TilemapCollider";
 import { LAYER_FOREGROUND } from "../Config/renderLayers";
 
 export const TAG_FOREGROUND = 'Foreground';
@@ -33,6 +34,11 @@ export default class ForegroundTopDown extends GameObject {
             tilemapData: tilemapData,
             tileScale: 4
         }), 'TilemapRenderer');
+        this.addComponent(() => new TilemapCollider({
+            tilemapData: tilemapData,
+            tileWidth: 16,
+            tileHeight: 16
+        }));
 
         this.tilemapRenderer = this.getComponent('TilemapRenderer');
     }
