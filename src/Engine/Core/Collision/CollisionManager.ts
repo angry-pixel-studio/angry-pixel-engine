@@ -38,7 +38,6 @@ export default class CollisionManager {
 
         this.quad.clear();
         this.broadPhase();
-        //this.narrowPhase();
     }
 
     public addCollider(collider: ICollider): void {
@@ -53,6 +52,8 @@ export default class CollisionManager {
 
         for (const collider of this.colliders) {
             const colliders = this.quad.retrieve(collider);
+
+            this.narrowPhase(collider, colliders);
             //if (collider.gameObject.id === "Player") {
             //    console.log("# of possible collisions with", collider.gameObject.id, colliders.length);
             // console.log(collider.gameObject.transform.position.x, collider.gameObject.transform.position.y)
@@ -61,7 +62,17 @@ export default class CollisionManager {
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(): void { }
+    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): void {
+        for (const c of colliders) {
+            if (c.isPasive()) {
+                continue;
+            }
+            //console.log(c.getRectangle().y);
+            if (c.collidesWith(collider)) {
+                console.log('true!');
+            }
+        }
+    }
 
     private debugQuads(quad: QuadTree) {
         const renderData = new RenderData();

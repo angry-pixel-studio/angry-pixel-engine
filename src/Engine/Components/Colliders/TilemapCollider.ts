@@ -1,10 +1,11 @@
-import Component from "../../Component";
-import RectangleCollider from "../../Core/Collision/RectangleCollider";
+import Component from "./../../Component";
+import RectangleCollider from "./../../Core/Collision/RectangleCollider";
 
 interface Config {
     tilemapData: string;
     tileWidth: number;
     tileHeight: number;
+    tileScale: number;
 };
 
 export default class TilemapCollider extends Component {
@@ -13,12 +14,12 @@ export default class TilemapCollider extends Component {
     private tileHeight: number;
     private colliders: Array<RectangleCollider> = [];
 
-    constructor({ tilemapData, tileWidth, tileHeight }: Config) {
+    constructor({ tilemapData, tileWidth, tileHeight, tileScale }: Config) {
         super();
 
         this.tilemapData = tilemapData;
-        this.tileWidth = tileWidth * 4;
-        this.tileHeight = tileHeight * 4;
+        this.tileWidth = tileWidth * tileScale;
+        this.tileHeight = tileHeight * tileScale;
     }
 
     // TODO: Change this to be handle by an agnostic implementation of tilemapData.
@@ -49,6 +50,7 @@ export default class TilemapCollider extends Component {
                                 y: posY - offsetY,
                                 width: this.tileWidth,
                                 height: this.tileHeight,
+                                layer: this.gameObject.layer,
                             });
 
                             this.colliders.push(rectangleCollider);

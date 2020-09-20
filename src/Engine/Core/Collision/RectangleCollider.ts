@@ -8,20 +8,28 @@ interface Config {
     x: number;
     y: number;
     width: number;
-    height: number
+    height: number;
+    layer: string;
 }
 
+// TODO: unify this with the other RectangleCollider
 export default class RectangleCollider {
     private rectangle: Rectangle;
     private renderData: RenderData;
+    private layer: string;
 
-    constructor({ x, y, width, height }: Config) {
+    constructor({ x, y, width, height, layer }: Config) {
         this.rectangle = new Rectangle(x, y * -1, width, height);
+        this.layer = layer;
+
         this.setupRenderData();
     }
 
     public collidesWith(other: ICollider): boolean {
-        return true;
+        return this.rectangle.x < other.getRectangle().x + other.getRectangle().width &&
+            this.rectangle.x + this.rectangle.width > other.getRectangle().x &&
+            this.rectangle.y - this.rectangle.height < other.getRectangle().y &&
+            this.rectangle.y > other.getRectangle().y - other.getRectangle().height;
     }
 
     public getRectangle(): Rectangle {
@@ -30,6 +38,14 @@ export default class RectangleCollider {
 
     public getRenderData(): RenderData {
         return this.renderData;
+    }
+
+    public isPasive(): boolean {
+        return true; // set this by constructor
+    }
+
+    public getLayer(): string {
+        return this.layer;
     }
 
     private setupRenderData(): void {

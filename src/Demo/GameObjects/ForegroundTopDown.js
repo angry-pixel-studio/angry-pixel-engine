@@ -37,7 +37,8 @@ export default class ForegroundTopDown extends GameObject {
         this.addComponent(() => new TilemapCollider({
             tilemapData: tilemapData,
             tileWidth: 16,
-            tileHeight: 16
+            tileHeight: 16,
+            tileScale: 4,
         }));
 
         this.tilemapRenderer = this.getComponent('TilemapRenderer');

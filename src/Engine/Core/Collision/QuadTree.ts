@@ -3,7 +3,7 @@ import Rectangle from "./../../Helper/Rectangle";
 import ICollider from "./ICollider";
 
 export default class QuadTree {
-    readonly maxObjects: number = 10;
+    readonly maxObjects: number = 5;
     readonly maxLevels: number = 5;
 
     // Quads cardinal positions

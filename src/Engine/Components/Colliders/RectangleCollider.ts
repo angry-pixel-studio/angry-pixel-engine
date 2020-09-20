@@ -12,12 +12,15 @@ interface Config {
     offsetY: number;
 };
 
+// TODO: unify this with the other RectangleCollider
 export default class RectangleCollider extends Component {
     private rectangle: Rectangle;
     private renderData: RenderData;
 
     private offsetX: number;
     private offsetY: number;
+
+    private layer: string;
 
     constructor({ width, height, offsetX = 0, offsetY = 0 }: Config) {
         super();
@@ -36,6 +39,8 @@ export default class RectangleCollider extends Component {
         this.setupRenderData();
         this.updateRectangleCoordinates();
         this.updateRenderDataPosition();
+
+        this.layer = this.gameObject.layer;
     }
 
     protected update(event: { [key: string]: any }): void {
@@ -53,7 +58,10 @@ export default class RectangleCollider extends Component {
     }
 
     public collidesWith(other: ICollider): boolean {
-        return true;
+        return this.rectangle.x < other.getRectangle().x + other.getRectangle().width &&
+            this.rectangle.x + this.rectangle.width > other.getRectangle().x &&
+            this.rectangle.y - this.rectangle.height < other.getRectangle().y &&
+            this.rectangle.y > other.getRectangle().y - other.getRectangle().height;
     }
 
     public getRectangle(): Rectangle {
@@ -62,6 +70,14 @@ export default class RectangleCollider extends Component {
 
     public getRenderData(): RenderData {
         return this.renderData;
+    }
+
+    public isPasive(): boolean {
+        return false;
+    }
+
+    public getLayer(): string {
+        return this.layer;
     }
 
     private setupRenderData(): void {
