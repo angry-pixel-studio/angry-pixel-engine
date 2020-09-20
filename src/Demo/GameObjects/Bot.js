@@ -1,5 +1,5 @@
 import Animator from "../../Engine/Components/Animator";
-import SpriteRenderer from "../../Engine/Components/SpriteRenderer";
+import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Helper/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";

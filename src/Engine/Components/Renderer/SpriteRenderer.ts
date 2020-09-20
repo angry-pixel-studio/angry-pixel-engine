@@ -1,15 +1,15 @@
-import Component from '../Component';
-import RenderData from '../Core/Rendering/RenderData';
+import Component from '../../Component';
+import RenderData from '../../Core/Rendering/RenderData';
 import {
     PIVOT_CENTER,
     PIVOT_TOP_LEFT,
     PIVOT_TOP_RIGHT,
     PIVOT_BOTTOM_LEFT,
     PIVOT_BOTTOM_RIGHT
-} from '../Core/Rendering/RenderPivots';
-import Sprite from '../Sprite';
+} from '../../Core/Rendering/RenderPivots';
+import Sprite from '../../Sprite';
 
-export * from '../Core/Rendering/RenderPivots';
+export * from '../../Core/Rendering/RenderPivots';
 
 export default class SpriteRenderer extends Component {
     public sprite: Sprite = null;
@@ -25,8 +25,6 @@ export default class SpriteRenderer extends Component {
 
     constructor(config: {[key: string]: any}) {
         super();
-
-        this.renderData.ui = false;
 
         // required
         this.sprite = config.sprite;
@@ -45,6 +43,7 @@ export default class SpriteRenderer extends Component {
 
     update(event: {[key: string]: any}): void {
         if (this.sprite.loaded === true) {
+            this.renderData.ui = this.gameObject.ui;
             this.renderData.layer = this.gameObject.layer;
             this.renderData.image = this.sprite.image;
             this.renderData.width = this.sprite.width * this.gameObject.transform.scale.x;

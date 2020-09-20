@@ -1,5 +1,5 @@
 import GameObject, { LAYER_DEFAULT } from "../../Engine/GameObject";
-import SpriteRenderer from '../../Engine/Components/SpriteRenderer';
+import SpriteRenderer from '../../Engine/Components/Renderer/SpriteRenderer';
 import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
@@ -52,7 +52,7 @@ export default class PlayerTop extends GameObject {
 
     update(event) {
         this.updateCollidersPosition();
-        this.drawCollider(event.renderManager);
+        //this.drawCollider(event.renderManager);
     }
 
     updateCollidersPosition() {

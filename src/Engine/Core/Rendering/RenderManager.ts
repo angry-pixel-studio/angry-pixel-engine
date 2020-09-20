@@ -1,12 +1,12 @@
 import RenderData from "./RenderData";
 import Rectangle from "../../Helper/Rectangle";
-import ContextRendererInterface from "./ContextRendererInterface";
+import IContextRenderer from "./IContextRenderer";
 
 export default class RenderManager {
     private renderStack: Array<RenderData> = [];
-    private contextRenderer: ContextRendererInterface = null;
+    private contextRenderer: IContextRenderer = null;
 
-    constructor(contextRenderer: ContextRendererInterface) {
+    constructor(contextRenderer: IContextRenderer) {
         this.contextRenderer = contextRenderer;
     }
 
@@ -32,15 +32,13 @@ export default class RenderManager {
         this.contextRenderer.clearCanvas(color);
     }
 
-    public render(renderLayers: Array<string>, worldSpaceViewRect: Rectangle) {
+    public render(renderLayers: Array<string>, worldSpaceViewRect: Rectangle, viewportRect: Rectangle) {
         this.renderStack.forEach(renderData => {
             if (renderLayers.includes(renderData.layer) === false) {
                 return;
             }
 
-            if (renderData.ui === false) {
-                this.contextRenderer.renderInWorldSpace(renderData, worldSpaceViewRect);
-            }
+            this.contextRenderer.render(renderData, worldSpaceViewRect, viewportRect);
         });
 
         this.clearRenderStack();

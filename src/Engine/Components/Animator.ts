@@ -1,5 +1,5 @@
 import Component from "../Component";
-import SpriteRenderer from "./SpriteRenderer";
+import SpriteRenderer from "./Renderer/SpriteRenderer";
 import Sprite from "../Sprite";
 import Animation from "../Animation";
 

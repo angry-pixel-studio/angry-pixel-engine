@@ -1,7 +1,19 @@
-import Component from "../Component";
-import RenderData from "../Core/Rendering/RenderData";
+import Component from "../../Component";
+import RenderData from "../../Core/Rendering/RenderData";
 
-export * from '../Core/Rendering/RenderPivots';
+export * from '../../Core/Rendering/RenderPivots';
+
+export type TextRendererConfig = {
+    text: string,
+    font: string, 
+    size: number,
+    color: string,
+    bold: boolean,
+    italic: boolean,
+    lineSeparation: number,
+    width: number,
+    height: number
+}
 
 export default class TextRenderer extends Component {
     public text: string = '';
@@ -12,8 +24,10 @@ export default class TextRenderer extends Component {
     public italic: boolean = false;
     public renderData: RenderData = null;
     public lineSeparation: number = 5;
+    public width: number = 0;
+    public height: number = 0;
 
-    constructor(config: {[key: string]: any}) {
+    constructor(config: TextRendererConfig) {
         super();
 
         this.renderData = new RenderData();
@@ -25,6 +39,8 @@ export default class TextRenderer extends Component {
         this.bold = config.bold ? config.bold : this.bold;
         this.italic = config.italic ? config.italic : this.italic;
         this.lineSeparation = config.lineSeparation ? config.lineSeparation : this.lineSeparation;
+        this.width = config.width ? config.width : this.width;
+        this.height = config.height ? config.height : this.height;
     }
 
     start(event: object): void {
@@ -32,6 +48,8 @@ export default class TextRenderer extends Component {
     }
 
     update(event: {[key: string]: any}): void {
+        this.renderData.layer = this.gameObject.layer;
+        this.renderData.ui = this.gameObject.ui;
         this.renderData.text = this.text;
         this.renderData.textSize = this.size;
         this.renderData.color = this.color;
@@ -41,6 +59,8 @@ export default class TextRenderer extends Component {
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.bold = this.bold;
         this.renderData.italic = this.italic;
+        this.renderData.width = this.width;
+        this.renderData.height = this.height;
 
         event.renderManager.addToRenderStack(this.renderData);
     }

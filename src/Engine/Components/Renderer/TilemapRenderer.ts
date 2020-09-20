@@ -1,7 +1,7 @@
-import Component from '../Component';
-import RenderData from '../Core/Rendering/RenderData';
-import Rectangle from '../Helper/Rectangle';
-import Tileset from '../Tileset';
+import Component from '../../Component';
+import RenderData from '../../Core/Rendering/RenderData';
+import Rectangle from '../../Helper/Rectangle';
+import Tileset from '../../Tileset';
 
 export default class TilemapRenderer extends Component {
     public tileset: Tileset = null;

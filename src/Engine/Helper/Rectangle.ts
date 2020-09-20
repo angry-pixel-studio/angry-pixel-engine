@@ -6,10 +6,7 @@ export default class Rectangle {
     public height: number = 0;
 
     constructor(x: number, y: number, width: number, height: number) {
-        this.position.x = x;
-        this.position.y = y;
-        this.width = width;
-        this.height = height;
+        this.set(x, y, width, height);
     }
 
     public get x(): number {
@@ -34,6 +31,12 @@ export default class Rectangle {
 
     public get y1(): number {
         return this.position.y - this.height;
+    }
+
+    public set(x: number, y: number, width: number, height: number): void {
+        this.setPosition(x, y);
+        this.width = width;
+        this.height = height;
     }
 
     public setPosition(x: number, y: number): void {

@@ -6,6 +6,7 @@ import ForegroundTopDown from "../GameObjects/ForegroundTopDown";
 import renderLayers from '../Config/renderLayers';
 import Bot from "../GameObjects/Bot";
 import InputManager from "../GameObjects/InputManager";
+import PlayerStats from "../GameObjects/UI/PlayerStats";
 
 export default class TopDown extends Scene {
 
@@ -13,10 +14,11 @@ export default class TopDown extends Scene {
         super();
 
         this.addGameObject(() => new ForegroundTopDown(), 'Foreground')
-            .addGameObject(() => new SpotPointer(), 'SpotPointer')
+            //.addGameObject(() => new SpotPointer(), 'SpotPointer')
             .addGameObject(() => new InputManager(), 'InputManager')
             .addGameObject(() => new PlayerTop(), 'Player')
-            .addGameObject(() => new Bot(), 'Bot');
+            .addGameObject(() => new Bot(), 'Bot')
+            .addGameObject(() => new PlayerStats(), 'PlayerStats');
 
         this.gameCamera.camera.renderLayers = renderLayers;
         this.gameCamera.addComponent(() => new FollowPlayerCamera());

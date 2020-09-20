@@ -7,29 +7,29 @@ const DEFAULT_LAYERS: string[] = [
 ]
 
 export default class Camera extends Component {
-    private _viewportWidth: number = 0;
-    private _viewportHeight: number = 0;
     private _vpHalfWidth: number = 0;
     private _vpHalfHeight: number = 0;
 
-    private _worldSpaceRect: Rectangle = null;
+    private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
+    private _worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _renderLayers: string[] = DEFAULT_LAYERS;
 
     start(event: {[key:string]: any}): void {
-        this._worldSpaceRect = new Rectangle(0, 0, 0, 0);
         this.setupViewportRect(event.canvas);
     }
 
     private setupViewportRect(canvas: HTMLCanvasElement): void {
-        this._viewportWidth = canvas.clientWidth;
-        this._viewportHeight = canvas.clientHeight;
-        this._vpHalfWidth = this._viewportWidth / 2;
-        this._vpHalfHeight = this._viewportHeight / 2;
+        this._viewportRect.setPosition(-(canvas.clientWidth/2), canvas.clientHeight / 2);
+        this._viewportRect.width = canvas.clientWidth;
+        this._viewportRect.height = canvas.clientHeight;
+        
+        this._vpHalfWidth = this._viewportRect.width / 2;
+        this._vpHalfHeight = this._viewportRect.height / 2;
     }
 
     update(event: {[key:string]: any}): void {
         this.updateWorldSpaceRect();
-        event.renderManager.render(this._renderLayers, this._worldSpaceRect);
+        event.renderManager.render(this._renderLayers, this._worldSpaceRect, this._viewportRect);
     }
     
     private updateWorldSpaceRect(): void  {
@@ -37,8 +37,8 @@ export default class Camera extends Component {
 
         this._worldSpaceRect.x = position.x - this._vpHalfWidth;
         this._worldSpaceRect.y = position.y + this._vpHalfHeight;
-        this._worldSpaceRect.width = this._viewportWidth;
-        this._worldSpaceRect.height = this._viewportHeight;
+        this._worldSpaceRect.width = this._viewportRect.width;
+        this._worldSpaceRect.height = this._viewportRect.height;
     }
 
     public addLayerToRender(layer: string): void {
@@ -49,11 +49,15 @@ export default class Camera extends Component {
         this._renderLayers = [...DEFAULT_LAYERS, ...renderLayers];
     }
  
-    public get renderLayer(): string[] {
+    public get renderLayers(): string[] {
         return this._renderLayers;
     }
 
     public get worldSpaceRect(): Rectangle {
         return this._worldSpaceRect;
+    }
+
+    public get viewportRect(): Rectangle {
+        return this._viewportRect;
     }
 }

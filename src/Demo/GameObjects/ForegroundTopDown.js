@@ -1,5 +1,5 @@
 import GameObject from "../../Engine/GameObject";
-import TilemapRenderer from '../../Engine/Components/TilemapRenderer';
+import TilemapRenderer from '../../Engine/Components/Renderer/TilemapRenderer';
 import tilemapData from "../Tilemaps/Foreground";
 import Tileset from "../../Engine/Tileset";
 import { LAYER_FOREGROUND } from "../Config/renderLayers";
