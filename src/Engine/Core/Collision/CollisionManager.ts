@@ -18,6 +18,7 @@ export default class CollisionManager {
 
     public checkCollisions(): void {
         for (const collider of this.colliders) {
+            collider.clearCollisions();
             this.renderManager.addToRenderStack(collider.getRenderData());
 
             /*if (collider.getRectangle().x < this.quad.bounds.x) {
@@ -37,6 +38,11 @@ export default class CollisionManager {
         this.debugQuads(this.quad);
 
         this.quad.clear();
+
+        for (const collider of this.colliders) {
+            this.quad.insert(collider);
+        }
+
         this.broadPhase();
     }
 
@@ -47,17 +53,9 @@ export default class CollisionManager {
     // broadPhase takes care of looking for possible collisions
     private broadPhase() {
         for (const collider of this.colliders) {
-            this.quad.insert(collider);
-        }
-
-        for (const collider of this.colliders) {
             const colliders = this.quad.retrieve(collider);
 
             this.narrowPhase(collider, colliders);
-            //if (collider.gameObject.id === "Player") {
-            //    console.log("# of possible collisions with", collider.gameObject.id, colliders.length);
-            // console.log(collider.gameObject.transform.position.x, collider.gameObject.transform.position.y)
-            //}
         }
     }
 
@@ -67,9 +65,8 @@ export default class CollisionManager {
             if (c.isPasive()) {
                 continue;
             }
-            //console.log(c.getRectangle().y);
-            if (c.collidesWith(collider)) {
-                console.log('true!');
+            if (this.checkCollision(c, collider)) {
+                c.addCollision(collider);
             }
         }
     }
@@ -87,5 +84,12 @@ export default class CollisionManager {
         for (const q of quad.quadrants) {
             this.debugQuads(q);
         }
+    }
+
+    private checkCollision(collider1: ICollider, colldier2: ICollider) {
+        return collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
+            collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
+            collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
+            collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
     }
 }

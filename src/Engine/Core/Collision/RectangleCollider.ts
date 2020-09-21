@@ -18,6 +18,9 @@ export default class RectangleCollider {
     private renderData: RenderData;
     private layer: string;
 
+    // change any for a proper type
+    private collisions: Array<any> = [];
+
     constructor({ x, y, width, height, layer }: Config) {
         this.rectangle = new Rectangle(x, y * -1, width, height);
         this.layer = layer;
@@ -26,10 +29,8 @@ export default class RectangleCollider {
     }
 
     public collidesWith(other: ICollider): boolean {
-        return this.rectangle.x < other.getRectangle().x + other.getRectangle().width &&
-            this.rectangle.x + this.rectangle.width > other.getRectangle().x &&
-            this.rectangle.y - this.rectangle.height < other.getRectangle().y &&
-            this.rectangle.y > other.getRectangle().y - other.getRectangle().height;
+        console.log(this.collisions);
+        return false;
     }
 
     public getRectangle(): Rectangle {
@@ -46,6 +47,14 @@ export default class RectangleCollider {
 
     public getLayer(): string {
         return this.layer;
+    }
+
+    public addCollision(collider: ICollider): void {
+        this.collisions.push(collider);
+    }
+
+    public clearCollisions(): void {
+        this.collisions = [];
     }
 
     private setupRenderData(): void {

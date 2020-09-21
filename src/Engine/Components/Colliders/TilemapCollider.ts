@@ -37,7 +37,6 @@ export default class TilemapCollider extends Component {
         data.forEach((rowData: string, row: number) => {
             const parsedRow = rowData.match(/.{1,5}/g);
             if (parsedRow) {
-                console.log('parsed');
                 parsedRow.forEach(
                     (colData: string, col: number) => {
                         const stringId = colData.trim().replace('[', '').replace(']', '');

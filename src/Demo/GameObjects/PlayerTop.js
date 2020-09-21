@@ -54,23 +54,5 @@ export default class PlayerTop extends GameObject {
 
     update(event) {
         //this.updateCollidersPosition();
-        //this.drawCollider(event.renderManager);
     }
-
-    /*updateCollidersPosition() {
-        this.collider.setPosition(
-            this.transform.position.x - this.collider.width / 2,
-            this.transform.position.y + this.collider.height / 2
-        );
-    }*/
-
-    /*drawCollider(renderManager) {
-        this.renderData.position = this.collider.position;
-        this.renderData.layer = LAYER_DEFAULT;
-        this.renderData.geometric = this.collider;
-        this.renderData.geometricType = GEOMETRIC_RECTANGLE;
-        this.renderData.color = '#7FE900';
-
-        renderManager.addToRenderStack(this.renderData);
-    }*/
 }

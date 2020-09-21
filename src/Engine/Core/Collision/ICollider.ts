@@ -7,4 +7,6 @@ export default interface ICollider {
     getRectangle(): Rectangle;
     getRenderData(): RenderData;
     isPasive(): boolean;
+    addCollision(collider: ICollider): void;
+    clearCollisions(): void;
 }

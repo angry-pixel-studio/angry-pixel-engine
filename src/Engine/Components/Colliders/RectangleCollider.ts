@@ -22,6 +22,9 @@ export default class RectangleCollider extends Component {
 
     private layer: string;
 
+    // change any for a proper type
+    private collisions: Array<any> = [];
+
     constructor({ width, height, offsetX = 0, offsetY = 0 }: Config) {
         super();
 
@@ -48,20 +51,26 @@ export default class RectangleCollider extends Component {
         this.updateRenderDataPosition();
     }
 
-    private updateRenderDataPosition() {
-        this.renderData.position.x = this.rectangle.x;
-        this.renderData.position.y = this.rectangle.y;
-    }
-    private updateRectangleCoordinates() {
-        this.rectangle.x = this.gameObject.transform.position.x - (this.rectangle.width / 2) - this.offsetX;
-        this.rectangle.y = this.gameObject.transform.position.y + (this.rectangle.height / 2) + this.offsetY
+    public collidesWith(other: ICollider): boolean {
+        return false;
     }
 
-    public collidesWith(other: ICollider): boolean {
-        return this.rectangle.x < other.getRectangle().x + other.getRectangle().width &&
-            this.rectangle.x + this.rectangle.width > other.getRectangle().x &&
-            this.rectangle.y - this.rectangle.height < other.getRectangle().y &&
-            this.rectangle.y > other.getRectangle().y - other.getRectangle().height;
+    public collidesWithLayer(layer: string): boolean {
+        for (const c of this.collisions) {
+            if (c.getLayer() === layer) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public addCollision(collider: ICollider): void {
+        this.collisions.push(collider);
+    }
+
+    public clearCollisions(): void {
+        this.collisions = [];
     }
 
     public getRectangle(): Rectangle {
@@ -78,6 +87,15 @@ export default class RectangleCollider extends Component {
 
     public getLayer(): string {
         return this.layer;
+    }
+
+    private updateRenderDataPosition() {
+        this.renderData.position.x = this.rectangle.x;
+        this.renderData.position.y = this.rectangle.y;
+    }
+    private updateRectangleCoordinates() {
+        this.rectangle.x = this.gameObject.transform.position.x - (this.rectangle.width / 2) - this.offsetX;
+        this.rectangle.y = this.gameObject.transform.position.y + (this.rectangle.height / 2) + this.offsetY
     }
 
     private setupRenderData(): void {

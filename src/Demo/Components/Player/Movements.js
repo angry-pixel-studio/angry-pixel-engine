@@ -33,16 +33,14 @@ export default class Movements extends Component {
         let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
 
         deltaX = deltaY ? deltaX / 1.4 : deltaX;
-        deltaY = deltaX ? deltaY / 1.4 : deltaY
+        deltaY = deltaX ? deltaY / 1.4 : deltaY;
 
         this.transform.position.x += deltaX;
-        // this.gameObject.updateCollidersPosition();
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
         }
 
         this.transform.position.y += deltaY;
-        // this.gameObject.updateCollidersPosition();
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
         }
@@ -65,8 +63,7 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        //console.log(this.getComponent("RectangleCollider"));
-        return this.tilemap.isTouchingRect(this.gameObject.collider);
+        return this.gameObject.getComponent('RectangleCollider').collidesWithLayer('Foreground');
     }
 
 }
