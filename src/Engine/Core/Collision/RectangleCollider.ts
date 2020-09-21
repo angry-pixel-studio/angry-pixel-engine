@@ -41,10 +41,6 @@ export default class RectangleCollider {
         return this.renderData;
     }
 
-    public isPasive(): boolean {
-        return true; // set this by constructor
-    }
-
     public getLayer(): string {
         return this.layer;
     }

@@ -1,8 +1,8 @@
-import { LAYER_DEFAULT } from "../../GameObject";
-import Rectangle from "../../Helper/Rectangle";
-import Vector2 from "../../Helper/Vector2";
-import RenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData";
-import RenderManager from "../Rendering/RenderManager";
+import { LAYER_DEFAULT } from "./../../GameObject";
+import Rectangle from "./../../Helper/Rectangle";
+import Vector2 from "./../../Helper/Vector2";
+import RenderData, { GEOMETRIC_RECTANGLE } from "./../Rendering/RenderData";
+import RenderManager from "./../Rendering/RenderManager";
 import ICollider from "./ICollider";
 import QuadTree from "./QuadTree";
 
@@ -42,8 +42,6 @@ export default class CollisionManager {
         for (const collider of this.colliders) {
             this.quad.insert(collider);
         }
-
-        this.broadPhase();
     }
 
     public addCollider(collider: ICollider): void {
@@ -51,24 +49,25 @@ export default class CollisionManager {
     }
 
     // broadPhase takes care of looking for possible collisions
-    private broadPhase() {
-        for (const collider of this.colliders) {
-            const colliders = this.quad.retrieve(collider);
-
-            this.narrowPhase(collider, colliders);
-        }
+    private broadPhase(collider: ICollider) {
+        return this.quad.retrieve(collider);
     }
 
     // narrowPhase takes care of checking for actual collision
     private narrowPhase(collider: ICollider, colliders: Array<ICollider>): void {
+        console.log("possibleCollisions", colliders.length);
         for (const c of colliders) {
-            if (c.isPasive()) {
-                continue;
-            }
-            if (this.checkCollision(c, collider)) {
+            if (this.checkCollision(collider, c)) {
+                collider.addCollision(c);
                 c.addCollision(collider);
             }
         }
+    }
+
+    public check(collider: ICollider) {
+        collider.clearCollisions();
+        const colliders = this.broadPhase(collider);
+        this.narrowPhase(collider, colliders);
     }
 
     private debugQuads(quad: QuadTree) {
