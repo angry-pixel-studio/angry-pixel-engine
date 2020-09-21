@@ -85,6 +85,7 @@ export default class RectangleCollider extends Component {
         this.rectangle.y = this.gameObject.transform.position.y + (this.rectangle.height / 2) + this.offsetY
     }
 
+    // TODO: find a nicer way to setup the render data
     private setupRenderData(): void {
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.rectangle;

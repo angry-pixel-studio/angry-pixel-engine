@@ -18,7 +18,7 @@ export default class RectangleCollider {
     private renderData: RenderData;
     private layer: string;
 
-    // change any for a proper type
+    // TODO: change any for a proper type
     private collisions: Array<any> = [];
 
     constructor({ x, y, width, height, layer }: Config) {
@@ -48,6 +48,7 @@ export default class RectangleCollider {
         this.collisions = [];
     }
 
+    // TODO: find a nicer way to setup the render data
     private setupRenderData(): void {
         this.renderData = new RenderData();
         this.renderData.position = new Vector2(this.rectangle.x, this.rectangle.y);

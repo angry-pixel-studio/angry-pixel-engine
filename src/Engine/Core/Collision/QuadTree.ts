@@ -3,6 +3,8 @@ import Rectangle from "./../../Helper/Rectangle";
 import ICollider from "./ICollider";
 
 export default class QuadTree {
+    // TODO: maxObjects and maxLevels should be calculated automatically based
+    // on the size of the scene and set on the constructor.
     readonly maxObjects: number = 5;
     readonly maxLevels: number = 5;
 

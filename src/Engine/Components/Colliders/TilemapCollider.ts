@@ -22,7 +22,7 @@ export default class TilemapCollider extends Component {
         this.tileHeight = tileHeight * tileScale;
     }
 
-    // TODO: Change this to be handle by an agnostic implementation of tilemapData.
+    // TODO: Change this to get the tilemap data from the tilemap renderer
     protected start(event: { [key: string]: any }) {
         const data = this.tilemapData
             .trim()
