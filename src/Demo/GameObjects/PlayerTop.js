@@ -51,8 +51,4 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Weapon(), 'Weapon');
         this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), 'RectangleCollider');
     }
-
-    update(event) {
-        //this.updateCollidersPosition();
-    }
 }

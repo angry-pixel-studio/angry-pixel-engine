@@ -81,7 +81,7 @@ export default class Game {
         this.then = now;
 
         this.renderManager.clearCanvas(this.canvasBGColor);
-        this.collisionManager.checkCollisions();
+        this.collisionManager.prepare();
 
         if (this.firstFrame === true) {
             this.dispatchFrameEvent(EVENT_START);

@@ -16,9 +16,6 @@ export const TAG_BOT = 'Bot';
 export default class Bot extends GameObject {
     player = null;
     tilemap = null;
-    collider = new Rectangle(0, 0, 32, 32);
-    wallDetector = new Rectangle(0, 0, 64, 64)
-    playerDistance = new Rectangle(0, 0, 128, 128);
 
     walkSpeed = 180;
     rotationSpeed = 3;
@@ -66,30 +63,10 @@ export default class Bot extends GameObject {
     }
 
     update(event) {
-        this.updateColliders();
         this.updateAimAngle();
         this.updateCurrentDirection();
-
-        //this.move(event.deltaTime);
+        this.move(event.deltaTime);
     }
-
-    updateColliders() {
-        this.collider.setPosition(
-            this.transform.position.x - this.collider.width / 2,
-            this.transform.position.y + this.collider.height / 2
-        );
-
-        this.wallDetector.setPosition(
-            this.transform.position.x - this.wallDetector.width / 2,
-            this.transform.position.y + this.wallDetector.height / 2
-        );
-
-        this.playerDistance.setPosition(
-            this.transform.position.x - this.wallDetector.width / 2,
-            this.transform.position.y + this.wallDetector.height / 2
-        );
-    }
-
 
     updateAimAngle() {
         this.aimAngle = Math.atan2(
@@ -105,32 +82,23 @@ export default class Bot extends GameObject {
     }
 
     move(deltaTime) {
-        if (this.playerDistance.overlappingRectangle(this.player.collider)) {
-            return;
-        }
-
-        let deltaX = this.currentDirection.x * (this.walkSpeed * deltaTime);
-        let deltaY = this.currentDirection.y * (this.walkSpeed * deltaTime);
+        const deltaX = this.currentDirection.x * (this.walkSpeed * deltaTime);
+        const deltaY = this.currentDirection.y * (this.walkSpeed * deltaTime);
 
         this.transform.position.x += deltaX;
-        this.updateColliders();
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
         }
 
         this.transform.position.y += deltaY;
-        this.updateColliders();
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
         }
     }
 
     isTouchingForeground() {
-        return this.tilemap.isTouchingRect(this.collider);
+        return this.getComponent('RectangleCollider').collidesWithLayer('Foreground');
     }
 
-
-    animate() {
-
-    }
+    animate() { }
 }

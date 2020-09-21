@@ -1,5 +1,4 @@
 import Component from "./../../Component";
-import ICollider from "./../../Core/Collision/ICollider";
 import { LAYER_DEFAULT } from "../../GameObject";
 import RenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
 import Rectangle from "./../../Helper/Rectangle";
@@ -23,9 +22,6 @@ export default class RectangleCollider extends Component {
 
     private layer: string;
 
-    // change any for a proper type
-    private collisions: Array<any> = [];
-
     private collisionManager: CollisionManager;
 
     constructor({ width, height, offsetX = 0, offsetY = 0 }: Config) {
@@ -41,6 +37,7 @@ export default class RectangleCollider extends Component {
 
     protected start(event: { [key: string]: any }): void {
         this.collisionManager = event.collisionManager;
+
         this.collisionManager.addCollider(this);
 
         this.setupRenderData();
@@ -55,28 +52,16 @@ export default class RectangleCollider extends Component {
         this.updateRenderDataPosition();
     }
 
-    public collidesWith(other: ICollider): boolean {
-        return false;
-    }
-
     public collidesWithLayer(layer: string): boolean {
         this.updateRectangleCoordinates();
-        this.collisionManager.check(this);
-        for (const c of this.collisions) {
+        const collisions = this.collisionManager.getCollisionsForCollider(this);
+        for (const c of collisions) {
             if (c.getLayer() === layer) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    public addCollision(collider: ICollider): void {
-        this.collisions.push(collider);
-    }
-
-    public clearCollisions(): void {
-        this.collisions = [];
     }
 
     public getRectangle(): Rectangle {

@@ -7,45 +7,32 @@ import ICollider from "./ICollider";
 import QuadTree from "./QuadTree";
 
 export default class CollisionManager {
+    private debug: boolean = false;
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];
     private quad: QuadTree;
 
     constructor(renderManager: RenderManager) {
         this.renderManager = renderManager;
+
+        // TODO: remove hardcoded quad size
         this.quad = new QuadTree(0, new Rectangle(-1025, 700, 2050, 1400))
     }
 
-    public checkCollisions(): void {
-        for (const collider of this.colliders) {
-            collider.clearCollisions();
-            this.renderManager.addToRenderStack(collider.getRenderData());
-
-            /*if (collider.getRectangle().x < this.quad.bounds.x) {
-                this.quad.bounds.x = collider.getRectangle().x;
-            }
-            if (collider.getRectangle().y < this.quad.bounds.y) {
-                this.quad.bounds.y = collider.getRectangle().y;
-            }
-            if (collider.getRectangle().x1 > this.quad.bounds.x1) {
-                this.quad.bounds.width = collider.getRectangle().x1;
-            }
-            if (collider.getRectangle().y1 < this.quad.bounds.y1) {
-                this.quad.bounds.height = collider.getRectangle().y1;
-            }*/
-        }
-
+    public prepare(): void {
+        this.debugColliders();
         this.debugQuads(this.quad);
-
-        this.quad.clear();
-
-        for (const collider of this.colliders) {
-            this.quad.insert(collider);
-        }
+        this.refreshQuad();
     }
 
     public addCollider(collider: ICollider): void {
         this.colliders.push(collider);
+    }
+
+    public getCollisionsForCollider(collider: ICollider): Array<ICollider> {
+        const colliders = this.broadPhase(collider);
+
+        return this.narrowPhase(collider, colliders);
     }
 
     // broadPhase takes care of looking for possible collisions
@@ -54,23 +41,47 @@ export default class CollisionManager {
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): void {
-        console.log("possibleCollisions", colliders.length);
+    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<ICollider> {
+        const collisions: Array<ICollider> = [];
         for (const c of colliders) {
             if (this.checkCollision(collider, c)) {
-                collider.addCollision(c);
-                c.addCollision(collider);
+                collisions.push(c);
             }
+        }
+
+        return collisions;
+    }
+
+    private refreshQuad(): void {
+        this.quad.clear();
+        for (const collider of this.colliders) {
+            this.quad.insert(collider);
         }
     }
 
-    public check(collider: ICollider) {
-        collider.clearCollisions();
-        const colliders = this.broadPhase(collider);
-        this.narrowPhase(collider, colliders);
+    // TODO: Make this agnostic of which shapes is checking
+    private checkCollision(collider1: ICollider, colldier2: ICollider) {
+        return collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
+            collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
+            collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
+            collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
+    }
+
+    private debugColliders(): void {
+        if (!this.debug) {
+            return;
+        }
+
+        for (const collider of this.colliders) {
+            this.renderManager.addToRenderStack(collider.getRenderData());
+        }
     }
 
     private debugQuads(quad: QuadTree) {
+        if (!this.debug) {
+            return;
+        }
+
         const renderData = new RenderData();
         renderData.position = new Vector2(quad.bounds.x, quad.bounds.y);
         renderData.layer = LAYER_DEFAULT;
@@ -83,12 +94,5 @@ export default class CollisionManager {
         for (const q of quad.quadrants) {
             this.debugQuads(q);
         }
-    }
-
-    private checkCollision(collider1: ICollider, colldier2: ICollider) {
-        return collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
-            collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
-            collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
-            collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
     }
 }

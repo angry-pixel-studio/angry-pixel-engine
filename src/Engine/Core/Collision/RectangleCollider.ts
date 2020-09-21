@@ -28,11 +28,6 @@ export default class RectangleCollider {
         this.setupRenderData();
     }
 
-    public collidesWith(other: ICollider): boolean {
-        console.log(this.collisions);
-        return false;
-    }
-
     public getRectangle(): Rectangle {
         return this.rectangle;
     }
