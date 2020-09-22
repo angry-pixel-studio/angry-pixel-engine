@@ -11,14 +11,14 @@ export default class GameObject {
     private _uuid: string = uuidv4();
     
     public id: string = null;
-    public tag: string  = null;
+    public tag: string = null;
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
 
     public active: boolean = true;
     public scene: Scene = null;
-    private _parent: GameObject|null = null;
-    
+    private _parent: GameObject | null = null;
+
     private components: Array<any> = [];
     private gameObjects: Array<any> = [];
     private inactiveComponents: Array<any> = [];
@@ -60,11 +60,11 @@ export default class GameObject {
         return this.getComponent<Transform>(TRANSFORM_ID);
     }
 
-    public findGameObject<OType>(id: string): OType|null {
+    public findGameObject<OType>(id: string): OType | null {
         return this.scene.getGameObject<OType>(id);
     }
 
-    public findGameObjectByTag<OType>(tag: string): OType|null {
+    public findGameObjectByTag<OType>(tag: string): OType | null {
         return this.scene.getGameObjectByTag<OType>(tag);
     }
 
@@ -72,7 +72,7 @@ export default class GameObject {
         return this.scene.getGameObjectsByTag(tag);
     }
 
-    public addComponent(componentFunction: Function , id: string|null = null): this {
+    public addComponent(componentFunction: Function, id: string | null = null): this {
         const component = componentFunction();
         component.id = id;
         component.gameObject = this;
@@ -85,7 +85,7 @@ export default class GameObject {
         return this.components;
     }
 
-    public getComponent<CType>(id: string): CType|null {
+    public getComponent<CType>(id: string): CType | null {
         return this.components.reduce(
             (prev, component) => component.id === id
                 ? component
@@ -120,12 +120,12 @@ export default class GameObject {
         return this._parent;
     }
 
-    public set parent(parent: GameObject|null) {
+    public set parent(parent: GameObject | null) {
         this._parent = parent;
         this.transform.update();
     }
 
-    public addChild(gameObjectFunction: Function, id: string|null = null): this {
+    public addChild(gameObjectFunction: Function, id: string | null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
         gameObject.parent = this;
@@ -139,7 +139,7 @@ export default class GameObject {
         return this.gameObjects;
     }
 
-    public getChild<CType>(id: string): CType|null {
+    public getChild<CType>(id: string): CType | null {
         return this.gameObjects.reduce(
             (prev, child) => child.id === id
                 ? child
@@ -152,7 +152,7 @@ export default class GameObject {
         return this.gameObjects.filter(object => object.tag === tag);
     }
 
-    public getChildByTag<CType>(tag: string): CType|null {
+    public getChildByTag<CType>(tag: string): CType | null {
         const objects = this.gameObjects.filter(object => object.tag === tag);
         return objects.length > 0 ? objects[0] : null;
     }
@@ -190,7 +190,7 @@ export default class GameObject {
 
     public setComponentActive(id: string, active: boolean): void {
         const component = this.getComponent<Component>(id);
-        
+
         if (component === null) {
             throw `Component ith id ${id} does not exists`;
         }
@@ -208,7 +208,7 @@ export default class GameObject {
 
     public setChildActive(id: string, active: boolean): void {
         const gameObject = this.getChild<GameObject>(id);
-        
+
         if (gameObject === null) {
             throw `GameObject with id ${id} does not exists`;
         }
@@ -230,7 +230,7 @@ export default class GameObject {
 
         this.removeComponents();
         this.destroyChildren();
-        
+
         // @ts-ignore
         Object.keys(this).forEach(key => delete this[key]);
     }

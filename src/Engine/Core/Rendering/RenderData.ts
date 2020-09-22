@@ -21,11 +21,11 @@ export default class RenderData {
 
     // for text and geometric
     public color: string = null;
-    
+
     // for text
     public text: string = null;
     public font: string = null;
-    public textSize:  number = null;
+    public textSize: number = null;
     public lineSeparation: number = null;
     public bold: boolean = false;
     public italic: boolean = false;
