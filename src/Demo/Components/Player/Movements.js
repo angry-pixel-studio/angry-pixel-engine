@@ -33,20 +33,18 @@ export default class Movements extends Component {
         let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
 
         deltaX = deltaY ? deltaX / 1.4 : deltaX;
-        deltaY = deltaX ? deltaY / 1.4 : deltaY
+        deltaY = deltaX ? deltaY / 1.4 : deltaY;
 
         this.transform.position.x += deltaX;
-        this.gameObject.updateCollidersPosition();
         if (deltaX !== 0 && this.isTouchingForeground()) {
             this.transform.position.x -= deltaX;
         }
 
         this.transform.position.y += deltaY;
-        this.gameObject.updateCollidersPosition();
         if (deltaY !== 0 && this.isTouchingForeground()) {
             this.transform.position.y -= deltaY;
         }
-        
+
         if ((deltaX || deltaY) && this.walkingAnimation === false) {
             this.walkingAnimation = true;
             this.animator.playAnimation('PlayerWalking');
@@ -56,7 +54,7 @@ export default class Movements extends Component {
         }
     }
 
-    rotate () {
+    rotate() {
         this.angle = Math.atan2(
             this.inputManager.mousePosition.y - this.transform.position.y,
             this.inputManager.mousePosition.x - this.transform.position.x
@@ -65,7 +63,7 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        return this.tilemap.isTouchingRect(this.gameObject.collider);
+        return this.gameObject.getComponent('RectangleCollider').collidesWithLayer('Foreground');
     }
-    
+
 }

@@ -20,10 +20,10 @@ export default class SpriteRenderer extends Component {
     public flipVertical: boolean = false;
     public rotation: number = 0;
     public smooth: boolean = true;
-    
+
     private renderData = new RenderData();
 
-    constructor(config: {[key: string]: any}) {
+    constructor(config: { [key: string]: any }) {
         super();
 
         // required
@@ -41,7 +41,7 @@ export default class SpriteRenderer extends Component {
         this.update(event);
     }
 
-    update(event: {[key: string]: any}): void {
+    update(event: { [key: string]: any }): void {
         if (this.sprite.loaded === true) {
             this.renderData.ui = this.gameObject.ui;
             this.renderData.layer = this.gameObject.layer;
