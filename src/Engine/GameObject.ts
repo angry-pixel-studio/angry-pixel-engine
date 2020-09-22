@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import Component from "./Component";
 import Transform from "./Components/Transform";
 import { EVENT_START, EVENT_UPDATE } from "./Game";
@@ -7,6 +8,8 @@ export const LAYER_DEFAULT = 'Default';
 export const TRANSFORM_ID = 'Transform';
 
 export default class GameObject {
+    private _uuid: string = uuidv4();
+    
     public id: string = null;
     public tag: string  = null;
     public layer: string = LAYER_DEFAULT;
@@ -49,7 +52,11 @@ export default class GameObject {
 
     protected update(event: object): void { }
 
-    get transform(): Transform {
+    public get uuid(): string {
+        return this._uuid;
+    }
+
+    public get transform(): Transform {
         return this.getComponent<Transform>(TRANSFORM_ID);
     }
 

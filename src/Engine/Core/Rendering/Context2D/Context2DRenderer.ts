@@ -19,9 +19,9 @@ export default class Context2DRenderer implements IContextRenderer {
     }
 
     public clearCanvas(color: string|null = null): void {
-        this.canvasContext.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientWidth);
+        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.canvasContext.fillStyle = color ? color : DEFAULT_COLOR;
-        this.canvasContext.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientWidth);
+        this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
     
     public render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void {

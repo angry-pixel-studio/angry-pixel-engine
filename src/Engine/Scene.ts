@@ -6,7 +6,7 @@ export const GAME_CAMERA_ID = 'GameCamera';
 
 export default class Scene {
     public game: Game = null;
-    public id: string = null;
+    public name: string = null;
     private gameObjects: Array<any> = [];
 
     constructor() {

@@ -47,8 +47,8 @@ export default class Game {
         container.appendChild(this.canvas);
     }
 
-    public addScene(sceneId: string, sceneFunction: Function, openingScene: boolean = false): void {
-        this.sceneManager.addScene(sceneId, sceneFunction, openingScene);
+    public addScene(name: string, sceneFunction: Function, openingScene: boolean = false): void {
+        this.sceneManager.addScene(name, sceneFunction, openingScene);
     }
 
     public run(): void {

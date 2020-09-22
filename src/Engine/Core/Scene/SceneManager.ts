@@ -5,27 +5,31 @@ export default class SceneManager {
     private game: Game = null;
     private scenes: {[id: string]: Function} = {};
     private currentScene: Scene = null;
-    private openingSceneId: string = null;
+    private openingSceneName: string = null;
 
-    public currentSceneId: string;
+    public currentSceneName: string;
 
     constructor(game: Game) {
         this.game = game;
     }
 
-    public addScene(sceneId: string, sceneFunction: Function, openingScene: boolean = false): void {
-        this.scenes[sceneId] = sceneFunction;
+    public addScene(name: string, sceneFunction: Function, openingScene: boolean = false): void {
+        if (typeof this.scenes[name] === 'function') {
+            throw new Error(`There is already a scene with the name '${name}'`);
+        }
+
+        this.scenes[name] = sceneFunction;
         
-        if (openingScene === true || this.openingSceneId === null) {
-            this.openingSceneId = sceneId;
+        if (openingScene === true || this.openingSceneName === null) {
+            this.openingSceneName = name;
         }
     }
 
     public loadOpeningScene(): void {
-        this.loadScene(this.openingSceneId);
+        this.loadScene(this.openingSceneName);
     }
 
-    public loadScene(sceneId: string): void {
+    public loadScene(name: string): void {
         const resetLoop = this.game.running;
         
         if (resetLoop) {
@@ -33,8 +37,8 @@ export default class SceneManager {
         }
         
         this.unloadCurrentScene();
-        this.currentScene = this.scenes[sceneId]();
-        this.currentScene.id = sceneId;
+        this.currentScene = this.scenes[name]();
+        this.currentScene.name = name;
         this.currentScene.game = this.game;
         
         if (resetLoop) {
@@ -46,7 +50,7 @@ export default class SceneManager {
         if (this.currentScene !== null) {
             this.currentScene._destroy();
             this.currentScene = null;
-            this.currentSceneId = null;
+            this.currentSceneName = null;
 
             this.game.renderManager.clearRenderStack();
         }   

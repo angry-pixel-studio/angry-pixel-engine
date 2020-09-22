@@ -1,16 +1,18 @@
 import GameObject from "../../GameObject";
 
-interface GameObjectManager {
-    gameObjects: GameObject[];
-    addGameObject(gameObject: GameObject): void;
-};
-
-export const GameObjectManager: GameObjectManager = {
-    gameObjects: [],
+class GameObjectManager {
+    private gameObjects: GameObject[] = [];
     
-    addGameObject: function(gameObject: GameObject): void {
+    addGameObject(gameObject: GameObject): void {
         this.gameObjects.push(gameObject)
-    },
+    }
 
-    
+    findGameObjectByUuid(uuid: string): GameObject | null {
+        return this.gameObjects.reduce(
+            (prev, gameObject) => gameObject.id === uuid
+                ? gameObject
+                : prev
+            , null
+        );
+    }
 };
