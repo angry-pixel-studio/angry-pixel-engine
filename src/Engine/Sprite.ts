@@ -1,6 +1,13 @@
 import Rectangle from "./Helper/Rectangle";
 import Vector2 from "./Helper/Vector2";
 
+interface config {
+    image: HTMLImageElement,
+    scale: Vector2,
+    slice: Rectangle|null,
+    smooth: boolean,
+}
+
 export default class Sprite {
     public image: HTMLImageElement = null;
     public width: number = null;
@@ -10,24 +17,22 @@ export default class Sprite {
     public smooth: boolean = true;
     public loaded: boolean =  false;
     
-    private canvas: HTMLCanvasElement = null;
+    constructor({ image, slice, scale, smooth }: config) {
+        this.image = image
 
-    constructor(config: {[key: string]: any}) {
-        this.image = config.image
-
-        this.slice = ('slice' in config) ? config.slice : this.slice;
+        this.slice = slice ? slice : this.slice;
         if (this.slice) {
             this.width = this.slice.width;
             this.height = this.slice.height;
         }
 
-        this.scale = ('scale' in config) ? config.scale : this.scale;
-        this.smooth = ('smooth' in config) ? config.smooth : this.smooth;
+        this.scale = scale ? scale : this.scale;
+        this.smooth = smooth ? smooth : this.smooth;
 
         if (this.image.naturalWidth) {
             this.onLoad();
         } else {
-            this.image.addEventListener('load', (e: Event) => this.onLoad());
+            this.image.addEventListener('load', () => this.onLoad());
         }
     }
 

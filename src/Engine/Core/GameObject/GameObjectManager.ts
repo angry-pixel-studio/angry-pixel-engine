@@ -15,4 +15,4 @@ class GameObjectManager {
             , null
         );
     }
-};
+}

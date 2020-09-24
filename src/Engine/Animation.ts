@@ -2,6 +2,12 @@ import Sprite from "./Sprite";
 
 const FRAME_RATE: number = 24;
 
+interface config {
+    sprites: Sprite[],
+    speed: number,
+    loop: boolean,
+}
+
 export default class Animation {
     private sprites: Sprite[] = [];
     private _playing = false;
@@ -12,10 +18,10 @@ export default class Animation {
     public loop: boolean = false;
     public currentSprite: Sprite = null;
     
-    constructor(config: {[key:string]: any}) {
-        this.sprites = config.sprites ? config.sprites : this.sprites;
-        this.speed = config.speed !== undefined ? config.speed : this.speed;
-        this.loop = config.loop !== undefined ? config.loop : this.loop;
+    constructor({ sprites, speed, loop }: config) {
+        this.sprites = sprites ? sprites : this.sprites;
+        this.speed = speed !== undefined ? speed : this.speed;
+        this.loop = loop !== undefined ? loop : this.loop;
 
         this.currentFrame = 1;
         this.currentSprite = null;

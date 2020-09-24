@@ -6,7 +6,7 @@ interface Config {
     tileWidth: number;
     tileHeight: number;
     tileScale: number;
-};
+}
 
 export default class TilemapCollider extends Component {
     private tilemapData: string;

@@ -43,7 +43,7 @@ export default class TextRenderer extends Component {
         this.height = config.height ? config.height : this.height;
     }
 
-    start(event: object): void {
+    start(event: Record<string, unknown>): void {
         this.update(event);
     }
 

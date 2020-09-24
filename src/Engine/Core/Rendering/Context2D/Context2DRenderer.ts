@@ -97,7 +97,7 @@ export default class Context2DRenderer implements IContextRenderer {
         
         this.canvasContext.save();
        
-        let font = [
+        const font = [
             renderData.bold ? 'bold' : '',
             renderData.italic ? 'italic' : '',
             renderData.textSize + 'px',

@@ -30,9 +30,13 @@ export default abstract class Component {
         this.processingLoop = false;
     }
 
-    protected start(event: object): void { }
+    protected start(event: Record<string, unknown>): void { 
+        // do nothing
+    }
 
-    protected update(event: object): void { }
+    protected update(event: Record<string, unknown>): void { 
+        // do nothing
+    }
 
     public getComponent<CType>(id: string): CType|null {
         return this.gameObject.getComponent<CType>(id);

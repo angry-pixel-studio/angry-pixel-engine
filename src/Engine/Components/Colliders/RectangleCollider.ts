@@ -10,7 +10,7 @@ interface Config {
     height: number;
     offsetX: number;
     offsetY: number;
-};
+}
 
 // TODO: unify this with the other RectangleCollider
 export default class RectangleCollider extends Component {

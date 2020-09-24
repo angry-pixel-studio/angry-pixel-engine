@@ -1,6 +1,16 @@
 import Vector2 from "./Helper/Vector2";
 import Rectangle from "./Helper/Rectangle";
 
+interface config {
+    image: HTMLImageElement,
+    tileWidth: number,
+    tileHeight: number,
+    gridWidth: number,
+    gridHeight: number,
+    offset: Vector2|null,
+    tileOffset: Vector2|null,
+}
+
 export default class Tileset {
     public image: HTMLImageElement = null;
     public offset: Vector2 = new Vector2(0, 0);
@@ -13,17 +23,25 @@ export default class Tileset {
     private _tiles: Rectangle[] = [];
     private _loaded: boolean = false;
 
-    constructor(config: {[key:string]: any}) {
+    constructor({
+        image, 
+        tileWidth, 
+        tileHeight, 
+        gridWidth, 
+        gridHeight, 
+        offset, 
+        tileOffset
+    }: config) {
         // required
-        this.image = config.image;
-        this.tileWidth = config.tileWidth;
-        this.tileHeight = config.tileHeight;
-        this.gridWidth = config.gridWidth;
-        this.gridHeight = config.gridHeight;
+        this.image = image;
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
+        this.gridWidth = gridWidth;
+        this.gridHeight = gridHeight;
 
         // optional
-        this.offset = config.offset ? config.offset : this.offset;
-        this.tileOffset = config.tileOffset ? config.tileOffset : this.tileOffset;
+        this.offset = offset ? offset : this.offset;
+        this.tileOffset = tileOffset ? tileOffset : this.tileOffset;
 
         if (this.image.naturalWidth) {
             this.generateTiles();
