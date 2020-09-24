@@ -17,7 +17,6 @@ export default class Bot extends GameObject {
     tilemap = null;
 
     walkSpeed = 180;
-    rotationSpeed = 3;
 
     // status
     aimAngle = 0; // in radians
@@ -26,8 +25,7 @@ export default class Bot extends GameObject {
     walkingAnimation = false;
     currentSpeed = new Vector2(0, 0);
 
-    avoidX = 0;
-    avoidY = 0;
+    playerDistance = 128;
 
     constructor(x, y) {
         super();
@@ -78,6 +76,12 @@ export default class Bot extends GameObject {
     }
 
     move(deltaTime) {
+        if (Math.abs(this.player.transform.position.x - this.transform.position.x) <= this.playerDistance
+            && Math.abs(this.player.transform.position.y - this.transform.position.y) <= this.playerDistance
+        ) {
+            return;
+        }
+
         const deltaX = this.currentDirection.x * (this.walkSpeed * deltaTime);
         const deltaY = this.currentDirection.y * (this.walkSpeed * deltaTime);
 
