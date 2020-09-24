@@ -1,3 +1,4 @@
+import AssetManager from "../../Engine/AssetManager";
 import Animator from "../../Engine/Components/Animator";
 import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
@@ -8,8 +9,6 @@ import Sprite from "../../Engine/Sprite";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
 import { LAYER_BOT } from "../Config/renderLayers";
 import { TAG_PLAYER } from "./PlayerTop";
-
-const SPRITE_PATH = 'image/demo/player-top-down.png';
 
 export const TAG_BOT = 'Bot';
 
@@ -37,12 +36,9 @@ export default class Bot extends GameObject {
         this.layer = LAYER_BOT;
         this.transform.position.set(x, y);
 
-        const image = new Image();
-        image.src = SPRITE_PATH;
-
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
-                image: image,
+                image: AssetManager.getImage('image/demo/player-top-down.png'),
                 slice: new Rectangle(0, 0, 32, 32),
                 scale: new Vector2(2, 2),
                 smooth: false

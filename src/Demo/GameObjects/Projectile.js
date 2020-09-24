@@ -1,11 +1,10 @@
+import AssetManager from "../../Engine/AssetManager";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Helper/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
 import { LAYER_PROJECTILE } from "../Config/renderLayers";
-
-const SPRITE_PATH = 'image/demo/projectile.png';
 
 export const TAG_PROJECTILE = 'Projectile';
 
@@ -30,12 +29,9 @@ export default class Projectile extends GameObject {
         this.layer = LAYER_PROJECTILE;
         this.tag = TAG_PROJECTILE;
 
-        const image = new Image();
-        image.src = SPRITE_PATH;
-
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
-                image: image,
+                image: AssetManager.getImage('image/demo/projectile.png'),
                 scale: new Vector2(2, 2),
                 smooth: false
             }),

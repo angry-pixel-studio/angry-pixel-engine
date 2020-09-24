@@ -4,10 +4,9 @@ import tilemapData from "../Tilemaps/Foreground";
 import Tileset from "../../Engine/Tileset";
 import TilemapCollider from "./../../Engine/Components/Colliders/TilemapCollider";
 import { LAYER_FOREGROUND } from "../Config/renderLayers";
+import AssetManager from "../../Engine/AssetManager";
 
 export const TAG_FOREGROUND = 'Foreground';
-
-const SPRITE_PATH = 'image/demo/earth-cave.png';
 
 export default class ForegroundTopDown extends GameObject {
     width = 0;
@@ -20,12 +19,9 @@ export default class ForegroundTopDown extends GameObject {
         this.tag = TAG_FOREGROUND;
         this.layer = LAYER_FOREGROUND;
 
-        const image = new Image();
-        image.src = SPRITE_PATH;
-
         this.addComponent(() => new TilemapRenderer({
             tileset: new Tileset({
-                image: image,
+                image: AssetManager.getImage('image/demo/earth-cave.png'),
                 tileWidth: 16,
                 tileHeight: 16,
                 gridWidth: 11,

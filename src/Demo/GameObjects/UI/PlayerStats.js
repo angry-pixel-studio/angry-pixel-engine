@@ -3,8 +3,7 @@ import TextRenderer from '../../../Engine/Components/Renderer/TextRenderer'
 import SpriteRenderer from '../../../Engine/Components/Renderer/SpriteRenderer';
 import Sprite from '../../../Engine/Sprite';
 import Vector2 from '../../../Engine/Helper/Vector2';
-
-const SPRITE_PATH = 'image/demo/avatar.png';
+import AssetManager from '../../../Engine/AssetManager';
 
 export default class PlayerStats extends GameObject {
     constructor() {
@@ -21,12 +20,9 @@ export default class PlayerStats extends GameObject {
             font: "Courier New"
         }), 'TextRenderer');
 
-        const image = new Image();
-        image.src = SPRITE_PATH;
-
         this.addComponent(() => new SpriteRenderer({
             sprite: new Sprite({
-                image: image,
+                image: AssetManager.getImage('image/demo/avatar.png'),
                 scale: new Vector2(2, 2),
                 smooth: false
             }),
