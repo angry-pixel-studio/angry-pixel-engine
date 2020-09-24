@@ -37,7 +37,7 @@ export default class SpriteRenderer extends Component {
         this.rotation = config.rotation ? config.rotation : this.rotation;
     }
 
-    start(event: object): void {
+    start(event: Record<string, unknown>): void {
         this.update(event);
     }
 

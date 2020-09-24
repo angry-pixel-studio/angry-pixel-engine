@@ -13,14 +13,14 @@ export default class Rectangle {
         return this.position.x;
     }
 
-    public get y(): number {
-        return this.position.y;
-    }
-
     public set x(value: number) {
         this.position.x = value;
     }
 
+    public get y(): number {
+        return this.position.y;
+    }
+    
     public set y(value: number) {
         this.position.y = value;
     }

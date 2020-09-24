@@ -4,6 +4,8 @@ import GameObject from "./GameObject";
 
 export const GAME_CAMERA_ID = 'GameCamera';
 
+type gameObjectFunction = () => GameObject;
+
 export default class Scene {
     public game: Game = null;
     public name: string = null;
@@ -35,15 +37,19 @@ export default class Scene {
         this.processingLoop = false;
     }
 
-    protected start(event: object): void { }
+    protected start(event: Record<string, unknown>): void { 
+        // do nothing
+    }
 
-    protected update(event: object): void { }
+    protected update(event: Record<string, unknown>): void {
+        // do nothing
+    }
 
     public get gameCamera(): GameCamera {
         return this.getGameObject(GAME_CAMERA_ID);
     }
 
-    public addGameObject(gameObjectFunction: Function, id: string|null = null): this {
+    public addGameObject(gameObjectFunction: gameObjectFunction, id: string|null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
         gameObject.scene = this;

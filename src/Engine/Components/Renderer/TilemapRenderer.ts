@@ -28,7 +28,7 @@ export default class TilemapRenderer extends Component {
         this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
     }
 
-    start (event: object): void {
+    start (event: Record<string, unknown>): void {
         this.update(event);
     }
 

@@ -7,6 +7,9 @@ import Scene from "./Scene";
 export const LAYER_DEFAULT = 'Default';
 export const TRANSFORM_ID = 'Transform';
 
+type componentFunction = () => Component;
+type gameObjectFunction = () => GameObject;
+
 export default class GameObject {
     private _uuid: string = uuidv4();
     
@@ -50,9 +53,13 @@ export default class GameObject {
         this.processingLoop = false;
     }
 
-    protected start(event: object): void { }
+    protected start(event: Record<string, unknown>): void { 
+        // do nothing
+    }
 
-    protected update(event: object): void { }
+    protected update(event: Record<string, unknown>): void { 
+        // do nothing
+    }
 
     public get uuid(): string {
         return this._uuid;
@@ -74,7 +81,7 @@ export default class GameObject {
         return this.scene.getGameObjectsByTag(tag);
     }
 
-    public addComponent(componentFunction: Function, id: string | null = null): this {
+    public addComponent(componentFunction: componentFunction, id: string | null = null): this {
         const component = componentFunction();
         component.id = id;
         component.gameObject = this;
@@ -127,7 +134,7 @@ export default class GameObject {
         this.transform.update();
     }
 
-    public addChild(gameObjectFunction: Function, id: string | null = null): this {
+    public addChild(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
         gameObject.parent = this;

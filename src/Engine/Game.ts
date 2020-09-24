@@ -3,6 +3,7 @@ import SceneManager from "./Core/Scene/SceneManager";
 import RenderManager from "./Core/Rendering/RenderManager";
 import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
 import CollisionManager from "./Core/Collision/CollisionManager";
+import Scene from "./Scene";
 
 const CANVAS_ID: string = 'miniEngineCanvas';
 
@@ -17,6 +18,8 @@ export const EVENT_UPDATE: string = 'mini-engine-update';
     const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     window.cancelAnimationFrame = cancelAnimationFrame;
 })();
+
+type sceneFunction = () => Scene;
 
 export default class Game {
     public canvas: HTMLCanvasElement = null;
@@ -47,7 +50,7 @@ export default class Game {
         container.appendChild(this.canvas);
     }
 
-    public addScene(name: string, sceneFunction: Function, openingScene: boolean = false): void {
+    public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
         this.sceneManager.addScene(name, sceneFunction, openingScene);
     }
 

@@ -1,9 +1,11 @@
 import Game from "../../Game";
 import Scene from "../../Scene";
 
+type sceneFunction = () => Scene;
+
 export default class SceneManager {
     private game: Game = null;
-    private scenes: { [id: string]: Function } = {};
+    private scenes: { [id: string]: sceneFunction } = {};
     private currentScene: Scene = null;
     private openingSceneName: string = null;
 
@@ -13,7 +15,7 @@ export default class SceneManager {
         this.game = game;
     }
 
-    public addScene(name: string, sceneFunction: Function, openingScene: boolean = false): void {
+    public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
         if (typeof this.scenes[name] === 'function') {
             throw new Error(`There is already a scene with the name '${name}'`);
         }
