@@ -8,4 +8,5 @@ jobs:
         with:
           node-version: 12.x
       - uses: actions/checkout@v2
+      - run: npm install
       - run: npm run lint
