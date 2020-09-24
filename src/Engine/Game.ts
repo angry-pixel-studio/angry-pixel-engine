@@ -6,7 +6,6 @@ import CollisionManager from "./Core/Collision/CollisionManager";
 
 const CANVAS_ID: string = 'miniEngineCanvas';
 
-export const EVENT_START: string = 'mini-engine-start';
 export const EVENT_UPDATE: string = 'mini-engine-update';
 
 (function () {
@@ -28,9 +27,7 @@ export default class Game {
     public collisionManager: CollisionManager = null;
     public running: boolean = false;
 
-    private firstFrame: boolean = false;
     private frameRequestId: number = null;
-
     private then: number = 0;
     private deltaTime: number = 0;
 
@@ -55,7 +52,6 @@ export default class Game {
     }
 
     public run(): void {
-        this.firstFrame = true;
         this.input = new Input(this);
         this.sceneManager.loadOpeningScene();
 
@@ -83,12 +79,7 @@ export default class Game {
         this.renderManager.clearCanvas(this.canvasBGColor);
         this.collisionManager.prepare();
 
-        if (this.firstFrame === true) {
-            this.dispatchFrameEvent(EVENT_START);
-            this.firstFrame = false;
-        } else {
-            this.dispatchFrameEvent(EVENT_UPDATE);
-        }
+        this.dispatchFrameEvent(EVENT_UPDATE);
 
         this.requestAnimationFrame();
     }
@@ -99,9 +90,8 @@ export default class Game {
         this.frameRequestId = null;
     }
 
-    public resumeLoop(resetFrames = false) {
+    public resumeLoop() {
         if (this.running == false && this.frameRequestId === null) {
-            this.firstFrame = resetFrames ? true : this.firstFrame;
             this.requestAnimationFrame();
         }
     }

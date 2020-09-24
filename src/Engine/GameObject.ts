@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import Component from "./Component";
 import Transform from "./Components/Transform";
-import { EVENT_START, EVENT_UPDATE } from "./Game";
+import { EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
 
 export const LAYER_DEFAULT = 'Default';
@@ -17,6 +17,7 @@ export default class GameObject {
 
     public active: boolean = true;
     public scene: Scene = null;
+    private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
     private components: Array<any> = [];
@@ -28,7 +29,7 @@ export default class GameObject {
     constructor() {
         this.addComponent(() => new Transform(), TRANSFORM_ID);
 
-        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
+        this.gameLoopEventHandler.bind(this);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
@@ -37,11 +38,12 @@ export default class GameObject {
             return;
         }
 
-        if (event.type === EVENT_START) {
-            this.processingLoop = true;
+        this.processingLoop = true;
+
+        if (this.firstFrame === true) {
             this.start((event as CustomEvent).detail);
-        } else if (event.type === EVENT_UPDATE) {
-            this.processingLoop = true;
+            this.firstFrame = false;
+        } else {
             this.update((event as CustomEvent).detail);
         }
 
@@ -225,7 +227,6 @@ export default class GameObject {
     }
 
     public _destroy(): void {
-        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.removeComponents();

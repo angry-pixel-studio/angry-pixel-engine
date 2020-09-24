@@ -1,16 +1,16 @@
 {
   "name": "mini-engine",
   "version": "1.0.0",
-  "description": "Mini game engine",
+  "description": "Lightweight 2d game engin made with javascript.",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "dev": "webpack --mode development"
   },
-  "keywords": [],
+  "keywords": ["game-engine", "videogames", "engine", "2d-engine", "webgl", "canvas"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.4",

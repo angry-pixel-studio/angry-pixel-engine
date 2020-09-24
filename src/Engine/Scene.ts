@@ -1,5 +1,5 @@
 import GameCamera from "./GameObjects/GameCamera";
-import Game, { EVENT_START, EVENT_UPDATE } from "./Game";
+import Game, { EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
 
 export const GAME_CAMERA_ID = 'GameCamera';
@@ -8,20 +8,31 @@ export default class Scene {
     public game: Game = null;
     public name: string = null;
     private gameObjects: Array<any> = [];
+    private firstFrame: boolean = true;
+    private processingLoop: boolean = false;
 
     constructor() {
         this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
 
-        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
+        this.gameLoopEventHandler.bind(this);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
     gameLoopEventHandler = (event: Event): void => {
-        if (event.type === EVENT_START) {
+        if (this.processingLoop === true) {
+            return;
+        }
+
+        this.processingLoop = true;
+
+        if (this.firstFrame === true) {
             this.start((event as CustomEvent).detail);
-        } else if (event.type === EVENT_UPDATE) {
+            this.firstFrame = false;
+        } else {
             this.update((event as CustomEvent).detail);
         }
+
+        this.processingLoop = false;
     }
 
     protected start(event: object): void { }
@@ -82,7 +93,6 @@ export default class Scene {
     }
 
     public _destroy(): void {
-        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.destroyGameObjects();

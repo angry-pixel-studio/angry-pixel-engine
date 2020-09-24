@@ -42,7 +42,7 @@ export default class SceneManager {
         this.currentScene.game = this.game;
 
         if (resetLoop) {
-            this.game.resumeLoop(true);
+            this.game.resumeLoop();
         }
     }
 
