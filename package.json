@@ -10,7 +10,14 @@
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix"
   },
-  "keywords": ["game-engine", "videogames", "engine", "2d-engine", "webgl", "canvas"],
+  "keywords": [
+    "game-engine",
+    "videogames",
+    "engine",
+    "2d-engine",
+    "webgl",
+    "canvas"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
