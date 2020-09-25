@@ -11,6 +11,7 @@ import Movements from "../Components/Player/Movements";
 import Weapon from "../Components/Player/Weapon";
 import { LAYER_PLAYER } from "../Config/renderLayers";
 import RenderData, { GEOMETRIC_RECTANGLE } from "../../Engine/Core/Rendering/RenderData";
+import Game from "../../Engine/Game";
 
 export const TAG_PLAYER = 'Player';
 
@@ -42,8 +43,24 @@ export default class PlayerTop extends GameObject {
         this.getComponent('Animator').addAnimation('PlayerWalking', PlayerWalking);
 
         this.addComponent(() => new Movements(), 'Movements');
-        //this.addComponent(() => new MovementsArrows(), 'Movements');
         this.addComponent(() => new Weapon(), 'Weapon');
         this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), 'RectangleCollider');
+
+        //this.createChild();
+    }
+
+    createChild() {
+        this.addChild(() => new GameObject(), 'Child');
+        this.getChild('Child').transform.innerPosition.x = 64;
+
+        this.getChild('Child').addComponent(() => new SpriteRenderer({
+            sprite: new Sprite({
+                image: AssetManager.getImage('image/demo/avatar.png'),
+                scale: new Vector2(2, 2),
+                smooth: false
+            }),
+            offsetX: 64,
+            rotation: 90
+        }), 'SpriteRenderer2');
     }
 }

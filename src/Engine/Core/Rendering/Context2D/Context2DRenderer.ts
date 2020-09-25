@@ -82,8 +82,8 @@ export default class Context2DRenderer implements IContextRenderer {
         } else {
             this.canvasContext.drawImage(
                 renderData.image,
-                0,
-                0,
+                this.imagePosition.x,
+                this.imagePosition.y,
                 renderData.width,
                 renderData.height
             );

@@ -7,6 +7,7 @@ import {
     PIVOT_BOTTOM_LEFT,
     PIVOT_BOTTOM_RIGHT
 } from '../../Core/Rendering/RenderPivots';
+import Vector2 from '../../Helper/Vector2';
 import Sprite from '../../Sprite';
 
 export * from '../../Core/Rendering/RenderPivots';
@@ -21,7 +22,8 @@ export default class SpriteRenderer extends Component {
     public rotation: number = 0;
     public smooth: boolean = true;
 
-    private renderData = new RenderData();
+    private renderData: RenderData = new RenderData();
+    private goPosition: Vector2 = null;
 
     constructor(config: { [key: string]: any }) {
         super();
@@ -38,6 +40,7 @@ export default class SpriteRenderer extends Component {
     }
 
     start(event: Record<string, unknown>): void {
+        this.goPosition = this.gameObject.transform.position;
         this.update(event);
     }
 
@@ -63,6 +66,10 @@ export default class SpriteRenderer extends Component {
         this.renderData.position.x = this.gameObject.transform.position.x + this.offsetX;
         this.renderData.position.y = this.gameObject.transform.position.y + this.offsetY;
 
+        if (this.gameObject.transform.rotation) {
+            this.translateRenderPosition();
+        }
+
         switch (this.pivot) {
             case PIVOT_CENTER:
                 this.renderData.position.x -= (Math.floor(this.renderData.width / 2));
@@ -83,5 +90,16 @@ export default class SpriteRenderer extends Component {
             default:
                 break;
         }
+    }
+
+    private translateRenderPosition(): void {
+        const angle: number = this.gameObject.transform.rotation * Math.PI / 180.0;
+        const radius: number = Math.hypot(
+            this.renderData.position.x - this.goPosition.x,
+            this.renderData.position.y - this.goPosition.y
+        );
+        
+        this.renderData.position.x = this.goPosition.x + radius * Math.cos(angle),
+        this.renderData.position.y = this.goPosition.y - radius * Math.sin(angle);
     }
 }
