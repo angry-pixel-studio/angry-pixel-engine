@@ -5,17 +5,22 @@ import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
 import CollisionManager from "./Core/Collision/CollisionManager";
 import Scene from "./Scene";
 
-const CANVAS_ID: string = 'miniEngineCanvas';
+const CANVAS_ID: string = "miniEngineCanvas";
 
-export const EVENT_UPDATE: string = 'mini-engine-update';
+export const EVENT_UPDATE: string = "mini-engine-update";
 
 (function () {
     // @ts-ignore
-    const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    const requestAnimationFrame =
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
 
     // @ts-ignore
-    const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+    const cancelAnimationFrame =
+        window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     window.cancelAnimationFrame = cancelAnimationFrame;
 })();
 
@@ -23,7 +28,7 @@ type sceneFunction = () => Scene;
 
 export default class Game {
     public canvas: HTMLCanvasElement = null;
-    public canvasBGColor: string = '#000000';
+    public canvasBGColor: string = "#000000";
     public input: Input = null;
     public sceneManager: SceneManager = null;
     public renderManager: RenderManager = null;
@@ -37,12 +42,18 @@ export default class Game {
     constructor(containerElement: HTMLElement, width: number, height: number) {
         this.createCanvas(containerElement, width, height);
         this.sceneManager = new SceneManager(this);
-        this.renderManager = new RenderManager(new Context2DRenderer(this.canvas));
+        this.renderManager = new RenderManager(
+            new Context2DRenderer(this.canvas)
+        );
         this.collisionManager = new CollisionManager(this.renderManager);
     }
 
-    private createCanvas(container: HTMLElement, width: number, height: number): void {
-        this.canvas = document.createElement('canvas');
+    private createCanvas(
+        container: HTMLElement,
+        width: number,
+        height: number
+    ): void {
+        this.canvas = document.createElement("canvas");
         this.canvas.id = CANVAS_ID;
         this.canvas.width = width;
         this.canvas.height = height;
@@ -50,7 +61,11 @@ export default class Game {
         container.appendChild(this.canvas);
     }
 
-    public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
+    public addScene(
+        name: string,
+        sceneFunction: sceneFunction,
+        openingScene: boolean = false
+    ): void {
         this.sceneManager.addScene(name, sceneFunction, openingScene);
     }
 
@@ -61,7 +76,6 @@ export default class Game {
         this.then = Date.now();
 
         this.requestAnimationFrame();
-
     }
 
     public stop(): void {
@@ -100,13 +114,14 @@ export default class Game {
     }
 
     private requestAnimationFrame(): void {
-        this.frameRequestId = window.requestAnimationFrame((time) => this.gameLoop(time));
+        this.frameRequestId = window.requestAnimationFrame((time) =>
+            this.gameLoop(time)
+        );
     }
 
     dispatchFrameEvent(event: string) {
-        window.dispatchEvent(new CustomEvent(
-            event,
-            {
+        window.dispatchEvent(
+            new CustomEvent(event, {
                 detail: {
                     game: this,
                     sceneManager: this.sceneManager,
@@ -115,8 +130,8 @@ export default class Game {
                     input: this.input,
                     deltaTime: this.deltaTime,
                     collisionManager: this.collisionManager,
-                }
-            }
-        ));
+                },
+            })
+        );
     }
 }

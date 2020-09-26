@@ -1,16 +1,16 @@
-import Component from '../../Component';
-import RenderData from '../../Core/Rendering/RenderData';
+import Component from "../../Component";
+import RenderData from "../../Core/Rendering/RenderData";
 import {
     PIVOT_CENTER,
     PIVOT_TOP_LEFT,
     PIVOT_TOP_RIGHT,
     PIVOT_BOTTOM_LEFT,
-    PIVOT_BOTTOM_RIGHT
-} from '../../Core/Rendering/RenderPivots';
-import Vector2 from '../../Helper/Vector2';
-import Sprite from '../../Sprite';
+    PIVOT_BOTTOM_RIGHT,
+} from "../../Core/Rendering/RenderPivots";
+import Vector2 from "../../Helper/Vector2";
+import Sprite from "../../Sprite";
 
-export * from '../../Core/Rendering/RenderPivots';
+export * from "../../Core/Rendering/RenderPivots";
 
 export default class SpriteRenderer extends Component {
     public sprite: Sprite = null;
@@ -35,7 +35,7 @@ export default class SpriteRenderer extends Component {
         this.pivot = config.pivot ? config.pivot : this.pivot;
         this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
         this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
-        this.smooth = config.smooth ? config.smooth : this.smooth
+        this.smooth = config.smooth ? config.smooth : this.smooth;
         this.rotation = config.rotation ? config.rotation : this.rotation;
     }
 
@@ -49,12 +49,15 @@ export default class SpriteRenderer extends Component {
             this.renderData.ui = this.gameObject.ui;
             this.renderData.layer = this.gameObject.layer;
             this.renderData.image = this.sprite.image;
-            this.renderData.width = this.sprite.width * this.gameObject.transform.scale.x;
-            this.renderData.height = this.sprite.height * this.gameObject.transform.scale.y;
+            this.renderData.width =
+                this.sprite.width * this.gameObject.transform.scale.x;
+            this.renderData.height =
+                this.sprite.height * this.gameObject.transform.scale.y;
             this.renderData.slice = this.sprite.slice;
             this.renderData.flipHorizontal = this.flipHorizontal;
             this.renderData.flipVertical = this.flipVertical;
-            this.renderData.rotation = this.gameObject.transform.rotation + this.rotation;
+            this.renderData.rotation =
+                this.gameObject.transform.rotation + this.rotation;
 
             this.calculateRenderPosition();
 
@@ -63,8 +66,10 @@ export default class SpriteRenderer extends Component {
     }
 
     private calculateRenderPosition(): void {
-        this.renderData.position.x = this.gameObject.transform.position.x + this.offsetX;
-        this.renderData.position.y = this.gameObject.transform.position.y + this.offsetY;
+        this.renderData.position.x =
+            this.gameObject.transform.position.x + this.offsetX;
+        this.renderData.position.y =
+            this.gameObject.transform.position.y + this.offsetY;
 
         if (this.gameObject.transform.rotation) {
             this.translateRenderPosition();
@@ -72,8 +77,12 @@ export default class SpriteRenderer extends Component {
 
         switch (this.pivot) {
             case PIVOT_CENTER:
-                this.renderData.position.x -= (Math.floor(this.renderData.width / 2));
-                this.renderData.position.y += (Math.floor(this.renderData.height / 2));
+                this.renderData.position.x -= Math.floor(
+                    this.renderData.width / 2
+                );
+                this.renderData.position.y += Math.floor(
+                    this.renderData.height / 2
+                );
                 break;
             case PIVOT_TOP_RIGHT:
                 this.renderData.position.x -= this.renderData.width;
@@ -93,13 +102,16 @@ export default class SpriteRenderer extends Component {
     }
 
     private translateRenderPosition(): void {
-        const angle: number = this.gameObject.transform.rotation * Math.PI / 180.0;
+        const angle: number =
+            (this.gameObject.transform.rotation * Math.PI) / 180.0;
         const radius: number = Math.hypot(
             this.renderData.position.x - this.goPosition.x,
             this.renderData.position.y - this.goPosition.y
         );
-        
-        this.renderData.position.x = this.goPosition.x + radius * Math.cos(angle),
-        this.renderData.position.y = this.goPosition.y - radius * Math.sin(angle);
+
+        (this.renderData.position.x =
+            this.goPosition.x + radius * Math.cos(angle)),
+            (this.renderData.position.y =
+                this.goPosition.y - radius * Math.sin(angle));
     }
 }

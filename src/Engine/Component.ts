@@ -28,25 +28,25 @@ export default abstract class Component {
         }
 
         this.processingLoop = false;
-    }
+    };
 
-    protected start(event: Record<string, unknown>): void { 
+    protected start(event: {}): void {
         // do nothing
     }
 
-    protected update(event: Record<string, unknown>): void { 
+    protected update(event: Record<string, unknown>): void {
         // do nothing
     }
 
-    public getComponent<CType>(id: string): CType|null {
+    public getComponent<CType>(id: string): CType | null {
         return this.gameObject.getComponent<CType>(id);
     }
 
-    public findGameObject<OType>(id: string): OType|null {
+    public findGameObject<OType>(id: string): OType | null {
         return this.gameObject.scene.getGameObject<OType>(id);
     }
 
-    public findGameObjectByTag<OType>(tag: string): OType|null {
+    public findGameObjectByTag<OType>(tag: string): OType | null {
         return this.gameObject.scene.getGameObjectByTag<OType>(tag);
     }
 

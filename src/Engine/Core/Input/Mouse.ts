@@ -11,12 +11,20 @@ export default class Mouse {
 
     constructor(game: Game) {
         this.game = game;
-        
-        this.game.canvas.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault());
 
-        this.game.canvas.addEventListener('mousemove', (e: MouseEvent) => this.updatePosition(e));
-        this.game.canvas.addEventListener('mousedown', (e: MouseEvent) => this.updateButtonDown(e));
-        this.game.canvas.addEventListener('mouseup', (e: MouseEvent) => this.updateButtonUp(e));
+        this.game.canvas.addEventListener("contextmenu", (e: MouseEvent) =>
+            e.preventDefault()
+        );
+
+        this.game.canvas.addEventListener("mousemove", (e: MouseEvent) =>
+            this.updatePosition(e)
+        );
+        this.game.canvas.addEventListener("mousedown", (e: MouseEvent) =>
+            this.updateButtonDown(e)
+        );
+        this.game.canvas.addEventListener("mouseup", (e: MouseEvent) =>
+            this.updateButtonUp(e)
+        );
     }
 
     private updateButtonDown(event: MouseEvent) {
@@ -26,9 +34,12 @@ export default class Mouse {
     }
 
     private updateButtonUp(event: MouseEvent) {
-        this.leftButtonPressed = event.button === 0 ? false : this.leftButtonPressed;
-        this.scrollButonPressed = event.button === 1 ? false : this.scrollButonPressed;
-        this.rightButtonPressed = event.button === 2 ? false : this.rightButtonPressed;
+        this.leftButtonPressed =
+            event.button === 0 ? false : this.leftButtonPressed;
+        this.scrollButonPressed =
+            event.button === 1 ? false : this.scrollButonPressed;
+        this.rightButtonPressed =
+            event.button === 2 ? false : this.rightButtonPressed;
     }
 
     private updatePosition(event: MouseEvent) {

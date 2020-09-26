@@ -51,10 +51,13 @@ export default class RectangleCollider {
     // TODO: find a nicer way to setup the render data
     private setupRenderData(): void {
         this.renderData = new RenderData();
-        this.renderData.position = new Vector2(this.rectangle.x, this.rectangle.y);
+        this.renderData.position = new Vector2(
+            this.rectangle.x,
+            this.rectangle.y
+        );
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.rectangle;
         this.renderData.geometricType = GEOMETRIC_RECTANGLE;
-        this.renderData.color = '#00FF00';
+        this.renderData.color = "#00FF00";
     }
 }

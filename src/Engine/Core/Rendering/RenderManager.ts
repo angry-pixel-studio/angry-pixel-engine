@@ -33,13 +33,21 @@ export default class RenderManager {
         this.contextRenderer.clearCanvas(color);
     }
 
-    public render(renderLayers: Array<string>, worldSpaceViewRect: Rectangle, viewportRect: Rectangle) {
-        this.renderStack.forEach(renderData => {
+    public render(
+        renderLayers: Array<string>,
+        worldSpaceViewRect: Rectangle,
+        viewportRect: Rectangle
+    ) {
+        this.renderStack.forEach((renderData) => {
             if (renderLayers.includes(renderData.layer) === false) {
                 return;
             }
 
-            this.contextRenderer.render(renderData, worldSpaceViewRect, viewportRect);
+            this.contextRenderer.render(
+                renderData,
+                worldSpaceViewRect,
+                viewportRect
+            );
         });
 
         this.clearRenderStack();

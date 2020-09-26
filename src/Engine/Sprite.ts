@@ -2,10 +2,10 @@ import Rectangle from "./Helper/Rectangle";
 import Vector2 from "./Helper/Vector2";
 
 interface config {
-    image: HTMLImageElement,
-    scale: Vector2,
-    slice: Rectangle|null,
-    smooth: boolean,
+    image: HTMLImageElement;
+    scale: Vector2;
+    slice: Rectangle | null;
+    smooth: boolean;
 }
 
 export default class Sprite {
@@ -15,10 +15,10 @@ export default class Sprite {
     public slice: Rectangle = null;
     public scale: Vector2 = null;
     public smooth: boolean = true;
-    public loaded: boolean =  false;
-    
+    public loaded: boolean = false;
+
     constructor({ image, slice, scale, smooth }: config) {
-        this.image = image
+        this.image = image;
 
         this.slice = slice ? slice : this.slice;
         if (this.slice) {
@@ -32,13 +32,14 @@ export default class Sprite {
         if (this.image.naturalWidth) {
             this.onLoad();
         } else {
-            this.image.addEventListener('load', () => this.onLoad());
+            this.image.addEventListener("load", () => this.onLoad());
         }
     }
 
     private onLoad(): void {
         this.width = this.width === null ? this.image.naturalWidth : this.width;
-        this.height = this.height === null ? this.image.naturalHeight : this.height;
+        this.height =
+            this.height === null ? this.image.naturalHeight : this.height;
 
         if (this.scale !== null) {
             this.width *= this.scale.x;
