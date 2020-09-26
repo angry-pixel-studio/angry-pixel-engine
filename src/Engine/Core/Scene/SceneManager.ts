@@ -16,12 +16,12 @@ export default class SceneManager {
     }
 
     public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
-        if (typeof this.scenes[name] === 'function') {
+        if (typeof this.scenes[name] === "function") {
             throw new Error(`There is already a scene with the name '${name}'`);
         }
 
         this.scenes[name] = sceneFunction;
-        
+
         if (openingScene === true || this.openingSceneName === null) {
             this.openingSceneName = name;
         }

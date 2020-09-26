@@ -16,7 +16,7 @@ export default class CollisionManager {
         this.renderManager = renderManager;
 
         // TODO: remove hardcoded quad size
-        this.quad = new QuadTree(0, new Rectangle(-1025, 700, 2050, 1400))
+        this.quad = new QuadTree(0, new Rectangle(-1025, 700, 2050, 1400));
     }
 
     public prepare(): void {
@@ -61,10 +61,12 @@ export default class CollisionManager {
 
     // TODO: Make this agnostic of which shapes is checking
     private checkCollision(collider1: ICollider, colldier2: ICollider) {
-        return collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
+        return (
+            collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
             collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
             collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
             collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
+        );
     }
 
     private debugColliders(): void {
@@ -87,7 +89,7 @@ export default class CollisionManager {
         renderData.layer = LAYER_DEFAULT;
         renderData.geometric = quad.bounds;
         renderData.geometricType = GEOMETRIC_RECTANGLE;
-        renderData.color = '#0000FF';
+        renderData.color = "#0000FF";
 
         this.renderManager.addToRenderStack(renderData);
 

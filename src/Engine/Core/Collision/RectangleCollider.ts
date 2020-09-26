@@ -55,6 +55,6 @@ export default class RectangleCollider {
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.rectangle;
         this.renderData.geometricType = GEOMETRIC_RECTANGLE;
-        this.renderData.color = '#00FF00';
+        this.renderData.color = "#00FF00";
     }
 }

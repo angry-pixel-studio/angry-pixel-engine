@@ -2,7 +2,7 @@ import GameCamera from "./GameObjects/GameCamera";
 import Game, { EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
 
-export const GAME_CAMERA_ID = 'GameCamera';
+export const GAME_CAMERA_ID = "GameCamera";
 
 type gameObjectFunction = () => GameObject;
 
@@ -35,9 +35,9 @@ export default class Scene {
         }
 
         this.processingLoop = false;
-    }
+    };
 
-    protected start(event: Record<string, unknown>): void { 
+    protected start(event: Record<string, unknown>): void {
         // do nothing
     }
 
@@ -49,7 +49,7 @@ export default class Scene {
         return this.getGameObject(GAME_CAMERA_ID);
     }
 
-    public addGameObject(gameObjectFunction: gameObjectFunction, id: string|null = null): this {
+    public addGameObject(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
         gameObject.scene = this;
@@ -63,20 +63,15 @@ export default class Scene {
     }
 
     public getGameObject<OType>(id: string): OType {
-        return this.gameObjects.reduce(
-            (prev, child) => child.id === id
-                ? child
-                : prev
-            , null
-        );
+        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
     }
 
-    public getGameObjectsByTag(tag: string ): GameObject[] {
-        return this.gameObjects.filter(object => object.tag === tag);
+    public getGameObjectsByTag(tag: string): GameObject[] {
+        return this.gameObjects.filter((object) => object.tag === tag);
     }
 
-    public getGameObjectByTag<OType>(tag: string): OType|null {
-        const objects = this.gameObjects.filter(object => object.tag === tag);
+    public getGameObjectByTag<OType>(tag: string): OType | null {
+        const objects = this.gameObjects.filter((object) => object.tag === tag);
         return objects.length > 0 ? objects[0] : null;
     }
 
@@ -104,6 +99,6 @@ export default class Scene {
         this.destroyGameObjects();
 
         // @ts-ignore
-        Object.keys(this).forEach(key => delete this[key]);
+        Object.keys(this).forEach((key) => delete this[key]);
     }
 }

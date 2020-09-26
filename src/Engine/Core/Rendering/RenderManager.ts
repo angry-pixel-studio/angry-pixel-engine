@@ -20,9 +20,7 @@ export default class RenderManager {
     }
 
     public shiftFromRenderStack(): RenderData {
-        return this.renderStack[0] !== undefined
-            ? this.renderStack.shift()
-            : null;
+        return this.renderStack[0] !== undefined ? this.renderStack.shift() : null;
     }
 
     public clearRenderStack() {
@@ -34,7 +32,7 @@ export default class RenderManager {
     }
 
     public render(renderLayers: Array<string>, worldSpaceViewRect: Rectangle, viewportRect: Rectangle) {
-        this.renderStack.forEach(renderData => {
+        this.renderStack.forEach((renderData) => {
             if (renderLayers.includes(renderData.layer) === false) {
                 return;
             }

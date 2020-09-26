@@ -5,13 +5,17 @@ import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
 import CollisionManager from "./Core/Collision/CollisionManager";
 import Scene from "./Scene";
 
-const CANVAS_ID: string = 'miniEngineCanvas';
+const CANVAS_ID: string = "miniEngineCanvas";
 
-export const EVENT_UPDATE: string = 'mini-engine-update';
+export const EVENT_UPDATE: string = "mini-engine-update";
 
 (function () {
     // @ts-ignore
-    const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    const requestAnimationFrame =
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
 
     // @ts-ignore
@@ -23,7 +27,7 @@ type sceneFunction = () => Scene;
 
 export default class Game {
     public canvas: HTMLCanvasElement = null;
-    public canvasBGColor: string = '#000000';
+    public canvasBGColor: string = "#000000";
     public input: Input = null;
     public sceneManager: SceneManager = null;
     public renderManager: RenderManager = null;
@@ -42,7 +46,7 @@ export default class Game {
     }
 
     private createCanvas(container: HTMLElement, width: number, height: number): void {
-        this.canvas = document.createElement('canvas');
+        this.canvas = document.createElement("canvas");
         this.canvas.id = CANVAS_ID;
         this.canvas.width = width;
         this.canvas.height = height;
@@ -61,7 +65,6 @@ export default class Game {
         this.then = Date.now();
 
         this.requestAnimationFrame();
-
     }
 
     public stop(): void {
@@ -104,9 +107,8 @@ export default class Game {
     }
 
     dispatchFrameEvent(event: string) {
-        window.dispatchEvent(new CustomEvent(
-            event,
-            {
+        window.dispatchEvent(
+            new CustomEvent(event, {
                 detail: {
                     game: this,
                     sceneManager: this.sceneManager,
@@ -115,8 +117,8 @@ export default class Game {
                     input: this.input,
                     deltaTime: this.deltaTime,
                     collisionManager: this.collisionManager,
-                }
-            }
-        ));
+                },
+            })
+        );
     }
 }

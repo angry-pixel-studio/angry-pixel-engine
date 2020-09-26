@@ -1,18 +1,18 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import Component from "./Component";
 import Transform from "./Components/Transform";
 import { EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
 
-export const LAYER_DEFAULT = 'Default';
-export const TRANSFORM_ID = 'Transform';
+export const LAYER_DEFAULT = "Default";
+export const TRANSFORM_ID = "Transform";
 
 type componentFunction = () => Component;
 type gameObjectFunction = () => GameObject;
 
 export default class GameObject {
     private _uuid: string = uuidv4();
-    
+
     public id: string = null;
     public tag: string = null;
     public layer: string = LAYER_DEFAULT;
@@ -51,13 +51,13 @@ export default class GameObject {
         }
 
         this.processingLoop = false;
-    }
+    };
 
-    protected start(event: Record<string, unknown>): void { 
+    protected start(event: Record<string, unknown>): void {
         // do nothing
     }
 
-    protected update(event: Record<string, unknown>): void { 
+    protected update(event: Record<string, unknown>): void {
         // do nothing
     }
 
@@ -95,12 +95,7 @@ export default class GameObject {
     }
 
     public getComponent<CType>(id: string): CType | null {
-        return this.components.reduce(
-            (prev, component) => component.id === id
-                ? component
-                : prev
-            , null
-        );
+        return this.components.reduce((prev, component) => (component.id === id ? component : prev), null);
     }
 
     public hasComponent(id: string): boolean {
@@ -149,20 +144,15 @@ export default class GameObject {
     }
 
     public getChild<CType>(id: string): CType | null {
-        return this.gameObjects.reduce(
-            (prev, child) => child.id === id
-                ? child
-                : prev
-            , null
-        );
+        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
     }
 
     public getChildrenByTag(tag: string): Array<GameObject> {
-        return this.gameObjects.filter(object => object.tag === tag);
+        return this.gameObjects.filter((object) => object.tag === tag);
     }
 
     public getChildByTag<CType>(tag: string): CType | null {
-        const objects = this.gameObjects.filter(object => object.tag === tag);
+        const objects = this.gameObjects.filter((object) => object.tag === tag);
         return objects.length > 0 ? objects[0] : null;
     }
 
@@ -186,12 +176,12 @@ export default class GameObject {
 
     public setActive(value: boolean) {
         this.components
-            .filter(component => this.inactiveComponents.indexOf(component.id) === -1)
-            .forEach(component => component.active = value);
+            .filter((component) => this.inactiveComponents.indexOf(component.id) === -1)
+            .forEach((component) => (component.active = value));
 
         this.gameObjects
-            .filter(gameObject => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
-            .forEach(gameObject => gameObject.setActive(value));
+            .filter((gameObject) => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
+            .forEach((gameObject) => gameObject.setActive(value));
 
         this.transform.update();
         this.active = value;
@@ -240,6 +230,6 @@ export default class GameObject {
         this.destroyChildren();
 
         // @ts-ignore
-        Object.keys(this).forEach(key => delete this[key]);
+        Object.keys(this).forEach((key) => delete this[key]);
     }
 }

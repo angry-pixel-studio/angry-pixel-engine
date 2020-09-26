@@ -34,7 +34,7 @@ export default class QuadTree {
         this.objects.push(object);
 
         if (!this.isQuadFull()) {
-            return
+            return;
         }
 
         if (this.level < this.maxLevels) {
@@ -94,7 +94,7 @@ export default class QuadTree {
 
     private getChildrenQuadrantForObject(object: ICollider): Array<QuadTree> {
         if (this.quadrants.length === 0) {
-            throw new Error('Current quadrant does not have quadrant children.');
+            throw new Error("Current quadrant does not have quadrant children.");
         }
 
         const { x: midPointX, y: midPointY } = this.getQuadrantMidPoint();
@@ -118,7 +118,7 @@ export default class QuadTree {
         }
 
         if (childrenQuadrants.length === 0) {
-            throw new Error('Children does not fit in any children quadrant');
+            throw new Error("Children does not fit in any children quadrant");
         }
 
         return childrenQuadrants;
@@ -132,10 +132,7 @@ export default class QuadTree {
     }
 
     private getQuadrantMidPoint(): Vector2 {
-        return new Vector2(
-            this.bounds.width / 2 + this.bounds.x,
-            (this.bounds.height / 2 - this.bounds.y) * -1,
-        );
+        return new Vector2(this.bounds.width / 2 + this.bounds.x, (this.bounds.height / 2 - this.bounds.y) * -1);
     }
 
     private hasQuadChildren(): boolean {

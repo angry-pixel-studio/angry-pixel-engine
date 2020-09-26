@@ -8,12 +8,12 @@ export default class Weapon extends Component {
     projectiles = [];
 
     start() {
-        this.inputManager = this.findGameObject('InputManager');
+        this.inputManager = this.findGameObject("InputManager");
         this.setupProjectiles();
     }
 
     setupProjectiles() {
-        for(let i = 0; i < this.projectileAmount; i++) {
+        for (let i = 0; i < this.projectileAmount; i++) {
             const id = `Projectile${i}`;
             this.gameObject.addChild(() => new Projectile(this), id);
             this.gameObject.setChildActive(id, false);
@@ -29,7 +29,7 @@ export default class Weapon extends Component {
         if (this.projectiles.length > 0 && this.inputManager.fire && this.firePressed === false) {
             const p = this.projectiles.pop();
             this.gameObject.setChildActive(p.id, true);
-            p.fire(this.getComponent('Movements').angle);
+            p.fire(this.getComponent("Movements").angle);
         }
 
         this.firePressed = this.inputManager.fire;

@@ -3,9 +3,9 @@ import Sprite from "./Sprite";
 const FRAME_RATE: number = 24;
 
 interface config {
-    sprites: Sprite[],
-    speed: number,
-    loop: boolean,
+    sprites: Sprite[];
+    speed: number;
+    loop: boolean;
 }
 
 export default class Animation {
@@ -17,7 +17,7 @@ export default class Animation {
     public speed: number = 1;
     public loop: boolean = false;
     public currentSprite: Sprite = null;
-    
+
     constructor({ sprites, speed, loop }: config) {
         this.sprites = sprites ? sprites : this.sprites;
         this.speed = speed !== undefined ? speed : this.speed;
@@ -31,7 +31,7 @@ export default class Animation {
         if (this.sprites.length > 0 && this._playing === false) {
             this._playing = true;
             this.currentFrame = 1;
-            this.currentSprite = this.sprites[this.currentFrame-1];
+            this.currentSprite = this.sprites[this.currentFrame - 1];
 
             this.update();
         }
@@ -39,11 +39,9 @@ export default class Animation {
 
     async update(): Promise<any> {
         while (this._playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 this.currentInterval = setTimeout(() => {
-                    this.currentFrame = this.sprites.length === this.currentFrame
-                        ? 1
-                        : this.currentFrame + 1
+                    this.currentFrame = this.sprites.length === this.currentFrame ? 1 : this.currentFrame + 1;
                     this.currentSprite = this.sprites[this.currentFrame - 1];
                     resolve();
                 }, Math.floor(1000 / (FRAME_RATE * this.speed)));

@@ -1,25 +1,25 @@
 import Component from "../../Component";
 import RenderData from "../../Core/Rendering/RenderData";
 
-export * from '../../Core/Rendering/RenderPivots';
+export * from "../../Core/Rendering/RenderPivots";
 
 export type TextRendererConfig = {
-    text: string,
-    font: string, 
-    size: number,
-    color: string,
-    bold: boolean,
-    italic: boolean,
-    lineSeparation: number,
-    width: number,
-    height: number
-}
+    text: string;
+    font: string;
+    size: number;
+    color: string;
+    bold: boolean;
+    italic: boolean;
+    lineSeparation: number;
+    width: number;
+    height: number;
+};
 
 export default class TextRenderer extends Component {
-    public text: string = '';
-    public font: string = 'Sans';
+    public text: string = "";
+    public font: string = "Sans";
     public size: number = 12;
-    public color: string = '#000000';
+    public color: string = "#000000";
     public bold: boolean = false;
     public italic: boolean = false;
     public renderData: RenderData = null;
@@ -34,7 +34,7 @@ export default class TextRenderer extends Component {
 
         this.text = config.text ? config.text : this.text;
         this.font = config.font ? config.font : this.font;
-        this.size = config.size ? config.size : this.size
+        this.size = config.size ? config.size : this.size;
         this.color = config.color ? config.color : this.color;
         this.bold = config.bold ? config.bold : this.bold;
         this.italic = config.italic ? config.italic : this.italic;
@@ -47,7 +47,7 @@ export default class TextRenderer extends Component {
         this.update(event);
     }
 
-    update(event: {[key: string]: any}): void {
+    update(event: { [key: string]: any }): void {
         this.renderData.layer = this.gameObject.layer;
         this.renderData.ui = this.gameObject.ui;
         this.renderData.text = this.text;

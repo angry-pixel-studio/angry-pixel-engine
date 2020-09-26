@@ -1,15 +1,15 @@
-import Component from '../../Component';
-import RenderData from '../../Core/Rendering/RenderData';
-import Rectangle from '../../Helper/Rectangle';
-import Tileset from '../../Tileset';
+import Component from "../../Component";
+import RenderData from "../../Core/Rendering/RenderData";
+import Rectangle from "../../Helper/Rectangle";
+import Tileset from "../../Tileset";
 
 export default class TilemapRenderer extends Component {
     public tileset: Tileset = null;
     public tilemapData: string = null;
     public tileScale: number = 1;
     public showTileset: boolean = false;
-    
-    private tilemapProcessd:boolean = false;
+
+    private tilemapProcessd: boolean = false;
     private processedData: RenderData[] = [];
 
     private _width: number = 0;
@@ -19,7 +19,7 @@ export default class TilemapRenderer extends Component {
     private _realWidth: number = 0;
     private _realHeight: number = 0;
 
-    constructor(config: {[key: string]: any}) {
+    constructor(config: { [key: string]: any }) {
         super();
 
         this.tileset = config.tileset;
@@ -28,11 +28,11 @@ export default class TilemapRenderer extends Component {
         this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
     }
 
-    start (event: Record<string, unknown>): void {
+    start(event: Record<string, unknown>): void {
         this.update(event);
     }
 
-    update (event: {[key: string]: any}): void {
+    update(event: { [key: string]: any }): void {
         if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();
@@ -40,50 +40,46 @@ export default class TilemapRenderer extends Component {
             this.processTilemap();
             this.updateTilesPosition();
         }
-        
+
         if (this.tileset.loaded && this.tilemapProcessd === true) {
-            this.processedData.forEach(renderData => event.renderManager.addToRenderStack(renderData));
+            this.processedData.forEach((renderData) => event.renderManager.addToRenderStack(renderData));
         }
     }
 
     private processTileset(): void {
         let index = 0;
-        
+
         for (let row = 0; row < this.tileset.gridHeight; row++) {
             for (let col = 0; col < this.tileset.gridWidth; col++) {
                 const tile = this.tileset.getTile(index);
-                
+
                 if (tile !== null) {
                     this.updateSizeInfo(col, row);
                     this.processTile(tile, col, row);
                 }
-                
+
                 index++;
-            }    
+            }
         }
 
         this.tilemapProcessd = true;
     }
 
     private processTilemap(): void {
-        const data = this.tilemapData
-            .trim()
-            .split('\n');
+        const data = this.tilemapData.trim().split("\n");
 
-        data.forEach((rowData: string, row: number)  => {
+        data.forEach((rowData: string, row: number) => {
             const parsedRow = rowData.match(/.{1,5}/g);
             if (parsedRow) {
-                parsedRow.forEach(
-                    (colData: string, col: number) => {
-                        const stringId = colData.trim().replace('[', '').replace(']', '');
-                        const tile = this.tileset.getTile(parseInt(stringId));
-                        
-                        if (tile !== null) {
-                            this.updateSizeInfo(col + 1, row + 1);
-                            this.processTile(tile, col, row);
-                        }
+                parsedRow.forEach((colData: string, col: number) => {
+                    const stringId = colData.trim().replace("[", "").replace("]", "");
+                    const tile = this.tileset.getTile(parseInt(stringId));
+
+                    if (tile !== null) {
+                        this.updateSizeInfo(col + 1, row + 1);
+                        this.processTile(tile, col, row);
                     }
-                )
+                });
             }
         });
         this.tilemapProcessd = true;
@@ -103,9 +99,9 @@ export default class TilemapRenderer extends Component {
 
     private processTile(tile: Rectangle, col: number, row: number): void {
         const renderData = new RenderData();
-        
-        renderData.position.x = this.gameObject.transform.position.x + (col * this.tileset.tileWidth * this.tileScale);
-        renderData.position.y = this.gameObject.transform.position.y - (row * this.tileset.tileHeight * this.tileScale);
+
+        renderData.position.x = this.gameObject.transform.position.x + col * this.tileset.tileWidth * this.tileScale;
+        renderData.position.y = this.gameObject.transform.position.y - row * this.tileset.tileHeight * this.tileScale;
 
         renderData.ui = false;
         renderData.image = this.tileset.image;
@@ -118,25 +114,22 @@ export default class TilemapRenderer extends Component {
     }
 
     private processRealTile(renderData: RenderData): void {
-        this._realTiles.push(new Rectangle(
-            renderData.position.x,
-            renderData.position.y,
-            renderData.width,
-            renderData.height
-        ));
+        this._realTiles.push(
+            new Rectangle(renderData.position.x, renderData.position.y, renderData.width, renderData.height)
+        );
     }
 
     private updateTilesPosition(): void {
-        this.processedData.forEach(renderData => {
-            renderData.position.x -= (Math.floor(this._realWidth / 2));
-            renderData.position.y += (Math.floor(this._realHeight / 2));
+        this.processedData.forEach((renderData) => {
+            renderData.position.x -= Math.floor(this._realWidth / 2);
+            renderData.position.y += Math.floor(this._realHeight / 2);
             this.processRealTile(renderData);
         });
     }
 
     public isTouchingRect(rect: Rectangle): boolean {
         let touching = false;
-        this._realTiles.every(tile => {
+        this._realTiles.every((tile) => {
             if (tile.overlappingRectangle(rect)) {
                 touching = true;
                 return false;

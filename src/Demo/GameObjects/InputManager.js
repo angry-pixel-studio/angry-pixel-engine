@@ -13,27 +13,29 @@ export default class InputManager extends GameObject {
     start(event) {
         this.keyboard = event.input.keyboard;
         this.mouse = event.input.mouse;
-        this.camera = this.findGameObject('GameCamera').getComponent('Camera');
-        
+        this.camera = this.findGameObject("GameCamera").getComponent("Camera");
+
         this.update();
     }
 
-    update () {
+    update() {
         this.updateAxis();
         this.updateMousePosition();
         this.updateFire();
     }
 
     updateAxis() {
-        this.axis.x = (this.keyboard.isPressed('a') || this.keyboard.isPressed('A'))
-            ? -1
-            : (this.keyboard.isPressed('d') || this.keyboard.isPressed('D'))
+        this.axis.x =
+            this.keyboard.isPressed("a") || this.keyboard.isPressed("A")
+                ? -1
+                : this.keyboard.isPressed("d") || this.keyboard.isPressed("D")
                 ? 1
                 : 0;
 
-        this.axis.y = (this.keyboard.isPressed('s') || this.keyboard.isPressed('S'))
-            ? -1
-            : (this.keyboard.isPressed('w') || this.keyboard.isPressed('W'))
+        this.axis.y =
+            this.keyboard.isPressed("s") || this.keyboard.isPressed("S")
+                ? -1
+                : this.keyboard.isPressed("w") || this.keyboard.isPressed("W")
                 ? 1
                 : 0;
     }

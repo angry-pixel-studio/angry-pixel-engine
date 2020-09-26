@@ -6,6 +6,8 @@ import Vector2 from "./../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
 
 interface Config {
+    x: number;
+    y: number;
     width: number;
     height: number;
     offsetX: number;
@@ -24,10 +26,10 @@ export default class RectangleCollider extends Component {
 
     private collisionManager: CollisionManager;
 
-    constructor({ width, height, offsetX = 0, offsetY = 0 }: Config) {
+    constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0 }: Config) {
         super();
 
-        this.rectangle = new Rectangle(0, 0, width, height);
+        this.rectangle = new Rectangle(x, y, width, height);
         this.renderData = new RenderData();
         this.renderData.position = new Vector2(0, 0);
 
@@ -80,9 +82,10 @@ export default class RectangleCollider extends Component {
         this.renderData.position.x = this.rectangle.x;
         this.renderData.position.y = this.rectangle.y;
     }
+
     private updateRectangleCoordinates() {
-        this.rectangle.x = this.gameObject.transform.position.x - (this.rectangle.width / 2) - this.offsetX;
-        this.rectangle.y = this.gameObject.transform.position.y + (this.rectangle.height / 2) + this.offsetY
+        this.rectangle.x = this.gameObject.transform.position.x - this.rectangle.width / 2 - this.offsetX;
+        this.rectangle.y = this.gameObject.transform.position.y + this.rectangle.height / 2 + this.offsetY;
     }
 
     // TODO: find a nicer way to setup the render data
@@ -90,6 +93,6 @@ export default class RectangleCollider extends Component {
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.rectangle;
         this.renderData.geometricType = GEOMETRIC_RECTANGLE;
-        this.renderData.color = '#00FF00';
+        this.renderData.color = "#00FF00";
     }
 }

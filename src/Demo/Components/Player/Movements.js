@@ -17,10 +17,10 @@ export default class Movements extends Component {
     walkingAnimation = false;
 
     start() {
-        this.tilemap = this.findGameObject('Foreground').getComponent('TilemapRenderer');
-        this.transform = this.getComponent('Transform');
-        this.animator = this.getComponent('Animator');
-        this.inputManager = this.findGameObject('InputManager');
+        this.tilemap = this.findGameObject("Foreground").getComponent("TilemapRenderer");
+        this.transform = this.getComponent("Transform");
+        this.animator = this.getComponent("Animator");
+        this.inputManager = this.findGameObject("InputManager");
     }
 
     update(event) {
@@ -47,7 +47,7 @@ export default class Movements extends Component {
 
         if ((deltaX || deltaY) && this.walkingAnimation === false) {
             this.walkingAnimation = true;
-            this.animator.playAnimation('PlayerWalking');
+            this.animator.playAnimation("PlayerWalking");
         } else if (!deltaX && !deltaY && this.walkingAnimation === true) {
             this.walkingAnimation = false;
             this.animator.stopAnimation();
@@ -59,11 +59,10 @@ export default class Movements extends Component {
             this.inputManager.mousePosition.y - this.transform.position.y,
             this.inputManager.mousePosition.x - this.transform.position.x
         );
-        this.transform.rotation = -this.angle * 180 / Math.PI;
+        this.transform.rotation = (-this.angle * 180) / Math.PI;
     }
 
     isTouchingForeground() {
-        return this.gameObject.getComponent('RectangleCollider').collidesWithLayer('Foreground');
+        return this.gameObject.getComponent("RectangleCollider").collidesWithLayer("Foreground");
     }
-
 }

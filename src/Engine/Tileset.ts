@@ -2,13 +2,13 @@ import Vector2 from "./Helper/Vector2";
 import Rectangle from "./Helper/Rectangle";
 
 interface config {
-    image: HTMLImageElement,
-    tileWidth: number,
-    tileHeight: number,
-    gridWidth: number,
-    gridHeight: number,
-    offset: Vector2|null,
-    tileOffset: Vector2|null,
+    image: HTMLImageElement;
+    tileWidth: number;
+    tileHeight: number;
+    gridWidth: number;
+    gridHeight: number;
+    offset: Vector2 | null;
+    tileOffset: Vector2 | null;
 }
 
 export default class Tileset {
@@ -19,19 +19,11 @@ export default class Tileset {
     public tileWidth: number = 0;
     public tileHeight: number = 0;
     public tileOffset: Vector2 = new Vector2(0, 0);
-    
+
     private _tiles: Rectangle[] = [];
     private _loaded: boolean = false;
 
-    constructor({
-        image, 
-        tileWidth, 
-        tileHeight, 
-        gridWidth, 
-        gridHeight, 
-        offset, 
-        tileOffset
-    }: config) {
+    constructor({ image, tileWidth, tileHeight, gridWidth, gridHeight, offset, tileOffset }: config) {
         // required
         this.image = image;
         this.tileWidth = tileWidth;
@@ -46,7 +38,7 @@ export default class Tileset {
         if (this.image.naturalWidth) {
             this.generateTiles();
         } else {
-            this.image.addEventListener('load', () => this.generateTiles());
+            this.image.addEventListener("load", () => this.generateTiles());
         }
     }
 
@@ -56,20 +48,20 @@ export default class Tileset {
         for (let row = 0; row < this.gridHeight; row++) {
             for (let col = 0; col < this.gridWidth; col++) {
                 this._tiles[index] = new Rectangle(
-                    (col * this.tileWidth) + this.offset.x + this.tileOffset.x,
-                    (row * this.tileHeight) - this.offset.y - this.tileOffset.y,
+                    col * this.tileWidth + this.offset.x + this.tileOffset.x,
+                    row * this.tileHeight - this.offset.y - this.tileOffset.y,
                     this.tileWidth,
                     this.tileHeight
                 );
 
                 index++;
-            }    
+            }
         }
 
         this._loaded = true;
     }
 
-    public getTile(index: number): Rectangle|null {
+    public getTile(index: number): Rectangle | null {
         return this._tiles[index] ? this._tiles[index] : null;
     }
 
