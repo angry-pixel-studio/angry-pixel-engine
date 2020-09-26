@@ -10,7 +10,7 @@ import { PlayerWalking } from "../Animations/PlayerTopAnimations";
 import { LAYER_BOT } from "../Config/renderLayers";
 import { TAG_PLAYER } from "./PlayerTop";
 
-export const TAG_BOT = 'Bot';
+export const TAG_BOT = "Bot";
 
 export default class Bot extends GameObject {
     player = null;
@@ -34,26 +34,44 @@ export default class Bot extends GameObject {
         this.layer = LAYER_BOT;
         this.transform.position.set(x, y);
 
-        this.addComponent(() => new SpriteRenderer({
-            sprite: new Sprite({
-                image: AssetManager.getImage('image/demo/player-top-down.png'),
-                slice: new Rectangle(0, 0, 32, 32),
-                scale: new Vector2(2, 2),
-                smooth: false
-            }),
-            rotation: 90
-        }), 'SpriteRenderer');
+        this.addComponent(
+            () =>
+                new SpriteRenderer({
+                    sprite: new Sprite({
+                        image: AssetManager.getImage(
+                            "image/demo/player-top-down.png"
+                        ),
+                        slice: new Rectangle(0, 0, 32, 32),
+                        scale: new Vector2(2, 2),
+                        smooth: false,
+                    }),
+                    rotation: 90,
+                }),
+            "SpriteRenderer"
+        );
 
-        this.addComponent(() => new Animator({
-            spriteRenderer: this.getComponent('SpriteRenderer')
-        }), 'Animator');
-        this.getComponent('Animator').addAnimation('PlayerWalking', PlayerWalking);
-        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), 'RectangleCollider');
+        this.addComponent(
+            () =>
+                new Animator({
+                    spriteRenderer: this.getComponent("SpriteRenderer"),
+                }),
+            "Animator"
+        );
+        this.getComponent("Animator").addAnimation(
+            "PlayerWalking",
+            PlayerWalking
+        );
+        this.addComponent(
+            () => new RectangleCollider({ width: 32, height: 32 }),
+            "RectangleCollider"
+        );
     }
 
     start() {
         this.player = this.findGameObjectByTag(TAG_PLAYER);
-        this.tilemap = this.findGameObject('Foreground').getComponent('TilemapRenderer');
+        this.tilemap = this.findGameObject("Foreground").getComponent(
+            "TilemapRenderer"
+        );
     }
 
     update(event) {
@@ -67,7 +85,7 @@ export default class Bot extends GameObject {
             this.player.transform.position.y - this.transform.position.y,
             this.player.transform.position.x - this.transform.position.x
         );
-        this.transform.rotation = -this.aimAngle * 180 / Math.PI;
+        this.transform.rotation = (-this.aimAngle * 180) / Math.PI;
     }
 
     updateCurrentDirection() {
@@ -76,8 +94,13 @@ export default class Bot extends GameObject {
     }
 
     move(deltaTime) {
-        if (Math.abs(this.player.transform.position.x - this.transform.position.x) <= this.playerDistance
-            && Math.abs(this.player.transform.position.y - this.transform.position.y) <= this.playerDistance
+        if (
+            Math.abs(
+                this.player.transform.position.x - this.transform.position.x
+            ) <= this.playerDistance &&
+            Math.abs(
+                this.player.transform.position.y - this.transform.position.y
+            ) <= this.playerDistance
         ) {
             return;
         }
@@ -97,8 +120,10 @@ export default class Bot extends GameObject {
     }
 
     isTouchingForeground() {
-        return this.getComponent('RectangleCollider').collidesWithLayer('Foreground');
+        return this.getComponent("RectangleCollider").collidesWithLayer(
+            "Foreground"
+        );
     }
 
-    animate() { }
+    animate() {}
 }

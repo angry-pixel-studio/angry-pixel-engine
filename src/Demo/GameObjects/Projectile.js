@@ -6,7 +6,7 @@ import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
 import { LAYER_PROJECTILE } from "../Config/renderLayers";
 
-export const TAG_PROJECTILE = 'Projectile';
+export const TAG_PROJECTILE = "Projectile";
 
 export default class Projectile extends GameObject {
     shooted = false;
@@ -29,13 +29,19 @@ export default class Projectile extends GameObject {
         this.layer = LAYER_PROJECTILE;
         this.tag = TAG_PROJECTILE;
 
-        this.addComponent(() => new SpriteRenderer({
-            sprite: new Sprite({
-                image: AssetManager.getImage('image/demo/projectile.png'),
-                scale: new Vector2(2, 2),
-                smooth: false
-            }),
-        }), 'SpriteRenderer')
+        this.addComponent(
+            () =>
+                new SpriteRenderer({
+                    sprite: new Sprite({
+                        image: AssetManager.getImage(
+                            "image/demo/projectile.png"
+                        ),
+                        scale: new Vector2(2, 2),
+                        smooth: false,
+                    }),
+                }),
+            "SpriteRenderer"
+        );
     }
 
     update() {
@@ -44,7 +50,7 @@ export default class Projectile extends GameObject {
             this.transform.position.y += this.deltaY;
         }
     }
-    
+
     fire(angle) {
         this.deltaX = Math.cos(angle) * this.speed;
         this.deltaY = Math.sin(angle) * this.speed;
@@ -56,8 +62,8 @@ export default class Projectile extends GameObject {
         setTimeout(() => {
             this.shooted = false;
             this.transform.innerPosition.set(this.innerPosX, this.innerPosY);
-            this.parent = this.cachedParent;            
-            
+            this.parent = this.cachedParent;
+
             this.weapon.restoreProjectile(this);
         }, 500);
     }
