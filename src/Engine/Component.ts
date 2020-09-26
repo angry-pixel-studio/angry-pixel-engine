@@ -30,7 +30,7 @@ export default abstract class Component {
         this.processingLoop = false;
     };
 
-    protected start(event: {}): void {
+    protected start(event: unknown): void {
         // do nothing
     }
 
