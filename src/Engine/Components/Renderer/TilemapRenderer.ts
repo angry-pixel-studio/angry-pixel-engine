@@ -25,8 +25,7 @@ export default class TilemapRenderer extends Component {
         this.tileset = config.tileset;
         this.tilemapData = config.tilemapData;
 
-        this.tileScale =
-            config.tileScale !== undefined ? config.tileScale : this.tileScale;
+        this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
     }
 
     start(event: Record<string, unknown>): void {
@@ -34,11 +33,7 @@ export default class TilemapRenderer extends Component {
     }
 
     update(event: { [key: string]: any }): void {
-        if (
-            this.tileset.loaded &&
-            this.showTileset === true &&
-            this.tilemapProcessd === false
-        ) {
+        if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();
         } else if (this.tileset.loaded && this.tilemapProcessd === false) {
@@ -47,9 +42,7 @@ export default class TilemapRenderer extends Component {
         }
 
         if (this.tileset.loaded && this.tilemapProcessd === true) {
-            this.processedData.forEach((renderData) =>
-                event.renderManager.addToRenderStack(renderData)
-            );
+            this.processedData.forEach((renderData) => event.renderManager.addToRenderStack(renderData));
         }
     }
 
@@ -79,10 +72,7 @@ export default class TilemapRenderer extends Component {
             const parsedRow = rowData.match(/.{1,5}/g);
             if (parsedRow) {
                 parsedRow.forEach((colData: string, col: number) => {
-                    const stringId = colData
-                        .trim()
-                        .replace("[", "")
-                        .replace("]", "");
+                    const stringId = colData.trim().replace("[", "").replace("]", "");
                     const tile = this.tileset.getTile(parseInt(stringId));
 
                     if (tile !== null) {
@@ -98,26 +88,20 @@ export default class TilemapRenderer extends Component {
     private updateSizeInfo(col: number, row: number): void {
         if (this._width < col) {
             this._width = col;
-            this._realWidth =
-                this._width * this.tileset.tileWidth * this.tileScale;
+            this._realWidth = this._width * this.tileset.tileWidth * this.tileScale;
         }
 
         if (this._height < row) {
             this._height = row;
-            this._realHeight =
-                this._height * this.tileset.tileHeight * this.tileScale;
+            this._realHeight = this._height * this.tileset.tileHeight * this.tileScale;
         }
     }
 
     private processTile(tile: Rectangle, col: number, row: number): void {
         const renderData = new RenderData();
 
-        renderData.position.x =
-            this.gameObject.transform.position.x +
-            col * this.tileset.tileWidth * this.tileScale;
-        renderData.position.y =
-            this.gameObject.transform.position.y -
-            row * this.tileset.tileHeight * this.tileScale;
+        renderData.position.x = this.gameObject.transform.position.x + col * this.tileset.tileWidth * this.tileScale;
+        renderData.position.y = this.gameObject.transform.position.y - row * this.tileset.tileHeight * this.tileScale;
 
         renderData.ui = false;
         renderData.image = this.tileset.image;
@@ -131,12 +115,7 @@ export default class TilemapRenderer extends Component {
 
     private processRealTile(renderData: RenderData): void {
         this._realTiles.push(
-            new Rectangle(
-                renderData.position.x,
-                renderData.position.y,
-                renderData.width,
-                renderData.height
-            )
+            new Rectangle(renderData.position.x, renderData.position.y, renderData.width, renderData.height)
         );
     }
 

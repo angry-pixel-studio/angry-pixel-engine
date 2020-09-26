@@ -38,16 +38,10 @@ export default class Animation {
     }
 
     async update(): Promise<any> {
-        while (
-            this._playing === true &&
-            (this.loop || this.sprites.length !== this.currentFrame)
-        ) {
+        while (this._playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
             await new Promise((resolve) => {
                 this.currentInterval = setTimeout(() => {
-                    this.currentFrame =
-                        this.sprites.length === this.currentFrame
-                            ? 1
-                            : this.currentFrame + 1;
+                    this.currentFrame = this.sprites.length === this.currentFrame ? 1 : this.currentFrame + 1;
                     this.currentSprite = this.sprites[this.currentFrame - 1];
                     resolve();
                 }, Math.floor(1000 / (FRAME_RATE * this.speed)));

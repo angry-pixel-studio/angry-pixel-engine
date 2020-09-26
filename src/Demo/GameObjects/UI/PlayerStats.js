@@ -39,9 +39,6 @@ export default class PlayerStats extends GameObject {
     }
 
     start(event) {
-        this.transform.position.set(
-            100 - event.canvas.clientWidth / 2,
-            event.canvas.clientHeight / 2 - 50
-        );
+        this.transform.position.set(100 - event.canvas.clientWidth / 2, event.canvas.clientHeight / 2 - 50);
     }
 }

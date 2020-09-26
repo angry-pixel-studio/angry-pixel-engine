@@ -17,9 +17,7 @@ export default class Movements extends Component {
     walkingAnimation = false;
 
     start() {
-        this.tilemap = this.findGameObject("Foreground").getComponent(
-            "TilemapRenderer"
-        );
+        this.tilemap = this.findGameObject("Foreground").getComponent("TilemapRenderer");
         this.transform = this.getComponent("Transform");
         this.animator = this.getComponent("Animator");
         this.inputManager = this.findGameObject("InputManager");
@@ -31,10 +29,8 @@ export default class Movements extends Component {
     }
 
     walk(deltaTime) {
-        let deltaY =
-            this.inputManager.axis.y * Math.floor(this.walkSpeed * deltaTime);
-        let deltaX =
-            this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
+        let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * deltaTime);
+        let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
 
         deltaX = deltaY ? deltaX / 1.4 : deltaX;
         deltaY = deltaX ? deltaY / 1.4 : deltaY;
@@ -67,8 +63,6 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        return this.gameObject
-            .getComponent("RectangleCollider")
-            .collidesWithLayer("Foreground");
+        return this.gameObject.getComponent("RectangleCollider").collidesWithLayer("Foreground");
     }
 }

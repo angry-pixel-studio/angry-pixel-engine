@@ -20,17 +20,9 @@ export default class Animator extends Component {
     }
 
     update(): void {
-        if (
-            this.playingAnimationId &&
-            this.animations[this.playingAnimationId].playing === true
-        ) {
-            this.spriteRenderer.sprite = this.animations[
-                this.playingAnimationId
-            ].currentSprite;
-        } else if (
-            this.playingAnimationId &&
-            this.animations[this.playingAnimationId].playing === false
-        ) {
+        if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === true) {
+            this.spriteRenderer.sprite = this.animations[this.playingAnimationId].currentSprite;
+        } else if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === false) {
             this.playingAnimationId = null;
             this.spriteRenderer.sprite = this.defaultSprite;
         }
@@ -51,10 +43,7 @@ export default class Animator extends Component {
             return;
         }
 
-        if (
-            this.playingAnimationId != id &&
-            this.animations[id] !== undefined
-        ) {
+        if (this.playingAnimationId != id && this.animations[id] !== undefined) {
             this.stopAnimation();
 
             this.playingAnimationId = id;

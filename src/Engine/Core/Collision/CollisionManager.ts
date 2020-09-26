@@ -41,10 +41,7 @@ export default class CollisionManager {
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(
-        collider: ICollider,
-        colliders: Array<ICollider>
-    ): Array<ICollider> {
+    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<ICollider> {
         const collisions: Array<ICollider> = [];
         for (const c of colliders) {
             if (this.checkCollision(collider, c)) {
@@ -65,14 +62,10 @@ export default class CollisionManager {
     // TODO: Make this agnostic of which shapes is checking
     private checkCollision(collider1: ICollider, colldier2: ICollider) {
         return (
-            collider1.getRectangle().x <
-                colldier2.getRectangle().x + colldier2.getRectangle().width &&
-            collider1.getRectangle().x + collider1.getRectangle().width >
-                colldier2.getRectangle().x &&
-            collider1.getRectangle().y - collider1.getRectangle().height <
-                colldier2.getRectangle().y &&
-            collider1.getRectangle().y >
-                colldier2.getRectangle().y - colldier2.getRectangle().height
+            collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
+            collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
+            collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
+            collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
         );
     }
 

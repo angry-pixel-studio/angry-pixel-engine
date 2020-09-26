@@ -23,10 +23,8 @@ export default class Transform extends Component {
         }
 
         if (this.parentTransform !== null) {
-            this.position.x =
-                this.parentTransform.position.x + this.innerPosition.x;
-            this.position.y =
-                this.parentTransform.position.y + this.innerPosition.y;
+            this.position.x = this.parentTransform.position.x + this.innerPosition.x;
+            this.position.y = this.parentTransform.position.y + this.innerPosition.y;
             this.translateFromParent();
         } else {
             this.innerPosition.x = this.position.x;
@@ -41,10 +39,8 @@ export default class Transform extends Component {
             this.position.y - this.parentTransform.position.y
         );
 
-        (this.position.x =
-            this.parentTransform.position.x + radius * Math.cos(angle)),
-            (this.position.y =
-                this.parentTransform.position.y - radius * Math.sin(angle));
+        (this.position.x = this.parentTransform.position.x + radius * Math.cos(angle)),
+            (this.position.y = this.parentTransform.position.y - radius * Math.sin(angle));
         this.rotation = this.parentTransform.rotation;
     }
 }

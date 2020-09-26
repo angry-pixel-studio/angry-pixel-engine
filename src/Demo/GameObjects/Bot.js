@@ -38,9 +38,7 @@ export default class Bot extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage(
-                            "image/demo/player-top-down.png"
-                        ),
+                        image: AssetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,
@@ -57,21 +55,13 @@ export default class Bot extends GameObject {
                 }),
             "Animator"
         );
-        this.getComponent("Animator").addAnimation(
-            "PlayerWalking",
-            PlayerWalking
-        );
-        this.addComponent(
-            () => new RectangleCollider({ width: 32, height: 32 }),
-            "RectangleCollider"
-        );
+        this.getComponent("Animator").addAnimation("PlayerWalking", PlayerWalking);
+        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
     }
 
     start() {
         this.player = this.findGameObjectByTag(TAG_PLAYER);
-        this.tilemap = this.findGameObject("Foreground").getComponent(
-            "TilemapRenderer"
-        );
+        this.tilemap = this.findGameObject("Foreground").getComponent("TilemapRenderer");
     }
 
     update(event) {
@@ -95,12 +85,8 @@ export default class Bot extends GameObject {
 
     move(deltaTime) {
         if (
-            Math.abs(
-                this.player.transform.position.x - this.transform.position.x
-            ) <= this.playerDistance &&
-            Math.abs(
-                this.player.transform.position.y - this.transform.position.y
-            ) <= this.playerDistance
+            Math.abs(this.player.transform.position.x - this.transform.position.x) <= this.playerDistance &&
+            Math.abs(this.player.transform.position.y - this.transform.position.y) <= this.playerDistance
         ) {
             return;
         }
@@ -120,9 +106,7 @@ export default class Bot extends GameObject {
     }
 
     isTouchingForeground() {
-        return this.getComponent("RectangleCollider").collidesWithLayer(
-            "Foreground"
-        );
+        return this.getComponent("RectangleCollider").collidesWithLayer("Foreground");
     }
 
     animate() {}

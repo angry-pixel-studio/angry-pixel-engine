@@ -41,12 +41,8 @@ export default class InputManager extends GameObject {
     }
 
     updateMousePosition() {
-        this.mousePosition.x = Math.floor(
-            this.mouse.viewportPosition.x + this.camera.worldSpaceRect.x
-        );
-        this.mousePosition.y = Math.floor(
-            this.camera.worldSpaceRect.y - this.mouse.viewportPosition.y
-        );
+        this.mousePosition.x = Math.floor(this.mouse.viewportPosition.x + this.camera.worldSpaceRect.x);
+        this.mousePosition.y = Math.floor(this.camera.worldSpaceRect.y - this.mouse.viewportPosition.y);
     }
 
     updateFire() {

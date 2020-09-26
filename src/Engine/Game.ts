@@ -19,8 +19,7 @@ export const EVENT_UPDATE: string = "mini-engine-update";
     window.requestAnimationFrame = requestAnimationFrame;
 
     // @ts-ignore
-    const cancelAnimationFrame =
-        window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+    const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     window.cancelAnimationFrame = cancelAnimationFrame;
 })();
 
@@ -42,17 +41,11 @@ export default class Game {
     constructor(containerElement: HTMLElement, width: number, height: number) {
         this.createCanvas(containerElement, width, height);
         this.sceneManager = new SceneManager(this);
-        this.renderManager = new RenderManager(
-            new Context2DRenderer(this.canvas)
-        );
+        this.renderManager = new RenderManager(new Context2DRenderer(this.canvas));
         this.collisionManager = new CollisionManager(this.renderManager);
     }
 
-    private createCanvas(
-        container: HTMLElement,
-        width: number,
-        height: number
-    ): void {
+    private createCanvas(container: HTMLElement, width: number, height: number): void {
         this.canvas = document.createElement("canvas");
         this.canvas.id = CANVAS_ID;
         this.canvas.width = width;
@@ -61,11 +54,7 @@ export default class Game {
         container.appendChild(this.canvas);
     }
 
-    public addScene(
-        name: string,
-        sceneFunction: sceneFunction,
-        openingScene: boolean = false
-    ): void {
+    public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
         this.sceneManager.addScene(name, sceneFunction, openingScene);
     }
 
@@ -114,9 +103,7 @@ export default class Game {
     }
 
     private requestAnimationFrame(): void {
-        this.frameRequestId = window.requestAnimationFrame((time) =>
-            this.gameLoop(time)
-        );
+        this.frameRequestId = window.requestAnimationFrame((time) => this.gameLoop(time));
     }
 
     dispatchFrameEvent(event: string) {

@@ -38,9 +38,7 @@ export default class TextRenderer extends Component {
         this.color = config.color ? config.color : this.color;
         this.bold = config.bold ? config.bold : this.bold;
         this.italic = config.italic ? config.italic : this.italic;
-        this.lineSeparation = config.lineSeparation
-            ? config.lineSeparation
-            : this.lineSeparation;
+        this.lineSeparation = config.lineSeparation ? config.lineSeparation : this.lineSeparation;
         this.width = config.width ? config.width : this.width;
         this.height = config.height ? config.height : this.height;
     }

@@ -15,11 +15,7 @@ export default class SceneManager {
         this.game = game;
     }
 
-    public addScene(
-        name: string,
-        sceneFunction: sceneFunction,
-        openingScene: boolean = false
-    ): void {
+    public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
         if (typeof this.scenes[name] === "function") {
             throw new Error(`There is already a scene with the name '${name}'`);
         }

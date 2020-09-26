@@ -81,10 +81,7 @@ export default class GameObject {
         return this.scene.getGameObjectsByTag(tag);
     }
 
-    public addComponent(
-        componentFunction: componentFunction,
-        id: string | null = null
-    ): this {
+    public addComponent(componentFunction: componentFunction, id: string | null = null): this {
         const component = componentFunction();
         component.id = id;
         component.gameObject = this;
@@ -98,10 +95,7 @@ export default class GameObject {
     }
 
     public getComponent<CType>(id: string): CType | null {
-        return this.components.reduce(
-            (prev, component) => (component.id === id ? component : prev),
-            null
-        );
+        return this.components.reduce((prev, component) => (component.id === id ? component : prev), null);
     }
 
     public hasComponent(id: string): boolean {
@@ -135,10 +129,7 @@ export default class GameObject {
         this.transform.update();
     }
 
-    public addChild(
-        gameObjectFunction: gameObjectFunction,
-        id: string | null = null
-    ): this {
+    public addChild(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
         gameObject.parent = this;
@@ -153,10 +144,7 @@ export default class GameObject {
     }
 
     public getChild<CType>(id: string): CType | null {
-        return this.gameObjects.reduce(
-            (prev, child) => (child.id === id ? child : prev),
-            null
-        );
+        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
     }
 
     public getChildrenByTag(tag: string): Array<GameObject> {
@@ -188,17 +176,11 @@ export default class GameObject {
 
     public setActive(value: boolean) {
         this.components
-            .filter(
-                (component) =>
-                    this.inactiveComponents.indexOf(component.id) === -1
-            )
+            .filter((component) => this.inactiveComponents.indexOf(component.id) === -1)
             .forEach((component) => (component.active = value));
 
         this.gameObjects
-            .filter(
-                (gameObject) =>
-                    this.inactiveGameObjects.indexOf(gameObject.id) === -1
-            )
+            .filter((gameObject) => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
             .forEach((gameObject) => gameObject.setActive(value));
 
         this.transform.update();

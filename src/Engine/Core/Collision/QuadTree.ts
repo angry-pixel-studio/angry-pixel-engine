@@ -46,9 +46,7 @@ export default class QuadTree {
         const colliders: Array<ICollider> = [];
 
         if (this.hasQuadChildren()) {
-            const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(
-                collider
-            );
+            const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(collider);
             for (const quadrant of quadrants) {
                 colliders.push(...quadrant.retrieve(collider));
             }
@@ -81,37 +79,10 @@ export default class QuadTree {
         const newHeight = this.bounds.height / 2;
 
         this.quadrants = [
-            new QuadTree(
-                newLevel,
-                new Rectangle(
-                    midPointX - newWidth,
-                    midPointY,
-                    newWidth,
-                    newHeight
-                )
-            ),
-            new QuadTree(
-                newLevel,
-                new Rectangle(midPointX, midPointY, newWidth, newHeight)
-            ),
-            new QuadTree(
-                newLevel,
-                new Rectangle(
-                    midPointX - newWidth,
-                    midPointY + newHeight,
-                    newWidth,
-                    newHeight
-                )
-            ),
-            new QuadTree(
-                newLevel,
-                new Rectangle(
-                    midPointX,
-                    midPointY + newHeight,
-                    newWidth,
-                    newHeight
-                )
-            ),
+            new QuadTree(newLevel, new Rectangle(midPointX - newWidth, midPointY, newWidth, newHeight)),
+            new QuadTree(newLevel, new Rectangle(midPointX, midPointY, newWidth, newHeight)),
+            new QuadTree(newLevel, new Rectangle(midPointX - newWidth, midPointY + newHeight, newWidth, newHeight)),
+            new QuadTree(newLevel, new Rectangle(midPointX, midPointY + newHeight, newWidth, newHeight)),
         ];
 
         for (const object of this.objects) {
@@ -123,40 +94,26 @@ export default class QuadTree {
 
     private getChildrenQuadrantForObject(object: ICollider): Array<QuadTree> {
         if (this.quadrants.length === 0) {
-            throw new Error(
-                "Current quadrant does not have quadrant children."
-            );
+            throw new Error("Current quadrant does not have quadrant children.");
         }
 
         const { x: midPointX, y: midPointY } = this.getQuadrantMidPoint();
 
         const childrenQuadrants: Array<QuadTree> = [];
 
-        if (
-            object.getRectangle().x <= midPointX &&
-            object.getRectangle().y1 <= midPointY
-        ) {
+        if (object.getRectangle().x <= midPointX && object.getRectangle().y1 <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.sw]);
         }
 
-        if (
-            object.getRectangle().x1 >= midPointX &&
-            object.getRectangle().y1 <= midPointY
-        ) {
+        if (object.getRectangle().x1 >= midPointX && object.getRectangle().y1 <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.se]);
         }
 
-        if (
-            object.getRectangle().x <= midPointX &&
-            object.getRectangle().y >= midPointY
-        ) {
+        if (object.getRectangle().x <= midPointX && object.getRectangle().y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.nw]);
         }
 
-        if (
-            object.getRectangle().x1 >= midPointX &&
-            object.getRectangle().y >= midPointY
-        ) {
+        if (object.getRectangle().x1 >= midPointX && object.getRectangle().y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.ne]);
         }
 
@@ -168,19 +125,14 @@ export default class QuadTree {
     }
 
     private insertObjectIntoChildrenQuads(object: ICollider) {
-        const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(
-            object
-        );
+        const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(object);
         for (const quadrant of quadrants) {
             quadrant.insert(object);
         }
     }
 
     private getQuadrantMidPoint(): Vector2 {
-        return new Vector2(
-            this.bounds.width / 2 + this.bounds.x,
-            (this.bounds.height / 2 - this.bounds.y) * -1
-        );
+        return new Vector2(this.bounds.width / 2 + this.bounds.x, (this.bounds.height / 2 - this.bounds.y) * -1);
     }
 
     private hasQuadChildren(): boolean {

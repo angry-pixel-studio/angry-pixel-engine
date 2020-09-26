@@ -23,9 +23,7 @@ export default class ForegroundTopDown extends GameObject {
             () =>
                 new TilemapRenderer({
                     tileset: new Tileset({
-                        image: AssetManager.getImage(
-                            "image/demo/earth-cave.png"
-                        ),
+                        image: AssetManager.getImage("image/demo/earth-cave.png"),
                         tileWidth: 16,
                         tileHeight: 16,
                         gridWidth: 11,

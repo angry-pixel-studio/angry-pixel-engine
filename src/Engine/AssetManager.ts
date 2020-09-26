@@ -8,20 +8,14 @@ class Asset {
     public type: AssetType = null;
     public url: string = null;
     public loaded: boolean = false;
-    public element:
-        | HTMLImageElement
-        | HTMLVideoElement
-        | HTMLAudioElement = null;
+    public element: HTMLImageElement | HTMLVideoElement | HTMLAudioElement = null;
 }
 
 class AssetManager {
     private assets: Asset[] = [];
 
     public getAssetsLoaded(): boolean {
-        return this.assets.reduce(
-            (prev: boolean, asset: Asset) => prev && asset.loaded,
-            true
-        );
+        return this.assets.reduce((prev: boolean, asset: Asset) => prev && asset.loaded, true);
     }
 
     public createImage(url: string): HTMLImageElement {
@@ -33,10 +27,7 @@ class AssetManager {
         if (asset.element.naturalWidth) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener(
-                "load",
-                (e: Event) => (asset.loaded = true)
-            );
+            asset.element.addEventListener("load", (e: Event) => (asset.loaded = true));
         }
 
         return asset.element;
@@ -51,10 +42,7 @@ class AssetManager {
         if (asset.element.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener(
-                "loadeddata",
-                (e: Event) => (asset.loaded = true)
-            );
+            asset.element.addEventListener("loadeddata", (e: Event) => (asset.loaded = true));
         }
 
         return asset.element;
@@ -69,10 +57,7 @@ class AssetManager {
         if (asset.element.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener(
-                "loadeddata",
-                (e: Event) => (asset.loaded = true)
-            );
+            asset.element.addEventListener("loadeddata", (e: Event) => (asset.loaded = true));
         }
 
         return asset.element as HTMLVideoElement;
@@ -90,14 +75,13 @@ class AssetManager {
         return this.getAsset<HTMLAudioElement>(url, AssetType.Audio);
     }
 
-    public getAsset<
-        EType extends HTMLImageElement | HTMLVideoElement | HTMLAudioElement
-    >(url: string, type: AssetType | null = null): EType {
+    public getAsset<EType extends HTMLImageElement | HTMLVideoElement | HTMLAudioElement>(
+        url: string,
+        type: AssetType | null = null
+    ): EType {
         return this.assets.reduce(
             (prev: Asset | null, asset: Asset) =>
-                asset.url === url && (type === null || type === asset.type)
-                    ? asset
-                    : prev,
+                asset.url === url && (type === null || type === asset.type) ? asset : prev,
             null
         ).element as EType;
     }

@@ -17,10 +17,7 @@ export default class Camera extends Component {
     }
 
     private setupViewportRect(canvas: HTMLCanvasElement): void {
-        this._viewportRect.setPosition(
-            -(canvas.clientWidth / 2),
-            canvas.clientHeight / 2
-        );
+        this._viewportRect.setPosition(-(canvas.clientWidth / 2), canvas.clientHeight / 2);
         this._viewportRect.width = canvas.clientWidth;
         this._viewportRect.height = canvas.clientHeight;
 
@@ -30,11 +27,7 @@ export default class Camera extends Component {
 
     update(event: { [key: string]: any }): void {
         this.updateWorldSpaceRect();
-        event.renderManager.render(
-            this._renderLayers,
-            this._worldSpaceRect,
-            this._viewportRect
-        );
+        event.renderManager.render(this._renderLayers, this._worldSpaceRect, this._viewportRect);
     }
 
     private updateWorldSpaceRect(): void {

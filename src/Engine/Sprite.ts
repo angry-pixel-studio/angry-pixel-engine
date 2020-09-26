@@ -38,8 +38,7 @@ export default class Sprite {
 
     private onLoad(): void {
         this.width = this.width === null ? this.image.naturalWidth : this.width;
-        this.height =
-            this.height === null ? this.image.naturalHeight : this.height;
+        this.height = this.height === null ? this.image.naturalHeight : this.height;
 
         if (this.scale !== null) {
             this.width *= this.scale.x;

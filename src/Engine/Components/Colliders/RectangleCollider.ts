@@ -1,8 +1,6 @@
 import Component from "./../../Component";
 import { LAYER_DEFAULT } from "../../GameObject";
-import RenderData, {
-    GEOMETRIC_RECTANGLE,
-} from "../../Core/Rendering/RenderData";
+import RenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
 import Rectangle from "./../../Helper/Rectangle";
 import Vector2 from "./../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
@@ -28,14 +26,7 @@ export default class RectangleCollider extends Component {
 
     private collisionManager: CollisionManager;
 
-    constructor({
-        x = 0,
-        y = 0,
-        width,
-        height,
-        offsetX = 0,
-        offsetY = 0,
-    }: Config) {
+    constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0 }: Config) {
         super();
 
         this.rectangle = new Rectangle(x, y, width, height);
@@ -93,14 +84,8 @@ export default class RectangleCollider extends Component {
     }
 
     private updateRectangleCoordinates() {
-        this.rectangle.x =
-            this.gameObject.transform.position.x -
-            this.rectangle.width / 2 -
-            this.offsetX;
-        this.rectangle.y =
-            this.gameObject.transform.position.y +
-            this.rectangle.height / 2 +
-            this.offsetY;
+        this.rectangle.x = this.gameObject.transform.position.x - this.rectangle.width / 2 - this.offsetX;
+        this.rectangle.y = this.gameObject.transform.position.y + this.rectangle.height / 2 + this.offsetY;
     }
 
     // TODO: find a nicer way to setup the render data

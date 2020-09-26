@@ -33,9 +33,7 @@ export default class Projectile extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage(
-                            "image/demo/projectile.png"
-                        ),
+                        image: AssetManager.getImage("image/demo/projectile.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),

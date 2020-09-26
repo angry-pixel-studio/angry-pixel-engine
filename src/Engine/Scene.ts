@@ -49,10 +49,7 @@ export default class Scene {
         return this.getGameObject(GAME_CAMERA_ID);
     }
 
-    public addGameObject(
-        gameObjectFunction: gameObjectFunction,
-        id: string | null = null
-    ): this {
+    public addGameObject(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
         const gameObject = gameObjectFunction();
         gameObject.id = id;
         gameObject.scene = this;
@@ -66,10 +63,7 @@ export default class Scene {
     }
 
     public getGameObject<OType>(id: string): OType {
-        return this.gameObjects.reduce(
-            (prev, child) => (child.id === id ? child : prev),
-            null
-        );
+        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
     }
 
     public getGameObjectsByTag(tag: string): GameObject[] {

@@ -36,10 +36,7 @@ export default class TilemapCollider extends Component {
             const parsedRow = rowData.match(/.{1,5}/g);
             if (parsedRow) {
                 parsedRow.forEach((colData: string, col: number) => {
-                    const stringId = colData
-                        .trim()
-                        .replace("[", "")
-                        .replace("]", "");
+                    const stringId = colData.trim().replace("[", "").replace("]", "");
                     if (stringId) {
                         const posX = col * this.tileWidth;
                         const posY = row * this.tileHeight;

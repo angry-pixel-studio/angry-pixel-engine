@@ -10,9 +10,7 @@ export default class FollowPlayerCamera extends Component {
     start() {
         this.camera = this.gameObject.camera;
         this.player = this.gameObject.scene.getGameObjectByTag(TAG_PLAYER);
-        this.foreground = this.gameObject.scene.getGameObjectByTag(
-            "Foreground"
-        );
+        this.foreground = this.gameObject.scene.getGameObjectByTag("Foreground");
     }
 
     update(event) {

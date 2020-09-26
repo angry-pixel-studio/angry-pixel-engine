@@ -25,8 +25,7 @@ export default class TiledRenderer extends Component {
         this.tileset = config.tileset;
         this.tilemapData = config.tilemapData;
 
-        this.tileScale =
-            config.tileScale !== undefined ? config.tileScale : this.tileScale;
+        this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
     }
 
     start(event: Record<string, unknown>): void {
@@ -34,11 +33,7 @@ export default class TiledRenderer extends Component {
     }
 
     update(event: { [key: string]: any }): void {
-        if (
-            this.tileset.loaded &&
-            this.showTileset === true &&
-            this.tilemapProcessd === false
-        ) {
+        if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();
         } else if (this.tileset.loaded && this.tilemapProcessd === false) {
@@ -47,9 +42,7 @@ export default class TiledRenderer extends Component {
         }
 
         if (this.tileset.loaded && this.tilemapProcessd === true) {
-            this.processedData.forEach((renderData) =>
-                event.renderManager.addToRenderStack(renderData)
-            );
+            this.processedData.forEach((renderData) => event.renderManager.addToRenderStack(renderData));
         }
     }
 
@@ -74,9 +67,7 @@ export default class TiledRenderer extends Component {
 
     private processTilemap(): void {
         this.tilemapData.layers.forEach((layer: { [key: string]: any }) =>
-            layer.chunks.forEach((chunk: { [key: string]: any }) =>
-                this.processChunk(chunk)
-            )
+            layer.chunks.forEach((chunk: { [key: string]: any }) => this.processChunk(chunk))
         );
 
         this.tilemapProcessd = true;
@@ -98,33 +89,22 @@ export default class TiledRenderer extends Component {
         }
     }
 
-    private updateSizeInfo(
-        chunk: { [key: string]: any },
-        col: number,
-        row: number
-    ): void {
+    private updateSizeInfo(chunk: { [key: string]: any }, col: number, row: number): void {
         col += 1 + chunk.x;
         row += 1 + chunk.y;
 
         if (this._width < col) {
             this._width = col;
-            this._realWidth =
-                this._width * this.tileset.tileWidth * this.tileScale;
+            this._realWidth = this._width * this.tileset.tileWidth * this.tileScale;
         }
 
         if (this._height < row) {
             this._height = row;
-            this._realHeight =
-                this._height * this.tileset.tileHeight * this.tileScale;
+            this._realHeight = this._height * this.tileset.tileHeight * this.tileScale;
         }
     }
 
-    private processTile(
-        tile: Rectangle,
-        chunk: { [key: string]: any },
-        col: number,
-        row: number
-    ): void {
+    private processTile(tile: Rectangle, chunk: { [key: string]: any }, col: number, row: number): void {
         const renderData = new RenderData();
 
         renderData.position.x =

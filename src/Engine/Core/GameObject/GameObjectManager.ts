@@ -8,9 +8,6 @@ class GameObjectManager {
     }
 
     findGameObjectByUuid(uuid: string): GameObject | null {
-        return this.gameObjects.reduce(
-            (prev, gameObject) => (gameObject.id === uuid ? gameObject : prev),
-            null
-        );
+        return this.gameObjects.reduce((prev, gameObject) => (gameObject.id === uuid ? gameObject : prev), null);
     }
 }

@@ -26,11 +26,7 @@ export default class Weapon extends Component {
     }
 
     fire() {
-        if (
-            this.projectiles.length > 0 &&
-            this.inputManager.fire &&
-            this.firePressed === false
-        ) {
+        if (this.projectiles.length > 0 && this.inputManager.fire && this.firePressed === false) {
             const p = this.projectiles.pop();
             this.gameObject.setChildActive(p.id, true);
             p.fire(this.getComponent("Movements").angle);

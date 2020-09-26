@@ -19,45 +19,22 @@ export default class Context2DRenderer implements IContextRenderer {
     }
 
     public clearCanvas(color: string | null = null): void {
-        this.canvasContext.clearRect(
-            0,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
+        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.canvasContext.fillStyle = color ? color : DEFAULT_COLOR;
-        this.canvasContext.fillRect(
-            0,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
+        this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    public render(
-        renderData: RenderData,
-        worldSpaceViewRect: Rectangle,
-        viewportRect: Rectangle
-    ): void {
+    public render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void {
         if (renderData.image) {
-            this.renderImage(
-                renderData,
-                renderData.ui === true ? viewportRect : worldSpaceViewRect
-            );
+            this.renderImage(renderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
         }
 
         if (renderData.text) {
-            this.renderText(
-                renderData,
-                renderData.ui === true ? viewportRect : worldSpaceViewRect
-            );
+            this.renderText(renderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
         }
 
         if (renderData.geometric) {
-            this.renderGeometric(
-                renderData,
-                renderData.ui === true ? viewportRect : worldSpaceViewRect
-            );
+            this.renderGeometric(renderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
         }
     }
 
@@ -75,30 +52,17 @@ export default class Context2DRenderer implements IContextRenderer {
                 this.renderPosition.x + renderData.width / 2,
                 this.renderPosition.y + renderData.height / 2
             );
-            this.imagePosition.set(
-                -renderData.width / 2,
-                -renderData.height / 2
-            );
+            this.imagePosition.set(-renderData.width / 2, -renderData.height / 2);
             this.canvasContext.rotate((renderData.rotation * Math.PI) / 180);
         } else {
-            this.canvasContext.translate(
-                this.renderPosition.x,
-                this.renderPosition.y
-            );
-            this.imagePosition.x = renderData.flipHorizontal
-                ? -renderData.width
-                : this.imagePosition.x;
-            this.imagePosition.y = renderData.flipVertical
-                ? -renderData.height
-                : this.imagePosition.y;
+            this.canvasContext.translate(this.renderPosition.x, this.renderPosition.y);
+            this.imagePosition.x = renderData.flipHorizontal ? -renderData.width : this.imagePosition.x;
+            this.imagePosition.y = renderData.flipVertical ? -renderData.height : this.imagePosition.y;
         }
 
         this.canvasContext.imageSmoothingEnabled = renderData.smooth;
 
-        this.canvasContext.scale(
-            renderData.flipHorizontal ? -1 : 1,
-            renderData.flipVertical ? -1 : 1
-        );
+        this.canvasContext.scale(renderData.flipHorizontal ? -1 : 1, renderData.flipVertical ? -1 : 1);
 
         if (renderData.slice !== undefined && renderData.slice !== null) {
             this.canvasContext.drawImage(
@@ -145,24 +109,14 @@ export default class Context2DRenderer implements IContextRenderer {
             let lineSeparation = 0;
 
             renderData.text.forEach((text) => {
-                lineSeparation = first
-                    ? lineSeparation
-                    : renderData.lineSeparation + renderData.textSize;
+                lineSeparation = first ? lineSeparation : renderData.lineSeparation + renderData.textSize;
 
-                this.canvasContext.fillText(
-                    text,
-                    this.renderPosition.x,
-                    this.renderPosition.y + lineSeparation
-                );
+                this.canvasContext.fillText(text, this.renderPosition.x, this.renderPosition.y + lineSeparation);
 
                 first = false;
             });
         } else {
-            this.canvasContext.fillText(
-                renderData.text,
-                this.renderPosition.x,
-                this.renderPosition.y
-            );
+            this.canvasContext.fillText(renderData.text, this.renderPosition.x, this.renderPosition.y);
         }
 
         this.canvasContext.restore();
@@ -188,26 +142,14 @@ export default class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private isInsideViewRect(
-        renderData: RenderData,
-        viewRect: Rectangle
-    ): boolean {
-        this.cacheRect.set(
-            renderData.position.x,
-            renderData.position.y,
-            renderData.width,
-            renderData.height
-        );
+    private isInsideViewRect(renderData: RenderData, viewRect: Rectangle): boolean {
+        this.cacheRect.set(renderData.position.x, renderData.position.y, renderData.width, renderData.height);
 
         return viewRect.overlappingRectangle(this.cacheRect);
     }
 
     private updateRenderPosition(renderData: RenderData, viewRect: Rectangle) {
-        this.renderPosition.x = Number(
-            (renderData.position.x - viewRect.x).toFixed(0)
-        );
-        this.renderPosition.y = Number(
-            (viewRect.y - renderData.position.y).toFixed(0)
-        );
+        this.renderPosition.x = Number((renderData.position.x - viewRect.x).toFixed(0));
+        this.renderPosition.y = Number((viewRect.y - renderData.position.y).toFixed(0));
     }
 }

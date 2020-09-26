@@ -23,15 +23,7 @@ export default class Tileset {
     private _tiles: Rectangle[] = [];
     private _loaded: boolean = false;
 
-    constructor({
-        image,
-        tileWidth,
-        tileHeight,
-        gridWidth,
-        gridHeight,
-        offset,
-        tileOffset,
-    }: config) {
+    constructor({ image, tileWidth, tileHeight, gridWidth, gridHeight, offset, tileOffset }: config) {
         // required
         this.image = image;
         this.tileWidth = tileWidth;

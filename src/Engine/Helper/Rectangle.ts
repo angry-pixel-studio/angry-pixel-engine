@@ -44,11 +44,6 @@ export default class Rectangle {
     }
 
     public overlappingRectangle(rect: Rectangle): boolean {
-        return (
-            this.x1 >= rect.x &&
-            this.x <= rect.x1 &&
-            this.y1 <= rect.y &&
-            this.y >= rect.y1
-        );
+        return this.x1 >= rect.x && this.x <= rect.x1 && this.y1 <= rect.y && this.y >= rect.y1;
     }
 }
