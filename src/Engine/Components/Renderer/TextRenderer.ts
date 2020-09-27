@@ -1,5 +1,6 @@
 import Component from "../../Component";
 import RenderData from "../../Core/Rendering/RenderData";
+import Game from "../../Game";
 
 export * from "../../Core/Rendering/RenderPivots";
 
@@ -43,11 +44,11 @@ export default class TextRenderer extends Component {
         this.height = config.height ? config.height : this.height;
     }
 
-    start(event: Record<string, unknown>): void {
-        this.update(event);
+    start(): void {
+        this.update();
     }
 
-    update(event: { [key: string]: any }): void {
+    update(): void {
         this.renderData.layer = this.gameObject.layer;
         this.renderData.ui = this.gameObject.ui;
         this.renderData.text = this.text;
@@ -62,6 +63,6 @@ export default class TextRenderer extends Component {
         this.renderData.width = this.width;
         this.renderData.height = this.height;
 
-        event.renderManager.addToRenderStack(this.renderData);
+        Game.renderManager.addToRenderStack(this.renderData);
     }
 }

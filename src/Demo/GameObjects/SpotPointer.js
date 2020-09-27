@@ -8,10 +8,10 @@ export default class SpotPointer extends GameObject {
     vpPos = null;
 
     update(event) {
-        const mouse = event.input.mouse;
+        const mouse = event.inputManager.mouse;
 
         if (mouse.leftButtonPressed && this.mousePressed === false) {
-            this.camera = this.camera === null ? this.scene.getGameObject("GameCamera").camera : this.camera;
+            this.camera = this.camera === null ? this.scene.gameCamera.camera : this.camera;
             this.vpPos = mouse.viewportPosition;
 
             console.log({

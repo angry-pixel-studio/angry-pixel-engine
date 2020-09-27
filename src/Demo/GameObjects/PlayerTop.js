@@ -1,4 +1,3 @@
-import AssetManager from "../../Engine/AssetManager";
 import GameObject, { LAYER_DEFAULT } from "../../Engine/GameObject";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
@@ -31,7 +30,7 @@ export default class PlayerTop extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage("image/demo/player-top-down.png"),
+                        image: Game.assetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,

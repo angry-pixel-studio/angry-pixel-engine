@@ -6,17 +6,13 @@ export default class Mouse {
     public scrollButonPressed: boolean = false;
     public rightButtonPressed: boolean = false;
 
-    private game: Game = null;
     private viewportPosition: Vector2 = new Vector2(0, 0);
 
-    constructor(game: Game) {
-        this.game = game;
-
-        this.game.canvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
-
-        this.game.canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
-        this.game.canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
-        this.game.canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+    constructor() {
+        Game.canvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+        Game.canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
+        Game.canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
+        Game.canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
     }
 
     private updateButtonDown(event: MouseEvent) {
@@ -32,7 +28,7 @@ export default class Mouse {
     }
 
     private updatePosition(event: MouseEvent) {
-        const rect = this.game.canvas.getBoundingClientRect();
+        const rect: DOMRect = Game.canvas.getBoundingClientRect();
 
         this.viewportPosition.x = event.clientX - rect.left;
         this.viewportPosition.y = event.clientY - rect.top;

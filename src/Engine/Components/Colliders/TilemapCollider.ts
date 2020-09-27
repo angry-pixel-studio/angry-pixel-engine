@@ -1,3 +1,4 @@
+import Game from "../../Game";
 import Component from "./../../Component";
 import RectangleCollider from "./../../Core/Collision/RectangleCollider";
 
@@ -50,7 +51,7 @@ export default class TilemapCollider extends Component {
                         });
 
                         this.colliders.push(rectangleCollider);
-                        event.collisionManager.addCollider(rectangleCollider);
+                        Game.collisionManager.addCollider(rectangleCollider);
                     }
                 });
             }

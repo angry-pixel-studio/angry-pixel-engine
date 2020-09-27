@@ -1,3 +1,4 @@
+import Game from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
 import Vector2 from "../../Engine/Helper/Vector2";
 
@@ -10,10 +11,10 @@ export default class InputManager extends GameObject {
     mouse = null;
     camera = null;
 
-    start(event) {
-        this.keyboard = event.input.keyboard;
-        this.mouse = event.input.mouse;
-        this.camera = this.findGameObject("GameCamera").getComponent("Camera");
+    start() {
+        this.keyboard = Game.inputManager.keyboard;
+        this.mouse = Game.inputManager.mouse;
+        this.camera = this.findGameObjectByName("GameCamera").getComponent("Camera");
 
         this.update();
     }

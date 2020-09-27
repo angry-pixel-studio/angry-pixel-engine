@@ -7,6 +7,7 @@ import {
     PIVOT_BOTTOM_LEFT,
     PIVOT_BOTTOM_RIGHT,
 } from "../../Core/Rendering/RenderPivots";
+import Game from "../../Game";
 import Vector2 from "../../Helper/Vector2";
 import Sprite from "../../Sprite";
 
@@ -39,12 +40,12 @@ export default class SpriteRenderer extends Component {
         this.rotation = config.rotation ? config.rotation : this.rotation;
     }
 
-    start(event: Record<string, unknown>): void {
+    start(): void {
         this.goPosition = this.gameObject.transform.position;
-        this.update(event);
+        this.update();
     }
 
-    update(event: { [key: string]: any }): void {
+    update(): void {
         if (this.sprite.loaded === true) {
             this.renderData.ui = this.gameObject.ui;
             this.renderData.layer = this.gameObject.layer;
@@ -58,7 +59,7 @@ export default class SpriteRenderer extends Component {
 
             this.calculateRenderPosition();
 
-            event.renderManager.addToRenderStack(this.renderData);
+            Game.renderManager.addToRenderStack(this.renderData);
         }
     }
 

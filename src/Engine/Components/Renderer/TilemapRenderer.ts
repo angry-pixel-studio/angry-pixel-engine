@@ -1,5 +1,6 @@
 import Component from "../../Component";
 import RenderData from "../../Core/Rendering/RenderData";
+import Game from "../../Game";
 import Rectangle from "../../Helper/Rectangle";
 import Tileset from "../../Tileset";
 
@@ -28,11 +29,11 @@ export default class TilemapRenderer extends Component {
         this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
     }
 
-    start(event: Record<string, unknown>): void {
-        this.update(event);
+    start(): void {
+        this.update();
     }
 
-    update(event: { [key: string]: any }): void {
+    update(): void {
         if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();
@@ -42,7 +43,7 @@ export default class TilemapRenderer extends Component {
         }
 
         if (this.tileset.loaded && this.tilemapProcessd === true) {
-            this.processedData.forEach((renderData) => event.renderManager.addToRenderStack(renderData));
+            this.processedData.forEach((renderData) => Game.renderManager.addToRenderStack(renderData));
         }
     }
 

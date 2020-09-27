@@ -1,7 +1,7 @@
-import AssetManager from "../../Engine/AssetManager";
 import Animator from "../../Engine/Components/Animator";
 import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
+import Game from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Helper/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
@@ -38,7 +38,7 @@ export default class Bot extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage("image/demo/player-top-down.png"),
+                        image: Game.assetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,
@@ -61,7 +61,7 @@ export default class Bot extends GameObject {
 
     start() {
         this.player = this.findGameObjectByTag(TAG_PLAYER);
-        this.tilemap = this.findGameObject("Foreground").getComponent("TilemapRenderer");
+        this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
     }
 
     update(event) {

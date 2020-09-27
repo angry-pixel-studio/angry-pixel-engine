@@ -1,4 +1,4 @@
-import { EVENT_UPDATE } from "./Game";
+import Game, { EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
 
 export default abstract class Component {
@@ -6,7 +6,6 @@ export default abstract class Component {
     public gameObject: GameObject = null;
     public active: boolean = true;
     private firstFrame: boolean = true;
-    private processingLoop: boolean = false;
 
     constructor() {
         this.gameLoopEventHandler.bind(this);
@@ -14,11 +13,9 @@ export default abstract class Component {
     }
 
     private gameLoopEventHandler = (event: Event): void => {
-        if (this.active === false || this.processingLoop === true) {
+        if (this.active === false) {
             return;
         }
-
-        this.processingLoop = true;
 
         if (this.firstFrame === true) {
             this.start((event as CustomEvent).detail);
@@ -26,8 +23,6 @@ export default abstract class Component {
         } else {
             this.update((event as CustomEvent).detail);
         }
-
-        this.processingLoop = false;
     };
 
     protected start(event: unknown): void {
@@ -38,20 +33,20 @@ export default abstract class Component {
         // do nothing
     }
 
-    public getComponent<CType>(id: string): CType | null {
-        return this.gameObject.getComponent<CType>(id);
+    public getComponent<T extends Component>(id: string): T | null {
+        return this.gameObject.getComponent<T>(id);
     }
 
-    public findGameObject<OType>(id: string): OType | null {
-        return this.gameObject.scene.getGameObject<OType>(id);
-    }
-
-    public findGameObjectByTag<OType>(tag: string): OType | null {
-        return this.gameObject.scene.getGameObjectByTag<OType>(tag);
+    public findGameObjectByName<T extends GameObject>(name: string): T | null {
+        return Game.gameObjectManager.findGameObjectByName(name) as T;
     }
 
     public findGameObjectsByTag(tag: string): GameObject[] {
-        return this.gameObject.scene.getGameObjectsByTag(tag);
+        return Game.gameObjectManager.findGameObjectsByTag(tag);
+    }
+
+    public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     public _destroy(): void {

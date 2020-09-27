@@ -17,10 +17,10 @@ export default class Movements extends Component {
     walkingAnimation = false;
 
     start() {
-        this.tilemap = this.findGameObject("Foreground").getComponent("TilemapRenderer");
+        this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
         this.transform = this.getComponent("Transform");
         this.animator = this.getComponent("Animator");
-        this.inputManager = this.findGameObject("InputManager");
+        this.inputManager = this.findGameObjectByName("InputManager");
     }
 
     update(event) {

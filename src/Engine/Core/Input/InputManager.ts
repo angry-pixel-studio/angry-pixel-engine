@@ -1,14 +1,13 @@
 import Mouse from "./Mouse";
 import Keyboard from "./Keyboard";
-import Game from "../../Game";
 
-export default class Input {
+export default class InputManager {
     public mouse: Mouse = null;
     public keyboard: Keyboard = null;
     public gamepad: any = null;
 
-    constructor(game: Game) {
-        this.mouse = new Mouse(game);
+    constructor() {
+        this.mouse = new Mouse();
         this.keyboard = new Keyboard();
     }
 }

@@ -13,7 +13,7 @@ interface Config {
 }
 
 // TODO: unify this with the other RectangleCollider
-export default class RectangleCollider {
+export default class RectangleCollider implements ICollider {
     private rectangle: Rectangle;
     private renderData: RenderData;
     private layer: string;
@@ -26,6 +26,10 @@ export default class RectangleCollider {
         this.layer = layer;
 
         this.setupRenderData();
+    }
+
+    collidesWithLayer(layer: string): boolean {
+        throw new Error("Method not implemented.");
     }
 
     public getRectangle(): Rectangle {

@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 import Component from "./Component";
 import Transform from "./Components/Transform";
-import { EVENT_UPDATE } from "./Game";
+import { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import Game, { EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
 export const TRANSFORM_ID = "Transform";
 
 type componentFunction = () => Component;
-type gameObjectFunction = () => GameObject;
 
 export default class GameObject {
     private _uuid: string = uuidv4();
 
-    public id: string = null;
+    public name: string = null;
     public tag: string = null;
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
@@ -26,39 +26,13 @@ export default class GameObject {
     private components: Array<any> = [];
     private gameObjects: Array<any> = [];
     private inactiveComponents: Array<any> = [];
-    private inactiveGameObjects: Array<any> = [];
-    private processingLoop: boolean = false;
+    private inactiveChildren: Array<any> = [];
 
     constructor() {
         this.addComponent(() => new Transform(), TRANSFORM_ID);
 
         this.gameLoopEventHandler.bind(this);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-    }
-
-    gameLoopEventHandler = (event: Event): void => {
-        if (this.active === false || this.processingLoop === true) {
-            return;
-        }
-
-        this.processingLoop = true;
-
-        if (this.firstFrame === true) {
-            this.start((event as CustomEvent).detail);
-            this.firstFrame = false;
-        } else {
-            this.update((event as CustomEvent).detail);
-        }
-
-        this.processingLoop = false;
-    };
-
-    protected start(event: Record<string, unknown>): void {
-        // do nothing
-    }
-
-    protected update(event: Record<string, unknown>): void {
-        // do nothing
     }
 
     public get uuid(): string {
@@ -69,16 +43,46 @@ export default class GameObject {
         return this.getComponent<Transform>(TRANSFORM_ID);
     }
 
-    public findGameObject<OType>(id: string): OType | null {
-        return this.scene.getGameObject<OType>(id);
+    public get parent(): GameObject {
+        return this._parent;
     }
 
-    public findGameObjectByTag<OType>(tag: string): OType | null {
-        return this.scene.getGameObjectByTag<OType>(tag);
+    public set parent(parent: GameObject | null) {
+        this._parent = parent;
+        this.transform.update();
+    }
+
+    gameLoopEventHandler = (event: Event): void => {
+        if (this.active === false) {
+            return;
+        }
+
+        if (this.firstFrame === true) {
+            this.start((event as CustomEvent).detail);
+            this.firstFrame = false;
+        } else {
+            this.update((event as CustomEvent).detail);
+        }
+    };
+
+    protected start(event: Record<string, unknown>): void {
+        // do nothing
+    }
+
+    protected update(event: Record<string, unknown>): void {
+        // do nothing
+    }
+
+    public findGameObjectByName<T extends GameObject>(name: string): T | null {
+        return Game.gameObjectManager.findGameObjectByName(name) as T;
     }
 
     public findGameObjectsByTag(tag: string): GameObject[] {
-        return this.scene.getGameObjectsByTag(tag);
+        return Game.gameObjectManager.findGameObjectsByTag(tag);
+    }
+
+    public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     public addComponent(componentFunction: componentFunction, id: string | null = null): this {
@@ -120,58 +124,24 @@ export default class GameObject {
         });
     }
 
-    public get parent(): GameObject {
-        return this._parent;
-    }
-
-    public set parent(parent: GameObject | null) {
-        this._parent = parent;
-        this.transform.update();
-    }
-
-    public addChild(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
-        const gameObject = gameObjectFunction();
-        gameObject.id = id;
-        gameObject.parent = this;
-        gameObject.scene = this.scene;
-        this.gameObjects.push(gameObject);
+    public addChild(gameObjectFactory: GameObjectFactory, name: string): this {
+        Game.gameObjectManager.addGameObject(gameObjectFactory, this.scene, name, this);
 
         return this;
     }
 
     public getChildren(): GameObject[] {
-        return this.gameObjects;
+        return Game.gameObjectManager.findGameObjectsByParent(this);
     }
 
-    public getChild<CType>(id: string): CType | null {
-        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
-    }
-
-    public getChildrenByTag(tag: string): Array<GameObject> {
-        return this.gameObjects.filter((object) => object.tag === tag);
-    }
-
-    public getChildByTag<CType>(tag: string): CType | null {
-        const objects = this.gameObjects.filter((object) => object.tag === tag);
-        return objects.length > 0 ? objects[0] : null;
-    }
-
-    public destroyChild(id: string): void {
-        this.gameObjects.every((gameObject, index) => {
-            if (gameObject.id === id) {
-                gameObject._destroy();
-                delete this.gameObjects[index];
-
-                return false;
-            }
-        });
+    public getChild<T extends GameObject>(name: string): T {
+        return Game.gameObjectManager.findGameObjectByParentAndName(this, name) as T;
     }
 
     public destroyChildren(): void {
-        this.gameObjects.every((gameObject, index) => {
-            gameObject._destroy();
-            return delete this.gameObjects[index];
-        });
+        Game.gameObjectManager
+            .findGameObjectsByParent(this)
+            .every((gameObject) => Game.gameObjectManager.destroyGameObject(gameObject));
     }
 
     public setActive(value: boolean) {
@@ -179,8 +149,8 @@ export default class GameObject {
             .filter((component) => this.inactiveComponents.indexOf(component.id) === -1)
             .forEach((component) => (component.active = value));
 
-        this.gameObjects
-            .filter((gameObject) => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
+        this.getChildren()
+            .filter((gameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
             .forEach((gameObject) => gameObject.setActive(value));
 
         this.transform.update();
@@ -191,7 +161,7 @@ export default class GameObject {
         const component = this.getComponent<Component>(id);
 
         if (component === null) {
-            throw `Component ith id ${id} does not exists`;
+            throw new Error(`Component with id ${id} does not exists`);
         }
 
         const inactiveIndex = this.inactiveComponents.indexOf(id);
@@ -205,19 +175,19 @@ export default class GameObject {
         component.active = active;
     }
 
-    public setChildActive(id: string, active: boolean): void {
-        const gameObject = this.getChild<GameObject>(id);
+    public setChildActive(name: string, active: boolean): void {
+        const gameObject = this.getChild(name);
 
         if (gameObject === null) {
-            throw `GameObject with id ${id} does not exists`;
+            throw `GameObject with name ${name} does not exists`;
         }
 
-        const inactiveIndex = this.inactiveGameObjects.indexOf(id);
+        const inactiveIndex = this.inactiveChildren.indexOf(gameObject.uuid);
 
         if (active === false && inactiveIndex === -1) {
-            this.inactiveGameObjects.push(id);
+            this.inactiveChildren.push(gameObject.uuid);
         } else if (active === true && inactiveIndex !== -1) {
-            delete this.inactiveGameObjects[inactiveIndex];
+            delete this.inactiveChildren[inactiveIndex];
         }
 
         gameObject.setActive(active);
@@ -227,7 +197,6 @@ export default class GameObject {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.removeComponents();
-        this.destroyChildren();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
