@@ -1,12 +1,12 @@
 import Vector2 from "../../Helper/Vector2";
 import Rectangle from "./../../Helper/Rectangle";
 import ICollider from "./ICollider";
-import IColliderData from "./IColliderData";
+import IColliderData, { IParallelogram } from "./IColliderData";
 
 export default class QuadTree {
     // TODO: maxObjects and maxLevels should be calculated automatically based
     // on the size of the scene and set on the constructor.
-    readonly maxObjects: number = 5;
+    readonly maxObjects: number = 20;
     readonly maxLevels: number = 5;
 
     // Quads cardinal positions
@@ -16,7 +16,7 @@ export default class QuadTree {
     private readonly ne: number = 3;
 
     private level: number;
-    private objects: Array<ICollider> = [];
+    private objects: Array<IColliderData> = [];
     public quadrants: Array<QuadTree> = [];
     public bounds: Rectangle;
 
@@ -25,7 +25,7 @@ export default class QuadTree {
         this.bounds = bounds;
     }
 
-    public insert(object: ICollider): void {
+    public insert(object: IColliderData): void {
         if (this.hasQuadChildren()) {
             this.insertObjectIntoChildrenQuads(object);
 
@@ -43,8 +43,8 @@ export default class QuadTree {
         }
     }
 
-    public retrieve(collider: ICollider): Array<ICollider> {
-        const colliders: Array<ICollider> = [];
+    public retrieve(collider: IColliderData): Array<IColliderData> {
+        const colliders: Array<IColliderData> = [];
 
         if (this.hasQuadChildren()) {
             const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(collider);
@@ -92,7 +92,7 @@ export default class QuadTree {
         this.objects = [];
     }
 
-    private getChildrenQuadrantForObject(object: IColliderData): Array<QuadTree> {
+    private getChildrenQuadrantForObject(object: IParallelogram): Array<QuadTree> {
         if (this.quadrants.length === 0) {
             throw new Error("Current quadrant does not have quadrant children.");
         }
@@ -101,19 +101,19 @@ export default class QuadTree {
 
         const childrenQuadrants: Array<QuadTree> = [];
 
-        if (object.getRectangle().x <= midPointX && object.getRectangle().y1 <= midPointY) {
+        if (object.getBottomLeftPoint().x <= midPointX && object.getBottomLeftPoint().y <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.sw]);
         }
 
-        if (object.getRectangle().x1 >= midPointX && object.getRectangle().y1 <= midPointY) {
+        if (object.getBottomRightPoint().x >= midPointX && object.getBottomRightPoint().y <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.se]);
         }
 
-        if (object.getRectangle().x <= midPointX && object.getRectangle().y >= midPointY) {
+        if (object.getTopLeftPoint().x <= midPointX && object.getTopLeftPoint().y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.nw]);
         }
 
-        if (object.getRectangle().x1 >= midPointX && object.getRectangle().y >= midPointY) {
+        if (object.getTopRightPoint().x >= midPointX && object.getTopRightPoint().y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.ne]);
         }
 
@@ -124,7 +124,7 @@ export default class QuadTree {
         return childrenQuadrants;
     }
 
-    private insertObjectIntoChildrenQuads(object: ICollider) {
+    private insertObjectIntoChildrenQuads(object: IColliderData) {
         const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(object);
         for (const quadrant of quadrants) {
             quadrant.insert(object);

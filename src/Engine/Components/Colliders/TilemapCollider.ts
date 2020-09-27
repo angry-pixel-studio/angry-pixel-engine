@@ -51,8 +51,7 @@ export default class TilemapCollider extends Component {
                             layer: this.gameObject.layer,
                         });
 
-                        //this.colliders.push(rectangleCollider);
-                        //event.collisionManager.addCollider(rectangleCollider);
+                        this.colliders.push(rectangleCollider);
                     }
                 });
             }
