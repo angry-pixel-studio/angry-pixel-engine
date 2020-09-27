@@ -1,6 +1,7 @@
 import Vector2 from "../../Helper/Vector2";
 import Rectangle from "./../../Helper/Rectangle";
 import ICollider from "./ICollider";
+import IColliderData from "./IColliderData";
 
 export default class QuadTree {
     // TODO: maxObjects and maxLevels should be calculated automatically based
@@ -73,16 +74,15 @@ export default class QuadTree {
 
     private splitQuad(): void {
         const { x: midPointX, y: midPointY } = this.getQuadrantMidPoint();
-
         const newLevel: number = this.level + 1;
         const newWidth = this.bounds.width / 2;
         const newHeight = this.bounds.height / 2;
 
         this.quadrants = [
+            new QuadTree(newLevel, new Rectangle(midPointX - newWidth, midPointY - newHeight, newWidth, newHeight)),
+            new QuadTree(newLevel, new Rectangle(midPointX, midPointY - newHeight, newWidth, newHeight)),
             new QuadTree(newLevel, new Rectangle(midPointX - newWidth, midPointY, newWidth, newHeight)),
             new QuadTree(newLevel, new Rectangle(midPointX, midPointY, newWidth, newHeight)),
-            new QuadTree(newLevel, new Rectangle(midPointX - newWidth, midPointY + newHeight, newWidth, newHeight)),
-            new QuadTree(newLevel, new Rectangle(midPointX, midPointY + newHeight, newWidth, newHeight)),
         ];
 
         for (const object of this.objects) {
@@ -92,7 +92,7 @@ export default class QuadTree {
         this.objects = [];
     }
 
-    private getChildrenQuadrantForObject(object: ICollider): Array<QuadTree> {
+    private getChildrenQuadrantForObject(object: IColliderData): Array<QuadTree> {
         if (this.quadrants.length === 0) {
             throw new Error("Current quadrant does not have quadrant children.");
         }
@@ -132,7 +132,7 @@ export default class QuadTree {
     }
 
     private getQuadrantMidPoint(): Vector2 {
-        return new Vector2(this.bounds.width / 2 + this.bounds.x, (this.bounds.height / 2 - this.bounds.y) * -1);
+        return new Vector2(this.bounds.width / 2 + this.bounds.x, this.bounds.height / 2 + this.bounds.y);
     }
 
     private hasQuadChildren(): boolean {

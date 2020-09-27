@@ -4,19 +4,21 @@ import Vector2 from "./../../Helper/Vector2";
 import RenderData, { GEOMETRIC_RECTANGLE } from "./../Rendering/RenderData";
 import RenderManager from "./../Rendering/RenderManager";
 import ICollider from "./ICollider";
+import IColliderData, { IParallelogram } from "./IColliderData";
 import QuadTree from "./QuadTree";
 
 export default class CollisionManager {
     private debug: boolean = true;
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];
+    private colliders2: Array<IColliderData> = [];
     private quad: QuadTree;
 
     constructor(renderManager: RenderManager) {
         this.renderManager = renderManager;
 
         // TODO: remove hardcoded quad size
-        this.quad = new QuadTree(0, new Rectangle(-1025, 700, 2050, 1400));
+        this.quad = new QuadTree(0, new Rectangle(-1025, -700, 2050, 1400));
     }
 
     public prepare(): void {
@@ -25,23 +27,24 @@ export default class CollisionManager {
         this.refreshQuad();
     }
 
-    public addCollider(collider: ICollider): void {
+    public addCollider(collider: ICollider, collider2: IColliderData): void {
         this.colliders.push(collider);
+        this.colliders2.push(collider2);
     }
 
-    public getCollisionsForCollider(collider: ICollider): Array<ICollider> {
+    public getCollisionsForCollider(collider: IColliderData): Array<ICollider> {
         const colliders = this.broadPhase(collider);
 
         return this.narrowPhase(collider, colliders);
     }
 
     // broadPhase takes care of looking for possible collisions
-    private broadPhase(collider: ICollider) {
+    private broadPhase(collider: IColliderData): IColliderData[] {
         return this.quad.retrieve(collider);
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<ICollider> {
+    private narrowPhase(collider: IColliderData, colliders: Array<IColliderData>): Array<ICollider> {
         const collisions: Array<ICollider> = [];
         for (const c of colliders) {
             if (this.checkCollision(collider, c)) {
@@ -60,12 +63,12 @@ export default class CollisionManager {
     }
 
     // TODO: Make this agnostic of which shapes is checking
-    private checkCollision(collider1: ICollider, colldier2: ICollider) {
+    private checkCollision(collider1: IParallelogram, collider2: IParallelogram) {
         return (
-            collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
-            collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
-            collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
-            collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
+            collider1.getBottomLeftPoint().x < collider2.getBottomRightPoint().x &&
+            collider1.getBottomRightPoint().x > collider2.getBottomLeftPoint().x &&
+            collider1.getBottomLeftPoint().y < collider2.getTopLeftPoint().y &&
+            collider1.getTopLeftPoint().y > collider2.getBottomLeftPoint().y
         );
     }
 

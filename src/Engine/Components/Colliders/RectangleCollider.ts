@@ -112,16 +112,8 @@ export default class RectangleCollider extends Component {
         }
 
         this.rectangle.x = this.gameObject.transform.position.x - this.rectangle.width / 2 - this.offsetX;
-        this.rectangle.y = this.gameObject.transform.position.y + this.rectangle.height / 2 + this.offsetY;
+        this.rectangle.y = this.gameObject.transform.position.y - this.rectangle.height / 2 - this.offsetY;
         this.setColliderData(this.rectangle.x, this.rectangle.y, this.rectangle.width, this.rectangle.height);
-    }
-
-    // TODO: find a nicer way to setup the render data
-    private setupRenderData(): void {
-        this.renderData.layer = LAYER_DEFAULT;
-        this.renderData.geometric = this.rectangle;
-        this.renderData.geometricType = GEOMETRIC_RECTANGLE;
-        this.renderData.color = "#00FF00";
     }
 
     private setColliderData(x: number, y: number, width: number, height: number): void {
@@ -134,5 +126,13 @@ export default class RectangleCollider extends Component {
             ],
             type: GeometricShape.parallelogram,
         };
+    }
+
+    // TODO: find a nicer way to setup the render data
+    private setupRenderData(): void {
+        this.renderData.layer = LAYER_DEFAULT;
+        this.renderData.geometric = this.rectangle;
+        this.renderData.geometricType = GEOMETRIC_RECTANGLE;
+        this.renderData.color = "#00FF00";
     }
 }

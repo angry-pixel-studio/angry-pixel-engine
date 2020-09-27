@@ -43,16 +43,16 @@ export default class TilemapCollider extends Component {
 
                         const rectangleCollider = new RectangleCollider({
                             x: posX - offsetX,
-                            y: posY - offsetY + this.tileHeight,
-                            offsetX: 0,
-                            offsetY: 0,
+                            y: posY - offsetY,
                             width: this.tileWidth,
                             height: this.tileHeight,
+                            offsetX: 0,
+                            offsetY: 0,
                             layer: this.gameObject.layer,
                         });
 
-                        this.colliders.push(rectangleCollider);
-                        event.collisionManager.addCollider(rectangleCollider);
+                        //this.colliders.push(rectangleCollider);
+                        //event.collisionManager.addCollider(rectangleCollider);
                     }
                 });
             }
