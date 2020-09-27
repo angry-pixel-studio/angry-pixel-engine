@@ -7,7 +7,7 @@ import ICollider from "./ICollider";
 import QuadTree from "./QuadTree";
 
 export default class CollisionManager {
-    private debug: boolean = false;
+    private debug: boolean = true;
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];
     private quad: QuadTree;

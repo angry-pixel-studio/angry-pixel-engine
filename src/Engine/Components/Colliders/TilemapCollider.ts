@@ -1,5 +1,5 @@
 import Component from "./../../Component";
-import RectangleCollider from "./../../Core/Collision/RectangleCollider";
+import RectangleCollider from "./../../Components/Colliders/RectangleCollider";
 
 interface Config {
     tilemapData: string;
@@ -43,7 +43,9 @@ export default class TilemapCollider extends Component {
 
                         const rectangleCollider = new RectangleCollider({
                             x: posX - offsetX,
-                            y: posY - offsetY,
+                            y: posY - offsetY + this.tileHeight,
+                            offsetX: 0,
+                            offsetY: 0,
                             width: this.tileWidth,
                             height: this.tileHeight,
                             layer: this.gameObject.layer,

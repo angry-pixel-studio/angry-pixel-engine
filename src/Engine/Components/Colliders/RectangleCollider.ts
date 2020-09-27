@@ -4,6 +4,7 @@ import RenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData
 import Rectangle from "./../../Helper/Rectangle";
 import Vector2 from "./../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
+import IColliderData, { GeometricShape } from "../../Core/Collision/IColliderData";
 
 interface Config {
     x: number;
@@ -12,12 +13,13 @@ interface Config {
     height: number;
     offsetX: number;
     offsetY: number;
+    layer: string | null;
 }
 
-// TODO: unify this with the other RectangleCollider
 export default class RectangleCollider extends Component {
     private rectangle: Rectangle;
     private renderData: RenderData;
+    private colliderData: IColliderData;
 
     private offsetX: number;
     private offsetY: number;
@@ -26,8 +28,10 @@ export default class RectangleCollider extends Component {
 
     private collisionManager: CollisionManager;
 
-    constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0 }: Config) {
+    constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0, layer }: Config) {
         super();
+
+        this.setColliderData(x + offsetX, y + offsetY, width, height);
 
         this.rectangle = new Rectangle(x, y, width, height);
         this.renderData = new RenderData();
@@ -35,18 +39,21 @@ export default class RectangleCollider extends Component {
 
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+
+        this.layer = layer;
     }
 
     protected start(event: { [key: string]: any }): void {
         this.collisionManager = event.collisionManager;
-
-        this.collisionManager.addCollider(this);
+        this.collisionManager.addCollider(this, this.colliderData);
 
         this.setupRenderData();
         this.updateRectangleCoordinates();
         this.updateRenderDataPosition();
 
-        this.layer = this.gameObject.layer;
+        if (this.layer === null && this.gameObject !== null) {
+            this.layer = this.gameObject.layer;
+        }
     }
 
     protected update(event: { [key: string]: any }): void {
@@ -78,14 +85,35 @@ export default class RectangleCollider extends Component {
         return this.layer;
     }
 
+    public getBottomLeftPoint(): Vector2 {
+        return this.colliderData.points[0];
+    }
+
+    public getBottomRightPoint(): Vector2 {
+        return this.colliderData.points[1];
+    }
+
+    public getTopLeftPoint(): Vector2 {
+        return this.colliderData.points[2];
+    }
+
+    public getTopRightPoint(): Vector2 {
+        return this.colliderData.points[3];
+    }
+
     private updateRenderDataPosition() {
         this.renderData.position.x = this.rectangle.x;
         this.renderData.position.y = this.rectangle.y;
     }
 
     private updateRectangleCoordinates() {
+        if (this.gameObject === null) {
+            return;
+        }
+
         this.rectangle.x = this.gameObject.transform.position.x - this.rectangle.width / 2 - this.offsetX;
         this.rectangle.y = this.gameObject.transform.position.y + this.rectangle.height / 2 + this.offsetY;
+        this.setColliderData(this.rectangle.x, this.rectangle.y, this.rectangle.width, this.rectangle.height);
     }
 
     // TODO: find a nicer way to setup the render data
@@ -94,5 +122,17 @@ export default class RectangleCollider extends Component {
         this.renderData.geometric = this.rectangle;
         this.renderData.geometricType = GEOMETRIC_RECTANGLE;
         this.renderData.color = "#00FF00";
+    }
+
+    private setColliderData(x: number, y: number, width: number, height: number): void {
+        this.colliderData = {
+            points: [
+                new Vector2(x, y),
+                new Vector2(x + width, y),
+                new Vector2(x, y + height),
+                new Vector2(x + width, y + height),
+            ],
+            type: GeometricShape.parallelogram,
+        };
     }
 }

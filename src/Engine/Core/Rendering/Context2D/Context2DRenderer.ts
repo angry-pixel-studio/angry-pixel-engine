@@ -132,9 +132,9 @@ export default class Context2DRenderer implements IContextRenderer {
                 this.canvasContext.strokeStyle = renderData.color;
                 this.canvasContext.strokeRect(
                     this.renderPosition.x,
-                    this.renderPosition.y,
+                    this.renderPosition.y + renderData.geometric.height,
                     renderData.geometric.width,
-                    renderData.geometric.height
+                    renderData.geometric.height * -1
                 );
                 break;
         }
