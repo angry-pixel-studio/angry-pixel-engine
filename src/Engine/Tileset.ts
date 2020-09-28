@@ -43,10 +43,10 @@ export default class Tileset {
     }
 
     private generateTiles(): void {
-        let index = 0;
+        let index: number = 0;
 
-        for (let row = 0; row < this.gridHeight; row++) {
-            for (let col = 0; col < this.gridWidth; col++) {
+        for (let row: number = 0; row < this.gridHeight; row++) {
+            for (let col: number = 0; col < this.gridWidth; col++) {
                 this._tiles[index] = new Rectangle(
                     col * this.tileWidth + this.offset.x + this.tileOffset.x,
                     row * this.tileHeight - this.offset.y - this.tileOffset.y,

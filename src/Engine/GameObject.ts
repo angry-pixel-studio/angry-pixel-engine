@@ -8,10 +8,10 @@ import Scene from "./Scene";
 export const LAYER_DEFAULT = "Default";
 export const TRANSFORM_ID = "Transform";
 
-type componentFunction = () => Component;
+type ComponentConstructor = () => Component;
 
 export default class GameObject {
-    private _uuid: string = uuidv4();
+    private readonly _uuid: string = uuidv4();
 
     public name: string = null;
     public tag: string = null;
@@ -23,10 +23,9 @@ export default class GameObject {
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
-    private components: Array<any> = [];
-    private gameObjects: Array<any> = [];
-    private inactiveComponents: Array<any> = [];
-    private inactiveChildren: Array<any> = [];
+    private components: Component[] = [];
+    private inactiveComponents: string[] = [];
+    private inactiveChildren: string[] = [];
 
     constructor() {
         this.addComponent(() => new Transform(), TRANSFORM_ID);
@@ -85,9 +84,9 @@ export default class GameObject {
         return Game.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
-    public addComponent(componentFunction: componentFunction, id: string | null = null): this {
-        const component = componentFunction();
-        component.id = id;
+    public addComponent(componentConstructor: ComponentConstructor, name: string | null = null): this {
+        const component = componentConstructor();
+        component.name = name;
         component.gameObject = this;
         this.components.push(component);
 
@@ -98,17 +97,17 @@ export default class GameObject {
         return this.components;
     }
 
-    public getComponent<CType>(id: string): CType | null {
-        return this.components.reduce((prev, component) => (component.id === id ? component : prev), null);
+    public getComponent<T extends Component>(name: string): T | null {
+        return this.components.reduce((prev, component) => (component.name === name ? component : prev), null) as T;
     }
 
-    public hasComponent(id: string): boolean {
-        return this.getComponent(id) !== null;
+    public hasComponent(name: string): boolean {
+        return this.getComponent(name) !== null;
     }
 
-    public removeComponent(id: string): void {
-        this.components.every((component, index) => {
-            if (component.id === id) {
+    public removeComponent(name: string): void {
+        this.components.every((component: Component, index: number) => {
+            if (component.name === name) {
                 component._destroy();
                 delete this.components[index];
 
@@ -118,10 +117,12 @@ export default class GameObject {
     }
 
     public removeComponents(): void {
-        this.components.every((component, index) => {
+        this.components.every((component: Component, index: number) => {
             component._destroy();
             return delete this.components[index];
         });
+
+        this.components = [];
     }
 
     public addChild(gameObjectFactory: GameObjectFactory, name: string): this {
@@ -141,33 +142,33 @@ export default class GameObject {
     public destroyChildren(): void {
         Game.gameObjectManager
             .findGameObjectsByParent(this)
-            .every((gameObject) => Game.gameObjectManager.destroyGameObject(gameObject));
+            .every((gameObject: GameObject) => Game.gameObjectManager.destroyGameObject(gameObject));
     }
 
     public setActive(value: boolean) {
         this.components
-            .filter((component) => this.inactiveComponents.indexOf(component.id) === -1)
-            .forEach((component) => (component.active = value));
+            .filter((component: Component) => this.inactiveComponents.indexOf(component.uuid) === -1)
+            .forEach((component: Component) => (component.active = value));
 
         this.getChildren()
-            .filter((gameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
-            .forEach((gameObject) => gameObject.setActive(value));
+            .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
+            .forEach((gameObject: GameObject) => gameObject.setActive(value));
 
         this.transform.update();
         this.active = value;
     }
 
-    public setComponentActive(id: string, active: boolean): void {
-        const component = this.getComponent<Component>(id);
+    public setComponentActive(name: string, active: boolean): void {
+        const component = this.getComponent(name);
 
         if (component === null) {
-            throw new Error(`Component with id ${id} does not exists`);
+            throw new Error(`Component with id ${name} does not exists`);
         }
 
-        const inactiveIndex = this.inactiveComponents.indexOf(id);
+        const inactiveIndex = this.inactiveComponents.indexOf(component.uuid);
 
         if (active === false && inactiveIndex === -1) {
-            this.inactiveComponents.push(id);
+            this.inactiveComponents.push(component.uuid);
         } else if (active === true && inactiveIndex !== -1) {
             delete this.inactiveComponents[inactiveIndex];
         }

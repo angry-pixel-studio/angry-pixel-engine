@@ -1,8 +1,10 @@
+import { v4 as uuidv4 } from "uuid";
 import Game, { EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
 
 export default abstract class Component {
-    public id: string = null;
+    private readonly _uuid: string = uuidv4();
+    public name: string = null;
     public gameObject: GameObject = null;
     public active: boolean = true;
     private firstFrame: boolean = true;
@@ -10,6 +12,10 @@ export default abstract class Component {
     constructor() {
         this.gameLoopEventHandler.bind(this);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+    }
+
+    public get uuid(): string {
+        return this._uuid;
     }
 
     private gameLoopEventHandler = (event: Event): void => {
@@ -33,8 +39,8 @@ export default abstract class Component {
         // do nothing
     }
 
-    public getComponent<T extends Component>(id: string): T | null {
-        return this.gameObject.getComponent<T>(id);
+    public getComponent<T extends Component>(name: string): T | null {
+        return this.gameObject.getComponent<T>(name);
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {

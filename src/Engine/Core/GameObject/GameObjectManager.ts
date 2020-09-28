@@ -13,7 +13,7 @@ export default class GameObjectManager {
         parent: GameObject | null = null
     ): GameObject {
         if (this.findGameObjectByName(name)) {
-            throw new Error(`There is already a GameObject with name ${name}`);
+            throw new Error(`There is already a GameObject with the name ${name}`);
         }
 
         const gameObject: GameObject = gameObjectFactory();
