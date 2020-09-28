@@ -27,7 +27,7 @@ export default class Game {
     private deltaTime: number = 0;
 
     constructor(containerElement: HTMLElement, width: number, height: number) {
-        this.createCanvas(containerElement, width, height);
+        this.setupCanvas(containerElement, width, height);
         Game.sceneManager.game = this;
     }
 
@@ -35,7 +35,7 @@ export default class Game {
         return this._running;
     }
 
-    private createCanvas(container: HTMLElement, width: number, height: number): void {
+    private setupCanvas(container: HTMLElement, width: number, height: number): void {
         Game.canvas.id = CANVAS_ID;
         Game.canvas.width = width;
         Game.canvas.height = height;
@@ -66,7 +66,7 @@ export default class Game {
     private gameLoop(time: number): void {
         this._running = true;
 
-        const now = time * 0.001;
+        const now: number = time * 0.001;
         this.deltaTime = Math.min(0.1, now - this.then);
         this.then = now;
 
@@ -74,6 +74,8 @@ export default class Game {
         Game.collisionManager.prepare();
 
         this.dispatchFrameEvent(EVENT_UPDATE);
+
+        Game.renderManager.render();
 
         this.requestAnimationFrame();
     }
@@ -94,7 +96,7 @@ export default class Game {
         this.frameRequestId = window.requestAnimationFrame((time) => this.gameLoop(time));
     }
 
-    dispatchFrameEvent(event: string) {
+    private dispatchFrameEvent(event: string): void {
         window.dispatchEvent(
             new CustomEvent(event, {
                 detail: {

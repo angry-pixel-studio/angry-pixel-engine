@@ -28,7 +28,10 @@ export default class Camera extends Component {
 
     update(): void {
         this.updateWorldSpaceRect();
-        Game.renderManager.render(this._renderLayers, this._worldSpaceRect, this._viewportRect);
+
+        Game.renderManager.renderLayers = this._renderLayers;
+        Game.renderManager.viewportRect = this._viewportRect;
+        Game.renderManager.worldSpaceViewRect = this._worldSpaceRect;
     }
 
     private updateWorldSpaceRect(): void {

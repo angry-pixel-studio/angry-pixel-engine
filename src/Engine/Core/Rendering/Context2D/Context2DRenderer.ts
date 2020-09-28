@@ -149,7 +149,15 @@ export default class Context2DRenderer implements IContextRenderer {
     }
 
     private updateRenderPosition(renderData: RenderData, viewRect: Rectangle) {
-        this.renderPosition.x = Number((renderData.position.x - viewRect.x).toFixed(0));
-        this.renderPosition.y = Number((viewRect.y - renderData.position.y).toFixed(0));
+        this.renderPosition.x = renderData.position.x;
+        this.renderPosition.y = renderData.position.y;
+
+        /*if (renderData.image) {
+            this.renderPosition.x -= Math.floor(renderData.width / 2);
+            this.renderPosition.y += Math.floor(renderData.height / 2);
+        }*/
+
+        this.renderPosition.x = Number((this.renderPosition.x - viewRect.x).toFixed(0));
+        this.renderPosition.y = Number((viewRect.y - this.renderPosition.y).toFixed(0));
     }
 }
