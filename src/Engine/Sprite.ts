@@ -15,7 +15,8 @@ export default class Sprite {
     public slice: Rectangle = null;
     public scale: Vector2 = null;
     public smooth: boolean = true;
-    public loaded: boolean = false;
+
+    private _loaded: boolean = false;
 
     constructor({ image, slice, scale, smooth }: config) {
         this.image = image;
@@ -36,6 +37,10 @@ export default class Sprite {
         }
     }
 
+    public get loaded(): boolean {
+        return this._loaded;
+    }
+
     private onLoad(): void {
         this.width = this.width === null ? this.image.naturalWidth : this.width;
         this.height = this.height === null ? this.image.naturalHeight : this.height;
@@ -45,6 +50,6 @@ export default class Sprite {
             this.height *= this.scale.y;
         }
 
-        this.loaded = true;
+        this._loaded = true;
     }
 }

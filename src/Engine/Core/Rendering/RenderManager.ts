@@ -1,43 +1,49 @@
 import RenderData from "./RenderData";
-
 import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 import IContextRenderer from "./IContextRenderer";
 
 export default class RenderManager {
-    private renderStack: Array<RenderData> = [];
     private contextRenderer: IContextRenderer = null;
+    private renderStack: RenderData[] = [];
+    private _renderLayers: string[] = [];
+    private _worldSpaceViewRect: Rectangle = new Rectangle(0, 0, 0, 0);
+    private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
     constructor(contextRenderer: IContextRenderer) {
         this.contextRenderer = contextRenderer;
     }
 
-    public addToRenderStack(renderData: RenderData): void {
-        this.renderStack.push(renderData);
+    public set renderLayers(renderLayers: string[]) {
+        this._renderLayers = [...renderLayers];
     }
 
-    public getRenderStack(): Array<RenderData> {
-        return this.renderStack;
+    public set worldSpaceViewRect(worldSpaceRect: Rectangle) {
+        this._worldSpaceViewRect.updateFromRect(worldSpaceRect);
     }
 
-    public shiftFromRenderStack(): RenderData {
-        return this.renderStack[0] !== undefined ? this.renderStack.shift() : null;
-    }
-
-    public clearRenderStack() {
-        this.renderStack = [];
+    public set viewportRect(viewportRect: Rectangle) {
+        this._viewportRect.updateFromRect(viewportRect);
     }
 
     public clearCanvas(color: string | null = null) {
         this.contextRenderer.clearCanvas(color);
     }
 
-    public render(renderLayers: Array<string>, worldSpaceViewRect: Rectangle, viewportRect: Rectangle) {
-        this.renderStack.forEach((renderData) => {
-            if (renderLayers.includes(renderData.layer) === false) {
+    public addToRenderStack(renderData: RenderData): void {
+        this.renderStack.push(renderData);
+    }
+
+    public clearRenderStack() {
+        this.renderStack = [];
+    }
+
+    public render() {
+        this.renderStack.forEach((renderData: RenderData) => {
+            if (this._renderLayers.includes(renderData.layer) === false) {
                 return;
             }
 
-            this.contextRenderer.render(renderData, worldSpaceViewRect, viewportRect);
+            this.contextRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
         });
 
         this.clearRenderStack();

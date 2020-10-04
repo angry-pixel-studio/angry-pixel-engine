@@ -1,7 +1,6 @@
-import AssetManager from "../../Engine/AssetManager";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
+import Game from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
-import Rectangle from "../../Engine/Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
 import { LAYER_PROJECTILE } from "../Config/renderLayers";
@@ -33,7 +32,7 @@ export default class Projectile extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage("image/demo/projectile.png"),
+                        image: Game.assetManager.getImage("image/demo/projectile.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),

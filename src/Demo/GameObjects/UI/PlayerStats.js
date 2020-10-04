@@ -3,7 +3,7 @@ import TextRenderer from "../../../Engine/Components/Renderer/TextRenderer";
 import SpriteRenderer from "../../../Engine/Components/Renderer/SpriteRenderer";
 import Sprite from "../../../Engine/Sprite";
 import Vector2 from "../../../Engine/Helper/Vector2";
-import AssetManager from "../../../Engine/AssetManager";
+import Game from "../../../Engine/Game";
 
 export default class PlayerStats extends GameObject {
     constructor() {
@@ -28,7 +28,7 @@ export default class PlayerStats extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage("image/demo/avatar.png"),
+                        image: Game.assetManager.getImage("image/demo/avatar.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
@@ -38,7 +38,7 @@ export default class PlayerStats extends GameObject {
         );
     }
 
-    start(event) {
-        this.transform.position.set(100 - event.canvas.clientWidth / 2, event.canvas.clientHeight / 2 - 50);
+    start() {
+        this.transform.position.set(100 - Game.canvas.clientWidth / 2, Game.canvas.clientHeight / 2 - 50);
     }
 }

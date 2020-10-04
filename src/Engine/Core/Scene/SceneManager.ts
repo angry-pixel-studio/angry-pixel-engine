@@ -1,26 +1,26 @@
 import Game from "../../Game";
 import Scene from "../../Scene";
 
-type sceneFunction = () => Scene;
+export type SceneConstructor = () => Scene;
 
 export default class SceneManager {
-    private game: Game = null;
-    private scenes: { [id: string]: sceneFunction } = {};
+    private _game: Game = null;
+    private scenes: { [id: string]: SceneConstructor } = {};
     private currentScene: Scene = null;
     private openingSceneName: string = null;
 
     public currentSceneName: string;
 
-    constructor(game: Game) {
-        this.game = game;
+    public set game(game: Game) {
+        this._game = game;
     }
 
-    public addScene(name: string, sceneFunction: sceneFunction, openingScene: boolean = false): void {
+    public addScene(name: string, SceneConstructor: SceneConstructor, openingScene: boolean = false): void {
         if (typeof this.scenes[name] === "function") {
             throw new Error(`There is already a scene with the name '${name}'`);
         }
 
-        this.scenes[name] = sceneFunction;
+        this.scenes[name] = SceneConstructor;
 
         if (openingScene === true || this.openingSceneName === null) {
             this.openingSceneName = name;
@@ -32,19 +32,23 @@ export default class SceneManager {
     }
 
     public loadScene(name: string): void {
-        const resetLoop = this.game.running;
+        if (this._game === null) {
+            throw new Error("Game not initialized.");
+        }
+
+        const resetLoop = this._game.running;
 
         if (resetLoop) {
-            this.game.stopLoop();
+            this._game.stopLoop();
         }
 
         this.unloadCurrentScene();
         this.currentScene = this.scenes[name]();
         this.currentScene.name = name;
-        this.currentScene.game = this.game;
+        this.currentScene.game = this._game;
 
         if (resetLoop) {
-            this.game.resumeLoop();
+            this._game.resumeLoop();
         }
     }
 
@@ -54,7 +58,7 @@ export default class SceneManager {
             this.currentScene = null;
             this.currentSceneName = null;
 
-            this.game.renderManager.clearRenderStack();
+            Game.renderManager.clearRenderStack();
         }
     }
 }

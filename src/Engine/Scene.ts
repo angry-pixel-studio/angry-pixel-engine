@@ -1,40 +1,29 @@
 import GameCamera from "./GameObjects/GameCamera";
 import Game, { EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
+import { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 
 export const GAME_CAMERA_ID = "GameCamera";
-
-type gameObjectFunction = () => GameObject;
 
 export default class Scene {
     public game: Game = null;
     public name: string = null;
-    private gameObjects: Array<any> = [];
     private firstFrame: boolean = true;
-    private processingLoop: boolean = false;
 
     constructor() {
-        this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
-
-        this.gameLoopEventHandler.bind(this);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+
+        this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
+        this.gameLoopEventHandler.bind(this);
     }
 
     gameLoopEventHandler = (event: Event): void => {
-        if (this.processingLoop === true) {
-            return;
-        }
-
-        this.processingLoop = true;
-
         if (this.firstFrame === true) {
             this.start((event as CustomEvent).detail);
             this.firstFrame = false;
         } else {
             this.update((event as CustomEvent).detail);
         }
-
-        this.processingLoop = false;
     };
 
     protected start(event: Record<string, unknown>): void {
@@ -46,57 +35,46 @@ export default class Scene {
     }
 
     public get gameCamera(): GameCamera {
-        return this.getGameObject(GAME_CAMERA_ID);
+        return this.findGameObjectByName(GAME_CAMERA_ID);
     }
 
-    public addGameObject(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
-        const gameObject = gameObjectFunction();
-        gameObject.id = id;
-        gameObject.scene = this;
-        this.gameObjects.push(gameObject);
+    public addGameObject(gameObjectFactory: GameObjectFactory, name: string): this {
+        Game.gameObjectManager.addGameObject(gameObjectFactory, this, name);
 
         return this;
     }
 
-    public getGameObjects(): GameObject[] {
-        return this.gameObjects;
+    public getRootGameObjects(): GameObject[] {
+        return Game.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.parent === null);
     }
 
-    public getGameObject<OType>(id: string): OType {
-        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
+    public findGameObjectByName<T extends GameObject>(name: string): T | null {
+        return Game.gameObjectManager.findGameObjectByName(name) as T;
     }
 
-    public getGameObjectsByTag(tag: string): GameObject[] {
-        return this.gameObjects.filter((object) => object.tag === tag);
+    public findGameObjectsByTag(tag: string): GameObject[] {
+        return Game.gameObjectManager.findGameObjectsByTag(tag);
     }
 
-    public getGameObjectByTag<OType>(tag: string): OType | null {
-        const objects = this.gameObjects.filter((object) => object.tag === tag);
-        return objects.length > 0 ? objects[0] : null;
+    public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
-    public destroyGameObject(id: string): void {
-        this.gameObjects.every((gameObject, index) => {
-            if (gameObject.id === id) {
-                gameObject._destroy();
-                delete this.gameObjects[index];
+    public destroyGameObject(name: string): void {
+        const gameObject = this.findGameObjectByName(name);
 
-                return false;
-            }
-        });
+        if (gameObject !== null) {
+            Game.gameObjectManager.destroyGameObject(gameObject);
+        }
     }
 
-    public destroyGameObjects(): void {
-        this.gameObjects.every((gameObject, index) => {
-            gameObject._destroy();
-            return delete this.gameObjects[index];
-        });
+    public destroyAllGameObjects(): void {
+        Game.gameObjectManager.destroyAllGameObjects();
     }
 
     public _destroy(): void {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-
-        this.destroyGameObjects();
+        Game.gameObjectManager.destroyAllGameObjects();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);

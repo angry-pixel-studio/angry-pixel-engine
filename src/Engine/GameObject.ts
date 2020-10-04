@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 import Component from "./Component";
 import Transform from "./Components/Transform";
-import { EVENT_UPDATE } from "./Game";
+import { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import Game, { EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
 export const TRANSFORM_ID = "Transform";
 
-type componentFunction = () => Component;
-type gameObjectFunction = () => GameObject;
+type ComponentConstructor = () => Component;
 
 export default class GameObject {
-    private _uuid: string = uuidv4();
+    private readonly _uuid: string = uuidv4();
 
-    public id: string = null;
+    public name: string = null;
     public tag: string = null;
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
@@ -23,11 +23,9 @@ export default class GameObject {
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
-    private components: Array<any> = [];
-    private gameObjects: Array<any> = [];
-    private inactiveComponents: Array<any> = [];
-    private inactiveGameObjects: Array<any> = [];
-    private processingLoop: boolean = false;
+    private components: Component[] = [];
+    private inactiveComponents: string[] = [];
+    private inactiveChildren: string[] = [];
 
     constructor() {
         this.addComponent(() => new Transform(), TRANSFORM_ID);
@@ -36,88 +34,12 @@ export default class GameObject {
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
-    gameLoopEventHandler = (event: Event): void => {
-        if (this.active === false || this.processingLoop === true) {
-            return;
-        }
-
-        this.processingLoop = true;
-
-        if (this.firstFrame === true) {
-            this.start((event as CustomEvent).detail);
-            this.firstFrame = false;
-        } else {
-            this.update((event as CustomEvent).detail);
-        }
-
-        this.processingLoop = false;
-    };
-
-    protected start(event: Record<string, unknown>): void {
-        // do nothing
-    }
-
-    protected update(event: Record<string, unknown>): void {
-        // do nothing
-    }
-
     public get uuid(): string {
         return this._uuid;
     }
 
     public get transform(): Transform {
         return this.getComponent<Transform>(TRANSFORM_ID);
-    }
-
-    public findGameObject<OType>(id: string): OType | null {
-        return this.scene.getGameObject<OType>(id);
-    }
-
-    public findGameObjectByTag<OType>(tag: string): OType | null {
-        return this.scene.getGameObjectByTag<OType>(tag);
-    }
-
-    public findGameObjectsByTag(tag: string): GameObject[] {
-        return this.scene.getGameObjectsByTag(tag);
-    }
-
-    public addComponent(componentFunction: componentFunction, id: string | null = null): this {
-        const component = componentFunction();
-        component.id = id;
-        component.gameObject = this;
-        this.components.push(component);
-
-        return this;
-    }
-
-    public getComponents(): Component[] {
-        return this.components;
-    }
-
-    public getComponent<CType>(id: string): CType | null {
-        return this.components.reduce((prev, component) => (component.id === id ? component : prev), null);
-    }
-
-    public hasComponent(id: string): boolean {
-        return this.getComponent(id) !== null;
-    }
-
-    public removeComponent(id: string): void {
-        this.components.every((component, index) => {
-            if (component.id === id) {
-                component._destroy();
-                delete this.components[index];
-
-                return false;
-            }
-        });
-    }
-
-    public removeComponents(): void {
-        this.components.every((component, index) => {
-            component._destroy();
-            return delete this.components[index];
-        });
     }
 
     public get parent(): GameObject {
@@ -129,75 +51,124 @@ export default class GameObject {
         this.transform.update();
     }
 
-    public addChild(gameObjectFunction: gameObjectFunction, id: string | null = null): this {
-        const gameObject = gameObjectFunction();
-        gameObject.id = id;
-        gameObject.parent = this;
-        gameObject.scene = this.scene;
-        this.gameObjects.push(gameObject);
+    gameLoopEventHandler = (event: Event): void => {
+        if (this.active === false) {
+            return;
+        }
+
+        if (this.firstFrame === true) {
+            this.start((event as CustomEvent).detail);
+            this.firstFrame = false;
+        } else {
+            this.update((event as CustomEvent).detail);
+        }
+    };
+
+    protected start(event: Record<string, unknown>): void {
+        // do nothing
+    }
+
+    protected update(event: Record<string, unknown>): void {
+        // do nothing
+    }
+
+    public findGameObjectByName<T extends GameObject>(name: string): T | null {
+        return Game.gameObjectManager.findGameObjectByName(name) as T;
+    }
+
+    public findGameObjectsByTag(tag: string): GameObject[] {
+        return Game.gameObjectManager.findGameObjectsByTag(tag);
+    }
+
+    public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
+    }
+
+    public addComponent(componentConstructor: ComponentConstructor, name: string | null = null): this {
+        const component = componentConstructor();
+        component.name = name;
+        component.gameObject = this;
+        this.components.push(component);
 
         return this;
     }
 
-    public getChildren(): GameObject[] {
-        return this.gameObjects;
+    public getComponents(): Component[] {
+        return this.components;
     }
 
-    public getChild<CType>(id: string): CType | null {
-        return this.gameObjects.reduce((prev, child) => (child.id === id ? child : prev), null);
+    public getComponent<T extends Component>(name: string): T | null {
+        return this.components.reduce((prev, component) => (component.name === name ? component : prev), null) as T;
     }
 
-    public getChildrenByTag(tag: string): Array<GameObject> {
-        return this.gameObjects.filter((object) => object.tag === tag);
+    public hasComponent(name: string): boolean {
+        return this.getComponent(name) !== null;
     }
 
-    public getChildByTag<CType>(tag: string): CType | null {
-        const objects = this.gameObjects.filter((object) => object.tag === tag);
-        return objects.length > 0 ? objects[0] : null;
-    }
-
-    public destroyChild(id: string): void {
-        this.gameObjects.every((gameObject, index) => {
-            if (gameObject.id === id) {
-                gameObject._destroy();
-                delete this.gameObjects[index];
+    public removeComponent(name: string): void {
+        this.components.every((component: Component, index: number) => {
+            if (component.name === name) {
+                component._destroy();
+                delete this.components[index];
 
                 return false;
             }
         });
     }
 
-    public destroyChildren(): void {
-        this.gameObjects.every((gameObject, index) => {
-            gameObject._destroy();
-            return delete this.gameObjects[index];
+    public removeComponents(): void {
+        this.components.every((component: Component, index: number) => {
+            component._destroy();
+            return delete this.components[index];
         });
+
+        this.components = [];
+    }
+
+    public addChild(gameObjectFactory: GameObjectFactory, name: string): this {
+        Game.gameObjectManager.addGameObject(gameObjectFactory, this.scene, name, this);
+
+        return this;
+    }
+
+    public getChildren(): GameObject[] {
+        return Game.gameObjectManager.findGameObjectsByParent(this);
+    }
+
+    public getChild<T extends GameObject>(name: string): T {
+        return Game.gameObjectManager.findGameObjectByParentAndName(this, name) as T;
+    }
+
+    public destroyChildren(): void {
+        Game.gameObjectManager
+            .findGameObjectsByParent(this)
+            .every((gameObject: GameObject) => Game.gameObjectManager.destroyGameObject(gameObject));
     }
 
     public setActive(value: boolean) {
         this.components
-            .filter((component) => this.inactiveComponents.indexOf(component.id) === -1)
-            .forEach((component) => (component.active = value));
+            .filter((component: Component) => this.inactiveComponents.indexOf(component.uuid) === -1)
+            .forEach((component: Component) => (component.active = value));
 
-        this.gameObjects
-            .filter((gameObject) => this.inactiveGameObjects.indexOf(gameObject.id) === -1)
-            .forEach((gameObject) => gameObject.setActive(value));
+        this.getChildren()
+            .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
+            .forEach((gameObject: GameObject) => gameObject.setActive(value));
 
         this.transform.update();
         this.active = value;
     }
 
-    public setComponentActive(id: string, active: boolean): void {
-        const component = this.getComponent<Component>(id);
+    public setComponentActive(name: string, active: boolean): void {
+        const component = this.getComponent(name);
 
         if (component === null) {
-            throw `Component ith id ${id} does not exists`;
+            throw new Error(`Component with id ${name} does not exists`);
         }
 
-        const inactiveIndex = this.inactiveComponents.indexOf(id);
+        const inactiveIndex = this.inactiveComponents.indexOf(component.uuid);
 
         if (active === false && inactiveIndex === -1) {
-            this.inactiveComponents.push(id);
+            this.inactiveComponents.push(component.uuid);
         } else if (active === true && inactiveIndex !== -1) {
             delete this.inactiveComponents[inactiveIndex];
         }
@@ -205,19 +176,19 @@ export default class GameObject {
         component.active = active;
     }
 
-    public setChildActive(id: string, active: boolean): void {
-        const gameObject = this.getChild<GameObject>(id);
+    public setChildActive(name: string, active: boolean): void {
+        const gameObject = this.getChild(name);
 
         if (gameObject === null) {
-            throw `GameObject with id ${id} does not exists`;
+            throw `GameObject with name ${name} does not exists`;
         }
 
-        const inactiveIndex = this.inactiveGameObjects.indexOf(id);
+        const inactiveIndex = this.inactiveChildren.indexOf(gameObject.uuid);
 
         if (active === false && inactiveIndex === -1) {
-            this.inactiveGameObjects.push(id);
+            this.inactiveChildren.push(gameObject.uuid);
         } else if (active === true && inactiveIndex !== -1) {
-            delete this.inactiveGameObjects[inactiveIndex];
+            delete this.inactiveChildren[inactiveIndex];
         }
 
         gameObject.setActive(active);
@@ -227,7 +198,6 @@ export default class GameObject {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.removeComponents();
-        this.destroyChildren();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);

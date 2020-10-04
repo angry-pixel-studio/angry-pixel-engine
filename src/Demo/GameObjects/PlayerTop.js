@@ -1,5 +1,4 @@
-import AssetManager from "../../Engine/AssetManager";
-import GameObject, { LAYER_DEFAULT } from "../../Engine/GameObject";
+import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import TrapezoidCollider from "../../Engine/Components/Colliders/TrapezoidCollider";
 import Sprite from "../../Engine/Sprite";
@@ -10,7 +9,7 @@ import Vector2 from "../../Engine/Helper/Vector2";
 import Movements from "../Components/Player/Movements";
 import Weapon from "../Components/Player/Weapon";
 import { LAYER_PLAYER } from "../Config/renderLayers";
-import RenderData, { GEOMETRIC_RECTANGLE } from "../../Engine/Core/Rendering/RenderData";
+import RenderData from "../../Engine/Core/Rendering/RenderData";
 import Game from "../../Engine/Game";
 
 export const TAG_PLAYER = "Player";
@@ -31,7 +30,7 @@ export default class PlayerTop extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage("image/demo/player-top-down.png"),
+                        image: Game.assetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,
@@ -65,7 +64,7 @@ export default class PlayerTop extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: AssetManager.getImage("image/demo/avatar.png"),
+                        image: Game.assetManager.getImage("image/demo/avatar.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),

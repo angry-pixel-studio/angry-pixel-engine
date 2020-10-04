@@ -6,6 +6,7 @@ import Vector2 from "../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
 import IColliderData, { GeometricShape } from "../../Core/Collision/IColliderData";
 import RenderManager from "../../Core/Rendering/RenderManager";
+import Game from "../../Game";
 
 interface Config {
     x: number;
@@ -51,9 +52,9 @@ export default class TrapezoidCollider extends Component {
         this.layer = layer;
     }
 
-    protected start({ collisionManager, renderManager }: StartConfig): void {
-        this.collisionManager = collisionManager;
-        this.renderManager = renderManager;
+    protected start(): void {
+        this.collisionManager = Game.collisionManager;
+        this.renderManager = Game.renderManager;
 
         this.collisionManager.addCollider(this, this.colliderData);
 

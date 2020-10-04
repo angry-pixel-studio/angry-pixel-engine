@@ -23,7 +23,7 @@ export default class TilemapCollider extends Component {
     }
 
     // TODO: Change this to get the tilemap data from the tilemap renderer
-    protected start(event: { [key: string]: any }) {
+    protected start() {
         const data = this.tilemapData.trim().split("\n");
 
         const totalRows = data.length;
@@ -52,7 +52,6 @@ export default class TilemapCollider extends Component {
                         });
 
                         trapezoidCollider.enableDebug();
-
                         this.colliders.push(trapezoidCollider);
                     }
                 });
