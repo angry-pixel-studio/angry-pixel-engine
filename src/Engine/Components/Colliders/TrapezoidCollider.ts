@@ -1,11 +1,11 @@
 import Component from "../../Component";
 import { LAYER_DEFAULT } from "../../GameObject";
 import RenderData, { GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
-import Vector2 from "../../Helper/Vector2";
-import CollisionManager from "../../Core/Collision/CollisionManager";
-import IColliderData, { GeometricShape } from "../../Core/Collision/IColliderData";
-import RenderManager from "../../Core/Rendering/RenderManager";
-import Game from "../../Game";
+import Vector2 from "./../../Helper/Vector2";
+import CollisionManager from "./../../Core/Collision/CollisionManager";
+import IColliderData, { GeometricShape } from "./../../Core/Collision/IColliderData";
+import RenderManager from "./../../Core/Rendering/RenderManager";
+import Game from "./../../Game";
 
 interface Config {
     x: number;
@@ -15,11 +15,6 @@ interface Config {
     offsetX: number;
     offsetY: number;
     layer: string | null;
-}
-
-interface StartConfig {
-    collisionManager: CollisionManager;
-    renderManager: RenderManager;
 }
 
 export default class TrapezoidCollider extends Component {

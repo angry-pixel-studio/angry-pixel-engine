@@ -3,9 +3,9 @@ import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 import IColliderData, { ITrapezoid } from "./IColliderData";
 
 export default class QuadTree {
-    // TODO: maxObjects and maxLevels should be calculated automatically based
+    // TODO: maxColliders and maxLevels should be calculated automatically based
     // on the size of the scene and set on the constructor.
-    readonly maxObjects: number = 20;
+    readonly maxColliders: number = 20;
     readonly maxLevels: number = 5;
 
     // Quads cardinal positions
@@ -15,7 +15,7 @@ export default class QuadTree {
     private readonly ne: number = 3;
 
     private level: number;
-    private objects: Array<IColliderData> = [];
+    private colliders: Array<IColliderData> = [];
     public quadrants: Array<QuadTree> = [];
     public bounds: Rectangle;
 
@@ -24,14 +24,14 @@ export default class QuadTree {
         this.bounds = bounds;
     }
 
-    public insert(object: IColliderData): void {
+    public insert(collider: IColliderData): void {
         if (this.hasQuadChildren()) {
-            this.insertObjectIntoChildrenQuads(object);
+            this.insertColliderIntoChildrenQuads(collider);
 
             return;
         }
 
-        this.objects.push(object);
+        this.colliders.push(collider);
 
         if (!this.isQuadFull()) {
             return;
@@ -46,13 +46,13 @@ export default class QuadTree {
         const colliders: Array<IColliderData> = [];
 
         if (this.hasQuadChildren()) {
-            const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(collider);
+            const quadrants: Array<QuadTree> = this.getChildrenQuadrantForCollider(collider);
             for (const quadrant of quadrants) {
                 colliders.push(...quadrant.retrieve(collider));
             }
         }
 
-        colliders.push(...this.objects);
+        colliders.push(...this.colliders);
 
         const selfIndex: number = colliders.indexOf(collider);
         if (selfIndex !== -1) {
@@ -67,7 +67,7 @@ export default class QuadTree {
             quadrant.clear();
         }
 
-        this.objects = [];
+        this.colliders = [];
         this.quadrants = [];
     }
 
@@ -84,14 +84,14 @@ export default class QuadTree {
             new QuadTree(newLevel, new Rectangle(midPointX, midPointY, newWidth, newHeight)),
         ];
 
-        for (const object of this.objects) {
-            this.insertObjectIntoChildrenQuads(object);
+        for (const collider of this.colliders) {
+            this.insertColliderIntoChildrenQuads(collider);
         }
 
-        this.objects = [];
+        this.colliders = [];
     }
 
-    private getChildrenQuadrantForObject(object: ITrapezoid): Array<QuadTree> {
+    private getChildrenQuadrantForCollider(collider: IColliderData): Array<QuadTree> {
         if (this.quadrants.length === 0) {
             throw new Error("Current quadrant does not have quadrant children.");
         }
@@ -100,19 +100,19 @@ export default class QuadTree {
 
         const childrenQuadrants: Array<QuadTree> = [];
 
-        if (object.getBottomLeftPoint().x <= midPointX && object.getBottomLeftPoint().y <= midPointY) {
+        if (collider.getBottomLeftPoint().x <= midPointX && collider.getBottomLeftPoint().y <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.sw]);
         }
 
-        if (object.getBottomRightPoint().x >= midPointX && object.getBottomRightPoint().y <= midPointY) {
+        if (collider.getBottomRightPoint().x >= midPointX && collider.getBottomRightPoint().y <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.se]);
         }
 
-        if (object.getTopLeftPoint().x <= midPointX && object.getTopLeftPoint().y >= midPointY) {
+        if (collider.getTopLeftPoint().x <= midPointX && collider.getTopLeftPoint().y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.nw]);
         }
 
-        if (object.getTopRightPoint().x >= midPointX && object.getTopRightPoint().y >= midPointY) {
+        if (collider.getTopRightPoint().x >= midPointX && collider.getTopRightPoint().y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.ne]);
         }
 
@@ -123,10 +123,10 @@ export default class QuadTree {
         return childrenQuadrants;
     }
 
-    private insertObjectIntoChildrenQuads(object: IColliderData) {
-        const quadrants: Array<QuadTree> = this.getChildrenQuadrantForObject(object);
+    private insertColliderIntoChildrenQuads(collider: IColliderData) {
+        const quadrants: Array<QuadTree> = this.getChildrenQuadrantForCollider(collider);
         for (const quadrant of quadrants) {
-            quadrant.insert(object);
+            quadrant.insert(collider);
         }
     }
 
@@ -139,6 +139,6 @@ export default class QuadTree {
     }
 
     private isQuadFull(): boolean {
-        return this.objects.length > this.maxObjects;
+        return this.colliders.length > this.maxColliders;
     }
 }

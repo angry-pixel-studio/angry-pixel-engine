@@ -3,6 +3,7 @@ import Vector2 from "../../Helper/Vector2";
 export enum GeometricShape {
     ellipse,
     polygon,
+    rectangle,
 }
 
 export interface ITrapezoid {
