@@ -15,7 +15,6 @@ import Game from "../../Engine/Game";
 export const TAG_PLAYER = "Player";
 
 export default class PlayerTop extends GameObject {
-    collider = new Rectangle(0, 0, 32, 32);
     renderData = new RenderData();
 
     constructor() {

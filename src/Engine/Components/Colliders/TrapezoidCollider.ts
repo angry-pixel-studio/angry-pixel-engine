@@ -1,7 +1,6 @@
 import Component from "../../Component";
 import { LAYER_DEFAULT } from "../../GameObject";
-import RenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
-import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
+import RenderData, { GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
 import Vector2 from "../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
 import IColliderData, { GeometricShape } from "../../Core/Collision/IColliderData";
@@ -46,10 +45,9 @@ export default class TrapezoidCollider extends Component {
         this.height = height;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        this.layer = layer;
 
         this.setColliderData(x + offsetX, y + offsetY, width, height);
-
-        this.layer = layer;
     }
 
     protected start(): void {
@@ -122,6 +120,7 @@ export default class TrapezoidCollider extends Component {
         this.coordinates.x = this.gameObject.transform.position.x - this.width / 2 - this.offsetX;
         this.coordinates.y = this.gameObject.transform.position.y - this.height / 2 - this.offsetY;
         this.setColliderData(this.coordinates.x, this.coordinates.y, this.width, this.height);
+        this.setupRenderData();
     }
 
     private setColliderData(x: number, y: number, width: number, height: number): void {
@@ -140,8 +139,8 @@ export default class TrapezoidCollider extends Component {
         this.renderData = new RenderData();
         this.renderData.position = this.coordinates;
         this.renderData.layer = LAYER_DEFAULT;
-        this.renderData.geometric = new Rectangle(this.coordinates.x, this.coordinates.y, this.width, this.height);
-        this.renderData.geometricType = GEOMETRIC_RECTANGLE;
+        this.renderData.geometric = this.colliderData.points;
+        this.renderData.geometricType = GEOMETRIC_POLYGON;
         this.renderData.color = "#00FF00";
     }
 }

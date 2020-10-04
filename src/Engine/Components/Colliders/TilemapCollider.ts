@@ -50,8 +50,10 @@ export default class TilemapCollider extends Component {
                             offsetY: 0,
                             layer: this.gameObject.layer,
                         });
-
+                        //if (posX - offsetX === 64 && posY - offsetY === 64) {
                         trapezoidCollider.enableDebug();
+                        //}
+
                         this.colliders.push(trapezoidCollider);
                     }
                 });

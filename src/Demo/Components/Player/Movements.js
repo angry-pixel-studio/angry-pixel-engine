@@ -20,8 +20,10 @@ export default class Movements extends Component {
         this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
         this.transform = this.getComponent("Transform");
         this.animator = this.getComponent("Animator");
-        this.gameObject.getComponent("TrapezoidCollider").enableDebug();
         this.inputManager = this.findGameObjectByName("InputManager");
+
+        // remove enable debug before merging
+        this.gameObject.getComponent("TrapezoidCollider").enableDebug();
     }
 
     update(event) {
