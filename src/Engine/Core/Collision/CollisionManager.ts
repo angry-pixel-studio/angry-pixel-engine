@@ -1,10 +1,10 @@
 import { LAYER_DEFAULT } from "./../../GameObject";
-import Rectangle from "./../../Helper/Rectangle";
+import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "./../../Helper/Vector2";
 import RenderData, { GEOMETRIC_RECTANGLE } from "./../Rendering/RenderData";
 import RenderManager from "./../Rendering/RenderManager";
 import ICollider from "./ICollider";
-import IColliderData, { IParallelogram } from "./IColliderData";
+import IColliderData, { ITrapezoid } from "./IColliderData";
 import QuadTree from "./QuadTree";
 
 export default class CollisionManager {
@@ -22,7 +22,6 @@ export default class CollisionManager {
     }
 
     public prepare(): void {
-        this.debugColliders();
         this.debugQuads(this.quad);
         this.refreshQuad();
     }
@@ -63,23 +62,13 @@ export default class CollisionManager {
     }
 
     // TODO: Make this agnostic of which shapes is checking
-    private checkCollision(collider1: IParallelogram, collider2: IParallelogram) {
+    private checkCollision(collider1: ITrapezoid, collider2: ITrapezoid) {
         return (
             collider1.getBottomLeftPoint().x < collider2.getBottomRightPoint().x &&
             collider1.getBottomRightPoint().x > collider2.getBottomLeftPoint().x &&
             collider1.getBottomLeftPoint().y < collider2.getTopLeftPoint().y &&
             collider1.getTopLeftPoint().y > collider2.getBottomLeftPoint().y
         );
-    }
-
-    private debugColliders(): void {
-        if (!this.debug) {
-            return;
-        }
-
-        for (const collider of this.colliders) {
-            this.renderManager.addToRenderStack(collider.getRenderData());
-        }
     }
 
     private debugQuads(quad: QuadTree) {

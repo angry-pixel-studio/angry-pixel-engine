@@ -1,7 +1,7 @@
 import AssetManager from "../../Engine/AssetManager";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import GameObject from "../../Engine/GameObject";
-import Rectangle from "../../Engine/Helper/Rectangle";
+import Rectangle from "../../Engine/Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
 import { LAYER_PROJECTILE } from "../Config/renderLayers";

@@ -1,7 +1,8 @@
 import Vector2 from "../../Helper/Vector2";
-import Rectangle from "../../Helper/Rectangle";
+import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 
 export const GEOMETRIC_RECTANGLE = "Rectangle";
+export const GEOMETRIC_POLYGON = "Polygon";
 
 export default class RenderData {
     // general

@@ -1,6 +1,6 @@
 import Component from "../Component";
 import { LAYER_DEFAULT } from "../GameObject";
-import Rectangle from "../Helper/Rectangle";
+import Rectangle from "../Libs/Geometric/Shapes/Rectangle";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 

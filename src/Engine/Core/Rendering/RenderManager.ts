@@ -1,6 +1,6 @@
 import RenderData from "./RenderData";
 
-import Rectangle from "../../Helper/Rectangle";
+import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 import IContextRenderer from "./IContextRenderer";
 
 export default class RenderManager {

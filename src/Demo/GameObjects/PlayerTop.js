@@ -1,11 +1,11 @@
 import AssetManager from "../../Engine/AssetManager";
 import GameObject, { LAYER_DEFAULT } from "../../Engine/GameObject";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
-import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
+import TrapezoidCollider from "../../Engine/Components/Colliders/TrapezoidCollider";
 import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
-import Rectangle from "../../Engine/Helper/Rectangle";
+import Rectangle from "../../Engine/Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Movements from "../Components/Player/Movements";
 import Weapon from "../Components/Player/Weapon";
@@ -52,7 +52,7 @@ export default class PlayerTop extends GameObject {
 
         this.addComponent(() => new Movements(), "Movements");
         this.addComponent(() => new Weapon(), "Weapon");
-        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
+        this.addComponent(() => new TrapezoidCollider({ width: 32, height: 32 }), "TrapezoidCollider");
 
         //this.createChild();
     }

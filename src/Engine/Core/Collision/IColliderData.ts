@@ -2,11 +2,10 @@ import Vector2 from "../../Helper/Vector2";
 
 export enum GeometricShape {
     ellipse,
-    parallelogram,
-    triangle,
+    polygon,
 }
 
-export interface IParallelogram {
+export interface ITrapezoid {
     getBottomLeftPoint(): Vector2;
     getBottomRightPoint(): Vector2;
     getTopLeftPoint(): Vector2;

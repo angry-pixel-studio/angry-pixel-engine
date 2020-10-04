@@ -1,7 +1,6 @@
 import Vector2 from "../../Helper/Vector2";
-import Rectangle from "./../../Helper/Rectangle";
-import ICollider from "./ICollider";
-import IColliderData, { IParallelogram } from "./IColliderData";
+import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
+import IColliderData, { ITrapezoid } from "./IColliderData";
 
 export default class QuadTree {
     // TODO: maxObjects and maxLevels should be calculated automatically based
@@ -92,7 +91,7 @@ export default class QuadTree {
         this.objects = [];
     }
 
-    private getChildrenQuadrantForObject(object: IParallelogram): Array<QuadTree> {
+    private getChildrenQuadrantForObject(object: ITrapezoid): Array<QuadTree> {
         if (this.quadrants.length === 0) {
             throw new Error("Current quadrant does not have quadrant children.");
         }

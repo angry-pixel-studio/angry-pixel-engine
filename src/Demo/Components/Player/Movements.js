@@ -1,5 +1,5 @@
 import Component from "../../../Engine/Component";
-import Rectangle from "../../../Engine/Helper/Rectangle";
+import Rectangle from "../../../Engine/Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../../Engine/Helper/Vector2";
 
 export default class Movements extends Component {
@@ -21,6 +21,7 @@ export default class Movements extends Component {
         this.transform = this.getComponent("Transform");
         this.animator = this.getComponent("Animator");
         this.inputManager = this.findGameObject("InputManager");
+        this.gameObject.getComponent("TrapezoidCollider").enableDebug();
     }
 
     update(event) {
@@ -63,6 +64,6 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        return this.gameObject.getComponent("RectangleCollider").collidesWithLayer("Foreground");
+        return this.gameObject.getComponent("TrapezoidCollider").collidesWithLayer("Foreground");
     }
 }

@@ -1,5 +1,5 @@
 import Component from "./../../Component";
-import RectangleCollider from "./../../Components/Colliders/RectangleCollider";
+import TrapezoidCollider from "./TrapezoidCollider";
 
 interface Config {
     tilemapData: string;
@@ -12,7 +12,7 @@ export default class TilemapCollider extends Component {
     private tilemapData: string;
     private tileWidth: number;
     private tileHeight: number;
-    private colliders: Array<RectangleCollider> = [];
+    private colliders: Array<TrapezoidCollider> = [];
 
     constructor({ tilemapData, tileWidth, tileHeight, tileScale }: Config) {
         super();
@@ -41,7 +41,7 @@ export default class TilemapCollider extends Component {
                         const posX = col * this.tileWidth;
                         const posY = row * this.tileHeight;
 
-                        const rectangleCollider = new RectangleCollider({
+                        const trapezoidCollider = new TrapezoidCollider({
                             x: posX - offsetX,
                             y: posY - offsetY,
                             width: this.tileWidth,
@@ -51,7 +51,9 @@ export default class TilemapCollider extends Component {
                             layer: this.gameObject.layer,
                         });
 
-                        this.colliders.push(rectangleCollider);
+                        trapezoidCollider.enableDebug();
+
+                        this.colliders.push(trapezoidCollider);
                     }
                 });
             }
