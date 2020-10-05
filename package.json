@@ -41,6 +41,7 @@
     },
     "dependencies": {
         "core-js": "^3.6.5",
+        "gl-matrix": "^3.3.0",
         "uuid": "^8.3.0"
     }
 }

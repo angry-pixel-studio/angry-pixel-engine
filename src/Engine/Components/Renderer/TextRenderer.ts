@@ -1,8 +1,6 @@
 import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
+import TextRenderData from "../../Core/Rendering/RenderData/TextRenderData";
 import Game from "../../Game";
-
-export * from "../../Core/Rendering/RenderPivots";
 
 export type TextRendererConfig = {
     text: string;
@@ -23,15 +21,14 @@ export default class TextRenderer extends Component {
     public color: string = "#000000";
     public bold: boolean = false;
     public italic: boolean = false;
-    public renderData: RenderData = null;
     public lineSeparation: number = 5;
     public width: number = 0;
     public height: number = 0;
 
+    private renderData: TextRenderData = new TextRenderData();
+
     constructor(config: TextRendererConfig) {
         super();
-
-        this.renderData = new RenderData();
 
         this.text = config.text ? config.text : this.text;
         this.font = config.font ? config.font : this.font;
@@ -60,8 +57,6 @@ export default class TextRenderer extends Component {
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.bold = this.bold;
         this.renderData.italic = this.italic;
-        this.renderData.width = this.width;
-        this.renderData.height = this.height;
 
         Game.renderManager.addToRenderStack(this.renderData);
     }

@@ -1,29 +1,20 @@
 import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
-import {
-    PIVOT_CENTER,
-    PIVOT_TOP_LEFT,
-    PIVOT_TOP_RIGHT,
-    PIVOT_BOTTOM_LEFT,
-    PIVOT_BOTTOM_RIGHT,
-} from "../../Core/Rendering/RenderPivots";
+import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
 import Game from "../../Game";
 import Vector2 from "../../Helper/Vector2";
 import Sprite from "../../Sprite";
-
-export * from "../../Core/Rendering/RenderPivots";
 
 export default class SpriteRenderer extends Component {
     public sprite: Sprite = null;
     public offsetX: number = 0;
     public offsetY: number = 0;
-    public pivot: string = PIVOT_CENTER;
+    //public pivot: string = PIVOT_CENTER;
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = 0;
     public smooth: boolean = true;
 
-    private renderData: RenderData = new RenderData();
+    private renderData: ImageRenderData = new ImageRenderData();
     private goPosition: Vector2 = null;
 
     constructor(config: { [key: string]: any }) {
@@ -33,7 +24,7 @@ export default class SpriteRenderer extends Component {
         this.sprite = config.sprite;
 
         // optional
-        this.pivot = config.pivot ? config.pivot : this.pivot;
+        //this.pivot = config.pivot ? config.pivot : this.pivot;
         this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
         this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
         this.smooth = config.smooth ? config.smooth : this.smooth;
@@ -71,7 +62,9 @@ export default class SpriteRenderer extends Component {
             this.translateRenderPosition();
         }
 
-        switch (this.pivot) {
+        return;
+
+        /*switch (this.pivot) {
             case PIVOT_CENTER:
                 this.renderData.position.x -= Math.floor(this.renderData.width / 2);
                 this.renderData.position.y += Math.floor(this.renderData.height / 2);
@@ -90,7 +83,7 @@ export default class SpriteRenderer extends Component {
                 break;
             default:
                 break;
-        }
+        }*/
     }
 
     private translateRenderPosition(): void {

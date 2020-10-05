@@ -1,10 +1,10 @@
 import Component from "./../../Component";
 import { LAYER_DEFAULT } from "../../GameObject";
-import RenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
 import Rectangle from "./../../Helper/Rectangle";
 import Vector2 from "./../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
 import Game from "../../Game";
+import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
 
 interface Config {
     x: number;
@@ -18,7 +18,7 @@ interface Config {
 // TODO: unify this with the other RectangleCollider
 export default class RectangleCollider extends Component {
     private rectangle: Rectangle;
-    private renderData: RenderData;
+    private renderData: GeometricRenderData;
 
     private offsetX: number;
     private offsetY: number;
@@ -29,7 +29,7 @@ export default class RectangleCollider extends Component {
         super();
 
         this.rectangle = new Rectangle(x, y, width, height);
-        this.renderData = new RenderData();
+        this.renderData = new GeometricRenderData();
         this.renderData.position = new Vector2(0, 0);
 
         this.offsetX = offsetX;
@@ -67,7 +67,7 @@ export default class RectangleCollider extends Component {
         return this.rectangle;
     }
 
-    public getRenderData(): RenderData {
+    public getRenderData(): GeometricRenderData {
         return this.renderData;
     }
 

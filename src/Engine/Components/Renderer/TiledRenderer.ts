@@ -1,8 +1,8 @@
 import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
 import Tileset from "../../Tileset";
 import Rectangle from "../../Helper/Rectangle";
 import Game from "../../Game";
+import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
 
 export default class TiledRenderer extends Component {
     public tileset: Tileset = null;
@@ -11,7 +11,7 @@ export default class TiledRenderer extends Component {
     public showTileset: boolean = false;
 
     private tilemapProcessd: boolean = false;
-    private processedData: RenderData[] = [];
+    private processedData: ImageRenderData[] = [];
 
     private _width: number = 0;
     private _height: number = 0;
@@ -106,7 +106,7 @@ export default class TiledRenderer extends Component {
     }
 
     private processTile(tile: Rectangle, chunk: { [key: string]: any }, col: number, row: number): void {
-        const renderData = new RenderData();
+        const renderData = new ImageRenderData();
 
         renderData.position.x =
             this.gameObject.transform.position.x +

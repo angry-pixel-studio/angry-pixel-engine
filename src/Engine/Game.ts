@@ -10,12 +10,17 @@ const CANVAS_ID: string = "miniEngineCanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
 
+const ccanvas = document.createElement("canvas");
+ccanvas.id = CANVAS_ID;
+ccanvas.width = 1366;
+ccanvas.height = 768;
+
 export default class Game {
-    static readonly canvas: HTMLCanvasElement = document.createElement("canvas");
+    static readonly canvas: HTMLCanvasElement = ccanvas;
     static readonly assetManager: AssetManager = new AssetManager();
     static readonly inputManager: InputManager = new InputManager();
     static readonly gameObjectManager: GameObjectManager = new GameObjectManager();
-    static readonly renderManager: RenderManager = new RenderManager(new Context2DRenderer(Game.canvas));
+    static readonly renderManager: RenderManager = new RenderManager(Game.canvas);
     static readonly sceneManager: SceneManager = new SceneManager();
     static readonly collisionManager: CollisionManager = new CollisionManager(Game.renderManager);
 
@@ -36,9 +41,9 @@ export default class Game {
     }
 
     private setupCanvas(container: HTMLElement, width: number, height: number): void {
-        Game.canvas.id = CANVAS_ID;
+        /*Game.canvas.id = CANVAS_ID;
         Game.canvas.width = width;
-        Game.canvas.height = height;
+        Game.canvas.height = height;*/
 
         container.appendChild(Game.canvas);
     }

@@ -1,5 +1,5 @@
 export default class Keyboard {
-    private keyPresses: { [k: string]: any } = {};
+    private keyPresses: { [k: string]: boolean } = {};
 
     constructor() {
         window.addEventListener("keydown", (e: KeyboardEvent) => (this.keyPresses[e.key] = true));

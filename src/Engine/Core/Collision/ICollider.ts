@@ -1,9 +1,9 @@
 import Rectangle from "../../Helper/Rectangle";
-import RenderData from "../Rendering/RenderData";
+import GeometricRenderData from "../Rendering/RenderData/GeometricRenderData";
 
 export default interface ICollider {
     getLayer(): string;
     getRectangle(): Rectangle;
-    getRenderData(): RenderData;
+    getRenderData(): GeometricRenderData;
     collidesWithLayer(layer: string): boolean;
 }

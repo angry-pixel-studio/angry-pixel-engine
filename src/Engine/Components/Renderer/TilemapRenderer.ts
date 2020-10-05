@@ -1,5 +1,5 @@
 import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
+import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
 import Game from "../../Game";
 import Rectangle from "../../Helper/Rectangle";
 import Tileset from "../../Tileset";
@@ -11,7 +11,7 @@ export default class TilemapRenderer extends Component {
     public showTileset: boolean = false;
 
     private tilemapProcessd: boolean = false;
-    private processedData: RenderData[] = [];
+    private processedData: ImageRenderData[] = [];
 
     private _width: number = 0;
     private _height: number = 0;
@@ -99,10 +99,13 @@ export default class TilemapRenderer extends Component {
     }
 
     private processTile(tile: Rectangle, col: number, row: number): void {
-        const renderData = new RenderData();
+        const renderData: ImageRenderData = new ImageRenderData();
 
-        renderData.position.x = this.gameObject.transform.position.x + col * this.tileset.tileWidth * this.tileScale;
-        renderData.position.y = this.gameObject.transform.position.y - row * this.tileset.tileHeight * this.tileScale;
+        const tWidth: number = this.tileset.tileWidth * this.tileScale;
+        const tHeight: number = this.tileset.tileHeight * this.tileScale;
+
+        renderData.position.x = this.gameObject.transform.position.x + col * tWidth + tWidth / 2;
+        renderData.position.y = this.gameObject.transform.position.y - row * tHeight - tHeight / 2;
 
         renderData.ui = false;
         renderData.image = this.tileset.image;
@@ -114,7 +117,7 @@ export default class TilemapRenderer extends Component {
         this.processedData.push(renderData);
     }
 
-    private processRealTile(renderData: RenderData): void {
+    private processRealTile(renderData: ImageRenderData): void {
         this._realTiles.push(
             new Rectangle(renderData.position.x, renderData.position.y, renderData.width, renderData.height)
         );

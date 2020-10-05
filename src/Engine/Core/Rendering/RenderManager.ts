@@ -1,6 +1,8 @@
-import RenderData from "./RenderData";
 import Rectangle from "../../Helper/Rectangle";
+import Context2DRenderer from "./Context2D/Context2DRenderer";
 import IContextRenderer from "./IContextRenderer";
+import RenderData from "./RenderData/RenderData";
+import WebGLRenderer from "./WebGL/WebGLRenderer";
 
 export default class RenderManager {
     private contextRenderer: IContextRenderer = null;
@@ -9,8 +11,9 @@ export default class RenderManager {
     private _worldSpaceViewRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    constructor(contextRenderer: IContextRenderer) {
-        this.contextRenderer = contextRenderer;
+    constructor(canvas: HTMLCanvasElement) {
+        //this.contextRenderer = new Context2DRenderer(canvas);
+        this.contextRenderer = new WebGLRenderer(canvas);
     }
 
     public set renderLayers(renderLayers: string[]) {

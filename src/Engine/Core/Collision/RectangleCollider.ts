@@ -1,7 +1,7 @@
 import { LAYER_DEFAULT } from "../../GameObject";
 import Rectangle from "../../Helper/Rectangle";
 import Vector2 from "../../Helper/Vector2";
-import RenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData";
+import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
 import ICollider from "./ICollider";
 
 interface Config {
@@ -15,7 +15,7 @@ interface Config {
 // TODO: unify this with the other RectangleCollider
 export default class RectangleCollider implements ICollider {
     private rectangle: Rectangle;
-    private renderData: RenderData;
+    private renderData: GeometricRenderData;
     private layer: string;
 
     // TODO: change any for a proper type
@@ -36,7 +36,7 @@ export default class RectangleCollider implements ICollider {
         return this.rectangle;
     }
 
-    public getRenderData(): RenderData {
+    public getRenderData(): GeometricRenderData {
         return this.renderData;
     }
 
@@ -54,7 +54,7 @@ export default class RectangleCollider implements ICollider {
 
     // TODO: find a nicer way to setup the render data
     private setupRenderData(): void {
-        this.renderData = new RenderData();
+        this.renderData = new GeometricRenderData();
         this.renderData.position = new Vector2(this.rectangle.x, this.rectangle.y);
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.rectangle;

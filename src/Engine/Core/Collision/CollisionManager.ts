@@ -1,7 +1,7 @@
+import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
 import { LAYER_DEFAULT } from "./../../GameObject";
 import Rectangle from "./../../Helper/Rectangle";
 import Vector2 from "./../../Helper/Vector2";
-import RenderData, { GEOMETRIC_RECTANGLE } from "./../Rendering/RenderData";
 import RenderManager from "./../Rendering/RenderManager";
 import ICollider from "./ICollider";
 import QuadTree from "./QuadTree";
@@ -84,7 +84,7 @@ export default class CollisionManager {
             return;
         }
 
-        const renderData = new RenderData();
+        const renderData = new GeometricRenderData();
         renderData.position = new Vector2(quad.bounds.x, quad.bounds.y);
         renderData.layer = LAYER_DEFAULT;
         renderData.geometric = quad.bounds;
