@@ -12,7 +12,7 @@ export default class Animation {
     private sprites: Sprite[] = [];
     private _playing = false;
     private currentFrame: number = 1;
-    private currentInterval: any = null;
+    private currentInterval: NodeJS.Timeout = null;
 
     public speed: number = 1;
     public loop: boolean = false;

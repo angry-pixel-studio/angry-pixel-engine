@@ -9,7 +9,7 @@ export default class Animator extends Component {
     private spriteRenderer: SpriteRenderer = null;
     private defaultSprite: Sprite = null;
 
-    constructor(config: { [key: string]: any }) {
+    constructor(config: { spriteRenderer: SpriteRenderer }) {
         super();
 
         this.spriteRenderer = config.spriteRenderer;

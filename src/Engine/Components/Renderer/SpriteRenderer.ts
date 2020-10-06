@@ -5,6 +5,16 @@ import Game from "../../Game";
 import Vector2 from "../../Helper/Vector2";
 import Sprite from "../../Sprite";
 
+type Config = {
+    sprite: Sprite;
+    offsetX: number;
+    offsetY: number;
+    smooth: boolean;
+    rotation: number;
+    flipHorizontal: boolean;
+    flipVertical: boolean;
+};
+
 export default class SpriteRenderer extends Component {
     public sprite: Sprite = null;
     public offsetX: number = 0;
@@ -18,17 +28,19 @@ export default class SpriteRenderer extends Component {
     private renderData: ImageRenderData = new ImageRenderData();
     private goPosition: Vector2 = null;
 
-    constructor(config: { [key: string]: any }) {
+    constructor(config: Config) {
         super();
 
         // required
         this.sprite = config.sprite;
 
         // optional
-        this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
-        this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
-        this.smooth = config.smooth ? config.smooth : this.smooth;
-        this.rotation = config.rotation ? config.rotation : this.rotation;
+        this.offsetX = config.offsetX ?? this.offsetX;
+        this.offsetY = config.offsetY ?? this.offsetY;
+        this.smooth = config.smooth ?? this.smooth;
+        this.rotation = config.rotation ?? this.rotation;
+        this.flipHorizontal = config.flipHorizontal ?? this.flipHorizontal;
+        this.flipVertical = config.flipVertical ?? this.flipVertical;
     }
 
     start(): void {

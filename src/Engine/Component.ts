@@ -34,7 +34,7 @@ export default abstract class Component {
         }
     };
 
-    protected start(event: unknown): void {
+    protected start(event: Record<string, unknown>): void {
         // do nothing
     }
 
