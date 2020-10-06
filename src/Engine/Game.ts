@@ -15,11 +15,13 @@ export default class Game {
 
     public canvasBGColor: string = "#000000";
 
-    // canvas
+    private sceneManager: SceneManager;
+    private renderManager: RenderManager;
+    private collisionManager: CollisionManager;
+
     private canvasContainer: HTMLElement;
     private canvasWidth: number;
     private canvasHeight: number;
-
     private _running: boolean = false;
     private frameRequestId: number = null;
     private then: number = 0;
@@ -43,6 +45,10 @@ export default class Game {
         Game.container.add("CollisionManager", () => new CollisionManager(Game.get<RenderManager>("RenderManager")));
         Game.container.add("GameObjectManager", () => new GameObjectManager());
         Game.container.add("AssetManager", () => new AssetManager());
+
+        this.sceneManager = Game.get<SceneManager>("SceneManager");
+        this.renderManager = Game.get<RenderManager>("RenderManager");
+        this.collisionManager = Game.get<CollisionManager>("CollisionManager");
     }
 
     private setupCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
@@ -63,11 +69,11 @@ export default class Game {
     }
 
     public addScene(name: string, sceneFunction: SceneConstructor, openingScene: boolean = false): void {
-        Game.get<SceneManager>("SceneManager").addScene(name, sceneFunction, openingScene);
+        this.sceneManager.addScene(name, sceneFunction, openingScene);
     }
 
     public run(): void {
-        Game.get<SceneManager>("SceneManager").loadOpeningScene();
+        this.sceneManager.loadOpeningScene();
 
         this.then = Date.now();
 
@@ -77,8 +83,8 @@ export default class Game {
     public stop(): void {
         this.stopLoop();
         setTimeout(() => {
-            Game.get<SceneManager>("SceneManager").unloadCurrentScene();
-            Game.get<RenderManager>("RenderManager").clearCanvas(this.canvasBGColor);
+            this.sceneManager.unloadCurrentScene();
+            this.renderManager.clearCanvas(this.canvasBGColor);
         }, 100);
     }
 
@@ -89,12 +95,12 @@ export default class Game {
         this.deltaTime = Math.min(0.1, now - this.then);
         this.then = now;
 
-        Game.get<RenderManager>("RenderManager").clearCanvas(this.canvasBGColor);
-        Game.get<CollisionManager>("CollisionManager").prepare();
+        this.renderManager.clearCanvas(this.canvasBGColor);
+        this.collisionManager.prepare();
 
         this.dispatchFrameEvent(EVENT_UPDATE);
 
-        Game.get<RenderManager>("RenderManager").render();
+        this.renderManager.render();
 
         this.requestAnimationFrame();
     }
