@@ -1,5 +1,6 @@
 import Component from "../../Component";
 import TextRenderData from "../../Core/Rendering/RenderData/TextRenderData";
+import RenderManager from "../../Core/Rendering/RenderManager";
 import Game from "../../Game";
 
 export type TextRendererConfig = {
@@ -25,6 +26,7 @@ export default class TextRenderer extends Component {
     public width: number = 0;
     public height: number = 0;
 
+    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
 
     constructor(config: TextRendererConfig) {
@@ -58,6 +60,6 @@ export default class TextRenderer extends Component {
         this.renderData.bold = this.bold;
         this.renderData.italic = this.italic;
 
-        Game.renderManager.addToRenderStack(this.renderData);
+        this.renderManager.addToRenderStack(this.renderData);
     }
 }

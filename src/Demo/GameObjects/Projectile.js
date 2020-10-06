@@ -8,6 +8,8 @@ import { LAYER_PROJECTILE } from "../Config/renderLayers";
 export const TAG_PROJECTILE = "Projectile";
 
 export default class Projectile extends GameObject {
+    assetManager = Game.get("AssetManager");
+
     shooted = false;
     speed = 15;
     deltaX = 0;
@@ -32,7 +34,7 @@ export default class Projectile extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: Game.assetManager.getImage("image/demo/projectile.png"),
+                        image: this.assetManager.getImage("image/demo/projectile.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),

@@ -12,8 +12,8 @@ export default class InputManager extends GameObject {
     camera = null;
 
     start() {
-        this.keyboard = Game.inputManager.keyboard;
-        this.mouse = Game.inputManager.mouse;
+        this.keyboard = Game.get("InputManager").keyboard;
+        this.mouse = Game.get("InputManager").mouse;
         this.camera = this.findGameObjectByName("GameCamera").getComponent("Camera");
 
         this.update();

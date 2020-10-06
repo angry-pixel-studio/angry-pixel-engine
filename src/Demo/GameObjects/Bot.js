@@ -13,6 +13,8 @@ import { TAG_PLAYER } from "./PlayerTop";
 export const TAG_BOT = "Bot";
 
 export default class Bot extends GameObject {
+    assetManager = Game.get("AssetManager");
+
     player = null;
     tilemap = null;
 
@@ -38,7 +40,7 @@ export default class Bot extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: Game.assetManager.getImage("image/demo/player-top-down.png"),
+                        image: this.assetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,

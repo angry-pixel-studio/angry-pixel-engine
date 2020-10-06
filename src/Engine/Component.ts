@@ -1,8 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
+import GameObjectManager from "./Core/GameObject/GameObjectManager";
 import Game, { EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
 
 export default abstract class Component {
+    private gameObjectManager: GameObjectManager = Game.get<GameObjectManager>("GameObjectManager");
+
     private readonly _uuid: string = uuidv4();
     public name: string = null;
     public gameObject: GameObject = null;
@@ -44,15 +47,15 @@ export default abstract class Component {
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
-        return Game.gameObjectManager.findGameObjectByName(name) as T;
+        return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
     public findGameObjectsByTag(tag: string): GameObject[] {
-        return Game.gameObjectManager.findGameObjectsByTag(tag);
+        return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
-        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
+        return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     public _destroy(): void {

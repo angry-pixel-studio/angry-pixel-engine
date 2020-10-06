@@ -10,6 +10,7 @@ import PlayerStats from "../GameObjects/UI/PlayerStats";
 import Game from "../../Engine/Game";
 
 export default class TopDown extends Scene {
+    assetManager = Game.get("AssetManager");
     assetsLoaded = false;
     gameObjectsLoaded = false;
 
@@ -26,7 +27,7 @@ export default class TopDown extends Scene {
 
     update() {
         if (this.assetsLoaded === false) {
-            this.assetsLoaded = Game.assetManager.getAssetsLoaded();
+            this.assetsLoaded = this.assetManager.getAssetsLoaded();
         }
 
         if (this.assetsLoaded && this.gameObjectsLoaded === false) {
@@ -36,10 +37,10 @@ export default class TopDown extends Scene {
     }
 
     loadAssets() {
-        Game.assetManager.createImage("image/demo/earth-cave.png");
-        Game.assetManager.createImage("image/demo/player-top-down.png");
-        Game.assetManager.createImage("image/demo/projectile.png");
-        Game.assetManager.createImage("image/demo/avatar.png");
+        this.assetManager.createImage("image/demo/earth-cave.png");
+        this.assetManager.createImage("image/demo/player-top-down.png");
+        this.assetManager.createImage("image/demo/projectile.png");
+        this.assetManager.createImage("image/demo/avatar.png");
     }
 
     setupGameObjects() {

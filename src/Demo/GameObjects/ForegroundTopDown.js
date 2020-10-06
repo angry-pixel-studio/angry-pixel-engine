@@ -9,6 +9,7 @@ import Game from "../../Engine/Game";
 export const TAG_FOREGROUND = "Foreground";
 
 export default class ForegroundTopDown extends GameObject {
+    assetManager = Game.get("AssetManager");
     width = 0;
     height = 0;
     tilemapRenderer = null;
@@ -23,7 +24,7 @@ export default class ForegroundTopDown extends GameObject {
             () =>
                 new TilemapRenderer({
                     tileset: new Tileset({
-                        image: Game.assetManager.getImage("image/demo/earth-cave.png"),
+                        image: this.assetManager.getImage("image/demo/earth-cave.png"),
                         tileWidth: 16,
                         tileHeight: 16,
                         gridWidth: 11,

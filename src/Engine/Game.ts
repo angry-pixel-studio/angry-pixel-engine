@@ -1,59 +1,73 @@
 import InputManager from "./Core/Input/InputManager";
 import SceneManager, { SceneConstructor } from "./Core/Scene/SceneManager";
 import RenderManager from "./Core/Rendering/RenderManager";
-import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
 import CollisionManager from "./Core/Collision/CollisionManager";
 import AssetManager from "./Core/Asset/AssetManager";
 import GameObjectManager from "./Core/GameObject/GameObjectManager";
+import Container from "./Core/DependencyInjection/Container";
 
 const CANVAS_ID: string = "miniEngineCanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
 
-const ccanvas = document.createElement("canvas");
-ccanvas.id = CANVAS_ID;
-ccanvas.width = 1366;
-ccanvas.height = 768;
-
 export default class Game {
-    static readonly canvas: HTMLCanvasElement = ccanvas;
-    static readonly assetManager: AssetManager = new AssetManager();
-    static readonly inputManager: InputManager = new InputManager();
-    static readonly gameObjectManager: GameObjectManager = new GameObjectManager();
-    static readonly renderManager: RenderManager = new RenderManager(Game.canvas);
-    static readonly sceneManager: SceneManager = new SceneManager();
-    static readonly collisionManager: CollisionManager = new CollisionManager(Game.renderManager);
+    static readonly container: Container = new Container();
 
     public canvasBGColor: string = "#000000";
+
+    // canvas
+    private canvasContainer: HTMLElement;
+    private canvasWidth: number;
+    private canvasHeight: number;
 
     private _running: boolean = false;
     private frameRequestId: number = null;
     private then: number = 0;
     private deltaTime: number = 0;
 
-    constructor(containerElement: HTMLElement, width: number, height: number) {
-        this.setupCanvas(containerElement, width, height);
-        Game.sceneManager.game = this;
+    constructor(canvasContainer: HTMLElement, canvasWidth: number, canvasHeight: number) {
+        this.canvasContainer = canvasContainer;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+
+        this.setup();
+    }
+
+    private setup() {
+        Game.container.add("Canvas", () => {
+            return this.setupCanvas(document.createElement("canvas"));
+        });
+        Game.container.add("InputManager", () => new InputManager(Game.get<HTMLCanvasElement>("Canvas")));
+        Game.container.add("RenderManager", () => new RenderManager(Game.get<HTMLCanvasElement>("Canvas")));
+        Game.container.add("SceneManager", () => new SceneManager(this, Game.get<RenderManager>("RenderManager")));
+        Game.container.add("CollisionManager", () => new CollisionManager(Game.get<RenderManager>("RenderManager")));
+        Game.container.add("GameObjectManager", () => new GameObjectManager());
+        Game.container.add("AssetManager", () => new AssetManager());
+    }
+
+    private setupCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
+        canvas.id = CANVAS_ID;
+        canvas.width = this.canvasWidth;
+        canvas.height = this.canvasHeight;
+        this.canvasContainer.appendChild(canvas);
+
+        return canvas;
+    }
+
+    public static get<T extends object>(name: string): T {
+        return this.container.getSingleton<T>(name);
     }
 
     public get running(): boolean {
         return this._running;
     }
 
-    private setupCanvas(container: HTMLElement, width: number, height: number): void {
-        /*Game.canvas.id = CANVAS_ID;
-        Game.canvas.width = width;
-        Game.canvas.height = height;*/
-
-        container.appendChild(Game.canvas);
-    }
-
     public addScene(name: string, sceneFunction: SceneConstructor, openingScene: boolean = false): void {
-        Game.sceneManager.addScene(name, sceneFunction, openingScene);
+        Game.get<SceneManager>("SceneManager").addScene(name, sceneFunction, openingScene);
     }
 
     public run(): void {
-        Game.sceneManager.loadOpeningScene();
+        Game.get<SceneManager>("SceneManager").loadOpeningScene();
 
         this.then = Date.now();
 
@@ -63,8 +77,8 @@ export default class Game {
     public stop(): void {
         this.stopLoop();
         setTimeout(() => {
-            Game.sceneManager.unloadCurrentScene();
-            Game.renderManager.clearCanvas(this.canvasBGColor);
+            Game.get<SceneManager>("SceneManager").unloadCurrentScene();
+            Game.get<RenderManager>("RenderManager").clearCanvas(this.canvasBGColor);
         }, 100);
     }
 
@@ -75,12 +89,12 @@ export default class Game {
         this.deltaTime = Math.min(0.1, now - this.then);
         this.then = now;
 
-        Game.renderManager.clearCanvas(this.canvasBGColor);
-        Game.collisionManager.prepare();
+        Game.get<RenderManager>("RenderManager").clearCanvas(this.canvasBGColor);
+        Game.get<CollisionManager>("CollisionManager").prepare();
 
         this.dispatchFrameEvent(EVENT_UPDATE);
 
-        Game.renderManager.render();
+        Game.get<RenderManager>("RenderManager").render();
 
         this.requestAnimationFrame();
     }

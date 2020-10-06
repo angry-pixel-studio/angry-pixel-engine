@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import Component from "./Component";
 import Transform from "./Components/Transform";
-import { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 import Game, { EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
 
@@ -23,6 +23,7 @@ export default class GameObject {
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
+    private gameObjectManager: GameObjectManager = Game.get<GameObjectManager>("GameObjectManager");
     private components: Component[] = [];
     private inactiveComponents: string[] = [];
     private inactiveChildren: string[] = [];
@@ -73,15 +74,15 @@ export default class GameObject {
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
-        return Game.gameObjectManager.findGameObjectByName(name) as T;
+        return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
     public findGameObjectsByTag(tag: string): GameObject[] {
-        return Game.gameObjectManager.findGameObjectsByTag(tag);
+        return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
-        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
+        return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     public addComponent(componentConstructor: ComponentConstructor, name: string | null = null): this {
@@ -126,23 +127,23 @@ export default class GameObject {
     }
 
     public addChild(gameObjectFactory: GameObjectFactory, name: string): this {
-        Game.gameObjectManager.addGameObject(gameObjectFactory, this.scene, name, this);
+        this.gameObjectManager.addGameObject(gameObjectFactory, this.scene, name, this);
 
         return this;
     }
 
     public getChildren(): GameObject[] {
-        return Game.gameObjectManager.findGameObjectsByParent(this);
+        return this.gameObjectManager.findGameObjectsByParent(this);
     }
 
     public getChild<T extends GameObject>(name: string): T {
-        return Game.gameObjectManager.findGameObjectByParentAndName(this, name) as T;
+        return this.gameObjectManager.findGameObjectByParentAndName(this, name) as T;
     }
 
     public destroyChildren(): void {
-        Game.gameObjectManager
+        this.gameObjectManager
             .findGameObjectsByParent(this)
-            .every((gameObject: GameObject) => Game.gameObjectManager.destroyGameObject(gameObject));
+            .every((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
     public setActive(value: boolean) {

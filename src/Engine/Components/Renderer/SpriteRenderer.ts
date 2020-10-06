@@ -1,5 +1,6 @@
 import Component from "../../Component";
 import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
+import RenderManager from "../../Core/Rendering/RenderManager";
 import Game from "../../Game";
 import Vector2 from "../../Helper/Vector2";
 import Sprite from "../../Sprite";
@@ -8,12 +9,12 @@ export default class SpriteRenderer extends Component {
     public sprite: Sprite = null;
     public offsetX: number = 0;
     public offsetY: number = 0;
-    //public pivot: string = PIVOT_CENTER;
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = 0;
     public smooth: boolean = true;
 
+    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
     private renderData: ImageRenderData = new ImageRenderData();
     private goPosition: Vector2 = null;
 
@@ -24,7 +25,6 @@ export default class SpriteRenderer extends Component {
         this.sprite = config.sprite;
 
         // optional
-        //this.pivot = config.pivot ? config.pivot : this.pivot;
         this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
         this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
         this.smooth = config.smooth ? config.smooth : this.smooth;
@@ -50,7 +50,7 @@ export default class SpriteRenderer extends Component {
 
             this.calculateRenderPosition();
 
-            Game.renderManager.addToRenderStack(this.renderData);
+            this.renderManager.addToRenderStack(this.renderData);
         }
     }
 
@@ -63,27 +63,6 @@ export default class SpriteRenderer extends Component {
         }
 
         return;
-
-        /*switch (this.pivot) {
-            case PIVOT_CENTER:
-                this.renderData.position.x -= Math.floor(this.renderData.width / 2);
-                this.renderData.position.y += Math.floor(this.renderData.height / 2);
-                break;
-            case PIVOT_TOP_RIGHT:
-                this.renderData.position.x -= this.renderData.width;
-                break;
-            case PIVOT_BOTTOM_LEFT:
-                this.renderData.position.y += this.renderData.height;
-                break;
-            case PIVOT_BOTTOM_RIGHT:
-                this.renderData.position.x -= this.renderData.width;
-                this.renderData.position.y += this.renderData.height;
-                break;
-            case PIVOT_TOP_LEFT:
-                break;
-            default:
-                break;
-        }*/
     }
 
     private translateRenderPosition(): void {

@@ -25,6 +25,8 @@ export default class RectangleCollider extends Component {
 
     private layer: string;
 
+    private collisionManager: CollisionManager = Game.get<CollisionManager>("CollisionManager");
+
     constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0 }: Config) {
         super();
 
@@ -37,7 +39,7 @@ export default class RectangleCollider extends Component {
     }
 
     protected start(): void {
-        Game.collisionManager.addCollider(this);
+        this.collisionManager.addCollider(this);
 
         this.setupRenderData();
         this.updateRectangleCoordinates();
@@ -53,7 +55,7 @@ export default class RectangleCollider extends Component {
 
     public collidesWithLayer(layer: string): boolean {
         this.updateRectangleCoordinates();
-        const collisions = Game.collisionManager.getCollisionsForCollider(this);
+        const collisions = this.collisionManager.getCollisionsForCollider(this);
         for (const c of collisions) {
             if (c.getLayer() === layer) {
                 return true;

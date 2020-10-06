@@ -1,5 +1,6 @@
 import Component from "../../Component";
 import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
+import RenderManager from "../../Core/Rendering/RenderManager";
 import Game from "../../Game";
 import Rectangle from "../../Helper/Rectangle";
 import Tileset from "../../Tileset";
@@ -9,6 +10,8 @@ export default class TilemapRenderer extends Component {
     public tilemapData: string = null;
     public tileScale: number = 1;
     public showTileset: boolean = false;
+
+    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
 
     private tilemapProcessd: boolean = false;
     private processedData: ImageRenderData[] = [];
@@ -43,7 +46,7 @@ export default class TilemapRenderer extends Component {
         }
 
         if (this.tileset.loaded && this.tilemapProcessd === true) {
-            this.processedData.forEach((renderData) => Game.renderManager.addToRenderStack(renderData));
+            this.processedData.forEach((renderData) => this.renderManager.addToRenderStack(renderData));
         }
     }
 

@@ -14,7 +14,7 @@ import Game from "../../Engine/Game";
 export const TAG_PLAYER = "Player";
 
 export default class PlayerTop extends GameObject {
-    collider = new Rectangle(0, 0, 32, 32);
+    assetManager = Game.get("AssetManager");
 
     constructor() {
         super();
@@ -28,7 +28,7 @@ export default class PlayerTop extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: Game.assetManager.getImage("image/demo/player-top-down.png"),
+                        image: this.assetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,
@@ -62,7 +62,7 @@ export default class PlayerTop extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: Game.assetManager.getImage("image/demo/avatar.png"),
+                        image: this.assetManager.getImage("image/demo/avatar.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),

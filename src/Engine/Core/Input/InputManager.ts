@@ -6,8 +6,8 @@ export default class InputManager {
     public keyboard: Keyboard = null;
     public gamepad: any = null;
 
-    constructor() {
-        this.mouse = new Mouse();
+    constructor(canvas: HTMLCanvasElement) {
+        this.mouse = new Mouse(canvas);
         this.keyboard = new Keyboard();
     }
 }

@@ -6,6 +6,9 @@ import Vector2 from "../../../Engine/Helper/Vector2";
 import Game from "../../../Engine/Game";
 
 export default class PlayerStats extends GameObject {
+    assetManager = Game.get("AssetManager");
+    canvas = Game.get("Canvas");
+
     constructor() {
         super();
 
@@ -28,7 +31,7 @@ export default class PlayerStats extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: Game.assetManager.getImage("image/demo/avatar.png"),
+                        image: this.assetManager.getImage("image/demo/avatar.png"),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
@@ -39,6 +42,6 @@ export default class PlayerStats extends GameObject {
     }
 
     start() {
-        this.transform.position.set(100 - Game.canvas.clientWidth / 2, Game.canvas.clientHeight / 2 - 50);
+        this.transform.position.set(100 - this.canvas.clientWidth / 2, this.canvas.clientHeight / 2 - 50);
     }
 }

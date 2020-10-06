@@ -1,4 +1,5 @@
 import Component from "../Component";
+import RenderManager from "../Core/Rendering/RenderManager";
 import Game from "../Game";
 import { LAYER_DEFAULT } from "../GameObject";
 import Rectangle from "../Helper/Rectangle";
@@ -13,14 +14,17 @@ export default class Camera extends Component {
     private _worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _renderLayers: string[] = DEFAULT_LAYERS;
 
+    private canvas: HTMLCanvasElement = Game.get<HTMLCanvasElement>("Canvas");
+    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
+
     start(): void {
         this.setupViewportRect();
     }
 
     private setupViewportRect(): void {
-        this._viewportRect.setPosition(-(Game.canvas.clientWidth / 2), Game.canvas.clientHeight / 2);
-        this._viewportRect.width = Game.canvas.clientWidth;
-        this._viewportRect.height = Game.canvas.clientHeight;
+        this._viewportRect.setPosition(-(this.canvas.clientWidth / 2), this.canvas.clientHeight / 2);
+        this._viewportRect.width = this.canvas.clientWidth;
+        this._viewportRect.height = this.canvas.clientHeight;
 
         this._vpHalfWidth = this._viewportRect.width / 2;
         this._vpHalfHeight = this._viewportRect.height / 2;
@@ -29,9 +33,9 @@ export default class Camera extends Component {
     update(): void {
         this.updateWorldSpaceRect();
 
-        Game.renderManager.renderLayers = this._renderLayers;
-        Game.renderManager.viewportRect = this._viewportRect;
-        Game.renderManager.worldSpaceViewRect = this._worldSpaceRect;
+        this.renderManager.renderLayers = this._renderLayers;
+        this.renderManager.viewportRect = this._viewportRect;
+        this.renderManager.worldSpaceViewRect = this._worldSpaceRect;
     }
 
     private updateWorldSpaceRect(): void {

@@ -1,18 +1,22 @@
 import Game from "../../Game";
 import Scene from "../../Scene";
+import RenderManager from "../Rendering/RenderManager";
 
 export type SceneConstructor = () => Scene;
 
 export default class SceneManager {
-    private _game: Game = null;
+    private game: Game = null;
+    private renderManager: RenderManager;
+
     private scenes: { [id: string]: SceneConstructor } = {};
     private currentScene: Scene = null;
     private openingSceneName: string = null;
 
     public currentSceneName: string;
 
-    public set game(game: Game) {
-        this._game = game;
+    constructor(game: Game, renderManager: RenderManager) {
+        this.game = game;
+        this.renderManager = renderManager;
     }
 
     public addScene(name: string, SceneConstructor: SceneConstructor, openingScene: boolean = false): void {
@@ -32,23 +36,23 @@ export default class SceneManager {
     }
 
     public loadScene(name: string): void {
-        if (this._game === null) {
+        if (this.game === null) {
             throw new Error("Game not initialized.");
         }
 
-        const resetLoop = this._game.running;
+        const resetLoop = this.game.running;
 
         if (resetLoop) {
-            this._game.stopLoop();
+            this.game.stopLoop();
         }
 
         this.unloadCurrentScene();
         this.currentScene = this.scenes[name]();
         this.currentScene.name = name;
-        this.currentScene.game = this._game;
+        this.currentScene.game = this.game;
 
         if (resetLoop) {
-            this._game.resumeLoop();
+            this.game.resumeLoop();
         }
     }
 
@@ -58,7 +62,7 @@ export default class SceneManager {
             this.currentScene = null;
             this.currentSceneName = null;
 
-            Game.renderManager.clearRenderStack();
+            this.renderManager.clearRenderStack();
         }
     }
 }
