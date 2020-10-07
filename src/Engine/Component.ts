@@ -21,24 +21,24 @@ export default abstract class Component {
         return this._uuid;
     }
 
-    private gameLoopEventHandler = (event: Event): void => {
+    private gameLoopEventHandler = (): void => {
         if (this.active === false) {
             return;
         }
 
         if (this.firstFrame === true) {
-            this.start((event as CustomEvent).detail);
+            this.start();
             this.firstFrame = false;
         } else {
-            this.update((event as CustomEvent).detail);
+            this.update();
         }
     };
 
-    protected start(event: Record<string, unknown>): void {
+    protected start(): void {
         // do nothing
     }
 
-    protected update(event: Record<string, unknown>): void {
+    protected update(): void {
         // do nothing
     }
 
@@ -62,6 +62,6 @@ export default abstract class Component {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         // @ts-ignore
-        Object.keys(this).forEach((key: any) => delete this[key]);
+        Object.keys(this).forEach((key) => delete this[key]);
     }
 }

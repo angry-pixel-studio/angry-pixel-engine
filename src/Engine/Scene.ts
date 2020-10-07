@@ -19,20 +19,20 @@ export default class Scene {
         this.gameLoopEventHandler.bind(this);
     }
 
-    gameLoopEventHandler = (event: Event): void => {
+    gameLoopEventHandler = (): void => {
         if (this.firstFrame === true) {
-            this.start((event as CustomEvent).detail);
+            this.start();
             this.firstFrame = false;
         } else {
-            this.update((event as CustomEvent).detail);
+            this.update();
         }
     };
 
-    protected start(event: Record<string, unknown>): void {
+    protected start(): void {
         // do nothing
     }
 
-    protected update(event: Record<string, unknown>): void {
+    protected update(): void {
         // do nothing
     }
 

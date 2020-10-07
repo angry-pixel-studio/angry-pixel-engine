@@ -1,8 +1,8 @@
-type constructor = () => object;
+type constructor = () => unknown;
 
 export default class Container {
-    private instances: Map<string, object> = new Map<string, object>();
-    private constructors: Map<string, constructor> = new Map<string, () => constructor>();
+    private instances: Map<string, unknown> = new Map<string, unknown>();
+    private constructors: Map<string, constructor> = new Map<string, constructor>();
 
     public add(name: string, constructor: constructor): void {
         if (this.constructors.has(name)) {
@@ -12,7 +12,7 @@ export default class Container {
         this.constructors.set(name, constructor);
     }
 
-    public getSingleton<T extends object>(name: string): T {
+    public getSingleton<T>(name: string): T {
         if (this.constructors.has(name) === false) {
             throw new Error(`Invalid object constructor name: ${name}`);
         }
@@ -24,7 +24,7 @@ export default class Container {
         return this.instances.get(name) as T;
     }
 
-    public getTranscient<T extends object>(name: string): T {
+    public getTranscient<T>(name: string): T {
         if (this.constructors.has(name) === false) {
             throw new Error(`Invalid object constructor name: ${name}`);
         }

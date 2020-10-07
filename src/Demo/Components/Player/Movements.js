@@ -1,9 +1,10 @@
 import Component from "../../../Engine/Component";
-import Rectangle from "../../../Engine/Helper/Rectangle";
+import Game from "../../../Engine/Game";
 import Vector2 from "../../../Engine/Helper/Vector2";
 
 export default class Movements extends Component {
     // cache
+    timeManager = Game.get("TimeManager");
     inputManager = null;
     transform = null;
     tilemap = null;
@@ -23,14 +24,14 @@ export default class Movements extends Component {
         this.inputManager = this.findGameObjectByName("InputManager");
     }
 
-    update(event) {
+    update() {
         this.rotate();
-        this.walk(event.deltaTime);
+        this.walk();
     }
 
-    walk(deltaTime) {
-        let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * deltaTime);
-        let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
+    walk() {
+        let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * this.timeManager.deltaTime);
+        let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * this.timeManager.deltaTime);
 
         deltaX = deltaY ? deltaX / 1.4 : deltaX;
         deltaY = deltaX ? deltaY / 1.4 : deltaY;

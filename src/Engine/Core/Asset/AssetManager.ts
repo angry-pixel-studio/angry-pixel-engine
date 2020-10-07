@@ -27,7 +27,7 @@ export default class AssetManager {
         if (asset.element.naturalWidth) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("load", (e: Event) => (asset.loaded = true));
+            asset.element.addEventListener("load", () => (asset.loaded = true));
         }
 
         return asset.element;
@@ -42,7 +42,7 @@ export default class AssetManager {
         if (asset.element.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("loadeddata", (e: Event) => (asset.loaded = true));
+            asset.element.addEventListener("loadeddata", () => (asset.loaded = true));
         }
 
         return asset.element;
@@ -57,7 +57,7 @@ export default class AssetManager {
         if (asset.element.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("loadeddata", (e: Event) => (asset.loaded = true));
+            asset.element.addEventListener("loadeddata", () => (asset.loaded = true));
         }
 
         return asset.element as HTMLVideoElement;

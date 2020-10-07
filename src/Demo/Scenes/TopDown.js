@@ -20,8 +20,7 @@ export default class TopDown extends Scene {
         this.loadAssets();
     }
 
-    start(event) {
-        event.game.canvasBGColor = "#080500";
+    start() {
         this.update();
     }
 

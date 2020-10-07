@@ -37,7 +37,7 @@ export default class Animation {
         }
     }
 
-    async update(): Promise<any> {
+    async update(): Promise<void> {
         while (this._playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
             await new Promise((resolve) => {
                 this.currentInterval = setTimeout(() => {

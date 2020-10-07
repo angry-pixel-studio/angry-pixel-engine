@@ -13,6 +13,7 @@ import { TAG_PLAYER } from "./PlayerTop";
 export const TAG_BOT = "Bot";
 
 export default class Bot extends GameObject {
+    timeManager = Game.get("TimeManager");
     assetManager = Game.get("AssetManager");
 
     player = null;
@@ -66,10 +67,10 @@ export default class Bot extends GameObject {
         this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
     }
 
-    update(event) {
+    update() {
         this.updateAimAngle();
         this.updateCurrentDirection();
-        this.move(event.deltaTime);
+        this.move();
     }
 
     updateAimAngle() {
@@ -85,7 +86,7 @@ export default class Bot extends GameObject {
         this.currentDirection.y = Math.sin(this.aimAngle);
     }
 
-    move(deltaTime) {
+    move() {
         if (
             Math.abs(this.player.transform.position.x - this.transform.position.x) <= this.playerDistance &&
             Math.abs(this.player.transform.position.y - this.transform.position.y) <= this.playerDistance
@@ -93,8 +94,8 @@ export default class Bot extends GameObject {
             return;
         }
 
-        const deltaX = this.currentDirection.x * (this.walkSpeed * deltaTime);
-        const deltaY = this.currentDirection.y * (this.walkSpeed * deltaTime);
+        const deltaX = this.currentDirection.x * (this.walkSpeed * this.timeManager.deltaTime);
+        const deltaY = this.currentDirection.y * (this.walkSpeed * this.timeManager.deltaTime);
 
         this.transform.position.x += deltaX;
         if (deltaX !== 0 && this.isTouchingForeground()) {

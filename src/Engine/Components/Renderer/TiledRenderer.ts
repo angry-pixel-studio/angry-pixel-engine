@@ -5,9 +5,25 @@ import Game from "../../Game";
 import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
 import RenderManager from "../../Core/Rendering/RenderManager";
 
+type Config = {
+    tileset: Tileset;
+    tilemapData: TilemapData;
+    tileScale: number;
+};
+
+type TilemapData = { layers: Layer[] };
+type Layer = { chunks: Chunk[] };
+type Chunk = {
+    data: number[];
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+};
+
 export default class TiledRenderer extends Component {
-    public tileset: Tileset = null;
-    public tilemapData: { [key: string]: any } = null;
+    public tileset: Tileset;
+    public tilemapData: TilemapData;
     public tileScale: number = 1;
     public showTileset: boolean = false;
 
@@ -23,13 +39,12 @@ export default class TiledRenderer extends Component {
     private _realWidth: number = 0;
     private _realHeight: number = 0;
 
-    constructor(config: { [key: string]: any }) {
+    constructor(config: Config) {
         super();
 
         this.tileset = config.tileset;
         this.tilemapData = config.tilemapData;
-
-        this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
+        this.tileScale = config.tileScale ?? this.tileScale;
     }
 
     start(): void {
@@ -70,14 +85,14 @@ export default class TiledRenderer extends Component {
     }
 
     private processTilemap(): void {
-        this.tilemapData.layers.forEach((layer: { [key: string]: any }) =>
-            layer.chunks.forEach((chunk: { [key: string]: any }) => this.processChunk(chunk))
+        this.tilemapData.layers.forEach((layer: Layer) =>
+            layer.chunks.forEach((chunk: Chunk) => this.processChunk(chunk))
         );
 
         this.tilemapProcessd = true;
     }
 
-    private processChunk(chunk: { [key: string]: any }): void {
+    private processChunk(chunk: Chunk): void {
         let dataIndex = 0;
 
         for (let row = 0; row < chunk.height; row++) {
@@ -93,7 +108,7 @@ export default class TiledRenderer extends Component {
         }
     }
 
-    private updateSizeInfo(chunk: { [key: string]: any }, col: number, row: number): void {
+    private updateSizeInfo(chunk: { x: number; y: number }, col: number, row: number): void {
         col += 1 + chunk.x;
         row += 1 + chunk.y;
 
@@ -108,7 +123,7 @@ export default class TiledRenderer extends Component {
         }
     }
 
-    private processTile(tile: Rectangle, chunk: { [key: string]: any }, col: number, row: number): void {
+    private processTile(tile: Rectangle, chunk: { x: number; y: number }, col: number, row: number): void {
         const renderData = new ImageRenderData();
 
         renderData.position.x =

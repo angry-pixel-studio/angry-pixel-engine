@@ -28,7 +28,7 @@ export default class RenderManager {
         this._viewportRect.updateFromRect(viewportRect);
     }
 
-    public clearCanvas(color: string | null = null) {
+    public clearCanvas(color: string | null = null): void {
         this.contextRenderer.clearCanvas(color);
     }
 
@@ -36,11 +36,11 @@ export default class RenderManager {
         this.renderStack.push(renderData);
     }
 
-    public clearRenderStack() {
+    public clearRenderStack(): void {
         this.renderStack = [];
     }
 
-    public render() {
+    public render(): void {
         this.renderStack.forEach((renderData: RenderData) => {
             if (this._renderLayers.includes(renderData.layer) === false) {
                 return;

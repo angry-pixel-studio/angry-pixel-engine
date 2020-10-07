@@ -5,6 +5,7 @@ import CollisionManager from "./Core/Collision/CollisionManager";
 import AssetManager from "./Core/Asset/AssetManager";
 import GameObjectManager from "./Core/GameObject/GameObjectManager";
 import Container from "./Core/DependencyInjection/Container";
+import TimeManager from "./Core/Time/TimeManager";
 
 const CANVAS_ID: string = "miniEngineCanvas";
 
@@ -18,14 +19,13 @@ export default class Game {
     private sceneManager: SceneManager;
     private renderManager: RenderManager;
     private collisionManager: CollisionManager;
+    private timeManager: TimeManager;
 
     private canvasContainer: HTMLElement;
     private canvasWidth: number;
     private canvasHeight: number;
     private _running: boolean = false;
     private frameRequestId: number = null;
-    private then: number = 0;
-    private deltaTime: number = 0;
 
     constructor(canvasContainer: HTMLElement, canvasWidth: number, canvasHeight: number) {
         this.canvasContainer = canvasContainer;
@@ -35,7 +35,7 @@ export default class Game {
         this.setup();
     }
 
-    private setup() {
+    private setup(): void {
         Game.container.add("Canvas", () => {
             return this.setupCanvas(document.createElement("canvas"));
         });
@@ -45,10 +45,12 @@ export default class Game {
         Game.container.add("CollisionManager", () => new CollisionManager(Game.get<RenderManager>("RenderManager")));
         Game.container.add("GameObjectManager", () => new GameObjectManager());
         Game.container.add("AssetManager", () => new AssetManager());
+        Game.container.add("TimeManager", () => new TimeManager());
 
         this.sceneManager = Game.get<SceneManager>("SceneManager");
         this.renderManager = Game.get<RenderManager>("RenderManager");
         this.collisionManager = Game.get<CollisionManager>("CollisionManager");
+        this.timeManager = Game.get<TimeManager>("TimeManager");
     }
 
     private setupCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
@@ -60,7 +62,7 @@ export default class Game {
         return canvas;
     }
 
-    public static get<T extends object>(name: string): T {
+    public static get<T>(name: string): T {
         return this.container.getSingleton<T>(name);
     }
 
@@ -74,8 +76,7 @@ export default class Game {
 
     public run(): void {
         this.sceneManager.loadOpeningScene();
-
-        this.then = Date.now();
+        this.timeManager.start();
 
         this.requestAnimationFrame();
     }
@@ -91,10 +92,7 @@ export default class Game {
     private gameLoop(time: number): void {
         this._running = true;
 
-        const now: number = time * 0.001;
-        this.deltaTime = Math.min(0.1, now - this.then);
-        this.then = now;
-
+        this.timeManager.update(time);
         this.renderManager.clearCanvas(this.canvasBGColor);
         this.collisionManager.prepare();
 
@@ -105,13 +103,13 @@ export default class Game {
         this.requestAnimationFrame();
     }
 
-    public stopLoop() {
+    public stopLoop(): void {
         window.cancelAnimationFrame(this.frameRequestId);
         this._running = false;
         this.frameRequestId = null;
     }
 
-    public resumeLoop() {
+    public resumeLoop(): void {
         if (this._running == false && this.frameRequestId === null) {
             this.requestAnimationFrame();
         }
@@ -122,13 +120,6 @@ export default class Game {
     }
 
     private dispatchFrameEvent(event: string): void {
-        window.dispatchEvent(
-            new CustomEvent(event, {
-                detail: {
-                    game: this,
-                    deltaTime: this.deltaTime,
-                },
-            })
-        );
+        window.dispatchEvent(new CustomEvent(event));
     }
 }

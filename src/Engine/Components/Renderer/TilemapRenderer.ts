@@ -5,6 +5,12 @@ import Game from "../../Game";
 import Rectangle from "../../Helper/Rectangle";
 import Tileset from "../../Tileset";
 
+type Config = {
+    tileset: Tileset;
+    tilemapData: string;
+    tileScale: number;
+};
+
 export default class TilemapRenderer extends Component {
     public tileset: Tileset = null;
     public tilemapData: string = null;
@@ -23,13 +29,12 @@ export default class TilemapRenderer extends Component {
     private _realWidth: number = 0;
     private _realHeight: number = 0;
 
-    constructor(config: { [key: string]: any }) {
+    constructor(config: Config) {
         super();
 
         this.tileset = config.tileset;
         this.tilemapData = config.tilemapData;
-
-        this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
+        this.tileScale = config.tileScale ?? this.tileScale;
     }
 
     start(): void {
