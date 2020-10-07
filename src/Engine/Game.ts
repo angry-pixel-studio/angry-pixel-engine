@@ -55,8 +55,8 @@ export default class Game {
 
     private setupCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
         canvas.id = CANVAS_ID;
-        canvas.width = this.canvasWidth;
-        canvas.height = this.canvasHeight;
+        canvas.width = Math.floor(this.canvasWidth);
+        canvas.height = Math.floor(this.canvasHeight);
         this.canvasContainer.appendChild(canvas);
 
         return canvas;

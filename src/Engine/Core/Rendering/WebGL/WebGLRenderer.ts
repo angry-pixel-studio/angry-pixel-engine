@@ -58,10 +58,6 @@ export default class WebGLRenderer implements IContextRenderer {
 
         this.updateRenderPosition(renderData, viewRect);
 
-        /*if (renderData.layer === "Player") {
-            debugger;
-        }*/
-
         this.imageRenderer.renderImage(
             renderData.image,
             this.renderPosition,
@@ -76,7 +72,12 @@ export default class WebGLRenderer implements IContextRenderer {
     }
 
     private isInsideViewRect(renderData: ImageRenderData, viewRect: Rectangle): boolean {
-        this.cacheRect.set(renderData.position.x, renderData.position.y, renderData.width, renderData.height);
+        this.cacheRect.set(
+            renderData.position.x - renderData.width / 2,
+            renderData.position.y + renderData.height / 2,
+            renderData.width,
+            renderData.height
+        );
 
         return viewRect.overlappingRectangle(this.cacheRect);
     }
