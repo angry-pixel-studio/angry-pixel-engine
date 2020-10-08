@@ -88,14 +88,11 @@ export default class ImageRenderer {
         rotation: number = 0,
         flipHorizontal: boolean = false,
         flipVertical: boolean = false,
-        alpha: number = 1
+        alpha: number = 1,
+        smooth: boolean = true
     ): void {
         if (this.cache.has(image.src) === false) {
-            this.cache.set(image.src, this.textureFactory.create(image));
-        }
-
-        if (slice === null) {
-            slice = new Rectangle(0, 0, image.naturalWidth, image.naturalHeight);
+            this.cache.set(image.src, this.textureFactory.create(image, smooth));
         }
 
         const texture = this.cache.get(image.src);
@@ -110,22 +107,23 @@ export default class ImageRenderer {
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, -rotation * (Math.PI / 180));
 
         this.textureMatrix = mat4.create();
-        mat4.translate(this.textureMatrix, this.textureMatrix, [
-            slice.x / image.naturalWidth,
-            slice.y / image.naturalHeight,
-            0,
-        ]);
-        mat4.scale(this.textureMatrix, this.textureMatrix, [
-            slice.width / image.naturalWidth,
-            slice.height / image.naturalHeight,
-            0,
-        ]);
+        if (slice !== null) {
+            mat4.translate(this.textureMatrix, this.textureMatrix, [
+                slice.x / image.naturalWidth,
+                slice.y / image.naturalHeight,
+                0,
+            ]);
+            mat4.scale(this.textureMatrix, this.textureMatrix, [
+                slice.width / image.naturalWidth,
+                slice.height / image.naturalHeight,
+                0,
+            ]);
+        }
 
         this.gl.enableVertexAttribArray(this.positionAttr);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.vertexAttribPointer(this.positionAttr, 2, this.gl.FLOAT, false, 0, 0);
 
-        //texture
         this.gl.enableVertexAttribArray(this.texCoordsAttr);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.vertexAttribPointer(this.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);

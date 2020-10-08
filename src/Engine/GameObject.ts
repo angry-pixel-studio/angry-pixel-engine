@@ -19,7 +19,7 @@ export default class GameObject {
     public ui: boolean = false;
 
     public active: boolean = true;
-    public scene: Scene = null;
+    private _scene: Scene = null;
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
@@ -50,6 +50,18 @@ export default class GameObject {
     public set parent(parent: GameObject | null) {
         this._parent = parent;
         this.transform.update();
+    }
+
+    public get scene(): Scene {
+        if (this._scene === null && this._parent !== null) {
+            this._scene = this._parent.scene;
+        }
+
+        return this._scene;
+    }
+
+    public set scene(scene: Scene) {
+        this._scene = scene;
     }
 
     gameLoopEventHandler = (): void => {

@@ -67,7 +67,8 @@ export default class WebGLRenderer implements IContextRenderer {
             renderData.rotation,
             renderData.flipHorizontal,
             renderData.flipVertical,
-            renderData.alpha
+            renderData.alpha,
+            renderData.smooth
         );
     }
 

@@ -32,6 +32,7 @@ export default class ForegroundTopDown extends GameObject {
                     }),
                     tilemapData: tilemapData,
                     tileScale: 4,
+                    smooth: false,
                 }),
             "TilemapRenderer"
         );

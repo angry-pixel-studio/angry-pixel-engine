@@ -9,12 +9,14 @@ type Config = {
     tileset: Tileset;
     tilemapData: string;
     tileScale: number;
+    smooth: boolean;
 };
 
 export default class TilemapRenderer extends Component {
     public tileset: Tileset = null;
     public tilemapData: string = null;
     public tileScale: number = 1;
+    public smooth: boolean = true; // default TRUE to avoid bleeding between tiles
     public showTileset: boolean = false;
 
     private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
@@ -35,6 +37,7 @@ export default class TilemapRenderer extends Component {
         this.tileset = config.tileset;
         this.tilemapData = config.tilemapData;
         this.tileScale = config.tileScale ?? this.tileScale;
+        this.smooth = config.smooth ?? this.smooth;
     }
 
     start(): void {
@@ -121,6 +124,7 @@ export default class TilemapRenderer extends Component {
         renderData.width = tile.width * this.tileScale;
         renderData.height = tile.height * this.tileScale;
         renderData.slice = tile;
+        renderData.smooth = this.smooth;
 
         this.processedData.push(renderData);
     }

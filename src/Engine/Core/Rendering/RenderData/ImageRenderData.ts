@@ -10,6 +10,6 @@ export default class ImageRenderData extends RenderData {
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = null;
-    public smooth: boolean = false;
+    public smooth: boolean = true;
     public alpha: number = 1;
 }

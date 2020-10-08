@@ -5,22 +5,20 @@ export default class TextureFactory {
         this.gl = gl;
     }
 
-    public create(image: HTMLImageElement): WebGLTexture {
+    public create(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
         const texture: WebGLTexture = this.gl.createTexture();
 
         if (image.naturalWidth) {
-            this.onImageLoaded(image, texture);
+            this.onImageLoaded(image, texture, smooth);
         } else {
-            image.addEventListener("load", () => this.onImageLoaded(image, texture));
+            image.addEventListener("load", () => this.onImageLoaded(image, texture, smooth));
         }
 
         return texture;
     }
 
-    private onImageLoaded(image: HTMLImageElement, texture: WebGLTexture) {
+    private onImageLoaded(image: HTMLImageElement, texture: WebGLTexture, smooth: boolean = true) {
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-
-        //this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
 
         this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image);
 
@@ -28,7 +26,12 @@ export default class TextureFactory {
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
 
         // NEAREST = crisp pixels, LINEAR = smooth pixels
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        if (smooth === false) {
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        } else {
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
+        }
     }
 }
