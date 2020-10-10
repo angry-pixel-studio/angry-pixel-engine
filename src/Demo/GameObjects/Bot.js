@@ -1,7 +1,7 @@
 import Animator from "../../Engine/Components/Animator";
 import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Helper/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
@@ -13,8 +13,8 @@ import { TAG_PLAYER } from "./PlayerTop";
 export const TAG_BOT = "Bot";
 
 export default class Bot extends GameObject {
-    timeManager = Game.get("TimeManager");
-    assetManager = Game.get("AssetManager");
+    timeManager = container.getSingleton("TimeManager");
+    assetManager = container.getSingleton("AssetManager");
 
     player = null;
     tilemap = null;

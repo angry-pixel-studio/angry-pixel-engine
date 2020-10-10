@@ -19,6 +19,10 @@ export default class SceneManager {
         this.renderManager = renderManager;
     }
 
+    public getCurrentScene<T extends Scene>(): T {
+        return this.currentScene as T;
+    }
+
     public addScene(name: string, SceneConstructor: SceneConstructor, openingScene: boolean = false): void {
         if (typeof this.scenes[name] === "function") {
             throw new Error(`There is already a scene with the name '${name}'`);

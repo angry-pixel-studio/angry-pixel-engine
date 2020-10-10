@@ -3,11 +3,11 @@ import TextRenderer from "../../../Engine/Components/Renderer/TextRenderer";
 import SpriteRenderer from "../../../Engine/Components/Renderer/SpriteRenderer";
 import Sprite from "../../../Engine/Sprite";
 import Vector2 from "../../../Engine/Helper/Vector2";
-import Game from "../../../Engine/Game";
+import { container } from "../../../Engine/Game";
 
 export default class PlayerStats extends GameObject {
-    assetManager = Game.get("AssetManager");
-    canvas = Game.get("Canvas");
+    assetManager = container.getSingleton("AssetManager");
+    canvas = container.getSingleton("Canvas");
 
     constructor() {
         super();

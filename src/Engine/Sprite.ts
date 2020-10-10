@@ -28,7 +28,7 @@ export default class Sprite {
         }
 
         this.scale = scale ? scale : this.scale;
-        this.smooth = smooth ? smooth : this.smooth;
+        this.smooth = smooth !== undefined ? smooth : this.smooth;
 
         if (this.image.naturalWidth) {
             this.onLoad();

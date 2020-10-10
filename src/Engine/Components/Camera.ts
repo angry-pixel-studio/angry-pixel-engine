@@ -1,6 +1,6 @@
 import Component from "../Component";
 import RenderManager from "../Core/Rendering/RenderManager";
-import Game from "../Game";
+import { container } from "../Game";
 import { LAYER_DEFAULT } from "../GameObject";
 import Rectangle from "../Helper/Rectangle";
 
@@ -14,8 +14,8 @@ export default class Camera extends Component {
     private _worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _renderLayers: string[] = DEFAULT_LAYERS;
 
-    private canvas: HTMLCanvasElement = Game.get<HTMLCanvasElement>("Canvas");
-    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
+    private canvas: HTMLCanvasElement = container.getSingleton<HTMLCanvasElement>("Canvas");
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     start(): void {
         this.setupViewportRect();

@@ -4,12 +4,12 @@ import tilemapData from "../Tilemaps/Foreground";
 import Tileset from "../../Engine/Tileset";
 import TilemapCollider from "./../../Engine/Components/Colliders/TilemapCollider";
 import { LAYER_FOREGROUND } from "../Config/renderLayers";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 
 export const TAG_FOREGROUND = "Foreground";
 
 export default class ForegroundTopDown extends GameObject {
-    assetManager = Game.get("AssetManager");
+    assetManager = container.getSingleton("AssetManager");
     width = 0;
     height = 0;
     tilemapRenderer = null;

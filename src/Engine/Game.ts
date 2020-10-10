@@ -11,9 +11,9 @@ const CANVAS_ID: string = "miniEngineCanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
 
-export default class Game {
-    static readonly container: Container = new Container();
+export const container: Container = new Container();
 
+export default class Game {
     public canvasBGColor: string = "#000000";
 
     private sceneManager: SceneManager;
@@ -36,21 +36,21 @@ export default class Game {
     }
 
     private setup(): void {
-        Game.container.add("Canvas", () => {
+        container.add("Canvas", () => {
             return this.setupCanvas(document.createElement("canvas"));
         });
-        Game.container.add("InputManager", () => new InputManager(Game.get<HTMLCanvasElement>("Canvas")));
-        Game.container.add("RenderManager", () => new RenderManager(Game.get<HTMLCanvasElement>("Canvas")));
-        Game.container.add("SceneManager", () => new SceneManager(this, Game.get<RenderManager>("RenderManager")));
-        Game.container.add("CollisionManager", () => new CollisionManager(Game.get<RenderManager>("RenderManager")));
-        Game.container.add("GameObjectManager", () => new GameObjectManager());
-        Game.container.add("AssetManager", () => new AssetManager());
-        Game.container.add("TimeManager", () => new TimeManager());
-
-        this.sceneManager = Game.get<SceneManager>("SceneManager");
-        this.renderManager = Game.get<RenderManager>("RenderManager");
-        this.collisionManager = Game.get<CollisionManager>("CollisionManager");
-        this.timeManager = Game.get<TimeManager>("TimeManager");
+        container.add("InputManager", () => new InputManager(container.getSingleton<HTMLCanvasElement>("Canvas")));
+        container.add("RenderManager", () => new RenderManager(container.getSingleton<HTMLCanvasElement>("Canvas")));
+        container.add("SceneManager", () => new SceneManager(this, container.getSingleton<RenderManager>("RenderManager")));
+        container.add("CollisionManager", () => new CollisionManager(container.getSingleton<RenderManager>("RenderManager")));
+        container.add("GameObjectManager", () => new GameObjectManager());
+        container.add("AssetManager", () => new AssetManager());
+        container.add("TimeManager", () => new TimeManager());
+        
+        this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
+        this.renderManager = container.getSingleton<RenderManager>("RenderManager");
+        this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
+        this.timeManager = container.getSingleton<TimeManager>("TimeManager");
     }
 
     private setupCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
@@ -60,10 +60,6 @@ export default class Game {
         this.canvasContainer.appendChild(canvas);
 
         return canvas;
-    }
-
-    public static get<T>(name: string): T {
-        return this.container.getSingleton<T>(name);
     }
 
     public get running(): boolean {

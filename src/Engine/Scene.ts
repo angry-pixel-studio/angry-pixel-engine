@@ -1,5 +1,5 @@
 import GameCamera from "./GameObjects/GameCamera";
-import Game, { EVENT_UPDATE } from "./Game";
+import Game, { container, EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
 import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 
@@ -9,7 +9,7 @@ export default class Scene {
     public game: Game = null;
     public name: string = null;
 
-    private gameObjectManager: GameObjectManager = Game.get<GameObjectManager>("GameObjectManager");
+    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private firstFrame: boolean = true;
 
     constructor() {
@@ -41,7 +41,7 @@ export default class Scene {
     }
 
     public addGameObject(gameObjectFactory: GameObjectFactory, name: string): this {
-        this.gameObjectManager.addGameObject(gameObjectFactory, this, name);
+        this.gameObjectManager.addGameObject(gameObjectFactory, name);
 
         return this;
     }

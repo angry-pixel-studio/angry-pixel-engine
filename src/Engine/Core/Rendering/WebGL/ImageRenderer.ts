@@ -34,7 +34,7 @@ export default class ImageRenderer {
     private modelMatrix: mat4;
     private textureMatrix: mat4;
 
-    private cache: Map<string, WebGLTexture> = new Map<string, WebGLTexture>();
+    private texcache: Map<string, WebGLTexture> = new Map<string, WebGLTexture>();
 
     constructor(gl: WebGLRenderingContext, programFactory: ProgramFactory, textureFactory: TextureFactory) {
         this.gl = gl;
@@ -63,7 +63,7 @@ export default class ImageRenderer {
             this.gl.canvas.height / 2,
             -1,
             1
-        );
+        ); // todo: sacar esto de la camara y no el canvas
 
         this.gl.useProgram(this.program);
 
@@ -77,6 +77,15 @@ export default class ImageRenderer {
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCoords), this.gl.STATIC_DRAW);
+
+        this.gl.enableVertexAttribArray(this.positionAttr);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.vertexAttribPointer(this.positionAttr, 2, this.gl.FLOAT, false, 0, 0);
+
+        this.gl.enableVertexAttribArray(this.texCoordsAttr);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.vertexAttribPointer(this.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+
     }
 
     public renderImage(
@@ -91,11 +100,11 @@ export default class ImageRenderer {
         alpha: number = 1,
         smooth: boolean = true
     ): void {
-        if (this.cache.has(image.src) === false) {
-            this.cache.set(image.src, this.textureFactory.create(image, smooth));
+        if (this.texcache.has(image.src) === false) {
+            this.texcache.set(image.src, this.textureFactory.create(image, smooth));
         }
 
-        const texture = this.cache.get(image.src);
+        const texture = this.texcache.get(image.src);
 
         this.modelMatrix = mat4.create();
         mat4.translate(this.modelMatrix, this.modelMatrix, [position.x, position.y, 0]);
@@ -119,14 +128,6 @@ export default class ImageRenderer {
                 0,
             ]);
         }
-
-        this.gl.enableVertexAttribArray(this.positionAttr);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.vertexAttribPointer(this.positionAttr, 2, this.gl.FLOAT, false, 0, 0);
-
-        this.gl.enableVertexAttribArray(this.texCoordsAttr);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.vertexAttribPointer(this.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
         this.gl.uniformMatrix4fv(this.projectionMatrixUniform, false, this.projectionMatrix);
         this.gl.uniformMatrix4fv(this.modelMatrixUniform, false, this.modelMatrix);

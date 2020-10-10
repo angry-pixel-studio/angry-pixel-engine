@@ -1,10 +1,10 @@
 import Component from "../../../Engine/Component";
-import Game from "../../../Engine/Game";
+import { container } from "../../../Engine/Game";
 import Vector2 from "../../../Engine/Helper/Vector2";
 
 export default class Movements extends Component {
     // cache
-    timeManager = Game.get("TimeManager");
+    timeManager = container.getSingleton("TimeManager");
     inputManager = null;
     transform = null;
     tilemap = null;

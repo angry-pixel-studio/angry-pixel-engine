@@ -1,9 +1,9 @@
 import Component from "../../Engine/Component";
 import { TAG_PLAYER } from "../../Demo/GameObjects/PlayerTop";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 
 export default class FollowPlayerCamera extends Component {
-    canvas = Game.get("Canvas");
+    canvas = container.getSingleton("Canvas");
     player = null;
     foreground = null;
 

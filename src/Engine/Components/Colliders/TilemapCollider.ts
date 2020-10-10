@@ -1,5 +1,5 @@
 import CollisionManager from "../../Core/Collision/CollisionManager";
-import Game from "../../Game";
+import { container } from "../../Game";
 import Component from "./../../Component";
 import RectangleCollider from "./../../Core/Collision/RectangleCollider";
 
@@ -16,7 +16,7 @@ export default class TilemapCollider extends Component {
     private tileHeight: number;
     private colliders: Array<RectangleCollider> = [];
 
-    private collisionManager: CollisionManager = Game.get<CollisionManager>("CollisionManager");
+    private collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
 
     constructor({ tilemapData, tileWidth, tileHeight, tileScale }: Config) {
         super();

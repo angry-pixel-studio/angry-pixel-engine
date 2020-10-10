@@ -9,12 +9,12 @@ import Vector2 from "../../Engine/Helper/Vector2";
 import Movements from "../Components/Player/Movements";
 import Weapon from "../Components/Player/Weapon";
 import { LAYER_PLAYER } from "../Config/renderLayers";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 
 export const TAG_PLAYER = "Player";
 
 export default class PlayerTop extends GameObject {
-    assetManager = Game.get("AssetManager");
+    assetManager = container.getSingleton("AssetManager");
 
     constructor() {
         super();

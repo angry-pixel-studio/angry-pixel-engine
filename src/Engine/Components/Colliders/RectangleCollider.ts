@@ -3,7 +3,7 @@ import { LAYER_DEFAULT } from "../../GameObject";
 import Rectangle from "./../../Helper/Rectangle";
 import Vector2 from "./../../Helper/Vector2";
 import CollisionManager from "../../Core/Collision/CollisionManager";
-import Game from "../../Game";
+import { container } from "../../Game";
 import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
 
 interface Config {
@@ -25,7 +25,7 @@ export default class RectangleCollider extends Component {
 
     private layer: string;
 
-    private collisionManager: CollisionManager = Game.get<CollisionManager>("CollisionManager");
+    private collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
 
     constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0 }: Config) {
         super();

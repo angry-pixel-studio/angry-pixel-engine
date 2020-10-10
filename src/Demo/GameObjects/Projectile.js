@@ -1,5 +1,5 @@
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
@@ -8,7 +8,7 @@ import { LAYER_PROJECTILE } from "../Config/renderLayers";
 export const TAG_PROJECTILE = "Projectile";
 
 export default class Projectile extends GameObject {
-    assetManager = Game.get("AssetManager");
+    assetManager = container.getSingleton("AssetManager");
 
     shooted = false;
     speed = 15;

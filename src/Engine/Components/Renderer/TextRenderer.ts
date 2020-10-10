@@ -1,7 +1,7 @@
 import Component from "../../Component";
 import TextRenderData from "../../Core/Rendering/RenderData/TextRenderData";
 import RenderManager from "../../Core/Rendering/RenderManager";
-import Game from "../../Game";
+import { container } from "../../Game";
 
 export type TextRendererConfig = {
     text: string;
@@ -26,7 +26,7 @@ export default class TextRenderer extends Component {
     public width: number = 0;
     public height: number = 0;
 
-    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
 
     constructor(config: TextRendererConfig) {

@@ -7,10 +7,10 @@ import renderLayers from "../Config/renderLayers";
 import Bot from "../GameObjects/Bot";
 import InputManager from "../GameObjects/InputManager";
 import PlayerStats from "../GameObjects/UI/PlayerStats";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 
 export default class TopDown extends Scene {
-    assetManager = Game.get("AssetManager");
+    assetManager = container.getSingleton("AssetManager");
     assetsLoaded = false;
     gameObjectsLoaded = false;
 
@@ -44,7 +44,7 @@ export default class TopDown extends Scene {
 
     setupGameObjects() {
         this.addGameObject(() => new ForegroundTopDown(), "Foreground")
-            .addGameObject(() => new SpotPointer(), "SpotPointer")
+            //.addGameObject(() => new SpotPointer(), "SpotPointer")
             .addGameObject(() => new InputManager(), "InputManager")
             .addGameObject(() => new PlayerTop(), "Player")
             .addGameObject(() => new PlayerStats(), "PlayerStats")

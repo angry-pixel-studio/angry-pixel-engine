@@ -1,7 +1,7 @@
 import Component from "../../Component";
 import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
 import RenderManager from "../../Core/Rendering/RenderManager";
-import Game from "../../Game";
+import { container } from "../../Game";
 import Vector2 from "../../Helper/Vector2";
 import Sprite from "../../Sprite";
 
@@ -24,7 +24,7 @@ export default class SpriteRenderer extends Component {
     public rotation: number = 0;
     public smooth: boolean = true;
 
-    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: ImageRenderData = new ImageRenderData();
     private goPosition: Vector2 = null;
 
@@ -59,6 +59,7 @@ export default class SpriteRenderer extends Component {
             this.renderData.flipHorizontal = this.flipHorizontal;
             this.renderData.flipVertical = this.flipVertical;
             this.renderData.rotation = this.gameObject.transform.rotation + this.rotation;
+            this.renderData.smooth = this.sprite.smooth;
 
             this.calculateRenderPosition();
 

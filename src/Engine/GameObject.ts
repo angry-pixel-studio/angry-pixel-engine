@@ -2,7 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import Component from "./Component";
 import Transform from "./Components/Transform";
 import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
-import Game, { EVENT_UPDATE } from "./Game";
+import SceneManager from "./Core/Scene/SceneManager";
+import { container, EVENT_UPDATE } from "./Game";
 import Scene from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
@@ -19,11 +20,11 @@ export default class GameObject {
     public ui: boolean = false;
 
     public active: boolean = true;
-    private _scene: Scene = null;
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
-    private gameObjectManager: GameObjectManager = Game.get<GameObjectManager>("GameObjectManager");
+    private sceneManager: SceneManager = container.getSingleton<SceneManager>('SceneManager');
+    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private components: Component[] = [];
     private inactiveComponents: string[] = [];
     private inactiveChildren: string[] = [];
@@ -52,16 +53,8 @@ export default class GameObject {
         this.transform.update();
     }
 
-    public get scene(): Scene {
-        if (this._scene === null && this._parent !== null) {
-            this._scene = this._parent.scene;
-        }
-
-        return this._scene;
-    }
-
-    public set scene(scene: Scene) {
-        this._scene = scene;
+    public getCurrentScene<T extends Scene>(): T {
+        return this.sceneManager.getCurrentScene<T>();
     }
 
     gameLoopEventHandler = (): void => {
@@ -139,7 +132,7 @@ export default class GameObject {
     }
 
     public addChild(gameObjectFactory: GameObjectFactory, name: string): this {
-        this.gameObjectManager.addGameObject(gameObjectFactory, this.scene, name, this);
+        this.gameObjectManager.addGameObject(gameObjectFactory, name, this);
 
         return this;
     }

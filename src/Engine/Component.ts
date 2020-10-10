@@ -1,10 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
 import GameObjectManager from "./Core/GameObject/GameObjectManager";
-import Game, { EVENT_UPDATE } from "./Game";
+import SceneManager from "./Core/Scene/SceneManager";
+import {container, EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
+import Scene from "./Scene";
 
 export default abstract class Component {
-    private gameObjectManager: GameObjectManager = Game.get<GameObjectManager>("GameObjectManager");
+    private sceneManager: SceneManager = container.getSingleton<SceneManager>('SceneManager');
+    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 
     private readonly _uuid: string = uuidv4();
     public name: string = null;
@@ -40,6 +43,10 @@ export default abstract class Component {
 
     protected update(): void {
         // do nothing
+    }
+
+    public getCurrentScene<T extends Scene>(): T {
+        return this.sceneManager.getCurrentScene<T>();
     }
 
     public getComponent<T extends Component>(name: string): T | null {

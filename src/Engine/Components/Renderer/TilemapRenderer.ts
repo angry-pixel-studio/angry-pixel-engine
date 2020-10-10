@@ -1,7 +1,7 @@
 import Component from "../../Component";
 import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
 import RenderManager from "../../Core/Rendering/RenderManager";
-import Game from "../../Game";
+import { container } from "../../Game";
 import Rectangle from "../../Helper/Rectangle";
 import Tileset from "../../Tileset";
 
@@ -16,10 +16,10 @@ export default class TilemapRenderer extends Component {
     public tileset: Tileset = null;
     public tilemapData: string = null;
     public tileScale: number = 1;
-    public smooth: boolean = true; // default TRUE to avoid bleeding between tiles
+    public smooth: boolean = true; // default TRUE to avoid tiles bleeding
     public showTileset: boolean = false;
 
-    private renderManager: RenderManager = Game.get<RenderManager>("RenderManager");
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     private tilemapProcessd: boolean = false;
     private processedData: ImageRenderData[] = [];

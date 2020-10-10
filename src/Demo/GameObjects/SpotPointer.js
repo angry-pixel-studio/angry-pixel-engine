@@ -1,8 +1,8 @@
 import GameObject from "../../Engine/GameObject";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 
 export default class SpotPointer extends GameObject {
-    inputManager = Game.get("InputManager");
+    inputManager = container.getSingleton("InputManager");
 
     mousePressed = false;
     camera = null;
@@ -12,7 +12,7 @@ export default class SpotPointer extends GameObject {
         const mouse = this.inputManager.mouse;
 
         if (mouse.leftButtonPressed && this.mousePressed === false) {
-            this.camera = this.camera === null ? this.scene.gameCamera.camera : this.camera;
+            this.camera = this.camera === null ? this.getCurrentScene().gameCamera.camera : this.camera;
             this.vpPos = mouse.viewportPosition;
 
             console.log({
