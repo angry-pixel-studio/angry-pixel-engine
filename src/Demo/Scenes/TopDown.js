@@ -44,13 +44,21 @@ export default class TopDown extends Scene {
 
     setupGameObjects() {
         this.addGameObject(() => new ForegroundTopDown(), "Foreground")
-            //.addGameObject(() => new SpotPointer(), "SpotPointer")
+            .addGameObject(() => new SpotPointer(), "SpotPointer")
             .addGameObject(() => new InputManager(), "InputManager")
             .addGameObject(() => new PlayerTop(), "Player")
-            .addGameObject(() => new PlayerStats(), "PlayerStats")
-            .addGameObject(() => new Bot(690, 385), "Bot");
+            .addGameObject(() => new PlayerStats(), "PlayerStats");
+
+        this.setUpBots();
 
         this.gameCamera.camera.renderLayers = renderLayers;
         this.gameCamera.addComponent(() => new FollowPlayerCamera());
+    }
+
+    setUpBots() {
+        this.addGameObject(() => new Bot(690, 385), "Bot01")
+            .addGameObject(() => new Bot(-820, 500), "Bot02")
+            .addGameObject(() => new Bot(690, -385), "Bot03")
+            .addGameObject(() => new Bot(-820, -500), "Bot04");
     }
 }

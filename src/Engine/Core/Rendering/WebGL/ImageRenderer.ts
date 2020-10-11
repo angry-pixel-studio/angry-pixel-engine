@@ -85,7 +85,6 @@ export default class ImageRenderer {
         this.gl.enableVertexAttribArray(this.texCoordsAttr);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.vertexAttribPointer(this.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
-
     }
 
     public renderImage(

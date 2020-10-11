@@ -23,7 +23,7 @@ export default class GameObject {
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
-    private sceneManager: SceneManager = container.getSingleton<SceneManager>('SceneManager');
+    private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private components: Component[] = [];
     private inactiveComponents: string[] = [];
