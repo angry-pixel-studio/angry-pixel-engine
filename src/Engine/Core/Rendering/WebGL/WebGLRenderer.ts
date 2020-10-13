@@ -3,6 +3,7 @@ import Vector2 from "../../../Helper/Vector2";
 import IContextRenderer from "../IContextRenderer";
 import ImageRenderData from "../RenderData/ImageRenderData";
 import RenderData, { RenderDataType } from "../RenderData/RenderData";
+import TextRenderData from "../RenderData/TextRenderData";
 import ImageRenderer from "./ImageRenderer";
 import ProgramFactory from "./ProgramFactory";
 import ShaderLoader from "./ShaderLoader";
@@ -72,7 +73,10 @@ export default class WebGLRenderer implements IContextRenderer {
         );
     }
 
-    private isInsideViewRect(renderData: ImageRenderData, viewRect: Rectangle): boolean {
+    private isInsideViewRect(
+        renderData: { position: Vector2; width: number; height: number },
+        viewRect: Rectangle
+    ): boolean {
         this.cacheRect.set(
             renderData.position.x - renderData.width / 2,
             renderData.position.y + renderData.height / 2,

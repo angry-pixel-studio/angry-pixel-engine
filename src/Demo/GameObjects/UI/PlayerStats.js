@@ -3,11 +3,10 @@ import TextRenderer from "../../../Engine/Components/Renderer/TextRenderer";
 import SpriteRenderer from "../../../Engine/Components/Renderer/SpriteRenderer";
 import Sprite from "../../../Engine/Sprite";
 import Vector2 from "../../../Engine/Helper/Vector2";
-import { container } from "../../../Engine/Game";
+import { container, gameCanvas } from "../../../Engine/Game";
 
 export default class PlayerStats extends GameObject {
     assetManager = container.getSingleton("AssetManager");
-    canvas = container.getSingleton("Canvas");
 
     constructor() {
         super();
@@ -42,6 +41,6 @@ export default class PlayerStats extends GameObject {
     }
 
     start() {
-        this.transform.position.set(100 - this.canvas.clientWidth / 2, this.canvas.clientHeight / 2 - 50);
+        this.transform.position.set(100 - gameCanvas.clientWidth / 2, gameCanvas.clientHeight / 2 - 50);
     }
 }

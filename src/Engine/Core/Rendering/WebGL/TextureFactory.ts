@@ -5,19 +5,19 @@ export default class TextureFactory {
         this.gl = gl;
     }
 
-    public create(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
+    public createFromImage(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
         const texture: WebGLTexture = this.gl.createTexture();
 
         if (image.naturalWidth) {
-            this.onImageLoaded(image, texture, smooth);
+            this.create(image, texture, smooth);
         } else {
-            image.addEventListener("load", () => this.onImageLoaded(image, texture, smooth));
+            image.addEventListener("load", () => this.create(image, texture, smooth));
         }
 
         return texture;
     }
 
-    private onImageLoaded(image: HTMLImageElement, texture: WebGLTexture, smooth: boolean = true) {
+    private create(image: HTMLImageElement, texture: WebGLTexture, smooth: boolean = true) {
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
         this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image);

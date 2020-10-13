@@ -1,9 +1,8 @@
 import Component from "../../Engine/Component";
 import { TAG_PLAYER } from "../../Demo/GameObjects/PlayerTop";
-import { container } from "../../Engine/Game";
+import { gameCanvas } from "../../Engine/Game";
 
 export default class FollowPlayerCamera extends Component {
-    canvas = container.getSingleton("Canvas");
     player = null;
     foreground = null;
 
@@ -13,11 +12,11 @@ export default class FollowPlayerCamera extends Component {
     }
 
     update() {
-        let x = (this.foreground.width - this.canvas.width) / 2;
-        let y = (this.foreground.height - this.canvas.height) / 2;
+        let x = (this.foreground.width - gameCanvas.width) / 2;
+        let y = (this.foreground.height - gameCanvas.height) / 2;
 
-        x = x < 0 ? this.canvas.width / 2 : x;
-        y = x < 0 ? this.canvas.height / 2 : x;
+        x = x < 0 ? gameCanvas.width / 2 : x;
+        y = x < 0 ? gameCanvas.height / 2 : x;
 
         //this.gameObject.transform.position.x = this.clamp(this.player.transform.position.x, -x, x);
         //this.gameObject.transform.position.y = this.clamp(this.player.transform.position.y, -y, y);

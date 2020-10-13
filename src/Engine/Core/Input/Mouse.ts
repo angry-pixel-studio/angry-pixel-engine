@@ -5,20 +5,19 @@ export default class Mouse {
     public scrollButonPressed: boolean = false;
     public rightButtonPressed: boolean = false;
 
-    private canvas: HTMLCanvasElement;
+    private gameNode: HTMLElement;
     private viewportPosition: Vector2 = new Vector2(0, 0);
 
-    constructor(canvas: HTMLCanvasElement) {
-        this.canvas = canvas;
+    constructor(gameNode: HTMLElement) {
+        this.gameNode = gameNode;
 
         this.setup();
     }
 
     private setup(): void {
-        this.canvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
-        this.canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
-        this.canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
-        this.canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+        this.gameNode.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
+        this.gameNode.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
+        this.gameNode.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
     }
 
     private updateButtonDown(event: MouseEvent) {
@@ -34,7 +33,7 @@ export default class Mouse {
     }
 
     private updatePosition(event: MouseEvent) {
-        const rect: DOMRect = this.canvas.getBoundingClientRect();
+        const rect: DOMRect = this.gameNode.getBoundingClientRect();
 
         this.viewportPosition.x = event.clientX - rect.left;
         this.viewportPosition.y = event.clientY - rect.top;

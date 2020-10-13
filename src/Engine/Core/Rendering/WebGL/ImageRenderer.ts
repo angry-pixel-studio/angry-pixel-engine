@@ -5,6 +5,7 @@ import ProgramFactory from "./ProgramFactory";
 import TextureFactory from "./TextureFactory";
 import Rectangle from "../../../Helper/Rectangle";
 import Vector2 from "../../../Helper/Vector2";
+import { sha256 } from "js-sha256";
 
 export default class ImageRenderer {
     private textureFactory: TextureFactory;
@@ -99,11 +100,11 @@ export default class ImageRenderer {
         alpha: number = 1,
         smooth: boolean = true
     ): void {
-        if (this.texcache.has(image.src) === false) {
-            this.texcache.set(image.src, this.textureFactory.create(image, smooth));
+        const textureHash: string = sha256(image.src);
+        if (this.texcache.has(textureHash) === false) {
+            this.texcache.set(textureHash, this.textureFactory.createFromImage(image, smooth));
         }
-
-        const texture = this.texcache.get(image.src);
+        const texture = this.texcache.get(textureHash);
 
         this.modelMatrix = mat4.create();
         mat4.translate(this.modelMatrix, this.modelMatrix, [position.x, position.y, 0]);

@@ -7,10 +7,14 @@ import GameObjectManager from "./Core/GameObject/GameObjectManager";
 import Container from "./Core/DependencyInjection/Container";
 import TimeManager from "./Core/Time/TimeManager";
 
-const CANVAS_ID: string = "miniEngineCanvas";
+const GAME_NODE_ID: string = "miniEngineGame";
+const GAME_CANVAS_ID: string = "miniEngineGameCanvas";
+const UI_CANVAS_ID: string = "miniEngineUiCanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
-
+export const gameNode: HTMLDivElement = document.createElement("div");
+export const gameCanvas: HTMLCanvasElement = document.createElement("canvas");
+export const uiCanvas: HTMLCanvasElement = document.createElement("canvas");
 export const container: Container = new Container();
 
 export default class Game {
@@ -21,51 +25,61 @@ export default class Game {
     private collisionManager: CollisionManager;
     private timeManager: TimeManager;
 
-    private canvasContainer: HTMLElement;
-    private canvasWidth: number;
-    private canvasHeight: number;
+    private gameContainer: HTMLElement;
+    private gameWidth: number;
+    private gameHeight: number;
     private _running: boolean = false;
     private frameRequestId: number = null;
 
-    constructor(canvasContainer: HTMLElement, canvasWidth: number, canvasHeight: number) {
-        this.canvasContainer = canvasContainer;
-        this.canvasWidth = canvasWidth;
-        this.canvasHeight = canvasHeight;
+    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number) {
+        this.gameContainer = gameContainer;
+        this.gameWidth = gameWidth;
+        this.gameHeight = gameHeight;
 
-        this.setup();
+        this.setupHTMLDom();
+        this.setupManagers();
     }
 
-    private setup(): void {
-        container.add("Canvas", () => {
-            return this.setupCanvas(document.createElement("canvas"));
-        });
-        container.add("InputManager", () => new InputManager(container.getSingleton<HTMLCanvasElement>("Canvas")));
-        container.add("RenderManager", () => new RenderManager(container.getSingleton<HTMLCanvasElement>("Canvas")));
-        container.add(
-            "SceneManager",
-            () => new SceneManager(this, container.getSingleton<RenderManager>("RenderManager"))
-        );
-        container.add(
-            "CollisionManager",
-            () => new CollisionManager(container.getSingleton<RenderManager>("RenderManager"))
-        );
+    private setupHTMLDom() {
+        gameNode.id = GAME_NODE_ID;
+        gameNode.style.width = `${this.gameWidth}px`;
+        gameNode.style.height = `${this.gameWidth}px`;
+        gameNode.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+        this.gameContainer.appendChild(gameNode);
+
+        gameCanvas.id = GAME_CANVAS_ID;
+        gameCanvas.width = Math.floor(this.gameWidth);
+        gameCanvas.height = Math.floor(this.gameHeight);
+        gameCanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+
+        const rect: DOMRect = gameNode.getBoundingClientRect();
+        uiCanvas.id = UI_CANVAS_ID;
+        uiCanvas.style.position = "absolute";
+        uiCanvas.style.top = rect.top.toString();
+        uiCanvas.style.left = `${rect.left}px`;
+        uiCanvas.style.zIndex = "10";
+        uiCanvas.width = Math.floor(this.gameWidth);
+        uiCanvas.height = Math.floor(this.gameHeight);
+        uiCanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+
+        gameNode.appendChild(uiCanvas);
+        gameNode.appendChild(gameCanvas);
+    }
+
+    private setupManagers(): void {
+        container.add("RenderManager", () => new RenderManager(gameCanvas));
+        this.renderManager = container.getSingleton<RenderManager>("RenderManager");
+
+        container.add("InputManager", () => new InputManager(gameNode));
+        container.add("SceneManager", () => new SceneManager(this, this.renderManager));
+        container.add("CollisionManager", () => new CollisionManager(this.renderManager));
         container.add("GameObjectManager", () => new GameObjectManager());
         container.add("AssetManager", () => new AssetManager());
         container.add("TimeManager", () => new TimeManager());
 
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
-        this.renderManager = container.getSingleton<RenderManager>("RenderManager");
         this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
         this.timeManager = container.getSingleton<TimeManager>("TimeManager");
-    }
-
-    private setupCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement {
-        canvas.id = CANVAS_ID;
-        canvas.width = Math.floor(this.canvasWidth);
-        canvas.height = Math.floor(this.canvasHeight);
-        this.canvasContainer.appendChild(canvas);
-
-        return canvas;
     }
 
     public get running(): boolean {
