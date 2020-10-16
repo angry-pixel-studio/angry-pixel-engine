@@ -48,6 +48,10 @@ export default class TextRenderer extends Component {
     }
 
     update(): void {
+        if (this.gameObject.ui === false) {
+            throw new Error("TextRenderer only can be used on UI GameObjects");
+        }
+
         this.renderData.layer = this.gameObject.layer;
         this.renderData.ui = this.gameObject.ui;
         this.renderData.text = this.text;

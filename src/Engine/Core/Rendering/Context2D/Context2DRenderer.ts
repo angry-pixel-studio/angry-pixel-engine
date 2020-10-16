@@ -23,8 +23,11 @@ export default class Context2DRenderer implements IContextRenderer {
 
     public clearCanvas(color: string | null = null): void {
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasContext.fillStyle = color ? color : DEFAULT_COLOR;
-        this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        if (color !== null) {
+            this.canvasContext.fillStyle = color ? color : DEFAULT_COLOR;
+            this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     }
 
     public render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void {
@@ -32,8 +35,8 @@ export default class Context2DRenderer implements IContextRenderer {
             this.renderImage(renderData as ImageRenderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
         }
 
-        if (renderData.type === RenderDataType.Text) {
-            this.renderText(renderData as TextRenderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
+        if (renderData.type === RenderDataType.Text && renderData.ui === true) {
+            this.renderText(renderData as TextRenderData, viewportRect);
         }
 
         if (renderData.type === RenderDataType.Geometric) {
@@ -109,6 +112,7 @@ export default class Context2DRenderer implements IContextRenderer {
 
         this.canvasContext.font = font.join(" ");
         this.canvasContext.fillStyle = renderData.color;
+        this.canvasContext.textBaseline = "middle";
 
         if (Array.isArray(renderData.text)) {
             let first = true;

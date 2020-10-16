@@ -18,10 +18,8 @@ export default class PlayerStats extends GameObject {
                 new TextRenderer({
                     text: ["Life: 100", "Ammo: 50"],
                     color: "#FFFFFF",
-                    size: 20,
-                    width: 200,
-                    height: 200,
-                    font: "Courier New",
+                    size: 16,
+                    font: "PressStart2P-Regular",
                 }),
             "TextRenderer"
         );

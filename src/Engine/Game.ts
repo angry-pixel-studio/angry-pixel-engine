@@ -9,12 +9,12 @@ import TimeManager from "./Core/Time/TimeManager";
 
 const GAME_NODE_ID: string = "miniEngineGame";
 const GAME_CANVAS_ID: string = "miniEngineGameCanvas";
-const UI_CANVAS_ID: string = "miniEngineUiCanvas";
+const UI_CANVAS_ID: string = "miniEngineUICanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
 export const gameNode: HTMLDivElement = document.createElement("div");
 export const gameCanvas: HTMLCanvasElement = document.createElement("canvas");
-export const uiCanvas: HTMLCanvasElement = document.createElement("canvas");
+export const UICanvas: HTMLCanvasElement = document.createElement("canvas");
 export const container: Container = new Container();
 
 export default class Game {
@@ -28,13 +28,15 @@ export default class Game {
     private gameContainer: HTMLElement;
     private gameWidth: number;
     private gameHeight: number;
+    private UIEnabled: boolean = true;
     private _running: boolean = false;
     private frameRequestId: number = null;
 
-    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number) {
+    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number, UIEnabled: boolean = true) {
         this.gameContainer = gameContainer;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
+        this.UIEnabled = UIEnabled;
 
         this.setupHTMLDom();
         this.setupManagers();
@@ -42,8 +44,9 @@ export default class Game {
 
     private setupHTMLDom() {
         gameNode.id = GAME_NODE_ID;
+        gameNode.style.position = "relative";
         gameNode.style.width = `${this.gameWidth}px`;
-        gameNode.style.height = `${this.gameWidth}px`;
+        gameNode.style.height = `${this.gameHeight}px`;
         gameNode.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
         this.gameContainer.appendChild(gameNode);
 
@@ -52,22 +55,22 @@ export default class Game {
         gameCanvas.height = Math.floor(this.gameHeight);
         gameCanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
 
-        const rect: DOMRect = gameNode.getBoundingClientRect();
-        uiCanvas.id = UI_CANVAS_ID;
-        uiCanvas.style.position = "absolute";
-        uiCanvas.style.top = rect.top.toString();
-        uiCanvas.style.left = `${rect.left}px`;
-        uiCanvas.style.zIndex = "10";
-        uiCanvas.width = Math.floor(this.gameWidth);
-        uiCanvas.height = Math.floor(this.gameHeight);
-        uiCanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+        if (this.UIEnabled) {
+            UICanvas.id = UI_CANVAS_ID;
+            UICanvas.style.position = "absolute";
+            UICanvas.style.zIndex = "10";
+            UICanvas.width = Math.floor(this.gameWidth);
+            UICanvas.height = Math.floor(this.gameHeight);
+            UICanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
 
-        gameNode.appendChild(uiCanvas);
+            gameNode.appendChild(UICanvas);
+        }
+
         gameNode.appendChild(gameCanvas);
     }
 
     private setupManagers(): void {
-        container.add("RenderManager", () => new RenderManager(gameCanvas));
+        container.add("RenderManager", () => new RenderManager(gameCanvas, this.UIEnabled ? UICanvas : null));
         this.renderManager = container.getSingleton<RenderManager>("RenderManager");
 
         container.add("InputManager", () => new InputManager(gameNode));
