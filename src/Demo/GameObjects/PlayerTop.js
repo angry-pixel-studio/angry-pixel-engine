@@ -33,7 +33,7 @@ export default class PlayerTop extends GameObject {
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
-                    rotation: -90,
+                    rotation: -90
                 }),
             "SpriteRenderer"
         );

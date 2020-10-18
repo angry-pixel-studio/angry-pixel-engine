@@ -13,6 +13,7 @@ type Config = {
     rotation: number;
     flipHorizontal: boolean;
     flipVertical: boolean;
+    opacity: number;
 };
 
 export default class SpriteRenderer extends Component {
@@ -23,6 +24,7 @@ export default class SpriteRenderer extends Component {
     public flipVertical: boolean = false;
     public rotation: number = 0;
     public smooth: boolean = true;
+    public opacity: number = 1;
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: ImageRenderData = new ImageRenderData();
@@ -41,6 +43,7 @@ export default class SpriteRenderer extends Component {
         this.rotation = config.rotation ?? this.rotation;
         this.flipHorizontal = config.flipHorizontal ?? this.flipHorizontal;
         this.flipVertical = config.flipVertical ?? this.flipVertical;
+        this.opacity = config.opacity ?? this.opacity;
     }
 
     protected start(): void {
@@ -60,6 +63,7 @@ export default class SpriteRenderer extends Component {
             this.renderData.flipVertical = this.flipVertical;
             this.renderData.rotation = this.gameObject.transform.rotation + this.rotation;
             this.renderData.smooth = this.sprite.smooth;
+            this.renderData.alpha = this.opacity;
 
             this.calculateRenderPosition();
 
