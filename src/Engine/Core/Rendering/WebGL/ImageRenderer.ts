@@ -37,23 +37,23 @@ export default class ImageRenderer {
 
     private texcache: Map<string, WebGLTexture> = new Map<string, WebGLTexture>();
 
-    constructor(gl: WebGLRenderingContext, programFactory: ProgramFactory, textureFactory: TextureFactory) {
-        this.gl = gl;
+    constructor(canvas: HTMLCanvasElement, programFactory: ProgramFactory, textureFactory: TextureFactory) {
+        this.gl = canvas.getContext("webgl2");
         this.textureFactory = textureFactory;
-        this.program = programFactory.create(vertexShader, fragmentShader);
+        this.program = programFactory.create(this.gl, vertexShader, fragmentShader);
 
-        this.positionBuffer = gl.createBuffer();
-        this.textureBuffer = gl.createBuffer();
+        this.positionBuffer = this.gl.createBuffer();
+        this.textureBuffer = this.gl.createBuffer();
 
-        this.positionAttr = gl.getAttribLocation(this.program, "position");
-        this.texCoordsAttr = gl.getAttribLocation(this.program, "textureCoords");
+        this.positionAttr = this.gl.getAttribLocation(this.program, "position");
+        this.texCoordsAttr = this.gl.getAttribLocation(this.program, "textureCoords");
 
-        this.modelMatrixUniform = gl.getUniformLocation(this.program, "modelMatrix");
-        this.projectionMatrixUniform = gl.getUniformLocation(this.program, "projectionMatrix");
-        this.textureMatrixUniform = gl.getUniformLocation(this.program, "textureMatrix");
+        this.modelMatrixUniform = this.gl.getUniformLocation(this.program, "modelMatrix");
+        this.projectionMatrixUniform = this.gl.getUniformLocation(this.program, "projectionMatrix");
+        this.textureMatrixUniform = this.gl.getUniformLocation(this.program, "textureMatrix");
 
-        this.textureUniform = gl.getUniformLocation(this.program, "texImage");
-        this.alphaUniform = gl.getUniformLocation(this.program, "alpha");
+        this.textureUniform = this.gl.getUniformLocation(this.program, "texImage");
+        this.alphaUniform = this.gl.getUniformLocation(this.program, "alpha");
 
         this.projectionMatrix = mat4.create();
         mat4.ortho(
@@ -68,10 +68,10 @@ export default class ImageRenderer {
 
         this.gl.useProgram(this.program);
 
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
-        const triangleCoords = [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5];
-        const textureCoords = [0, 1, 1, 1, 0, 0, 1, 0];
+        const triangleCoords = [-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5];
+        const textureCoords = [0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0];
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(triangleCoords), this.gl.STATIC_DRAW);
@@ -102,7 +102,7 @@ export default class ImageRenderer {
     ): void {
         const textureHash: string = sha256(image.src);
         if (this.texcache.has(textureHash) === false) {
-            this.texcache.set(textureHash, this.textureFactory.createFromImage(image, smooth));
+            this.texcache.set(textureHash, this.textureFactory.createFromImage(this.gl, image, smooth));
         }
         const texture = this.texcache.get(textureHash);
 
@@ -144,6 +144,6 @@ export default class ImageRenderer {
 
         this.gl.uniform1f(this.alphaUniform, alpha);
 
-        this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
     }
 }

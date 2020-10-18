@@ -5,20 +5,17 @@ import RenderData from "./RenderData/RenderData";
 import WebGLRenderer from "./WebGL/WebGLRenderer";
 
 export default class RenderManager {
-    private webGLRenderer: IContextRenderer = null;
-    private context2DRenderer: Context2DRenderer = null;
+    private gameRenderer: IContextRenderer = null;
+    private UIRenderer: IContextRenderer | null = null;
 
     private renderStack: RenderData[] = [];
     private _renderLayers: string[] = [];
     private _worldSpaceViewRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    constructor(gameCanvas: HTMLCanvasElement, UICanvas: HTMLCanvasElement = null) {
-        this.webGLRenderer = new WebGLRenderer(gameCanvas);
-
-        if (UICanvas !== null) {
-            this.context2DRenderer = new Context2DRenderer(UICanvas);
-        }
+    constructor(gameRenderer: IContextRenderer, UIRenderer: IContextRenderer | null) {
+        this.gameRenderer = gameRenderer;
+        this.UIRenderer = UIRenderer;
     }
 
     public set renderLayers(renderLayers: string[]) {
@@ -34,11 +31,11 @@ export default class RenderManager {
     }
 
     public clearCanvas(color: string | null = null): void {
-        this.webGLRenderer.clearCanvas(color);
+        this.gameRenderer.clearCanvas(color);
 
         // If UI enabled
-        if (this.context2DRenderer) {
-            this.context2DRenderer.clearCanvas();
+        if (this.UIRenderer) {
+            this.UIRenderer.clearCanvas(null);
         }
     }
 
@@ -57,9 +54,9 @@ export default class RenderManager {
             }
 
             if (renderData.ui !== true) {
-                this.webGLRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
-            } else if (this.context2DRenderer && renderData.ui === true) {
-                this.context2DRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+                this.gameRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+            } else if (this.UIRenderer && renderData.ui === true) {
+                this.UIRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
             }
         });
 

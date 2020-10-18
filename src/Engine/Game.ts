@@ -1,9 +1,7 @@
-import InputManager from "./Core/Input/InputManager";
 import SceneManager, { SceneConstructor } from "./Core/Scene/SceneManager";
 import RenderManager from "./Core/Rendering/RenderManager";
 import CollisionManager from "./Core/Collision/CollisionManager";
-import AssetManager from "./Core/Asset/AssetManager";
-import GameObjectManager from "./Core/GameObject/GameObjectManager";
+import loadDependencies from "./Core/DependencyInjection/Config";
 import Container from "./Core/DependencyInjection/Container";
 import TimeManager from "./Core/Time/TimeManager";
 
@@ -70,16 +68,9 @@ export default class Game {
     }
 
     private setupManagers(): void {
-        container.add("RenderManager", () => new RenderManager(gameCanvas, this.UIEnabled ? UICanvas : null));
+        loadDependencies(container, this, gameNode, gameCanvas, UICanvas);
+
         this.renderManager = container.getSingleton<RenderManager>("RenderManager");
-
-        container.add("InputManager", () => new InputManager(gameNode));
-        container.add("SceneManager", () => new SceneManager(this, this.renderManager));
-        container.add("CollisionManager", () => new CollisionManager(this.renderManager));
-        container.add("GameObjectManager", () => new GameObjectManager());
-        container.add("AssetManager", () => new AssetManager());
-        container.add("TimeManager", () => new TimeManager());
-
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
         this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
         this.timeManager = container.getSingleton<TimeManager>("TimeManager");

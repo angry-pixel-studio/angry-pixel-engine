@@ -17,14 +17,10 @@ export default class WebGLRenderer implements IContextRenderer {
     private renderPosition: Vector2 = new Vector2(0, 0);
     private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    public constructor(canvas: HTMLCanvasElement) {
+    public constructor(canvas: HTMLCanvasElement, imageRenderer: ImageRenderer) {
         this.canvas = canvas;
         this.gl = this.canvas.getContext("webgl2");
-
-        const programFactory: ProgramFactory = new ProgramFactory(this.gl, new ShaderLoader(this.gl));
-        const textureFactory: TextureFactory = new TextureFactory(this.gl);
-
-        this.imageRenderer = new ImageRenderer(this.gl, programFactory, textureFactory);
+        this.imageRenderer = imageRenderer;
     }
 
     clearCanvas(color: string): void {

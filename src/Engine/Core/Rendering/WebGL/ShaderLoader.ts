@@ -1,21 +1,15 @@
 export default class ShaderLoader {
-    gl: WebGLRenderingContext;
+    load(gl: WebGLRenderingContext, type: number, source: string): WebGLShader {
+        const shader: WebGLShader = gl.createShader(type);
 
-    constructor(gl: WebGLRenderingContext) {
-        this.gl = gl;
-    }
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
 
-    load(type: number, source: string): WebGLShader {
-        const shader: WebGLShader = this.gl.createShader(type);
+        const status: number = gl.COMPILE_STATUS;
 
-        this.gl.shaderSource(shader, source);
-        this.gl.compileShader(shader);
-
-        const status: number = this.gl.COMPILE_STATUS;
-
-        if (!this.gl.getShaderParameter(shader, status)) {
-            const error: string = this.gl.getShaderInfoLog(shader);
-            this.gl.deleteShader(shader);
+        if (!gl.getShaderParameter(shader, status)) {
+            const error: string = gl.getShaderInfoLog(shader);
+            gl.deleteShader(shader);
 
             throw new Error(`Unable to initialize the shader program: ${error}`);
         }

@@ -2,11 +2,11 @@ import Mouse from "./Mouse";
 import Keyboard from "./Keyboard";
 
 export default class InputManager {
-    public mouse: Mouse = null;
-    public keyboard: Keyboard = null;
+    public mouse: Mouse;
+    public keyboard: Keyboard;
 
-    constructor(gameNode: HTMLElement) {
-        this.mouse = new Mouse(gameNode);
-        this.keyboard = new Keyboard();
+    constructor(mouse: Mouse, keyboard: Keyboard) {
+        this.mouse = mouse;
+        this.keyboard = keyboard;
     }
 }

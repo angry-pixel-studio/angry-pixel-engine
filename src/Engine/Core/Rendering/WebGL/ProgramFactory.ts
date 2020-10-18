@@ -1,35 +1,38 @@
 import ShaderLoader from "./ShaderLoader";
 
 export default class ProgramFactory {
-    gl: WebGLRenderingContext;
     shaderLoader: ShaderLoader;
 
-    constructor(gl: WebGLRenderingContext, shaderLoader: ShaderLoader) {
-        this.gl = gl;
+    constructor(shaderLoader: ShaderLoader) {
         this.shaderLoader = shaderLoader;
     }
 
-    public create(vertexShaderSource: string, fragmentShaderSource: string): WebGLProgram {
-        const program: WebGLProgram = this.gl.createProgram();
+    public create(gl: WebGLRenderingContext, vertexShaderSource: string, fragmentShaderSource: string): WebGLProgram {
+        const program: WebGLProgram = gl.createProgram();
 
-        const vertexShader: WebGLShader = this.shaderLoader.load(this.gl.VERTEX_SHADER, vertexShaderSource);
-        const fragmentShader: WebGLShader = this.shaderLoader.load(this.gl.FRAGMENT_SHADER, fragmentShaderSource);
+        const vertexShader: WebGLShader = this.shaderLoader.load(gl, gl.VERTEX_SHADER, vertexShaderSource);
+        const fragmentShader: WebGLShader = this.shaderLoader.load(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-        this.link(program, vertexShader, fragmentShader);
+        this.link(gl, program, vertexShader, fragmentShader);
 
         return program;
     }
 
-    private link(program: WebGLProgram, vertexShader: WebGLShader, fragmentShader: WebGLShader): void {
-        this.gl.attachShader(program, vertexShader);
-        this.gl.attachShader(program, fragmentShader);
-        this.gl.linkProgram(program);
+    private link(
+        gl: WebGLRenderingContext,
+        program: WebGLProgram,
+        vertexShader: WebGLShader,
+        fragmentShader: WebGLShader
+    ): void {
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
 
-        const status = this.gl.LINK_STATUS;
+        const status = gl.LINK_STATUS;
 
-        if (!this.gl.getProgramParameter(program, status)) {
-            const error: string = this.gl.getProgramInfoLog(program);
-            this.gl.deleteProgram(program);
+        if (!gl.getProgramParameter(program, status)) {
+            const error: string = gl.getProgramInfoLog(program);
+            gl.deleteProgram(program);
             throw new Error(`Unable to initialize the Program: ${error}`);
         }
     }
