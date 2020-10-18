@@ -15,11 +15,11 @@ export default class Animator extends Component {
         this.spriteRenderer = config.spriteRenderer;
     }
 
-    start(): void {
+    protected start(): void {
         this.defaultSprite = this.spriteRenderer.sprite;
     }
 
-    update(): void {
+    protected update(): void {
         if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === true) {
             this.spriteRenderer.sprite = this.animations[this.playingAnimationId].currentSprite;
         } else if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === false) {

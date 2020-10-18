@@ -1,8 +1,6 @@
 import Rectangle from "../../Helper/Rectangle";
-import Context2DRenderer from "./Context2D/Context2DRenderer";
 import IContextRenderer from "./IContextRenderer";
 import RenderData from "./RenderData/RenderData";
-import WebGLRenderer from "./WebGL/WebGLRenderer";
 
 export default class RenderManager {
     private gameRenderer: IContextRenderer = null;

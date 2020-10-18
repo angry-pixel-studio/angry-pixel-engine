@@ -40,11 +40,11 @@ export default class TilemapRenderer extends Component {
         this.smooth = config.smooth ?? this.smooth;
     }
 
-    start(): void {
+    protected start(): void {
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
         if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();

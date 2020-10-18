@@ -16,7 +16,7 @@ export default class Camera extends Component {
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
-    start(): void {
+    protected start(): void {
         this.setupViewportRect();
     }
 
@@ -29,7 +29,7 @@ export default class Camera extends Component {
         this._vpHalfHeight = this._viewportRect.height / 2;
     }
 
-    update(): void {
+    protected update(): void {
         this.updateWorldSpaceRect();
 
         this.renderManager.renderLayers = this._renderLayers;

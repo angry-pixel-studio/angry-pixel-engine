@@ -50,7 +50,7 @@ export default class GameObject {
 
     public set parent(parent: GameObject | null) {
         this._parent = parent;
-        this.transform.update();
+        this.transform.forceUpdate();
     }
 
     public getCurrentScene<T extends Scene>(): T {
@@ -160,7 +160,7 @@ export default class GameObject {
             .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
             .forEach((gameObject: GameObject) => gameObject.setActive(value));
 
-        this.transform.update();
+        this.transform.forceUpdate();
         this.active = value;
     }
 

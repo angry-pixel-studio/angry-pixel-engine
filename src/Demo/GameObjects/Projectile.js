@@ -18,8 +18,8 @@ export default class Projectile extends GameObject {
     weapon = null;
     cachedParent = null;
 
-    innerPosX = 0; //-3;
-    innerPosY = 0; //20;
+    innerPosX = 3;
+    innerPosY = 24;
 
     constructor(weapon) {
         super();
@@ -56,7 +56,7 @@ export default class Projectile extends GameObject {
         this.shooted = true;
 
         this.cachedParent = this._parent;
-        this._parent = null;
+        this.parent = null;
 
         setTimeout(() => {
             this.shooted = false;

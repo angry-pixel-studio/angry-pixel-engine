@@ -10,7 +10,7 @@ interface config {
 
 export default class Animation {
     private sprites: Sprite[] = [];
-    private _playing = false;
+    private _playing: boolean = false;
     private currentFrame: number = 1;
     private currentInterval: NodeJS.Timeout = null;
 

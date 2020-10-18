@@ -1,13 +1,9 @@
 import Rectangle from "../../../Helper/Rectangle";
 import Vector2 from "../../../Helper/Vector2";
-import Context2DRenderer from "../Context2D/Context2DRenderer";
 import IContextRenderer from "../IContextRenderer";
 import ImageRenderData from "../RenderData/ImageRenderData";
 import RenderData, { RenderDataType } from "../RenderData/RenderData";
 import ImageRenderer from "./ImageRenderer";
-import ProgramFactory from "./ProgramFactory";
-import ShaderLoader from "./ShaderLoader";
-import TextureFactory from "./TextureFactory";
 
 export default class WebGLRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement;

@@ -43,11 +43,11 @@ export default class TextRenderer extends Component {
         this.height = config.height ? config.height : this.height;
     }
 
-    start(): void {
+    protected start(): void {
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
         if (this.gameObject.ui === false) {
             throw new Error("TextRenderer only can be used on UI GameObjects");
         }

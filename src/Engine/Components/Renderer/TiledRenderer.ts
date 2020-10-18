@@ -47,11 +47,11 @@ export default class TiledRenderer extends Component {
         this.tileScale = config.tileScale ?? this.tileScale;
     }
 
-    start(): void {
+    protected start(): void {
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
         if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
             this.processTileset();
             this.updateTilesPosition();

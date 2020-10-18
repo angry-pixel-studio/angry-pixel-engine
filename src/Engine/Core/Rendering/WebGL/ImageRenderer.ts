@@ -18,7 +18,7 @@ export default class ImageRenderer {
     private textureBuffer: WebGLBuffer;
 
     // attributes
-    private positionAttr: GLint;
+    private positionCoordsAttr: GLint;
     private texCoordsAttr: GLint;
 
     // vertex uniforms
@@ -45,7 +45,7 @@ export default class ImageRenderer {
         this.positionBuffer = this.gl.createBuffer();
         this.textureBuffer = this.gl.createBuffer();
 
-        this.positionAttr = this.gl.getAttribLocation(this.program, "position");
+        this.positionCoordsAttr = this.gl.getAttribLocation(this.program, "positionCoords");
         this.texCoordsAttr = this.gl.getAttribLocation(this.program, "textureCoords");
 
         this.modelMatrixUniform = this.gl.getUniformLocation(this.program, "modelMatrix");
@@ -58,10 +58,10 @@ export default class ImageRenderer {
         this.projectionMatrix = mat4.create();
         mat4.ortho(
             this.projectionMatrix,
-            -this.gl.canvas.width / 2,
-            this.gl.canvas.width / 2,
-            -this.gl.canvas.height / 2,
-            this.gl.canvas.height / 2,
+            -canvas.width / 2,
+            canvas.width / 2,
+            -canvas.height / 2,
+            canvas.height / 2,
             -1,
             1
         ); // todo: sacar esto de la camara y no el canvas
@@ -79,9 +79,9 @@ export default class ImageRenderer {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCoords), this.gl.STATIC_DRAW);
 
-        this.gl.enableVertexAttribArray(this.positionAttr);
+        this.gl.enableVertexAttribArray(this.positionCoordsAttr);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.vertexAttribPointer(this.positionAttr, 2, this.gl.FLOAT, false, 0, 0);
+        this.gl.vertexAttribPointer(this.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
         this.gl.enableVertexAttribArray(this.texCoordsAttr);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);

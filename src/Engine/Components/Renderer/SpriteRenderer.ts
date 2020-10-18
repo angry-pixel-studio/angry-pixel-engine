@@ -43,12 +43,12 @@ export default class SpriteRenderer extends Component {
         this.flipVertical = config.flipVertical ?? this.flipVertical;
     }
 
-    start(): void {
+    protected start(): void {
         this.goPosition = this.gameObject.transform.position;
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
         if (this.sprite.loaded === true) {
             this.renderData.ui = this.gameObject.ui;
             this.renderData.layer = this.gameObject.layer;
