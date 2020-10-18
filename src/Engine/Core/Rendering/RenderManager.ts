@@ -1,6 +1,6 @@
 import Rectangle from "../../Helper/Rectangle";
 import IContextRenderer from "./IContextRenderer";
-import RenderData from "./RenderData/RenderData";
+import RenderData, { RenderDataType } from "./RenderData/RenderData";
 
 export default class RenderManager {
     private gameRenderer: IContextRenderer = null;
@@ -52,7 +52,12 @@ export default class RenderManager {
             }
 
             if (renderData.ui !== true) {
-                this.gameRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+                // TODO: temporary solution until resolve this with WebGL
+                if (renderData.type === RenderDataType.Geometric && this.UIRenderer) {
+                    this.UIRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+                } else {
+                    this.gameRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+                }
             } else if (this.UIRenderer && renderData.ui === true) {
                 this.UIRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
             }

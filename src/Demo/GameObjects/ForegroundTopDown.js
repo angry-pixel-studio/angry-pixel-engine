@@ -30,7 +30,7 @@ export default class ForegroundTopDown extends GameObject {
                         tileWidth: 16,
                         tileHeight: 16,
                         gridWidth: 11,
-                        gridHeight: 10,
+                        gridHeight: 10
                     }),
                     tilemapData: tilemapData,
                     tileScale: 4,
