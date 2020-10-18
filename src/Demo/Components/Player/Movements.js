@@ -60,7 +60,7 @@ export default class Movements extends Component {
             this.inputManager.mousePosition.y - this.transform.position.y,
             this.inputManager.mousePosition.x - this.transform.position.x
         );
-        this.transform.rotation = (-this.angle * 180) / Math.PI;
+        this.transform.rotation = (this.angle * 180) / Math.PI;
     }
 
     isTouchingForeground() {

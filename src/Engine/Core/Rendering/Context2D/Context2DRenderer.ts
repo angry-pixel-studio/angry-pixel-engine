@@ -25,7 +25,7 @@ export default class Context2DRenderer implements IContextRenderer {
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         if (color !== null) {
-            this.canvasContext.fillStyle = color ? color : DEFAULT_COLOR;
+            this.canvasContext.fillStyle = color;
             this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
         }
     }
@@ -62,7 +62,7 @@ export default class Context2DRenderer implements IContextRenderer {
                 this.renderPosition.y + renderData.height / 2
             );
             this.imagePosition.set(-renderData.width / 2, -renderData.height / 2);
-            this.canvasContext.rotate((renderData.rotation * Math.PI) / 180);
+            this.canvasContext.rotate(-(renderData.rotation * Math.PI) / 180);
         } else {
             this.canvasContext.translate(this.renderPosition.x, this.renderPosition.y);
             this.imagePosition.x = renderData.flipHorizontal ? -renderData.width : this.imagePosition.x;

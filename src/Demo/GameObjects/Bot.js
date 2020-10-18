@@ -46,7 +46,7 @@ export default class Bot extends GameObject {
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
-                    rotation: 90,
+                    rotation: -90,
                 }),
             "SpriteRenderer"
         );
@@ -78,7 +78,7 @@ export default class Bot extends GameObject {
             this.player.transform.position.y - this.transform.position.y,
             this.player.transform.position.x - this.transform.position.x
         );
-        this.transform.rotation = (-this.aimAngle * 180) / Math.PI;
+        this.transform.rotation = (this.aimAngle * 180) / Math.PI;
     }
 
     updateCurrentDirection() {

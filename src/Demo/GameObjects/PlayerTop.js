@@ -33,7 +33,7 @@ export default class PlayerTop extends GameObject {
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
-                    rotation: 90,
+                    rotation: -90,
                 }),
             "SpriteRenderer"
         );
@@ -57,7 +57,7 @@ export default class PlayerTop extends GameObject {
     createChild() {
         this.addChild(() => new GameObject(), "Child");
         this.getChild("Child").transform.innerPosition.x = 90;
-        this.getChild("Child").transform.innerPosition.y = 90;
+        //this.getChild("Child").transform.innerPosition.y = 90;
 
         this.getChild("Child").addComponent(
             () =>
@@ -67,7 +67,7 @@ export default class PlayerTop extends GameObject {
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
-                    rotation: 90,
+                    rotation: -90,
                 }),
             "SpriteRenderer2"
         );

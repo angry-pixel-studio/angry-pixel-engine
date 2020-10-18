@@ -18,8 +18,8 @@ export default class Projectile extends GameObject {
     weapon = null;
     cachedParent = null;
 
-    innerPosX = 3;
-    innerPosY = 24;
+    innerPosX = 24;
+    innerPosY = 3;
 
     constructor(weapon) {
         super();

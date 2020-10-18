@@ -113,7 +113,7 @@ export default class ImageRenderer {
             height * (flipVertical ? -1 : 1),
             0,
         ]);
-        mat4.rotateZ(this.modelMatrix, this.modelMatrix, -rotation * (Math.PI / 180));
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, rotation * (Math.PI / 180));
 
         this.textureMatrix = mat4.create();
         if (slice !== null) {

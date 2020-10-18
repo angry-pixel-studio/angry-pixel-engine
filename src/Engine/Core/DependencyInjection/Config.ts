@@ -54,16 +54,16 @@ const renderingDependencies = (
             )
     );
     container.add(
-        "WebGLRenderer",
+        "GameRenderer",
         () => new WebGLRenderer(gameCanvas, container.getSingleton<ImageRenderer>("WebGLImageRenderer"))
     );
-    container.add("Context2DRenderer", () => new Context2DRenderer(UICanvas));
+    container.add("UIRenderer", () => new Context2DRenderer(UICanvas));
     container.add(
         "RenderManager",
         () =>
             new RenderManager(
-                container.getSingleton<WebGLRenderer>("WebGLRenderer"),
-                container.getSingleton<Context2DRenderer>("Context2DRenderer")
+                container.getSingleton<WebGLRenderer>("GameRenderer"),
+                container.getSingleton<Context2DRenderer>("UIRenderer")
             )
     );
 };

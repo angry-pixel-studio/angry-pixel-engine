@@ -23,8 +23,6 @@ export default class Transform extends Component {
         }
 
         if (this.parentTransform !== null) {
-            this.position.x = this.parentTransform.position.x + this.innerPosition.x;
-            this.position.y = this.parentTransform.position.y + this.innerPosition.y;
             this.translateFromParent();
         } else {
             this.innerPosition.x = this.position.x;
@@ -34,17 +32,11 @@ export default class Transform extends Component {
 
     private translateFromParent(): void {
         const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
-        const thisRad: number = Math.atan2(
-            this.position.x - this.parentTransform.position.x,
-            this.position.y - this.parentTransform.position.y
-        );
-        const radius: number = Math.hypot(
-            this.position.x - this.parentTransform.position.x,
-            this.position.y - this.parentTransform.position.y
-        );
+        const thisRad: number = Math.atan2(this.innerPosition.x, this.innerPosition.y);
+        const radius: number = Math.hypot(this.innerPosition.x, this.innerPosition.y);
 
-        this.position.x = this.parentTransform.position.x + radius * Math.cos(parentRad - thisRad);
-        this.position.y = this.parentTransform.position.y - radius * Math.sin(parentRad - thisRad);
+        this.position.x = this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad);
+        this.position.y = this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad);
         this.rotation = this.parentTransform.rotation;
     }
 
