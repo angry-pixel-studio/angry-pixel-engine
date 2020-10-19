@@ -19,7 +19,7 @@ export default class Scene {
         this.gameLoopEventHandler.bind(this);
     }
 
-    gameLoopEventHandler = (): void => {
+    private gameLoopEventHandler = (): void => {
         if (this.firstFrame === true) {
             this.start();
             this.firstFrame = false;

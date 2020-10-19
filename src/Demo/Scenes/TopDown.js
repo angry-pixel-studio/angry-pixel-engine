@@ -8,6 +8,7 @@ import Bot from "../GameObjects/Bot";
 import InputManager from "../GameObjects/InputManager";
 import PlayerStats from "../GameObjects/UI/PlayerStats";
 import { container } from "../../Engine/Game";
+import MusicPlayer from "../GameObjects/MusicPlayer";
 
 export default class TopDown extends Scene {
     assetManager = container.getSingleton("AssetManager");
@@ -26,6 +27,7 @@ export default class TopDown extends Scene {
 
     update() {
         if (this.assetsLoaded === false) {
+            console.log("loading");
             this.assetsLoaded = this.assetManager.getAssetsLoaded();
         }
 
@@ -40,10 +42,14 @@ export default class TopDown extends Scene {
         this.assetManager.createImage("image/demo/player-top-down.png");
         this.assetManager.createImage("image/demo/projectile.png");
         this.assetManager.createImage("image/demo/avatar.png");
+        this.assetManager.createAudio("audio/footsteps.wav");
+        this.assetManager.createAudio("audio/gunshot.wav");
+        this.assetManager.createAudio("audio/music.wav");
     }
 
     setupGameObjects() {
         this.addGameObject(() => new ForegroundTopDown(), "Foreground")
+            //.addGameObject(() => new MusicPlayer(), "MusicPlayer")
             //.addGameObject(() => new SpotPointer(), "SpotPointer")
             .addGameObject(() => new InputManager(), "InputManager")
             .addGameObject(() => new PlayerTop(), "Player")

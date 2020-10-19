@@ -5,10 +5,12 @@ import Vector2 from "../../../Engine/Helper/Vector2";
 export default class Movements extends Component {
     // cache
     timeManager = container.getSingleton("TimeManager");
+    assetManager = container.getSingleton("AssetManager");
     inputManager = null;
     transform = null;
     tilemap = null;
     animator = null;
+    audioPlayer = null;
 
     // status
     mousePosition = new Vector2(0, 0);
@@ -16,12 +18,18 @@ export default class Movements extends Component {
     rotationSpeed = 3;
     angle = 0; // in radians
     walkingAnimation = false;
+    walkingSFX = false;
 
     start() {
         this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
         this.transform = this.getComponent("Transform");
         this.animator = this.getComponent("Animator");
         this.inputManager = this.findGameObjectByName("InputManager");
+        this.audioPlayer = this.getComponent("AudioPlayer");
+
+        this.audioPlayer.audio = this.assetManager.getAudio("audio/footsteps.wav");
+        this.audioPlayer.loop = true;
+        this.audioPlayer.volume = 0.5;
     }
 
     update() {
@@ -49,9 +57,11 @@ export default class Movements extends Component {
         if ((deltaX || deltaY) && this.walkingAnimation === false) {
             this.walkingAnimation = true;
             this.animator.playAnimation("PlayerWalking");
+            this.audioPlayer.play();
         } else if (!deltaX && !deltaY && this.walkingAnimation === true) {
             this.walkingAnimation = false;
             this.animator.stopAnimation();
+            this.audioPlayer.stop();
         }
     }
 

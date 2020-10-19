@@ -57,7 +57,7 @@ export default class GameObject {
         return this.sceneManager.getCurrentScene<T>();
     }
 
-    gameLoopEventHandler = (): void => {
+    private gameLoopEventHandler = (): void => {
         if (this.active === false) {
             return;
         }

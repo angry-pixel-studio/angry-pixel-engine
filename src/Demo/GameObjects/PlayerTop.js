@@ -10,6 +10,7 @@ import Movements from "../Components/Player/Movements";
 import Weapon from "../Components/Player/Weapon";
 import { LAYER_PLAYER } from "../Config/renderLayers";
 import { container } from "../../Engine/Game";
+import AudioPlayer from "../../Engine/Components/AudioPlayer";
 
 export const TAG_PLAYER = "Player";
 
@@ -33,7 +34,7 @@ export default class PlayerTop extends GameObject {
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
-                    rotation: -90
+                    rotation: -90,
                 }),
             "SpriteRenderer"
         );
@@ -50,6 +51,7 @@ export default class PlayerTop extends GameObject {
         this.addComponent(() => new Movements(), "Movements");
         this.addComponent(() => new Weapon(), "Weapon");
         this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
+        this.addComponent(() => new AudioPlayer(), "AudioPlayer");
 
         //this.createChild();
     }
