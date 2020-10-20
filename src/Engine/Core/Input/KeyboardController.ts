@@ -1,4 +1,4 @@
-export default class Keyboard {
+export default class KeyboardController {
     private keyPresses: { [k: string]: boolean } = {};
 
     constructor() {

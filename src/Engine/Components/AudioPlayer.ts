@@ -69,7 +69,9 @@ export default class AudioPlayer extends Component {
 
         // see https://developers.google.com/web/updates/2018/11/web-audio-autoplay
         promise
-            .then(() => {})
+            .then(() => {
+                // do nothing
+            })
             .catch(() =>
                 userInputEventNames.forEach((eventName) =>
                     window.addEventListener(eventName, this.userinputEventHandler)

@@ -2,9 +2,10 @@ import Game from "../../Game";
 import AssetManager from "../Asset/AssetManager";
 import CollisionManager from "../Collision/CollisionManager";
 import GameObjectManager from "../GameObject/GameObjectManager";
+import GamepadController from "../Input/GamepadController";
 import InputManager from "../Input/InputManager";
-import Keyboard from "../Input/Keyboard";
-import Mouse from "../Input/Mouse";
+import KeyboardController from "../Input/KeyboardController";
+import MouseController from "../Input/MouseController";
 import Context2DRenderer from "../Rendering/Context2D/Context2DRenderer";
 import RenderManager from "../Rendering/RenderManager";
 import ImageRenderer from "../Rendering/WebGL/ImageRenderer";
@@ -69,10 +70,16 @@ const renderingDependencies = (
 };
 
 const inputDependencies = (container: Container, gameNode: HTMLElement): void => {
-    container.add("Mouse", () => new Mouse(gameNode));
-    container.add("Keyboard", () => new Keyboard());
+    container.add("Mouse", () => new MouseController(gameNode));
+    container.add("Keyboard", () => new KeyboardController());
+    container.add("Gamepad", () => new GamepadController());
     container.add(
         "InputManager",
-        () => new InputManager(container.getSingleton<Mouse>("Mouse"), container.getSingleton<Keyboard>("Keyboard"))
+        () =>
+            new InputManager(
+                container.getSingleton<MouseController>("Mouse"),
+                container.getSingleton<KeyboardController>("Keyboard"),
+                container.getSingleton<GamepadController>("Gamepad")
+            )
     );
 };

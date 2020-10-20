@@ -1,12 +1,15 @@
-import Mouse from "./Mouse";
-import Keyboard from "./Keyboard";
+import MouseController from "./MouseController";
+import KeyboardController from "./KeyboardController";
+import GamepadController from "./GamepadController";
 
 export default class InputManager {
-    public mouse: Mouse;
-    public keyboard: Keyboard;
+    public mouse: MouseController;
+    public keyboard: KeyboardController;
+    public gamepad: GamepadController;
 
-    constructor(mouse: Mouse, keyboard: Keyboard) {
+    constructor(mouse: MouseController, keyboard: KeyboardController, gamepad: GamepadController) {
         this.mouse = mouse;
         this.keyboard = keyboard;
+        this.gamepad = gamepad;
     }
 }

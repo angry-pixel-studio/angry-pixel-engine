@@ -38,8 +38,8 @@ export default class Movements extends Component {
     }
 
     walk() {
-        let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * this.timeManager.deltaTime);
-        let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * this.timeManager.deltaTime);
+        let deltaY = this.inputManager.axis.y * this.walkSpeed * this.timeManager.deltaTime;
+        let deltaX = this.inputManager.axis.x * this.walkSpeed * this.timeManager.deltaTime;
 
         deltaX = deltaY ? deltaX / 1.4 : deltaX;
         deltaY = deltaX ? deltaY / 1.4 : deltaY;
@@ -67,8 +67,8 @@ export default class Movements extends Component {
 
     rotate() {
         this.angle = Math.atan2(
-            this.inputManager.mousePosition.y - this.transform.position.y,
-            this.inputManager.mousePosition.x - this.transform.position.x
+            this.inputManager.gunPointer.y - this.transform.position.y,
+            this.inputManager.gunPointer.x - this.transform.position.x
         );
         this.transform.rotation = (this.angle * 180) / Math.PI;
     }
