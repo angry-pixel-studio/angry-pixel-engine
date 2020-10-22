@@ -1,5 +1,5 @@
 import { LAYER_DEFAULT } from "../../GameObject";
-import Rectangle from "../../Helper/Rectangle";
+import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../Helper/Vector2";
 import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
 import ICollider from "./ICollider";

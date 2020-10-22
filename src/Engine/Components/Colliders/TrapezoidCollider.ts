@@ -1,11 +1,11 @@
 import Component from "../../Component";
 import { LAYER_DEFAULT } from "../../GameObject";
-import RenderData, { GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData";
+import GeometricRenderData, { GEOMETRIC_POLYGON } from "../../Core/Rendering/RenderData/GeometricRenderData";
 import Vector2 from "./../../Helper/Vector2";
 import CollisionManager from "./../../Core/Collision/CollisionManager";
 import IColliderData, { GeometricShape } from "./../../Core/Collision/IColliderData";
 import RenderManager from "./../../Core/Rendering/RenderManager";
-import Game from "./../../Game";
+import Game, { container } from "./../../Game";
 
 interface Config {
     x: number;
@@ -18,8 +18,8 @@ interface Config {
 }
 
 export default class TrapezoidCollider extends Component {
-    private collisionManager: CollisionManager;
-    private renderManager: RenderManager;
+    private collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     private coordinates: Vector2;
     private width: number;
@@ -30,7 +30,7 @@ export default class TrapezoidCollider extends Component {
     private debug: boolean = false;
 
     private colliderData: IColliderData;
-    private renderData: RenderData;
+    private renderData: GeometricRenderData;
 
     constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0, layer }: Config) {
         super();
@@ -46,9 +46,6 @@ export default class TrapezoidCollider extends Component {
     }
 
     protected start(): void {
-        this.collisionManager = Game.collisionManager;
-        this.renderManager = Game.renderManager;
-
         this.collisionManager.addCollider(this, this.colliderData);
 
         this.setupRenderData();
@@ -131,7 +128,7 @@ export default class TrapezoidCollider extends Component {
     }
 
     private setupRenderData(): void {
-        this.renderData = new RenderData();
+        this.renderData = new GeometricRenderData();
         this.renderData.position = this.coordinates;
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.colliderData.points;

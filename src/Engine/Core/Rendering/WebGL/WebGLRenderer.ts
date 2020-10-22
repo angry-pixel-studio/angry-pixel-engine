@@ -1,4 +1,4 @@
-import Rectangle from "../../../Helper/Rectangle";
+import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../../Helper/Vector2";
 import IContextRenderer from "../IContextRenderer";
 import ImageRenderData from "../RenderData/ImageRenderData";
