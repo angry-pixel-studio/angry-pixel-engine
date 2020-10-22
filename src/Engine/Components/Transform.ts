@@ -9,11 +9,11 @@ export default class Transform extends Component {
 
     private parentTransform: Transform = null;
 
-    start(): void {
+    protected start(): void {
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
         if (this.parentTransform === null && this.gameObject.parent !== null) {
             this.parentTransform = this.gameObject.parent.transform;
         }
@@ -23,8 +23,6 @@ export default class Transform extends Component {
         }
 
         if (this.parentTransform !== null) {
-            this.position.x = this.parentTransform.position.x + this.innerPosition.x;
-            this.position.y = this.parentTransform.position.y + this.innerPosition.y;
             this.translateFromParent();
         } else {
             this.innerPosition.x = this.position.x;
@@ -33,14 +31,16 @@ export default class Transform extends Component {
     }
 
     private translateFromParent(): void {
-        const angle: number = (this.parentTransform.rotation * Math.PI) / 180.0;
-        const radius: number = Math.hypot(
-            this.position.x - this.parentTransform.position.x,
-            this.position.y - this.parentTransform.position.y
-        );
+        const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
+        const thisRad: number = Math.atan2(this.innerPosition.x, this.innerPosition.y);
+        const radius: number = Math.hypot(this.innerPosition.x, this.innerPosition.y);
 
-        (this.position.x = this.parentTransform.position.x + radius * Math.cos(angle)),
-            (this.position.y = this.parentTransform.position.y - radius * Math.sin(angle));
+        this.position.x = this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad);
+        this.position.y = this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad);
         this.rotation = this.parentTransform.rotation;
+    }
+
+    public forceUpdate(): void {
+        this.update();
     }
 }

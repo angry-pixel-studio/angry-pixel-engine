@@ -1,16 +1,19 @@
-import RenderData from "./RenderData";
 import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
 import IContextRenderer from "./IContextRenderer";
+import RenderData, { RenderDataType } from "./RenderData/RenderData";
 
 export default class RenderManager {
-    private contextRenderer: IContextRenderer = null;
+    private gameRenderer: IContextRenderer = null;
+    private UIRenderer: IContextRenderer | null = null;
+
     private renderStack: RenderData[] = [];
     private _renderLayers: string[] = [];
     private _worldSpaceViewRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    constructor(contextRenderer: IContextRenderer) {
-        this.contextRenderer = contextRenderer;
+    constructor(gameRenderer: IContextRenderer, UIRenderer: IContextRenderer | null) {
+        this.gameRenderer = gameRenderer;
+        this.UIRenderer = UIRenderer;
     }
 
     public set renderLayers(renderLayers: string[]) {
@@ -25,25 +28,39 @@ export default class RenderManager {
         this._viewportRect.updateFromRect(viewportRect);
     }
 
-    public clearCanvas(color: string | null = null) {
-        this.contextRenderer.clearCanvas(color);
+    public clearCanvas(color: string | null = null): void {
+        this.gameRenderer.clearCanvas(color);
+
+        // If UI enabled
+        if (this.UIRenderer) {
+            this.UIRenderer.clearCanvas(null);
+        }
     }
 
     public addToRenderStack(renderData: RenderData): void {
         this.renderStack.push(renderData);
     }
 
-    public clearRenderStack() {
+    public clearRenderStack(): void {
         this.renderStack = [];
     }
 
-    public render() {
+    public render(): void {
         this.renderStack.forEach((renderData: RenderData) => {
             if (this._renderLayers.includes(renderData.layer) === false) {
                 return;
             }
 
-            this.contextRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+            if (renderData.ui !== true) {
+                // TODO: temporary solution until resolve this with WebGL
+                if (renderData.type === RenderDataType.Geometric && this.UIRenderer) {
+                    this.UIRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+                } else {
+                    this.gameRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+                }
+            } else if (this.UIRenderer && renderData.ui === true) {
+                this.UIRenderer.render(renderData, this._worldSpaceViewRect, this._viewportRect);
+            }
         });
 
         this.clearRenderStack();

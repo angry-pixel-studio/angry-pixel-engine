@@ -10,9 +10,9 @@ interface config {
 
 export default class Animation {
     private sprites: Sprite[] = [];
-    private _playing = false;
+    private _playing: boolean = false;
     private currentFrame: number = 1;
-    private currentInterval: any = null;
+    private currentInterval: NodeJS.Timeout = null;
 
     public speed: number = 1;
     public loop: boolean = false;
@@ -37,7 +37,7 @@ export default class Animation {
         }
     }
 
-    async update(): Promise<any> {
+    async update(): Promise<void> {
         while (this._playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
             await new Promise((resolve) => {
                 this.currentInterval = setTimeout(() => {

@@ -1,8 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
-import Game, { EVENT_UPDATE } from "./Game";
+import GameObjectManager from "./Core/GameObject/GameObjectManager";
+import SceneManager from "./Core/Scene/SceneManager";
+import { container, EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
+import Scene from "./Scene";
 
 export default abstract class Component {
+    private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
+    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
+
     private readonly _uuid: string = uuidv4();
     public name: string = null;
     public gameObject: GameObject = null;
@@ -18,25 +24,29 @@ export default abstract class Component {
         return this._uuid;
     }
 
-    private gameLoopEventHandler = (event: Event): void => {
+    private gameLoopEventHandler = (): void => {
         if (this.active === false) {
             return;
         }
 
         if (this.firstFrame === true) {
-            this.start((event as CustomEvent).detail);
+            this.start();
             this.firstFrame = false;
         } else {
-            this.update((event as CustomEvent).detail);
+            this.update();
         }
     };
 
-    protected start(event: unknown): void {
+    protected start(): void {
         // do nothing
     }
 
-    protected update(event: Record<string, unknown>): void {
+    protected update(): void {
         // do nothing
+    }
+
+    public getCurrentScene<T extends Scene>(): T {
+        return this.sceneManager.getCurrentScene<T>();
     }
 
     public getComponent<T extends Component>(name: string): T | null {
@@ -44,21 +54,21 @@ export default abstract class Component {
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
-        return Game.gameObjectManager.findGameObjectByName(name) as T;
+        return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
     public findGameObjectsByTag(tag: string): GameObject[] {
-        return Game.gameObjectManager.findGameObjectsByTag(tag);
+        return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
-        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
+        return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     public _destroy(): void {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         // @ts-ignore
-        Object.keys(this).forEach((key: any) => delete this[key]);
+        Object.keys(this).forEach((key) => delete this[key]);
     }
 }

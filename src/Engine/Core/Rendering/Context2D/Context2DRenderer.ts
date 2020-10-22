@@ -1,7 +1,10 @@
 import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../../Helper/Vector2";
 import IContextRenderer from "../IContextRenderer";
-import RenderData, { GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData";
+import GeometricRenderData, { GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
+import ImageRenderData from "../RenderData/ImageRenderData";
+import RenderData, { RenderDataType } from "../RenderData/RenderData";
+import TextRenderData from "../RenderData/TextRenderData";
 
 const DEFAULT_COLOR: string = "#000000";
 
@@ -20,25 +23,31 @@ export default class Context2DRenderer implements IContextRenderer {
 
     public clearCanvas(color: string | null = null): void {
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasContext.fillStyle = color ? color : DEFAULT_COLOR;
-        this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        if (color !== null) {
+            this.canvasContext.fillStyle = color;
+            this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     }
 
     public render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void {
-        if (renderData.image) {
-            this.renderImage(renderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
+        if (renderData.type === RenderDataType.Image) {
+            this.renderImage(renderData as ImageRenderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
         }
 
-        if (renderData.text) {
-            this.renderText(renderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
+        if (renderData.type === RenderDataType.Text && renderData.ui === true) {
+            this.renderText(renderData as TextRenderData, viewportRect);
         }
 
-        if (renderData.geometric) {
-            this.renderGeometric(renderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
+        if (renderData.type === RenderDataType.Geometric) {
+            this.renderGeometric(
+                renderData as GeometricRenderData,
+                renderData.ui === true ? viewportRect : worldSpaceViewRect
+            );
         }
     }
 
-    private renderImage(renderData: RenderData, viewRect: Rectangle): void {
+    private renderImage(renderData: ImageRenderData, viewRect: Rectangle): void {
         if (this.isInsideViewRect(renderData, viewRect) === false) {
             return;
         }
@@ -53,7 +62,7 @@ export default class Context2DRenderer implements IContextRenderer {
                 this.renderPosition.y + renderData.height / 2
             );
             this.imagePosition.set(-renderData.width / 2, -renderData.height / 2);
-            this.canvasContext.rotate((renderData.rotation * Math.PI) / 180);
+            this.canvasContext.rotate(-(renderData.rotation * Math.PI) / 180);
         } else {
             this.canvasContext.translate(this.renderPosition.x, this.renderPosition.y);
             this.imagePosition.x = renderData.flipHorizontal ? -renderData.width : this.imagePosition.x;
@@ -89,7 +98,7 @@ export default class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private renderText(renderData: RenderData, viewRect: Rectangle): void {
+    private renderText(renderData: TextRenderData, viewRect: Rectangle): void {
         this.updateRenderPosition(renderData, viewRect);
 
         this.canvasContext.save();
@@ -103,6 +112,7 @@ export default class Context2DRenderer implements IContextRenderer {
 
         this.canvasContext.font = font.join(" ");
         this.canvasContext.fillStyle = renderData.color;
+        this.canvasContext.textBaseline = "middle";
 
         if (Array.isArray(renderData.text)) {
             let first = true;
@@ -122,7 +132,7 @@ export default class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private renderGeometric(renderData: RenderData, viewRect: Rectangle): void {
+    private renderGeometric(renderData: GeometricRenderData, viewRect: Rectangle): void {
         this.canvasContext.save();
 
         this.updateRenderPosition(renderData, viewRect);
@@ -166,7 +176,7 @@ export default class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private isInsideViewRect(renderData: RenderData, viewRect: Rectangle): boolean {
+    private isInsideViewRect(renderData: ImageRenderData, viewRect: Rectangle): boolean {
         this.cacheRect.set(renderData.position.x, renderData.position.y, renderData.width, renderData.height);
 
         return viewRect.overlappingRectangle(this.cacheRect);
@@ -176,12 +186,16 @@ export default class Context2DRenderer implements IContextRenderer {
         this.renderPosition.x = renderData.position.x;
         this.renderPosition.y = renderData.position.y;
 
-        /*if (renderData.image) {
-            this.renderPosition.x -= Math.floor(renderData.width / 2);
-            this.renderPosition.y += Math.floor(renderData.height / 2);
-        }*/
+        if (renderData.type === RenderDataType.Image) {
+            this.centerImage(renderData as ImageRenderData);
+        }
 
         this.renderPosition.x = Number((this.renderPosition.x - viewRect.x).toFixed(0));
         this.renderPosition.y = Number((viewRect.y - this.renderPosition.y).toFixed(0));
+    }
+
+    private centerImage(renderData: ImageRenderData) {
+        this.renderPosition.x -= Math.floor(renderData.width / 2);
+        this.renderPosition.y += Math.floor(renderData.height / 2);
     }
 }

@@ -1,5 +1,4 @@
 import GameObject from "../../GameObject";
-import Scene from "../../Scene";
 
 export type GameObjectFactory = () => GameObject;
 
@@ -8,7 +7,6 @@ export default class GameObjectManager {
 
     public addGameObject(
         gameObjectFactory: GameObjectFactory,
-        scene: Scene,
         name: string,
         parent: GameObject | null = null
     ): GameObject {
@@ -17,7 +15,6 @@ export default class GameObjectManager {
         }
 
         const gameObject: GameObject = gameObjectFactory();
-        gameObject.scene = scene;
         gameObject.name = name;
         gameObject.parent = parent;
 

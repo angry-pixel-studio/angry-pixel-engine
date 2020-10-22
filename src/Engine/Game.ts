@@ -1,56 +1,92 @@
-import InputManager from "./Core/Input/InputManager";
 import SceneManager, { SceneConstructor } from "./Core/Scene/SceneManager";
 import RenderManager from "./Core/Rendering/RenderManager";
-import Context2DRenderer from "./Core/Rendering/Context2D/Context2DRenderer";
 import CollisionManager from "./Core/Collision/CollisionManager";
-import AssetManager from "./Core/Asset/AssetManager";
-import GameObjectManager from "./Core/GameObject/GameObjectManager";
+import loadDependencies from "./Core/DependencyInjection/Config";
+import Container from "./Core/DependencyInjection/Container";
+import TimeManager from "./Core/Time/TimeManager";
 
-const CANVAS_ID: string = "miniEngineCanvas";
+const GAME_NODE_ID: string = "miniEngineGame";
+const GAME_CANVAS_ID: string = "miniEngineGameCanvas";
+const UI_CANVAS_ID: string = "miniEngineUICanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
+export const gameNode: HTMLDivElement = document.createElement("div");
+export const gameCanvas: HTMLCanvasElement = document.createElement("canvas");
+export const UICanvas: HTMLCanvasElement = document.createElement("canvas");
+export const container: Container = new Container();
 
 export default class Game {
-    static readonly canvas: HTMLCanvasElement = document.createElement("canvas");
-    static readonly assetManager: AssetManager = new AssetManager();
-    static readonly inputManager: InputManager = new InputManager();
-    static readonly gameObjectManager: GameObjectManager = new GameObjectManager();
-    static readonly renderManager: RenderManager = new RenderManager(new Context2DRenderer(Game.canvas));
-    static readonly sceneManager: SceneManager = new SceneManager();
-    static readonly collisionManager: CollisionManager = new CollisionManager(Game.renderManager);
-
     public canvasBGColor: string = "#000000";
 
+    private sceneManager: SceneManager;
+    private renderManager: RenderManager;
+    private collisionManager: CollisionManager;
+    private timeManager: TimeManager;
+
+    private gameContainer: HTMLElement;
+    private gameWidth: number;
+    private gameHeight: number;
+    private UIEnabled: boolean = true;
     private _running: boolean = false;
     private frameRequestId: number = null;
-    private then: number = 0;
-    private deltaTime: number = 0;
 
-    constructor(containerElement: HTMLElement, width: number, height: number) {
-        this.setupCanvas(containerElement, width, height);
-        Game.sceneManager.game = this;
+    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number, UIEnabled: boolean = true) {
+        this.gameContainer = gameContainer;
+        this.gameWidth = gameWidth;
+        this.gameHeight = gameHeight;
+        this.UIEnabled = UIEnabled;
+
+        this.setupHTMLDom();
+        this.setupManagers();
+    }
+
+    private setupHTMLDom() {
+        gameNode.id = GAME_NODE_ID;
+        gameNode.style.position = "relative";
+        gameNode.style.width = `${this.gameWidth}px`;
+        gameNode.style.height = `${this.gameHeight}px`;
+        gameNode.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+        this.gameContainer.appendChild(gameNode);
+
+        gameCanvas.id = GAME_CANVAS_ID;
+        gameCanvas.width = Math.floor(this.gameWidth);
+        gameCanvas.height = Math.floor(this.gameHeight);
+        gameCanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+
+        if (this.UIEnabled) {
+            UICanvas.id = UI_CANVAS_ID;
+            UICanvas.style.position = "absolute";
+            UICanvas.style.zIndex = "10";
+            UICanvas.width = Math.floor(this.gameWidth);
+            UICanvas.height = Math.floor(this.gameHeight);
+            UICanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
+
+            gameNode.appendChild(UICanvas);
+        }
+
+        gameNode.appendChild(gameCanvas);
+    }
+
+    private setupManagers(): void {
+        loadDependencies(container, this, gameNode, gameCanvas, UICanvas);
+
+        this.renderManager = container.getSingleton<RenderManager>("RenderManager");
+        this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
+        this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
+        this.timeManager = container.getSingleton<TimeManager>("TimeManager");
     }
 
     public get running(): boolean {
         return this._running;
     }
 
-    private setupCanvas(container: HTMLElement, width: number, height: number): void {
-        Game.canvas.id = CANVAS_ID;
-        Game.canvas.width = width;
-        Game.canvas.height = height;
-
-        container.appendChild(Game.canvas);
-    }
-
     public addScene(name: string, sceneFunction: SceneConstructor, openingScene: boolean = false): void {
-        Game.sceneManager.addScene(name, sceneFunction, openingScene);
+        this.sceneManager.addScene(name, sceneFunction, openingScene);
     }
 
     public run(): void {
-        Game.sceneManager.loadOpeningScene();
-
-        this.then = Date.now();
+        this.sceneManager.loadOpeningScene();
+        this.timeManager.start();
 
         this.requestAnimationFrame();
     }
@@ -58,35 +94,32 @@ export default class Game {
     public stop(): void {
         this.stopLoop();
         setTimeout(() => {
-            Game.sceneManager.unloadCurrentScene();
-            Game.renderManager.clearCanvas(this.canvasBGColor);
+            this.sceneManager.unloadCurrentScene();
+            this.renderManager.clearCanvas(this.canvasBGColor);
         }, 100);
     }
 
     private gameLoop(time: number): void {
         this._running = true;
 
-        const now: number = time * 0.001;
-        this.deltaTime = Math.min(0.1, now - this.then);
-        this.then = now;
-
-        Game.renderManager.clearCanvas(this.canvasBGColor);
-        Game.collisionManager.prepare();
+        this.timeManager.update(time);
+        this.renderManager.clearCanvas(this.canvasBGColor);
+        this.collisionManager.prepare();
 
         this.dispatchFrameEvent(EVENT_UPDATE);
 
-        Game.renderManager.render();
+        this.renderManager.render();
 
         this.requestAnimationFrame();
     }
 
-    public stopLoop() {
+    public stopLoop(): void {
         window.cancelAnimationFrame(this.frameRequestId);
         this._running = false;
         this.frameRequestId = null;
     }
 
-    public resumeLoop() {
+    public resumeLoop(): void {
         if (this._running == false && this.frameRequestId === null) {
             this.requestAnimationFrame();
         }
@@ -97,13 +130,6 @@ export default class Game {
     }
 
     private dispatchFrameEvent(event: string): void {
-        window.dispatchEvent(
-            new CustomEvent(event, {
-                detail: {
-                    game: this,
-                    deltaTime: this.deltaTime,
-                },
-            })
-        );
+        window.dispatchEvent(new CustomEvent(event));
     }
 }

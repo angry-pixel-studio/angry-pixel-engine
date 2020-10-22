@@ -1,7 +1,7 @@
 import GameObject from "../GameObject";
 import Camera from "../Components/Camera";
 
-export const CAMERA_NAME = "Camera";
+export const CAMERA_COMPONENT = "Camera";
 
 export default class GameCamera extends GameObject {
     constructor() {
@@ -10,10 +10,10 @@ export default class GameCamera extends GameObject {
         this.transform.position.x = 0;
         this.transform.position.y = 0;
 
-        this.addComponent(() => new Camera(), CAMERA_NAME);
+        this.addComponent(() => new Camera(), CAMERA_COMPONENT);
     }
 
     get camera(): Camera {
-        return this.getComponent<Camera>(CAMERA_NAME);
+        return this.getComponent<Camera>(CAMERA_COMPONENT);
     }
 }

@@ -27,14 +27,14 @@ export default class AssetManager {
         if (asset.element.naturalWidth) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("load", (e: Event) => (asset.loaded = true));
+            asset.element.addEventListener("load", () => (asset.loaded = true));
         }
 
         return asset.element;
     }
 
     public createAudio(url: string): HTMLAudioElement {
-        const asset = this.createAsset(url, AssetType.Image);
+        const asset = this.createAsset(url, AssetType.Audio);
 
         asset.element = new Audio();
         asset.element.src = url;
@@ -42,14 +42,14 @@ export default class AssetManager {
         if (asset.element.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("loadeddata", (e: Event) => (asset.loaded = true));
+            asset.element.addEventListener("canplaythrough", () => (asset.loaded = true));
         }
 
         return asset.element;
     }
 
     public createVideo(url: string): HTMLVideoElement {
-        const asset = this.createAsset(url, AssetType.Image);
+        const asset = this.createAsset(url, AssetType.Video);
 
         asset.element = document.createElement("video");
         asset.element.src = url;
@@ -57,7 +57,7 @@ export default class AssetManager {
         if (asset.element.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("loadeddata", (e: Event) => (asset.loaded = true));
+            asset.element.addEventListener("canplaythrough", () => (asset.loaded = true));
         }
 
         return asset.element as HTMLVideoElement;

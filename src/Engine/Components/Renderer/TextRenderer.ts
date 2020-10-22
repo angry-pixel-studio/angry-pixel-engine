@@ -1,8 +1,7 @@
 import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
-import Game from "../../Game";
-
-export * from "../../Core/Rendering/RenderPivots";
+import TextRenderData from "../../Core/Rendering/RenderData/TextRenderData";
+import RenderManager from "../../Core/Rendering/RenderManager";
+import { container } from "../../Game";
 
 export type TextRendererConfig = {
     text: string;
@@ -23,15 +22,15 @@ export default class TextRenderer extends Component {
     public color: string = "#000000";
     public bold: boolean = false;
     public italic: boolean = false;
-    public renderData: RenderData = null;
     public lineSeparation: number = 5;
     public width: number = 0;
     public height: number = 0;
 
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+    private renderData: TextRenderData = new TextRenderData();
+
     constructor(config: TextRendererConfig) {
         super();
-
-        this.renderData = new RenderData();
 
         this.text = config.text ? config.text : this.text;
         this.font = config.font ? config.font : this.font;
@@ -44,11 +43,15 @@ export default class TextRenderer extends Component {
         this.height = config.height ? config.height : this.height;
     }
 
-    start(): void {
+    protected start(): void {
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
+        if (this.gameObject.ui === false) {
+            throw new Error("TextRenderer only can be used on UI GameObjects");
+        }
+
         this.renderData.layer = this.gameObject.layer;
         this.renderData.ui = this.gameObject.ui;
         this.renderData.text = this.text;
@@ -60,9 +63,7 @@ export default class TextRenderer extends Component {
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.bold = this.bold;
         this.renderData.italic = this.italic;
-        this.renderData.width = this.width;
-        this.renderData.height = this.height;
 
-        Game.renderManager.addToRenderStack(this.renderData);
+        this.renderManager.addToRenderStack(this.renderData);
     }
 }

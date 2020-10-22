@@ -1,13 +1,16 @@
 import Component from "../../../Engine/Component";
-import Rectangle from "../../../Engine/Libs/Geometric/Shapes/Rectangle";
+import { container } from "../../../Engine/Game";
 import Vector2 from "../../../Engine/Helper/Vector2";
 
 export default class Movements extends Component {
     // cache
+    timeManager = container.getSingleton("TimeManager");
+    assetManager = container.getSingleton("AssetManager");
     inputManager = null;
     transform = null;
     tilemap = null;
     animator = null;
+    audioPlayer = null;
 
     // status
     mousePosition = new Vector2(0, 0);
@@ -15,6 +18,7 @@ export default class Movements extends Component {
     rotationSpeed = 3;
     angle = 0; // in radians
     walkingAnimation = false;
+    walkingSFX = false;
 
     start() {
         this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
@@ -24,16 +28,21 @@ export default class Movements extends Component {
 
         // remove enable debug before merging
         this.gameObject.getComponent("TrapezoidCollider").enableDebug();
+
+        this.audioPlayer = this.getComponent("AudioPlayer");
+        this.audioPlayer.audio = this.assetManager.getAudio("audio/footsteps.wav");
+        this.audioPlayer.loop = true;
+        this.audioPlayer.volume = 0.5;
     }
 
-    update(event) {
+    update() {
         this.rotate();
-        this.walk(event.deltaTime);
+        this.walk();
     }
 
-    walk(deltaTime) {
-        let deltaY = this.inputManager.axis.y * Math.floor(this.walkSpeed * deltaTime);
-        let deltaX = this.inputManager.axis.x * Math.floor(this.walkSpeed * deltaTime);
+    walk() {
+        let deltaY = this.inputManager.axis.y * this.walkSpeed * this.timeManager.deltaTime;
+        let deltaX = this.inputManager.axis.x * this.walkSpeed * this.timeManager.deltaTime;
 
         deltaX = deltaY ? deltaX / 1.4 : deltaX;
         deltaY = deltaX ? deltaY / 1.4 : deltaY;
@@ -51,18 +60,20 @@ export default class Movements extends Component {
         if ((deltaX || deltaY) && this.walkingAnimation === false) {
             this.walkingAnimation = true;
             this.animator.playAnimation("PlayerWalking");
+            this.audioPlayer.play();
         } else if (!deltaX && !deltaY && this.walkingAnimation === true) {
             this.walkingAnimation = false;
             this.animator.stopAnimation();
+            this.audioPlayer.stop();
         }
     }
 
     rotate() {
         this.angle = Math.atan2(
-            this.inputManager.mousePosition.y - this.transform.position.y,
-            this.inputManager.mousePosition.x - this.transform.position.x
+            this.inputManager.gunPointer.y - this.transform.position.y,
+            this.inputManager.gunPointer.x - this.transform.position.x
         );
-        this.transform.rotation = (-this.angle * 180) / Math.PI;
+        this.transform.rotation = (this.angle * 180) / Math.PI;
     }
 
     isTouchingForeground() {

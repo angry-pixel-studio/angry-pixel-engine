@@ -9,17 +9,17 @@ export default class Animator extends Component {
     private spriteRenderer: SpriteRenderer = null;
     private defaultSprite: Sprite = null;
 
-    constructor(config: { [key: string]: any }) {
+    constructor(config: { spriteRenderer: SpriteRenderer }) {
         super();
 
         this.spriteRenderer = config.spriteRenderer;
     }
 
-    start(): void {
+    protected start(): void {
         this.defaultSprite = this.spriteRenderer.sprite;
     }
 
-    update(): void {
+    protected update(): void {
         if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === true) {
             this.spriteRenderer.sprite = this.animations[this.playingAnimationId].currentSprite;
         } else if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === false) {

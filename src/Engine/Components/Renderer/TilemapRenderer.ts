@@ -1,72 +1,28 @@
-import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
-import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
-import Game from "../../Game";
 import Tileset from "../../Tileset";
+import AbstractTilemapRenderer from "./Tilemap/AbstractTilemapRenderer";
 
-export default class TilemapRenderer extends Component {
-    public tileset: Tileset = null;
-    public tilemapData: string = null;
-    public tileScale: number = 1;
-    public showTileset: boolean = false;
+type Config = {
+    tileset: Tileset;
+    tilemapData: string;
+    tileScale: number;
+    smooth: boolean;
+    alpha: number;
+};
 
-    private tilemapProcessd: boolean = false;
-    private processedData: RenderData[] = [];
+export default class TilemapRenderer extends AbstractTilemapRenderer {
+    private alpha: number = 1;
 
-    private _width: number = 0;
-    private _height: number = 0;
-
-    private _realTiles: Rectangle[] = [];
-    private _realWidth: number = 0;
-    private _realHeight: number = 0;
-
-    constructor(config: { [key: string]: any }) {
+    constructor(config: Config) {
         super();
 
         this.tileset = config.tileset;
         this.tilemapData = config.tilemapData;
-
-        this.tileScale = config.tileScale !== undefined ? config.tileScale : this.tileScale;
+        this.tileScale = config.tileScale ?? this.tileScale;
+        this.smooth = config.smooth ?? this.smooth;
+        this.alpha = config.alpha ?? this.alpha;
     }
 
-    start(): void {
-        this.update();
-    }
-
-    update(): void {
-        if (this.tileset.loaded && this.showTileset === true && this.tilemapProcessd === false) {
-            this.processTileset();
-            this.updateTilesPosition();
-        } else if (this.tileset.loaded && this.tilemapProcessd === false) {
-            this.processTilemap();
-            this.updateTilesPosition();
-        }
-
-        if (this.tileset.loaded && this.tilemapProcessd === true) {
-            this.processedData.forEach((renderData) => Game.renderManager.addToRenderStack(renderData));
-        }
-    }
-
-    private processTileset(): void {
-        let index = 0;
-
-        for (let row = 0; row < this.tileset.gridHeight; row++) {
-            for (let col = 0; col < this.tileset.gridWidth; col++) {
-                const tile = this.tileset.getTile(index);
-
-                if (tile !== null) {
-                    this.updateSizeInfo(col, row);
-                    this.processTile(tile, col, row);
-                }
-
-                index++;
-            }
-        }
-
-        this.tilemapProcessd = true;
-    }
-
-    private processTilemap(): void {
+    protected processTilemap(): void {
         const data = this.tilemapData.trim().split("\n");
 
         data.forEach((rowData: string, row: number) => {
@@ -78,82 +34,11 @@ export default class TilemapRenderer extends Component {
 
                     if (tile !== null) {
                         this.updateSizeInfo(col + 1, row + 1);
-                        this.processTile(tile, col, row);
+                        this.processTile(tile, col, row, this.alpha);
                     }
                 });
             }
         });
-        this.tilemapProcessd = true;
-    }
-
-    private updateSizeInfo(col: number, row: number): void {
-        if (this._width < col) {
-            this._width = col;
-            this._realWidth = this._width * this.tileset.tileWidth * this.tileScale;
-        }
-
-        if (this._height < row) {
-            this._height = row;
-            this._realHeight = this._height * this.tileset.tileHeight * this.tileScale;
-        }
-    }
-
-    private processTile(tile: Rectangle, col: number, row: number): void {
-        const renderData = new RenderData();
-
-        renderData.position.x = this.gameObject.transform.position.x + col * this.tileset.tileWidth * this.tileScale;
-        renderData.position.y = this.gameObject.transform.position.y - row * this.tileset.tileHeight * this.tileScale;
-
-        renderData.ui = false;
-        renderData.image = this.tileset.image;
-        renderData.layer = this.gameObject.layer;
-        renderData.width = tile.width * this.tileScale;
-        renderData.height = tile.height * this.tileScale;
-        renderData.slice = tile;
-
-        this.processedData.push(renderData);
-    }
-
-    private processRealTile(renderData: RenderData): void {
-        this._realTiles.push(
-            new Rectangle(renderData.position.x, renderData.position.y, renderData.width, renderData.height)
-        );
-    }
-
-    private updateTilesPosition(): void {
-        this.processedData.forEach((renderData) => {
-            renderData.position.x -= Math.floor(this._realWidth / 2);
-            renderData.position.y += Math.floor(this._realHeight / 2);
-            this.processRealTile(renderData);
-        });
-    }
-
-    public isTouchingRect(rect: Rectangle): boolean {
-        let touching = false;
-        this._realTiles.every((tile) => {
-            if (tile.overlappingRectangle(rect)) {
-                touching = true;
-                return false;
-            }
-            return true;
-        });
-
-        return touching;
-    }
-
-    public get width(): number {
-        return this._width;
-    }
-
-    public get height(): number {
-        return this._height;
-    }
-
-    public get realWidth(): number {
-        return this._realWidth;
-    }
-
-    public get realHeight(): number {
-        return this._realHeight;
+        this.tilemapProcessed = true;
     }
 }

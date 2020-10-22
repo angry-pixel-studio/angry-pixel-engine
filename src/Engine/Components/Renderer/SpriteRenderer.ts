@@ -1,51 +1,57 @@
 import Component from "../../Component";
-import RenderData from "../../Core/Rendering/RenderData";
-import {
-    PIVOT_CENTER,
-    PIVOT_TOP_LEFT,
-    PIVOT_TOP_RIGHT,
-    PIVOT_BOTTOM_LEFT,
-    PIVOT_BOTTOM_RIGHT,
-} from "../../Core/Rendering/RenderPivots";
-import Game from "../../Game";
+import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
+import RenderManager from "../../Core/Rendering/RenderManager";
+import { container } from "../../Game";
 import Vector2 from "../../Helper/Vector2";
 import Sprite from "../../Sprite";
 
-export * from "../../Core/Rendering/RenderPivots";
+type Config = {
+    sprite: Sprite;
+    offsetX: number;
+    offsetY: number;
+    smooth: boolean;
+    rotation: number;
+    flipHorizontal: boolean;
+    flipVertical: boolean;
+    opacity: number;
+};
 
 export default class SpriteRenderer extends Component {
     public sprite: Sprite = null;
     public offsetX: number = 0;
     public offsetY: number = 0;
-    public pivot: string = PIVOT_CENTER;
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = 0;
     public smooth: boolean = true;
+    public opacity: number = 1;
 
-    private renderData: RenderData = new RenderData();
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+    private renderData: ImageRenderData = new ImageRenderData();
     private goPosition: Vector2 = null;
 
-    constructor(config: { [key: string]: any }) {
+    constructor(config: Config) {
         super();
 
         // required
         this.sprite = config.sprite;
 
         // optional
-        this.pivot = config.pivot ? config.pivot : this.pivot;
-        this.offsetX = config.offsetX ? config.offsetX : this.offsetX;
-        this.offsetY = config.offsetY ? config.offsetY : this.offsetY;
-        this.smooth = config.smooth ? config.smooth : this.smooth;
-        this.rotation = config.rotation ? config.rotation : this.rotation;
+        this.offsetX = config.offsetX ?? this.offsetX;
+        this.offsetY = config.offsetY ?? this.offsetY;
+        this.smooth = config.smooth ?? this.smooth;
+        this.rotation = config.rotation ?? this.rotation;
+        this.flipHorizontal = config.flipHorizontal ?? this.flipHorizontal;
+        this.flipVertical = config.flipVertical ?? this.flipVertical;
+        this.opacity = config.opacity ?? this.opacity;
     }
 
-    start(): void {
+    protected start(): void {
         this.goPosition = this.gameObject.transform.position;
         this.update();
     }
 
-    update(): void {
+    protected update(): void {
         if (this.sprite.loaded === true) {
             this.renderData.ui = this.gameObject.ui;
             this.renderData.layer = this.gameObject.layer;
@@ -56,10 +62,12 @@ export default class SpriteRenderer extends Component {
             this.renderData.flipHorizontal = this.flipHorizontal;
             this.renderData.flipVertical = this.flipVertical;
             this.renderData.rotation = this.gameObject.transform.rotation + this.rotation;
+            this.renderData.smooth = this.sprite.smooth;
+            this.renderData.alpha = this.opacity;
 
             this.calculateRenderPosition();
 
-            Game.renderManager.addToRenderStack(this.renderData);
+            this.renderManager.addToRenderStack(this.renderData);
         }
     }
 
@@ -71,26 +79,7 @@ export default class SpriteRenderer extends Component {
             this.translateRenderPosition();
         }
 
-        switch (this.pivot) {
-            case PIVOT_CENTER:
-                this.renderData.position.x -= Math.floor(this.renderData.width / 2);
-                this.renderData.position.y += Math.floor(this.renderData.height / 2);
-                break;
-            case PIVOT_TOP_RIGHT:
-                this.renderData.position.x -= this.renderData.width;
-                break;
-            case PIVOT_BOTTOM_LEFT:
-                this.renderData.position.y += this.renderData.height;
-                break;
-            case PIVOT_BOTTOM_RIGHT:
-                this.renderData.position.x -= this.renderData.width;
-                this.renderData.position.y += this.renderData.height;
-                break;
-            case PIVOT_TOP_LEFT:
-                break;
-            default:
-                break;
-        }
+        return;
     }
 
     private translateRenderPosition(): void {

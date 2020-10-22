@@ -1,7 +1,7 @@
 import Animator from "../../Engine/Components/Animator";
 import TrapezoidCollider from "../../Engine/Components/Colliders/TrapezoidCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
-import Game from "../../Engine/Game";
+import { container } from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
 import Rectangle from "../../Engine/Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
@@ -13,6 +13,9 @@ import { TAG_PLAYER } from "./PlayerTop";
 export const TAG_BOT = "Bot";
 
 export default class Bot extends GameObject {
+    timeManager = container.getSingleton("TimeManager");
+    assetManager = container.getSingleton("AssetManager");
+
     player = null;
     tilemap = null;
 
@@ -38,12 +41,12 @@ export default class Bot extends GameObject {
             () =>
                 new SpriteRenderer({
                     sprite: new Sprite({
-                        image: Game.assetManager.getImage("image/demo/player-top-down.png"),
+                        image: this.assetManager.getImage("image/demo/player-top-down.png"),
                         slice: new Rectangle(0, 0, 32, 32),
                         scale: new Vector2(2, 2),
                         smooth: false,
                     }),
-                    rotation: 90,
+                    rotation: -90,
                 }),
             "SpriteRenderer"
         );
@@ -64,10 +67,10 @@ export default class Bot extends GameObject {
         this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
     }
 
-    update(event) {
+    update() {
         this.updateAimAngle();
         this.updateCurrentDirection();
-        this.move(event.deltaTime);
+        this.move();
     }
 
     updateAimAngle() {
@@ -75,7 +78,7 @@ export default class Bot extends GameObject {
             this.player.transform.position.y - this.transform.position.y,
             this.player.transform.position.x - this.transform.position.x
         );
-        this.transform.rotation = (-this.aimAngle * 180) / Math.PI;
+        this.transform.rotation = (this.aimAngle * 180) / Math.PI;
     }
 
     updateCurrentDirection() {
@@ -83,7 +86,7 @@ export default class Bot extends GameObject {
         this.currentDirection.y = Math.sin(this.aimAngle);
     }
 
-    move(deltaTime) {
+    move() {
         if (
             Math.abs(this.player.transform.position.x - this.transform.position.x) <= this.playerDistance &&
             Math.abs(this.player.transform.position.y - this.transform.position.y) <= this.playerDistance
@@ -91,8 +94,8 @@ export default class Bot extends GameObject {
             return;
         }
 
-        const deltaX = this.currentDirection.x * (this.walkSpeed * deltaTime);
-        const deltaY = this.currentDirection.y * (this.walkSpeed * deltaTime);
+        const deltaX = this.currentDirection.x * (this.walkSpeed * this.timeManager.deltaTime);
+        const deltaY = this.currentDirection.y * (this.walkSpeed * this.timeManager.deltaTime);
 
         this.transform.position.x += deltaX;
         if (deltaX !== 0 && this.isTouchingForeground()) {

@@ -1,14 +1,20 @@
 import Component from "../../../Engine/Component";
+import { container } from "../../../Engine/Game";
 import Projectile from "../../GameObjects/Projectile";
 
 export default class Weapon extends Component {
+    assetManager = container.getSingleton("AssetManager");
     inputManager = null;
+    audioPlayer = null;
+
     firePressed = false;
     projectileAmount = 20;
     projectiles = [];
 
     start() {
         this.inputManager = this.findGameObjectByName("InputManager");
+        this.audioPlayer = this.getComponent("AudioPlayer");
+
         this.setupProjectiles();
     }
 
@@ -30,6 +36,8 @@ export default class Weapon extends Component {
             const p = this.projectiles.pop();
             this.gameObject.setChildActive(p.name, true);
             p.fire(this.getComponent("Movements").angle);
+
+            this.audioPlayer.playAudio(this.assetManager.getAudio("audio/gunshot.wav"), 0.2);
         }
 
         this.firePressed = this.inputManager.fire;

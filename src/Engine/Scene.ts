@@ -1,13 +1,15 @@
 import GameCamera from "./GameObjects/GameCamera";
-import Game, { EVENT_UPDATE } from "./Game";
+import Game, { container, EVENT_UPDATE } from "./Game";
 import GameObject from "./GameObject";
-import { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 
 export const GAME_CAMERA_ID = "GameCamera";
 
 export default class Scene {
     public game: Game = null;
     public name: string = null;
+
+    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private firstFrame: boolean = true;
 
     constructor() {
@@ -17,20 +19,20 @@ export default class Scene {
         this.gameLoopEventHandler.bind(this);
     }
 
-    gameLoopEventHandler = (event: Event): void => {
+    private gameLoopEventHandler = (): void => {
         if (this.firstFrame === true) {
-            this.start((event as CustomEvent).detail);
+            this.start();
             this.firstFrame = false;
         } else {
-            this.update((event as CustomEvent).detail);
+            this.update();
         }
     };
 
-    protected start(event: Record<string, unknown>): void {
+    protected start(): void {
         // do nothing
     }
 
-    protected update(event: Record<string, unknown>): void {
+    protected update(): void {
         // do nothing
     }
 
@@ -39,42 +41,42 @@ export default class Scene {
     }
 
     public addGameObject(gameObjectFactory: GameObjectFactory, name: string): this {
-        Game.gameObjectManager.addGameObject(gameObjectFactory, this, name);
+        this.gameObjectManager.addGameObject(gameObjectFactory, name);
 
         return this;
     }
 
     public getRootGameObjects(): GameObject[] {
-        return Game.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.parent === null);
+        return this.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.parent === null);
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
-        return Game.gameObjectManager.findGameObjectByName(name) as T;
+        return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
     public findGameObjectsByTag(tag: string): GameObject[] {
-        return Game.gameObjectManager.findGameObjectsByTag(tag);
+        return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
-        return Game.gameObjectManager.findGameObjectByTag(tag) as T;
+        return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     public destroyGameObject(name: string): void {
         const gameObject = this.findGameObjectByName(name);
 
         if (gameObject !== null) {
-            Game.gameObjectManager.destroyGameObject(gameObject);
+            this.gameObjectManager.destroyGameObject(gameObject);
         }
     }
 
     public destroyAllGameObjects(): void {
-        Game.gameObjectManager.destroyAllGameObjects();
+        this.gameObjectManager.destroyAllGameObjects();
     }
 
     public _destroy(): void {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-        Game.gameObjectManager.destroyAllGameObjects();
+        this.gameObjectManager.destroyAllGameObjects();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);

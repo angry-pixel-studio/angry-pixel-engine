@@ -23,7 +23,7 @@ export default class TilemapCollider extends Component {
     }
 
     // TODO: Change this to get the tilemap data from the tilemap renderer
-    protected start() {
+    protected start(): void {
         const data = this.tilemapData.trim().split("\n");
 
         const totalRows = data.length;
