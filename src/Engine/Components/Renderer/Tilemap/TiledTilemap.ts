@@ -1,9 +1,9 @@
-export type TiledTilemap = {
+export interface TiledTilemap {
     width: number;
     height: number;
     infinite: boolean;
     layers: TiledLayer[];
-};
+}
 
 export interface TiledChunk {
     data: number[];

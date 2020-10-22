@@ -97,18 +97,18 @@ export default abstract class AbstractTilemapRenderer extends Component {
         this.processedData.push(renderData);
     }
 
-    protected processRealTile(renderData: ImageRenderData): void {
-        this._realTiles.push(
-            new Rectangle(renderData.position.x, renderData.position.y, renderData.width, renderData.height)
-        );
-    }
-
     protected updateTilesPosition(): void {
         this.processedData.forEach((renderData) => {
             renderData.position.x -= Math.floor(this._realWidth / 2);
             renderData.position.y += Math.floor(this._realHeight / 2);
             this.processRealTile(renderData);
         });
+    }
+
+    protected processRealTile(renderData: ImageRenderData): void {
+        this._realTiles.push(
+            new Rectangle(renderData.position.x, renderData.position.y, renderData.width, renderData.height)
+        );
     }
 
     public get width(): number {
