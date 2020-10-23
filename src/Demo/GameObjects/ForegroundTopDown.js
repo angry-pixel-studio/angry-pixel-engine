@@ -38,6 +38,7 @@ export default class ForegroundTopDown extends GameObject {
                 }),
             "TilemapRenderer"
         );
+
         /*this.addComponent(
             () => new TiledRenderer({
                 tileset: new Tileset({
@@ -53,17 +54,10 @@ export default class ForegroundTopDown extends GameObject {
             }),
             "TilemapRenderer"
         );*/
-        this.addComponent(
-            () =>
-                new TilemapCollider({
-                    tilemapData: tilemapData,
-                    tileWidth: 16,
-                    tileHeight: 16,
-                    tileScale: 4,
-                })
-        );
 
         this.tilemapRenderer = this.getComponent("TilemapRenderer");
+
+        this.addComponent(() => new TilemapCollider({ tilesData: this.tilemapRenderer.tilesData }));
     }
 
     update() {
