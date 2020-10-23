@@ -33,7 +33,6 @@ export default class TilemapRenderer extends AbstractTilemapRenderer {
                     const tile = this.tileset.getTile(parseInt(stringId));
 
                     if (tile !== null) {
-                        this.updateSizeInfo(col + 1, row + 1);
                         this.processTile(tile, col, row, this.alpha);
                     }
                 });

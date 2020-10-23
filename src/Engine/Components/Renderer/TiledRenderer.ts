@@ -36,7 +36,6 @@ export default class TiledRenderer extends AbstractTilemapRenderer {
             for (let col = 0; col < chunk.width; col++) {
                 const tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
                 if (tile !== null) {
-                    this.updateSizeInfo(col + 1 + chunk.x, row + 1 + chunk.y);
                     this.processTile(tile, col + chunk.x, row + chunk.y, alpha);
                 }
 
