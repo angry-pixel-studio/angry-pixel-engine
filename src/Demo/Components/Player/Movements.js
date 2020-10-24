@@ -27,7 +27,7 @@ export default class Movements extends Component {
         this.inputManager = this.findGameObjectByName("InputManager");
 
         // remove enable debug before merging
-        this.gameObject.getComponent("TrapezoidCollider").enableDebug();
+        this.gameObject.getComponent("RectangleCollider").enableDebug();
 
         this.audioPlayer = this.getComponent("AudioPlayer");
         this.audioPlayer.audio = this.assetManager.getAudio("audio/footsteps.wav");
@@ -77,6 +77,6 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        return this.gameObject.getComponent("TrapezoidCollider").collidesWithLayer("Foreground");
+        return this.gameObject.getComponent("RectangleCollider").collidesWithLayer("Foreground");
     }
 }

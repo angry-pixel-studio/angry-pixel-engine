@@ -1,6 +1,6 @@
 import GameObject from "../../Engine/GameObject";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
-import TrapezoidCollider from "../../Engine/Components/Colliders/TrapezoidCollider";
+import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import Sprite from "../../Engine/Sprite";
 import Animator from "../../Engine/Components/Animator";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
@@ -50,7 +50,7 @@ export default class PlayerTop extends GameObject {
 
         this.addComponent(() => new Movements(), "Movements");
         this.addComponent(() => new Weapon(), "Weapon");
-        this.addComponent(() => new TrapezoidCollider({ width: 32, height: 32 }), "TrapezoidCollider");
+        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
         this.addComponent(() => new AudioPlayer(), "AudioPlayer");
 
         //this.createChild();

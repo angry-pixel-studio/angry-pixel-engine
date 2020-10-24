@@ -1,5 +1,5 @@
 import Animator from "../../Engine/Components/Animator";
-import TrapezoidCollider from "../../Engine/Components/Colliders/TrapezoidCollider";
+import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import { container } from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
@@ -59,7 +59,7 @@ export default class Bot extends GameObject {
             "Animator"
         );
         this.getComponent("Animator").addAnimation("PlayerWalking", PlayerWalking);
-        this.addComponent(() => new TrapezoidCollider({ width: 32, height: 32 }), "TrapezoidCollider");
+        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
     }
 
     start() {
@@ -109,7 +109,7 @@ export default class Bot extends GameObject {
     }
 
     isTouchingForeground() {
-        return this.getComponent("TrapezoidCollider").collidesWithLayer("Foreground");
+        return this.getComponent("RectangleCollider").collidesWithLayer("Foreground");
     }
 
     animate() {}
