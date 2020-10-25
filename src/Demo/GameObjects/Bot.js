@@ -7,7 +7,7 @@ import Rectangle from "../../Engine/Libs/Geometric/Shapes/Rectangle";
 import Vector2 from "../../Engine/Helper/Vector2";
 import Sprite from "../../Engine/Sprite";
 import { PlayerWalking } from "../Animations/PlayerTopAnimations";
-import { LAYER_BOT } from "../Config/renderLayers";
+import { LAYER_BOT, LAYER_PROJECTILE } from "../Config/renderLayers";
 import { TAG_PLAYER } from "./PlayerTop";
 
 export const TAG_BOT = "Bot";
@@ -18,6 +18,7 @@ export default class Bot extends GameObject {
 
     player = null;
     tilemap = null;
+    collider = null;
 
     walkSpeed = 180;
 
@@ -59,7 +60,10 @@ export default class Bot extends GameObject {
             "Animator"
         );
         this.getComponent("Animator").addAnimation("PlayerWalking", PlayerWalking);
+
         this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
+        this.collider = this.getComponent("RectangleCollider");
+        this.collider.enableDebug();
     }
 
     start() {
@@ -71,6 +75,7 @@ export default class Bot extends GameObject {
         this.updateAimAngle();
         this.updateCurrentDirection();
         this.move();
+        // this.getShot();
     }
 
     updateAimAngle() {
@@ -109,7 +114,13 @@ export default class Bot extends GameObject {
     }
 
     isTouchingForeground() {
-        return this.getComponent("RectangleCollider").collidesWithLayer("Foreground");
+        return this.collider.collidesWithLayer("Foreground") || this.collider.collidesWithLayer("Bot");
+    }
+
+    getShot() {
+        if (this.collider.collidesWithLayer(LAYER_PROJECTILE)) {
+            this.getCurrentScene().destroyGameObject(this.name);
+        }
     }
 
     animate() {}

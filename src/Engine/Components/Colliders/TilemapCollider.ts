@@ -53,9 +53,9 @@ export default class TilemapCollider extends Component {
     }
 
     private updateRenderData(renderData: GeometricRenderData, collider: RectangleCollider): void {
-        renderData.position.set(collider.coordinates.x, collider.coordinates.y);
+        renderData.position = collider.coordinates;
         renderData.layer = LAYER_DEFAULT;
-        renderData.geometric = { width: collider.width, height: collider.height };
+        renderData.geometric = collider;
         renderData.geometricType = GEOMETRIC_RECTANGLE;
         renderData.color = "#00FF00";
     }

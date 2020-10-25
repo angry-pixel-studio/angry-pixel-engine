@@ -144,7 +144,7 @@ export default class Context2DRenderer implements IContextRenderer {
                     this.renderPosition.x,
                     this.renderPosition.y,
                     renderData.geometric.width,
-                    renderData.geometric.height * -1
+                    renderData.geometric.height
                 );
                 break;
             case GEOMETRIC_POLYGON:

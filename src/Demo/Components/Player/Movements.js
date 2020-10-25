@@ -7,10 +7,12 @@ export default class Movements extends Component {
     timeManager = container.getSingleton("TimeManager");
     assetManager = container.getSingleton("AssetManager");
     inputManager = null;
+
     transform = null;
     tilemap = null;
     animator = null;
     audioPlayer = null;
+    collider = null;
 
     // status
     mousePosition = new Vector2(0, 0);
@@ -24,6 +26,7 @@ export default class Movements extends Component {
         this.tilemap = this.findGameObjectByName("Foreground").getComponent("TilemapRenderer");
         this.transform = this.getComponent("Transform");
         this.animator = this.getComponent("Animator");
+        this.collider = this.getComponent("RectangleCollider");
         this.inputManager = this.findGameObjectByName("InputManager");
 
         // remove enable debug before merging
@@ -77,6 +80,6 @@ export default class Movements extends Component {
     }
 
     isTouchingForeground() {
-        return this.gameObject.getComponent("RectangleCollider").collidesWithLayer("Foreground");
+        return this.collider.collidesWithLayer("Foreground") || this.collider.collidesWithLayer("Bot");
     }
 }

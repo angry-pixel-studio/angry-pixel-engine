@@ -94,7 +94,7 @@ export default abstract class AbstractTilemapRenderer extends Component {
         this.tiles.push(
             new Rectangle(
                 renderData.position.x - renderData.width / 2,
-                renderData.position.y - renderData.height / 2,
+                renderData.position.y + renderData.height / 2,
                 renderData.width,
                 renderData.height
             )

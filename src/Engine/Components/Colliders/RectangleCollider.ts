@@ -40,12 +40,17 @@ export default class RectangleCollider extends Component {
         this.collider = new CoreRectangleCollider(
             new Vector2(
                 this.gameObject.transform.position.x - Math.floor(this.width / 2) - this.offsetX,
-                this.gameObject.transform.position.y - Math.floor(this.height / 2) - this.offsetY
+                this.gameObject.transform.position.y + Math.floor(this.height / 2) - this.offsetY
             ),
             this.width,
             this.height,
             this.gameObject.layer
         );
+        console.log("player");
+        console.log(this.collider.topLeftPoint);
+        console.log(this.collider.topRightPoint);
+        console.log(this.collider.bottomLeftPoint);
+        console.log(this.collider.bottomRightPoint);
 
         this.collisionManager.addCollider(this.collider);
     }
@@ -82,7 +87,7 @@ export default class RectangleCollider extends Component {
     private updateCoordinates() {
         this.collider.coordinates = new Vector2(
             this.gameObject.transform.position.x - Math.floor(this.width / 2) - this.offsetX,
-            this.gameObject.transform.position.y - Math.floor(this.height / 2) - this.offsetY
+            this.gameObject.transform.position.y + Math.floor(this.height / 2) - this.offsetY
         );
     }
 

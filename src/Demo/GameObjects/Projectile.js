@@ -1,3 +1,4 @@
+import RectangleCollider from "../../Engine/Components/Colliders/RectangleCollider";
 import SpriteRenderer from "../../Engine/Components/Renderer/SpriteRenderer";
 import { container } from "../../Engine/Game";
 import GameObject from "../../Engine/GameObject";
@@ -41,6 +42,8 @@ export default class Projectile extends GameObject {
                 }),
             "SpriteRenderer"
         );
+
+        // this.addComponent(() => new RectangleCollider({ width: 2, height: 2 }), "RectangleCollider");
     }
 
     update() {
