@@ -1,4 +1,4 @@
-import Rectangle from "../../../Helper/Rectangle";
+import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
 import RenderData, { RenderDataType } from "./RenderData";
 
 export default class ImageRenderData extends RenderData {

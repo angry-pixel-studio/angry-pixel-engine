@@ -3,9 +3,9 @@ import fragmentShader from "./Shader/Image/fragmentShader";
 import { mat4 } from "gl-matrix";
 import ProgramFactory from "./ProgramFactory";
 import TextureFactory from "./TextureFactory";
-import Rectangle from "../../../Helper/Rectangle";
 import Vector2 from "../../../Helper/Vector2";
 import { sha256 } from "js-sha256";
+import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
 
 export default class ImageRenderer {
     private textureFactory: TextureFactory;
