@@ -29,9 +29,6 @@ export default class Movements extends Component {
         this.collider = this.getComponent("RectangleCollider");
         this.inputManager = this.findGameObjectByName("InputManager");
 
-        // remove enable debug before merging
-        this.gameObject.getComponent("RectangleCollider").enableDebug();
-
         this.audioPlayer = this.getComponent("AudioPlayer");
         this.audioPlayer.audio = this.assetManager.getAudio("audio/footsteps.wav");
         this.audioPlayer.loop = true;

@@ -68,7 +68,7 @@ export default class GameObjectManager {
 
         if (index !== -1) {
             destroyChildren ? this.destroyChildren(gameObject) : null;
-            gameObject._destroy();
+            gameObject.destroy();
             delete this.gameObjects[index];
         }
     }

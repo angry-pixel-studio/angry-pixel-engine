@@ -1,20 +1,21 @@
+import GameObject from "../../../GameObject";
 import Vector2 from "../../../Helper/Vector2";
 import ICollider, { ColliderType } from "./ICollider";
 
 export default class RectangleCollider implements ICollider {
     public readonly type: ColliderType = ColliderType.Rectangle;
-    public readonly layer: string;
+    public readonly gameObject: GameObject;
     public readonly points: Vector2[] = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
 
     private _coordinates: Vector2 = new Vector2(0, 0);
     private _width: number = 0;
     private _height: number = 0;
 
-    constructor(coordinates: Vector2, width: number, height: number, layer: string) {
+    constructor(coordinates: Vector2, width: number, height: number, gameObject: GameObject) {
         this._coordinates.set(coordinates.x, coordinates.y);
         this._width = width;
         this._height = height;
-        this.layer = layer;
+        this.gameObject = gameObject;
 
         this.updatePoints();
     }

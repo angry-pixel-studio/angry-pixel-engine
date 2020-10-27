@@ -8,7 +8,7 @@ export default class Weapon extends Component {
     audioPlayer = null;
 
     firePressed = false;
-    projectileAmount = 20;
+    projectileAmount = 30;
     projectiles = [];
 
     start() {
@@ -22,7 +22,7 @@ export default class Weapon extends Component {
         for (let i = 0; i < this.projectileAmount; i++) {
             const name = `Projectile${i}`;
             this.gameObject.addChild(() => new Projectile(this), name);
-            this.gameObject.setChildActive(name, false);
+            this.gameObject.getChild(name).setActive(false);
             this.projectiles.push(this.gameObject.getChild(name));
         }
     }
@@ -34,7 +34,7 @@ export default class Weapon extends Component {
     fire() {
         if (this.projectiles.length > 0 && this.inputManager.fire && this.firePressed === false) {
             const p = this.projectiles.pop();
-            this.gameObject.setChildActive(p.name, true);
+            p.setActive(true);
             p.fire(this.getComponent("Movements").angle);
 
             this.audioPlayer.playAudio(this.assetManager.getAudio("audio/gunshot.wav"), 0.2);
@@ -44,7 +44,7 @@ export default class Weapon extends Component {
     }
 
     restoreProjectile(projectile) {
-        this.gameObject.setChildActive(projectile.name, false);
+        projectile.setActive(false);
         this.projectiles.push(projectile);
     }
 }

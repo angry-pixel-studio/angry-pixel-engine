@@ -27,7 +27,6 @@ export default class TopDown extends Scene {
 
     update() {
         if (this.assetsLoaded === false) {
-            console.log("loading");
             this.assetsLoaded = this.assetManager.getAssetsLoaded();
         }
 
@@ -62,9 +61,13 @@ export default class TopDown extends Scene {
     }
 
     setUpBots() {
-        this.addGameObject(() => new Bot(690, 385), "Bot01")
+        this.addGameObject(() => new Bot(690, 500), "Bot01")
             .addGameObject(() => new Bot(-820, 500), "Bot02")
-            .addGameObject(() => new Bot(690, -385), "Bot03")
-            .addGameObject(() => new Bot(-820, -500), "Bot04");
+            .addGameObject(() => new Bot(690, -500), "Bot03")
+            .addGameObject(() => new Bot(-820, -500), "Bot04")
+            .addGameObject(() => new Bot(0, 500), "Bot05")
+            .addGameObject(() => new Bot(500, 0), "Bot06")
+            .addGameObject(() => new Bot(0, -500), "Bot07")
+            .addGameObject(() => new Bot(-500, 0), "Bot08");
     }
 }

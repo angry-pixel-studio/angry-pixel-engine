@@ -9,10 +9,11 @@ export default abstract class Component {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 
-    private readonly _uuid: string = uuidv4();
+    public readonly uuid: string = uuidv4();
     public name: string = null;
     public gameObject: GameObject = null;
-    public active: boolean = true;
+
+    private _active: boolean = true;
     private firstFrame: boolean = true;
 
     constructor() {
@@ -20,12 +21,16 @@ export default abstract class Component {
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
-    public get uuid(): string {
-        return this._uuid;
+    public get active(): boolean {
+        return this._active;
+    }
+
+    public setActive(active: boolean): void {
+        this._active = active;
     }
 
     private gameLoopEventHandler = (): void => {
-        if (this.active === false) {
+        if (this._active === false) {
             return;
         }
 
@@ -65,7 +70,18 @@ export default abstract class Component {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
-    public _destroy(): void {
+    public destroyGameObjectByName(name: string): void {
+        this.destroyGameObject(this.findGameObjectByName(name));
+    }
+
+    public destroyGameObject(gameObject: GameObject): void {
+        this.gameObjectManager.destroyGameObject(gameObject);
+    }
+
+    /**
+     * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
+     */
+    public destroy(): void {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         // @ts-ignore

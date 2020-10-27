@@ -62,7 +62,7 @@ export default class SceneManager {
 
     public unloadCurrentScene(): void {
         if (this.currentScene !== null) {
-            this.currentScene._destroy();
+            this.currentScene.destroy();
             this.currentScene = null;
             this.currentSceneName = null;
 

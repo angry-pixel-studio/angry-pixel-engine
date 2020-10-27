@@ -18,6 +18,7 @@ export default class Projectile extends GameObject {
 
     weapon = null;
     cachedParent = null;
+    collider = null;
 
     innerPosX = 24;
     innerPosY = 3;
@@ -43,13 +44,16 @@ export default class Projectile extends GameObject {
             "SpriteRenderer"
         );
 
-        // this.addComponent(() => new RectangleCollider({ width: 2, height: 2 }), "RectangleCollider");
+        this.addComponent(() => new RectangleCollider({ width: 2, height: 2, debug: false }), "RectangleCollider");
+        this.collider = this.getComponent("RectangleCollider");
     }
 
     update() {
         if (this.shooted) {
             this.transform.position.x += this.deltaX;
             this.transform.position.y += this.deltaY;
+
+            this.impact();
         }
     }
 
@@ -60,13 +64,25 @@ export default class Projectile extends GameObject {
 
         this.cachedParent = this._parent;
         this.parent = null;
+    }
 
-        setTimeout(() => {
-            this.shooted = false;
-            this.transform.innerPosition.set(this.innerPosX, this.innerPosY);
-            this.parent = this.cachedParent;
+    impact() {
+        if (this.collider.collidesWithLayer("Foreground")) {
+            this.returnToParent();
+        }
 
-            this.weapon.restoreProjectile(this);
-        }, 500);
+        const botCollision = this.collider.getCollisionWithLayer("Bot");
+        if (botCollision !== null) {
+            botCollision.gameObject.die();
+            this.returnToParent();
+        }
+    }
+
+    returnToParent() {
+        this.shooted = false;
+        this.transform.innerPosition.set(this.innerPosX, this.innerPosY);
+        this.parent = this.cachedParent;
+
+        this.weapon.restoreProjectile(this);
     }
 }

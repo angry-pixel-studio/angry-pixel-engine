@@ -16,16 +16,24 @@ export default class CollisionManager {
         this.renderManager = renderManager;
 
         // TODO: remove hardcoded quad size
-        this.quad = new QuadTree(0, new Rectangle(-1025, -700, 2050, 1400));
+        this.quad = new QuadTree(0, new Rectangle(-2500, -2500, 5000, 5000));
     }
 
     public prepare(): void {
-        this.debugQuads(this.quad);
+        //this.debugQuads(this.quad);
         this.refreshQuad();
     }
 
     public addCollider(collider: ICollider): void {
         this.colliders.push(collider);
+    }
+
+    public removeCollider(collider: ICollider): void {
+        const index: number = this.colliders.indexOf(collider);
+        if (index !== -1) {
+            delete this.colliders[index];
+            this.colliders.splice(index, 1);
+        }
     }
 
     public getCollisionsForCollider(collider: ICollider): Array<ICollider> {

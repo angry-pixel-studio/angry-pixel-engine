@@ -28,6 +28,7 @@ export default class Bot extends GameObject {
     currentDirection = new Vector2(1, 0);
     walkingAnimation = false;
     currentSpeed = new Vector2(0, 0);
+    respawnPoint = new Vector2(0, 0);
 
     playerDistance = 128;
 
@@ -37,6 +38,7 @@ export default class Bot extends GameObject {
         this.tag = TAG_BOT;
         this.layer = LAYER_BOT;
         this.transform.position.set(x, y);
+        this.respawnPoint.set(x, y);
 
         this.addComponent(
             () =>
@@ -61,9 +63,8 @@ export default class Bot extends GameObject {
         );
         this.getComponent("Animator").addAnimation("PlayerWalking", PlayerWalking);
 
-        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
+        this.addComponent(() => new RectangleCollider({ width: 32, height: 32, debug: false }), "RectangleCollider");
         this.collider = this.getComponent("RectangleCollider");
-        this.collider.enableDebug();
     }
 
     start() {
@@ -75,7 +76,6 @@ export default class Bot extends GameObject {
         this.updateAimAngle();
         this.updateCurrentDirection();
         this.move();
-        // this.getShot();
     }
 
     updateAimAngle() {
@@ -117,10 +117,12 @@ export default class Bot extends GameObject {
         return this.collider.collidesWithLayer("Foreground") || this.collider.collidesWithLayer("Bot");
     }
 
-    getShot() {
-        if (this.collider.collidesWithLayer(LAYER_PROJECTILE)) {
-            this.getCurrentScene().destroyGameObject(this.name);
-        }
+    die() {
+        this.setActive(false);
+        setTimeout(() => {
+            this.transform.position.set(this.respawnPoint.x, this.respawnPoint.y);
+            this.setActive(true);
+        }, 5000);
     }
 
     animate() {}

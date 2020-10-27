@@ -1,3 +1,4 @@
+import GameObject from "../../../GameObject";
 import Vector2 from "../../../Helper/Vector2";
 
 export enum ColliderType {
@@ -8,8 +9,11 @@ export enum ColliderType {
 
 export default interface ICollider {
     readonly type: ColliderType;
-    readonly layer: string;
+    readonly gameObject: GameObject;
+
+    coordinates: Vector2;
     points: Vector2[];
+
     readonly bottomLeftPoint: Vector2;
     readonly bottomRightPoint: Vector2;
     readonly topLeftPoint: Vector2;

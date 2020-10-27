@@ -22,8 +22,7 @@ export default class PlayerTop extends GameObject {
 
         this.tag = TAG_PLAYER;
         this.layer = LAYER_PLAYER;
-        this.transform.position.x = 0;
-        this.transform.position.y = 0;
+        this.transform.position.set(0, 0);
 
         this.addComponent(
             () =>
@@ -50,7 +49,7 @@ export default class PlayerTop extends GameObject {
 
         this.addComponent(() => new Movements(), "Movements");
         this.addComponent(() => new Weapon(), "Weapon");
-        this.addComponent(() => new RectangleCollider({ width: 32, height: 32 }), "RectangleCollider");
+        this.addComponent(() => new RectangleCollider({ width: 32, height: 32, debug: false }), "RectangleCollider");
         this.addComponent(() => new AudioPlayer(), "AudioPlayer");
 
         //this.createChild();

@@ -1,21 +1,22 @@
+import GameObject from "../../../GameObject";
 import Vector2 from "../../../Helper/Vector2";
 import ICollider, { ColliderType } from "./ICollider";
 
 export default class PolygonCollider implements ICollider {
     public readonly type: ColliderType = ColliderType.Polygon;
-    public readonly layer: string;
+    public readonly gameObject: GameObject;
 
-    private _position: Vector2 = new Vector2(0, 0);
+    private _coordinates: Vector2 = new Vector2(0, 0);
     private _points: Vector2[];
     private realPoints: Vector2[];
 
-    constructor(position: Vector2, points: Vector2[], layer: string) {
+    constructor(position: Vector2, points: Vector2[], gameObject: GameObject) {
         if (points.length < 3) {
             throw new Error("PolygonCollider needs at least three points");
         }
 
-        this.layer = layer;
-        this._position.set(position.x, position.y);
+        this.gameObject = gameObject;
+        this._coordinates.set(position.x, position.y);
         this._points = points;
         this.createRealPoints();
     }
@@ -25,17 +26,17 @@ export default class PolygonCollider implements ICollider {
         this.createRealPoints();
     }
 
-    public set position(position: Vector2) {
-        this._position.set(position.x, position.y);
-        this.updateRealPoints();
-    }
-
     public get points(): Vector2[] {
         return this._points;
     }
 
-    public get position(): Vector2 {
-        return this._position;
+    public set coordinates(coordinates: Vector2) {
+        this._coordinates.set(coordinates.x, coordinates.y);
+        this.updateRealPoints();
+    }
+
+    public get coordinates(): Vector2 {
+        return this._coordinates;
     }
 
     public get bottomLeftPoint(): Vector2 {
@@ -61,7 +62,7 @@ export default class PolygonCollider implements ICollider {
 
     private updateRealPoints(): void {
         this.realPoints.forEach((point: Vector2, index: number) =>
-            point.set(this._points[index].x + this._position.x, this._points[index].y + this._position.y)
+            point.set(this._points[index].x + this._coordinates.x, this._points[index].y + this._coordinates.y)
         );
     }
 
