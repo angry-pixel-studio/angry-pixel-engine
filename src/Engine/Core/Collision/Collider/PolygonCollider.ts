@@ -1,8 +1,8 @@
-import GameObject from "../../../GameObject";
-import Vector2 from "../../../Helper/Vector2";
-import ICollider, { ColliderType } from "./ICollider";
+import { GameObject } from "../../../GameObject";
+import { Vector2 } from "../../../Helper/Vector2";
+import { ICollider, ColliderType } from "./ICollider";
 
-export default class PolygonCollider implements ICollider {
+export class PolygonCollider implements ICollider {
     public readonly type: ColliderType = ColliderType.Polygon;
     public readonly gameObject: GameObject;
 

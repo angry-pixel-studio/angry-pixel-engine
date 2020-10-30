@@ -1,4 +1,4 @@
-import Vector2 from "../../../Helper/Vector2";
+import { Vector2 } from "../../../Helper/Vector2";
 
 export enum RenderDataType {
     Image = "Image",
@@ -6,7 +6,7 @@ export enum RenderDataType {
     Geometric = "Geometric",
 }
 
-export default abstract class RenderData {
+export abstract class RenderData {
     public abstract type: RenderDataType;
     public ui: boolean = false;
     public layer: string = null;

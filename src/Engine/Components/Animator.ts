@@ -1,9 +1,9 @@
-import Component from "../Component";
-import SpriteRenderer from "./Renderer/SpriteRenderer";
-import Sprite from "../Sprite";
-import Animation from "../Animation";
+import { Component } from "../Component";
+import { SpriteRenderer } from "./Renderer/SpriteRenderer";
+import { Sprite } from "../Sprite";
+import { Animation } from "../Animation";
 
-export default class Animator extends Component {
+export class Animator extends Component {
     private animations: { [id: string]: Animation } = {};
     private playingAnimationId: string = null;
     private spriteRenderer: SpriteRenderer = null;

@@ -1,6 +1,6 @@
 type constructor = () => unknown;
 
-export default class Container {
+export class Container {
     private instances: Map<string, unknown> = new Map<string, unknown>();
     private constructors: Map<string, constructor> = new Map<string, constructor>();
 

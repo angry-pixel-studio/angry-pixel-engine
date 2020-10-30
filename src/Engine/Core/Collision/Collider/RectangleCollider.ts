@@ -1,8 +1,8 @@
-import GameObject from "../../../GameObject";
-import Vector2 from "../../../Helper/Vector2";
-import ICollider, { ColliderType } from "./ICollider";
+import { GameObject } from "../../../GameObject";
+import { Vector2 } from "../../../Helper/Vector2";
+import { ICollider, ColliderType } from "./ICollider";
 
-export default class RectangleCollider implements ICollider {
+export class RectangleCollider implements ICollider {
     public readonly type: ColliderType = ColliderType.Rectangle;
     public readonly gameObject: GameObject;
     public readonly points: Vector2[] = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];

@@ -1,0 +1,32 @@
+import { SceneConstructor } from "./Core/Scene/SceneManager";
+import { Container } from "./Core/DependencyInjection/Container";
+export declare const EVENT_UPDATE: string;
+export declare const gameNode: HTMLDivElement;
+export declare const gameCanvas: HTMLCanvasElement;
+export declare const UICanvas: HTMLCanvasElement;
+export declare const container: Container;
+export declare class Game {
+    canvasBGColor: string;
+    private sceneManager;
+    private renderManager;
+    private collisionManager;
+    private timeManager;
+    private gameContainer;
+    private gameWidth;
+    private gameHeight;
+    private UIEnabled;
+    private _running;
+    private frameRequestId;
+    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number, UIEnabled?: boolean);
+    private setupHTMLDom;
+    private setupManagers;
+    get running(): boolean;
+    addScene(name: string, sceneFunction: SceneConstructor, openingScene?: boolean): void;
+    run(): void;
+    stop(): void;
+    private gameLoop;
+    stopLoop(): void;
+    resumeLoop(): void;
+    private requestAnimationFrame;
+    private dispatchFrameEvent;
+}

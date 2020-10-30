@@ -1,9 +1,9 @@
-import SceneManager, { SceneConstructor } from "./Core/Scene/SceneManager";
-import RenderManager from "./Core/Rendering/RenderManager";
-import CollisionManager from "./Core/Collision/CollisionManager";
-import loadDependencies from "./Core/DependencyInjection/Config";
-import Container from "./Core/DependencyInjection/Container";
-import TimeManager from "./Core/Time/TimeManager";
+import { SceneManager, SceneConstructor } from "./Core/Scene/SceneManager";
+import { RenderManager } from "./Core/Rendering/RenderManager";
+import { CollisionManager } from "./Core/Collision/CollisionManager";
+import { loadDependencies } from "./Core/DependencyInjection/Config";
+import { Container } from "./Core/DependencyInjection/Container";
+import { TimeManager } from "./Core/Time/TimeManager";
 
 const GAME_NODE_ID: string = "miniEngineGame";
 const GAME_CANVAS_ID: string = "miniEngineGameCanvas";
@@ -15,7 +15,7 @@ export const gameCanvas: HTMLCanvasElement = document.createElement("canvas");
 export const UICanvas: HTMLCanvasElement = document.createElement("canvas");
 export const container: Container = new Container();
 
-export default class Game {
+export class Game {
     public canvasBGColor: string = "#000000";
 
     private sceneManager: SceneManager;

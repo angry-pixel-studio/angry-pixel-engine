@@ -1,6 +1,6 @@
 import { EVENT_UPDATE } from "../../Game";
 
-export default class GamepadController {
+export class GamepadController {
     private readonly gamepads: GamepadData[] = [];
 
     constructor() {

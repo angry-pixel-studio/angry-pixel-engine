@@ -1,11 +1,11 @@
-import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
-import Vector2 from "../../../Helper/Vector2";
-import IContextRenderer from "../IContextRenderer";
-import ImageRenderData from "../RenderData/ImageRenderData";
-import RenderData, { RenderDataType } from "../RenderData/RenderData";
-import ImageRenderer from "./ImageRenderer";
+import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "../../../Helper/Vector2";
+import { IContextRenderer } from "../IContextRenderer";
+import { ImageRenderData } from "../RenderData/ImageRenderData";
+import { RenderData, RenderDataType } from "../RenderData/RenderData";
+import { ImageRenderer } from "./ImageRenderer";
 
-export default class WebGLRenderer implements IContextRenderer {
+export class WebGLRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
     private imageRenderer: ImageRenderer;

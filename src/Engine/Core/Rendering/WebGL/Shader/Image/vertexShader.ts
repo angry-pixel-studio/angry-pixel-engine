@@ -1,4 +1,4 @@
-export default `#version 300 es
+export const vertexShader = `#version 300 es
 precision mediump float;
 
 in vec2 positionCoords;

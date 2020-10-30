@@ -11,7 +11,7 @@ class Asset {
     public element: HTMLImageElement | HTMLVideoElement | HTMLAudioElement = null;
 }
 
-export default class AssetManager {
+export class AssetManager {
     private assets: Asset[] = [];
 
     public getAssetsLoaded(): boolean {

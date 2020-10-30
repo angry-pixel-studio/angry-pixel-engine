@@ -1,7 +1,7 @@
 import { EVENT_UPDATE } from "../../Game";
-import Vector2 from "../../Helper/Vector2";
+import { Vector2 } from "../../Helper/Vector2";
 
-export default class MouseController {
+export class MouseController {
     public leftButtonPressed: boolean = false;
     public scrollButonPressed: boolean = false;
     public rightButtonPressed: boolean = false;

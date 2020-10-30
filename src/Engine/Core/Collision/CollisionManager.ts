@@ -1,12 +1,12 @@
-import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
+import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
 import { LAYER_DEFAULT } from "./../../GameObject";
-import Rectangle from "./../../Libs/Geometric/Shapes/Rectangle";
-import Vector2 from "./../../Helper/Vector2";
-import RenderManager from "./../Rendering/RenderManager";
-import ICollider from "./Collider/ICollider";
-import QuadTree from "./QuadTree";
+import { Rectangle } from "./../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "./../../Helper/Vector2";
+import { RenderManager } from "./../Rendering/RenderManager";
+import { ICollider } from "./Collider/ICollider";
+import { QuadTree } from "./QuadTree";
 
-export default class CollisionManager {
+export class CollisionManager {
     private debug: boolean = true;
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];

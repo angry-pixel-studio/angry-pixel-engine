@@ -1,10 +1,10 @@
 import { LAYER_DEFAULT } from "../../GameObject";
-import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
-import RenderManager from "./../../Core/Rendering/RenderManager";
-import { container } from "./../../Game";
-import CoreRectangleCollider from "../../Core/Collision/Collider/RectangleCollider";
-import Vector2 from "../../Helper/Vector2";
-import AbstractColliderComponent from "./AbstractColliderComponent";
+import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
+import { container } from "../../Game";
+import { RectangleCollider as CoreRectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
+import { Vector2 } from "../../Helper/Vector2";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 
 interface Config {
     width: number;
@@ -14,7 +14,7 @@ interface Config {
     debug: boolean;
 }
 
-export default class RectangleCollider extends AbstractColliderComponent {
+export class RectangleCollider extends AbstractColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     public debug: boolean = false;

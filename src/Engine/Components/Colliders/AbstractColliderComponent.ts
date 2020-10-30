@@ -1,11 +1,15 @@
-import Component from "../../Component";
-import ICollider from "../../Core/Collision/Collider/ICollider";
-import CollisionManager from "../../Core/Collision/CollisionManager";
+import { Component } from "../../Component";
+import { ICollider } from "../../Core/Collision/Collider/ICollider";
+import { CollisionManager } from "../../Core/Collision/CollisionManager";
 import { container } from "../../Game";
 
-export default abstract class AbstractColliderComponent extends Component {
+export abstract class AbstractColliderComponent extends Component {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected colliders: ICollider[] = [];
+
+    constructor() {
+        super();
+    }
 
     protected abstract updateCoordinates(): void;
 

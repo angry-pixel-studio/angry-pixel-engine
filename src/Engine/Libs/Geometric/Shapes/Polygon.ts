@@ -1,6 +1,6 @@
-import Vector2 from "../../../Helper/Vector2";
+import { Vector2 } from "../../../Helper/Vector2";
 
-export default class Polygon {
+export class Polygon {
     points: Array<Vector2>;
 
     constructor(points: Array<Vector2>) {

@@ -1,8 +1,8 @@
-import Vector2 from "../../Helper/Vector2";
-import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
-import ICollider from "./Collider/ICollider";
+import { Vector2 } from "../../Helper/Vector2";
+import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { ICollider } from "./Collider/ICollider";
 
-export default class QuadTree {
+export class QuadTree {
     // TODO: maxColliders and maxLevels should be calculated automatically based
     // on the size of the scene and set on the constructor.
     readonly maxColliders: number = 20;

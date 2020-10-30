@@ -1,12 +1,12 @@
-import Component from "../Component";
-import RenderManager from "../Core/Rendering/RenderManager";
+import { Component } from "../Component";
+import { RenderManager } from "../Core/Rendering/RenderManager";
 import { container, gameCanvas } from "../Game";
 import { LAYER_DEFAULT } from "../GameObject";
-import Rectangle from "../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
-export default class Camera extends Component {
+export class Camera extends Component {
     private _vpHalfWidth: number = 0;
     private _vpHalfHeight: number = 0;
 

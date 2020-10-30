@@ -1,5 +1,5 @@
-import Rectangle from "./Libs/Geometric/Shapes/Rectangle";
-import Vector2 from "./Helper/Vector2";
+import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "./Helper/Vector2";
 
 interface config {
     image: HTMLImageElement;
@@ -8,7 +8,7 @@ interface config {
     smooth: boolean;
 }
 
-export default class Sprite {
+export class Sprite {
     public image: HTMLImageElement = null;
     public width: number = null;
     public height: number = null;

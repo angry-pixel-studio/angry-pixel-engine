@@ -1,14 +1,14 @@
-import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
-import Vector2 from "../../../Helper/Vector2";
-import IContextRenderer from "../IContextRenderer";
-import GeometricRenderData, { GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
-import ImageRenderData from "../RenderData/ImageRenderData";
-import RenderData, { RenderDataType } from "../RenderData/RenderData";
-import TextRenderData from "../RenderData/TextRenderData";
+import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "../../../Helper/Vector2";
+import { IContextRenderer } from "../IContextRenderer";
+import { GeometricRenderData, GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
+import { ImageRenderData } from "../RenderData/ImageRenderData";
+import { RenderData, RenderDataType } from "../RenderData/RenderData";
+import { TextRenderData } from "../RenderData/TextRenderData";
 
 const DEFAULT_COLOR: string = "#000000";
 
-export default class Context2DRenderer implements IContextRenderer {
+export class Context2DRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement = null;
     private canvasContext: CanvasRenderingContext2D = null;
 

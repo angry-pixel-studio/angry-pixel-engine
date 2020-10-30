@@ -1,12 +1,12 @@
-import Component from "../../../Component";
-import ImageRenderData from "../../../Core/Rendering/RenderData/ImageRenderData";
-import RenderManager from "../../../Core/Rendering/RenderManager";
+import { Component } from "../../../Component";
+import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderData";
+import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { container } from "../../../Game";
-import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
-import Tileset from "../../../Tileset";
+import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Tileset } from "../../../Tileset";
 import { TiledTilemap } from "./TiledTilemap";
 
-export default abstract class AbstractTilemapRenderer extends Component {
+export abstract class AbstractTilemapRenderer extends Component {
     public tileset: Tileset = null;
     public tilemapData: string;
     public tiledTilemap: TiledTilemap;
@@ -25,6 +25,10 @@ export default abstract class AbstractTilemapRenderer extends Component {
     protected tiles: Rectangle[] = [];
     protected _realWidth: number = 0;
     protected _realHeight: number = 0;
+
+    constructor() {
+        super();
+    }
 
     protected start(): void {
         this.tileWidth = this.tileset.tileWidth * this.tileScale;

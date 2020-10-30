@@ -1,11 +1,11 @@
-import GameCamera from "./GameObjects/GameCamera";
-import Game, { container, EVENT_UPDATE } from "./Game";
-import GameObject from "./GameObject";
-import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import { GameCamera } from "./GameObjects/GameCamera";
+import { Game, container, EVENT_UPDATE } from "./Game";
+import { GameObject } from "./GameObject";
+import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 
 export const GAME_CAMERA_ID = "GameCamera";
 
-export default class Scene {
+export class Scene {
     public game: Game = null;
     public name: string = null;
 

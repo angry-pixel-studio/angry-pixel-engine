@@ -1,10 +1,10 @@
-import Game from "../../Game";
-import Scene from "../../Scene";
-import RenderManager from "../Rendering/RenderManager";
+import { Game } from "../../Game";
+import { Scene } from "../../Scene";
+import { RenderManager } from "../Rendering/RenderManager";
 
 export type SceneConstructor = () => Scene;
 
-export default class SceneManager {
+export class SceneManager {
     private game: Game = null;
     private renderManager: RenderManager;
 

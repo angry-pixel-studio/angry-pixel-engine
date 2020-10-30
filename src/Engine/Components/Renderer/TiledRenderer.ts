@@ -1,6 +1,6 @@
-import Tileset from "../../Tileset";
+import { Tileset } from "../../Tileset";
 import { TiledChunk, TiledLayer, TiledTilemap } from "./Tilemap/TiledTilemap";
-import AbstractTilemapRenderer from "./Tilemap/AbstractTilemapRenderer";
+import { AbstractTilemapRenderer } from "./Tilemap/AbstractTilemapRenderer";
 
 type Config = {
     tileset: Tileset;
@@ -9,7 +9,7 @@ type Config = {
     smooth: boolean;
 };
 
-export default class TiledRenderer extends AbstractTilemapRenderer {
+export class TiledRenderer extends AbstractTilemapRenderer {
     constructor(config: Config) {
         super();
 

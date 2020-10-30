@@ -1,6 +1,6 @@
-import ShaderLoader from "./ShaderLoader";
+import { ShaderLoader } from "./ShaderLoader";
 
-export default class ProgramFactory {
+export class ProgramFactory {
     shaderLoader: ShaderLoader;
 
     constructor(shaderLoader: ShaderLoader) {

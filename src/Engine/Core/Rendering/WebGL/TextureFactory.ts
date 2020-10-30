@@ -1,4 +1,4 @@
-export default class TextureFactory {
+export class TextureFactory {
     public createFromImage(gl: WebGLRenderingContext, image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
         const texture: WebGLTexture = gl.createTexture();
 

@@ -1,4 +1,4 @@
-export default class ShaderLoader {
+export class ShaderLoader {
     load(gl: WebGLRenderingContext, type: number, source: string): WebGLShader {
         const shader: WebGLShader = gl.createShader(type);
 

@@ -1,6 +1,6 @@
-import RenderData, { RenderDataType } from "./RenderData";
+import { RenderData, RenderDataType } from "./RenderData";
 
-export default class TextRenderData extends RenderData {
+export class TextRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Text;
     public color: string = null;
     public text: string = null;

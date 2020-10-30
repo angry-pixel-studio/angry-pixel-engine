@@ -1,5 +1,5 @@
-import Tileset from "../../Tileset";
-import AbstractTilemapRenderer from "./Tilemap/AbstractTilemapRenderer";
+import { Tileset } from "../../Tileset";
+import { AbstractTilemapRenderer } from "./Tilemap/AbstractTilemapRenderer";
 
 type Config = {
     tileset: Tileset;
@@ -9,7 +9,7 @@ type Config = {
     alpha: number;
 };
 
-export default class TilemapRenderer extends AbstractTilemapRenderer {
+export class TilemapRenderer extends AbstractTilemapRenderer {
     private alpha: number = 1;
 
     constructor(config: Config) {

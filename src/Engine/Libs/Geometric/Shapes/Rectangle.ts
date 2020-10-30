@@ -1,6 +1,6 @@
-import Vector2 from "../../../Helper/Vector2";
+import { Vector2 } from "../../../Helper/Vector2";
 
-export default class Rectangle {
+export class Rectangle {
     private position: Vector2 = new Vector2(0, 0);
     public width: number = 0;
     public height: number = 0;

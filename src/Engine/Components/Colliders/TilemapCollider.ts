@@ -1,19 +1,19 @@
-import ICollider from "../../Core/Collision/Collider/ICollider";
-import RectangleCollider from "../../Core/Collision/Collider/RectangleCollider";
-import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
-import RenderManager from "../../Core/Rendering/RenderManager";
+import { ICollider } from "../../Core/Collision/Collider/ICollider";
+import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
+import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { LAYER_DEFAULT } from "../../GameObject";
-import Vector2 from "../../Helper/Vector2";
-import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
-import AbstractColliderComponent from "./AbstractColliderComponent";
+import { Vector2 } from "../../Helper/Vector2";
+import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 
 interface Config {
     tilesData: Rectangle[];
     debug: boolean;
 }
 
-export default class TilemapCollider extends AbstractColliderComponent {
+export class TilemapCollider extends AbstractColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     public debug: boolean = false;

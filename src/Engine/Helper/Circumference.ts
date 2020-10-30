@@ -1,6 +1,6 @@
-import Vector2 from "./Vector2";
+import { Vector2 } from "./Vector2";
 
-export default class Circumference {
+export class Circumference {
     public position: Vector2 = new Vector2(0, 0);
     public radius: number = 0;
 

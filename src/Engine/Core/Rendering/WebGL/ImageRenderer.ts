@@ -1,13 +1,13 @@
-import vertexShader from "./Shader/Image/vertexShader";
-import fragmentShader from "./Shader/Image/fragmentShader";
+import { vertexShader } from "./Shader/Image/vertexShader";
+import { fragmentShader } from "./Shader/Image/fragmentShader";
 import { mat4 } from "gl-matrix";
-import ProgramFactory from "./ProgramFactory";
-import TextureFactory from "./TextureFactory";
-import Vector2 from "../../../Helper/Vector2";
+import { ProgramFactory } from "./ProgramFactory";
+import { TextureFactory } from "./TextureFactory";
+import { Vector2 } from "../../../Helper/Vector2";
 import { sha256 } from "js-sha256";
-import Rectangle from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
 
-export default class ImageRenderer {
+export class ImageRenderer {
     private textureFactory: TextureFactory;
     private gl: WebGLRenderingContext;
 

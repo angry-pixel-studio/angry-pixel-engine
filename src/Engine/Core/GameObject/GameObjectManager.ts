@@ -1,8 +1,8 @@
-import GameObject from "../../GameObject";
+import { GameObject } from "../../GameObject";
 
 export type GameObjectFactory = () => GameObject;
 
-export default class GameObjectManager {
+export class GameObjectManager {
     private gameObjects: GameObject[] = [];
 
     public addGameObject(

@@ -1,17 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
-import Component from "./Component";
-import Transform from "./Components/Transform";
-import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
-import SceneManager from "./Core/Scene/SceneManager";
+import { Component } from "./Component";
+import { Transform } from "./Components/Transform";
+import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import { SceneManager } from "./Core/Scene/SceneManager";
 import { container, EVENT_UPDATE } from "./Game";
-import Scene from "./Scene";
+import { Scene } from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
 export const TRANSFORM_ID = "Transform";
 
 type ComponentConstructor = () => Component;
 
-export default class GameObject {
+export class GameObject {
     private readonly _uuid: string = uuidv4();
 
     public name: string = null;

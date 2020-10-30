@@ -1,23 +1,23 @@
-import Game from "../../Game";
-import AssetManager from "../Asset/AssetManager";
-import CollisionManager from "../Collision/CollisionManager";
-import GameObjectManager from "../GameObject/GameObjectManager";
-import GamepadController from "../Input/GamepadController";
-import InputManager from "../Input/InputManager";
-import KeyboardController from "../Input/KeyboardController";
-import MouseController from "../Input/MouseController";
-import Context2DRenderer from "../Rendering/Context2D/Context2DRenderer";
-import RenderManager from "../Rendering/RenderManager";
-import ImageRenderer from "../Rendering/WebGL/ImageRenderer";
-import ProgramFactory from "../Rendering/WebGL/ProgramFactory";
-import ShaderLoader from "../Rendering/WebGL/ShaderLoader";
-import TextureFactory from "../Rendering/WebGL/TextureFactory";
-import WebGLRenderer from "../Rendering/WebGL/WebGLRenderer";
-import SceneManager from "../Scene/SceneManager";
-import TimeManager from "../Time/TimeManager";
-import Container from "./Container";
+import { Game } from "../../Game";
+import { AssetManager } from "../Asset/AssetManager";
+import { CollisionManager } from "../Collision/CollisionManager";
+import { GameObjectManager } from "../GameObject/GameObjectManager";
+import { GamepadController } from "../Input/GamepadController";
+import { InputManager } from "../Input/InputManager";
+import { KeyboardController } from "../Input/KeyboardController";
+import { MouseController } from "../Input/MouseController";
+import { Context2DRenderer } from "../Rendering/Context2D/Context2DRenderer";
+import { RenderManager } from "../Rendering/RenderManager";
+import { ImageRenderer } from "../Rendering/WebGL/ImageRenderer";
+import { ProgramFactory } from "../Rendering/WebGL/ProgramFactory";
+import { ShaderLoader } from "../Rendering/WebGL/ShaderLoader";
+import { TextureFactory } from "../Rendering/WebGL/TextureFactory";
+import { WebGLRenderer } from "../Rendering/WebGL/WebGLRenderer";
+import { SceneManager } from "../Scene/SceneManager";
+import { TimeManager } from "../Time/TimeManager";
+import { Container } from "./Container";
 
-export default (
+export const loadDependencies = (
     container: Container,
     game: Game,
     gameNode: HTMLElement,

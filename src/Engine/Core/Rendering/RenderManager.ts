@@ -1,8 +1,8 @@
-import Rectangle from "../../Libs/Geometric/Shapes/Rectangle";
-import IContextRenderer from "./IContextRenderer";
-import RenderData, { RenderDataType } from "./RenderData/RenderData";
+import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { IContextRenderer } from "./IContextRenderer";
+import { RenderData, RenderDataType } from "./RenderData/RenderData";
 
-export default class RenderManager {
+export class RenderManager {
     private gameRenderer: IContextRenderer = null;
     private UIRenderer: IContextRenderer | null = null;
 

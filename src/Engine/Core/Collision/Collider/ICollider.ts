@@ -1,5 +1,5 @@
-import GameObject from "../../../GameObject";
-import Vector2 from "../../../Helper/Vector2";
+import { GameObject } from "../../../GameObject";
+import { Vector2 } from "../../../Helper/Vector2";
 
 export enum ColliderType {
     Rectangle,
@@ -7,7 +7,7 @@ export enum ColliderType {
     Polygon,
 }
 
-export default interface ICollider {
+export interface ICollider {
     readonly type: ColliderType;
     readonly gameObject: GameObject;
 

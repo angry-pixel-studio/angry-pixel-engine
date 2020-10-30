@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import GameObjectManager from "./Core/GameObject/GameObjectManager";
-import SceneManager from "./Core/Scene/SceneManager";
+import { GameObjectManager } from "./Core/GameObject/GameObjectManager";
+import { SceneManager } from "./Core/Scene/SceneManager";
 import { container, EVENT_UPDATE } from "./Game";
-import GameObject from "./GameObject";
-import Scene from "./Scene";
+import { GameObject } from "./GameObject";
+import { Scene } from "./Scene";
 
-export default abstract class Component {
+export abstract class Component {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 

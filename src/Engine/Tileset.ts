@@ -1,5 +1,5 @@
-import Vector2 from "./Helper/Vector2";
-import Rectangle from "./Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "./Helper/Vector2";
+import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
 
 interface config {
     image: HTMLImageElement;
@@ -11,7 +11,7 @@ interface config {
     tileOffset: Vector2 | null;
 }
 
-export default class Tileset {
+export class Tileset {
     public image: HTMLImageElement = null;
     public offset: Vector2 = new Vector2(0, 0);
     public gridWidth: number = 0; // in number of tails

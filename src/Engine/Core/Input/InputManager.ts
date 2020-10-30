@@ -1,8 +1,8 @@
-import MouseController from "./MouseController";
-import KeyboardController from "./KeyboardController";
-import GamepadController from "./GamepadController";
+import { MouseController } from "./MouseController";
+import { KeyboardController } from "./KeyboardController";
+import { GamepadController } from "./GamepadController";
 
-export default class InputManager {
+export class InputManager {
     public mouse: MouseController;
     public keyboard: KeyboardController;
     public gamepad: GamepadController;
