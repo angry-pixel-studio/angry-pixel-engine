@@ -1,4 +1,4 @@
-export default class TimeManager {
+export class TimeManager {
     private then: number = 0;
     private _deltaTime: number = 0;
 

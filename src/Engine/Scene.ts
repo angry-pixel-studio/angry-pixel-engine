@@ -1,11 +1,11 @@
-import GameCamera from "./GameObjects/GameCamera";
-import Game, { container, EVENT_UPDATE } from "./Game";
-import GameObject from "./GameObject";
-import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import { GameCamera } from "./GameObjects/GameCamera";
+import { Game, container, EVENT_UPDATE } from "./Game";
+import { GameObject } from "./GameObject";
+import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 
 export const GAME_CAMERA_ID = "GameCamera";
 
-export default class Scene {
+export class Scene {
     public game: Game = null;
     public name: string = null;
 
@@ -62,19 +62,22 @@ export default class Scene {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
-    public destroyGameObject(name: string): void {
-        const gameObject = this.findGameObjectByName(name);
-
-        if (gameObject !== null) {
-            this.gameObjectManager.destroyGameObject(gameObject);
-        }
-    }
-
     public destroyAllGameObjects(): void {
         this.gameObjectManager.destroyAllGameObjects();
     }
 
-    public _destroy(): void {
+    public destroyGameObjectByName(name: string): void {
+        this.destroyGameObject(this.findGameObjectByName(name));
+    }
+
+    public destroyGameObject(gameObject: GameObject): void {
+        this.gameObjectManager.destroyGameObject(gameObject);
+    }
+
+    /**
+     * @description NOTE: do not use this method. Use SceneManager.unloadCurrentScene instead.
+     */
+    public destroy(): void {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
         this.gameObjectManager.destroyAllGameObjects();
 

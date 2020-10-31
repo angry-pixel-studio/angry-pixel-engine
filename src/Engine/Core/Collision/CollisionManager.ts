@@ -1,13 +1,13 @@
-import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
+import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
 import { LAYER_DEFAULT } from "./../../GameObject";
-import Rectangle from "./../../Helper/Rectangle";
-import Vector2 from "./../../Helper/Vector2";
-import RenderManager from "./../Rendering/RenderManager";
-import ICollider from "./ICollider";
-import QuadTree from "./QuadTree";
+import { Rectangle } from "./../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "./../../Helper/Vector2";
+import { RenderManager } from "./../Rendering/RenderManager";
+import { ICollider } from "./Collider/ICollider";
+import { QuadTree } from "./QuadTree";
 
-export default class CollisionManager {
-    private debug: boolean = false;
+export class CollisionManager {
+    private debug: boolean = true;
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];
     private quad: QuadTree;
@@ -16,17 +16,24 @@ export default class CollisionManager {
         this.renderManager = renderManager;
 
         // TODO: remove hardcoded quad size
-        this.quad = new QuadTree(0, new Rectangle(-1025, 700, 2050, 1400));
+        this.quad = new QuadTree(0, new Rectangle(-2500, -2500, 5000, 5000));
     }
 
     public prepare(): void {
-        this.debugColliders();
-        this.debugQuads(this.quad);
+        //this.debugQuads(this.quad);
         this.refreshQuad();
     }
 
     public addCollider(collider: ICollider): void {
         this.colliders.push(collider);
+    }
+
+    public removeCollider(collider: ICollider): void {
+        const index: number = this.colliders.indexOf(collider);
+        if (index !== -1) {
+            delete this.colliders[index];
+            this.colliders.splice(index, 1);
+        }
     }
 
     public getCollisionsForCollider(collider: ICollider): Array<ICollider> {
@@ -36,7 +43,7 @@ export default class CollisionManager {
     }
 
     // broadPhase takes care of looking for possible collisions
-    private broadPhase(collider: ICollider) {
+    private broadPhase(collider: ICollider): ICollider[] {
         return this.quad.retrieve(collider);
     }
 
@@ -44,7 +51,7 @@ export default class CollisionManager {
     private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<ICollider> {
         const collisions: Array<ICollider> = [];
         for (const c of colliders) {
-            if (this.checkCollision(collider, c)) {
+            if (collider.hasCollision(c)) {
                 collisions.push(c);
             }
         }
@@ -56,26 +63,6 @@ export default class CollisionManager {
         this.quad.clear();
         for (const collider of this.colliders) {
             this.quad.insert(collider);
-        }
-    }
-
-    // TODO: Make this agnostic of which shapes is checking
-    private checkCollision(collider1: ICollider, colldier2: ICollider) {
-        return (
-            collider1.getRectangle().x < colldier2.getRectangle().x + colldier2.getRectangle().width &&
-            collider1.getRectangle().x + collider1.getRectangle().width > colldier2.getRectangle().x &&
-            collider1.getRectangle().y - collider1.getRectangle().height < colldier2.getRectangle().y &&
-            collider1.getRectangle().y > colldier2.getRectangle().y - colldier2.getRectangle().height
-        );
-    }
-
-    private debugColliders(): void {
-        if (!this.debug) {
-            return;
-        }
-
-        for (const collider of this.colliders) {
-            this.renderManager.addToRenderStack(collider.getRenderData());
         }
     }
 

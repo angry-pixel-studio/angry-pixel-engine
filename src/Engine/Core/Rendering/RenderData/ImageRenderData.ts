@@ -1,7 +1,7 @@
-import Rectangle from "../../../Helper/Rectangle";
-import RenderData, { RenderDataType } from "./RenderData";
+import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { RenderData, RenderDataType } from "./RenderData";
 
-export default class ImageRenderData extends RenderData {
+export class ImageRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Image;
     public image: HTMLImageElement = null;
     public width: number = 0;

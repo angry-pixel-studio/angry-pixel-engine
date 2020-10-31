@@ -1,7 +1,7 @@
-import Component from "../Component";
-import Vector2 from "../Helper/Vector2";
+import { Component } from "../Component";
+import { Vector2 } from "../Helper/Vector2";
 
-export default class Transform extends Component {
+export class Transform extends Component {
     public position: Vector2 = new Vector2(0, 0);
     public innerPosition: Vector2 = new Vector2(0, 0);
     public scale: Vector2 = new Vector2(1, 1);

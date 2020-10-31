@@ -1,8 +1,8 @@
-import GameObject from "../../GameObject";
+import { GameObject } from "../../GameObject";
 
 export type GameObjectFactory = () => GameObject;
 
-export default class GameObjectManager {
+export class GameObjectManager {
     private gameObjects: GameObject[] = [];
 
     public addGameObject(
@@ -68,7 +68,7 @@ export default class GameObjectManager {
 
         if (index !== -1) {
             destroyChildren ? this.destroyChildren(gameObject) : null;
-            gameObject._destroy();
+            gameObject.destroy();
             delete this.gameObjects[index];
         }
     }

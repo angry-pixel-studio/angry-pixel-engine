@@ -1,14 +1,14 @@
-import Rectangle from "../../../Helper/Rectangle";
-import Vector2 from "../../../Helper/Vector2";
-import IContextRenderer from "../IContextRenderer";
-import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
-import ImageRenderData from "../RenderData/ImageRenderData";
-import RenderData, { RenderDataType } from "../RenderData/RenderData";
-import TextRenderData from "../RenderData/TextRenderData";
+import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "../../../Helper/Vector2";
+import { IContextRenderer } from "../IContextRenderer";
+import { GeometricRenderData, GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
+import { ImageRenderData } from "../RenderData/ImageRenderData";
+import { RenderData, RenderDataType } from "../RenderData/RenderData";
+import { TextRenderData } from "../RenderData/TextRenderData";
 
 const DEFAULT_COLOR: string = "#000000";
 
-export default class Context2DRenderer implements IContextRenderer {
+export class Context2DRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement = null;
     private canvasContext: CanvasRenderingContext2D = null;
 
@@ -146,6 +146,30 @@ export default class Context2DRenderer implements IContextRenderer {
                     renderData.geometric.width,
                     renderData.geometric.height
                 );
+                break;
+            case GEOMETRIC_POLYGON:
+                this.canvasContext.strokeStyle = renderData.color;
+
+                this.canvasContext.beginPath();
+                this.canvasContext.moveTo(
+                    renderData.geometric[0].x - viewRect.x,
+                    viewRect.y - renderData.geometric[0].y
+                );
+                this.canvasContext.lineTo(
+                    renderData.geometric[1].x - viewRect.x,
+                    viewRect.y - renderData.geometric[1].y
+                );
+                this.canvasContext.lineTo(
+                    renderData.geometric[3].x - viewRect.x,
+                    viewRect.y - renderData.geometric[3].y
+                );
+                this.canvasContext.lineTo(
+                    renderData.geometric[2].x - viewRect.x,
+                    viewRect.y - renderData.geometric[2].y
+                );
+                this.canvasContext.closePath();
+                this.canvasContext.stroke();
+
                 break;
         }
 

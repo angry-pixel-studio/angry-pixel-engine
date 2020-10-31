@@ -1,4 +1,4 @@
-import Component from "../Component";
+import { Component } from "../Component";
 
 type Config = {
     audio: HTMLAudioElement;
@@ -19,7 +19,7 @@ const userInputEventNames = [
     "keyup",
 ];
 
-export default class AudioPlayer extends Component {
+export class AudioPlayer extends Component {
     public volume: number = 1;
     public loop: boolean = false;
     public audio: HTMLAudioElement;

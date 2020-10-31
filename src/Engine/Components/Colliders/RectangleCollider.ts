@@ -1,96 +1,75 @@
-import Component from "./../../Component";
 import { LAYER_DEFAULT } from "../../GameObject";
-import Rectangle from "./../../Helper/Rectangle";
-import Vector2 from "./../../Helper/Vector2";
-import CollisionManager from "../../Core/Collision/CollisionManager";
+import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import GeometricRenderData, { GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
+import { RectangleCollider as CoreRectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
+import { Vector2 } from "../../Helper/Vector2";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 
 interface Config {
-    x: number;
-    y: number;
     width: number;
     height: number;
     offsetX: number;
     offsetY: number;
+    debug: boolean;
 }
 
-// TODO: unify this with the other RectangleCollider
-export default class RectangleCollider extends Component {
-    private rectangle: Rectangle;
-    private renderData: GeometricRenderData;
+export class RectangleCollider extends AbstractColliderComponent {
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
+    public debug: boolean = false;
+
+    private width: number;
+    private height: number;
     private offsetX: number;
     private offsetY: number;
 
-    private layer: string;
+    private renderData: GeometricRenderData = new GeometricRenderData();
 
-    private collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
-
-    constructor({ x = 0, y = 0, width, height, offsetX = 0, offsetY = 0 }: Config) {
+    constructor({ width, height, offsetX = 0, offsetY = 0, debug = false }: Config) {
         super();
 
-        this.rectangle = new Rectangle(x, y, width, height);
-        this.renderData = new GeometricRenderData();
-        this.renderData.position = new Vector2(0, 0);
-
+        this.width = width;
+        this.height = height;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        this.debug = debug;
     }
 
     protected start(): void {
-        this.collisionManager.addCollider(this);
-
-        this.setupRenderData();
-        this.updateRectangleCoordinates();
-        this.updateRenderDataPosition();
-
-        this.layer = this.gameObject.layer;
+        this.addCollider(
+            new CoreRectangleCollider(
+                new Vector2(
+                    this.gameObject.transform.position.x - Math.floor(this.width / 2) - this.offsetX,
+                    this.gameObject.transform.position.y + Math.floor(this.height / 2) - this.offsetY
+                ),
+                this.width,
+                this.height,
+                this.gameObject
+            )
+        );
     }
 
     protected update(): void {
-        this.updateRectangleCoordinates();
-        this.updateRenderDataPosition();
-    }
+        this.updateCoordinates();
 
-    public collidesWithLayer(layer: string): boolean {
-        this.updateRectangleCoordinates();
-        const collisions = this.collisionManager.getCollisionsForCollider(this);
-        for (const c of collisions) {
-            if (c.getLayer() === layer) {
-                return true;
-            }
+        if (this.debug) {
+            this.updateRenderData();
+            this.renderManager.addToRenderStack(this.renderData);
         }
-
-        return false;
     }
 
-    public getRectangle(): Rectangle {
-        return this.rectangle;
+    protected updateCoordinates() {
+        this.colliders[0].coordinates = new Vector2(
+            this.gameObject.transform.position.x - Math.floor(this.width / 2) - this.offsetX,
+            this.gameObject.transform.position.y + Math.floor(this.height / 2) - this.offsetY
+        );
     }
 
-    public getRenderData(): GeometricRenderData {
-        return this.renderData;
-    }
-
-    public getLayer(): string {
-        return this.layer;
-    }
-
-    private updateRenderDataPosition() {
-        this.renderData.position.x = this.rectangle.x;
-        this.renderData.position.y = this.rectangle.y;
-    }
-
-    private updateRectangleCoordinates() {
-        this.rectangle.x = this.gameObject.transform.position.x - this.rectangle.width / 2 - this.offsetX;
-        this.rectangle.y = this.gameObject.transform.position.y + this.rectangle.height / 2 + this.offsetY;
-    }
-
-    // TODO: find a nicer way to setup the render data
-    private setupRenderData(): void {
+    private updateRenderData(): void {
+        this.renderData.position = this.colliders[0].coordinates;
         this.renderData.layer = LAYER_DEFAULT;
-        this.renderData.geometric = this.rectangle;
+        this.renderData.geometric = this.colliders[0];
         this.renderData.geometricType = GEOMETRIC_RECTANGLE;
         this.renderData.color = "#00FF00";
     }

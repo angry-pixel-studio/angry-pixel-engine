@@ -1,4 +1,4 @@
-import Sprite from "./Sprite";
+import { Sprite } from "./Sprite";
 
 const FRAME_RATE: number = 24;
 
@@ -8,11 +8,11 @@ interface config {
     loop: boolean;
 }
 
-export default class Animation {
+export class Animation {
     private sprites: Sprite[] = [];
     private _playing: boolean = false;
     private currentFrame: number = 1;
-    private currentInterval: NodeJS.Timeout = null;
+    private currentInterval: number = null;
 
     public speed: number = 1;
     public loop: boolean = false;
@@ -40,7 +40,7 @@ export default class Animation {
     async update(): Promise<void> {
         while (this._playing === true && (this.loop || this.sprites.length !== this.currentFrame)) {
             await new Promise((resolve) => {
-                this.currentInterval = setTimeout(() => {
+                this.currentInterval = window.setTimeout(() => {
                     this.currentFrame = this.sprites.length === this.currentFrame ? 1 : this.currentFrame + 1;
                     this.currentSprite = this.sprites[this.currentFrame - 1];
                     resolve();

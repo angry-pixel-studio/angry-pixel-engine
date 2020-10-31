@@ -1,63 +1,64 @@
-import CollisionManager from "../../Core/Collision/CollisionManager";
+import { ICollider } from "../../Core/Collision/Collider/ICollider";
+import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
+import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import Component from "./../../Component";
-import RectangleCollider from "./../../Core/Collision/RectangleCollider";
+import { LAYER_DEFAULT } from "../../GameObject";
+import { Vector2 } from "../../Helper/Vector2";
+import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 
 interface Config {
-    tilemapData: string;
-    tileWidth: number;
-    tileHeight: number;
-    tileScale: number;
+    tilesData: Rectangle[];
+    debug: boolean;
 }
 
-export default class TilemapCollider extends Component {
-    private tilemapData: string;
-    private tileWidth: number;
-    private tileHeight: number;
-    private colliders: Array<RectangleCollider> = [];
+export class TilemapCollider extends AbstractColliderComponent {
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
-    private collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
+    public debug: boolean = false;
+    private tilesData: Rectangle[] = [];
+    private renderData: GeometricRenderData[] = [];
 
-    constructor({ tilemapData, tileWidth, tileHeight, tileScale }: Config) {
+    constructor({ tilesData, debug = false }: Config) {
         super();
 
-        this.tilemapData = tilemapData;
-        this.tileWidth = tileWidth * tileScale;
-        this.tileHeight = tileHeight * tileScale;
+        this.tilesData = tilesData;
+        this.debug = debug;
     }
 
-    // TODO: Change this to get the tilemap data from the tilemap renderer
     protected start(): void {
-        const data = this.tilemapData.trim().split("\n");
+        this.tilesData.forEach((tileData) => {
+            this.addCollider(
+                new RectangleCollider(
+                    new Vector2(tileData.x, tileData.y),
+                    tileData.width,
+                    tileData.height,
+                    this.gameObject
+                )
+            );
+            this.renderData.push(new GeometricRenderData());
+        });
+    }
 
-        const totalRows = data.length;
-        const totalColumns = data[0].length / 5;
-
-        const offsetX = (totalColumns * this.tileWidth) / 2;
-        const offsetY = (totalRows * this.tileHeight) / 2;
-
-        data.forEach((rowData: string, row: number) => {
-            const parsedRow = rowData.match(/.{1,5}/g);
-            if (parsedRow) {
-                parsedRow.forEach((colData: string, col: number) => {
-                    const stringId = colData.trim().replace("[", "").replace("]", "");
-                    if (stringId) {
-                        const posX = col * this.tileWidth;
-                        const posY = row * this.tileHeight;
-
-                        const rectangleCollider = new RectangleCollider({
-                            x: posX - offsetX,
-                            y: posY - offsetY,
-                            width: this.tileWidth,
-                            height: this.tileHeight,
-                            layer: this.gameObject.layer,
-                        });
-
-                        this.colliders.push(rectangleCollider);
-                        this.collisionManager.addCollider(rectangleCollider);
-                    }
-                });
+    protected update(): void {
+        this.colliders.forEach((collider: ICollider, index: number) => {
+            if (this.debug) {
+                this.updateRenderData(this.renderData[index], collider);
+                this.renderManager.addToRenderStack(this.renderData[index]);
             }
         });
+    }
+
+    private updateRenderData(renderData: GeometricRenderData, collider: ICollider): void {
+        renderData.position = collider.coordinates;
+        renderData.layer = LAYER_DEFAULT;
+        renderData.geometric = collider;
+        renderData.geometricType = GEOMETRIC_RECTANGLE;
+        renderData.color = "#00FF00";
+    }
+
+    protected updateCoordinates(): void {
+        // Tilemap does not update cooliders coordinates;
     }
 }

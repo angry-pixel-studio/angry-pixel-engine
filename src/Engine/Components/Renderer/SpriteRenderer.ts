@@ -1,9 +1,9 @@
-import Component from "../../Component";
-import ImageRenderData from "../../Core/Rendering/RenderData/ImageRenderData";
-import RenderManager from "../../Core/Rendering/RenderManager";
+import { Component } from "../../Component";
+import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import Vector2 from "../../Helper/Vector2";
-import Sprite from "../../Sprite";
+import { Vector2 } from "../../Helper/Vector2";
+import { Sprite } from "../../Sprite";
 
 type Config = {
     sprite: Sprite;
@@ -16,7 +16,7 @@ type Config = {
     opacity: number;
 };
 
-export default class SpriteRenderer extends Component {
+export class SpriteRenderer extends Component {
     public sprite: Sprite = null;
     public offsetX: number = 0;
     public offsetY: number = 0;

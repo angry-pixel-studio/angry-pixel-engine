@@ -1,17 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
-import Component from "./Component";
-import Transform from "./Components/Transform";
-import GameObjectManager, { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
-import SceneManager from "./Core/Scene/SceneManager";
+import { Component } from "./Component";
+import { Transform } from "./Components/Transform";
+import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import { SceneManager } from "./Core/Scene/SceneManager";
 import { container, EVENT_UPDATE } from "./Game";
-import Scene from "./Scene";
+import { Scene } from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
 export const TRANSFORM_ID = "Transform";
 
 type ComponentConstructor = () => Component;
 
-export default class GameObject {
+export class GameObject {
     private readonly _uuid: string = uuidv4();
 
     public name: string = null;
@@ -19,7 +19,7 @@ export default class GameObject {
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
 
-    public active: boolean = true;
+    private _active: boolean = true;
     private firstFrame: boolean = true;
     private _parent: GameObject | null = null;
 
@@ -44,6 +44,10 @@ export default class GameObject {
         return this.getComponent<Transform>(TRANSFORM_ID);
     }
 
+    public get active(): boolean {
+        return this._active;
+    }
+
     public get parent(): GameObject {
         return this._parent;
     }
@@ -58,7 +62,7 @@ export default class GameObject {
     }
 
     private gameLoopEventHandler = (): void => {
-        if (this.active === false) {
+        if (this._active === false) {
             return;
         }
 
@@ -114,7 +118,7 @@ export default class GameObject {
     public removeComponent(name: string): void {
         this.components.every((component: Component, index: number) => {
             if (component.name === name) {
-                component._destroy();
+                component.destroy();
                 delete this.components[index];
 
                 return false;
@@ -124,7 +128,7 @@ export default class GameObject {
 
     public removeComponents(): void {
         this.components.every((component: Component, index: number) => {
-            component._destroy();
+            component.destroy();
             return delete this.components[index];
         });
 
@@ -151,56 +155,48 @@ export default class GameObject {
             .every((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
-    public setActive(value: boolean): void {
+    public setActive(active: boolean): void {
+        if (active === false) {
+            this.updateInactiveCache();
+        }
+
         this.components
             .filter((component: Component) => this.inactiveComponents.indexOf(component.uuid) === -1)
-            .forEach((component: Component) => (component.active = value));
+            .forEach((component: Component) => component.setActive(active));
 
         this.getChildren()
             .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
-            .forEach((gameObject: GameObject) => gameObject.setActive(value));
+            .forEach((gameObject: GameObject) => gameObject.setActive(active));
 
         this.transform.forceUpdate();
-        this.active = value;
+        this._active = active;
     }
 
-    public setComponentActive(name: string, active: boolean): void {
-        const component = this.getComponent(name);
+    private updateInactiveCache(): void {
+        this.inactiveComponents = [];
+        this.inactiveChildren = [];
 
-        if (component === null) {
-            throw new Error(`Component with id ${name} does not exists`);
-        }
+        this.components
+            .filter((component: Component) => component.active === false)
+            .forEach((component: Component) => this.inactiveComponents.push(component.uuid));
 
-        const inactiveIndex = this.inactiveComponents.indexOf(component.uuid);
-
-        if (active === false && inactiveIndex === -1) {
-            this.inactiveComponents.push(component.uuid);
-        } else if (active === true && inactiveIndex !== -1) {
-            delete this.inactiveComponents[inactiveIndex];
-        }
-
-        component.active = active;
+        this.getChildren()
+            .filter((gameObject: GameObject) => gameObject.active === false)
+            .forEach((gameObject: GameObject) => this.inactiveChildren.push(gameObject.uuid));
     }
 
-    public setChildActive(name: string, active: boolean): void {
-        const gameObject = this.getChild(name);
-
-        if (gameObject === null) {
-            throw `GameObject with name ${name} does not exists`;
-        }
-
-        const inactiveIndex = this.inactiveChildren.indexOf(gameObject.uuid);
-
-        if (active === false && inactiveIndex === -1) {
-            this.inactiveChildren.push(gameObject.uuid);
-        } else if (active === true && inactiveIndex !== -1) {
-            delete this.inactiveChildren[inactiveIndex];
-        }
-
-        gameObject.setActive(active);
+    public destroyGameObjectByName(name: string): void {
+        this.destroyGameObject(this.findGameObjectByName(name));
     }
 
-    public _destroy(): void {
+    public destroyGameObject(gameObject: GameObject): void {
+        this.gameObjectManager.destroyGameObject(gameObject);
+    }
+
+    /**
+     * @description NOTE: do not use this method. Use GameObject.destroyGameObject or Scene.destroyGameObject instead.
+     */
+    public destroy(): void {
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.removeComponents();

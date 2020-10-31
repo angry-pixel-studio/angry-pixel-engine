@@ -1,9 +1,9 @@
-import GameObject from "../GameObject";
-import Camera from "../Components/Camera";
+import { GameObject } from "../GameObject";
+import { Camera } from "../Components/Camera";
 
 export const CAMERA_COMPONENT = "Camera";
 
-export default class GameCamera extends GameObject {
+export class GameCamera extends GameObject {
     constructor() {
         super();
 
