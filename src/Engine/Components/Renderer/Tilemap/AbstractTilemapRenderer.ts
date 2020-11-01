@@ -50,13 +50,25 @@ export abstract class AbstractTilemapRenderer extends Component {
 
     protected abstract processTilemap(): void;
 
-    protected processTile(tile: Rectangle, col: number, row: number, alpha: number = 1): void {
-        const renderData = this.createRenderData(tile, col, row, alpha);
+    protected processTile(
+        tile: Rectangle,
+        col: number,
+        row: number,
+        alpha: number = 1,
+        flip: { h: boolean; v: boolean } = { h: false, v: false }
+    ): void {
+        const renderData = this.createRenderData(tile, col, row, alpha, flip);
         this.updateSizeInfo(col + 1, row + 1);
         this.tilesRenderData.push(renderData);
     }
 
-    private createRenderData(tile: Rectangle, col: number, row: number, alpha: number = 1): ImageRenderData {
+    private createRenderData(
+        tile: Rectangle,
+        col: number,
+        row: number,
+        alpha: number = 1,
+        flip: { h: boolean; v: boolean } = { h: false, v: false }
+    ): ImageRenderData {
         const renderData: ImageRenderData = new ImageRenderData();
 
         renderData.position.x = this.gameObject.transform.position.x + col * this.tileWidth + this.tileWidth / 2;
@@ -70,6 +82,8 @@ export abstract class AbstractTilemapRenderer extends Component {
         renderData.slice = tile;
         renderData.smooth = this.smooth;
         renderData.alpha = alpha;
+        renderData.flipHorizontal = flip.h;
+        renderData.flipVertical = flip.v;
 
         return renderData;
     }

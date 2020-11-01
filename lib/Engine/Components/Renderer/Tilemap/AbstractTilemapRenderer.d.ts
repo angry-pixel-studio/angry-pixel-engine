@@ -24,7 +24,10 @@ export declare abstract class AbstractTilemapRenderer extends Component {
     protected start(): void;
     protected update(): void;
     protected abstract processTilemap(): void;
-    protected processTile(tile: Rectangle, col: number, row: number, alpha?: number): void;
+    protected processTile(tile: Rectangle, col: number, row: number, alpha?: number, flip?: {
+        h: boolean;
+        v: boolean;
+    }): void;
     private createRenderData;
     private updateSizeInfo;
     protected updateTilesPosition(): void;
