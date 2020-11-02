@@ -3,7 +3,7 @@ import { ICollider } from "../../Core/Collision/Collider/ICollider";
 import { CollisionManager } from "../../Core/Collision/CollisionManager";
 import { container } from "../../Game";
 
-export abstract class AbstractColliderComponent extends Component {
+export abstract class Collider extends Component {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected colliders: ICollider[] = [];
 

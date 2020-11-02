@@ -1,10 +1,10 @@
 import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
+import { Collider } from "./Collider";
 interface Config {
     tilesData: Rectangle[];
     debug: boolean;
 }
-export declare class TilemapCollider extends AbstractColliderComponent {
+export declare class TilemapCollider extends Collider {
     private renderManager;
     debug: boolean;
     private tilesData;

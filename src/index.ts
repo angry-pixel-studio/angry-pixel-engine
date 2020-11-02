@@ -22,6 +22,7 @@ export * from "./Engine/Components/Renderer/Tilemap/TiledTilemap";
 export * from "./Engine/Components/Animator";
 export * from "./Engine/Components/AudioPlayer";
 export * from "./Engine/Components/Camera";
+export * from "./Engine/Components/RigidBody";
 export * from "./Engine/Components/Transform";
 
 // game objects

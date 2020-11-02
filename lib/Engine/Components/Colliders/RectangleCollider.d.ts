@@ -1,4 +1,4 @@
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
+import { Collider } from "./Collider";
 interface Config {
     width: number;
     height: number;
@@ -6,7 +6,7 @@ interface Config {
     offsetY: number;
     debug: boolean;
 }
-export declare class RectangleCollider extends AbstractColliderComponent {
+export declare class RectangleCollider extends Collider {
     private renderManager;
     debug: boolean;
     private width;
