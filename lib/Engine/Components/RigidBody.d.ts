@@ -1,19 +1,19 @@
 import { Component } from "../Component";
 import { Vector2 } from "../Helper/Vector2";
-import { Collider } from "./Colliders/Collider";
+import { ColliderComponent } from "./Colliders/ColliderComponent";
 export declare enum RigidBodyType {
     Static = 0,
     Dynamic = 1
 }
 interface Config {
     type: RigidBodyType;
-    colliders: Collider[];
+    colliders: ColliderComponent[];
     layersToCollide: string[];
     gravity: number;
 }
 export declare class RigidBody extends Component {
     private _type;
-    private _colliders;
+    private _colliderComponents;
     private _gravity;
     private _layersToCollide;
     private _velocity;
@@ -33,6 +33,5 @@ export declare class RigidBody extends Component {
     private moveX;
     private moveY;
     private updateCollisions;
-    private isTouchingLayers;
 }
 export {};

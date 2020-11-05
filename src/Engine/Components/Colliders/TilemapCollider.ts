@@ -6,14 +6,14 @@ import { container } from "../../Game";
 import { LAYER_DEFAULT } from "../../GameObject";
 import { Vector2 } from "../../Helper/Vector2";
 import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
-import { Collider } from "./Collider";
+import { ColliderComponent } from "./ColliderComponent";
 
 interface Config {
     tilesData: Rectangle[];
     debug: boolean;
 }
 
-export class TilemapCollider extends Collider {
+export class TilemapCollider extends ColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     public debug: boolean = false;

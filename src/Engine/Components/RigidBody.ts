@@ -1,9 +1,10 @@
 import { Component } from "../Component";
 import { ICollider } from "../Core/Collision/Collider/ICollider";
+import { Collision } from "../Core/Collision/CollisionManager";
 import { TimeManager } from "../Core/Time/TimeManager";
 import { container } from "../Game";
 import { Vector2 } from "../Helper/Vector2";
-import { Collider } from "./Colliders/Collider";
+import { ColliderComponent } from "./Colliders/ColliderComponent";
 
 export enum RigidBodyType {
     Static,
@@ -12,21 +13,21 @@ export enum RigidBodyType {
 
 interface Config {
     type: RigidBodyType;
-    colliders: Collider[];
+    colliders: ColliderComponent[];
     layersToCollide: string[];
     gravity: number;
 }
 
 export class RigidBody extends Component {
     private _type: RigidBodyType;
-    private _colliders: Collider[] = [];
+    private _colliderComponents: ColliderComponent[] = [];
     private _gravity: number = 1;
     private _layersToCollide: string[] = [];
     private _velocity: Vector2 = new Vector2(0, 0);
     private deltaVelocity: Vector2 = new Vector2(0, 0);
 
     private gravityTime: number = 0;
-    private collisions: ICollider[] = [];
+    private collisions: Collision[] = [];
 
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
 
@@ -34,7 +35,7 @@ export class RigidBody extends Component {
         super();
 
         this._type = type;
-        this._colliders = colliders;
+        this._colliderComponents = colliders;
         this._layersToCollide = layersToCollide;
         this._gravity = gravity;
     }
@@ -71,7 +72,9 @@ export class RigidBody extends Component {
     private applyGravityToVelocity(): void {
         if (this._gravity > 0) {
             this.gravityTime += this.timeManager.deltaTime;
-            this._velocity.y -= this._gravity * this.gravityTime;
+            this._velocity.y -= this._gravity * this.timeManager.deltaTime;
+
+            //this._velocity.y -= this._gravity * this.gravityTime;
         }
     }
 
@@ -91,14 +94,14 @@ export class RigidBody extends Component {
         this.updateCollisions();
         let rollback: boolean = false;
 
-        this.collisions.forEach((collision: ICollider) => {
-            const rigidBody = collision.gameObject.getComponent<RigidBody>("RigidBody");
+        this.collisions.forEach((collision: Collision) => {
+            const rigidBody = collision.remoteCollider.gameObject.getComponent<RigidBody>("RigidBody");
             if (rigidBody !== null) {
                 rollback ||=
-                    (this.deltaVelocity.x > 0 && collision.coordinates.x >= this.gameObject.transform.position.x) ||
-                    (this.deltaVelocity.x < 0 && collision.coordinates.x <= this.gameObject.transform.position.x);
-
-                //rigidBody.velocity = new Vector2(rigidBody.velocity.x + this._velocity.x, rigidBody.velocity.y);
+                    (this.deltaVelocity.x > 0 &&
+                        collision.remoteCollider.coordinates.x >= collision.localCollider.coordinates.x) ||
+                    (this.deltaVelocity.x < 0 &&
+                        collision.remoteCollider.coordinates.x <= collision.localCollider.coordinates.x);
             }
         });
 
@@ -114,16 +117,16 @@ export class RigidBody extends Component {
         this.updateCollisions();
         let rollback: boolean = false;
 
-        this.collisions.forEach((collision: ICollider) => {
-            const rigidBody = collision.gameObject.getComponent<RigidBody>("RigidBody");
+        this.collisions.forEach((collision: Collision) => {
+            const rigidBody = collision.remoteCollider.gameObject.getComponent<RigidBody>("RigidBody");
             if (rigidBody !== null) {
                 rollback ||=
-                    (this.deltaVelocity.y > 0 && collision.coordinates.y >= this.gameObject.transform.position.y) ||
-                    (this.deltaVelocity.y < 0 && collision.coordinates.y <= this.gameObject.transform.position.y);
+                    (this.deltaVelocity.y > 0 &&
+                        collision.remoteCollider.coordinates.y >= collision.localCollider.coordinates.y) ||
+                    (this.deltaVelocity.y < 0 &&
+                        collision.remoteCollider.coordinates.y <= collision.localCollider.coordinates.y);
 
-                //rigidBody.velocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.y + this._velocity.y);
-
-                if (collision.coordinates.y <= this.gameObject.transform.position.y) {
+                if (collision.remoteCollider.coordinates.y <= collision.localCollider.coordinates.y) {
                     this.gravityTime = 0;
                 }
             }
@@ -138,9 +141,9 @@ export class RigidBody extends Component {
     private updateCollisions(): void {
         this.collisions = [];
 
-        this._colliders.forEach((collider: Collider) =>
+        this._colliderComponents.forEach((collider: ColliderComponent) =>
             this._layersToCollide.forEach((layer: string) =>
-                collider.getCollisionsWithLayer(layer).forEach((collision: ICollider) => {
+                collider.getCollisionsWithLayer(layer).forEach((collision: Collision) => {
                     this.collisions.push(collision);
                 })
             )

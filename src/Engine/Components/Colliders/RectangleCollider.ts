@@ -4,7 +4,7 @@ import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { RectangleCollider as CoreRectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
 import { Vector2 } from "../../Helper/Vector2";
-import { Collider } from "./Collider";
+import { ColliderComponent } from "./ColliderComponent";
 
 interface Config {
     width: number;
@@ -14,7 +14,7 @@ interface Config {
     debug: boolean;
 }
 
-export class RectangleCollider extends Collider {
+export class RectangleCollider extends ColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     public debug: boolean = false;

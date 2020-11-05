@@ -1,5 +1,9 @@
 import { RenderManager } from "./../Rendering/RenderManager";
 import { ICollider } from "./Collider/ICollider";
+export interface Collision {
+    localCollider: ICollider;
+    remoteCollider: ICollider;
+}
 export declare class CollisionManager {
     private debug;
     private renderManager;
@@ -9,7 +13,7 @@ export declare class CollisionManager {
     prepare(): void;
     addCollider(collider: ICollider): void;
     removeCollider(collider: ICollider): void;
-    getCollisionsForCollider(collider: ICollider): Array<ICollider>;
+    getCollisionsForCollider(collider: ICollider): Array<Collision>;
     private broadPhase;
     private narrowPhase;
     private refreshQuad;

@@ -6,6 +6,11 @@ import { RenderManager } from "./../Rendering/RenderManager";
 import { ICollider } from "./Collider/ICollider";
 import { QuadTree } from "./QuadTree";
 
+export interface Collision {
+    localCollider: ICollider;
+    remoteCollider: ICollider;
+}
+
 export class CollisionManager {
     private debug: boolean = true;
     private renderManager: RenderManager;
@@ -36,10 +41,13 @@ export class CollisionManager {
         }
     }
 
-    public getCollisionsForCollider(collider: ICollider): Array<ICollider> {
+    public getCollisionsForCollider(collider: ICollider): Array<Collision> {
         const colliders = this.broadPhase(collider);
 
-        return this.narrowPhase(collider, colliders);
+        return this.narrowPhase(collider, colliders).map<Collision>((remoteCollider: ICollider) => ({
+            localCollider: collider,
+            remoteCollider: remoteCollider,
+        }));
     }
 
     // broadPhase takes care of looking for possible collisions

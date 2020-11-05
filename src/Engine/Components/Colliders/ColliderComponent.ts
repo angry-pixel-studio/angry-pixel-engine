@@ -1,12 +1,12 @@
 import { Component } from "../../Component";
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
-import { CollisionManager } from "../../Core/Collision/CollisionManager";
+import { Collision, CollisionManager } from "../../Core/Collision/CollisionManager";
 import { container } from "../../Game";
 
-export abstract class Collider extends Component {
+export abstract class ColliderComponent extends Component {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected colliders: ICollider[] = [];
-    private collisionsCache: ICollider[] = [];
+    private collisionsCache: Collision[] = [];
 
     constructor() {
         super();
@@ -23,14 +23,14 @@ export abstract class Collider extends Component {
         return this.getCollisionWithLayer(layer) !== null;
     }
 
-    public getCollisionWithLayer(layer: string): ICollider | null {
+    public getCollisionWithLayer(layer: string): Collision | null {
         this.updateCoordinates();
 
         for (const collider of this.colliders) {
             const collisions = this.collisionManager.getCollisionsForCollider(collider);
-            for (const foreignCollider of collisions) {
-                if (foreignCollider.gameObject.layer === layer) {
-                    return foreignCollider;
+            for (const collision of collisions) {
+                if (collision.remoteCollider.gameObject.layer === layer) {
+                    return collision;
                 }
             }
         }
@@ -38,16 +38,16 @@ export abstract class Collider extends Component {
         return null;
     }
 
-    public getCollisionsWithLayer(layer: string): ICollider[] {
+    public getCollisionsWithLayer(layer: string): Collision[] {
         this.updateCoordinates();
 
         this.collisionsCache = [];
 
         for (const collider of this.colliders) {
             const collisions = this.collisionManager.getCollisionsForCollider(collider);
-            for (const foreignCollider of collisions) {
-                if (foreignCollider.gameObject.layer === layer) {
-                    this.collisionsCache.push(foreignCollider);
+            for (const collision of collisions) {
+                if (collision.remoteCollider.gameObject.layer === layer) {
+                    this.collisionsCache.push(collision);
                 }
             }
         }
