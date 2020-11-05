@@ -1,6 +1,8 @@
 import { Component } from "../Component";
 import { Vector2 } from "../Helper/Vector2";
 
+export const TYPE_TRANSFORM: string = "Transform";
+
 export class Transform extends Component {
     public position: Vector2 = new Vector2(0, 0);
     public innerPosition: Vector2 = new Vector2(0, 0);
@@ -8,6 +10,13 @@ export class Transform extends Component {
     public rotation: number = 0;
 
     private parentTransform: Transform = null;
+
+    constructor() {
+        super();
+
+        this.allowMultiple = false;
+        this.type = TYPE_TRANSFORM;
+    }
 
     protected start(): void {
         this.update();

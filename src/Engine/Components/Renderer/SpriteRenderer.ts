@@ -5,7 +5,7 @@ import { container } from "../../Game";
 import { Vector2 } from "../../Helper/Vector2";
 import { Sprite } from "../../Sprite";
 
-type Config = {
+interface Config {
     sprite: Sprite;
     offsetX: number;
     offsetY: number;
@@ -14,7 +14,9 @@ type Config = {
     flipHorizontal: boolean;
     flipVertical: boolean;
     opacity: number;
-};
+}
+
+export const TYPE_SPRITE_RENDERER: string = "SpriteRenderer";
 
 export class SpriteRenderer extends RenderComponent {
     public sprite: Sprite = null;
@@ -30,20 +32,28 @@ export class SpriteRenderer extends RenderComponent {
     private renderData: ImageRenderData = new ImageRenderData();
     private goPosition: Vector2 = null;
 
-    constructor(config: Config) {
+    constructor({
+        sprite,
+        offsetX = 0,
+        offsetY = 0,
+        smooth = true,
+        rotation = 0,
+        flipHorizontal = false,
+        flipVertical = false,
+        opacity = 1,
+    }: Config) {
         super();
 
-        // required
-        this.sprite = config.sprite;
+        this.type = TYPE_SPRITE_RENDERER;
 
-        // optional
-        this.offsetX = config.offsetX ?? this.offsetX;
-        this.offsetY = config.offsetY ?? this.offsetY;
-        this.smooth = config.smooth ?? this.smooth;
-        this.rotation = config.rotation ?? this.rotation;
-        this.flipHorizontal = config.flipHorizontal ?? this.flipHorizontal;
-        this.flipVertical = config.flipVertical ?? this.flipVertical;
-        this.opacity = config.opacity ?? this.opacity;
+        this.sprite = sprite;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.smooth = smooth;
+        this.rotation = rotation;
+        this.flipHorizontal = flipHorizontal;
+        this.flipVertical = flipVertical;
+        this.opacity = opacity;
     }
 
     protected start(): void {

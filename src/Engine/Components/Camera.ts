@@ -6,6 +6,8 @@ import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
+export const TYPE_CAMERA: string = "Camera";
+
 export class Camera extends Component {
     private _vpHalfWidth: number = 0;
     private _vpHalfHeight: number = 0;
@@ -15,6 +17,13 @@ export class Camera extends Component {
     private _renderLayers: string[] = DEFAULT_LAYERS;
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+
+    constructor() {
+        super();
+
+        this.allowMultiple = false;
+        this.type = TYPE_CAMERA;
+    }
 
     protected start(): void {
         this.setupViewportRect();

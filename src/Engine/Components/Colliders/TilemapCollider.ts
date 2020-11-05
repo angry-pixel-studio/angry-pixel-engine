@@ -13,6 +13,8 @@ interface Config {
     debug: boolean;
 }
 
+export const TYPE_TILEMAP_COLLIDER: string = "TilemapCollider";
+
 export class TilemapCollider extends ColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
@@ -22,6 +24,8 @@ export class TilemapCollider extends ColliderComponent {
 
     constructor({ tilesData, debug = false }: Config) {
         super();
+
+        this.type = TYPE_TILEMAP_COLLIDER;
 
         this.tilesData = tilesData;
         this.debug = debug;

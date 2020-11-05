@@ -1,5 +1,5 @@
 import { RenderComponent } from "../../Component";
-export declare type TextRendererConfig = {
+interface Config {
     text: string;
     font: string;
     size: number;
@@ -9,7 +9,8 @@ export declare type TextRendererConfig = {
     lineSeparation: number;
     width: number;
     height: number;
-};
+}
+export declare const TYPE_TEXT_RENDERER = "TextRenderer";
 export declare class TextRenderer extends RenderComponent {
     text: string;
     font: string;
@@ -22,7 +23,8 @@ export declare class TextRenderer extends RenderComponent {
     height: number;
     private renderManager;
     private renderData;
-    constructor(config: TextRendererConfig);
+    constructor({ width, height, text, font, size, color, bold, italic, lineSeparation, }: Config);
     protected start(): void;
     protected update(): void;
 }
+export {};

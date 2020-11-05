@@ -10,6 +10,8 @@ export abstract class Component {
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 
     public readonly uuid: string = uuidv4();
+    public allowMultiple: boolean = true;
+    public type: string = null;
     public name: string = null;
     public gameObject: GameObject = null;
 
@@ -61,8 +63,16 @@ export abstract class Component {
         return this.sceneManager.getCurrentScene<T>();
     }
 
-    public getComponent<T extends Component>(name: string): T | null {
-        return this.gameObject.getComponent<T>(name);
+    public getComponentByName<T extends Component>(name: string): T | null {
+        return this.gameObject.getComponentByName<T>(name);
+    }
+
+    public getComponentByType<T extends Component>(type: string): T | null {
+        return this.gameObject.getComponentByType<T>(type);
+    }
+
+    public getComponentsByType<T extends Component>(type: string): T[] {
+        return this.gameObject.getComponentsByType<T>(type);
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {

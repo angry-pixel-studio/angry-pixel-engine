@@ -1,4 +1,4 @@
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
+import { ColliderComponent } from "./ColliderComponent";
 interface Config {
     width: number;
     height: number;
@@ -6,7 +6,8 @@ interface Config {
     offsetY: number;
     debug: boolean;
 }
-export declare class BoxCollider extends AbstractColliderComponent {
+export declare const TYPE_BOX_COLLIDER: string;
+export declare class BoxCollider extends ColliderComponent {
     private renderManager;
     debug: boolean;
     private width;

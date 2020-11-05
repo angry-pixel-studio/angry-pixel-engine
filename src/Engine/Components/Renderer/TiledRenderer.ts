@@ -2,21 +2,25 @@ import { Tileset } from "../../Tileset";
 import { TiledChunk, TiledLayer, TiledTilemap } from "./Tilemap/TiledTilemap";
 import { AbstractTilemapRenderer } from "./Tilemap/AbstractTilemapRenderer";
 
-type Config = {
+interface Config {
     tileset: Tileset;
     tilemapData: TiledTilemap;
     tileScale: number;
     smooth: boolean;
-};
+}
+
+export const TYPE_TILED_RENDERER: string = "TiledRenderer";
 
 export class TiledRenderer extends AbstractTilemapRenderer {
-    constructor(config: Config) {
+    constructor({ tileset, tilemapData, tileScale = 1, smooth = true }: Config) {
         super();
 
-        this.tileset = config.tileset;
-        this.tiledTilemap = config.tilemapData;
-        this.tileScale = config.tileScale ?? this.tileScale;
-        this.smooth = config.smooth ?? this.smooth;
+        this.type = TYPE_TILED_RENDERER;
+
+        this.tileset = tileset;
+        this.tiledTilemap = tilemapData;
+        this.tileScale = tileScale;
+        this.smooth = smooth;
     }
 
     protected processTilemap(): void {

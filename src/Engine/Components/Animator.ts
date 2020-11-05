@@ -3,16 +3,25 @@ import { SpriteRenderer } from "./Renderer/SpriteRenderer";
 import { Sprite } from "../Sprite";
 import { Animation } from "../Animation";
 
+interface Config {
+    spriteRenderer: SpriteRenderer;
+}
+
+export const TYPE_ANIMATOR: string = "Animator";
+
 export class Animator extends Component {
     private animations: { [id: string]: Animation } = {};
     private playingAnimationId: string = null;
     private spriteRenderer: SpriteRenderer = null;
     private defaultSprite: Sprite = null;
 
-    constructor(config: { spriteRenderer: SpriteRenderer }) {
+    constructor({ spriteRenderer }: Config) {
         super();
 
-        this.spriteRenderer = config.spriteRenderer;
+        this.allowMultiple = false;
+        this.type = TYPE_ANIMATOR;
+
+        this.spriteRenderer = spriteRenderer;
     }
 
     protected start(): void {

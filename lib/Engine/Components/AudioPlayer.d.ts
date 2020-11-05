@@ -1,17 +1,18 @@
 import { Component } from "../Component";
-declare type Config = {
-    audio: HTMLAudioElement;
+interface Config {
+    audio: HTMLAudioElement | null;
     volume: number;
     loop: boolean;
-};
+}
+export declare const TYPE_AUDIO_PLAYER: string;
 export declare class AudioPlayer extends Component {
     volume: number;
     loop: boolean;
-    audio: HTMLAudioElement;
+    audio: HTMLAudioElement | null;
     private audioClone;
     private _playing;
     private _paused;
-    constructor(config?: Config | null);
+    constructor({ audio, volume, loop }?: Config);
     playAudio(audio: HTMLAudioElement, volume?: number | null): void;
     play(): void;
     stop(): void;

@@ -3,7 +3,6 @@ import { Transform } from "./Components/Transform";
 import { GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 import { Scene } from "./Scene";
 export declare const LAYER_DEFAULT = "Default";
-export declare const TRANSFORM_ID = "Transform";
 declare type ComponentConstructor = () => Component;
 export declare class GameObject {
     private readonly _uuid;
@@ -32,11 +31,15 @@ export declare class GameObject {
     findGameObjectByName<T extends GameObject>(name: string): T | null;
     findGameObjectsByTag(tag: string): GameObject[];
     findGameObjectByTag<T extends GameObject>(tag: string): T | null;
-    addComponent(componentConstructor: ComponentConstructor, name?: string | null): this;
+    addComponent<T extends Component>(componentConstructor: ComponentConstructor, name?: string | null): T;
     getComponents(): Component[];
-    getComponent<T extends Component>(name: string): T | null;
-    hasComponent(name: string): boolean;
-    removeComponent(name: string): void;
+    getComponentByName<T extends Component>(name: string): T | null;
+    getComponentByType<T extends Component>(type: string): T | null;
+    getComponentsByType<T extends Component>(type: string): T[];
+    hasComponentOfName(name: string): boolean;
+    hasComponentOfType(type: string): boolean;
+    removeComponentByName(name: string): void;
+    removeComponentByType(type: string): void;
     removeComponents(): void;
     addChild(gameObjectFactory: GameObjectFactory, name: string): this;
     getChildren(): GameObject[];

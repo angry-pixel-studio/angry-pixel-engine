@@ -6,23 +6,23 @@ export declare enum RigidBodyType {
     Dynamic = 1
 }
 interface Config {
-    type: RigidBodyType;
+    rigidBodyType: RigidBodyType;
     colliders: ColliderComponent[];
     layersToCollide: string[];
     gravity: number;
 }
+export declare const TYPE_RIGIDBODY: string;
 export declare class RigidBody extends Component {
-    private _type;
+    private _rigidBodyType;
     private _colliderComponents;
     private _gravity;
     private _layersToCollide;
     private _velocity;
     private deltaVelocity;
-    private gravityTime;
     private collisions;
     private timeManager;
-    constructor({ type, colliders, layersToCollide, gravity }: Config);
-    get type(): RigidBodyType;
+    constructor({ rigidBodyType, colliders, layersToCollide, gravity }: Config);
+    get rigidBodyType(): RigidBodyType;
     set velocity(velocity: Vector2);
     get velocity(): Vector2;
     set gravity(gravity: number);

@@ -1,10 +1,10 @@
 import { Component } from "../Component";
 
-type Config = {
-    audio: HTMLAudioElement;
+interface Config {
+    audio: HTMLAudioElement | null;
     volume: number;
     loop: boolean;
-};
+}
 
 const userInputEventNames = [
     "click",
@@ -19,23 +19,26 @@ const userInputEventNames = [
     "keyup",
 ];
 
+export const TYPE_AUDIO_PLAYER: string = "AudioPlayer";
+
 export class AudioPlayer extends Component {
     public volume: number = 1;
     public loop: boolean = false;
-    public audio: HTMLAudioElement;
+    public audio: HTMLAudioElement | null;
 
     private audioClone: HTMLAudioElement = null;
     private _playing: boolean = false;
     private _paused: boolean = false;
 
-    constructor(config: Config | null = null) {
+    constructor({ audio = null, volume = 1, loop = false }: Config = { audio: null, volume: 1, loop: false }) {
         super();
 
-        if (config !== null) {
-            this.audio = config.audio ?? this.audio;
-            this.volume = config.volume ?? this.volume;
-            this.loop = config.loop ?? this.loop;
-        }
+        this.allowMultiple = false;
+        this.type = TYPE_AUDIO_PLAYER;
+
+        this.audio = audio;
+        this.volume = volume;
+        this.loop = loop;
     }
 
     public playAudio(audio: HTMLAudioElement, volume: number | null = null): void {

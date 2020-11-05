@@ -4,6 +4,7 @@ interface Config {
     tilesData: Rectangle[];
     debug: boolean;
 }
+export declare const TYPE_TILEMAP_COLLIDER: string;
 export declare class TilemapCollider extends ColliderComponent {
     private renderManager;
     debug: boolean;

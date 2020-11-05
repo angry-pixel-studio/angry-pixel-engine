@@ -4,6 +4,8 @@ export declare abstract class Component {
     private sceneManager;
     private gameObjectManager;
     readonly uuid: string;
+    allowMultiple: boolean;
+    type: string;
     name: string;
     gameObject: GameObject;
     private _active;
@@ -17,7 +19,9 @@ export declare abstract class Component {
     protected start(): void;
     protected update(): void;
     getCurrentScene<T extends Scene>(): T;
-    getComponent<T extends Component>(name: string): T | null;
+    getComponentByName<T extends Component>(name: string): T | null;
+    getComponentByType<T extends Component>(type: string): T | null;
+    getComponentsByType<T extends Component>(type: string): T[];
     findGameObjectByName<T extends GameObject>(name: string): T | null;
     findGameObjectsByTag(tag: string): GameObject[];
     findGameObjectByTag<T extends GameObject>(tag: string): T | null;

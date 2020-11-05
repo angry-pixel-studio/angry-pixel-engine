@@ -2,30 +2,34 @@ import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
 import { Tileset } from "../../Tileset";
 import { AbstractTilemapRenderer } from "./Tilemap/AbstractTilemapRenderer";
 
-type Config = {
+interface Config {
     tileset: Tileset;
     tilemapData: string;
     tileScale: number;
     smooth: boolean;
     alpha: number;
-};
+}
 
 const MAX_TILES: number = 999;
 const FLIP_H: number = 1; // flip horizontal
 const FLIP_V: number = 2; // flip vertical
 const FLIP_B: number = 3; // flip both horizontal and vertical
 
+export const TYPE_TILEMAP_RENDERER: string = "TilemapRenderer";
+
 export class TilemapRenderer extends AbstractTilemapRenderer {
     private alpha: number = 1;
 
-    constructor(config: Config) {
+    constructor({ tileset, tilemapData, tileScale = 1, smooth = true, alpha = 1 }: Config) {
         super();
 
-        this.tileset = config.tileset;
-        this.tilemapData = config.tilemapData;
-        this.tileScale = config.tileScale ?? this.tileScale;
-        this.smooth = config.smooth ?? this.smooth;
-        this.alpha = config.alpha ?? this.alpha;
+        this.type = TYPE_TILEMAP_RENDERER;
+
+        this.tileset = tileset;
+        this.tilemapData = tilemapData;
+        this.tileScale = tileScale;
+        this.smooth = smooth;
+        this.alpha = alpha;
     }
 
     protected processTilemap(): void {

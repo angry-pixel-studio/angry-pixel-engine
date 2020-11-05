@@ -12,36 +12,40 @@ export enum RigidBodyType {
 }
 
 interface Config {
-    type: RigidBodyType;
+    rigidBodyType: RigidBodyType;
     colliders: ColliderComponent[];
     layersToCollide: string[];
     gravity: number;
 }
 
+export const TYPE_RIGIDBODY: string = "RigidBody";
+
 export class RigidBody extends Component {
-    private _type: RigidBodyType;
+    private _rigidBodyType: RigidBodyType;
     private _colliderComponents: ColliderComponent[] = [];
     private _gravity: number = 1;
     private _layersToCollide: string[] = [];
     private _velocity: Vector2 = new Vector2(0, 0);
     private deltaVelocity: Vector2 = new Vector2(0, 0);
 
-    private gravityTime: number = 0;
     private collisions: Collision[] = [];
 
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
 
-    constructor({ type, colliders, layersToCollide, gravity = 1 }: Config) {
+    constructor({ rigidBodyType, colliders, layersToCollide, gravity = 1 }: Config) {
         super();
 
-        this._type = type;
+        this.type = TYPE_RIGIDBODY;
+        this.allowMultiple = false;
+
+        this._rigidBodyType = rigidBodyType;
         this._colliderComponents = colliders;
         this._layersToCollide = layersToCollide;
         this._gravity = gravity;
     }
 
-    public get type(): RigidBodyType {
-        return this._type;
+    public get rigidBodyType(): RigidBodyType {
+        return this._rigidBodyType;
     }
 
     public set velocity(velocity: Vector2) {
@@ -61,7 +65,7 @@ export class RigidBody extends Component {
     }
 
     protected update(): void {
-        if (this._type === RigidBodyType.Static) {
+        if (this._rigidBodyType === RigidBodyType.Static) {
             return;
         }
 
@@ -71,10 +75,7 @@ export class RigidBody extends Component {
 
     private applyGravityToVelocity(): void {
         if (this._gravity > 0) {
-            this.gravityTime += this.timeManager.deltaTime;
             this._velocity.y -= this._gravity * this.timeManager.deltaTime;
-
-            //this._velocity.y -= this._gravity * this.gravityTime;
         }
     }
 
@@ -95,7 +96,7 @@ export class RigidBody extends Component {
         let rollback: boolean = false;
 
         this.collisions.forEach((collision: Collision) => {
-            const rigidBody = collision.remoteCollider.gameObject.getComponent<RigidBody>("RigidBody");
+            const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
             if (rigidBody !== null) {
                 rollback ||=
                     (this.deltaVelocity.x > 0 &&
@@ -118,17 +119,13 @@ export class RigidBody extends Component {
         let rollback: boolean = false;
 
         this.collisions.forEach((collision: Collision) => {
-            const rigidBody = collision.remoteCollider.gameObject.getComponent<RigidBody>("RigidBody");
+            const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
             if (rigidBody !== null) {
                 rollback ||=
                     (this.deltaVelocity.y > 0 &&
                         collision.remoteCollider.coordinates.y >= collision.localCollider.coordinates.y) ||
                     (this.deltaVelocity.y < 0 &&
                         collision.remoteCollider.coordinates.y <= collision.localCollider.coordinates.y);
-
-                if (collision.remoteCollider.coordinates.y <= collision.localCollider.coordinates.y) {
-                    this.gravityTime = 0;
-                }
             }
         });
 

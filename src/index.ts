@@ -12,7 +12,7 @@ export * from "./Engine/Animation";
 export * from "./Engine/Tileset";
 
 // components
-export * from "./Engine/Components/Colliders/RectangleCollider";
+export * from "./Engine/Components/Colliders/BoxCollider";
 export * from "./Engine/Components/Colliders/TilemapCollider";
 export * from "./Engine/Components/Renderer/SpriteRenderer";
 export * from "./Engine/Components/Renderer/TextRenderer";

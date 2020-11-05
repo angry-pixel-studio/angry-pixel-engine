@@ -2,7 +2,7 @@ import { LAYER_DEFAULT } from "../../GameObject";
 import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/RenderData/GeometricRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import { RectangleCollider as CoreRectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
+import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
 import { Vector2 } from "../../Helper/Vector2";
 import { ColliderComponent } from "./ColliderComponent";
 
@@ -14,7 +14,9 @@ interface Config {
     debug: boolean;
 }
 
-export class RectangleCollider extends ColliderComponent {
+export const TYPE_BOX_COLLIDER: string = "BoxCollider";
+
+export class BoxCollider extends ColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     public debug: boolean = false;
@@ -29,6 +31,8 @@ export class RectangleCollider extends ColliderComponent {
     constructor({ width, height, offsetX = 0, offsetY = 0, debug = false }: Config) {
         super();
 
+        this.type = TYPE_BOX_COLLIDER;
+
         this.width = width;
         this.height = height;
         this.offsetX = offsetX;
@@ -38,7 +42,7 @@ export class RectangleCollider extends ColliderComponent {
 
     protected start(): void {
         this.addCollider(
-            new CoreRectangleCollider(
+            new RectangleCollider(
                 new Vector2(
                     this.gameObject.transform.position.x - Math.floor(this.width / 2) - this.offsetX,
                     this.gameObject.transform.position.y + Math.floor(this.height / 2) - this.offsetY

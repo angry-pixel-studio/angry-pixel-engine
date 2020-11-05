@@ -1,5 +1,6 @@
 import { Component } from "../Component";
 import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
+export declare const TYPE_CAMERA: string;
 export declare class Camera extends Component {
     private _vpHalfWidth;
     private _vpHalfHeight;
@@ -7,6 +8,7 @@ export declare class Camera extends Component {
     private _worldSpaceRect;
     private _renderLayers;
     private renderManager;
+    constructor();
     protected start(): void;
     private setupViewportRect;
     protected update(): void;

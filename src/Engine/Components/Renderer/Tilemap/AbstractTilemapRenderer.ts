@@ -28,6 +28,8 @@ export abstract class AbstractTilemapRenderer extends RenderComponent {
 
     constructor() {
         super();
+
+        this.allowMultiple = false;
     }
 
     protected start(): void {

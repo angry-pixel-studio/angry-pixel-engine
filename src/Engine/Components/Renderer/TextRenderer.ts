@@ -3,7 +3,7 @@ import { TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 
-export type TextRendererConfig = {
+interface Config {
     text: string;
     font: string;
     size: number;
@@ -13,7 +13,9 @@ export type TextRendererConfig = {
     lineSeparation: number;
     width: number;
     height: number;
-};
+}
+
+export const TYPE_TEXT_RENDERER = "TextRenderer";
 
 export class TextRenderer extends RenderComponent {
     public text: string = "";
@@ -29,18 +31,30 @@ export class TextRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
 
-    constructor(config: TextRendererConfig) {
+    constructor({
+        width,
+        height,
+        text = "",
+        font = "Sans",
+        size = 12,
+        color = "#000000",
+        bold = false,
+        italic = false,
+        lineSeparation = 5,
+    }: Config) {
         super();
 
-        this.text = config.text ? config.text : this.text;
-        this.font = config.font ? config.font : this.font;
-        this.size = config.size ? config.size : this.size;
-        this.color = config.color ? config.color : this.color;
-        this.bold = config.bold ? config.bold : this.bold;
-        this.italic = config.italic ? config.italic : this.italic;
-        this.lineSeparation = config.lineSeparation ? config.lineSeparation : this.lineSeparation;
-        this.width = config.width ? config.width : this.width;
-        this.height = config.height ? config.height : this.height;
+        this.type = TYPE_TEXT_RENDERER;
+
+        this.width = width;
+        this.height = height;
+        this.text = text;
+        this.font = font;
+        this.size = size;
+        this.color = color;
+        this.bold = bold;
+        this.italic = italic;
+        this.lineSeparation = lineSeparation;
     }
 
     protected start(): void {
