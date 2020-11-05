@@ -8,7 +8,7 @@ export class SceneManager {
     private game: Game = null;
     private renderManager: RenderManager;
 
-    private scenes: { [id: string]: SceneConstructor } = {};
+    private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
     private currentScene: Scene = null;
     private openingSceneName: string = null;
 
@@ -23,12 +23,12 @@ export class SceneManager {
         return this.currentScene as T;
     }
 
-    public addScene(name: string, SceneConstructor: SceneConstructor, openingScene: boolean = false): void {
-        if (typeof this.scenes[name] === "function") {
+    public addScene(name: string, sceneConstructor: SceneConstructor, openingScene: boolean = false): void {
+        if (this.scenes.has(name)) {
             throw new Error(`There is already a scene with the name '${name}'`);
         }
 
-        this.scenes[name] = SceneConstructor;
+        this.scenes.set(name, sceneConstructor);
 
         if (openingScene === true || this.openingSceneName === null) {
             this.openingSceneName = name;
@@ -36,12 +36,20 @@ export class SceneManager {
     }
 
     public loadOpeningScene(): void {
+        if (this.openingSceneName === null) {
+            throw new Error(`There is no opening scene`);
+        }
+
         this.loadScene(this.openingSceneName);
     }
 
     public loadScene(name: string): void {
         if (this.game === null) {
             throw new Error("Game not initialized.");
+        }
+
+        if (this.scenes.has(name) === false) {
+            throw new Error(`Scene with name ${name} does not exists`);
         }
 
         const resetLoop = this.game.running;
@@ -51,7 +59,7 @@ export class SceneManager {
         }
 
         this.unloadCurrentScene();
-        this.currentScene = this.scenes[name]();
+        this.currentScene = this.scenes.get(name)();
         this.currentScene.name = name;
         this.currentScene.game = this.game;
 

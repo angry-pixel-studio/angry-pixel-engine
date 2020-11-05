@@ -9,9 +9,11 @@ export declare abstract class Component {
     private _active;
     private firstFrame;
     constructor();
+    protected createEventListener(): void;
+    protected destroyEventListener(): void;
     get active(): boolean;
     setActive(active: boolean): void;
-    private gameLoopEventHandler;
+    protected gameLoopEventHandler: () => void;
     protected start(): void;
     protected update(): void;
     getCurrentScene<T extends Scene>(): T;
@@ -25,4 +27,12 @@ export declare abstract class Component {
      * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
      */
     destroy(): void;
+}
+export declare class PhysicsComponent extends Component {
+    protected createEventListener(): void;
+    protected destroyEventListener(): void;
+}
+export declare class RenderComponent extends Component {
+    protected createEventListener(): void;
+    protected destroyEventListener(): void;
 }

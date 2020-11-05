@@ -11,7 +11,7 @@ export declare class SceneManager {
     currentSceneName: string;
     constructor(game: Game, renderManager: RenderManager);
     getCurrentScene<T extends Scene>(): T;
-    addScene(name: string, SceneConstructor: SceneConstructor, openingScene?: boolean): void;
+    addScene(name: string, sceneConstructor: SceneConstructor, openingScene?: boolean): void;
     loadOpeningScene(): void;
     loadScene(name: string): void;
     unloadCurrentScene(): void;

@@ -10,6 +10,9 @@ const GAME_CANVAS_ID: string = "miniEngineGameCanvas";
 const UI_CANVAS_ID: string = "miniEngineUICanvas";
 
 export const EVENT_UPDATE: string = "mini-engine-update";
+export const EVENT_UPDATE_PHYSICS: string = "mini-engine-update-physics";
+export const EVENT_UPDATE_RENDER: string = "mini-engine-update-renders";
+
 export const gameNode: HTMLDivElement = document.createElement("div");
 export const gameCanvas: HTMLCanvasElement = document.createElement("canvas");
 export const UICanvas: HTMLCanvasElement = document.createElement("canvas");
@@ -103,11 +106,13 @@ export class Game {
         this._running = true;
 
         this.timeManager.update(time);
-        this.renderManager.clearCanvas(this.canvasBGColor);
         this.collisionManager.prepare();
 
         this.dispatchFrameEvent(EVENT_UPDATE);
+        this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+        this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
+        this.renderManager.clearCanvas(this.canvasBGColor);
         this.renderManager.render();
 
         this.requestAnimationFrame();

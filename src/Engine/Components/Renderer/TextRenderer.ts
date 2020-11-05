@@ -1,4 +1,4 @@
-import { Component } from "../../Component";
+import { RenderComponent } from "../../Component";
 import { TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
@@ -15,7 +15,7 @@ export type TextRendererConfig = {
     height: number;
 };
 
-export class TextRenderer extends Component {
+export class TextRenderer extends RenderComponent {
     public text: string = "";
     public font: string = "Sans";
     public size: number = 12;

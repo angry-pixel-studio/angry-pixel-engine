@@ -1,4 +1,4 @@
-import { Component } from "../../Component";
+import { RenderComponent } from "../../Component";
 export declare type TextRendererConfig = {
     text: string;
     font: string;
@@ -10,7 +10,7 @@ export declare type TextRendererConfig = {
     width: number;
     height: number;
 };
-export declare class TextRenderer extends Component {
+export declare class TextRenderer extends RenderComponent {
     text: string;
     font: string;
     size: number;

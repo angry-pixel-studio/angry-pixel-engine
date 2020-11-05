@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
-import { container, EVENT_UPDATE } from "./Game";
+import { container, EVENT_UPDATE, EVENT_UPDATE_PHYSICS, EVENT_UPDATE_RENDER } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 
@@ -17,8 +17,15 @@ export abstract class Component {
     private firstFrame: boolean = true;
 
     constructor() {
-        this.gameLoopEventHandler.bind(this);
+        this.createEventListener();
+    }
+
+    protected createEventListener(): void {
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+    }
+
+    protected destroyEventListener(): void {
+        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
     public get active(): boolean {
@@ -29,7 +36,7 @@ export abstract class Component {
         this._active = active;
     }
 
-    private gameLoopEventHandler = (): void => {
+    protected gameLoopEventHandler = (): void => {
         if (this._active === false) {
             return;
         }
@@ -82,9 +89,29 @@ export abstract class Component {
      * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
      */
     public destroy(): void {
-        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+        this.destroyEventListener();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
+    }
+}
+
+export class PhysicsComponent extends Component {
+    protected createEventListener(): void {
+        window.addEventListener(EVENT_UPDATE_PHYSICS, this.gameLoopEventHandler);
+    }
+
+    protected destroyEventListener(): void {
+        window.removeEventListener(EVENT_UPDATE_PHYSICS, this.gameLoopEventHandler);
+    }
+}
+
+export class RenderComponent extends Component {
+    protected createEventListener(): void {
+        window.addEventListener(EVENT_UPDATE_RENDER, this.gameLoopEventHandler);
+    }
+
+    protected destroyEventListener(): void {
+        window.removeEventListener(EVENT_UPDATE_RENDER, this.gameLoopEventHandler);
     }
 }

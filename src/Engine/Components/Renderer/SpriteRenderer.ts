@@ -1,4 +1,4 @@
-import { Component } from "../../Component";
+import { RenderComponent } from "../../Component";
 import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
@@ -16,7 +16,7 @@ type Config = {
     opacity: number;
 };
 
-export class SpriteRenderer extends Component {
+export class SpriteRenderer extends RenderComponent {
     public sprite: Sprite = null;
     public offsetX: number = 0;
     public offsetY: number = 0;

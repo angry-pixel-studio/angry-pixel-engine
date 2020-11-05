@@ -1,4 +1,4 @@
-import { Component } from "../../../Component";
+import { RenderComponent } from "../../../Component";
 import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { container } from "../../../Game";
@@ -6,7 +6,7 @@ import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
 import { Tileset } from "../../../Tileset";
 import { TiledTilemap } from "./TiledTilemap";
 
-export abstract class AbstractTilemapRenderer extends Component {
+export abstract class AbstractTilemapRenderer extends RenderComponent {
     public tileset: Tileset = null;
     public tilemapData: string;
     public tiledTilemap: TiledTilemap;

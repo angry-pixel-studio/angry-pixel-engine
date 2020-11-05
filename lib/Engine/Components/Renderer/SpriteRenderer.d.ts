@@ -1,4 +1,4 @@
-import { Component } from "../../Component";
+import { RenderComponent } from "../../Component";
 import { Sprite } from "../../Sprite";
 declare type Config = {
     sprite: Sprite;
@@ -10,7 +10,7 @@ declare type Config = {
     flipVertical: boolean;
     opacity: number;
 };
-export declare class SpriteRenderer extends Component {
+export declare class SpriteRenderer extends RenderComponent {
     sprite: Sprite;
     offsetX: number;
     offsetY: number;
