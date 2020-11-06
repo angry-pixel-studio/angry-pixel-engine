@@ -32,6 +32,7 @@ export declare class GameObject {
     findGameObjectsByTag(tag: string): GameObject[];
     findGameObjectByTag<T extends GameObject>(tag: string): T | null;
     addComponent<T extends Component>(componentConstructor: ComponentConstructor, name?: string | null): T;
+    private checkMultipleComponent;
     getComponents(): Component[];
     getComponentByName<T extends Component>(name: string): T | null;
     getComponentByType<T extends Component>(type: string): T | null;

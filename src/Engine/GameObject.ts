@@ -98,11 +98,19 @@ export class GameObject {
         name: string | null = null
     ): T {
         const component = componentConstructor();
+        this.checkMultipleComponent(component);
+
         component.name = name;
         component.gameObject = this;
         this.components.push(component);
 
         return component as T;
+    }
+
+    private checkMultipleComponent(component: Component): void {
+        if (component.allowMultiple === false && this.hasComponentOfType(component.type)) {
+            throw new Error(`GameObject only allows one component of type ${component.type}`);
+        }
     }
 
     public getComponents(): Component[] {
