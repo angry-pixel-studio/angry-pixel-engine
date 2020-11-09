@@ -2,6 +2,9 @@ import { Component } from "../Component";
 import { SpriteRenderer } from "./Renderer/SpriteRenderer";
 import { Sprite } from "../Sprite";
 import { Animation } from "../Animation";
+import { TimeManager } from "../Core/Time/TimeManager";
+import { container } from "../Game";
+import { AnimationPlayer } from "./Animator/AnimationPlayer";
 
 interface Config {
     spriteRenderer: SpriteRenderer;
@@ -10,17 +13,16 @@ interface Config {
 export const TYPE_ANIMATOR: string = "Animator";
 
 export class Animator extends Component {
-    private animations: { [id: string]: Animation } = {};
-    private playingAnimationId: string = null;
+    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
     private spriteRenderer: SpriteRenderer = null;
+    private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
+    private currentAnimation: AnimationPlayer = null;
     private defaultSprite: Sprite = null;
 
     constructor({ spriteRenderer }: Config) {
         super();
 
-        this.allowMultiple = false;
         this.type = TYPE_ANIMATOR;
-
         this.spriteRenderer = spriteRenderer;
     }
 
@@ -29,35 +31,36 @@ export class Animator extends Component {
     }
 
     protected update(): void {
-        if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === true) {
-            this.spriteRenderer.sprite = this.animations[this.playingAnimationId].currentSprite;
-        } else if (this.playingAnimationId && this.animations[this.playingAnimationId].playing === false) {
-            this.playingAnimationId = null;
+        if (this.currentAnimation === null) {
             this.spriteRenderer.sprite = this.defaultSprite;
+            return;
         }
 
-        if (this.playingAnimationId === null) {
-            this.defaultSprite = this.spriteRenderer.sprite;
+        this.currentAnimation.playFrame(this.timeManager.deltaTime);
+
+        if (this.currentAnimation.restarted === true && this.currentAnimation.loop === false) {
+            this.stopAnimation();
+        } else {
+            this.spriteRenderer.sprite = this.currentAnimation.sprite;
         }
     }
 
-    public addAnimation(id: string, animation: Animation): this {
-        this.animations[id] = animation;
+    public addAnimation(name: string, animation: Animation): this {
+        this.animations.set(name, new AnimationPlayer(animation));
 
         return this;
     }
 
-    public playAnimation(id: string): void {
+    public playAnimation(name: string): void {
         if (this.active === false) {
             return;
         }
 
-        if (this.playingAnimationId != id && this.animations[id] !== undefined) {
-            this.stopAnimation();
-
-            this.playingAnimationId = id;
-            this.animations[id].play();
+        if (this.animations.has(name) === false) {
+            throw new Error(`Animation with name ${name} does not exist.`);
         }
+
+        this.currentAnimation = this.animations.get(name);
     }
 
     public stopAnimation(): void {
@@ -65,20 +68,8 @@ export class Animator extends Component {
             return;
         }
 
-        if (this.playingAnimationId !== null) {
-            this.animations[this.playingAnimationId].stop();
-        }
-    }
-
-    public setCurrentAniamtionSpeed(speed: number): void {
-        if (this.playingAnimationId != null) {
-            this.animations[this.playingAnimationId].speed = speed;
-        }
-    }
-
-    public setAnimationSpeed(id: string, speed: number): void {
-        if (this.animations[id] !== undefined) {
-            this.animations[id].speed = speed;
+        if (this.currentAnimation !== null) {
+            this.currentAnimation = null;
         }
     }
 }

@@ -5,17 +5,9 @@ interface config {
     loop: boolean;
 }
 export declare class Animation {
-    private sprites;
-    private _playing;
-    private currentFrame;
-    private currentInterval;
+    sprites: Sprite[];
     speed: number;
     loop: boolean;
-    currentSprite: Sprite;
     constructor({ sprites, speed, loop }: config);
-    play(): void;
-    update(): Promise<void>;
-    stop(): void;
-    get playing(): boolean;
 }
 export {};
