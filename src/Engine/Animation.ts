@@ -1,7 +1,5 @@
 import { Sprite } from "./Sprite";
 
-const FRAME_RATE: number = 24;
-
 interface config {
     sprites: Sprite[];
     speed: number;
