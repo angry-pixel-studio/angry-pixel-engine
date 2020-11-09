@@ -23,9 +23,9 @@ export class Scene {
         if (this.firstFrame === true) {
             this.start();
             this.firstFrame = false;
-        } else {
-            this.update();
         }
+
+        this.update();
     };
 
     protected start(): void {

@@ -31,7 +31,6 @@ export class GameObject {
     constructor() {
         this.addComponent(() => new Transform());
 
-        this.gameLoopEventHandler.bind(this);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
@@ -68,9 +67,9 @@ export class GameObject {
         if (this.firstFrame === true) {
             this.start();
             this.firstFrame = false;
-        } else {
-            this.update();
         }
+
+        this.update();
     };
 
     protected start(): void {
