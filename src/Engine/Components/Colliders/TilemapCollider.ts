@@ -6,10 +6,11 @@ import { container } from "../../Game";
 import { LAYER_DEFAULT } from "../../GameObject";
 import { Vector2 } from "../../Helper/Vector2";
 import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
 
 interface Config {
-    tilesData: Rectangle[];
+    tilemapRenderer: TilemapRenderer;
     debug: boolean;
 }
 
@@ -17,22 +18,21 @@ export const TYPE_TILEMAP_COLLIDER: string = "TilemapCollider";
 
 export class TilemapCollider extends ColliderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+    private tilemapRenderer: TilemapRenderer = null;
 
     public debug: boolean = false;
-    private tilesData: Rectangle[] = [];
     private renderData: GeometricRenderData[] = [];
 
-    constructor({ tilesData, debug = false }: Config) {
+    constructor({ tilemapRenderer, debug = false }: Config) {
         super();
 
         this.type = TYPE_TILEMAP_COLLIDER;
-
-        this.tilesData = tilesData;
+        this.tilemapRenderer = tilemapRenderer;
         this.debug = debug;
     }
 
     protected start(): void {
-        this.tilesData.forEach((tileData) => {
+        this.tilemapRenderer.tilesData.forEach((tileData) => {
             this.addCollider(
                 new RectangleCollider(
                     new Vector2(tileData.x, tileData.y),

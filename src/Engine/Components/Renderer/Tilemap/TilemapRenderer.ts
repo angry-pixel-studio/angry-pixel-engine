@@ -6,7 +6,7 @@ import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
 import { Tileset } from "../../../Tileset";
 import { TiledTilemap } from "./TiledTilemap";
 
-export abstract class AbstractTilemapRenderer extends RenderComponent {
+export abstract class TilemapRenderer extends RenderComponent {
     public tileset: Tileset = null;
     public tilemapData: string;
     public tiledTilemap: TiledTilemap;
@@ -35,19 +35,12 @@ export abstract class AbstractTilemapRenderer extends RenderComponent {
     protected start(): void {
         this.tileWidth = this.tileset.tileWidth * this.tileScale;
         this.tileHeight = this.tileset.tileHeight * this.tileScale;
-
-        this.update();
+        this.processTilemap();
+        this.updateTilesPosition();
     }
 
     protected update(): void {
-        if (this.tileset.loaded && this.tilemapProcessed === false) {
-            this.processTilemap();
-            this.updateTilesPosition();
-        }
-
-        if (this.tileset.loaded && this.tilemapProcessed === true) {
-            this.tilesRenderData.forEach((renderData) => this.renderManager.addToRenderStack(renderData));
-        }
+        this.tilesRenderData.forEach((renderData) => this.renderManager.addToRenderStack(renderData));
     }
 
     protected abstract processTilemap(): void;

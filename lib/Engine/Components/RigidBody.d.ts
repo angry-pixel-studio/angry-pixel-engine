@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { PhysicsComponent } from "../Component";
 import { Vector2 } from "../Helper/Vector2";
 import { ColliderComponent } from "./Colliders/ColliderComponent";
 export declare enum RigidBodyType {
@@ -12,7 +12,7 @@ interface Config {
     gravity: number;
 }
 export declare const TYPE_RIGIDBODY: string;
-export declare class RigidBody extends Component {
+export declare class RigidBody extends PhysicsComponent {
     private _rigidBodyType;
     private _colliderComponents;
     private _gravity;

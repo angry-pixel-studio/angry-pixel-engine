@@ -1,5 +1,6 @@
 import { SceneConstructor } from "./Core/Scene/SceneManager";
 import { Container } from "./Core/DependencyInjection/Container";
+export declare const EVENT_START: string;
 export declare const EVENT_UPDATE: string;
 export declare const EVENT_UPDATE_PHYSICS: string;
 export declare const EVENT_UPDATE_RENDER: string;

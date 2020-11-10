@@ -1,5 +1,5 @@
 import { GameCamera } from "./GameObjects/GameCamera";
-import { Game, container, EVENT_UPDATE } from "./Game";
+import { Game, container, EVENT_UPDATE, EVENT_START } from "./Game";
 import { GameObject } from "./GameObject";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 
@@ -10,22 +10,23 @@ export class Scene {
     public name: string = null;
 
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
-    private firstFrame: boolean = true;
+    private started: boolean = false;
 
     constructor() {
+        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
         this.gameLoopEventHandler.bind(this);
     }
 
-    private gameLoopEventHandler = (): void => {
-        if (this.firstFrame === true) {
+    private gameLoopEventHandler = (event: Event): void => {
+        if (this.started === false && event.type === EVENT_START) {
             this.start();
-            this.firstFrame = false;
+            this.started = true;
+        } else if (this.started === true && event.type === EVENT_UPDATE) {
+            this.update();
         }
-
-        this.update();
     };
 
     protected start(): void {
@@ -78,6 +79,7 @@ export class Scene {
      * @description NOTE: do not use this method. Use SceneManager.unloadCurrentScene instead.
      */
     public destroy(): void {
+        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
         this.gameObjectManager.destroyAllGameObjects();
 

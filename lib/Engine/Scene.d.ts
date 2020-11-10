@@ -7,7 +7,7 @@ export declare class Scene {
     game: Game;
     name: string;
     private gameObjectManager;
-    private firstFrame;
+    private started;
     constructor();
     private gameLoopEventHandler;
     protected start(): void;

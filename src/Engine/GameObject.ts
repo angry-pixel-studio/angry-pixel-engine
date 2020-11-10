@@ -3,7 +3,7 @@ import { Component } from "./Component";
 import { Transform, TYPE_TRANSFORM } from "./Components/Transform";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
-import { container, EVENT_UPDATE } from "./Game";
+import { container, EVENT_START, EVENT_UPDATE } from "./Game";
 import { Scene } from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
@@ -19,7 +19,7 @@ export class GameObject {
     public ui: boolean = false;
 
     private _active: boolean = true;
-    private firstFrame: boolean = true;
+    private started: boolean = false;
     private _parent: GameObject | null = null;
 
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
@@ -31,6 +31,7 @@ export class GameObject {
     constructor() {
         this.addComponent(() => new Transform());
 
+        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
     }
 
@@ -59,17 +60,17 @@ export class GameObject {
         return this.sceneManager.getCurrentScene<T>();
     }
 
-    private gameLoopEventHandler = (): void => {
+    private gameLoopEventHandler = (event: Event): void => {
         if (this._active === false) {
             return;
         }
 
-        if (this.firstFrame === true) {
+        if (this.started === false && event.type === EVENT_START) {
             this.start();
-            this.firstFrame = false;
+            this.started = true;
+        } else if (this.started === true && event.type === EVENT_UPDATE) {
+            this.update();
         }
-
-        this.update();
     };
 
     protected start(): void {
@@ -184,7 +185,7 @@ export class GameObject {
     public destroyChildren(): void {
         this.gameObjectManager
             .findGameObjectsByParent(this)
-            .every((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
+            .forEach((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
     public setActive(active: boolean): void {
@@ -229,6 +230,7 @@ export class GameObject {
      * @description NOTE: do not use this method. Use GameObject.destroyGameObject or Scene.destroyGameObject instead.
      */
     public destroy(): void {
+        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
         window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.removeComponents();

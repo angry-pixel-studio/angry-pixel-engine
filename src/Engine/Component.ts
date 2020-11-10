@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
-import { container, EVENT_UPDATE, EVENT_UPDATE_PHYSICS, EVENT_UPDATE_RENDER } from "./Game";
+import { container, EVENT_START, EVENT_UPDATE, EVENT_UPDATE_PHYSICS, EVENT_UPDATE_RENDER } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 
@@ -16,18 +16,15 @@ export abstract class Component {
     public gameObject: GameObject = null;
 
     private _active: boolean = true;
-    private firstFrame: boolean = true;
+    private started: boolean = false;
 
     constructor() {
-        this.createEventListener();
+        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.addEventListener(this.updateEvent, this.gameLoopEventHandler);
     }
 
-    protected createEventListener(): void {
-        window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-    }
-
-    protected destroyEventListener(): void {
-        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+    protected get updateEvent(): string {
+        return EVENT_UPDATE;
     }
 
     public get active(): boolean {
@@ -38,17 +35,17 @@ export abstract class Component {
         this._active = active;
     }
 
-    protected gameLoopEventHandler = (): void => {
+    protected gameLoopEventHandler = (event: Event): void => {
         if (this._active === false) {
             return;
         }
 
-        if (this.firstFrame === true) {
+        if (this.started === false && event.type === EVENT_START) {
             this.start();
-            this.firstFrame = false;
+            this.started = true;
+        } else if (this.started === true && event.type === this.updateEvent) {
+            this.update();
         }
-
-        this.update();
     };
 
     protected start(): void {
@@ -99,7 +96,8 @@ export abstract class Component {
      * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
      */
     public destroy(): void {
-        this.destroyEventListener();
+        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
+        window.removeEventListener(this.updateEvent, this.gameLoopEventHandler);
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
@@ -107,21 +105,13 @@ export abstract class Component {
 }
 
 export class PhysicsComponent extends Component {
-    protected createEventListener(): void {
-        window.addEventListener(EVENT_UPDATE_PHYSICS, this.gameLoopEventHandler);
-    }
-
-    protected destroyEventListener(): void {
-        window.removeEventListener(EVENT_UPDATE_PHYSICS, this.gameLoopEventHandler);
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_PHYSICS;
     }
 }
 
 export class RenderComponent extends Component {
-    protected createEventListener(): void {
-        window.addEventListener(EVENT_UPDATE_RENDER, this.gameLoopEventHandler);
-    }
-
-    protected destroyEventListener(): void {
-        window.removeEventListener(EVENT_UPDATE_RENDER, this.gameLoopEventHandler);
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_RENDER;
     }
 }

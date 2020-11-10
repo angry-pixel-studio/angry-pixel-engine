@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { Component, PhysicsComponent } from "../Component";
 import { ICollider } from "../Core/Collision/Collider/ICollider";
 import { Collision } from "../Core/Collision/CollisionManager";
 import { TimeManager } from "../Core/Time/TimeManager";
@@ -20,7 +20,7 @@ interface Config {
 
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
-export class RigidBody extends Component {
+export class RigidBody extends PhysicsComponent {
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: ColliderComponent[] = [];
     private _gravity: number = 1;

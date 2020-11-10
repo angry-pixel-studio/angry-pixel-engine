@@ -11,7 +11,7 @@ export declare class GameObject {
     layer: string;
     ui: boolean;
     private _active;
-    private firstFrame;
+    private started;
     private _parent;
     private sceneManager;
     private gameObjectManager;

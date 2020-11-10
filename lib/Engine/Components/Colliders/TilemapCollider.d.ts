@@ -1,16 +1,16 @@
-import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
 interface Config {
-    tilesData: Rectangle[];
+    tilemapRenderer: TilemapRenderer;
     debug: boolean;
 }
 export declare const TYPE_TILEMAP_COLLIDER: string;
 export declare class TilemapCollider extends ColliderComponent {
     private renderManager;
+    private tilemapRenderer;
     debug: boolean;
-    private tilesData;
     private renderData;
-    constructor({ tilesData, debug }: Config);
+    constructor({ tilemapRenderer, debug }: Config);
     protected start(): void;
     protected update(): void;
     private updateRenderData;

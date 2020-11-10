@@ -21,7 +21,6 @@ export class Tileset {
     public tileOffset: Vector2 = new Vector2(0, 0);
 
     private _tiles: Rectangle[] = [];
-    private _loaded: boolean = false;
 
     constructor({ image, tileWidth, tileHeight, gridWidth, gridHeight, offset, tileOffset }: config) {
         // required
@@ -35,11 +34,7 @@ export class Tileset {
         this.offset = offset ? offset : this.offset;
         this.tileOffset = tileOffset ? tileOffset : this.tileOffset;
 
-        if (this.image.naturalWidth) {
-            this.generateTiles();
-        } else {
-            this.image.addEventListener("load", () => this.generateTiles());
-        }
+        this.generateTiles();
     }
 
     private generateTiles(): void {
@@ -57,8 +52,6 @@ export class Tileset {
                 index++;
             }
         }
-
-        this._loaded = true;
     }
 
     public getTile(index: number): Rectangle | null {
@@ -67,9 +60,5 @@ export class Tileset {
 
     public get tiles(): Rectangle[] {
         return this._tiles;
-    }
-
-    public get loaded(): boolean {
-        return this._loaded;
     }
 }

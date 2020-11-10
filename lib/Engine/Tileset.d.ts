@@ -18,11 +18,9 @@ export declare class Tileset {
     tileHeight: number;
     tileOffset: Vector2;
     private _tiles;
-    private _loaded;
     constructor({ image, tileWidth, tileHeight, gridWidth, gridHeight, offset, tileOffset }: config);
     private generateTiles;
     getTile(index: number): Rectangle | null;
     get tiles(): Rectangle[];
-    get loaded(): boolean;
 }
 export {};

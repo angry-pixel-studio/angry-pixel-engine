@@ -1,6 +1,6 @@
 import { Tileset } from "../../Tileset";
 import { TiledChunk, TiledLayer, TiledTilemap } from "./Tilemap/TiledTilemap";
-import { AbstractTilemapRenderer } from "./Tilemap/AbstractTilemapRenderer";
+import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
 
 interface Config {
     tileset: Tileset;
@@ -11,7 +11,7 @@ interface Config {
 
 export const TYPE_TILED_RENDERER: string = "TiledRenderer";
 
-export class TiledRenderer extends AbstractTilemapRenderer {
+export class TiledTilemapRenderer extends TilemapRenderer {
     constructor({ tileset, tilemapData, tileScale = 1, smooth = true }: Config) {
         super();
 

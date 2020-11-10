@@ -55,7 +55,7 @@ export class GameObjectManager {
     }
 
     public destroyAllGameObjects(): void {
-        this.gameObjects.every((gameObject) => this._destroyGameObject(gameObject, false));
+        this.gameObjects.forEach((gameObject: GameObject) => this._destroyGameObject(gameObject, false));
         this.gameObjects = [];
     }
 
@@ -65,7 +65,6 @@ export class GameObjectManager {
 
     private _destroyGameObject(gameObject: GameObject, destroyChildren: boolean): void {
         const index: number = this.gameObjects.indexOf(gameObject);
-
         if (index !== -1) {
             destroyChildren ? this.destroyChildren(gameObject) : null;
             gameObject.destroy();
@@ -74,7 +73,7 @@ export class GameObjectManager {
     }
 
     private destroyChildren(parent: GameObject): void {
-        this.findGameObjectsByParent(parent).every((gameObject) => {
+        this.findGameObjectsByParent(parent).forEach((gameObject) => {
             this.destroyChildren(gameObject);
             this.destroyGameObject(gameObject);
         });
