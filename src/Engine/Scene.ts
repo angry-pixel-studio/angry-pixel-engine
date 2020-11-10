@@ -30,11 +30,11 @@ export class Scene {
     };
 
     protected start(): void {
-        // do nothing
+        return;
     }
 
     protected update(): void {
-        // do nothing
+        return;
     }
 
     public get gameCamera(): GameCamera {

@@ -49,11 +49,11 @@ export abstract class Component {
     };
 
     protected start(): void {
-        // do nothing
+        return;
     }
 
     protected update(): void {
-        // do nothing
+        return;
     }
 
     public getCurrentScene<T extends Scene>(): T {

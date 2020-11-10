@@ -74,11 +74,11 @@ export class GameObject {
     };
 
     protected start(): void {
-        // do nothing
+        return;
     }
 
     protected update(): void {
-        // do nothing
+        return;
     }
 
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
