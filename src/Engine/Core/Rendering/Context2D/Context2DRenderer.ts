@@ -115,15 +115,12 @@ export class Context2DRenderer implements IContextRenderer {
         this.canvasContext.textBaseline = "middle";
 
         if (Array.isArray(renderData.text)) {
-            let first = true;
-            let lineSeparation = 0;
-
-            renderData.text.forEach((text) => {
-                lineSeparation = first ? lineSeparation : renderData.lineSeparation + renderData.textSize;
-
-                this.canvasContext.fillText(text, this.renderPosition.x, this.renderPosition.y + lineSeparation);
-
-                first = false;
+            renderData.text.forEach((text: string, index: number) => {
+                this.canvasContext.fillText(
+                    text,
+                    this.renderPosition.x,
+                    this.renderPosition.y + (renderData.lineSeparation + renderData.textSize) * index
+                );
             });
         } else {
             this.canvasContext.fillText(renderData.text, this.renderPosition.x, this.renderPosition.y);
