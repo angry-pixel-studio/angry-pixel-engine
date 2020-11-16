@@ -2,12 +2,14 @@ import { Component } from "../Component";
 import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
 export declare const TYPE_CAMERA: string;
 export declare class Camera extends Component {
+    private renderManager;
+    private domManager;
+    private gameCanvas;
     private _vpHalfWidth;
     private _vpHalfHeight;
     private _viewportRect;
     private _worldSpaceRect;
     private _renderLayers;
-    private renderManager;
     constructor();
     protected start(): void;
     private setupViewportRect;

@@ -6,15 +6,11 @@ import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
 import { TextRenderData } from "../RenderData/TextRenderData";
 
-const DEFAULT_COLOR: string = "#000000";
-
 export class Context2DRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement = null;
     private canvasContext: CanvasRenderingContext2D = null;
 
-    private renderPosition: Vector2 = new Vector2(0, 0);
     private imagePosition: Vector2 = new Vector2(0, 0);
-    private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
     public constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -30,41 +26,35 @@ export class Context2DRenderer implements IContextRenderer {
         }
     }
 
-    public render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void {
+    public render(renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
-            this.renderImage(renderData as ImageRenderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
+            this.renderImage(renderData as ImageRenderData);
         }
 
-        if (renderData.type === RenderDataType.Text && renderData.ui === true) {
-            this.renderText(renderData as TextRenderData, viewportRect);
+        if (renderData.type === RenderDataType.Text) {
+            this.renderText(renderData as TextRenderData);
         }
 
         if (renderData.type === RenderDataType.Geometric) {
-            this.renderGeometric(
-                renderData as GeometricRenderData,
-                renderData.ui === true ? viewportRect : worldSpaceViewRect
-            );
+            this.renderGeometric(renderData as GeometricRenderData);
         }
     }
 
-    private renderImage(renderData: ImageRenderData, viewRect: Rectangle): void {
-        if (this.isInsideViewRect(renderData, viewRect) === false) {
-            return;
-        }
+    private renderImage(renderData: ImageRenderData): void {
+        this.updateRenderPosition(renderData);
 
-        this.updateRenderPosition(renderData, viewRect);
         this.imagePosition.set(0, 0);
         this.canvasContext.save();
 
         if (renderData.rotation) {
             this.canvasContext.translate(
-                this.renderPosition.x + renderData.width / 2,
-                this.renderPosition.y + renderData.height / 2
+                renderData.viewportPosition.x + renderData.width / 2,
+                renderData.viewportPosition.y + renderData.height / 2
             );
             this.imagePosition.set(-renderData.width / 2, -renderData.height / 2);
             this.canvasContext.rotate(-(renderData.rotation * Math.PI) / 180);
         } else {
-            this.canvasContext.translate(this.renderPosition.x, this.renderPosition.y);
+            this.canvasContext.translate(renderData.viewportPosition.x, renderData.viewportPosition.y);
             this.imagePosition.x = renderData.flipHorizontal ? -renderData.width : this.imagePosition.x;
             this.imagePosition.y = renderData.flipVertical ? -renderData.height : this.imagePosition.y;
         }
@@ -98,8 +88,8 @@ export class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private renderText(renderData: TextRenderData, viewRect: Rectangle): void {
-        this.updateRenderPosition(renderData, viewRect);
+    private renderText(renderData: TextRenderData): void {
+        this.updateRenderPosition(renderData);
 
         this.canvasContext.save();
 
@@ -118,81 +108,54 @@ export class Context2DRenderer implements IContextRenderer {
             renderData.text.forEach((text: string, index: number) => {
                 this.canvasContext.fillText(
                     text,
-                    this.renderPosition.x,
-                    this.renderPosition.y + (renderData.lineSeparation + renderData.textSize) * index
+                    renderData.viewportPosition.x,
+                    renderData.viewportPosition.y + (renderData.lineSeparation + renderData.textSize) * index
                 );
             });
         } else {
-            this.canvasContext.fillText(renderData.text, this.renderPosition.x, this.renderPosition.y);
+            this.canvasContext.fillText(renderData.text, renderData.viewportPosition.x, renderData.viewportPosition.y);
         }
 
         this.canvasContext.restore();
     }
 
-    private renderGeometric(renderData: GeometricRenderData, viewRect: Rectangle): void {
+    private renderGeometric(renderData: GeometricRenderData): void {
         this.canvasContext.save();
 
-        this.updateRenderPosition(renderData, viewRect);
+        this.updateRenderPosition(renderData);
 
         switch (renderData.geometricType) {
             case GEOMETRIC_RECTANGLE:
                 this.canvasContext.strokeStyle = renderData.color;
                 this.canvasContext.strokeRect(
-                    this.renderPosition.x,
-                    this.renderPosition.y,
+                    renderData.viewportPosition.x,
+                    renderData.viewportPosition.y,
                     renderData.geometric.width,
                     renderData.geometric.height
                 );
                 break;
             case GEOMETRIC_POLYGON:
-                this.canvasContext.strokeStyle = renderData.color;
-
-                this.canvasContext.beginPath();
-                this.canvasContext.moveTo(
-                    renderData.geometric[0].x - viewRect.x,
-                    viewRect.y - renderData.geometric[0].y
-                );
-                this.canvasContext.lineTo(
-                    renderData.geometric[1].x - viewRect.x,
-                    viewRect.y - renderData.geometric[1].y
-                );
-                this.canvasContext.lineTo(
-                    renderData.geometric[3].x - viewRect.x,
-                    viewRect.y - renderData.geometric[3].y
-                );
-                this.canvasContext.lineTo(
-                    renderData.geometric[2].x - viewRect.x,
-                    viewRect.y - renderData.geometric[2].y
-                );
-                this.canvasContext.closePath();
-                this.canvasContext.stroke();
-
                 break;
         }
 
         this.canvasContext.restore();
     }
 
-    private isInsideViewRect(renderData: ImageRenderData, viewRect: Rectangle): boolean {
-        this.cacheRect.set(renderData.position.x, renderData.position.y, renderData.width, renderData.height);
-
-        return viewRect.overlappingRectangle(this.cacheRect);
-    }
-
-    private updateRenderPosition(renderData: RenderData, viewRect: Rectangle) {
-        this.renderPosition.x = renderData.position.x;
-        this.renderPosition.y = renderData.position.y;
-
+    private updateRenderPosition(renderData: RenderData) {
         if (renderData.type === RenderDataType.Image) {
             this.centerImage(renderData as ImageRenderData);
         }
 
-        this.renderPosition.x = Number((this.renderPosition.x - viewRect.x).toFixed(0));
-        this.renderPosition.y = Number((viewRect.y - this.renderPosition.y).toFixed(0));
+        renderData.viewportPosition.x = Number(
+            (renderData.viewportPosition.x + this.canvas.clientWidth / 2).toFixed(0)
+        );
+        renderData.viewportPosition.y = Number(
+            (this.canvas.clientHeight / 2 - renderData.viewportPosition.y).toFixed(0)
+        );
     }
 
     private centerImage(renderData: ImageRenderData) {
-        this.renderPosition.x -= Math.floor(renderData.width / 2);
-        this.renderPosition.y += Math.floor(renderData.height / 2);
+        renderData.viewportPosition.x -= Math.floor(renderData.width / 2);
+        renderData.viewportPosition.y += Math.floor(renderData.height / 2);
     }
 }

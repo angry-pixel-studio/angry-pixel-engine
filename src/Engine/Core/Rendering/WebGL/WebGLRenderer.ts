@@ -1,19 +1,14 @@
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
-import { Vector2 } from "../../../Helper/Vector2";
 import { IContextRenderer } from "../IContextRenderer";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
-import { ImageRenderer } from "./ImageRenderer";
+import { WebGLImageRenderer } from "./WebGLImageRenderer";
 
 export class WebGLRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
-    private imageRenderer: ImageRenderer;
+    private imageRenderer: WebGLImageRenderer;
 
-    private renderPosition: Vector2 = new Vector2(0, 0);
-    private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
-
-    public constructor(canvas: HTMLCanvasElement, imageRenderer: ImageRenderer) {
+    public constructor(canvas: HTMLCanvasElement, imageRenderer: WebGLImageRenderer) {
         this.canvas = canvas;
         this.gl = this.canvas.getContext("webgl2");
         this.imageRenderer = imageRenderer;
@@ -38,22 +33,16 @@ export class WebGLRenderer implements IContextRenderer {
             : null;
     }
 
-    render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void {
+    render(renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
-            this.renderImage(renderData as ImageRenderData, renderData.ui === true ? viewportRect : worldSpaceViewRect);
+            this.renderImage(renderData as ImageRenderData);
         }
     }
 
-    private renderImage(renderData: ImageRenderData, viewRect: Rectangle): void {
-        if (this.isInsideViewRect(renderData, viewRect) === false) {
-            return;
-        }
-
-        this.updateRenderPosition(renderData, viewRect);
-
+    private renderImage(renderData: ImageRenderData): void {
         this.imageRenderer.renderImage(
             renderData.image,
-            this.renderPosition,
+            renderData.viewportPosition,
             renderData.width,
             renderData.height,
             renderData.slice,
@@ -63,24 +52,5 @@ export class WebGLRenderer implements IContextRenderer {
             renderData.alpha,
             renderData.smooth
         );
-    }
-
-    private isInsideViewRect(
-        renderData: { position: Vector2; width: number; height: number },
-        viewRect: Rectangle
-    ): boolean {
-        this.cacheRect.set(
-            renderData.position.x - renderData.width / 2,
-            renderData.position.y + renderData.height / 2,
-            renderData.width,
-            renderData.height
-        );
-
-        return viewRect.overlappingRectangle(this.cacheRect);
-    }
-
-    private updateRenderPosition(renderData: RenderData, viewRect: Rectangle) {
-        this.renderPosition.x = Number((renderData.position.x - viewRect.x - viewRect.width / 2).toFixed(0));
-        this.renderPosition.y = Number((renderData.position.y - viewRect.y + viewRect.height / 2).toFixed(0));
     }
 }

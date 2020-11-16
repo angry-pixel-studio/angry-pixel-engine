@@ -12,7 +12,7 @@ export interface Collision {
 }
 
 export class CollisionManager {
-    private debug: boolean = true;
+    private debug: boolean = false;
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];
     private quad: QuadTree;
@@ -25,7 +25,10 @@ export class CollisionManager {
     }
 
     public prepare(): void {
-        //this.debugQuads(this.quad);
+        if (this.debug === true) {
+            this.debugQuads(this.quad);
+        }
+
         this.refreshQuad();
     }
 
@@ -75,11 +78,9 @@ export class CollisionManager {
     }
 
     private debugQuads(quad: QuadTree) {
-        if (!this.debug) {
-            return;
-        }
-
         const renderData = new GeometricRenderData();
+
+        renderData.debug = true;
         renderData.position = new Vector2(quad.bounds.x, quad.bounds.y);
         renderData.layer = LAYER_DEFAULT;
         renderData.geometric = quad.bounds;

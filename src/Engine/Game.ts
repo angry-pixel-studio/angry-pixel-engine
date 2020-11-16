@@ -5,79 +5,66 @@ import { loadDependencies } from "./Core/DependencyInjection/Config";
 import { Container } from "./Core/DependencyInjection/Container";
 import { TimeManager } from "./Core/Time/TimeManager";
 
-const GAME_NODE_ID: string = "miniEngineGame";
-const GAME_CANVAS_ID: string = "miniEngineGameCanvas";
-const UI_CANVAS_ID: string = "miniEngineUICanvas";
-
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
 export const EVENT_UPDATE_PHYSICS: string = "mini-engine-update-physics";
 export const EVENT_UPDATE_RENDER: string = "mini-engine-update-render";
 
-export const gameNode: HTMLDivElement = document.createElement("div");
-export const gameCanvas: HTMLCanvasElement = document.createElement("canvas");
-export const UICanvas: HTMLCanvasElement = document.createElement("canvas");
 export const container: Container = new Container();
 
-export class Game {
-    public canvasBGColor: string = "#000000";
+export interface GameConfig {
+    containerNode: HTMLElement;
+    gameWidth?: number;
+    gameHeight?: number;
+    uiEnabled?: boolean;
+    debugEnabled?: boolean;
+    bgColor?: string;
+}
 
+const defaultConfig: GameConfig = {
+    containerNode: null,
+    gameWidth: 320,
+    gameHeight: 180,
+    uiEnabled: true,
+    debugEnabled: false,
+    bgColor: "#000000",
+};
+
+export class Game {
     private sceneManager: SceneManager;
     private renderManager: RenderManager;
     private collisionManager: CollisionManager;
     private timeManager: TimeManager;
 
-    private gameContainer: HTMLElement;
-    private gameWidth: number;
-    private gameHeight: number;
-    private UIEnabled: boolean = true;
+    private _config: GameConfig;
+
     private _running: boolean = false;
     private frameRequestId: number = null;
 
-    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number, UIEnabled: boolean = true) {
-        this.gameContainer = gameContainer;
-        this.gameWidth = gameWidth;
-        this.gameHeight = gameHeight;
-        this.UIEnabled = UIEnabled;
+    constructor(config: GameConfig) {
+        this._config = {
+            ...defaultConfig,
+            ...config,
+        };
 
-        this.setupHTMLDom();
+        if (this.config.containerNode === null) {
+            throw new Error("Config parameter 'containerNode' cannot be empty.");
+        }
+
         this.setupManagers();
     }
 
-    private setupHTMLDom() {
-        gameNode.id = GAME_NODE_ID;
-        gameNode.style.position = "relative";
-        gameNode.style.width = `${this.gameWidth}px`;
-        gameNode.style.height = `${this.gameHeight}px`;
-        gameNode.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
-        this.gameContainer.appendChild(gameNode);
-
-        gameCanvas.id = GAME_CANVAS_ID;
-        gameCanvas.width = Math.floor(this.gameWidth);
-        gameCanvas.height = Math.floor(this.gameHeight);
-        gameCanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
-
-        if (this.UIEnabled) {
-            UICanvas.id = UI_CANVAS_ID;
-            UICanvas.style.position = "absolute";
-            UICanvas.style.zIndex = "10";
-            UICanvas.width = Math.floor(this.gameWidth);
-            UICanvas.height = Math.floor(this.gameHeight);
-            UICanvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
-
-            gameNode.appendChild(UICanvas);
-        }
-
-        gameNode.appendChild(gameCanvas);
-    }
-
     private setupManagers(): void {
-        loadDependencies(container, this, gameNode, gameCanvas, UICanvas);
+        loadDependencies(container, this);
 
         this.renderManager = container.getSingleton<RenderManager>("RenderManager");
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
         this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
         this.timeManager = container.getSingleton<TimeManager>("TimeManager");
+    }
+
+    public get config(): GameConfig {
+        return this._config;
     }
 
     public get running(): boolean {
@@ -99,7 +86,7 @@ export class Game {
         this.stopLoop();
         setTimeout(() => {
             this.sceneManager.unloadCurrentScene();
-            this.renderManager.clearCanvas(this.canvasBGColor);
+            this.renderManager.clearCanvas(this._config.bgColor);
         }, 100);
     }
 
@@ -114,7 +101,7 @@ export class Game {
         this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
         this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
-        this.renderManager.clearCanvas(this.canvasBGColor);
+        this.renderManager.clearCanvas(this._config.bgColor);
         this.renderManager.render();
 
         this.requestAnimationFrame();

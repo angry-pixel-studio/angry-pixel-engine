@@ -11,7 +11,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     public tilemapData: string;
     public tiledTilemap: TiledTilemap;
     public tileScale: number = 1;
-    public smooth: boolean = true; // default TRUE to avoid tiles bleeding
+    public smooth: boolean = true; // set to FALSE to avoid bleeding
 
     protected tileWidth: number = 0;
     protected tileHeight: number = 0;

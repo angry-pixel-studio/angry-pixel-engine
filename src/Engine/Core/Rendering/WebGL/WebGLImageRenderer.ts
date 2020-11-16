@@ -7,7 +7,7 @@ import { Vector2 } from "../../../Helper/Vector2";
 import { sha256 } from "js-sha256";
 import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
 
-export class ImageRenderer {
+export class WebGLImageRenderer {
     private textureFactory: TextureFactory;
     private gl: WebGLRenderingContext;
 

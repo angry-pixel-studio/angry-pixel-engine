@@ -1,18 +1,13 @@
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
 import { IContextRenderer } from "../IContextRenderer";
 import { RenderData } from "../RenderData/RenderData";
-import { ImageRenderer } from "./ImageRenderer";
+import { WebGLImageRenderer } from "./WebGLImageRenderer";
 export declare class WebGLRenderer implements IContextRenderer {
     private canvas;
     private gl;
     private imageRenderer;
-    private renderPosition;
-    private cacheRect;
-    constructor(canvas: HTMLCanvasElement, imageRenderer: ImageRenderer);
+    constructor(canvas: HTMLCanvasElement, imageRenderer: WebGLImageRenderer);
     clearCanvas(color: string): void;
     private hexToRgb;
-    render(renderData: RenderData, worldSpaceViewRect: Rectangle, viewportRect: Rectangle): void;
+    render(renderData: RenderData): void;
     private renderImage;
-    private isInsideViewRect;
-    private updateRenderPosition;
 }

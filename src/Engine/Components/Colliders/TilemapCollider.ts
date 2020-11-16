@@ -55,6 +55,7 @@ export class TilemapCollider extends ColliderComponent {
     }
 
     private updateRenderData(renderData: GeometricRenderData, collider: ICollider): void {
+        renderData.debug = true;
         renderData.position = collider.coordinates;
         renderData.layer = LAYER_DEFAULT;
         renderData.geometric = collider;

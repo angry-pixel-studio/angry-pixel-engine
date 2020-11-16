@@ -99,7 +99,7 @@ export class SpriteRenderer extends RenderComponent {
             this.renderData.position.y - this.goPosition.y
         );
 
-        (this.renderData.position.x = this.goPosition.x + radius * Math.cos(angle)),
-            (this.renderData.position.y = this.goPosition.y - radius * Math.sin(angle));
+        this.renderData.position.x = this.goPosition.x + radius * Math.cos(angle);
+        this.renderData.position.y = this.goPosition.y - radius * Math.sin(angle);
     }
 }

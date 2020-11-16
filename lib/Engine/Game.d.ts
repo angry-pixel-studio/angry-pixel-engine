@@ -4,25 +4,26 @@ export declare const EVENT_START: string;
 export declare const EVENT_UPDATE: string;
 export declare const EVENT_UPDATE_PHYSICS: string;
 export declare const EVENT_UPDATE_RENDER: string;
-export declare const gameNode: HTMLDivElement;
-export declare const gameCanvas: HTMLCanvasElement;
-export declare const UICanvas: HTMLCanvasElement;
 export declare const container: Container;
+export interface GameConfig {
+    containerNode: HTMLElement;
+    gameWidth?: number;
+    gameHeight?: number;
+    uiEnabled?: boolean;
+    debugEnabled?: boolean;
+    bgColor?: string;
+}
 export declare class Game {
-    canvasBGColor: string;
     private sceneManager;
     private renderManager;
     private collisionManager;
     private timeManager;
-    private gameContainer;
-    private gameWidth;
-    private gameHeight;
-    private UIEnabled;
+    private _config;
     private _running;
     private frameRequestId;
-    constructor(gameContainer: HTMLElement, gameWidth: number, gameHeight: number, UIEnabled?: boolean);
-    private setupHTMLDom;
+    constructor(config: GameConfig);
     private setupManagers;
+    get config(): GameConfig;
     get running(): boolean;
     addScene(name: string, sceneFunction: SceneConstructor, openingScene?: boolean): void;
     run(): void;

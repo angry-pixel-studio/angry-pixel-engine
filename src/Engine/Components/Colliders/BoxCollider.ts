@@ -71,6 +71,7 @@ export class BoxCollider extends ColliderComponent {
     }
 
     private updateRenderData(): void {
+        this.renderData.debug = true;
         this.renderData.position = this.colliders[0].coordinates;
         this.renderData.layer = LAYER_DEFAULT;
         this.renderData.geometric = this.colliders[0];
