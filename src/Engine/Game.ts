@@ -4,6 +4,11 @@ import { CollisionManager } from "./Core/Collision/CollisionManager";
 import { loadDependencies } from "./Core/DependencyInjection/Config";
 import { Container } from "./Core/DependencyInjection/Container";
 import { TimeManager } from "./Core/Time/TimeManager";
+import { AssetManagerFacade } from "./Facades/AssetManagerFacade";
+import { DomManagerFacade } from "./Facades/DomManagerFacade";
+import { InputManagerFacade } from "./Facades/InputManagerFacade";
+import { SceneManagerFacade } from "./Facades/SceneManagerFacade";
+import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -12,7 +17,7 @@ export const EVENT_UPDATE_RENDER: string = "mini-engine-update-render";
 
 export const container: Container = new Container();
 
-export interface GameConfig {
+export interface IGameConfig {
     containerNode: HTMLElement;
     gameWidth?: number;
     gameHeight?: number;
@@ -21,7 +26,7 @@ export interface GameConfig {
     bgColor?: string;
 }
 
-const defaultConfig: GameConfig = {
+const defaultConfig: IGameConfig = {
     containerNode: null,
     gameWidth: 320,
     gameHeight: 180,
@@ -36,12 +41,12 @@ export class Game {
     private collisionManager: CollisionManager;
     private timeManager: TimeManager;
 
-    private _config: GameConfig;
+    private _config: IGameConfig;
 
     private _running: boolean = false;
     private frameRequestId: number = null;
 
-    constructor(config: GameConfig) {
+    constructor(config: IGameConfig) {
         this._config = {
             ...defaultConfig,
             ...config,
@@ -52,6 +57,7 @@ export class Game {
         }
 
         this.setupManagers();
+        this.initializeFacades();
     }
 
     private setupManagers(): void {
@@ -63,7 +69,15 @@ export class Game {
         this.timeManager = container.getSingleton<TimeManager>("TimeManager");
     }
 
-    public get config(): GameConfig {
+    private initializeFacades(): void {
+        AssetManagerFacade.initialize();
+        DomManagerFacade.initialize();
+        InputManagerFacade.initialize();
+        SceneManagerFacade.initialize();
+        TimeManagerFacade.initialize();
+    }
+
+    public get config(): IGameConfig {
         return this._config;
     }
 

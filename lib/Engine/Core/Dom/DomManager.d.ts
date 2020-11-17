@@ -6,13 +6,13 @@ export declare class DomManager {
     private debugEnabled;
     private _gameNode;
     private _gameCanvas;
-    private _uiCanvas;
-    private _debugCanvas;
+    private _uiCanvas?;
+    private _debugCanvas?;
     constructor(containerNode: HTMLElement, gameWidth: number, gameHeight: number, uiEnabled?: boolean, debugEnabled?: boolean);
     get gameNode(): HTMLElement;
     get gameCanvas(): HTMLCanvasElement;
-    get uiCanvas(): HTMLCanvasElement;
-    get debugCanvas(): HTMLCanvasElement;
+    get uiCanvas(): HTMLCanvasElement | null;
+    get debugCanvas(): HTMLCanvasElement | null;
     private setupDom;
     private setupGameNode;
     private setupGameCanvas;

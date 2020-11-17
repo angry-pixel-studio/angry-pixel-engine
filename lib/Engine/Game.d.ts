@@ -5,7 +5,7 @@ export declare const EVENT_UPDATE: string;
 export declare const EVENT_UPDATE_PHYSICS: string;
 export declare const EVENT_UPDATE_RENDER: string;
 export declare const container: Container;
-export interface GameConfig {
+export interface IGameConfig {
     containerNode: HTMLElement;
     gameWidth?: number;
     gameHeight?: number;
@@ -21,9 +21,10 @@ export declare class Game {
     private _config;
     private _running;
     private frameRequestId;
-    constructor(config: GameConfig);
+    constructor(config: IGameConfig);
     private setupManagers;
-    get config(): GameConfig;
+    private initializeFacades;
+    get config(): IGameConfig;
     get running(): boolean;
     addScene(name: string, sceneFunction: SceneConstructor, openingScene?: boolean): void;
     run(): void;

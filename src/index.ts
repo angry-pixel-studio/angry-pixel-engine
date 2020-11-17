@@ -3,7 +3,7 @@ export * from "./Engine/Helper/Vector2";
 export * from "./Engine/Libs/Geometric/Shapes/Rectangle";
 
 // main
-export * from "./Engine/Game";
+export { Game, IGameConfig } from "./Engine/Game";
 export * from "./Engine/Scene";
 export * from "./Engine/GameObject";
 export * from "./Engine/Component";
@@ -27,3 +27,10 @@ export * from "./Engine/Components/Transform";
 
 // game objects
 export * from "./Engine/GameObjects/GameCamera";
+
+// facades
+export { SceneManagerFacade as SceneManager } from "./Engine/Facades/SceneManagerFacade";
+export { InputManagerFacade as InputManager } from "./Engine/Facades/InputManagerFacade";
+export { AssetManagerFacade as AssetManager } from "./Engine/Facades/AssetManagerFacade";
+export { DomManagerFacade as DomManager } from "./Engine/Facades/DomManagerFacade";
+export { TimeManagerFacade as TimeManager } from "./Engine/Facades/TimeManagerFacade";

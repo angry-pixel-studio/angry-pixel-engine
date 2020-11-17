@@ -12,8 +12,8 @@ export class DomManager {
 
     private _gameNode: HTMLElement = null;
     private _gameCanvas: HTMLCanvasElement = null;
-    private _uiCanvas: HTMLCanvasElement = null;
-    private _debugCanvas: HTMLCanvasElement = null;
+    private _uiCanvas?: HTMLCanvasElement = null;
+    private _debugCanvas?: HTMLCanvasElement = null;
 
     constructor(
         containerNode: HTMLElement,
@@ -39,11 +39,11 @@ export class DomManager {
         return this._gameCanvas;
     }
 
-    public get uiCanvas(): HTMLCanvasElement {
+    public get uiCanvas(): HTMLCanvasElement | null {
         return this._uiCanvas;
     }
 
-    public get debugCanvas(): HTMLCanvasElement {
+    public get debugCanvas(): HTMLCanvasElement | null {
         return this._debugCanvas;
     }
 
