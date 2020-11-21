@@ -8,6 +8,6 @@ export declare class Animation {
     sprites: Sprite[];
     speed: number;
     loop: boolean;
-    constructor({ sprites, speed, loop }: config);
+    constructor(config: config);
 }
 export {};

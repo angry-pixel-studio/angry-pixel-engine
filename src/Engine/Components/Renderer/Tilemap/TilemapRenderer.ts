@@ -33,8 +33,8 @@ export abstract class TilemapRenderer extends RenderComponent {
     }
 
     protected start(): void {
-        this.tileWidth = this.tileset.tileWidth * this.tileScale;
-        this.tileHeight = this.tileset.tileHeight * this.tileScale;
+        this.tileWidth = this.tileset.tileWidth * this.tileScale * this.gameObject.transform.scale.x;
+        this.tileHeight = this.tileset.tileHeight * this.tileScale * this.gameObject.transform.scale.y;
         this.processTilemap();
         this.updateTilesPosition();
     }

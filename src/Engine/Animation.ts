@@ -11,9 +11,9 @@ export class Animation {
     public speed: number = 1;
     public loop: boolean = false;
 
-    constructor({ sprites, speed = 1, loop = false }: config) {
-        this.sprites = sprites;
-        this.speed = speed;
-        this.loop = loop;
+    constructor(config: config) {
+        this.sprites = config.sprites;
+        this.speed = config.speed ?? this.speed;
+        this.loop = config.loop ?? this.loop;
     }
 }

@@ -1,9 +1,9 @@
 import { Component } from "../Component";
 
 interface Config {
-    audio: HTMLAudioElement | null;
-    volume: number;
-    loop: boolean;
+    audio?: HTMLAudioElement;
+    volume?: number;
+    loop?: boolean;
 }
 
 const userInputEventNames = [
@@ -24,21 +24,21 @@ export const TYPE_AUDIO_PLAYER: string = "AudioPlayer";
 export class AudioPlayer extends Component {
     public volume: number = 1;
     public loop: boolean = false;
-    public audio: HTMLAudioElement | null;
+    public audio: HTMLAudioElement = null;
 
     private audioClone: HTMLAudioElement = null;
     private _playing: boolean = false;
     private _paused: boolean = false;
 
-    constructor({ audio = null, volume = 1, loop = false }: Config = { audio: null, volume: 1, loop: false }) {
+    constructor(config: Config = { audio: null, volume: 1, loop: false }) {
         super();
 
         this.allowMultiple = false;
         this.type = TYPE_AUDIO_PLAYER;
 
-        this.audio = audio;
-        this.volume = volume;
-        this.loop = loop;
+        this.audio = config.audio ?? this.audio;
+        this.volume = config.volume ?? this.volume;
+        this.loop = config.loop ?? this.loop;
     }
 
     public playAudio(audio: HTMLAudioElement, volume: number | null = null): void {

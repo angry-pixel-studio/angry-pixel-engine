@@ -146,12 +146,8 @@ export class Context2DRenderer implements IContextRenderer {
             this.centerImage(renderData as ImageRenderData);
         }
 
-        renderData.viewportPosition.x = Number(
-            (renderData.viewportPosition.x + this.canvas.clientWidth / 2).toFixed(0)
-        );
-        renderData.viewportPosition.y = Number(
-            (this.canvas.clientHeight / 2 - renderData.viewportPosition.y).toFixed(0)
-        );
+        renderData.viewportPosition.x = Number((renderData.viewportPosition.x + this.canvas.width / 2).toFixed(0));
+        renderData.viewportPosition.y = Number((this.canvas.height / 2 - renderData.viewportPosition.y).toFixed(0));
     }
 
     private centerImage(renderData: ImageRenderData) {

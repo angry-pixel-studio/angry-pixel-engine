@@ -19,11 +19,11 @@ export class Animator extends Component {
     private currentAnimation: AnimationPlayer = null;
     private defaultSprite: Sprite = null;
 
-    constructor({ spriteRenderer }: Config) {
+    constructor(config: Config) {
         super();
 
         this.type = TYPE_ANIMATOR;
-        this.spriteRenderer = spriteRenderer;
+        this.spriteRenderer = config.spriteRenderer;
     }
 
     protected start(): void {

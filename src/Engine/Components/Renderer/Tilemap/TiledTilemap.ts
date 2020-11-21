@@ -13,9 +13,9 @@ export interface TiledChunk {
     height: number;
 }
 
-export interface TiledLayer extends TiledChunk {
-    chunks: TiledChunk[] | undefined;
-    data: number[] | undefined;
+export interface TiledLayer {
+    chunks?: TiledChunk[];
+    data?: number[];
     x: number;
     y: number;
     width: number;

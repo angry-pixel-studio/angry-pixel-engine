@@ -2,7 +2,7 @@ import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
 interface Config {
     tilemapRenderer: TilemapRenderer;
-    debug: boolean;
+    debug?: boolean;
 }
 export declare const TYPE_TILEMAP_COLLIDER: string;
 export declare class TilemapCollider extends ColliderComponent {
@@ -10,7 +10,7 @@ export declare class TilemapCollider extends ColliderComponent {
     private tilemapRenderer;
     debug: boolean;
     private renderData;
-    constructor({ tilemapRenderer, debug }: Config);
+    constructor(config: Config);
     protected start(): void;
     protected update(): void;
     private updateRenderData;

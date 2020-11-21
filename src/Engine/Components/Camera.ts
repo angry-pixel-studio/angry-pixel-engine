@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { Component, RenderComponent } from "../Component";
 import { DomManager } from "../Core/Dom/DomManager";
 import { RenderManager } from "../Core/Rendering/RenderManager";
 import { container } from "../Game";
@@ -9,7 +9,7 @@ const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
 export const TYPE_CAMERA: string = "Camera";
 
-export class Camera extends Component {
+export class Camera extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private domManager: DomManager = container.getSingleton<DomManager>("DomManager");
     private gameCanvas: HTMLCanvasElement;
@@ -34,9 +34,9 @@ export class Camera extends Component {
     }
 
     private setupViewportRect(): void {
-        this._viewportRect.setPosition(-(this.gameCanvas.clientWidth / 2), this.gameCanvas.clientHeight / 2);
-        this._viewportRect.width = this.gameCanvas.clientWidth;
-        this._viewportRect.height = this.gameCanvas.clientHeight;
+        this._viewportRect.setPosition(-(this.gameCanvas.width / 2), this.gameCanvas.height / 2);
+        this._viewportRect.width = this.gameCanvas.width;
+        this._viewportRect.height = this.gameCanvas.height;
 
         this._vpHalfWidth = this._viewportRect.width / 2;
         this._vpHalfHeight = this._viewportRect.height / 2;

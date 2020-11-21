@@ -3,10 +3,11 @@ export declare class MouseController {
     scrollButonPressed: boolean;
     rightButtonPressed: boolean;
     private gameNode;
+    private gameCanvas;
     private viewportPosition;
     private lastViewportPosition;
     private _hasMoved;
-    constructor(gameNode: HTMLElement);
+    constructor(gameNode: HTMLElement, gameCanvas: HTMLCanvasElement);
     get hasMoved(): boolean;
     private setup;
     private updateButtonDown;

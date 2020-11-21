@@ -2,13 +2,13 @@ import { RenderComponent } from "../../Component";
 import { Sprite } from "../../Sprite";
 interface Config {
     sprite: Sprite;
-    offsetX: number;
-    offsetY: number;
-    smooth: boolean;
-    rotation: number;
-    flipHorizontal: boolean;
-    flipVertical: boolean;
-    opacity: number;
+    offsetX?: number;
+    offsetY?: number;
+    smooth?: boolean;
+    rotation?: number;
+    flipHorizontal?: boolean;
+    flipVertical?: boolean;
+    opacity?: number;
 }
 export declare const TYPE_SPRITE_RENDERER: string;
 export declare class SpriteRenderer extends RenderComponent {
@@ -23,7 +23,7 @@ export declare class SpriteRenderer extends RenderComponent {
     private renderManager;
     private renderData;
     private goPosition;
-    constructor({ sprite, offsetX, offsetY, smooth, rotation, flipHorizontal, flipVertical, opacity, }: Config);
+    constructor(config: Config);
     protected start(): void;
     protected update(): void;
     private calculateRenderPosition;

@@ -104,13 +104,13 @@ export abstract class Component {
     }
 }
 
-export class PhysicsComponent extends Component {
+export abstract class PhysicsComponent extends Component {
     protected get updateEvent(): string {
         return EVENT_UPDATE_PHYSICS;
     }
 }
 
-export class RenderComponent extends Component {
+export abstract class RenderComponent extends Component {
     protected get updateEvent(): string {
         return EVENT_UPDATE_RENDER;
     }

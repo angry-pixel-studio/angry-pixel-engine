@@ -15,7 +15,7 @@ interface Config {
     rigidBodyType: RigidBodyType;
     colliders: ColliderComponent[];
     layersToCollide: string[];
-    gravity: number;
+    gravity?: number;
 }
 
 export const TYPE_RIGIDBODY: string = "RigidBody";
@@ -32,16 +32,16 @@ export class RigidBody extends PhysicsComponent {
 
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
 
-    constructor({ rigidBodyType, colliders, layersToCollide, gravity = 1 }: Config) {
+    constructor(config: Config) {
         super();
 
         this.type = TYPE_RIGIDBODY;
         this.allowMultiple = false;
 
-        this._rigidBodyType = rigidBodyType;
-        this._colliderComponents = colliders;
-        this._layersToCollide = layersToCollide;
-        this._gravity = gravity;
+        this._rigidBodyType = config.rigidBodyType;
+        this._colliderComponents = config.colliders;
+        this._layersToCollide = config.layersToCollide;
+        this._gravity = config.gravity ?? this._gravity;
     }
 
     public get rigidBodyType(): RigidBodyType {
@@ -49,7 +49,7 @@ export class RigidBody extends PhysicsComponent {
     }
 
     public set velocity(velocity: Vector2) {
-        this.velocity.set(velocity.x, velocity.y);
+        this._velocity.set(velocity.x, velocity.y);
     }
 
     public get velocity(): Vector2 {
@@ -57,7 +57,7 @@ export class RigidBody extends PhysicsComponent {
     }
 
     public set gravity(gravity: number) {
-        this.gravity = gravity;
+        this._gravity = gravity;
     }
 
     public get gravity(): number {

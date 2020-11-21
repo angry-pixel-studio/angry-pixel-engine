@@ -9,7 +9,7 @@ interface Config {
     rigidBodyType: RigidBodyType;
     colliders: ColliderComponent[];
     layersToCollide: string[];
-    gravity: number;
+    gravity?: number;
 }
 export declare const TYPE_RIGIDBODY: string;
 export declare class RigidBody extends PhysicsComponent {
@@ -21,7 +21,7 @@ export declare class RigidBody extends PhysicsComponent {
     private deltaVelocity;
     private collisions;
     private timeManager;
-    constructor({ rigidBodyType, colliders, layersToCollide, gravity }: Config);
+    constructor(config: Config);
     get rigidBodyType(): RigidBodyType;
     set velocity(velocity: Vector2);
     get velocity(): Vector2;

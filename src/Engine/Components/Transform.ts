@@ -4,10 +4,10 @@ import { Vector2 } from "../Helper/Vector2";
 export const TYPE_TRANSFORM: string = "Transform";
 
 export class Transform extends Component {
-    public position: Vector2 = new Vector2(0, 0);
-    public innerPosition: Vector2 = new Vector2(0, 0);
-    public scale: Vector2 = new Vector2(1, 1);
-    public rotation: number = 0;
+    private _position: Vector2 = new Vector2(0, 0);
+    private _innerPosition: Vector2 = new Vector2(0, 0);
+    private _scale: Vector2 = new Vector2(1, 1);
+    private _rotation: number = 0;
 
     private parentTransform: Transform = null;
 
@@ -18,8 +18,36 @@ export class Transform extends Component {
         this.type = TYPE_TRANSFORM;
     }
 
-    protected start(): void {
-        this.update();
+    public get position(): Vector2 {
+        return this._position;
+    }
+
+    public set position(position: Vector2) {
+        this._position.set(position.x, position.y);
+    }
+
+    public get innerPosition(): Vector2 {
+        return this._innerPosition;
+    }
+
+    public set innerPosition(innerPosition: Vector2) {
+        this._innerPosition.set(innerPosition.x, innerPosition.y);
+    }
+
+    public get scale(): Vector2 {
+        return this._scale;
+    }
+
+    public set scale(scale: Vector2) {
+        this._scale.set(scale.x, scale.y);
+    }
+
+    public get rotation(): number {
+        return this._rotation;
+    }
+
+    public set rotation(rotation: number) {
+        this._rotation = rotation;
     }
 
     protected update(): void {
@@ -34,19 +62,19 @@ export class Transform extends Component {
         if (this.parentTransform !== null) {
             this.translateFromParent();
         } else {
-            this.innerPosition.x = this.position.x;
-            this.innerPosition.y = this.position.y;
+            this._innerPosition.x = this._position.x;
+            this._innerPosition.y = this._position.y;
         }
     }
 
     private translateFromParent(): void {
-        const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
-        const thisRad: number = Math.atan2(this.innerPosition.x, this.innerPosition.y);
-        const radius: number = Math.hypot(this.innerPosition.x, this.innerPosition.y);
+        const parentRad: number = (this.parentTransform._rotation * Math.PI) / 180.0;
+        const thisRad: number = Math.atan2(this._innerPosition.x, this._innerPosition.y);
+        const radius: number = Math.hypot(this._innerPosition.x, this._innerPosition.y);
 
-        this.position.x = this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad);
-        this.position.y = this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad);
-        this.rotation = this.parentTransform.rotation;
+        this._position.x = this.parentTransform._position.x + radius * Math.sin(thisRad - parentRad);
+        this._position.y = this.parentTransform._position.y + radius * Math.cos(thisRad - parentRad);
+        this._rotation = this.parentTransform._rotation;
     }
 
     public forceUpdate(): void {

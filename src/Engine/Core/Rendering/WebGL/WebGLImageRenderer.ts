@@ -4,7 +4,7 @@ import { mat4 } from "gl-matrix";
 import { ProgramFactory } from "./ProgramFactory";
 import { TextureFactory } from "./TextureFactory";
 import { Vector2 } from "../../../Helper/Vector2";
-import { sha256 } from "js-sha256";
+import * as sha256 from "crypto-js/sha256";
 import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
 
 export class WebGLImageRenderer {
@@ -100,7 +100,7 @@ export class WebGLImageRenderer {
         alpha: number = 1,
         smooth: boolean = true
     ): void {
-        const textureHash: string = sha256(image.src);
+        const textureHash: string = sha256(image.src).toString();
         if (this.texcache.has(textureHash) === false) {
             this.texcache.set(textureHash, this.textureFactory.createFromImage(this.gl, image, smooth));
         }

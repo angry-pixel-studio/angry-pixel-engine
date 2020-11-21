@@ -2,9 +2,9 @@ import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
 import { Vector2 } from "./Helper/Vector2";
 interface config {
     image: HTMLImageElement;
-    scale: Vector2;
-    slice: Rectangle | null;
-    smooth: boolean;
+    scale?: Vector2;
+    slice?: Rectangle | null;
+    smooth?: boolean;
 }
 export declare class Sprite {
     image: HTMLImageElement;
@@ -14,7 +14,7 @@ export declare class Sprite {
     scale: Vector2;
     smooth: boolean;
     private _loaded;
-    constructor({ image, slice, scale, smooth }: config);
+    constructor(config: config);
     get loaded(): boolean;
     private onLoad;
 }

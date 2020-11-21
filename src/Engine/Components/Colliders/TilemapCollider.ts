@@ -11,7 +11,7 @@ import { ColliderComponent } from "./ColliderComponent";
 
 interface Config {
     tilemapRenderer: TilemapRenderer;
-    debug: boolean;
+    debug?: boolean;
 }
 
 export const TYPE_TILEMAP_COLLIDER: string = "TilemapCollider";
@@ -23,12 +23,12 @@ export class TilemapCollider extends ColliderComponent {
     public debug: boolean = false;
     private renderData: GeometricRenderData[] = [];
 
-    constructor({ tilemapRenderer, debug = false }: Config) {
+    constructor(config: Config) {
         super();
 
         this.type = TYPE_TILEMAP_COLLIDER;
-        this.tilemapRenderer = tilemapRenderer;
-        this.debug = debug;
+        this.tilemapRenderer = config.tilemapRenderer;
+        this.debug = config.debug ?? this.debug;
     }
 
     protected start(): void {

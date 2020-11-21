@@ -8,7 +8,7 @@ export class TimeManager {
 
     public update(time: number): void {
         const now: number = time * 0.001;
-        this._deltaTime = Math.min(0.1, now - this.then);
+        this._deltaTime = Math.min(Math.max(0, now - this.then), 0.1);
         this.then = now;
     }
 

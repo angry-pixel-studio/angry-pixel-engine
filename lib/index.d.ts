@@ -25,3 +25,6 @@ export { InputManagerFacade as InputManager } from "./Engine/Facades/InputManage
 export { AssetManagerFacade as AssetManager } from "./Engine/Facades/AssetManagerFacade";
 export { DomManagerFacade as DomManager } from "./Engine/Facades/DomManagerFacade";
 export { TimeManagerFacade as TimeManager } from "./Engine/Facades/TimeManagerFacade";
+export * from "./Engine/Core/Input/KeyboardController";
+export * from "./Engine/Core/Input/MouseController";
+export * from "./Engine/Core/Input/GamepadController";

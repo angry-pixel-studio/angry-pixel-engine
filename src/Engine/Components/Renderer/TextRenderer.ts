@@ -4,57 +4,41 @@ import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 
 interface Config {
-    text: string;
-    font: string;
-    size: number;
-    color: string;
-    bold: boolean;
-    italic: boolean;
-    lineSeparation: number;
-    width: number;
-    height: number;
+    text: string | string[];
+    font?: string;
+    size?: number;
+    color?: string;
+    bold?: boolean;
+    italic?: boolean;
+    lineSeparation?: number;
 }
 
 export const TYPE_TEXT_RENDERER = "TextRenderer";
 
 export class TextRenderer extends RenderComponent {
-    public text: string = "";
+    public text: string | string[] = null;
     public font: string = "Sans";
     public size: number = 12;
     public color: string = "#000000";
     public bold: boolean = false;
     public italic: boolean = false;
     public lineSeparation: number = 5;
-    public width: number = 0;
-    public height: number = 0;
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
 
-    constructor({
-        width,
-        height,
-        text = "",
-        font = "Sans",
-        size = 12,
-        color = "#000000",
-        bold = false,
-        italic = false,
-        lineSeparation = 5,
-    }: Config) {
+    constructor(config: Config) {
         super();
 
         this.type = TYPE_TEXT_RENDERER;
 
-        this.width = width;
-        this.height = height;
-        this.text = text;
-        this.font = font;
-        this.size = size;
-        this.color = color;
-        this.bold = bold;
-        this.italic = italic;
-        this.lineSeparation = lineSeparation;
+        this.text = config.text;
+        this.font = config.font ?? this.font;
+        this.size = config.size ?? this.size;
+        this.color = config.color ?? this.color;
+        this.bold = config.bold ?? this.bold;
+        this.italic = config.italic ?? this.italic;
+        this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
     }
 
     protected start(): void {

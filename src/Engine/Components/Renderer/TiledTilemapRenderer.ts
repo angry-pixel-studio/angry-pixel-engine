@@ -5,22 +5,22 @@ import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
 interface Config {
     tileset: Tileset;
     tilemapData: TiledTilemap;
-    tileScale: number;
-    smooth: boolean;
+    tileScale?: number;
+    smooth?: boolean;
 }
 
 export const TYPE_TILED_RENDERER: string = "TiledRenderer";
 
 export class TiledTilemapRenderer extends TilemapRenderer {
-    constructor({ tileset, tilemapData, tileScale = 1, smooth = true }: Config) {
+    constructor(config: Config) {
         super();
 
         this.type = TYPE_TILED_RENDERER;
 
-        this.tileset = tileset;
-        this.tiledTilemap = tilemapData;
-        this.tileScale = tileScale;
-        this.smooth = smooth;
+        this.tileset = config.tileset;
+        this.tiledTilemap = config.tilemapData;
+        this.tileScale = config.tileScale ?? 1;
+        this.smooth = config.smooth ?? false;
     }
 
     protected processTilemap(): void {
@@ -33,7 +33,7 @@ export class TiledTilemapRenderer extends TilemapRenderer {
         this.tilemapProcessed = true;
     }
 
-    private processChunk(chunk: TiledChunk, alpha: number = 1): void {
+    private processChunk(chunk: TiledChunk | TiledLayer, alpha: number = 1): void {
         let dataIndex = 0;
 
         for (let row = 0; row < chunk.height; row++) {

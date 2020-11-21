@@ -11,7 +11,7 @@ export declare class Animator extends Component {
     private animations;
     private currentAnimation;
     private defaultSprite;
-    constructor({ spriteRenderer }: Config);
+    constructor(config: Config);
     protected start(): void;
     protected update(): void;
     addAnimation(name: string, animation: Animation): this;

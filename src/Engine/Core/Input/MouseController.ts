@@ -7,12 +7,14 @@ export class MouseController {
     public rightButtonPressed: boolean = false;
 
     private gameNode: HTMLElement;
+    private gameCanvas: HTMLCanvasElement;
     private viewportPosition: Vector2 = new Vector2(0, 0);
     private lastViewportPosition: Vector2 = new Vector2(0, 0);
     private _hasMoved: boolean = false;
 
-    constructor(gameNode: HTMLElement) {
+    constructor(gameNode: HTMLElement, gameCanvas: HTMLCanvasElement) {
         this.gameNode = gameNode;
+        this.gameCanvas = gameCanvas;
 
         this.setup();
     }
@@ -22,14 +24,18 @@ export class MouseController {
     }
 
     private setup(): void {
-        this.gameNode.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
-        this.gameNode.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
-        this.gameNode.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+        const canvas: HTMLCanvasElement = this.gameNode.querySelector<HTMLCanvasElement>("canvas");
+
+        canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
+        canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
+        canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+
         window.addEventListener(EVENT_UPDATE, () => this.update());
     }
 
     private updateButtonDown(event: MouseEvent) {
         event.preventDefault();
+        event.stopPropagation();
 
         this.leftButtonPressed = event.button === 0;
         this.scrollButonPressed = event.button === 1;
@@ -38,6 +44,7 @@ export class MouseController {
 
     private updateButtonUp(event: MouseEvent) {
         event.preventDefault();
+        event.stopPropagation();
 
         this.leftButtonPressed = event.button === 0 ? false : this.leftButtonPressed;
         this.scrollButonPressed = event.button === 1 ? false : this.scrollButonPressed;
@@ -46,11 +53,10 @@ export class MouseController {
 
     private updatePosition(event: MouseEvent) {
         event.preventDefault();
+        event.stopPropagation();
 
-        const rect: DOMRect = this.gameNode.getBoundingClientRect();
-
-        this.viewportPosition.x = event.clientX - rect.left;
-        this.viewportPosition.y = event.clientY - rect.top;
+        this.viewportPosition.x = event.offsetX / (this.gameCanvas.clientWidth / this.gameCanvas.width);
+        this.viewportPosition.y = event.offsetY / (this.gameCanvas.clientHeight / this.gameCanvas.height);
     }
 
     private update(): void {

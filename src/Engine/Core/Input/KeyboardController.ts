@@ -1,5 +1,5 @@
 export class KeyboardController {
-    private keyPresses: { [k: string]: boolean } = {};
+    private keyPresses: Map<string, boolean> = new Map<string, boolean>();
 
     constructor() {
         window.addEventListener("keydown", this.eventHandler);
@@ -8,15 +8,15 @@ export class KeyboardController {
 
     private eventHandler = (event: KeyboardEvent) => {
         if (event.type === "keydown") {
-            this.keyPresses[event.key] = true;
+            this.keyPresses.set(event.code, true);
         }
 
         if (event.type === "keyup") {
-            this.keyPresses[event.key] = false;
+            this.keyPresses.set(event.code, false);
         }
     };
 
-    public isPressed(key: string): boolean {
-        return this.keyPresses[key] !== undefined && this.keyPresses[key] !== false;
+    public isPressed(keyCode: string): boolean {
+        return this.keyPresses.get(keyCode);
     }
 }

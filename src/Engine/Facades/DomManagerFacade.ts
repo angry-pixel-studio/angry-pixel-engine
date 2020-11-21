@@ -9,11 +9,11 @@ export class DomManagerFacade {
     }
 
     public static get gameWidth(): number {
-        return this.domManager.gameCanvas.clientWidth;
+        return this.domManager.gameCanvas.width;
     }
 
     public static get gameHeight(): number {
-        return this.domManager.gameCanvas.clientHeight;
+        return this.domManager.gameCanvas.height;
     }
 
     public static get gameCanvas(): HTMLCanvasElement {

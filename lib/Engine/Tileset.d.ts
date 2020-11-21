@@ -1,24 +1,24 @@
 import { Vector2 } from "./Helper/Vector2";
 import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
-interface config {
+interface Config {
     image: HTMLImageElement;
     tileWidth: number;
     tileHeight: number;
     gridWidth: number;
     gridHeight: number;
-    offset: Vector2 | null;
-    tileOffset: Vector2 | null;
+    offset?: Vector2;
+    tileOffset?: Vector2;
 }
 export declare class Tileset {
     image: HTMLImageElement;
-    offset: Vector2;
-    gridWidth: number;
-    gridHeight: number;
     tileWidth: number;
     tileHeight: number;
+    gridWidth: number;
+    gridHeight: number;
+    offset: Vector2;
     tileOffset: Vector2;
     private _tiles;
-    constructor({ image, tileWidth, tileHeight, gridWidth, gridHeight, offset, tileOffset }: config);
+    constructor(config: Config);
     private generateTiles;
     getTile(index: number): Rectangle | null;
     get tiles(): Rectangle[];

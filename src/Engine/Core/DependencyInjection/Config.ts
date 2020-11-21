@@ -90,7 +90,7 @@ const webGLDependencies = (container: Container, domManager: DomManager): void =
 };
 
 const inputDependencies = (container: Container, domManager: DomManager): void => {
-    container.add("Mouse", () => new MouseController(domManager.gameNode));
+    container.add("Mouse", () => new MouseController(domManager.gameNode, domManager.gameCanvas));
     container.add("Keyboard", () => new KeyboardController());
     container.add("Gamepad", () => new GamepadController());
     container.add(

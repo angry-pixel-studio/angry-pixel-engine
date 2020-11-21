@@ -1,38 +1,35 @@
 import { Vector2 } from "./Helper/Vector2";
 import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
 
-interface config {
+interface Config {
     image: HTMLImageElement;
     tileWidth: number;
     tileHeight: number;
     gridWidth: number;
     gridHeight: number;
-    offset: Vector2 | null;
-    tileOffset: Vector2 | null;
+    offset?: Vector2;
+    tileOffset?: Vector2;
 }
 
 export class Tileset {
     public image: HTMLImageElement = null;
+    public tileWidth: number;
+    public tileHeight: number;
+    public gridWidth: number; // in number of tails
+    public gridHeight: number; // in number of tails
     public offset: Vector2 = new Vector2(0, 0);
-    public gridWidth: number = 0; // in number of tails
-    public gridHeight: number = 0; // in number of tails
-    public tileWidth: number = 0;
-    public tileHeight: number = 0;
     public tileOffset: Vector2 = new Vector2(0, 0);
 
     private _tiles: Rectangle[] = [];
 
-    constructor({ image, tileWidth, tileHeight, gridWidth, gridHeight, offset, tileOffset }: config) {
-        // required
-        this.image = image;
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
-        this.gridWidth = gridWidth;
-        this.gridHeight = gridHeight;
-
-        // optional
-        this.offset = offset ? offset : this.offset;
-        this.tileOffset = tileOffset ? tileOffset : this.tileOffset;
+    constructor(config: Config) {
+        this.image = config.image;
+        this.tileWidth = config.tileWidth;
+        this.tileHeight = config.tileHeight;
+        this.gridWidth = config.gridWidth;
+        this.gridHeight = config.gridHeight;
+        this.offset = config.offset ?? this.offset;
+        this.tileOffset = config.tileOffset ?? this.tileOffset;
 
         this.generateTiles();
     }

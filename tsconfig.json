@@ -8,7 +8,8 @@
     "rootDir": "src",
     "strict": true,
     "strictNullChecks": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "suppressExcessPropertyErrors": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "lib"]

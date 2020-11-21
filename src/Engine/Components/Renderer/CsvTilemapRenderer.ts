@@ -5,9 +5,9 @@ import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
 interface Config {
     tileset: Tileset;
     tilemapData: string;
-    tileScale: number;
-    smooth: boolean;
-    alpha: number;
+    tileScale?: number;
+    smooth?: boolean;
+    alpha?: number;
 }
 
 const MAX_TILES: number = 999;
@@ -20,16 +20,16 @@ export const TYPE_TILEMAP_RENDERER: string = "TilemapRenderer";
 export class CsvTilemapRenderer extends TilemapRenderer {
     private alpha: number = 1;
 
-    constructor({ tileset, tilemapData, tileScale = 1, smooth = true, alpha = 1 }: Config) {
+    constructor(config: Config) {
         super();
 
         this.type = TYPE_TILEMAP_RENDERER;
 
-        this.tileset = tileset;
-        this.tilemapData = tilemapData;
-        this.tileScale = tileScale;
-        this.smooth = smooth;
-        this.alpha = alpha;
+        this.tileset = config.tileset;
+        this.tilemapData = config.tilemapData;
+        this.tileScale = config.tileScale ?? 1;
+        this.smooth = config.smooth ?? false;
+        this.alpha = config.alpha ?? 1;
     }
 
     protected processTilemap(): void {

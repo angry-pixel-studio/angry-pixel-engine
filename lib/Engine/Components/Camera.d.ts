@@ -1,7 +1,7 @@
-import { Component } from "../Component";
+import { RenderComponent } from "../Component";
 import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
 export declare const TYPE_CAMERA: string;
-export declare class Camera extends Component {
+export declare class Camera extends RenderComponent {
     private renderManager;
     private domManager;
     private gameCanvas;
