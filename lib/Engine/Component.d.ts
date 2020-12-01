@@ -31,9 +31,9 @@ export declare abstract class Component {
      */
     destroy(): void;
 }
-export declare class PhysicsComponent extends Component {
+export declare abstract class PhysicsComponent extends Component {
     protected get updateEvent(): string;
 }
-export declare class RenderComponent extends Component {
+export declare abstract class RenderComponent extends Component {
     protected get updateEvent(): string;
 }

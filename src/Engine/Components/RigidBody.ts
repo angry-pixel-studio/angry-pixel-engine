@@ -26,7 +26,7 @@ export class RigidBody extends PhysicsComponent {
     private _gravity: number = 1;
     private _layersToCollide: string[] = [];
     private _velocity: Vector2 = new Vector2(0, 0);
-    private deltaVelocity: Vector2 = new Vector2(0, 0);
+    private deltaVelocity: number = 0;
 
     private collisions: Collision[] = [];
 
@@ -79,7 +79,7 @@ export class RigidBody extends PhysicsComponent {
         }
     }
 
-    protected moveGameObject(): void {
+    private moveGameObject(): void {
         if (this._velocity.x !== 0) {
             this.moveX();
         }
@@ -90,8 +90,8 @@ export class RigidBody extends PhysicsComponent {
     }
 
     private moveX(): void {
-        this.deltaVelocity.set(this._velocity.x * this.timeManager.deltaTime, 0);
-        this.gameObject.transform.position.x += this.deltaVelocity.x;
+        this.deltaVelocity = this._velocity.x * this.timeManager.deltaTime;
+        this.gameObject.transform.position.x += this.deltaVelocity;
         this.updateCollisions();
         let rollback: boolean = false;
 
@@ -99,22 +99,22 @@ export class RigidBody extends PhysicsComponent {
             const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
             if (rigidBody !== null) {
                 rollback ||=
-                    (this.deltaVelocity.x > 0 &&
+                    (this.deltaVelocity > 0 &&
                         collision.remoteCollider.coordinates.x >= collision.localCollider.coordinates.x) ||
-                    (this.deltaVelocity.x < 0 &&
+                    (this.deltaVelocity < 0 &&
                         collision.remoteCollider.coordinates.x <= collision.localCollider.coordinates.x);
             }
         });
 
         if (rollback) {
-            this.gameObject.transform.position.x -= this.deltaVelocity.x;
+            this.gameObject.transform.position.x -= this.deltaVelocity;
             this._velocity.x = 0;
         }
     }
 
     private moveY(): void {
-        this.deltaVelocity.set(0, this._velocity.y * this.timeManager.deltaTime);
-        this.gameObject.transform.position.y += this.deltaVelocity.y;
+        this.deltaVelocity = this._velocity.y * this.timeManager.deltaTime;
+        this.gameObject.transform.position.y += this.deltaVelocity;
         this.updateCollisions();
         let rollback: boolean = false;
 
@@ -122,15 +122,15 @@ export class RigidBody extends PhysicsComponent {
             const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
             if (rigidBody !== null) {
                 rollback ||=
-                    (this.deltaVelocity.y > 0 &&
+                    (this.deltaVelocity > 0 &&
                         collision.remoteCollider.coordinates.y >= collision.localCollider.coordinates.y) ||
-                    (this.deltaVelocity.y < 0 &&
+                    (this.deltaVelocity < 0 &&
                         collision.remoteCollider.coordinates.y <= collision.localCollider.coordinates.y);
             }
         });
 
         if (rollback) {
-            this.gameObject.transform.position.y -= this.deltaVelocity.y;
+            this.gameObject.transform.position.y -= this.deltaVelocity;
             this._velocity.y = 0;
         }
     }
