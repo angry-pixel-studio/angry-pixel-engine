@@ -1,7 +1,7 @@
 import { ProgramFactory } from "./ProgramFactory";
 import { TextureFactory } from "./TextureFactory";
-import { Vector2 } from "../../../Helper/Vector2";
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "../../../Math/Vector2";
+import { Rectangle } from "../../../Math/Rectangle";
 export declare class WebGLImageRenderer {
     private textureFactory;
     private gl;

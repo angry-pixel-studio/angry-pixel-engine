@@ -1,5 +1,5 @@
-export * from "./Engine/Helper/Vector2";
-export * from "./Engine/Libs/Geometric/Shapes/Rectangle";
+export * from "./Engine/Math/Vector2";
+export * from "./Engine/Math/Rectangle";
 export { Game, IGameConfig } from "./Engine/Game";
 export * from "./Engine/Scene";
 export * from "./Engine/GameObject";

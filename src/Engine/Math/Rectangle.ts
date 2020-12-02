@@ -1,4 +1,4 @@
-import { Vector2 } from "../../../Helper/Vector2";
+import { Vector2 } from "./Vector2";
 
 export class Rectangle {
     private position: Vector2 = new Vector2(0, 0);
@@ -14,7 +14,7 @@ export class Rectangle {
     }
 
     public set x(value: number) {
-        this.position.x = value;
+        this.position.set(value, this.position.y);
     }
 
     public get y(): number {
@@ -22,7 +22,7 @@ export class Rectangle {
     }
 
     public set y(value: number) {
-        this.position.y = value;
+        this.position.set(this.position.x, value);
     }
 
     public get x1(): number {

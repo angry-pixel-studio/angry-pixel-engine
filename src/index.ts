@@ -1,6 +1,6 @@
 // helpers and libs
-export * from "./Engine/Helper/Vector2";
-export * from "./Engine/Libs/Geometric/Shapes/Rectangle";
+export * from "./Engine/Math/Vector2";
+export * from "./Engine/Math/Rectangle";
 
 // main
 export { Game, IGameConfig } from "./Engine/Game";

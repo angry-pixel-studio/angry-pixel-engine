@@ -2,7 +2,7 @@ import { RenderComponent } from "../../../Component";
 import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { container } from "../../../Game";
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../../../Math/Rectangle";
 import { Tileset } from "../../../Tileset";
 import { TiledTilemap } from "./TiledTilemap";
 
@@ -66,8 +66,10 @@ export abstract class TilemapRenderer extends RenderComponent {
     ): ImageRenderData {
         const renderData: ImageRenderData = new ImageRenderData();
 
-        renderData.position.x = this.gameObject.transform.position.x + col * this.tileWidth + this.tileWidth / 2;
-        renderData.position.y = this.gameObject.transform.position.y - row * this.tileHeight - this.tileHeight / 2;
+        renderData.position.set(
+            this.gameObject.transform.position.x + col * this.tileWidth + this.tileWidth / 2,
+            this.gameObject.transform.position.y - row * this.tileHeight - this.tileHeight / 2
+        );
 
         renderData.ui = false;
         renderData.image = this.tileset.image;
@@ -97,8 +99,10 @@ export abstract class TilemapRenderer extends RenderComponent {
 
     protected updateTilesPosition(): void {
         this.tilesRenderData.forEach((renderData) => {
-            renderData.position.x -= Math.floor(this._realWidth / 2);
-            renderData.position.y += Math.floor(this._realHeight / 2);
+            renderData.position.set(
+                renderData.position.x - Math.floor(this._realWidth / 2),
+                renderData.position.y + Math.floor(this._realHeight / 2)
+            );
             this.addTileData(renderData);
         });
     }

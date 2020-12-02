@@ -1,9 +1,9 @@
-import { Component, RenderComponent } from "../Component";
+import { RenderComponent } from "../Component";
 import { DomManager } from "../Core/Dom/DomManager";
 import { RenderManager } from "../Core/Rendering/RenderManager";
 import { container } from "../Game";
 import { LAYER_DEFAULT } from "../GameObject";
-import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../Math/Rectangle";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 

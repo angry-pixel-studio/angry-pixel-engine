@@ -1,5 +1,5 @@
-import { Vector2 } from "../../Helper/Vector2";
-import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "../../Math/Vector2";
+import { Rectangle } from "../../Math/Rectangle";
 import { IContextRenderer } from "./IContextRenderer";
 import { GeometricRenderData } from "./RenderData/GeometricRenderData";
 import { ImageRenderData } from "./RenderData/ImageRenderData";
@@ -93,11 +93,15 @@ export class RenderManager {
 
     private setViewportPosition(renderData: RenderData): void {
         if (renderData.ui !== true) {
-            renderData.viewportPosition.x = Number(
-                (renderData.position.x - this._worldSpaceViewRect.x - this._worldSpaceViewRect.width / 2).toFixed(0)
-            );
-            renderData.viewportPosition.y = Number(
-                (renderData.position.y - this._worldSpaceViewRect.y + this._worldSpaceViewRect.height / 2).toFixed(0)
+            renderData.viewportPosition.set(
+                Number(
+                    (renderData.position.x - this._worldSpaceViewRect.x - this._worldSpaceViewRect.width / 2).toFixed(0)
+                ),
+                Number(
+                    (renderData.position.y - this._worldSpaceViewRect.y + this._worldSpaceViewRect.height / 2).toFixed(
+                        0
+                    )
+                )
             );
         } else {
             renderData.viewportPosition = renderData.position;

@@ -1,5 +1,5 @@
-import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
-import { Vector2 } from "./Helper/Vector2";
+import { Rectangle } from "./Math/Rectangle";
+import { Vector2 } from "./Math/Vector2";
 interface config {
     image: HTMLImageElement;
     scale?: Vector2;

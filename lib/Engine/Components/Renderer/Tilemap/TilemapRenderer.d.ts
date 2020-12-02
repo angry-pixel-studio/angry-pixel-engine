@@ -1,7 +1,7 @@
 import { RenderComponent } from "../../../Component";
 import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../../Core/Rendering/RenderManager";
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../../../Math/Rectangle";
 import { Tileset } from "../../../Tileset";
 import { TiledTilemap } from "./TiledTilemap";
 export declare abstract class TilemapRenderer extends RenderComponent {

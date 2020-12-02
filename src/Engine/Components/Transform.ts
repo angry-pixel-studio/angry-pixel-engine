@@ -1,5 +1,5 @@
 import { Component } from "../Component";
-import { Vector2 } from "../Helper/Vector2";
+import { Vector2 } from "../Math/Vector2";
 
 export const TYPE_TRANSFORM: string = "Transform";
 
@@ -62,8 +62,7 @@ export class Transform extends Component {
         if (this.parentTransform !== null) {
             this.translateFromParent();
         } else {
-            this._innerPosition.x = this._position.x;
-            this._innerPosition.y = this._position.y;
+            this._innerPosition.set(this._position.x, this._position.y);
         }
     }
 
@@ -72,8 +71,10 @@ export class Transform extends Component {
         const thisRad: number = Math.atan2(this._innerPosition.x, this._innerPosition.y);
         const radius: number = Math.hypot(this._innerPosition.x, this._innerPosition.y);
 
-        this._position.x = this.parentTransform._position.x + radius * Math.sin(thisRad - parentRad);
-        this._position.y = this.parentTransform._position.y + radius * Math.cos(thisRad - parentRad);
+        this._position.set(
+            this.parentTransform._position.x + radius * Math.sin(thisRad - parentRad),
+            this.parentTransform._position.y + radius * Math.cos(thisRad - parentRad)
+        );
         this._rotation = this.parentTransform._rotation;
     }
 

@@ -1,5 +1,5 @@
 import { Component } from "../Component";
-import { Vector2 } from "../Helper/Vector2";
+import { Vector2 } from "../Math/Vector2";
 export declare const TYPE_TRANSFORM: string;
 export declare class Transform extends Component {
     private _position;

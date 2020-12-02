@@ -1,4 +1,4 @@
-import { Vector2 } from "../../../Helper/Vector2";
+import { Vector2 } from "../../../Math/Vector2";
 
 export enum RenderDataType {
     Image,

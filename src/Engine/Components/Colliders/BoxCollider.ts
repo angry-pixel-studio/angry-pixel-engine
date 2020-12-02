@@ -3,7 +3,7 @@ import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/R
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
-import { Vector2 } from "../../Helper/Vector2";
+import { Vector2 } from "../../Math/Vector2";
 import { ColliderComponent } from "./ColliderComponent";
 
 interface Config {

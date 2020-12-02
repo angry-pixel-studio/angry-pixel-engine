@@ -56,8 +56,7 @@ export class TextRenderer extends RenderComponent {
         this.renderData.textSize = this.size;
         this.renderData.color = this.color;
         this.renderData.font = this.font;
-        this.renderData.position.x = this.gameObject.transform.position.x;
-        this.renderData.position.y = this.gameObject.transform.position.y;
+        this.renderData.position.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.bold = this.bold;
         this.renderData.italic = this.italic;

@@ -7,8 +7,7 @@ export class GameCamera extends GameObject {
     constructor() {
         super();
 
-        this.transform.position.x = 0;
-        this.transform.position.y = 0;
+        this.transform.position.set(0, 0);
 
         this.camera = this.addComponent(() => new Camera());
     }

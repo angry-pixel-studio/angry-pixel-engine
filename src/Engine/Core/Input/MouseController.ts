@@ -1,5 +1,5 @@
 import { EVENT_UPDATE } from "../../Game";
-import { Vector2 } from "../../Helper/Vector2";
+import { Vector2 } from "../../Math/Vector2";
 
 export class MouseController {
     public leftButtonPressed: boolean = false;
@@ -55,8 +55,10 @@ export class MouseController {
         event.preventDefault();
         event.stopPropagation();
 
-        this.viewportPosition.x = event.offsetX / (this.gameCanvas.clientWidth / this.gameCanvas.width);
-        this.viewportPosition.y = event.offsetY / (this.gameCanvas.clientHeight / this.gameCanvas.height);
+        this.viewportPosition.set(
+            event.offsetX / (this.gameCanvas.clientWidth / this.gameCanvas.width),
+            event.offsetY / (this.gameCanvas.clientHeight / this.gameCanvas.height)
+        );
     }
 
     private update(): void {

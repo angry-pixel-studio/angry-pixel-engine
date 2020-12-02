@@ -1,5 +1,5 @@
 import { RenderComponent } from "../Component";
-import { Rectangle } from "../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../Math/Rectangle";
 export declare const TYPE_CAMERA: string;
 export declare class Camera extends RenderComponent {
     private renderManager;

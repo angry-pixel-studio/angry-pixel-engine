@@ -1,4 +1,4 @@
-import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../../Math/Rectangle";
 import { ICollider } from "./Collider/ICollider";
 export declare class QuadTree {
     readonly maxColliders: number;

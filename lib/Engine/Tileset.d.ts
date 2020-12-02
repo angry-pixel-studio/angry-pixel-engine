@@ -1,5 +1,5 @@
-import { Vector2 } from "./Helper/Vector2";
-import { Rectangle } from "./Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "./Math/Vector2";
+import { Rectangle } from "./Math/Rectangle";
 interface Config {
     image: HTMLImageElement;
     tileWidth: number;

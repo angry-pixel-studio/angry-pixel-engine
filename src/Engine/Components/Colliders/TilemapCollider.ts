@@ -4,8 +4,8 @@ import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../../Core/Rendering/R
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { LAYER_DEFAULT } from "../../GameObject";
-import { Vector2 } from "../../Helper/Vector2";
-import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { Vector2 } from "../../Math/Vector2";
+import { Rectangle } from "../../Math/Rectangle";
 import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
 

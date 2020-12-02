@@ -1,5 +1,5 @@
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
-import { Vector2 } from "../../../Helper/Vector2";
+import { Rectangle } from "../../../Math/Rectangle";
+import { Vector2 } from "../../../Math/Vector2";
 import { IContextRenderer } from "../IContextRenderer";
 import { GeometricRenderData, GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
@@ -55,8 +55,10 @@ export class Context2DRenderer implements IContextRenderer {
             this.canvasContext.rotate(-(renderData.rotation * Math.PI) / 180);
         } else {
             this.canvasContext.translate(renderData.viewportPosition.x, renderData.viewportPosition.y);
-            this.imagePosition.x = renderData.flipHorizontal ? -renderData.width : this.imagePosition.x;
-            this.imagePosition.y = renderData.flipVertical ? -renderData.height : this.imagePosition.y;
+            this.imagePosition.set(
+                renderData.flipHorizontal ? -renderData.width : this.imagePosition.x,
+                renderData.flipVertical ? -renderData.height : this.imagePosition.y
+            );
         }
 
         this.canvasContext.imageSmoothingEnabled = renderData.smooth;
@@ -146,12 +148,16 @@ export class Context2DRenderer implements IContextRenderer {
             this.centerImage(renderData as ImageRenderData);
         }
 
-        renderData.viewportPosition.x = Number((renderData.viewportPosition.x + this.canvas.width / 2).toFixed(0));
-        renderData.viewportPosition.y = Number((this.canvas.height / 2 - renderData.viewportPosition.y).toFixed(0));
+        renderData.viewportPosition.set(
+            Number((renderData.viewportPosition.x + this.canvas.width / 2).toFixed(0)),
+            Number((this.canvas.height / 2 - renderData.viewportPosition.y).toFixed(0))
+        );
     }
 
     private centerImage(renderData: ImageRenderData) {
-        renderData.viewportPosition.x -= Math.floor(renderData.width / 2);
-        renderData.viewportPosition.y += Math.floor(renderData.height / 2);
+        renderData.viewportPosition.set(
+            renderData.viewportPosition.x - Math.floor(renderData.width / 2),
+            renderData.viewportPosition.y + Math.floor(renderData.height / 2)
+        );
     }
 }

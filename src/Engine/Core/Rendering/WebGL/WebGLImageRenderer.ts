@@ -3,9 +3,9 @@ import { fragmentShader } from "./Shader/Image/fragmentShader";
 import { mat4 } from "gl-matrix";
 import { ProgramFactory } from "./ProgramFactory";
 import { TextureFactory } from "./TextureFactory";
-import { Vector2 } from "../../../Helper/Vector2";
+import { Vector2 } from "../../../Math/Vector2";
 import * as sha256 from "crypto-js/sha256";
-import { Rectangle } from "../../../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../../../Math/Rectangle";
 
 export class WebGLImageRenderer {
     private textureFactory: TextureFactory;

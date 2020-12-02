@@ -1,5 +1,5 @@
 import { GameObject } from "../../../GameObject";
-import { Vector2 } from "../../../Helper/Vector2";
+import { Vector2 } from "../../../Math/Vector2";
 import { ICollider, ColliderType } from "./ICollider";
 
 export class RectangleCollider implements ICollider {

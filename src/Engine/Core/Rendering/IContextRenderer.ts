@@ -1,4 +1,3 @@
-import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
 import { RenderData } from "./RenderData/RenderData";
 
 export interface IContextRenderer {

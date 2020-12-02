@@ -3,7 +3,7 @@ import { ICollider } from "../Core/Collision/Collider/ICollider";
 import { Collision } from "../Core/Collision/CollisionManager";
 import { TimeManager } from "../Core/Time/TimeManager";
 import { container } from "../Game";
-import { Vector2 } from "../Helper/Vector2";
+import { Vector2 } from "../Math/Vector2";
 import { ColliderComponent } from "./Colliders/ColliderComponent";
 
 export enum RigidBodyType {
@@ -75,7 +75,7 @@ export class RigidBody extends PhysicsComponent {
 
     private applyGravityToVelocity(): void {
         if (this._gravity > 0) {
-            this._velocity.y -= this._gravity * this.timeManager.deltaTime;
+            this._velocity.set(this._velocity.x, this._velocity.y - this._gravity * this.timeManager.deltaTime);
         }
     }
 
@@ -91,7 +91,10 @@ export class RigidBody extends PhysicsComponent {
 
     private moveX(): void {
         this.deltaVelocity = this._velocity.x * this.timeManager.deltaTime;
-        this.gameObject.transform.position.x += this.deltaVelocity;
+        this.gameObject.transform.position.set(
+            this.gameObject.transform.position.x + this.deltaVelocity,
+            this.gameObject.transform.position.y
+        );
         this.updateCollisions();
         let rollback: boolean = false;
 
@@ -107,14 +110,20 @@ export class RigidBody extends PhysicsComponent {
         });
 
         if (rollback) {
-            this.gameObject.transform.position.x -= this.deltaVelocity;
-            this._velocity.x = 0;
+            this.gameObject.transform.position.set(
+                this.gameObject.transform.position.x - this.deltaVelocity,
+                this.gameObject.transform.position.y
+            );
+            this._velocity.set(0, this._velocity.y);
         }
     }
 
     private moveY(): void {
         this.deltaVelocity = this._velocity.y * this.timeManager.deltaTime;
-        this.gameObject.transform.position.y += this.deltaVelocity;
+        this.gameObject.transform.position.set(
+            this.gameObject.transform.position.x,
+            this.gameObject.transform.position.y + this.deltaVelocity
+        );
         this.updateCollisions();
         let rollback: boolean = false;
 
@@ -130,8 +139,11 @@ export class RigidBody extends PhysicsComponent {
         });
 
         if (rollback) {
-            this.gameObject.transform.position.y -= this.deltaVelocity;
-            this._velocity.y = 0;
+            this.gameObject.transform.position.set(
+                this.gameObject.transform.position.x,
+                this.gameObject.transform.position.y - this.deltaVelocity
+            );
+            this._velocity.set(this._velocity.x, 0);
         }
     }
 

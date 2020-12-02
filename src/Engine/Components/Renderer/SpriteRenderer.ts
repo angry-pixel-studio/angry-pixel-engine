@@ -2,7 +2,7 @@ import { RenderComponent } from "../../Component";
 import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import { Vector2 } from "../../Helper/Vector2";
+import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
 
 interface Config {
@@ -72,8 +72,10 @@ export class SpriteRenderer extends RenderComponent {
     }
 
     private calculateRenderPosition(): void {
-        this.renderData.position.x = this.gameObject.transform.position.x + this.offsetX;
-        this.renderData.position.y = this.gameObject.transform.position.y + this.offsetY;
+        this.renderData.position.set(
+            this.gameObject.transform.position.x + this.offsetX,
+            this.gameObject.transform.position.y + this.offsetY
+        );
 
         if (this.gameObject.transform.rotation) {
             this.translateRenderPosition();
@@ -89,7 +91,9 @@ export class SpriteRenderer extends RenderComponent {
             this.renderData.position.y - this.goPosition.y
         );
 
-        this.renderData.position.x = this.goPosition.x + radius * Math.cos(angle);
-        this.renderData.position.y = this.goPosition.y - radius * Math.sin(angle);
+        this.renderData.position.set(
+            this.goPosition.x + radius * Math.cos(angle),
+            this.goPosition.y - radius * Math.sin(angle)
+        );
     }
 }

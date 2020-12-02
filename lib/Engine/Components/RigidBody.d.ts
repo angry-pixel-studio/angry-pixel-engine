@@ -1,5 +1,5 @@
 import { PhysicsComponent } from "../Component";
-import { Vector2 } from "../Helper/Vector2";
+import { Vector2 } from "../Math/Vector2";
 import { ColliderComponent } from "./Colliders/ColliderComponent";
 export declare enum RigidBodyType {
     Static = 0,
@@ -29,7 +29,7 @@ export declare class RigidBody extends PhysicsComponent {
     get gravity(): number;
     protected update(): void;
     private applyGravityToVelocity;
-    protected moveGameObject(): void;
+    private moveGameObject;
     private moveX;
     private moveY;
     private updateCollisions;

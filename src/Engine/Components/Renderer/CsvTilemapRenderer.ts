@@ -1,4 +1,4 @@
-import { Rectangle } from "../../Libs/Geometric/Shapes/Rectangle";
+import { Rectangle } from "../../Math/Rectangle";
 import { Tileset } from "../../Tileset";
 import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
 
