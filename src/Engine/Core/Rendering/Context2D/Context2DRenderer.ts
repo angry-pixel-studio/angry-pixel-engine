@@ -1,6 +1,8 @@
 import { Rectangle } from "../../../Math/Rectangle";
 import { Vector2 } from "../../../Math/Vector2";
+import { ShapeType } from "../../Collision/Shape/Shape";
 import { IContextRenderer } from "../IContextRenderer";
+import { ColliderRenderData } from "../RenderData/ColliderRenderData";
 import { GeometricRenderData, GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
@@ -37,6 +39,10 @@ export class Context2DRenderer implements IContextRenderer {
 
         if (renderData.type === RenderDataType.Geometric) {
             this.renderGeometric(renderData as GeometricRenderData);
+        }
+
+        if (renderData.type === RenderDataType.Collider) {
+            this.renderCollider(renderData as ColliderRenderData);
         }
     }
 
@@ -140,6 +146,33 @@ export class Context2DRenderer implements IContextRenderer {
                 break;
         }
 
+        this.canvasContext.restore();
+    }
+
+    private renderCollider(renderData: ColliderRenderData): void {
+        this.canvasContext.save();
+
+        this.updateRenderPosition(renderData);
+
+        this.canvasContext.beginPath();
+        this.canvasContext.strokeStyle = renderData.color;
+
+        const shape = renderData.shape.clone();
+        shape.position = renderData.viewportPosition;
+        shape.update();
+
+        switch (shape.type) {
+            case ShapeType.Rectangle:
+                this.canvasContext.moveTo(shape.vertex[0].x, shape.vertex[0].y);
+                [1, 2, 3, 0].forEach((index: number) => {
+                    this.canvasContext.lineTo(shape.vertex[index].x, shape.vertex[index].y);
+                });
+        }
+
+        this.canvasContext.strokeStyle = renderData.color;
+        this.canvasContext.stroke();
+
+        this.canvasContext.closePath();
         this.canvasContext.restore();
     }
 

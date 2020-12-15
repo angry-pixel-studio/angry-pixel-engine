@@ -3,6 +3,7 @@ import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderD
 import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { Rectangle } from "../../../Math/Rectangle";
 import { Tileset } from "../../../Tileset";
+import { TileData } from "./TileData";
 import { TiledTilemap } from "./TiledTilemap";
 export declare abstract class TilemapRenderer extends RenderComponent {
     tileset: Tileset;
@@ -17,7 +18,7 @@ export declare abstract class TilemapRenderer extends RenderComponent {
     protected tilesRenderData: ImageRenderData[];
     protected _width: number;
     protected _height: number;
-    protected tiles: Rectangle[];
+    protected tiles: TileData[];
     protected _realWidth: number;
     protected _realHeight: number;
     constructor();
@@ -36,5 +37,5 @@ export declare abstract class TilemapRenderer extends RenderComponent {
     get height(): number;
     get realWidth(): number;
     get realHeight(): number;
-    get tilesData(): Rectangle[];
+    get tilesData(): TileData[];
 }

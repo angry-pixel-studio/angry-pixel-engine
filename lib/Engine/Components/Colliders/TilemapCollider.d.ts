@@ -14,6 +14,6 @@ export declare class TilemapCollider extends ColliderComponent {
     protected start(): void;
     protected update(): void;
     private updateRenderData;
-    protected updateCoordinates(): void;
+    protected updatePosition(): void;
 }
 export {};

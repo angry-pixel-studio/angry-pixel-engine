@@ -10,6 +10,7 @@ export declare class Context2DRenderer implements IContextRenderer {
     private renderImage;
     private renderText;
     private renderGeometric;
+    private renderCollider;
     private updateRenderPosition;
     private centerImage;
 }

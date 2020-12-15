@@ -105,20 +105,25 @@ export class Game {
     }
 
     private gameLoop(time: number): void {
-        this._running = true;
+        try {
+            this._running = true;
 
-        this.timeManager.update(time);
-        this.collisionManager.prepare();
+            this.timeManager.update(time);
+            this.collisionManager.prepare();
 
-        this.dispatchFrameEvent(EVENT_START);
-        this.dispatchFrameEvent(EVENT_UPDATE);
-        this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
-        this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
+            this.dispatchFrameEvent(EVENT_START);
+            this.dispatchFrameEvent(EVENT_UPDATE);
+            this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+            this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
-        this.renderManager.clearCanvas(this._config.bgColor);
-        this.renderManager.render();
+            this.renderManager.clearCanvas(this._config.bgColor);
+            this.renderManager.render();
 
-        this.requestAnimationFrame();
+            this.requestAnimationFrame();
+        } catch (error) {
+            throw error;
+            // console.error("Mini Engine Error: " + error);
+        }
     }
 
     public stopLoop(): void {

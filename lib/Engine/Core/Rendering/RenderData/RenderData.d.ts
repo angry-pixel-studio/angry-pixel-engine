@@ -2,7 +2,8 @@ import { Vector2 } from "../../../Math/Vector2";
 export declare enum RenderDataType {
     Image = 0,
     Text = 1,
-    Geometric = 2
+    Geometric = 2,
+    Collider = 3
 }
 export declare abstract class RenderData {
     abstract type: RenderDataType;

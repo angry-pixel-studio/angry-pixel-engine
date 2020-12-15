@@ -4,6 +4,7 @@ export enum RenderDataType {
     Image,
     Text,
     Geometric,
+    Collider,
 }
 
 export abstract class RenderData {

@@ -6,13 +6,19 @@ import { container } from "../../Game";
 export abstract class ColliderComponent extends Component {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected colliders: ICollider[] = [];
+    protected _physics: boolean = true;
+
     private collisionsCache: Collision[] = [];
 
     constructor() {
         super();
     }
 
-    protected abstract updateCoordinates(): void;
+    public get physics(): boolean {
+        return this._physics;
+    }
+
+    protected abstract updatePosition(): void;
 
     protected addCollider(collider: ICollider): void {
         this.colliders.push(collider);
@@ -24,7 +30,7 @@ export abstract class ColliderComponent extends Component {
     }
 
     public getCollisionWithLayer(layer: string): Collision | null {
-        this.updateCoordinates();
+        this.updatePosition();
 
         for (const collider of this.colliders) {
             const collisions = this.collisionManager.getCollisionsForCollider(collider);
@@ -39,7 +45,7 @@ export abstract class ColliderComponent extends Component {
     }
 
     public getCollisionsWithLayer(layer: string): Collision[] {
-        this.updateCoordinates();
+        this.updatePosition();
 
         this.collisionsCache = [];
 

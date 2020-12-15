@@ -5,10 +5,13 @@ import { Vector2 } from "../../Math/Vector2";
 import { RenderManager } from "./../Rendering/RenderManager";
 import { ICollider } from "./Collider/ICollider";
 import { QuadTree } from "./QuadTree";
+import { SatResolver } from "./Sat/SatResolver";
+import { SatData } from "./Sat/SatData";
 
 export interface Collision {
     localCollider: ICollider;
     remoteCollider: ICollider;
+    collisionData: SatData;
 }
 
 export class CollisionManager {
@@ -16,6 +19,7 @@ export class CollisionManager {
     private renderManager: RenderManager;
     private colliders: Array<ICollider> = [];
     private quad: QuadTree;
+    private satResolver: SatResolver = new SatResolver();
 
     constructor(renderManager: RenderManager) {
         this.renderManager = renderManager;
@@ -47,10 +51,7 @@ export class CollisionManager {
     public getCollisionsForCollider(collider: ICollider): Array<Collision> {
         const colliders = this.broadPhase(collider);
 
-        return this.narrowPhase(collider, colliders).map<Collision>((remoteCollider: ICollider) => ({
-            localCollider: collider,
-            remoteCollider: remoteCollider,
-        }));
+        return this.narrowPhase(collider, colliders);
     }
 
     // broadPhase takes care of looking for possible collisions
@@ -59,11 +60,16 @@ export class CollisionManager {
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<ICollider> {
-        const collisions: Array<ICollider> = [];
-        for (const c of colliders) {
-            if (collider.hasCollision(c)) {
-                collisions.push(c);
+    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<Collision> {
+        const collisions: Array<Collision> = [];
+        for (const remoteCollider of colliders) {
+            const satData = this.satResolver.getSatData(collider.shape, remoteCollider.shape);
+            if (satData !== null) {
+                collisions.push({
+                    localCollider: collider,
+                    remoteCollider: remoteCollider,
+                    collisionData: satData,
+                });
             }
         }
 

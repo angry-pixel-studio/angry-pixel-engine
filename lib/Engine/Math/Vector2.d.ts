@@ -1,16 +1,19 @@
 export declare class Vector2 {
     private _x;
     private _y;
-    constructor(x: number, y: number);
+    constructor(x?: number, y?: number);
     get x(): number;
+    set x(x: number);
     get y(): number;
+    set y(y: number);
     get magnitude(): number;
     set(x: number, y: number): void;
-    add(v: Vector2): Vector2;
-    substract(v: Vector2): Vector2;
-    mult(n: number): Vector2;
+    add(vector: Vector2): Vector2;
+    substract(vector: Vector2): Vector2;
+    mult(number: number): Vector2;
     normal(): Vector2;
     unit(): Vector2;
-    static dot(v1: Vector2, v2: Vector2): number;
-    static cross(v1: Vector2, v2: Vector2): number;
+    clone(): Vector2;
+    static dot(vector1: Vector2, vector2: Vector2): number;
+    static cross(vector1: Vector2, vector2: Vector2): number;
 }

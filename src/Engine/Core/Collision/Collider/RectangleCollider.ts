@@ -1,37 +1,47 @@
 import { GameObject } from "../../../GameObject";
 import { Vector2 } from "../../../Math/Vector2";
-import { ICollider, ColliderType } from "./ICollider";
+import { Rectangle } from "../Shape/Rectangle";
+import { ICollider } from "./ICollider";
 
 export class RectangleCollider implements ICollider {
-    public readonly type: ColliderType = ColliderType.Rectangle;
     public readonly gameObject: GameObject;
-    public readonly points: Vector2[] = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
+    public readonly shape: Rectangle;
 
-    private _coordinates: Vector2 = new Vector2(0, 0);
+    private _quadVertex: Vector2[];
+    private _position: Vector2 = new Vector2(0, 0);
     private _width: number = 0;
     private _height: number = 0;
 
-    constructor(coordinates: Vector2, width: number, height: number, gameObject: GameObject) {
-        this._coordinates.set(coordinates.x, coordinates.y);
+    constructor(position: Vector2, width: number, height: number, gameObject: GameObject) {
+        this._position.set(position.x, position.y);
+        this._quadVertex = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
         this._width = width;
         this._height = height;
         this.gameObject = gameObject;
 
-        this.updatePoints();
+        this.shape = new Rectangle(
+            this.position.x - this.width / 2,
+            this._position.y - this._height / 2,
+            this.position.x + this.width / 2,
+            this._position.y + this._height / 2
+        );
+
+        this.updateQuadVertex();
     }
 
-    public set coordinates(coordinates: Vector2) {
-        this._coordinates.set(coordinates.x, coordinates.y);
-        this.updatePoints();
+    public set position(coordinates: Vector2) {
+        this._position.set(coordinates.x, coordinates.y);
+        this.updateQuadVertex();
+        this.updateShape();
     }
 
-    public get coordinates(): Vector2 {
-        return this._coordinates;
+    public get position(): Vector2 {
+        return this._position;
     }
 
     public set width(width: number) {
         this._width = width;
-        this.updatePoints();
+        this.updateQuadVertex();
     }
 
     public get width(): number {
@@ -40,49 +50,39 @@ export class RectangleCollider implements ICollider {
 
     public set height(height: number) {
         this._height = height;
-        this.updatePoints();
+        this.updateQuadVertex();
     }
 
     public get height(): number {
         return this._height;
     }
 
-    public get bottomLeftPoint(): Vector2 {
-        return this.points[3];
+    public get bottomLeftQuadVertex(): Vector2 {
+        return this._quadVertex[0];
     }
 
-    public get bottomRightPoint(): Vector2 {
-        return this.points[2];
+    public get bottomRightQuadvertex(): Vector2 {
+        return this._quadVertex[3];
     }
 
-    public get topLeftPoint(): Vector2 {
-        return this.points[0];
+    public get topLeftQuadVertex(): Vector2 {
+        return this._quadVertex[1];
     }
 
-    public get topRightPoint(): Vector2 {
-        return this.points[1];
+    public get topRightQuadVertex(): Vector2 {
+        return this._quadVertex[2];
     }
 
-    public hasCollision(collider: ICollider): boolean {
-        switch (collider.type) {
-            case ColliderType.Rectangle:
-                return (
-                    this.topRightPoint.x >= collider.topLeftPoint.x &&
-                    this.topLeftPoint.x <= collider.topRightPoint.x &&
-                    this.bottomLeftPoint.y <= collider.topLeftPoint.y &&
-                    this.topLeftPoint.y >= collider.bottomLeftPoint.y
-                );
-            case ColliderType.Polygon:
-                return false;
-            case ColliderType.Circle:
-                return false;
-        }
+    private updateShape(): void {
+        this.shape.position = this._position;
+        this.shape.update();
     }
 
-    private updatePoints(): void {
-        this.points[0].set(this._coordinates.x, this._coordinates.y);
-        this.points[1].set(this._coordinates.x + this._width, this._coordinates.y);
-        this.points[2].set(this._coordinates.x + this._width, this._coordinates.y - this._height);
-        this.points[3].set(this._coordinates.x, this._coordinates.y - this._height);
+    // TODO:update using shape vertex
+    private updateQuadVertex(): void {
+        this._quadVertex[0].set(this._position.x - this._width / 2, this._position.y - this._height / 2);
+        this._quadVertex[1].set(this._position.x - this._width / 2, this._position.y + this._height / 2);
+        this._quadVertex[2].set(this._position.x + this._width / 2, this._position.y + this._height / 2);
+        this._quadVertex[3].set(this._position.x + this._width / 2, this._position.y - this._height / 2);
     }
 }

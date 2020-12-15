@@ -1,13 +1,11 @@
 import { PhysicsComponent } from "../Component";
 import { Vector2 } from "../Math/Vector2";
-import { ColliderComponent } from "./Colliders/ColliderComponent";
 export declare enum RigidBodyType {
     Static = 0,
     Dynamic = 1
 }
 interface Config {
     rigidBodyType: RigidBodyType;
-    colliders: ColliderComponent[];
     layersToCollide: string[];
     gravity?: number;
 }
@@ -20,6 +18,7 @@ export declare class RigidBody extends PhysicsComponent {
     private _velocity;
     private deltaVelocity;
     private collisions;
+    private penetrationPerDirection;
     private timeManager;
     constructor(config: Config);
     get rigidBodyType(): RigidBodyType;
@@ -27,6 +26,7 @@ export declare class RigidBody extends PhysicsComponent {
     get velocity(): Vector2;
     set gravity(gravity: number);
     get gravity(): number;
+    protected start(): void;
     protected update(): void;
     private applyGravityToVelocity;
     private moveGameObject;

@@ -1,24 +1,25 @@
 import { GameObject } from "../../../GameObject";
 import { Vector2 } from "../../../Math/Vector2";
-import { ICollider, ColliderType } from "./ICollider";
+import { Rectangle } from "../Shape/Rectangle";
+import { ICollider } from "./ICollider";
 export declare class RectangleCollider implements ICollider {
-    readonly type: ColliderType;
     readonly gameObject: GameObject;
-    readonly points: Vector2[];
-    private _coordinates;
+    readonly shape: Rectangle;
+    private _quadVertex;
+    private _position;
     private _width;
     private _height;
-    constructor(coordinates: Vector2, width: number, height: number, gameObject: GameObject);
-    set coordinates(coordinates: Vector2);
-    get coordinates(): Vector2;
+    constructor(position: Vector2, width: number, height: number, gameObject: GameObject);
+    set position(coordinates: Vector2);
+    get position(): Vector2;
     set width(width: number);
     get width(): number;
     set height(height: number);
     get height(): number;
-    get bottomLeftPoint(): Vector2;
-    get bottomRightPoint(): Vector2;
-    get topLeftPoint(): Vector2;
-    get topRightPoint(): Vector2;
-    hasCollision(collider: ICollider): boolean;
-    private updatePoints;
+    get bottomLeftQuadVertex(): Vector2;
+    get bottomRightQuadvertex(): Vector2;
+    get topLeftQuadVertex(): Vector2;
+    get topRightQuadVertex(): Vector2;
+    private updateShape;
+    private updateQuadVertex;
 }

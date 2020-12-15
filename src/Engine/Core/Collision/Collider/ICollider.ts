@@ -1,22 +1,13 @@
 import { GameObject } from "../../../GameObject";
 import { Vector2 } from "../../../Math/Vector2";
-
-export enum ColliderType {
-    Rectangle,
-    Circle,
-    Polygon,
-}
+import { Shape } from "../Shape/Shape";
 
 export interface ICollider {
-    readonly type: ColliderType;
+    position: Vector2;
+    readonly shape: Shape;
     readonly gameObject: GameObject;
-
-    coordinates: Vector2;
-    points: Vector2[];
-
-    readonly bottomLeftPoint: Vector2;
-    readonly bottomRightPoint: Vector2;
-    readonly topLeftPoint: Vector2;
-    readonly topRightPoint: Vector2;
-    hasCollision(collider: ICollider): boolean;
+    readonly bottomLeftQuadVertex: Vector2;
+    readonly bottomRightQuadvertex: Vector2;
+    readonly topLeftQuadVertex: Vector2;
+    readonly topRightQuadVertex: Vector2;
 }

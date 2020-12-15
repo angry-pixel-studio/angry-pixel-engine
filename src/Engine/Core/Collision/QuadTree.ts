@@ -100,19 +100,19 @@ export class QuadTree {
 
         const childrenQuadrants: Array<QuadTree> = [];
 
-        if (collider.bottomLeftPoint.x <= midPointX && collider.bottomLeftPoint.y <= midPointY) {
+        if (collider.bottomLeftQuadVertex.x <= midPointX && collider.bottomLeftQuadVertex.y <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.sw]);
         }
 
-        if (collider.bottomRightPoint.x >= midPointX && collider.bottomRightPoint.y <= midPointY) {
+        if (collider.bottomRightQuadvertex.x >= midPointX && collider.bottomRightQuadvertex.y <= midPointY) {
             childrenQuadrants.push(this.quadrants[this.se]);
         }
 
-        if (collider.topLeftPoint.x <= midPointX && collider.topLeftPoint.y >= midPointY) {
+        if (collider.topLeftQuadVertex.x <= midPointX && collider.topLeftQuadVertex.y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.nw]);
         }
 
-        if (collider.topRightPoint.x >= midPointX && collider.topRightPoint.y >= midPointY) {
+        if (collider.topRightQuadVertex.x >= midPointX && collider.topRightQuadVertex.y >= midPointY) {
             childrenQuadrants.push(this.quadrants[this.ne]);
         }
 

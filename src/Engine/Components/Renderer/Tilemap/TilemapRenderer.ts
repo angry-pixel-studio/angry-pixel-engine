@@ -4,6 +4,7 @@ import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { container } from "../../../Game";
 import { Rectangle } from "../../../Math/Rectangle";
 import { Tileset } from "../../../Tileset";
+import { TileData } from "./TileData";
 import { TiledTilemap } from "./TiledTilemap";
 
 export abstract class TilemapRenderer extends RenderComponent {
@@ -22,7 +23,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected _width: number = 0;
     protected _height: number = 0;
 
-    protected tiles: Rectangle[] = [];
+    protected tiles: TileData[] = [];
     protected _realWidth: number = 0;
     protected _realHeight: number = 0;
 
@@ -108,14 +109,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     }
 
     protected addTileData(renderData: ImageRenderData): void {
-        this.tiles.push(
-            new Rectangle(
-                renderData.position.x - renderData.width / 2,
-                renderData.position.y + renderData.height / 2,
-                renderData.width,
-                renderData.height
-            )
-        );
+        this.tiles.push(new TileData(renderData.position, renderData.width, renderData.height));
     }
 
     public get width(): number {
@@ -134,7 +128,7 @@ export abstract class TilemapRenderer extends RenderComponent {
         return this._realHeight;
     }
 
-    public get tilesData(): Rectangle[] {
+    public get tilesData(): TileData[] {
         return this.tiles;
     }
 }

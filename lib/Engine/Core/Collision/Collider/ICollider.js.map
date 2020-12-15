@@ -1,1 +1,1 @@
-{"version":3,"file":"ICollider.js","sourceRoot":"","sources":["../../../../../src/Engine/Core/Collision/Collider/ICollider.ts"],"names":[],"mappings":";;;AAGA,IAAY,YAIX;AAJD,WAAY,YAAY;IACpB,yDAAS,CAAA;IACT,mDAAM,CAAA;IACN,qDAAO,CAAA;AACX,CAAC,EAJW,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAIvB"}
+{"version":3,"file":"ICollider.js","sourceRoot":"","sources":["../../../../../src/Engine/Core/Collision/Collider/ICollider.ts"],"names":[],"mappings":""}

@@ -4,26 +4,24 @@ interface Config {
     height: number;
     offsetX?: number;
     offsetY?: number;
+    physics?: boolean;
     debug?: boolean;
 }
 export declare const TYPE_BOX_COLLIDER: string;
 export declare class BoxCollider extends ColliderComponent {
-    private renderManager;
+    debug: boolean;
     private width;
     private height;
     private offsetX;
     private offsetY;
-    debug: boolean;
     private realWidth;
     private realHeight;
     private realOffsetX;
     private realOffsetY;
-    private renderData;
     constructor(config: Config);
     protected start(): void;
     protected update(): void;
-    protected updateCoordinates(): void;
+    protected updatePosition(): void;
     private updateRealSize;
-    private updateRenderData;
 }
 export {};
