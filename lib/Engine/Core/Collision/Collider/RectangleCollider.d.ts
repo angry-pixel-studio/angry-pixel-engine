@@ -5,11 +5,12 @@ import { ICollider } from "./ICollider";
 export declare class RectangleCollider implements ICollider {
     readonly gameObject: GameObject;
     readonly shape: Rectangle;
+    readonly physics: boolean;
     private _quadVertex;
     private _position;
     private _width;
     private _height;
-    constructor(position: Vector2, width: number, height: number, gameObject: GameObject);
+    constructor(position: Vector2, width: number, height: number, physics: boolean, gameObject: GameObject);
     set position(coordinates: Vector2);
     get position(): Vector2;
     set width(width: number);

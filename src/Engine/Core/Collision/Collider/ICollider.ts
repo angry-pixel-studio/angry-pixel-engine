@@ -6,6 +6,7 @@ export interface ICollider {
     position: Vector2;
     readonly shape: Shape;
     readonly gameObject: GameObject;
+    readonly physics: boolean;
     readonly bottomLeftQuadVertex: Vector2;
     readonly bottomRightQuadvertex: Vector2;
     readonly topLeftQuadVertex: Vector2;

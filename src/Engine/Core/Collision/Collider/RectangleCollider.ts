@@ -6,18 +6,20 @@ import { ICollider } from "./ICollider";
 export class RectangleCollider implements ICollider {
     public readonly gameObject: GameObject;
     public readonly shape: Rectangle;
+    public readonly physics: boolean;
 
     private _quadVertex: Vector2[];
     private _position: Vector2 = new Vector2(0, 0);
     private _width: number = 0;
     private _height: number = 0;
 
-    constructor(position: Vector2, width: number, height: number, gameObject: GameObject) {
+    constructor(position: Vector2, width: number, height: number, physics: boolean, gameObject: GameObject) {
         this._position.set(position.x, position.y);
         this._quadVertex = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
         this._width = width;
         this._height = height;
         this.gameObject = gameObject;
+        this.physics = physics;
 
         this.shape = new Rectangle(
             this.position.x - this.width / 2,

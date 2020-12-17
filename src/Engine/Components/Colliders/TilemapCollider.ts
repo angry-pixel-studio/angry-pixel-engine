@@ -28,12 +28,19 @@ export class TilemapCollider extends ColliderComponent {
         this.type = TYPE_TILEMAP_COLLIDER;
         this.tilemapRenderer = config.tilemapRenderer;
         this.debug = config.debug ?? this.debug;
+        this._physics = true; // todo: fix this shit
     }
 
     protected start(): void {
         this.tilemapRenderer.tilesData.forEach((tileData: TileData) => {
             this.addCollider(
-                new RectangleCollider(tileData.position, tileData.width, tileData.height, this.gameObject)
+                new RectangleCollider(
+                    tileData.position,
+                    tileData.width,
+                    tileData.height,
+                    this._physics,
+                    this.gameObject
+                )
             );
             this.renderData.push(new ColliderRenderData());
         });

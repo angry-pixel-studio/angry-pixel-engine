@@ -93,33 +93,6 @@ export class RigidBody extends PhysicsComponent {
     }
 
     private moveGameObject(): void {
-        this.penetrationPerDirection.x.clear();
-        this.penetrationPerDirection.y.clear();
-
-        /*const deltaVelocity = this._velocity.mult(this.timeManager.deltaTime);
-        this.gameObject.transform.position = this.gameObject.transform.position.add(deltaVelocity);
-
-        this.updateCollisions();
-
-        this.collisions.forEach((collision: Collision) => {
-            const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
-            if (rigidBody !== null) {
-                const penetrationResolution: Vector2 = collision.collisionData.direction.mult(
-                    collision.collisionData.penetration
-                );
-
-                console.log(
-                    `x: ${collision.remoteCollider.position.x}, y: ${collision.remoteCollider.position.y}, pen: ${collision.collisionData.penetration}`
-                );
-
-                this.gameObject.transform.position = this.gameObject.transform.position.add(penetrationResolution);
-                this._velocity.set(
-                    collision.collisionData.direction.x !== this._velocity.unit().x ? 0 : this.velocity.x,
-                    collision.collisionData.direction.y !== this._velocity.unit().y ? 0 : this.velocity.y
-                );
-            }
-        });*/
-
         if (this._velocity.x !== 0) {
             this.moveX();
         }
@@ -130,6 +103,8 @@ export class RigidBody extends PhysicsComponent {
     }
 
     private moveX(): void {
+        this.penetrationPerDirection.x.clear();
+
         this.deltaVelocity = this._velocity.x * this.timeManager.deltaTime;
         this.gameObject.transform.position.set(
             this.gameObject.transform.position.x + this.deltaVelocity,
@@ -138,8 +113,11 @@ export class RigidBody extends PhysicsComponent {
         this.updateCollisions();
 
         this.collisions.forEach((collision: Collision) => {
-            const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
-            if (rigidBody !== null) {
+            if (
+                collision.remoteCollider.physics === true &&
+                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null &&
+                collision.collisionData.direction.x !== 0
+            ) {
                 this.penetrationPerDirection.x.set(
                     collision.collisionData.direction.x,
                     Math.max(
@@ -164,6 +142,8 @@ export class RigidBody extends PhysicsComponent {
     }
 
     private moveY(): void {
+        this.penetrationPerDirection.y.clear();
+
         this.deltaVelocity = this._velocity.y * this.timeManager.deltaTime;
         this.gameObject.transform.position.set(
             this.gameObject.transform.position.x,
@@ -172,8 +152,11 @@ export class RigidBody extends PhysicsComponent {
         this.updateCollisions();
 
         this.collisions.forEach((collision: Collision) => {
-            const rigidBody = collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY);
-            if (rigidBody !== null) {
+            if (
+                collision.remoteCollider.physics === true &&
+                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null &&
+                collision.collisionData.direction.y !== 0
+            ) {
                 this.penetrationPerDirection.y.set(
                     collision.collisionData.direction.y,
                     Math.max(
@@ -191,9 +174,7 @@ export class RigidBody extends PhysicsComponent {
                 this.gameObject.transform.position.y + pen
             );
 
-            console.log(`direction: ${direction}: ${this._velocity.unit().y}`);
-
-            if (direction !== 0 && this._velocity.unit().y !== direction) {
+            if (this._velocity.unit().y !== direction) {
                 this._velocity.set(this._velocity.x, 0);
             }
         });

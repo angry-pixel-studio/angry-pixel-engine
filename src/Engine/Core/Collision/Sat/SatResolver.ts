@@ -36,15 +36,17 @@ export class SatResolver {
             if (overlap < minOverlap || minOverlap === null) {
                 minOverlap = overlap;
                 smallestAxis = axes[i];
+
+                // esto es para diferenciar si el vertice con el minimo overlap pertenece al primer objeto o al segundo
                 if (i < firstShapeAxes) {
                     vertexObj = shape2;
                     if (proj1.max > proj2.max) {
-                        smallestAxis = axes[i].mult(-1);
+                        smallestAxis = axes[i].mult(-1); // la direccion del vertice es negada para usarla como direccion de respuesta
                     }
                 } else {
                     vertexObj = shape1;
                     if (proj1.max < proj2.max) {
-                        smallestAxis = axes[i].mult(-1);
+                        smallestAxis = axes[i].mult(-1); // idem
                     }
                 }
             }

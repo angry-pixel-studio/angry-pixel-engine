@@ -49,7 +49,13 @@ export class BoxCollider extends ColliderComponent {
         this.updateRealSize();
 
         this.addCollider(
-            new RectangleCollider(this.gameObject.transform.position, this.realWidth, this.realHeight, this.gameObject)
+            new RectangleCollider(
+                this.gameObject.transform.position,
+                this.realWidth,
+                this.realHeight,
+                this._physics,
+                this.gameObject
+            )
         );
 
         if (this.debug) {
@@ -72,8 +78,8 @@ export class BoxCollider extends ColliderComponent {
     }
 
     private updateRealSize(): void {
-        this.realWidth = this.width * this.gameObject.transform.scale.x;
-        this.realHeight = this.height * this.gameObject.transform.scale.y;
+        this.realWidth = this.width * Math.abs(this.gameObject.transform.scale.x);
+        this.realHeight = this.height * Math.abs(this.gameObject.transform.scale.y);
         this.realOffsetX = this.offsetX * this.gameObject.transform.scale.x;
         this.realOffsetY = this.offsetY * this.gameObject.transform.scale.y;
     }
