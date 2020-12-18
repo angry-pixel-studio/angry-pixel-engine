@@ -121,8 +121,8 @@ export class Game {
 
             this.requestAnimationFrame();
         } catch (error) {
-            throw error;
-            // console.error("Mini Engine Error: " + error);
+            console.error("Mini Engine Error: " + error);
+            // throw error;
         }
     }
 

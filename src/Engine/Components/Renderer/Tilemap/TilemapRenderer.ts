@@ -3,6 +3,7 @@ import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderD
 import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { container } from "../../../Game";
 import { Rectangle } from "../../../Math/Rectangle";
+import { Vector2 } from "../../../Math/Vector2";
 import { Tileset } from "../../../Tileset";
 import { TileData } from "./TileData";
 import { TiledTilemap } from "./TiledTilemap";
@@ -16,6 +17,8 @@ export abstract class TilemapRenderer extends RenderComponent {
 
     protected tileWidth: number = 0;
     protected tileHeight: number = 0;
+    protected orientation: Vector2 = new Vector2(1, 1);
+
     protected renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     protected tilemapProcessed: boolean = false;
     protected tilesRenderData: ImageRenderData[] = [];
@@ -34,8 +37,13 @@ export abstract class TilemapRenderer extends RenderComponent {
     }
 
     protected start(): void {
-        this.tileWidth = this.tileset.tileWidth * this.tileScale * this.gameObject.transform.scale.x;
-        this.tileHeight = this.tileset.tileHeight * this.tileScale * this.gameObject.transform.scale.y;
+        this.tileWidth = this.tileset.tileWidth * this.tileScale * Math.abs(this.gameObject.transform.scale.x);
+        this.tileHeight = this.tileset.tileHeight * this.tileScale * Math.abs(this.gameObject.transform.scale.y);
+        this.orientation.set(
+            Math.sign(this.gameObject.transform.scale.x),
+            Math.sign(this.gameObject.transform.scale.y)
+        );
+
         this.processTilemap();
         this.updateTilesPosition();
     }
@@ -68,8 +76,12 @@ export abstract class TilemapRenderer extends RenderComponent {
         const renderData: ImageRenderData = new ImageRenderData();
 
         renderData.position.set(
-            this.gameObject.transform.position.x + col * this.tileWidth + this.tileWidth / 2,
-            this.gameObject.transform.position.y - row * this.tileHeight - this.tileHeight / 2
+            this.gameObject.transform.position.x +
+                col * this.tileWidth * this.orientation.x +
+                (this.tileWidth * this.orientation.x) / 2,
+            this.gameObject.transform.position.y -
+                row * this.tileHeight * this.orientation.y -
+                (this.tileHeight * this.orientation.y) / 2
         );
 
         renderData.ui = false;
@@ -80,8 +92,8 @@ export abstract class TilemapRenderer extends RenderComponent {
         renderData.slice = tile;
         renderData.smooth = this.smooth;
         renderData.alpha = alpha;
-        renderData.flipHorizontal = flip.h;
-        renderData.flipVertical = flip.v;
+        renderData.flipHorizontal = flip.h !== this.orientation.x < 0;
+        renderData.flipVertical = flip.v !== this.orientation.y < 0;
 
         return renderData;
     }
@@ -101,8 +113,8 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected updateTilesPosition(): void {
         this.tilesRenderData.forEach((renderData) => {
             renderData.position.set(
-                renderData.position.x - Math.floor(this._realWidth / 2),
-                renderData.position.y + Math.floor(this._realHeight / 2)
+                renderData.position.x - Math.floor(this._realWidth / 2) * this.orientation.x,
+                renderData.position.y + Math.floor(this._realHeight / 2) * this.orientation.y
             );
             this.addTileData(renderData);
         });

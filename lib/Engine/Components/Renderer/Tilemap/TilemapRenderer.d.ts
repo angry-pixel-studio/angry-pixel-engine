@@ -2,6 +2,7 @@ import { RenderComponent } from "../../../Component";
 import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../../Core/Rendering/RenderManager";
 import { Rectangle } from "../../../Math/Rectangle";
+import { Vector2 } from "../../../Math/Vector2";
 import { Tileset } from "../../../Tileset";
 import { TileData } from "./TileData";
 import { TiledTilemap } from "./TiledTilemap";
@@ -13,6 +14,7 @@ export declare abstract class TilemapRenderer extends RenderComponent {
     smooth: boolean;
     protected tileWidth: number;
     protected tileHeight: number;
+    protected orientation: Vector2;
     protected renderManager: RenderManager;
     protected tilemapProcessed: boolean;
     protected tilesRenderData: ImageRenderData[];
