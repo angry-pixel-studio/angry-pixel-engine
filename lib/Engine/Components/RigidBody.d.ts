@@ -11,11 +11,13 @@ interface Config {
 }
 export declare const TYPE_RIGIDBODY: string;
 export declare class RigidBody extends PhysicsComponent {
+    private readonly velocityScale;
+    private readonly gravityScale;
     private _rigidBodyType;
     private _colliderComponents;
-    private _gravity;
     private _layersToCollide;
     private _velocity;
+    private _gravity;
     private deltaVelocity;
     private collisions;
     private penetrationPerDirection;
@@ -28,8 +30,8 @@ export declare class RigidBody extends PhysicsComponent {
     get gravity(): number;
     protected start(): void;
     protected update(): void;
-    private applyGravityToVelocity;
-    private moveGameObject;
+    private applyGravity;
+    private applyVelocity;
     private moveX;
     private moveY;
     private updateCollisions;

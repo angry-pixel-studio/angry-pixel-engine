@@ -1,4 +1,5 @@
 export class TimeManager {
+    private readonly max: number = 0.03;
     private then: number = 0;
     private _deltaTime: number = 0;
 
@@ -8,7 +9,7 @@ export class TimeManager {
 
     public update(time: number): void {
         const now: number = time * 0.001;
-        this._deltaTime = Math.min(Math.max(0, now - this.then), 0.1);
+        this._deltaTime = Math.min(Math.max(0, now - this.then), this.max);
         this.then = now;
     }
 

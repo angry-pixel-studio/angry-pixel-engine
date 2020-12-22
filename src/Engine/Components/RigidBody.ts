@@ -20,12 +20,16 @@ interface Config {
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
+    private readonly velocityScale: number = 60;
+    private readonly gravityScale: number = 9.8;
+
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: ColliderComponent[] = [];
-    private _gravity: number = 1;
     private _layersToCollide: string[] = [];
-    private _velocity: Vector2 = new Vector2(0, 0);
-    private deltaVelocity: number = 0;
+    private _velocity: Vector2 = new Vector2();
+    private _gravity: Vector2 = new Vector2();
+
+    private deltaVelocity: Vector2;
 
     private collisions: Collision[] = [];
 
@@ -44,7 +48,7 @@ export class RigidBody extends PhysicsComponent {
 
         this._rigidBodyType = config.rigidBodyType;
         this._layersToCollide = config.layersToCollide;
-        this._gravity = config.gravity ?? this._gravity;
+        this._gravity.set(0, config.gravity ?? this._gravity.y);
     }
 
     public get rigidBodyType(): RigidBodyType {
@@ -60,11 +64,11 @@ export class RigidBody extends PhysicsComponent {
     }
 
     public set gravity(gravity: number) {
-        this._gravity = gravity;
+        this._gravity.set(this._gravity.x, gravity);
     }
 
     public get gravity(): number {
-        return this._gravity;
+        return this._gravity.y;
     }
 
     protected start(): void {
@@ -82,17 +86,19 @@ export class RigidBody extends PhysicsComponent {
             return;
         }
 
-        this.applyGravityToVelocity();
-        this.moveGameObject();
+        this.applyGravity();
+        this.applyVelocity();
     }
 
-    private applyGravityToVelocity(): void {
-        if (this._gravity > 0) {
-            this._velocity.set(this._velocity.x, this._velocity.y - this._gravity * this.timeManager.deltaTime);
+    private applyGravity(): void {
+        if (this._gravity.y > 0) {
+            this._velocity = this._velocity.add(this._gravity.mult(-this.gravityScale * this.timeManager.deltaTime));
         }
     }
 
-    private moveGameObject(): void {
+    private applyVelocity(): void {
+        this.deltaVelocity = this._velocity.mult(this.velocityScale * this.timeManager.deltaTime);
+
         if (this._velocity.x !== 0) {
             this.moveX();
         }
@@ -105,9 +111,8 @@ export class RigidBody extends PhysicsComponent {
     private moveX(): void {
         this.penetrationPerDirection.x.clear();
 
-        this.deltaVelocity = this._velocity.x * this.timeManager.deltaTime;
         this.gameObject.transform.position.set(
-            this.gameObject.transform.position.x + this.deltaVelocity,
+            this.gameObject.transform.position.x + this.deltaVelocity.x,
             this.gameObject.transform.position.y
         );
         this.updateCollisions();
@@ -144,10 +149,9 @@ export class RigidBody extends PhysicsComponent {
     private moveY(): void {
         this.penetrationPerDirection.y.clear();
 
-        this.deltaVelocity = this._velocity.y * this.timeManager.deltaTime;
         this.gameObject.transform.position.set(
             this.gameObject.transform.position.x,
-            this.gameObject.transform.position.y + this.deltaVelocity
+            this.gameObject.transform.position.y + this.deltaVelocity.y
         );
         this.updateCollisions();
 

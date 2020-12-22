@@ -1,4 +1,5 @@
 export declare class TimeManager {
+    private readonly max;
     private then;
     private _deltaTime;
     start(): void;
