@@ -13,6 +13,7 @@ export declare const TYPE_RIGIDBODY: string;
 export declare class RigidBody extends PhysicsComponent {
     private readonly velocityScale;
     private readonly gravityScale;
+    velocityIterations: number;
     private _rigidBodyType;
     private _colliderComponents;
     private _layersToCollide;

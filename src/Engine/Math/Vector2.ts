@@ -32,6 +32,10 @@ export class Vector2 {
         this._y = y;
     }
 
+    public sameAs(vector: Vector2): boolean {
+        return this._x === vector.x && this._y === vector.y;
+    }
+
     public add(vector: Vector2): Vector2 {
         return new Vector2(this.x + vector.x, this.y + vector.y);
     }

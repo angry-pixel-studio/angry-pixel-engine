@@ -6,14 +6,12 @@ interface Config {
 }
 export declare const TYPE_TILEMAP_COLLIDER: string;
 export declare class TilemapCollider extends ColliderComponent {
-    private renderManager;
     private tilemapRenderer;
-    debug: boolean;
-    private renderData;
+    private debug;
+    private cacheVertex;
     constructor(config: Config);
     protected start(): void;
-    protected update(): void;
-    private updateRenderData;
+    private needsCollider;
     protected updatePosition(): void;
 }
 export {};

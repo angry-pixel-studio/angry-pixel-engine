@@ -22,6 +22,7 @@ export const TYPE_RIGIDBODY: string = "RigidBody";
 export class RigidBody extends PhysicsComponent {
     private readonly velocityScale: number = 60;
     private readonly gravityScale: number = 9.8;
+    public velocityIterations: number = 4;
 
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: ColliderComponent[] = [];
@@ -100,11 +101,17 @@ export class RigidBody extends PhysicsComponent {
         this.deltaVelocity = this._velocity.mult(this.velocityScale * this.timeManager.deltaTime);
 
         if (this._velocity.x !== 0) {
-            this.moveX();
+            this.deltaVelocity.x = this.deltaVelocity.x / this.velocityIterations;
+            for (let i = 0; i <= this.velocityIterations - 1; i++) {
+                this.moveX();
+            }
         }
 
         if (this._velocity.y !== 0) {
-            this.moveY();
+            this.deltaVelocity.y = this.deltaVelocity.y / this.velocityIterations;
+            for (let i = 0; i <= this.velocityIterations - 1; i++) {
+                this.moveY();
+            }
         }
     }
 
@@ -168,8 +175,13 @@ export class RigidBody extends PhysicsComponent {
                         collision.collisionData.penetration
                     )
                 );
+
+                //console.log(`pen: ${collision.collisionData.penetration}`);
             }
         });
+
+        //console.log(`up: ${this.penetrationPerDirection.y.get(1)}`);
+        //console.log(`down: ${this.penetrationPerDirection.y.get(-1)}`);
 
         this.penetrationPerDirection.y.forEach((penetration: number, direction: number) => {
             const pen: number = direction * penetration;

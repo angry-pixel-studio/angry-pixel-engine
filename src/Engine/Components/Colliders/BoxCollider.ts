@@ -85,7 +85,7 @@ export class BoxCollider extends ColliderComponent {
     }
 }
 
-const TYPE_BOX_COLLIDER_RENDERER: string = "BoxCollider";
+const TYPE_BOX_COLLIDER_RENDERER: string = "BoxColliderRenderer";
 
 class BoxColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
