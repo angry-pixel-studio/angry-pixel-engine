@@ -1,5 +1,4 @@
 import { Component, PhysicsComponent } from "../Component";
-import { ICollider } from "../Core/Collision/Collider/ICollider";
 import { Collision } from "../Core/Collision/CollisionManager";
 import { TimeManager } from "../Core/Time/TimeManager";
 import { container } from "../Game";
@@ -20,9 +19,12 @@ interface Config {
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
-    private readonly velocityScale: number = 60;
     private readonly gravityScale: number = 9.8;
-    public velocityIterations: number = 4;
+    private readonly physicsFramerate: number = 60;
+    private readonly physicsIterations: number = 4;
+
+    private physicsDeltaTime: number = 0;
+    private deltaTimeAccumulator: number = 0;
 
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: ColliderComponent[] = [];
@@ -50,6 +52,8 @@ export class RigidBody extends PhysicsComponent {
         this._rigidBodyType = config.rigidBodyType;
         this._layersToCollide = config.layersToCollide;
         this._gravity.set(0, config.gravity ?? this._gravity.y);
+
+        this.physicsDeltaTime = parseFloat((1 / this.physicsFramerate / this.physicsIterations).toFixed(6));
     }
 
     public get rigidBodyType(): RigidBodyType {
@@ -80,6 +84,10 @@ export class RigidBody extends PhysicsComponent {
                     ? this._colliderComponents.push(component)
                     : null
             );
+
+        if (this._colliderComponents.length === 0) {
+            throw new Error("RigidBody needs at least one Collider");
+        }
     }
 
     protected update(): void {
@@ -87,111 +95,72 @@ export class RigidBody extends PhysicsComponent {
             return;
         }
 
-        this.applyGravity();
-        this.applyVelocity();
+        this.deltaTimeAccumulator += this.timeManager.deltaTime;
+
+        while (this.deltaTimeAccumulator >= this.physicsDeltaTime) {
+            this.applyGravity();
+            this.applyVelocity();
+
+            this.deltaTimeAccumulator -= this.physicsDeltaTime;
+        }
     }
 
     private applyGravity(): void {
         if (this._gravity.y > 0) {
-            this._velocity = this._velocity.add(this._gravity.mult(-this.gravityScale * this.timeManager.deltaTime));
+            this._velocity = this._velocity.add(this._gravity.mult(-this.gravityScale * this.physicsDeltaTime));
         }
     }
 
     private applyVelocity(): void {
-        this.deltaVelocity = this._velocity.mult(this.velocityScale * this.timeManager.deltaTime);
+        this.deltaVelocity = this._velocity.mult(this.physicsFramerate * this.physicsDeltaTime);
 
-        if (this._velocity.x !== 0) {
-            this.deltaVelocity.x = this.deltaVelocity.x / this.velocityIterations;
-            for (let i = 0; i <= this.velocityIterations - 1; i++) {
-                this.moveX();
-            }
-        }
-
-        if (this._velocity.y !== 0) {
-            this.deltaVelocity.y = this.deltaVelocity.y / this.velocityIterations;
-            for (let i = 0; i <= this.velocityIterations - 1; i++) {
-                this.moveY();
-            }
+        if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
+            this.move();
         }
     }
 
-    private moveX(): void {
+    private move(): void {
         this.penetrationPerDirection.x.clear();
-
-        this.gameObject.transform.position.set(
-            this.gameObject.transform.position.x + this.deltaVelocity.x,
-            this.gameObject.transform.position.y
-        );
-        this.updateCollisions();
-
-        this.collisions.forEach((collision: Collision) => {
-            if (
-                collision.remoteCollider.physics === true &&
-                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null &&
-                collision.collisionData.direction.x !== 0
-            ) {
-                this.penetrationPerDirection.x.set(
-                    collision.collisionData.direction.x,
-                    Math.max(
-                        this.penetrationPerDirection.x.get(collision.collisionData.direction.x) ?? 0,
-                        collision.collisionData.penetration
-                    )
-                );
-            }
-        });
-
-        this.penetrationPerDirection.x.forEach((penetration: number, direction: number) => {
-            const pen: number = direction * penetration;
-            this.gameObject.transform.position.set(
-                this.gameObject.transform.position.x + pen,
-                this.gameObject.transform.position.y
-            );
-
-            if (this._velocity.unit().x !== direction) {
-                this._velocity.set(0, this._velocity.y);
-            }
-        });
-    }
-
-    private moveY(): void {
         this.penetrationPerDirection.y.clear();
 
-        this.gameObject.transform.position.set(
-            this.gameObject.transform.position.x,
-            this.gameObject.transform.position.y + this.deltaVelocity.y
-        );
+        this.gameObject.transform.position = this.gameObject.transform.position.add(this.deltaVelocity);
         this.updateCollisions();
 
         this.collisions.forEach((collision: Collision) => {
             if (
                 collision.remoteCollider.physics === true &&
-                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null &&
-                collision.collisionData.direction.y !== 0
+                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null
             ) {
-                this.penetrationPerDirection.y.set(
-                    collision.collisionData.direction.y,
-                    Math.max(
-                        this.penetrationPerDirection.y.get(collision.collisionData.direction.y) ?? 0,
-                        collision.collisionData.penetration
-                    )
-                );
+                if (collision.collisionData.direction.x !== 0) {
+                    this.setPenetrationPerDirectionPerAxis("x", collision);
+                }
 
-                //console.log(`pen: ${collision.collisionData.penetration}`);
+                if (collision.collisionData.direction.y !== 0) {
+                    this.setPenetrationPerDirectionPerAxis("y", collision);
+                }
             }
         });
 
-        //console.log(`up: ${this.penetrationPerDirection.y.get(1)}`);
-        //console.log(`down: ${this.penetrationPerDirection.y.get(-1)}`);
+        this.penetrationResolution("x");
+        this.penetrationResolution("y");
+    }
 
-        this.penetrationPerDirection.y.forEach((penetration: number, direction: number) => {
-            const pen: number = direction * penetration;
-            this.gameObject.transform.position.set(
-                this.gameObject.transform.position.x,
-                this.gameObject.transform.position.y + pen
-            );
+    private setPenetrationPerDirectionPerAxis(axis: "x" | "y", collision: Collision): void {
+        this.penetrationPerDirection[axis].set(
+            collision.collisionData.direction[axis],
+            Math.max(
+                this.penetrationPerDirection[axis].get(collision.collisionData.direction[axis]) ?? 0,
+                collision.collisionData.penetration
+            )
+        );
+    }
 
-            if (this._velocity.unit().y !== direction) {
-                this._velocity.set(this._velocity.x, 0);
+    private penetrationResolution(axis: "x" | "y"): void {
+        this.penetrationPerDirection[axis].forEach((penetration: number, direction: number) => {
+            this.gameObject.transform.position[axis] += direction * penetration;
+
+            if (this._velocity[axis] !== 0 && Math.sign(this._velocity[axis]) !== Math.sign(direction)) {
+                this._velocity[axis] = 0;
             }
         });
     }

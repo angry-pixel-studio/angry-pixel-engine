@@ -11,9 +11,11 @@ interface Config {
 }
 export declare const TYPE_RIGIDBODY: string;
 export declare class RigidBody extends PhysicsComponent {
-    private readonly velocityScale;
     private readonly gravityScale;
-    velocityIterations: number;
+    private readonly physicsFramerate;
+    private readonly physicsIterations;
+    private physicsDeltaTime;
+    private deltaTimeAccumulator;
     private _rigidBodyType;
     private _colliderComponents;
     private _layersToCollide;
@@ -33,8 +35,9 @@ export declare class RigidBody extends PhysicsComponent {
     protected update(): void;
     private applyGravity;
     private applyVelocity;
-    private moveX;
-    private moveY;
+    private move;
+    private setPenetrationPerDirectionPerAxis;
+    private penetrationResolution;
     private updateCollisions;
 }
 export {};
