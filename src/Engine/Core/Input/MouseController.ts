@@ -24,11 +24,9 @@ export class MouseController {
     }
 
     private setup(): void {
-        const canvas: HTMLCanvasElement = this.gameNode.querySelector<HTMLCanvasElement>("canvas");
-
-        canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
-        canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
-        canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+        this.gameNode.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
+        this.gameNode.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
+        this.gameNode.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
 
         window.addEventListener(EVENT_UPDATE, () => this.update());
     }
