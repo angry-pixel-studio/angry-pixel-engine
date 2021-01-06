@@ -1,6 +1,6 @@
-import { Rectangle } from "../../Math/Rectangle";
+import { Tile } from "../../Core/Tilemap/Tile";
 import { Tileset } from "../../Tileset";
-import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
+import { TilemapRenderer } from "./TilemapRenderer";
 
 interface Config {
     tileset: Tileset;
@@ -45,7 +45,7 @@ export class CsvTilemapRenderer extends TilemapRenderer {
                     const id: number = parsed > MAX_TILES ? parsed % 1000 : parsed;
                     const flipDigit: number = Math.round(parsed / 1000);
 
-                    const tile: Rectangle = this.tileset.getTile(id);
+                    const tile: Tile = this.tileset.getTile(id);
                     const flip = { h: [FLIP_H, FLIP_B].includes(flipDigit), v: [FLIP_V, FLIP_B].includes(flipDigit) };
 
                     if (tile !== null) {

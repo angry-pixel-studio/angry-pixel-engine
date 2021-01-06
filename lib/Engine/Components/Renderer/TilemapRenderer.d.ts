@@ -1,16 +1,43 @@
+import { RenderComponent } from "../../Component";
+import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
+import { Vector2 } from "../../Math/Vector2";
 import { Tileset } from "../../Tileset";
-import { AbstractTilemapRenderer } from "./Tilemap/AbstractTilemapRenderer";
-interface Config {
+import { TileData } from "../../Core/Tilemap/TileData";
+import { TiledTilemap } from "../../Core/Tilemap/TiledTilemap";
+import { Tile } from "../../Core/Tilemap/Tile";
+export declare abstract class TilemapRenderer extends RenderComponent {
     tileset: Tileset;
     tilemapData: string;
+    tiledTilemap: TiledTilemap;
     tileScale: number;
     smooth: boolean;
-    alpha: number;
+    protected tileWidth: number;
+    protected tileHeight: number;
+    protected orientation: Vector2;
+    protected renderManager: RenderManager;
+    protected tilemapProcessed: boolean;
+    protected tilesRenderData: ImageRenderData[];
+    protected _width: number;
+    protected _height: number;
+    protected tiles: TileData[];
+    protected _realWidth: number;
+    protected _realHeight: number;
+    constructor();
+    protected start(): void;
+    protected update(): void;
+    protected abstract processTilemap(): void;
+    protected processTile(tile: Tile, col: number, row: number, alpha?: number, flip?: {
+        h: boolean;
+        v: boolean;
+    }): void;
+    private createRenderData;
+    private updateSizeInfo;
+    protected updateTilesPosition(): void;
+    protected addTileData(renderData: ImageRenderData): void;
+    get width(): number;
+    get height(): number;
+    get realWidth(): number;
+    get realHeight(): number;
+    get tilesData(): TileData[];
 }
-export declare const TYPE_TILEMAP_RENDERER: string;
-export declare class TilemapRenderer extends AbstractTilemapRenderer {
-    private alpha;
-    constructor({ tileset, tilemapData, tileScale, smooth, alpha }: Config);
-    protected processTilemap(): void;
-}
-export {};

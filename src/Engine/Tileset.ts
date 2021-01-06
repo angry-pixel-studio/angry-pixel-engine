@@ -1,5 +1,5 @@
 import { Vector2 } from "./Math/Vector2";
-import { Rectangle } from "./Math/Rectangle";
+import { Tile } from "./Core/Tilemap/Tile";
 
 interface Config {
     image: HTMLImageElement;
@@ -20,7 +20,7 @@ export class Tileset {
     public offset: Vector2 = new Vector2(0, 0);
     public tileOffset: Vector2 = new Vector2(0, 0);
 
-    private _tiles: Rectangle[] = [];
+    private _tiles: Tile[] = [];
 
     constructor(config: Config) {
         this.image = config.image;
@@ -39,7 +39,7 @@ export class Tileset {
 
         for (let row: number = 0; row < this.gridHeight; row++) {
             for (let col: number = 0; col < this.gridWidth; col++) {
-                this._tiles[index] = new Rectangle(
+                this._tiles[index] = new Tile(
                     col * this.tileWidth + this.offset.x + this.tileOffset.x,
                     row * this.tileHeight - this.offset.y - this.tileOffset.y,
                     this.tileWidth,
@@ -51,11 +51,11 @@ export class Tileset {
         }
     }
 
-    public getTile(index: number): Rectangle | null {
+    public getTile(index: number): Tile | null {
         return this._tiles[index] ? this._tiles[index] : null;
     }
 
-    public get tiles(): Rectangle[] {
+    public get tiles(): Tile[] {
         return this._tiles;
     }
 }

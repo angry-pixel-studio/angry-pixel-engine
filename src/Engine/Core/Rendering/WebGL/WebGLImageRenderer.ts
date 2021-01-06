@@ -6,6 +6,7 @@ import { TextureFactory } from "./TextureFactory";
 import { Vector2 } from "../../../Math/Vector2";
 import * as sha256 from "crypto-js/sha256";
 import { Rectangle } from "../../../Math/Rectangle";
+import { Slice } from "../RenderData/ImageRenderData";
 
 export class WebGLImageRenderer {
     private textureFactory: TextureFactory;
@@ -55,17 +56,6 @@ export class WebGLImageRenderer {
         this.textureUniform = this.gl.getUniformLocation(this.program, "texImage");
         this.alphaUniform = this.gl.getUniformLocation(this.program, "alpha");
 
-        this.projectionMatrix = mat4.create();
-        mat4.ortho(
-            this.projectionMatrix,
-            -canvas.width / 2,
-            canvas.width / 2,
-            -canvas.height / 2,
-            canvas.height / 2,
-            -1,
-            1
-        ); // todo: sacar esto de la camara y no el canvas
-
         this.gl.useProgram(this.program);
 
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
@@ -89,11 +79,12 @@ export class WebGLImageRenderer {
     }
 
     public renderImage(
+        viewportRect: Rectangle,
         image: HTMLImageElement,
         position: Vector2,
         width: number,
         height: number,
-        slice: Rectangle | null = null,
+        slice: Slice | null = null,
         rotation: number = 0,
         flipHorizontal: boolean = false,
         flipVertical: boolean = false,
@@ -111,7 +102,7 @@ export class WebGLImageRenderer {
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             width * (flipHorizontal ? -1 : 1),
             height * (flipVertical ? -1 : 1),
-            0,
+            0, // todo: test with 1
         ]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, rotation * (Math.PI / 180));
 
@@ -125,9 +116,13 @@ export class WebGLImageRenderer {
             mat4.scale(this.textureMatrix, this.textureMatrix, [
                 slice.width / image.naturalWidth,
                 slice.height / image.naturalHeight,
-                0,
+                0, // todo: test with 1
             ]);
         }
+
+        this.projectionMatrix = mat4.create();
+
+        mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
 
         this.gl.uniformMatrix4fv(this.projectionMatrixUniform, false, this.projectionMatrix);
         this.gl.uniformMatrix4fv(this.modelMatrixUniform, false, this.modelMatrix);

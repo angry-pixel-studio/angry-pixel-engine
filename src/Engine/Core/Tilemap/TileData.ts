@@ -1,4 +1,4 @@
-import { Vector2 } from "../../../Math/Vector2";
+import { Vector2 } from "../../Math/Vector2";
 
 export class TileData {
     private _position: Vector2 = new Vector2();

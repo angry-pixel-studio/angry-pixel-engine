@@ -1,5 +1,5 @@
 import { Tileset } from "../../Tileset";
-import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
+import { TilemapRenderer } from "./TilemapRenderer";
 interface Config {
     tileset: Tileset;
     tilemapData: string;

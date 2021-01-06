@@ -1,5 +1,5 @@
 import { Vector2 } from "./Math/Vector2";
-import { Rectangle } from "./Math/Rectangle";
+import { Tile } from "./Core/Tilemap/Tile";
 interface Config {
     image: HTMLImageElement;
     tileWidth: number;
@@ -20,7 +20,7 @@ export declare class Tileset {
     private _tiles;
     constructor(config: Config);
     private generateTiles;
-    getTile(index: number): Rectangle | null;
-    get tiles(): Rectangle[];
+    getTile(index: number): Tile | null;
+    get tiles(): Tile[];
 }
 export {};

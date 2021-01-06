@@ -1,6 +1,6 @@
-import { Rectangle } from "../../../Math/Rectangle";
 import { Vector2 } from "../../../Math/Vector2";
 import { ShapeType } from "../../Collision/Shape/Shape";
+import { CameraData } from "../CameraData";
 import { IContextRenderer } from "../IContextRenderer";
 import { ColliderRenderData } from "../RenderData/ColliderRenderData";
 import { GeometricRenderData, GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
@@ -28,7 +28,7 @@ export class Context2DRenderer implements IContextRenderer {
         }
     }
 
-    public render(renderData: RenderData): void {
+    public render(camera: CameraData, renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
             this.renderImage(renderData as ImageRenderData);
         }

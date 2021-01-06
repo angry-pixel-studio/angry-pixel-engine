@@ -1,5 +1,6 @@
 export * from "./Engine/Math/Vector2";
 export * from "./Engine/Math/Rectangle";
+export * from "./Engine/Math/Matrix2";
 export { Game, IGameConfig } from "./Engine/Game";
 export * from "./Engine/Scene";
 export * from "./Engine/GameObject";
@@ -13,7 +14,6 @@ export * from "./Engine/Components/Renderer/SpriteRenderer";
 export * from "./Engine/Components/Renderer/TextRenderer";
 export * from "./Engine/Components/Renderer/TiledTilemapRenderer";
 export * from "./Engine/Components/Renderer/CsvTilemapRenderer";
-export * from "./Engine/Components/Renderer/Tilemap/TiledTilemap";
 export * from "./Engine/Components/Animator";
 export * from "./Engine/Components/AudioPlayer";
 export * from "./Engine/Components/Camera";

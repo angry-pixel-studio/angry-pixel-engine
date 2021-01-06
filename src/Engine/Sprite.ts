@@ -1,24 +1,30 @@
-import { Rectangle } from "./Math/Rectangle";
 import { Vector2 } from "./Math/Vector2";
 
-interface config {
+interface Config {
     image: HTMLImageElement;
     scale?: Vector2;
-    slice?: Rectangle | null;
+    slice?: Slice | null;
     smooth?: boolean;
+}
+
+interface Slice {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
 }
 
 export class Sprite {
     public image: HTMLImageElement = null;
     public width: number = null;
     public height: number = null;
-    public slice: Rectangle = null;
+    public slice: Slice = null;
     public scale: Vector2 = new Vector2(1, 1);
     public smooth: boolean = true;
 
     private _loaded: boolean = false;
 
-    constructor(config: config) {
+    constructor(config: Config) {
         this.image = config.image;
 
         this.slice = config.slice ?? this.slice;

@@ -3,9 +3,9 @@ import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollid
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { LAYER_DEFAULT } from "../../GameObject";
-import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
+import { TilemapRenderer } from "../Renderer/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
-import { TileData } from "../Renderer/Tilemap/TileData";
+import { TileData } from "../../Core/Tilemap/TileData";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
 import { RenderComponent } from "../../Component";
 import { Vector2 } from "../../Math/Vector2";

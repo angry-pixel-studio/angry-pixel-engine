@@ -1,3 +1,4 @@
+import { CameraData } from "../CameraData";
 import { IContextRenderer } from "../IContextRenderer";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
@@ -33,14 +34,15 @@ export class WebGLRenderer implements IContextRenderer {
             : null;
     }
 
-    render(renderData: RenderData): void {
+    render(camera: CameraData, renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
-            this.renderImage(renderData as ImageRenderData);
+            this.renderImage(camera, renderData as ImageRenderData);
         }
     }
 
-    private renderImage(renderData: ImageRenderData): void {
+    private renderImage(camera: CameraData, renderData: ImageRenderData): void {
         this.imageRenderer.renderImage(
+            camera.viewportRect,
             renderData.image,
             renderData.viewportPosition,
             renderData.width,

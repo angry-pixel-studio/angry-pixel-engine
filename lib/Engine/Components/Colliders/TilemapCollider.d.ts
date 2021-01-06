@@ -1,4 +1,4 @@
-import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
+import { TilemapRenderer } from "../Renderer/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
 interface Config {
     tilemapRenderer: TilemapRenderer;

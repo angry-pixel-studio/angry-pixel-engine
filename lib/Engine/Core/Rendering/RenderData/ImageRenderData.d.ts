@@ -1,11 +1,16 @@
-import { Rectangle } from "../../../Math/Rectangle";
 import { RenderData, RenderDataType } from "./RenderData";
+export interface Slice {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 export declare class ImageRenderData extends RenderData {
     type: RenderDataType;
     image: HTMLImageElement;
     width: number;
     height: number;
-    slice: Rectangle;
+    slice: Slice;
     flipHorizontal: boolean;
     flipVertical: boolean;
     rotation: number;

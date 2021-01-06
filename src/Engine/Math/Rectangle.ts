@@ -1,46 +1,72 @@
 import { Vector2 } from "./Vector2";
 
 export class Rectangle {
-    private position: Vector2 = new Vector2(0, 0);
-    public width: number = 0;
-    public height: number = 0;
+    private _position: Vector2 = new Vector2();
+    private _center: Vector2 = new Vector2();
+    private _width: number = 0;
+    private _height: number = 0;
 
     constructor(x: number, y: number, width: number, height: number) {
         this.set(x, y, width, height);
     }
 
     public get x(): number {
-        return this.position.x;
+        return this._position.x;
     }
 
     public set x(value: number) {
-        this.position.set(value, this.position.y);
+        this._position.set(value, this._position.y);
     }
 
     public get y(): number {
-        return this.position.y;
+        return this._position.y;
     }
 
     public set y(value: number) {
-        this.position.set(this.position.x, value);
+        this._position.set(this._position.x, value);
     }
 
     public get x1(): number {
-        return this.position.x + this.width;
+        return this._position.x + this._width;
     }
 
     public get y1(): number {
-        return this.position.y - this.height;
+        return this._position.y + this._height;
+    }
+
+    public get position(): Vector2 {
+        return this._position;
+    }
+
+    public set position(position: Vector2) {
+        this._position.set(position.x, position.y);
+    }
+
+    public get width(): number {
+        return this._width;
+    }
+
+    public set width(width: number) {
+        this._width = width;
+    }
+
+    public get height(): number {
+        return this._height;
+    }
+
+    public set height(height: number) {
+        this._height = height;
+    }
+
+    public get center(): Vector2 {
+        this._center.set(this.x + this.width / 2, this.y + this.height / 2);
+        return this._center;
     }
 
     public set(x: number, y: number, width: number, height: number): void {
-        this.setPosition(x, y);
-        this.width = width;
-        this.height = height;
-    }
-
-    public setPosition(x: number, y: number): void {
-        this.position.set(x, y);
+        this._position.set(x, y);
+        this._width = width;
+        this._height = height;
     }
 
     public updateFromRect(rect: Rectangle): void {
@@ -48,6 +74,6 @@ export class Rectangle {
     }
 
     public overlappingRectangle(rect: Rectangle): boolean {
-        return this.x1 >= rect.x && this.x <= rect.x1 && this.y1 <= rect.y && this.y >= rect.y1;
+        return this.x1 >= rect.x && this.x <= rect.x1 && this.y1 >= rect.y && this.y <= rect.y1;
     }
 }

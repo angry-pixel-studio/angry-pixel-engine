@@ -1,6 +1,6 @@
 import { Tileset } from "../../Tileset";
-import { TiledTilemap } from "./Tilemap/TiledTilemap";
-import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
+import { TiledTilemap } from "../../Core/Tilemap/TiledTilemap";
+import { TilemapRenderer } from "./TilemapRenderer";
 interface Config {
     tileset: Tileset;
     tilemapData: TiledTilemap;

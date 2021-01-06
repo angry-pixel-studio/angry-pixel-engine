@@ -1,12 +1,12 @@
-import { RenderComponent } from "../../../Component";
-import { ImageRenderData } from "../../../Core/Rendering/RenderData/ImageRenderData";
-import { RenderManager } from "../../../Core/Rendering/RenderManager";
-import { container } from "../../../Game";
-import { Rectangle } from "../../../Math/Rectangle";
-import { Vector2 } from "../../../Math/Vector2";
-import { Tileset } from "../../../Tileset";
-import { TileData } from "./TileData";
-import { TiledTilemap } from "./TiledTilemap";
+import { RenderComponent } from "../../Component";
+import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
+import { RenderManager } from "../../Core/Rendering/RenderManager";
+import { container } from "../../Game";
+import { Vector2 } from "../../Math/Vector2";
+import { Tileset } from "../../Tileset";
+import { TileData } from "../../Core/Tilemap/TileData";
+import { TiledTilemap } from "../../Core/Tilemap/TiledTilemap";
+import { Tile } from "../../Core/Tilemap/Tile";
 
 export abstract class TilemapRenderer extends RenderComponent {
     public tileset: Tileset = null;
@@ -55,7 +55,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected abstract processTilemap(): void;
 
     protected processTile(
-        tile: Rectangle,
+        tile: Tile,
         col: number,
         row: number,
         alpha: number = 1,
@@ -67,7 +67,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     }
 
     private createRenderData(
-        tile: Rectangle,
+        tile: Tile,
         col: number,
         row: number,
         alpha: number = 1,
