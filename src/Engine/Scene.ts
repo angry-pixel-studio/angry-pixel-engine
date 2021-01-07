@@ -41,10 +41,8 @@ export class Scene {
         return this.findGameObjectByName(GAME_CAMERA_ID);
     }
 
-    public addGameObject(gameObjectFactory: GameObjectFactory, name: string): this {
-        this.gameObjectManager.addGameObject(gameObjectFactory, name);
-
-        return this;
+    public addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
+        return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
     }
 
     public getRootGameObjects(): GameObject[] {

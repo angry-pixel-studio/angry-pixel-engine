@@ -76,6 +76,10 @@ export class WebGLImageRenderer {
         this.gl.enableVertexAttribArray(this.texCoordsAttr);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.vertexAttribPointer(this.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+
+        this.projectionMatrix = mat4.create();
+        this.modelMatrix = mat4.create();
+        this.textureMatrix = mat4.create();
     }
 
     public renderImage(
@@ -97,16 +101,16 @@ export class WebGLImageRenderer {
         }
         const texture = this.texcache.get(textureHash);
 
-        this.modelMatrix = mat4.create();
+        this.modelMatrix = mat4.identity(this.modelMatrix);
         mat4.translate(this.modelMatrix, this.modelMatrix, [position.x, position.y, 0]);
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             width * (flipHorizontal ? -1 : 1),
             height * (flipVertical ? -1 : 1),
-            0, // todo: test with 1
+            1,
         ]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, rotation * (Math.PI / 180));
 
-        this.textureMatrix = mat4.create();
+        this.textureMatrix = mat4.identity(this.textureMatrix);
         if (slice !== null) {
             mat4.translate(this.textureMatrix, this.textureMatrix, [
                 slice.x / image.naturalWidth,
@@ -116,12 +120,11 @@ export class WebGLImageRenderer {
             mat4.scale(this.textureMatrix, this.textureMatrix, [
                 slice.width / image.naturalWidth,
                 slice.height / image.naturalHeight,
-                0, // todo: test with 1
+                1,
             ]);
         }
 
-        this.projectionMatrix = mat4.create();
-
+        this.projectionMatrix = mat4.identity(this.projectionMatrix);
         mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
 
         this.gl.uniformMatrix4fv(this.projectionMatrixUniform, false, this.projectionMatrix);

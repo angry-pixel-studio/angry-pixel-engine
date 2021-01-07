@@ -13,7 +13,7 @@ export declare class Scene {
     protected start(): void;
     protected update(): void;
     get gameCamera(): GameCamera;
-    addGameObject(gameObjectFactory: GameObjectFactory, name: string): this;
+    addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T;
     getRootGameObjects(): GameObject[];
     findGameObjectByName<T extends GameObject>(name: string): T | null;
     findGameObjectsByTag(tag: string): GameObject[];
