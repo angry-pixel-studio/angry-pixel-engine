@@ -168,10 +168,8 @@ export class GameObject {
         this.components = [];
     }
 
-    public addChild(gameObjectFactory: GameObjectFactory, name: string): this {
-        this.gameObjectManager.addGameObject(gameObjectFactory, name, this);
-
-        return this;
+    public addChild<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
+        return this.gameObjectManager.addGameObject(gameObjectFactory, name, this) as T;
     }
 
     public getChildren(): GameObject[] {

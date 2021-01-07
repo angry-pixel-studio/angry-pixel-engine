@@ -60,7 +60,7 @@ export class TilemapCollider extends ColliderComponent {
         for (let i = 0; i < this.cacheVertex.length; i++) {
             if (
                 this.tilemapRenderer.tilesData.find((tileData2: TileData) =>
-                    tileData2.position.sameAs(this.cacheVertex[i])
+                    tileData2.position.equals(this.cacheVertex[i])
                 ) === undefined
             ) {
                 return true;

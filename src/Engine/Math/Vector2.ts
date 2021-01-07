@@ -32,7 +32,7 @@ export class Vector2 {
         this._y = y;
     }
 
-    public sameAs(vector: Vector2): boolean {
+    public equals(vector: Vector2): boolean {
         return this._x === vector.x && this._y === vector.y;
     }
 

@@ -42,7 +42,7 @@ export declare class GameObject {
     removeComponentByName(name: string): void;
     removeComponentByType(type: string): void;
     removeComponents(): void;
-    addChild(gameObjectFactory: GameObjectFactory, name: string): this;
+    addChild<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T;
     getChildren(): GameObject[];
     getChild<T extends GameObject>(name: string): T;
     destroyChildren(): void;

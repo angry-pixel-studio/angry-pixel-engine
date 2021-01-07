@@ -8,7 +8,7 @@ export declare class Vector2 {
     set y(y: number);
     get magnitude(): number;
     set(x: number, y: number): void;
-    sameAs(vector: Vector2): boolean;
+    equals(vector: Vector2): boolean;
     add(vector: Vector2): Vector2;
     substract(vector: Vector2): Vector2;
     mult(number: number): Vector2;

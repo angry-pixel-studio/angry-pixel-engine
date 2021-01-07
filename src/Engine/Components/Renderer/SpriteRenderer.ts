@@ -2,34 +2,35 @@ import { RenderComponent } from "../../Component";
 import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
+import { Matrix2 } from "../../Math/Matrix2";
 import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
 
 interface Config {
     sprite: Sprite;
-    offsetX?: number;
-    offsetY?: number;
+    offset?: Vector2;
     smooth?: boolean;
     rotation?: number;
     flipHorizontal?: boolean;
     flipVertical?: boolean;
     opacity?: number;
+    tiled?: Vector2;
 }
 
 export const TYPE_SPRITE_RENDERER: string = "SpriteRenderer";
 
 export class SpriteRenderer extends RenderComponent {
     public sprite: Sprite = null;
-    public offsetX: number = 0;
-    public offsetY: number = 0;
+    public offset: Vector2 = new Vector2();
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = 0;
     public smooth: boolean = true;
     public opacity: number = 1;
+    private _tiled: Vector2 = new Vector2(1, 1);
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-    private renderData: ImageRenderData = new ImageRenderData();
+    private renderData: ImageRenderData[] = [];
     private goPosition: Vector2 = null;
 
     constructor(config: Config) {
@@ -38,13 +39,25 @@ export class SpriteRenderer extends RenderComponent {
         this.type = TYPE_SPRITE_RENDERER;
 
         this.sprite = config.sprite;
-        this.offsetX = config.offsetX ?? this.offsetX;
-        this.offsetY = config.offsetY ?? this.offsetY;
+        this.offset = config.offset ?? this.offset;
         this.smooth = config.smooth ?? this.smooth;
         this.rotation = config.rotation ?? this.rotation;
         this.flipHorizontal = config.flipHorizontal ?? this.flipHorizontal;
         this.flipVertical = config.flipVertical ?? this.flipVertical;
         this.opacity = config.opacity ?? this.opacity;
+        this.tiled = config.tiled ?? this._tiled;
+    }
+
+    public get tiled(): Vector2 {
+        return this._tiled;
+    }
+
+    public set tiled(tiled: Vector2) {
+        if (tiled.x % 1 !== 0 || tiled.y % 1 !== 0) {
+            throw new Error("SpriteRenderer.tiled: Vector2 components must be integer");
+        }
+
+        this._tiled.set(tiled.x, tiled.y);
     }
 
     protected start(): void {
@@ -54,46 +67,74 @@ export class SpriteRenderer extends RenderComponent {
 
     protected update(): void {
         if (this.sprite.loaded === true) {
-            this.renderData.ui = this.gameObject.ui;
-            this.renderData.layer = this.gameObject.layer;
-            this.renderData.image = this.sprite.image;
-            this.renderData.width = this.sprite.width * Math.abs(this.gameObject.transform.scale.x);
-            this.renderData.height = this.sprite.height * Math.abs(this.gameObject.transform.scale.y);
-            this.renderData.slice = this.sprite.slice;
-            this.renderData.flipHorizontal = this.flipHorizontal !== this.gameObject.transform.scale.x < 0;
-            this.renderData.flipVertical = this.flipVertical !== this.gameObject.transform.scale.y < 0;
-            this.renderData.rotation = this.gameObject.transform.rotation + this.rotation;
-            this.renderData.smooth = this.sprite.smooth;
-            this.renderData.alpha = this.opacity;
+            this.updateRenderDataArray();
 
-            this.calculateRenderPosition();
-            this.renderManager.addToRenderStack(this.renderData);
+            let index = 0;
+            for (let tileX = 0; tileX < this._tiled.x; tileX++) {
+                for (let tileY = 0; tileY < this._tiled.y; tileY++) {
+                    this.updateRenderData(index, tileX, tileY);
+                    index++;
+                }
+            }
         }
     }
 
-    private calculateRenderPosition(): void {
-        this.renderData.position.set(
-            this.gameObject.transform.position.x + this.offsetX,
-            this.gameObject.transform.position.y + this.offsetY
-        );
+    private updateRenderDataArray(): void {
+        if (this.renderData.length !== this._tiled.x * this._tiled.y) {
+            this.renderData = [];
+            for (let i = 0; i <= this._tiled.x * this._tiled.y; i++) {
+                this.renderData[i] = new ImageRenderData();
+            }
+        }
+    }
+
+    private updateRenderData(index: number, tileX: number, tileY: number): void {
+        this.renderData[index].ui = this.gameObject.ui;
+        this.renderData[index].layer = this.gameObject.layer;
+        this.renderData[index].image = this.sprite.image;
+        this.renderData[index].width = this.sprite.width * Math.abs(this.gameObject.transform.scale.x);
+        this.renderData[index].height = this.sprite.height * Math.abs(this.gameObject.transform.scale.y);
+        this.renderData[index].slice = this.sprite.slice;
+        this.renderData[index].flipHorizontal = this.flipHorizontal !== this.gameObject.transform.scale.x < 0;
+        this.renderData[index].flipVertical = this.flipVertical !== this.gameObject.transform.scale.y < 0;
+        this.renderData[index].rotation = this.gameObject.transform.rotation + this.rotation;
+        this.renderData[index].smooth = this.sprite.smooth;
+        this.renderData[index].alpha = this.opacity;
+
+        this.calculateRenderPosition(index, tileX, tileY);
+        this.renderManager.addToRenderStack(this.renderData[index]);
+    }
+
+    private calculateRenderPosition(index: number, tileX: number, tileY: number): void {
+        this.renderData[index].position = this.gameObject.transform.position
+            .add(this.offset)
+            .substract(
+                new Vector2(
+                    (this.renderData[index].width / 2) * (this.tiled.x - 1),
+                    (this.renderData[index].height / 2) * (this.tiled.y - 1)
+                )
+            )
+            .add(new Vector2(tileX * this.renderData[index].width, tileY * this.renderData[index].height));
 
         if (this.gameObject.transform.rotation) {
-            this.translateRenderPosition();
+            this.translateRenderPosition(index);
         }
-
-        return;
     }
 
-    private translateRenderPosition(): void {
-        const angle: number = (this.gameObject.transform.rotation * Math.PI) / 180.0;
+    private translateRenderPosition(index: number): void {
+        const goRad: number = (this.gameObject.transform.rotation * Math.PI) / 180.0;
+        const thisRad: number = Math.atan2(
+            this.renderData[index].position.x - this.goPosition.x,
+            this.renderData[index].position.y - this.goPosition.y
+        );
         const radius: number = Math.hypot(
-            this.renderData.position.x - this.goPosition.x,
-            this.renderData.position.y - this.goPosition.y
+            this.renderData[index].position.x - this.goPosition.x,
+            this.renderData[index].position.y - this.goPosition.y
         );
 
-        this.renderData.position.set(
-            this.goPosition.x + radius * Math.cos(angle),
-            this.goPosition.y - radius * Math.sin(angle)
+        this.renderData[index].position.set(
+            this.goPosition.x + radius * Math.sin(thisRad - goRad),
+            this.goPosition.y + radius * Math.cos(thisRad - goRad)
         );
     }
 }
