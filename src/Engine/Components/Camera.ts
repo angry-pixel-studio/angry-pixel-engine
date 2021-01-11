@@ -10,12 +10,6 @@ const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
 export const TYPE_CAMERA: string = "Camera";
 
-interface Config {
-    layers: string[];
-    depth: number;
-    zoom: number;
-}
-
 export class Camera extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private domManager: DomManager = container.getSingleton<DomManager>("DomManager");
@@ -26,10 +20,7 @@ export class Camera extends RenderComponent {
     private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    private canvasWidth: number;
-    private canvasHeight: number;
-    private canvasHalfWidth: number;
-    private canvasHalfHeight: number;
+    private canvas: HTMLCanvasElement;
     private cameraData: CameraData = new CameraData();
 
     constructor() {
@@ -37,11 +28,7 @@ export class Camera extends RenderComponent {
 
         this.allowMultiple = false;
         this.type = TYPE_CAMERA;
-
-        this.canvasWidth = this.domManager.gameCanvas.width;
-        this.canvasHeight = this.domManager.gameCanvas.height;
-        this.canvasHalfWidth = this.canvasWidth / 2;
-        this.canvasHalfHeight = this.canvasHeight / 2;
+        this.canvas = this.domManager.gameCanvas;
     }
 
     public set layers(layers: string[]) {
@@ -93,10 +80,10 @@ export class Camera extends RenderComponent {
     private updateViewportRect(): void {
         const inverseZoom: number = 1 / this.zoom;
 
-        this._viewportRect.x = -this.canvasHalfWidth * inverseZoom;
-        this._viewportRect.y = -this.canvasHalfHeight * inverseZoom;
-        this._viewportRect.width = this.canvasWidth * inverseZoom;
-        this._viewportRect.height = this.canvasHeight * inverseZoom;
+        this._viewportRect.x = (-this.canvas.width / 2) * inverseZoom;
+        this._viewportRect.y = (-this.canvas.height / 2) * inverseZoom;
+        this._viewportRect.width = this.canvas.width * inverseZoom;
+        this._viewportRect.height = this.canvas.height * inverseZoom;
     }
 
     private updateWorldSpaceRect(): void {

@@ -9,10 +9,7 @@ export declare class Camera extends RenderComponent {
     private _zoom;
     private _viewportRect;
     private _worldSpaceRect;
-    private canvasWidth;
-    private canvasHeight;
-    private canvasHalfWidth;
-    private canvasHalfHeight;
+    private canvas;
     private cameraData;
     constructor();
     set layers(layers: string[]);

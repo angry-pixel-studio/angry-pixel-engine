@@ -69,7 +69,11 @@ export class RenderManager {
 
             this.setViewportPosition(camera, renderData);
 
-            if (
+            if (this.uiRenderer !== null && renderData.ui === true) {
+                this.uiRenderer.render(camera, renderData);
+            } else if (this.debugRenderer !== null && renderData.debug === true) {
+                this.debugRenderer.render(camera, renderData);
+            } else if (
                 renderData.ui !== true &&
                 renderData.debug !== true &&
                 this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false

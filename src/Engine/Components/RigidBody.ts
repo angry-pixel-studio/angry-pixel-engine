@@ -21,7 +21,7 @@ export const TYPE_RIGIDBODY: string = "RigidBody";
 export class RigidBody extends PhysicsComponent {
     private readonly gravityScale: number = 9.8;
     private readonly physicsFramerate: number = 60;
-    private readonly physicsIterations: number = 4;
+    private readonly physicsIterations: number = 12;
 
     private physicsDeltaTime: number = 0;
     private deltaTimeAccumulator: number = 0;
