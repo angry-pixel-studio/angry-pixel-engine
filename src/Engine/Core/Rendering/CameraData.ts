@@ -5,4 +5,5 @@ export class CameraData {
     public layers: string[] = [];
     public viewportRect: Rectangle = null;
     public worldSpaceRect: Rectangle = null;
+    public zoom: number = 0;
 }

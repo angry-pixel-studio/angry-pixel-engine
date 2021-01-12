@@ -15,7 +15,7 @@ export class WebGLRenderer implements IContextRenderer {
         this.imageRenderer = imageRenderer;
     }
 
-    clearCanvas(color: string): void {
+    public clearCanvas(color: string): void {
         const rgb = this.hexToRgb(color);
 
         this.gl.clearColor(rgb.r, rgb.g, rgb.b, 1);
@@ -34,7 +34,7 @@ export class WebGLRenderer implements IContextRenderer {
             : null;
     }
 
-    render(camera: CameraData, renderData: RenderData): void {
+    public render(camera: CameraData, renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
             this.renderImage(camera, renderData as ImageRenderData);
         }

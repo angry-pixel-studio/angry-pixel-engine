@@ -100,13 +100,13 @@ class BoxColliderRenderer extends RenderComponent {
 
         this.renderData = new ColliderRenderData();
         this.renderData.debug = true;
-        this.renderData.layer = LAYER_DEFAULT;
         this.renderData.color = "#00FF00";
 
         this.collider = collider;
     }
 
     protected update(): void {
+        this.renderData.layer = this.gameObject.layer;
         this.renderData.position = this.collider.position;
         this.renderData.shape = this.collider.shape;
         this.renderManager.addToRenderStack(this.renderData);

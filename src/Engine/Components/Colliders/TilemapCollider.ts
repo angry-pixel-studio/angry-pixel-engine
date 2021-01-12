@@ -92,13 +92,13 @@ class TilemapColliderRenderer extends RenderComponent {
         this.colliders.forEach((collider: ICollider, index: number) => {
             this.renderData[index] = new ColliderRenderData();
             this.renderData[index].debug = true;
-            this.renderData[index].layer = LAYER_DEFAULT;
             this.renderData[index].color = "#00FF00";
         });
     }
 
     protected update(): void {
         this.colliders.forEach((collider: ICollider, index: number) => {
+            this.renderData[index].layer = this.gameObject.layer;
             this.renderData[index].position = collider.position;
             this.renderData[index].shape = collider.shape;
             this.renderManager.addToRenderStack(this.renderData[index]);

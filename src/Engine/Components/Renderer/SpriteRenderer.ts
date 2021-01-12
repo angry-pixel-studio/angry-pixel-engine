@@ -116,7 +116,7 @@ export class SpriteRenderer extends RenderComponent {
             )
             .add(new Vector2(tileX * this.renderData[index].width, tileY * this.renderData[index].height));
 
-        if (this.gameObject.transform.rotation) {
+        if (this.gameObject.transform.rotation !== 0) {
             this.translateRenderPosition(index);
         }
     }

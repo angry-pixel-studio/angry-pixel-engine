@@ -30,7 +30,7 @@ export class Context2DRenderer implements IContextRenderer {
 
     public render(camera: CameraData, renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
-            this.renderImage(renderData as ImageRenderData);
+            this.renderImage(renderData as ImageRenderData, camera.zoom);
         }
 
         if (renderData.type === RenderDataType.Text) {
@@ -42,15 +42,26 @@ export class Context2DRenderer implements IContextRenderer {
         }
 
         if (renderData.type === RenderDataType.Collider) {
-            this.renderCollider(renderData as ColliderRenderData);
+            this.renderCollider(renderData as ColliderRenderData, camera.zoom);
         }
     }
 
-    private renderImage(renderData: ImageRenderData): void {
+    private renderImage(renderData: ImageRenderData, zoom: number): void {
         this.updateRenderPosition(renderData);
 
         this.imagePosition.set(0, 0);
         this.canvasContext.save();
+
+        if (renderData.ui !== true) {
+            this.canvasContext.setTransform(
+                zoom,
+                0,
+                0,
+                zoom,
+                (this.canvas.width * (1 - zoom)) / 2, // todo: use camera viewport
+                (this.canvas.height * (1 - zoom)) / 2
+            );
+        }
 
         if (renderData.rotation) {
             this.canvasContext.translate(
@@ -149,8 +160,19 @@ export class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private renderCollider(renderData: ColliderRenderData): void {
+    private renderCollider(renderData: ColliderRenderData, zoom: number): void {
         this.canvasContext.save();
+
+        if (renderData.ui !== true) {
+            this.canvasContext.setTransform(
+                zoom,
+                0,
+                0,
+                zoom,
+                (this.canvas.width * (1 - zoom)) / 2, // todo: use camera viewport
+                (this.canvas.height * (1 - zoom)) / 2
+            );
+        }
 
         this.updateRenderPosition(renderData);
 

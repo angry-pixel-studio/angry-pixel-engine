@@ -98,6 +98,7 @@ export class Camera extends RenderComponent {
         this.cameraData.layers = this._layers;
         this.cameraData.viewportRect = this._viewportRect;
         this.cameraData.worldSpaceRect = this._worldSpaceRect;
+        this.cameraData.zoom = this._zoom;
 
         this.renderManager.addCameraData(this.cameraData);
     }
