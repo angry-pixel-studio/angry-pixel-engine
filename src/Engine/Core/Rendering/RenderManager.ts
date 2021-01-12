@@ -4,12 +4,7 @@ import { IContextRenderer } from "./IContextRenderer";
 import { GeometricRenderData } from "./RenderData/GeometricRenderData";
 import { ImageRenderData } from "./RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "./RenderData/RenderData";
-
-interface Config {
-    gameRenderer: IContextRenderer;
-    uiRenderer: IContextRenderer | null;
-    debugRenderer: IContextRenderer | null;
-}
+import { CameraData } from "./CameraData";
 
 export class RenderManager {
     private gameRenderer: IContextRenderer = null;
@@ -17,9 +12,7 @@ export class RenderManager {
     private debugRenderer: IContextRenderer = null;
 
     private renderStack: RenderData[] = [];
-    private _renderLayers: string[] = [];
-    private _worldSpaceViewRect: Rectangle = new Rectangle(0, 0, 0, 0);
-    private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
+    private cameras: CameraData[] = [];
 
     private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
@@ -31,18 +24,6 @@ export class RenderManager {
         this.gameRenderer = gameRenderer;
         this.uiRenderer = uiRenderer;
         this.debugRenderer = debugRenderer;
-    }
-
-    public set renderLayers(renderLayers: string[]) {
-        this._renderLayers = [...renderLayers];
-    }
-
-    public set worldSpaceViewRect(worldSpaceRect: Rectangle) {
-        this._worldSpaceViewRect.updateFromRect(worldSpaceRect);
-    }
-
-    public set viewportRect(viewportRect: Rectangle) {
-        this._viewportRect.updateFromRect(viewportRect);
     }
 
     public clearCanvas(color: string | null = null): void {
@@ -63,59 +44,64 @@ export class RenderManager {
         this.renderStack.push(renderData);
     }
 
-    public clearRenderStack(): void {
-        this.renderStack = [];
+    public addCameraData(cameraData: CameraData): void {
+        this.cameras.push(cameraData);
     }
 
     public render(): void {
+        this.cameras
+            .sort((a: CameraData, b: CameraData) => a.depth - b.depth)
+            .forEach((camera: CameraData) => this.renderByCamera(camera));
+
+        this.clear();
+    }
+
+    public clear(): void {
+        this.renderStack = [];
+        this.cameras = [];
+    }
+
+    private renderByCamera(camera: CameraData): void {
         this.renderStack.forEach((renderData: RenderData) => {
-            if (this._renderLayers.includes(renderData.layer) === false) {
+            if (camera.layers.includes(renderData.layer) === false) {
                 return;
             }
 
-            this.setViewportPosition(renderData);
+            this.setViewportPosition(camera, renderData);
 
             if (this.uiRenderer !== null && renderData.ui === true) {
-                this.uiRenderer.render(renderData);
+                this.uiRenderer.render(camera, renderData);
             } else if (this.debugRenderer !== null && renderData.debug === true) {
-                this.debugRenderer.render(renderData);
+                this.debugRenderer.render(camera, renderData);
             } else if (
                 renderData.ui !== true &&
                 renderData.debug !== true &&
-                this.isInsideViewportRect(renderData as ImageRenderData) !== false
+                this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false
             ) {
-                this.gameRenderer.render(renderData);
+                this.gameRenderer.render(camera, renderData);
             }
         });
-
-        this.clearRenderStack();
     }
 
-    private setViewportPosition(renderData: RenderData): void {
+    private setViewportPosition(camera: CameraData, renderData: RenderData): void {
         if (renderData.ui !== true) {
             renderData.viewportPosition.set(
-                Number(
-                    (renderData.position.x - this._worldSpaceViewRect.x - this._worldSpaceViewRect.width / 2).toFixed(0)
-                ),
-                Number(
-                    (renderData.position.y - this._worldSpaceViewRect.y + this._worldSpaceViewRect.height / 2).toFixed(
-                        0
-                    )
-                )
+                Number((renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2).toFixed(0)),
+                Number((renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2).toFixed(0))
             );
         } else {
             renderData.viewportPosition = renderData.position;
         }
     }
 
-    private isInsideViewportRect(renderData: ImageRenderData): boolean {
+    private isInsideViewportRect(camera: CameraData, renderData: ImageRenderData): boolean {
         this.cacheRect.set(
             renderData.viewportPosition.x - renderData.width / 2,
-            renderData.viewportPosition.y + renderData.height / 2,
+            renderData.viewportPosition.y - renderData.height / 2,
             renderData.width,
             renderData.height
         );
 
-        return this._viewportRect.overlappingRectangle(this.cacheRect);
+        return camera.viewportRect.overlappingRectangle(this.cacheRect);
     }
 }

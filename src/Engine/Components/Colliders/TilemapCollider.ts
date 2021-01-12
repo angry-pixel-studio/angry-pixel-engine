@@ -3,9 +3,9 @@ import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollid
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { LAYER_DEFAULT } from "../../GameObject";
-import { TilemapRenderer } from "../Renderer/Tilemap/TilemapRenderer";
+import { TilemapRenderer } from "../Renderer/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
-import { TileData } from "../Renderer/Tilemap/TileData";
+import { TileData } from "../../Core/Tilemap/TileData";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
 import { RenderComponent } from "../../Component";
 import { Vector2 } from "../../Math/Vector2";
@@ -60,7 +60,7 @@ export class TilemapCollider extends ColliderComponent {
         for (let i = 0; i < this.cacheVertex.length; i++) {
             if (
                 this.tilemapRenderer.tilesData.find((tileData2: TileData) =>
-                    tileData2.position.sameAs(this.cacheVertex[i])
+                    tileData2.position.equals(this.cacheVertex[i])
                 ) === undefined
             ) {
                 return true;
@@ -92,13 +92,13 @@ class TilemapColliderRenderer extends RenderComponent {
         this.colliders.forEach((collider: ICollider, index: number) => {
             this.renderData[index] = new ColliderRenderData();
             this.renderData[index].debug = true;
-            this.renderData[index].layer = LAYER_DEFAULT;
             this.renderData[index].color = "#00FF00";
         });
     }
 
     protected update(): void {
         this.colliders.forEach((collider: ICollider, index: number) => {
+            this.renderData[index].layer = this.gameObject.layer;
             this.renderData[index].position = collider.position;
             this.renderData[index].shape = collider.shape;
             this.renderManager.addToRenderStack(this.renderData[index]);

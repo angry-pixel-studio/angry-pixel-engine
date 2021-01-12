@@ -1,6 +1,7 @@
 import { Tileset } from "../../Tileset";
-import { TiledChunk, TiledLayer, TiledTilemap } from "./Tilemap/TiledTilemap";
-import { TilemapRenderer } from "./Tilemap/TilemapRenderer";
+import { TiledChunk, TiledLayer, TiledTilemap } from "../../Core/Tilemap/TiledTilemap";
+import { TilemapRenderer } from "./TilemapRenderer";
+import { Tile } from "../../Core/Tilemap/Tile";
 
 interface Config {
     tileset: Tileset;
@@ -34,11 +35,11 @@ export class TiledTilemapRenderer extends TilemapRenderer {
     }
 
     private processChunk(chunk: TiledChunk | TiledLayer, alpha: number = 1): void {
-        let dataIndex = 0;
+        let dataIndex: number = 0;
 
         for (let row = 0; row < chunk.height; row++) {
             for (let col = 0; col < chunk.width; col++) {
-                const tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
+                const tile: Tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
                 if (tile !== null) {
                     this.processTile(tile, col + chunk.x, row + chunk.y, alpha);
                 }

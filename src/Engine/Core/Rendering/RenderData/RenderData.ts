@@ -1,3 +1,4 @@
+import { Rectangle } from "../../../Math/Rectangle";
 import { Vector2 } from "../../../Math/Vector2";
 
 export enum RenderDataType {
@@ -12,6 +13,7 @@ export abstract class RenderData {
     public ui: boolean = false;
     public debug: boolean = false;
     public layer: string = null;
+    public viwportRect: Rectangle;
 
     private _position: Vector2 = new Vector2(0, 0);
     private _viewportPosition: Vector2 = new Vector2(0, 0);

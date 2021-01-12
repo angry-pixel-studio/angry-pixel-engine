@@ -74,7 +74,7 @@ export class SceneManager {
             this.currentScene = null;
             this.currentSceneName = null;
 
-            this.renderManager.clearRenderStack();
+            this.renderManager.clear();
         }
     }
 }
