@@ -17,6 +17,6 @@ export class KeyboardController {
     };
 
     public isPressed(keyCode: string): boolean {
-        return this.keyPresses.get(keyCode);
+        return this.keyPresses.get(keyCode) ?? false;
     }
 }
