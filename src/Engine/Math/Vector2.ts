@@ -36,12 +36,16 @@ export class Vector2 {
         return this._x === vector.x && this._y === vector.y;
     }
 
-    public add(vector: Vector2): Vector2 {
-        return new Vector2(this.x + vector.x, this.y + vector.y);
+    public static add(out: Vector2, a: Vector2, b: Vector2): Vector2 {
+        out.set(a.x + b.x, a.y + b.y);
+
+        return out;
     }
 
-    public substract(vector: Vector2): Vector2 {
-        return new Vector2(this.x - vector.x, this.y - vector.y);
+    public static substract(out: Vector2, a: Vector2, b: Vector2): Vector2 {
+        out.set(a.x - b.x, a.y - b.y);
+
+        return out;
     }
 
     public mult(number: number) {
@@ -56,7 +60,7 @@ export class Vector2 {
         if (this.magnitude === 0) {
             return new Vector2(0, 0);
         } else {
-            return new Vector2(Math.round(this.x / this.magnitude), Math.round(this.y / this.magnitude));
+            return new Vector2(this.x / this.magnitude, this.y / this.magnitude);
         }
     }
 

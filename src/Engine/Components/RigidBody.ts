@@ -19,6 +19,8 @@ interface Config {
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
+    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
+
     private readonly gravityScale: number = 9.8;
     private readonly physicsFramerate: number = 60;
     private readonly physicsIterations: number = 12;
@@ -41,7 +43,7 @@ export class RigidBody extends PhysicsComponent {
         y: new Map<number, number>(),
     };
 
-    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
+    private nextObjectPosition: Vector2 = new Vector2();
 
     constructor(config: Config) {
         super();
@@ -107,7 +109,11 @@ export class RigidBody extends PhysicsComponent {
 
     private applyGravity(): void {
         if (this._gravity.y > 0) {
-            this._velocity = this._velocity.add(this._gravity.mult(-this.gravityScale * this.physicsDeltaTime));
+            this._velocity = Vector2.add(
+                this._velocity,
+                this._velocity,
+                this._gravity.mult(-this.gravityScale * this.physicsDeltaTime)
+            );
         }
     }
 
@@ -123,7 +129,11 @@ export class RigidBody extends PhysicsComponent {
         this.penetrationPerDirection.x.clear();
         this.penetrationPerDirection.y.clear();
 
-        this.gameObject.transform.position = this.gameObject.transform.position.add(this.deltaVelocity);
+        this.gameObject.transform.position = Vector2.add(
+            this.nextObjectPosition,
+            this.gameObject.transform.position,
+            this.deltaVelocity
+        );
         this.updateCollisions();
 
         this.collisions.forEach((collision: Collision) => {

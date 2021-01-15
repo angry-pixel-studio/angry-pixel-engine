@@ -29,8 +29,8 @@ export class BoxCollider extends ColliderComponent {
 
     private realWidth: number = 0;
     private realHeight: number = 0;
-    private realOffsetX: number = 0;
-    private realOffsetY: number = 0;
+    private realOffset: Vector2 = new Vector2();
+    private realPosition: Vector2 = new Vector2();
 
     constructor(config: Config) {
         super();
@@ -72,16 +72,20 @@ export class BoxCollider extends ColliderComponent {
 
         (this.colliders[0] as RectangleCollider).width = this.realWidth;
         (this.colliders[0] as RectangleCollider).height = this.realHeight;
-        this.colliders[0].position = this.gameObject.transform.position.add(
-            new Vector2(this.realOffsetX, this.realOffsetY)
+
+        this.colliders[0].position = Vector2.add(
+            this.realPosition,
+            this.gameObject.transform.position,
+            this.realOffset
         );
     }
 
     private updateRealSize(): void {
         this.realWidth = this.width * Math.abs(this.gameObject.transform.scale.x);
         this.realHeight = this.height * Math.abs(this.gameObject.transform.scale.y);
-        this.realOffsetX = this.offsetX * this.gameObject.transform.scale.x;
-        this.realOffsetY = this.offsetY * this.gameObject.transform.scale.y;
+
+        this.realOffset.x = this.offsetX * this.gameObject.transform.scale.x;
+        this.realOffset.y = this.offsetY * this.gameObject.transform.scale.y;
     }
 }
 
