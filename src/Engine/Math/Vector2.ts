@@ -36,43 +36,75 @@ export class Vector2 {
         return this._x === vector.x && this._y === vector.y;
     }
 
+    public clone(): Vector2 {
+        return new Vector2(this._x, this._y);
+    }
+
+    /**
+     * @param out The output vector
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The output vector
+     */
     public static add(out: Vector2, a: Vector2, b: Vector2): Vector2 {
         out.set(a.x + b.x, a.y + b.y);
 
         return out;
     }
 
+    /**
+     * @param out The output vector
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The output vector
+     */
     public static substract(out: Vector2, a: Vector2, b: Vector2): Vector2 {
         out.set(a.x - b.x, a.y - b.y);
 
         return out;
     }
 
+    /**
+     * @param out The output vector
+     * @param a The vector to get the unit
+     * @returns The output vector
+     */
+    public static unit(out: Vector2, a: Vector2): Vector2 {
+        a.magnitude === 0 ? out.set(0, 0) : out.set(a.x / a.magnitude, a.y / a.magnitude);
+
+        return out;
+    }
+
+    /**
+     * @param out The output vector
+     * @param a The vector to normalize
+     * @returns The output vector
+     */
+    public static normal(out: Vector2, a: Vector2): Vector2 {
+        out.set(-a.y, a.x);
+
+        return this.unit(out, out);
+    }
+
     public mult(number: number) {
         return new Vector2(this.x * number, this.y * number);
     }
 
-    public normal() {
-        return new Vector2(-this.y, this.x).unit();
+    /**
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The dot product result
+     */
+    public static dot(a: Vector2, b: Vector2): number {
+        return a.x * b.x + a.y * b.y;
     }
 
-    public unit() {
-        if (this.magnitude === 0) {
-            return new Vector2(0, 0);
-        } else {
-            return new Vector2(this.x / this.magnitude, this.y / this.magnitude);
-        }
-    }
-
-    public clone(): Vector2 {
-        return new Vector2(this._x, this._y);
-    }
-
-    public static dot(vector1: Vector2, vector2: Vector2): number {
-        return vector1.x * vector2.x + vector1.y * vector2.y;
-    }
-
-    public static cross(vector1: Vector2, vector2: Vector2): number {
-        return vector1.x * vector2.y - vector1.y * vector2.x;
+    /**
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The cross produc result
+     */
+    public static cross(a: Vector2, b: Vector2): number {
+        return a.x * b.y - a.y * b.x;
     }
 }

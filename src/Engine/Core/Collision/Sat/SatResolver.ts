@@ -71,13 +71,14 @@ export class SatResolver {
     private findAxes(shape1: Shape, shape2: Shape): Vector2[] {
         const axes: Vector2[] = [];
 
+        // TODO: make the shapes retrieve their own axes
         if (shape1.type === ShapeType.Rectangle) {
-            axes.push(shape1.direction.normal());
+            axes.push(Vector2.normal(new Vector2(), shape1.direction));
             axes.push(shape1.direction);
         }
 
         if (shape2.type === ShapeType.Rectangle) {
-            axes.push(shape2.direction.normal());
+            axes.push(Vector2.normal(new Vector2(), shape1.direction));
             axes.push(shape2.direction);
         }
 
