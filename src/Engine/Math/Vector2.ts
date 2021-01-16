@@ -151,4 +151,16 @@ export class Vector2 {
     public static cross(a: Vector2, b: Vector2): number {
         return a.x * b.y - a.y * b.x;
     }
+
+    /**
+     * Rounds a vector
+     *
+     * @param a The vector to round
+     * @returns The output vector
+     */
+    public static round(out: Vector2, a: Vector2): Vector2 {
+        out.set(Math.round(a.x), Math.round(a.y));
+
+        return out;
+    }
 }
