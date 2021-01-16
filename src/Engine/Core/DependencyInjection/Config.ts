@@ -21,14 +21,7 @@ import { Container } from "./Container";
 export const loadDependencies = (container: Container, game: Game): void => {
     container.add(
         "DomManager",
-        () =>
-            new DomManager(
-                game.config.containerNode,
-                game.config.gameWidth,
-                game.config.gameHeight,
-                game.config.uiEnabled,
-                game.config.debugEnabled
-            )
+        () => new DomManager(game.config.containerNode, game.config.gameWidth, game.config.gameHeight)
     );
 
     const domManager: DomManager = container.getSingleton<DomManager>("DomManager");
@@ -48,24 +41,7 @@ export const loadDependencies = (container: Container, game: Game): void => {
 
 const renderingDependencies = (container: Container, domManager: DomManager): void => {
     webGLDependencies(container, domManager);
-
-    if (domManager.uiCanvas !== null) {
-        container.add("UIRenderer", () => new Context2DRenderer(domManager.uiCanvas));
-    }
-
-    if (domManager.debugCanvas !== null) {
-        container.add("DebugRenderer", () => new Context2DRenderer(domManager.debugCanvas));
-    }
-
-    container.add(
-        "RenderManager",
-        () =>
-            new RenderManager(
-                container.getSingleton<WebGLRenderer>("GameRenderer"),
-                domManager.uiCanvas !== null ? container.getSingleton<Context2DRenderer>("UIRenderer") : null,
-                domManager.debugCanvas !== null ? container.getSingleton<Context2DRenderer>("DebugRenderer") : null
-            )
-    );
+    container.add("RenderManager", () => new RenderManager(container.getSingleton<WebGLRenderer>("GameRenderer")));
 };
 
 const webGLDependencies = (container: Container, domManager: DomManager): void => {
@@ -77,7 +53,7 @@ const webGLDependencies = (container: Container, domManager: DomManager): void =
         "WebGLImageRenderer",
         () =>
             new WebGLImageRenderer(
-                domManager.gameCanvas,
+                domManager.canvas,
                 container.getSingleton<ProgramFactory>("ProgramFactory"),
                 container.getSingleton<TextureFactory>("TextureFactory")
             )
@@ -85,12 +61,12 @@ const webGLDependencies = (container: Container, domManager: DomManager): void =
 
     container.add(
         "GameRenderer",
-        () => new WebGLRenderer(domManager.gameCanvas, container.getSingleton<WebGLImageRenderer>("WebGLImageRenderer"))
+        () => new WebGLRenderer(domManager.canvas, container.getSingleton<WebGLImageRenderer>("WebGLImageRenderer"))
     );
 };
 
 const inputDependencies = (container: Container, domManager: DomManager): void => {
-    container.add("Mouse", () => new MouseController(domManager.gameNode, domManager.gameCanvas));
+    container.add("Mouse", () => new MouseController(domManager.canvas));
     container.add("Keyboard", () => new KeyboardController());
     container.add("Gamepad", () => new GamepadController());
     container.add(

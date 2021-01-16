@@ -9,12 +9,10 @@ export class MouseController {
     private _hasMoved: boolean = false;
 
     private lastPositionInViewport: Vector2 = new Vector2(0, 0);
-    private gameNode: HTMLElement;
-    private gameCanvas: HTMLCanvasElement;
+    private canvas: HTMLCanvasElement;
 
-    constructor(gameNode: HTMLElement, gameCanvas: HTMLCanvasElement) {
-        this.gameNode = gameNode;
-        this.gameCanvas = gameCanvas;
+    constructor(canvas: HTMLCanvasElement) {
+        this.canvas = canvas;
 
         this.setup();
     }
@@ -40,9 +38,9 @@ export class MouseController {
     }
 
     private setup(): void {
-        this.gameNode.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
-        this.gameNode.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
-        this.gameNode.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+        this.canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
+        this.canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
+        this.canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
 
         window.addEventListener(EVENT_UPDATE, () => this.update());
     }
@@ -70,8 +68,8 @@ export class MouseController {
         event.stopPropagation();
 
         this._positionInViewport.set(
-            event.offsetX / (this.gameCanvas.clientWidth / this.gameCanvas.width) - this.gameCanvas.width / 2,
-            -event.offsetY / (this.gameCanvas.clientHeight / this.gameCanvas.height) + this.gameCanvas.height / 2
+            event.offsetX / (this.canvas.clientWidth / this.canvas.width) - this.canvas.width / 2,
+            -event.offsetY / (this.canvas.clientHeight / this.canvas.height) + this.canvas.height / 2
         );
     }
 

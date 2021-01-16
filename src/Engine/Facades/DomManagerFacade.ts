@@ -9,22 +9,14 @@ export class DomManagerFacade {
     }
 
     public static get gameWidth(): number {
-        return this.domManager.gameCanvas.width;
+        return this.domManager.canvas.width;
     }
 
     public static get gameHeight(): number {
-        return this.domManager.gameCanvas.height;
+        return this.domManager.canvas.height;
     }
 
-    public static get gameCanvas(): HTMLCanvasElement {
-        return this.domManager.gameCanvas;
-    }
-
-    public static get uiCanvas(): HTMLCanvasElement | null {
-        return this.domManager.uiCanvas;
-    }
-
-    public static get debugCanvas(): HTMLCanvasElement | null {
-        return this.domManager.debugCanvas;
+    public static get canvas(): HTMLCanvasElement {
+        return this.domManager.canvas;
     }
 }

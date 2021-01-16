@@ -28,7 +28,7 @@ export class Camera extends RenderComponent {
 
         this.allowMultiple = false;
         this.type = TYPE_CAMERA;
-        this.canvas = this.domManager.gameCanvas;
+        this.canvas = this.domManager.canvas;
     }
 
     public set layers(layers: string[]) {
