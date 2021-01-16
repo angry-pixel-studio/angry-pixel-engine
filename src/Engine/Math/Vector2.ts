@@ -86,8 +86,10 @@ export class Vector2 {
         return this.unit(out, out);
     }
 
-    public mult(number: number) {
-        return new Vector2(this.x * number, this.y * number);
+    public static scale(out: Vector2, a: Vector2, scalar: number): Vector2 {
+        out.set(a.x * scalar, a.y * scalar);
+
+        return out;
     }
 
     /**

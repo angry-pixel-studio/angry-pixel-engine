@@ -5,15 +5,14 @@ import { ShapeAxisProjection } from "./ShapeAxisProjection";
 
 export class SatResolver {
     private currentOverlap: number;
-    private minOverlap: number;
-    private smallestAxis: Vector2;
     private vertexShape: Shape;
 
     public getSatData(shape1: Shape, shape2: Shape): SatData | null {
         this.currentOverlap = null;
-        this.minOverlap = null;
-        this.smallestAxis = null;
         this.vertexShape = null;
+
+        let minOverlap: number = null;
+        let smallestAxis: Vector2 = null;
 
         const axes: Vector2[] = this.findAxes(shape1, shape2);
 
@@ -36,36 +35,36 @@ export class SatResolver {
                     this.currentOverlap += mins;
                 } else {
                     this.currentOverlap += maxs;
-                    axes[i] = axes[i].mult(-1);
+                    Vector2.scale(axes[i], axes[i], -1);
                 }
             }
 
-            if (this.currentOverlap < this.minOverlap || this.minOverlap === null) {
-                this.minOverlap = this.currentOverlap;
-                this.smallestAxis = axes[i];
+            if (this.currentOverlap < minOverlap || minOverlap === null) {
+                minOverlap = this.currentOverlap;
+                smallestAxis = axes[i];
 
                 // esto es para diferenciar si el vertice con el minimo overlap pertenece al primer objeto o al segundo
                 if (i < firstShapeAxes) {
                     this.vertexShape = shape2;
                     if (proj1.max > proj2.max) {
-                        this.smallestAxis = axes[i].mult(-1); // la direccion del vertice es negada para usarla como direccion de respuesta
+                        Vector2.scale(smallestAxis, axes[i], -1); // la direccion del vertice es negada para usarla como direccion de respuesta
                     }
                 } else {
                     this.vertexShape = shape1;
                     if (proj1.max < proj2.max) {
-                        this.smallestAxis = axes[i].mult(-1); // idem
+                        Vector2.scale(smallestAxis, axes[i], -1); // idem
                     }
                 }
             }
         }
 
-        const contactVertex = this.projShapeOntoAxis(this.smallestAxis, this.vertexShape).collisionVertex;
+        const contactVertex = this.projShapeOntoAxis(smallestAxis, this.vertexShape).collisionVertex;
 
         if (this.vertexShape === shape2) {
-            this.smallestAxis = this.smallestAxis.mult(-1);
+            Vector2.scale(smallestAxis, smallestAxis, -1);
         }
 
-        return new SatData(this.minOverlap, this.smallestAxis, contactVertex);
+        return new SatData(minOverlap, smallestAxis, contactVertex);
     }
 
     private findAxes(shape1: Shape, shape2: Shape): Vector2[] {

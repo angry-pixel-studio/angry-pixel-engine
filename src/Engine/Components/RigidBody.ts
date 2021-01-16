@@ -34,7 +34,8 @@ export class RigidBody extends PhysicsComponent {
     private _velocity: Vector2 = new Vector2();
     private _gravity: Vector2 = new Vector2();
 
-    private deltaVelocity: Vector2;
+    private deltaGravity: Vector2 = new Vector2();
+    private deltaVelocity: Vector2 = new Vector2();
 
     private collisions: Collision[] = [];
 
@@ -112,13 +113,13 @@ export class RigidBody extends PhysicsComponent {
             this._velocity = Vector2.add(
                 this._velocity,
                 this._velocity,
-                this._gravity.mult(-this.gravityScale * this.physicsDeltaTime)
+                Vector2.scale(this.deltaGravity, this._gravity, -this.gravityScale * this.physicsDeltaTime)
             );
         }
     }
 
     private applyVelocity(): void {
-        this.deltaVelocity = this._velocity.mult(this.physicsFramerate * this.physicsDeltaTime);
+        Vector2.scale(this.deltaVelocity, this._velocity, this.physicsFramerate * this.physicsDeltaTime);
 
         if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
             this.move();

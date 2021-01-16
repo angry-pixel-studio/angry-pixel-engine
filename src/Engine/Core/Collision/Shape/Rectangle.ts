@@ -6,6 +6,9 @@ export class Rectangle extends Shape {
     private _refDirection: Vector2;
     private _rotationMatrix: Matrix2 = new Matrix2();
 
+    private vertexHelper: Vector2[] = [new Vector2(-1, -1), new Vector2(-1, 1), new Vector2(1, 1), new Vector2(1, -1)];
+    private cacheVector: Vector2 = new Vector2();
+
     constructor(x1: number, y1: number, x2: number, y2: number) {
         super();
 
@@ -21,11 +24,11 @@ export class Rectangle extends Shape {
         this._height = Vector2.substract(new Vector2(), this._vertex[1], this._vertex[0]).magnitude;
         this._width = Vector2.substract(new Vector2(), this._vertex[2], this._vertex[1]).magnitude;
 
-        Vector2.add(this._position, this._vertex[0], this._direction.mult(this._height / 2));
+        Vector2.add(this._position, this._vertex[0], Vector2.scale(new Vector2(), this._direction, this._height / 2));
         Vector2.add(
             this._position,
             this._position,
-            Vector2.normal(new Vector2(), this._direction).mult(this._width / 2)
+            Vector2.scale(new Vector2(), Vector2.normal(new Vector2(), this._direction), this._width / 2)
         );
 
         this._angle = 0;
@@ -35,33 +38,22 @@ export class Rectangle extends Shape {
         this._rotationMatrix.rotate(this.angle);
         this._direction = this._rotationMatrix.multiplyVector2(this._refDirection);
 
-        Vector2.add(
-            this._vertex[0],
-            this._position,
-            Vector2.normal(this._vertex[0], this._direction).mult(-this._width / 2)
-        );
-        Vector2.add(this._vertex[0], this._vertex[0], this._direction.mult(-this._height / 2));
-
-        Vector2.add(
-            this._vertex[1],
-            this._position,
-            Vector2.normal(this._vertex[1], this._direction).mult(-this._width / 2)
-        );
-        Vector2.add(this._vertex[1], this._vertex[1], this._direction.mult(this._height / 2));
-
-        Vector2.add(
-            this._vertex[2],
-            this._position,
-            Vector2.normal(this._vertex[2], this._direction).mult(this._width / 2)
-        );
-        Vector2.add(this._vertex[2], this._vertex[2], this._direction.mult(this._height / 2));
-
-        Vector2.add(
-            this._vertex[3],
-            this._position,
-            Vector2.normal(this._vertex[3], this._direction).mult(this._width / 2)
-        );
-        Vector2.add(this._vertex[3], this._vertex[3], this._direction.mult(-this._height / 2));
+        this.vertexHelper.forEach((v: Vector2, i: number) => {
+            Vector2.add(
+                this._vertex[i],
+                this._position,
+                Vector2.scale(
+                    this.cacheVector,
+                    Vector2.normal(this.cacheVector, this._direction),
+                    (v.x * this._width) / 2
+                )
+            );
+            Vector2.add(
+                this._vertex[i],
+                this._vertex[i],
+                Vector2.scale(this.cacheVector, this._direction, (v.y * this._height) / 2)
+            );
+        });
     }
 
     public clone(): Rectangle {
