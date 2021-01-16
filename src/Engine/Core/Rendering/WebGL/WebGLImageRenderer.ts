@@ -145,4 +145,51 @@ export class WebGLImageRenderer {
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
     }
+
+    public renderCanvas(
+        viewportRect: Rectangle,
+        canvas: HTMLCanvasElement,
+        position: Vector2,
+        width: number,
+        height: number,
+        rotation: number = 0,
+        flipHorizontal: boolean = false,
+        flipVertical: boolean = false,
+        alpha: number = 1,
+        smooth: boolean = false
+    ) {
+        const texture: WebGLTexture = this.textureFactory.createFromCanvas(this.gl, canvas, smooth);
+
+        this.modelMatrix = mat4.identity(this.modelMatrix);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [position.x, position.y, 0]);
+        mat4.scale(this.modelMatrix, this.modelMatrix, [
+            width * (flipHorizontal ? -1 : 1),
+            height * (flipVertical ? -1 : 1),
+            1,
+        ]);
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, rotation * (Math.PI / 180));
+
+        this.textureMatrix = mat4.identity(this.textureMatrix);
+        //mat4.scale(this.textureMatrix, this.textureMatrix, [width, height, 1]);
+
+        this.projectionMatrix = mat4.identity(this.projectionMatrix);
+        mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
+
+        this.gl.uniformMatrix4fv(this.projectionMatrixUniform, false, this.projectionMatrix);
+        this.gl.uniformMatrix4fv(this.modelMatrixUniform, false, this.modelMatrix);
+        this.gl.uniformMatrix4fv(this.textureMatrixUniform, false, this.textureMatrix);
+
+        if (alpha < 1) {
+            this.gl.enable(this.gl.BLEND);
+        } else {
+            this.gl.disable(this.gl.BLEND);
+        }
+
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+        this.gl.uniform1i(this.textureUniform, 0);
+
+        this.gl.uniform1f(this.alphaUniform, alpha);
+
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+    }
 }

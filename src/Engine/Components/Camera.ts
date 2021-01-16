@@ -17,6 +17,8 @@ export class Camera extends RenderComponent {
     private _layers: string[] = DEFAULT_LAYERS;
     private _depth: number = 0;
     private _zoom: number = 1;
+
+    private _originalViewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
@@ -59,6 +61,10 @@ export class Camera extends RenderComponent {
         return this._zoom;
     }
 
+    public get originalViewportRect(): Rectangle {
+        return this._originalViewportRect;
+    }
+
     public get worldSpaceRect(): Rectangle {
         return this._worldSpaceRect;
     }
@@ -72,18 +78,26 @@ export class Camera extends RenderComponent {
     }
 
     protected update(): void {
+        this.updateOriginalViewportRect();
         this.updateViewportRect();
         this.updateWorldSpaceRect();
         this.updateCameraData();
     }
 
+    private updateOriginalViewportRect(): void {
+        this._originalViewportRect.x = -this.canvas.width / 2;
+        this._originalViewportRect.y = -this.canvas.height / 2;
+        this._originalViewportRect.width = this.canvas.width;
+        this._originalViewportRect.height = this.canvas.height;
+    }
+
     private updateViewportRect(): void {
         const inverseZoom: number = 1 / this.zoom;
 
-        this._viewportRect.x = (-this.canvas.width / 2) * inverseZoom;
-        this._viewportRect.y = (-this.canvas.height / 2) * inverseZoom;
-        this._viewportRect.width = this.canvas.width * inverseZoom;
-        this._viewportRect.height = this.canvas.height * inverseZoom;
+        this._viewportRect.x = this._originalViewportRect.x * inverseZoom;
+        this._viewportRect.y = this._originalViewportRect.y * inverseZoom;
+        this._viewportRect.width = this._originalViewportRect.width * inverseZoom;
+        this._viewportRect.height = this._originalViewportRect.height * inverseZoom;
     }
 
     private updateWorldSpaceRect(): void {
@@ -96,6 +110,7 @@ export class Camera extends RenderComponent {
     private updateCameraData(): void {
         this.cameraData.depth = this._depth;
         this.cameraData.layers = this._layers;
+        this.cameraData.originalViewportRect = this._originalViewportRect;
         this.cameraData.viewportRect = this._viewportRect;
         this.cameraData.worldSpaceRect = this._worldSpaceRect;
         this.cameraData.zoom = this._zoom;

@@ -11,7 +11,19 @@ export class TextureFactory {
         return texture;
     }
 
-    private create(gl: WebGLRenderingContext, image: HTMLImageElement, texture: WebGLTexture, smooth: boolean = true) {
+    public createFromCanvas(
+        gl: WebGLRenderingContext,
+        canvas: HTMLCanvasElement,
+        smooth: boolean = true
+    ): WebGLTexture {
+        const texture: WebGLTexture = gl.createTexture();
+
+        this.create(gl, canvas, texture, smooth);
+
+        return texture;
+    }
+
+    private create(gl: WebGLRenderingContext, image: TexImageSource, texture: WebGLTexture, smooth: boolean = true) {
         gl.bindTexture(gl.TEXTURE_2D, texture);
 
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);

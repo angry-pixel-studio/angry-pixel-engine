@@ -52,7 +52,7 @@ export class RenderManager {
             this.setViewportPosition(camera, renderData);
 
             if (renderData.ui === true) {
-                // render ui
+                this.gameRenderer.render(camera, renderData);
             } else if (renderData.debug === true) {
                 // render debug
             } else if (this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false) {
