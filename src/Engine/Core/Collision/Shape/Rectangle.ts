@@ -19,10 +19,10 @@ export class Rectangle extends Shape {
         this._vertex[2] = new Vector2(x2, y2);
         this._vertex[3] = new Vector2(x2, y1);
 
-        Vector2.unit(this._direction, Vector2.substract(new Vector2(), this._vertex[1], this._vertex[0]));
+        Vector2.unit(this._direction, Vector2.subtract(new Vector2(), this._vertex[1], this._vertex[0]));
         this._refDirection = this._direction.clone();
-        this._height = Vector2.substract(new Vector2(), this._vertex[1], this._vertex[0]).magnitude;
-        this._width = Vector2.substract(new Vector2(), this._vertex[2], this._vertex[1]).magnitude;
+        this._height = Vector2.subtract(new Vector2(), this._vertex[1], this._vertex[0]).magnitude;
+        this._width = Vector2.subtract(new Vector2(), this._vertex[2], this._vertex[1]).magnitude;
 
         Vector2.add(this._position, this._vertex[0], Vector2.scale(new Vector2(), this._direction, this._height / 2));
         Vector2.add(

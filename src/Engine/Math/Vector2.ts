@@ -84,7 +84,7 @@ export class Vector2 {
      * @param b The second operand
      * @returns The output vector
      */
-    public static substract(out: Vector2, a: Vector2, b: Vector2): Vector2 {
+    public static subtract(out: Vector2, a: Vector2, b: Vector2): Vector2 {
         out.set(a.x - b.x, a.y - b.y);
 
         return out;

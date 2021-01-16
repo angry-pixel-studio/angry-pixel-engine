@@ -115,7 +115,7 @@ export class SpriteRenderer extends RenderComponent {
             (this.renderData[index].width / 2) * (this.tiled.x - 1),
             (this.renderData[index].height / 2) * (this.tiled.y - 1)
         );
-        Vector2.substract(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
+        Vector2.subtract(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
 
         this.cacheRenderPosition.set(tileX * this.renderData[index].width, tileY * this.renderData[index].height);
         Vector2.add(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
