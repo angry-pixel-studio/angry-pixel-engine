@@ -23,24 +23,48 @@ export class Vector2 {
         this._y = y;
     }
 
+    /**
+     * Get the magnitude of the vector
+     *
+     * @returns The magnitude of the vector
+     */
     public get magnitude(): number {
         return Math.sqrt(this._x ** 2 + this._y ** 2);
     }
 
+    /**
+     * Set the vector
+     *
+     * @param x
+     * @param y
+     */
     public set(x: number, y: number): void {
         this._x = x;
         this._y = y;
     }
 
+    /**
+     * Compare if two vector are equals
+     *
+     * @param vector The vector to compare
+     * @returns True if the vectors are equals, false if not
+     */
     public equals(vector: Vector2): boolean {
         return this._x === vector.x && this._y === vector.y;
     }
 
+    /**
+     * Colne a vector into a new instace
+     *
+     * @returns The cloned vector
+     */
     public clone(): Vector2 {
         return new Vector2(this._x, this._y);
     }
 
     /**
+     * Calculates a + b
+     *
      * @param out The output vector
      * @param a The first operand
      * @param b The second operand
@@ -53,6 +77,8 @@ export class Vector2 {
     }
 
     /**
+     * Calculates a - b
+     *
      * @param out The output vector
      * @param a The first operand
      * @param b The second operand
@@ -65,6 +91,8 @@ export class Vector2 {
     }
 
     /**
+     * Returns the unit vector
+     *
      * @param out The output vector
      * @param a The vector to get the unit
      * @returns The output vector
@@ -76,6 +104,8 @@ export class Vector2 {
     }
 
     /**
+     * Normalize a vector
+     *
      * @param out The output vector
      * @param a The vector to normalize
      * @returns The output vector
@@ -86,6 +116,14 @@ export class Vector2 {
         return this.unit(out, out);
     }
 
+    /**
+     * Scale a vector
+     *
+     * @param out The output vector
+     * @param a The vector to scale
+     * @param scalar The scalar value
+     * @returns The output vector
+     */
     public static scale(out: Vector2, a: Vector2, scalar: number): Vector2 {
         out.set(a.x * scalar, a.y * scalar);
 
@@ -93,6 +131,8 @@ export class Vector2 {
     }
 
     /**
+     * Calculates the dot product of two vectors and returns a scalar value
+     *
      * @param a The first operand
      * @param b The second operand
      * @returns The dot product result
@@ -102,6 +142,8 @@ export class Vector2 {
     }
 
     /**
+     * Calculates the cross product of two vectors and returns a scalar value
+     *
      * @param a The first operand
      * @param b The second operand
      * @returns The cross produc result
