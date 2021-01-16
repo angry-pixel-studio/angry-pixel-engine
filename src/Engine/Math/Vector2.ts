@@ -23,52 +23,144 @@ export class Vector2 {
         this._y = y;
     }
 
+    /**
+     * Get the magnitude of the vector
+     *
+     * @returns The magnitude of the vector
+     */
     public get magnitude(): number {
         return Math.sqrt(this._x ** 2 + this._y ** 2);
     }
 
+    /**
+     * Set the vector
+     *
+     * @param x
+     * @param y
+     */
     public set(x: number, y: number): void {
         this._x = x;
         this._y = y;
     }
 
+    /**
+     * Compare if two vector are equals
+     *
+     * @param vector The vector to compare
+     * @returns True if the vectors are equals, false if not
+     */
     public equals(vector: Vector2): boolean {
         return this._x === vector.x && this._y === vector.y;
     }
 
-    public add(vector: Vector2): Vector2 {
-        return new Vector2(this.x + vector.x, this.y + vector.y);
-    }
-
-    public substract(vector: Vector2): Vector2 {
-        return new Vector2(this.x - vector.x, this.y - vector.y);
-    }
-
-    public mult(number: number) {
-        return new Vector2(this.x * number, this.y * number);
-    }
-
-    public normal() {
-        return new Vector2(-this.y, this.x).unit();
-    }
-
-    public unit() {
-        if (this.magnitude === 0) {
-            return new Vector2(0, 0);
-        } else {
-            return new Vector2(Math.round(this.x / this.magnitude), Math.round(this.y / this.magnitude));
-        }
-    }
-
+    /**
+     * Colne a vector into a new instace
+     *
+     * @returns The cloned vector
+     */
     public clone(): Vector2 {
         return new Vector2(this._x, this._y);
     }
 
-    public static dot(vector1: Vector2, vector2: Vector2): number {
-        return vector1.x * vector2.x + vector1.y * vector2.y;
+    /**
+     * Calculates a + b
+     *
+     * @param out The output vector
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The output vector
+     */
+    public static add(out: Vector2, a: Vector2, b: Vector2): Vector2 {
+        out.set(a.x + b.x, a.y + b.y);
+
+        return out;
     }
 
-    public static cross(vector1: Vector2, vector2: Vector2): number {
-        return vector1.x * vector2.y - vector1.y * vector2.x;
+    /**
+     * Calculates a - b
+     *
+     * @param out The output vector
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The output vector
+     */
+    public static subtract(out: Vector2, a: Vector2, b: Vector2): Vector2 {
+        out.set(a.x - b.x, a.y - b.y);
+
+        return out;
+    }
+
+    /**
+     * Returns the unit vector
+     *
+     * @param out The output vector
+     * @param a The vector to get the unit
+     * @returns The output vector
+     */
+    public static unit(out: Vector2, a: Vector2): Vector2 {
+        a.magnitude === 0 ? out.set(0, 0) : out.set(a.x / a.magnitude, a.y / a.magnitude);
+
+        return out;
+    }
+
+    /**
+     * Normalize a vector
+     *
+     * @param out The output vector
+     * @param a The vector to normalize
+     * @returns The output vector
+     */
+    public static normal(out: Vector2, a: Vector2): Vector2 {
+        out.set(-a.y, a.x);
+
+        return this.unit(out, out);
+    }
+
+    /**
+     * Scale a vector
+     *
+     * @param out The output vector
+     * @param a The vector to scale
+     * @param scalar The scalar value
+     * @returns The output vector
+     */
+    public static scale(out: Vector2, a: Vector2, scalar: number): Vector2 {
+        out.set(a.x * scalar, a.y * scalar);
+
+        return out;
+    }
+
+    /**
+     * Calculates the dot product of two vectors and returns a scalar value
+     *
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The dot product result
+     */
+    public static dot(a: Vector2, b: Vector2): number {
+        return a.x * b.x + a.y * b.y;
+    }
+
+    /**
+     * Calculates the cross product of two vectors and returns a scalar value
+     *
+     * @param a The first operand
+     * @param b The second operand
+     * @returns The cross produc result
+     */
+    public static cross(a: Vector2, b: Vector2): number {
+        return a.x * b.y - a.y * b.x;
+    }
+
+    /**
+     * Rounds a vector
+     *
+     * @param a The vector to round
+     * @returns The output vector
+     */
+    public static round(out: Vector2, a: Vector2): Vector2 {
+        out.set(Math.round(a.x), Math.round(a.y));
+
+        return out;
     }
 }

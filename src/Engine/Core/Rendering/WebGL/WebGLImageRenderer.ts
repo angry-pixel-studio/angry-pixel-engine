@@ -117,9 +117,10 @@ export class WebGLImageRenderer {
                 slice.y / image.naturalHeight,
                 0,
             ]);
+            // subtracting 0.5 to avoid bleeding (half-pixel correction)
             mat4.scale(this.textureMatrix, this.textureMatrix, [
-                slice.width / image.naturalWidth,
-                slice.height / image.naturalHeight,
+                (slice.width - 0.5) / image.naturalWidth,
+                (slice.height - 0.5) / image.naturalHeight,
                 1,
             ]);
         }

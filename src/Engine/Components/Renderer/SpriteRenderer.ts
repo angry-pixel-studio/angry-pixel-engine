@@ -2,7 +2,6 @@ import { RenderComponent } from "../../Component";
 import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import { Matrix2 } from "../../Math/Matrix2";
 import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
 
@@ -20,6 +19,8 @@ interface Config {
 export const TYPE_SPRITE_RENDERER: string = "SpriteRenderer";
 
 export class SpriteRenderer extends RenderComponent {
+    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+
     public sprite: Sprite = null;
     public offset: Vector2 = new Vector2();
     public flipHorizontal: boolean = false;
@@ -29,9 +30,11 @@ export class SpriteRenderer extends RenderComponent {
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
 
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: ImageRenderData[] = [];
+
     private goPosition: Vector2 = null;
+    private cachePosition: Vector2 = new Vector2();
+    private cacheRenderPosition: Vector2 = new Vector2();
 
     constructor(config: Config) {
         super();
@@ -106,15 +109,18 @@ export class SpriteRenderer extends RenderComponent {
     }
 
     private calculateRenderPosition(index: number, tileX: number, tileY: number): void {
-        this.renderData[index].position = this.gameObject.transform.position
-            .add(this.offset)
-            .substract(
-                new Vector2(
-                    (this.renderData[index].width / 2) * (this.tiled.x - 1),
-                    (this.renderData[index].height / 2) * (this.tiled.y - 1)
-                )
-            )
-            .add(new Vector2(tileX * this.renderData[index].width, tileY * this.renderData[index].height));
+        Vector2.add(this.cachePosition, this.gameObject.transform.position, this.offset);
+
+        this.cacheRenderPosition.set(
+            (this.renderData[index].width / 2) * (this.tiled.x - 1),
+            (this.renderData[index].height / 2) * (this.tiled.y - 1)
+        );
+        Vector2.subtract(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
+
+        this.cacheRenderPosition.set(tileX * this.renderData[index].width, tileY * this.renderData[index].height);
+        Vector2.add(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
+
+        this.renderData[index].position = this.cachePosition;
 
         if (this.gameObject.transform.rotation !== 0) {
             this.translateRenderPosition(index);

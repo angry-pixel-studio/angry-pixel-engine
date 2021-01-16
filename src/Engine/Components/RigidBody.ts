@@ -19,6 +19,8 @@ interface Config {
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
+    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
+
     private readonly gravityScale: number = 9.8;
     private readonly physicsFramerate: number = 60;
     private readonly physicsIterations: number = 12;
@@ -32,7 +34,8 @@ export class RigidBody extends PhysicsComponent {
     private _velocity: Vector2 = new Vector2();
     private _gravity: Vector2 = new Vector2();
 
-    private deltaVelocity: Vector2;
+    private deltaGravity: Vector2 = new Vector2();
+    private deltaVelocity: Vector2 = new Vector2();
 
     private collisions: Collision[] = [];
 
@@ -41,7 +44,7 @@ export class RigidBody extends PhysicsComponent {
         y: new Map<number, number>(),
     };
 
-    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
+    private nextObjectPosition: Vector2 = new Vector2();
 
     constructor(config: Config) {
         super();
@@ -107,12 +110,16 @@ export class RigidBody extends PhysicsComponent {
 
     private applyGravity(): void {
         if (this._gravity.y > 0) {
-            this._velocity = this._velocity.add(this._gravity.mult(-this.gravityScale * this.physicsDeltaTime));
+            this._velocity = Vector2.add(
+                this._velocity,
+                this._velocity,
+                Vector2.scale(this.deltaGravity, this._gravity, -this.gravityScale * this.physicsDeltaTime)
+            );
         }
     }
 
     private applyVelocity(): void {
-        this.deltaVelocity = this._velocity.mult(this.physicsFramerate * this.physicsDeltaTime);
+        Vector2.scale(this.deltaVelocity, this._velocity, this.physicsFramerate * this.physicsDeltaTime);
 
         if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
             this.move();
@@ -123,7 +130,11 @@ export class RigidBody extends PhysicsComponent {
         this.penetrationPerDirection.x.clear();
         this.penetrationPerDirection.y.clear();
 
-        this.gameObject.transform.position = this.gameObject.transform.position.add(this.deltaVelocity);
+        this.gameObject.transform.position = Vector2.add(
+            this.nextObjectPosition,
+            this.gameObject.transform.position,
+            this.deltaVelocity
+        );
         this.updateCollisions();
 
         this.collisions.forEach((collision: Collision) => {

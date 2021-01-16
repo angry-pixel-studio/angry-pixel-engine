@@ -113,8 +113,8 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected updateTilesPosition(): void {
         this.tilesRenderData.forEach((renderData) => {
             renderData.position.set(
-                renderData.position.x - Math.floor(this._realWidth / 2) * this.orientation.x,
-                renderData.position.y + Math.floor(this._realHeight / 2) * this.orientation.y
+                renderData.position.x - Math.round(this._realWidth / 2) * this.orientation.x,
+                renderData.position.y + Math.round(this._realHeight / 2) * this.orientation.y
             );
             this.addTileData(renderData);
         });

@@ -6,9 +6,9 @@ export enum ShapeType {
 
 export abstract class Shape {
     protected _type: ShapeType;
-    protected _position: Vector2 = null;
     protected _vertex: Vector2[] = [];
-    protected _direction: Vector2 = null;
+    protected _position: Vector2 = new Vector2();
+    protected _direction: Vector2 = new Vector2();
     protected _height: number = 0;
     protected _width: number = 0;
     protected _angle: number = 0;
