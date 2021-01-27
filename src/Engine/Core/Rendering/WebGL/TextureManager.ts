@@ -2,7 +2,7 @@ import { TextureFactory } from "./TextureFactory";
 
 export class TextureManager {
     private textureFactory: TextureFactory;
-    private textures: Map<Symbol, WebGLTexture> = new Map<Symbol, WebGLTexture>();
+    private textures: Map<symbol, WebGLTexture> = new Map<symbol, WebGLTexture>();
 
     constructor(textureFactory: TextureFactory) {
         this.textureFactory = textureFactory;
@@ -13,13 +13,13 @@ export class TextureManager {
     }
 
     public getOrCreateTextureFromImage(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
-        return this.textures.get(Symbol.for(image.src)) ?? this.createTextureFromImage(image.src, image, smooth);
+        return this.textures.get(Symbol.for(image.src)) ?? this.createTextureFromImage(image, smooth);
     }
 
-    public createTextureFromImage(name: string, image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
+    public createTextureFromImage(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
         const texture: WebGLTexture = this.textureFactory.createFromImage(image, smooth);
 
-        this.textures.set(Symbol.for(name), texture);
+        this.textures.set(Symbol.for(image.src), texture);
 
         return texture;
     }

@@ -49,7 +49,7 @@ export class RenderManager {
                 return;
             }
 
-            this.setViewportPosition(camera, renderData);
+            this.setPositionInViewport(camera, renderData);
 
             if (renderData.ui === true) {
                 this.gameRenderer.render(camera, renderData);
@@ -61,21 +61,21 @@ export class RenderManager {
         });
     }
 
-    private setViewportPosition(camera: CameraData, renderData: RenderData): void {
+    private setPositionInViewport(camera: CameraData, renderData: RenderData): void {
         if (renderData.ui !== true) {
-            renderData.viewportPosition.set(
+            renderData.positionInViewport.set(
                 Number((renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2).toFixed(0)),
                 Number((renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2).toFixed(0))
             );
         } else {
-            renderData.viewportPosition = renderData.position;
+            renderData.positionInViewport = renderData.position;
         }
     }
 
     private isInsideViewportRect(camera: CameraData, renderData: ImageRenderData): boolean {
         this.cacheRect.set(
-            renderData.viewportPosition.x - renderData.width / 2,
-            renderData.viewportPosition.y - renderData.height / 2,
+            renderData.positionInViewport.x - renderData.width / 2,
+            renderData.positionInViewport.y - renderData.height / 2,
             renderData.width,
             renderData.height
         );

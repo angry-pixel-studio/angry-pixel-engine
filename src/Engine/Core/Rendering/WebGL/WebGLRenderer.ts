@@ -65,7 +65,7 @@ export class WebGLRenderer implements IContextRenderer {
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
             this.textureManager.getOrCreateTextureFromImage(renderData.image, renderData.smooth),
             renderData.image,
-            renderData.viewportPosition,
+            renderData.positionInViewport,
             renderData.width,
             renderData.height,
             renderData.slice,
@@ -76,5 +76,7 @@ export class WebGLRenderer implements IContextRenderer {
         );
     }
 
-    private renderText(camera: CameraData, renderData: TextRenderData): void {}
+    private renderText(camera: CameraData, renderData: TextRenderData): void {
+        // do shomething
+    }
 }
