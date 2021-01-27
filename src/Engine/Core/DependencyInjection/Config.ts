@@ -17,6 +17,7 @@ import { WebGLRenderer } from "../Rendering/WebGL/WebGLRenderer";
 import { SceneManager } from "../Scene/SceneManager";
 import { TimeManager } from "../Time/TimeManager";
 import { Container } from "./Container";
+import { TextureManager } from "../Rendering/WebGL/TextureManager";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.add(
@@ -41,27 +42,24 @@ export const loadDependencies = (container: Container, game: Game): void => {
 
 const renderingDependencies = (container: Container, domManager: DomManager): void => {
     webGLDependencies(container, domManager);
-    container.add("RenderManager", () => new RenderManager(container.getSingleton<WebGLRenderer>("GameRenderer")));
+    container.add("RenderManager", () => new RenderManager(container.getSingleton<WebGLRenderer>("Renderer")));
 };
 
 const webGLDependencies = (container: Container, domManager: DomManager): void => {
     container.add("ShaderLoader", () => new ShaderLoader());
     container.add("ProgramFactory", () => new ProgramFactory(container.getSingleton<ShaderLoader>("ShaderLoader")));
-    container.add("TextureFactory", () => new TextureFactory());
-
+    container.add("TextureFactory", () => new TextureFactory(domManager.canvas));
+    container.add("TextureManager", () => new TextureManager(container.getSingleton<TextureFactory>("TextureFactory")));
+    container.add("WebGLImageRenderer", () => new WebGLImageRenderer(domManager.canvas));
     container.add(
-        "WebGLImageRenderer",
+        "Renderer",
         () =>
-            new WebGLImageRenderer(
+            new WebGLRenderer(
                 domManager.canvas,
                 container.getSingleton<ProgramFactory>("ProgramFactory"),
-                container.getSingleton<TextureFactory>("TextureFactory")
+                container.getSingleton<TextureManager>("TextureManager"),
+                container.getSingleton<WebGLImageRenderer>("WebGLImageRenderer")
             )
-    );
-
-    container.add(
-        "GameRenderer",
-        () => new WebGLRenderer(domManager.canvas, container.getSingleton<WebGLImageRenderer>("WebGLImageRenderer"))
     );
 };
 

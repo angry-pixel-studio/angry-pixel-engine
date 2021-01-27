@@ -122,6 +122,7 @@ export class Game {
             this.requestAnimationFrame();
         } catch (error) {
             console.error("Mini Engine Error: " + error);
+            this.stopLoop();
             // throw error;
         }
     }

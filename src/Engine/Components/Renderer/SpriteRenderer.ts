@@ -65,7 +65,6 @@ export class SpriteRenderer extends RenderComponent {
 
     protected start(): void {
         this.goPosition = this.gameObject.transform.position;
-        this.update();
     }
 
     protected update(): void {
