@@ -1,10 +1,9 @@
-export const vertexShader = `#version 300 es
-precision mediump float;
+export const imageVertexShader = `precision mediump float;
 
-in vec2 positionCoords;
-in vec2 textureCoords;
+attribute vec2 positionCoords;
+attribute vec2 textureCoords;
 
-out vec2 texCoords;
+varying vec2 texCoords;
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelMatrix;

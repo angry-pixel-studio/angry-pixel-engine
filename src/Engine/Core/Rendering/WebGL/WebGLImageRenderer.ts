@@ -2,6 +2,7 @@ import { mat4 } from "gl-matrix";
 import { Vector2 } from "../../../Math/Vector2";
 import { Rectangle } from "../../../Math/Rectangle";
 import { Slice } from "../RenderData/ImageRenderData";
+import { WebGLContextVersion } from "./WebGLRenderer";
 
 export class WebGLImageRenderer {
     private gl: WebGLRenderingContext;
@@ -32,8 +33,8 @@ export class WebGLImageRenderer {
 
     private lastTexture: WebGLTexture = null;
 
-    constructor(canvas: HTMLCanvasElement) {
-        this.gl = canvas.getContext("webgl2");
+    constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement) {
+        this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
 
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();

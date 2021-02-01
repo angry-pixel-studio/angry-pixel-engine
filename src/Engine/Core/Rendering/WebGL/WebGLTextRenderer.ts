@@ -1,5 +1,5 @@
-import { vertexShader } from "./Shader/Image/vertexShader";
-import { fragmentShader } from "./Shader/Image/fragmentShader";
+import { imageVertexShader } from "./Shader/imageVertexShader";
+import { imageFragmentShader } from "./Shader/imageFragmentShader";
 import { mat4 } from "gl-matrix";
 import { ProgramFactory } from "./ProgramFactory";
 import { TextureFactory } from "./TextureFactory";
@@ -7,6 +7,7 @@ import { Vector2 } from "../../../Math/Vector2";
 import * as sha256 from "crypto-js/sha256";
 import { Rectangle } from "../../../Math/Rectangle";
 import { Slice } from "../RenderData/ImageRenderData";
+import { WebGLContextVersion } from "./WebGLRenderer";
 
 export class WebGLImageRenderer {
     private textureFactory: TextureFactory;
@@ -39,10 +40,16 @@ export class WebGLImageRenderer {
     private texcache: Map<string, WebGLTexture> = new Map<string, WebGLTexture>();
     private textTex: WebGLTexture = null;
 
-    constructor(canvas: HTMLCanvasElement, programFactory: ProgramFactory, textureFactory: TextureFactory) {
-        this.gl = canvas.getContext("webgl2");
+    constructor(
+        contextVersion: WebGLContextVersion,
+        canvas: HTMLCanvasElement,
+        programFactory: ProgramFactory,
+        textureFactory: TextureFactory
+    ) {
+        this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
+
         this.textureFactory = textureFactory;
-        this.program = programFactory.create(this.gl, vertexShader, fragmentShader);
+        this.program = programFactory.create(this.gl, imageVertexShader, imageFragmentShader);
 
         this.positionBuffer = this.gl.createBuffer();
         this.textureBuffer = this.gl.createBuffer();

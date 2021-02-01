@@ -47,7 +47,7 @@ export class GamepadController {
     }
 }
 
-class GamepadData {
+export class GamepadData {
     private _connected: boolean = false;
     private _id: string = null;
     private readonly buttons: Map<number, boolean> = new Map<number, boolean>();

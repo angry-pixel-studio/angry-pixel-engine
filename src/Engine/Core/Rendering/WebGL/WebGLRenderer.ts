@@ -4,10 +4,19 @@ import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
 import { TextRenderData } from "../RenderData/TextRenderData";
 import { ProgramFactory } from "./ProgramFactory";
-import { fragmentShader } from "./Shader/Image/fragmentShader";
-import { vertexShader } from "./Shader/Image/vertexShader";
 import { TextureManager } from "./TextureManager";
 import { WebGLImageRenderer } from "./WebGLImageRenderer";
+
+// shaders
+import { imageFragmentShader } from "./Shader/imageFragmentShader";
+import { imageVertexShader } from "./Shader/imageVertexShader";
+import { imageFragmentShader as legacyImageFragmentRenderer } from "./Shader/Legacy/imageFragmentShader";
+import { imageVertexShader as legacyImageVertexRenderer } from "./Shader/Legacy/imageVertexShader";
+
+export enum WebGLContextVersion {
+    LegacyWebGl = "webgl",
+    WebGL2 = "webgl2",
+}
 
 export class WebGLRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement;
@@ -18,16 +27,21 @@ export class WebGLRenderer implements IContextRenderer {
     private imageRenderer: WebGLImageRenderer;
 
     public constructor(
+        contextVersion: WebGLContextVersion,
         canvas: HTMLCanvasElement,
         programFactory: ProgramFactory,
         textureManager: TextureManager,
         imageRenderer: WebGLImageRenderer
     ) {
         this.canvas = canvas;
-        this.gl = this.canvas.getContext("webgl2");
+        this.gl = this.canvas.getContext(contextVersion) as WebGLRenderingContext;
+
+        this.program =
+            contextVersion === WebGLContextVersion.WebGL2
+                ? programFactory.create(this.gl, imageVertexShader, imageFragmentShader)
+                : programFactory.create(this.gl, legacyImageVertexRenderer, legacyImageFragmentRenderer);
 
         this.textureManager = textureManager;
-        this.program = programFactory.create(this.gl, vertexShader, fragmentShader);
         this.imageRenderer = imageRenderer;
 
         this.imageRenderer.setProgram(this.program);

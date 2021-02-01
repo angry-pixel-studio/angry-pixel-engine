@@ -1,8 +1,10 @@
+import { WebGLContextVersion } from "./WebGLRenderer";
+
 export class TextureFactory {
     private gl: WebGLRenderingContext;
 
-    constructor(canvas: HTMLCanvasElement) {
-        this.gl = canvas.getContext("webgl2");
+    constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement) {
+        this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
     }
 
     public createFromImage(

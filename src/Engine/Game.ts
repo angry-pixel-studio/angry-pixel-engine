@@ -21,18 +21,18 @@ export interface IGameConfig {
     containerNode: HTMLElement;
     gameWidth?: number;
     gameHeight?: number;
-    uiEnabled?: boolean;
     debugEnabled?: boolean;
     bgColor?: string;
+    context2d?: string;
 }
 
 const defaultConfig: IGameConfig = {
     containerNode: null,
     gameWidth: 320,
     gameHeight: 180,
-    uiEnabled: true,
     debugEnabled: false,
     bgColor: "#000000",
+    context2d: "fallback",
 };
 
 export class Game {

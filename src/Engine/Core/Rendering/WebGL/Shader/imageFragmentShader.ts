@@ -1,4 +1,4 @@
-export const fragmentShader = `#version 300 es
+export const imageFragmentShader = `#version 300 es
 precision mediump float;
 
 out vec4 fragColor;
