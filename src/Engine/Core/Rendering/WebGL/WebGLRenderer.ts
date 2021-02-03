@@ -12,6 +12,7 @@ import { imageFragmentShader } from "./Shader/imageFragmentShader";
 import { imageVertexShader } from "./Shader/imageVertexShader";
 import { imageFragmentShader as legacyImageFragmentRenderer } from "./Shader/Legacy/imageFragmentShader";
 import { imageVertexShader as legacyImageVertexRenderer } from "./Shader/Legacy/imageVertexShader";
+import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
 
 export enum WebGLContextVersion {
     LegacyWebGl = "webgl",
@@ -25,6 +26,7 @@ export class WebGLRenderer implements IContextRenderer {
     private program: WebGLProgram;
     private textureManager: TextureManager;
     private imageRenderer: WebGLImageRenderer;
+    private fontAtlasFactory: FontAtlasFactory;
 
     public constructor(
         contextVersion: WebGLContextVersion,
@@ -45,6 +47,8 @@ export class WebGLRenderer implements IContextRenderer {
         this.imageRenderer = imageRenderer;
 
         this.imageRenderer.setProgram(this.program);
+
+        this.fontAtlasFactory = new FontAtlasFactory();
     }
 
     public clearCanvas(color: string): void {
@@ -90,7 +94,24 @@ export class WebGLRenderer implements IContextRenderer {
         );
     }
 
+    private fontAtlas: Map<symbol, FontAtlas> = new Map<symbol, FontAtlas>();
+
     private renderText(camera: CameraData, renderData: TextRenderData): void {
-        // do shomething
+        const symbol: symbol = Symbol.for(renderData.fontFamily);
+        if (this.fontAtlas.has(symbol) === false) {
+            this.fontAtlas.set(
+                symbol,
+                this.fontAtlasFactory.create(
+                    [
+                        [32, 126],
+                        [161, 255],
+                    ],
+                    renderData.fontFamily,
+                    renderData.fontUrl
+                )
+            );
+        }
+
+        const fontAtlas = this.fontAtlas.get(symbol);
     }
 }

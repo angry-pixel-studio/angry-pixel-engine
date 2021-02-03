@@ -24,6 +24,10 @@ export class TextureManager {
         return texture;
     }
 
+    public getOrCreateTextureFromCanvas(name: string, canvas: HTMLCanvasElement, smooth: boolean = true): WebGLTexture {
+        return this.textures.get(Symbol.for(name)) ?? this.createTextureFromCanvas(name, canvas, smooth);
+    }
+
     public createTextureFromCanvas(name: string, canvas: HTMLCanvasElement, smooth: boolean = true): WebGLTexture {
         const texture: WebGLTexture = this.textureFactory.createFromCanvas(canvas, smooth);
 

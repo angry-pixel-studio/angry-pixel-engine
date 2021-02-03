@@ -6,7 +6,8 @@ export class TextRenderData extends RenderData {
     public height: number = null;
     public color: string = null;
     public text: string | string[] = null;
-    public font: string = null;
+    public fontFamily: string = null;
+    public fontUrl: string = null;
     public textSize: number = null;
     public lineSeparation: number = null;
     public bold: boolean = false;

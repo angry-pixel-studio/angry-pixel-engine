@@ -116,7 +116,7 @@ export class Context2DRenderer implements IContextRenderer {
             renderData.bold ? "bold" : "",
             renderData.italic ? "italic" : "",
             renderData.textSize + "px",
-            renderData.font,
+            renderData.fontFamily,
         ];
 
         this.canvasContext.font = font.join(" ");
