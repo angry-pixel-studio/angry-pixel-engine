@@ -4,8 +4,6 @@ import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 
 interface Config {
-    width: number;
-    height: number;
     text: string | string[];
     fontFamily?: string;
     fontUrl?: string;
@@ -19,8 +17,6 @@ interface Config {
 export const TYPE_TEXT_RENDERER = "TextRenderer";
 
 export class TextRenderer extends RenderComponent {
-    public width: number = 0;
-    public height: number = 0;
     public text: string | string[] = null;
     public fontFamily: string = "Sans";
     public fontUrl: string = null;
@@ -38,8 +34,6 @@ export class TextRenderer extends RenderComponent {
 
         this.type = TYPE_TEXT_RENDERER;
 
-        this.width = config.width;
-        this.height = config.height;
         this.text = config.text;
         this.fontFamily = config.fontFamily ?? this.fontFamily;
         this.fontUrl = config.fontUrl ?? this.fontUrl;
@@ -68,8 +62,6 @@ export class TextRenderer extends RenderComponent {
             throw new Error("TextRenderer only can be used on UI GameObjects");
         }
 
-        this.renderData.width = this.width;
-        this.renderData.height = this.height;
         this.renderData.text = this.text;
         this.renderData.fontSize = this.size;
         this.renderData.color = this.color;

@@ -13,6 +13,7 @@ import { imageVertexShader } from "./Shader/imageVertexShader";
 import { imageFragmentShader as legacyImageFragmentRenderer } from "./Shader/Legacy/imageFragmentShader";
 import { imageVertexShader as legacyImageVertexRenderer } from "./Shader/Legacy/imageVertexShader";
 import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
+import { hexToRgb } from "./Utils";
 
 export enum WebGLContextVersion {
     LegacyWebGl = "webgl",
@@ -52,22 +53,10 @@ export class WebGLRenderer implements IContextRenderer {
     }
 
     public clearCanvas(color: string): void {
-        const rgb = this.hexToRgb(color);
+        const rgb = hexToRgb(color);
 
         this.gl.clearColor(rgb.r, rgb.g, rgb.b, 1);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    }
-
-    private hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-        const result: string[] = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-
-        return result
-            ? {
-                  r: parseInt(result[1], 16) / 256,
-                  g: parseInt(result[2], 16) / 256,
-                  b: parseInt(result[3], 16) / 256,
-              }
-            : null;
     }
 
     public render(camera: CameraData, renderData: RenderData): void {
@@ -120,10 +109,11 @@ export class WebGLRenderer implements IContextRenderer {
     private fontAtlasLoaded(fontAtlas: FontAtlas, camera: CameraData, renderData: TextRenderData): void {
         this.imageRenderer.renderText(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
-            this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, false),
+            this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, true),
             renderData.positionInViewport,
             renderData.text,
             renderData.fontSize,
+            renderData.color,
             fontAtlas
         );
     }
