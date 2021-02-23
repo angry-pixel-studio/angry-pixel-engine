@@ -115,7 +115,7 @@ export class Context2DRenderer implements IContextRenderer {
         const font = [
             renderData.bold ? "bold" : "",
             renderData.italic ? "italic" : "",
-            renderData.textSize + "px",
+            renderData.fontSize + "px",
             renderData.fontFamily,
         ];
 
@@ -128,7 +128,7 @@ export class Context2DRenderer implements IContextRenderer {
                 this.canvasContext.fillText(
                     text,
                     renderData.positionInViewport.x,
-                    renderData.positionInViewport.y + (renderData.lineSeparation + renderData.textSize) * index
+                    renderData.positionInViewport.y + (renderData.lineSeparation + renderData.fontSize) * index
                 );
             });
         } else {

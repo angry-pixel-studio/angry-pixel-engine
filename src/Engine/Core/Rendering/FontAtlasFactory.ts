@@ -6,7 +6,7 @@ export class FontAtlasFactory {
     // cache
     private chars: string[];
 
-    public create(charRanges: number[][], fontFamily: string, fontUrl: string = null): FontAtlas {
+    public async create(charRanges: number[][], fontFamily: string, fontUrl: string = null): Promise<FontAtlas> {
         const fontAtlas: FontAtlas = new FontAtlas(fontFamily);
 
         this.chars = [];
@@ -19,20 +19,21 @@ export class FontAtlasFactory {
         fontAtlas.canvas.width = Math.round(Math.sqrt(this.chars.length)) * this.fontSize;
         fontAtlas.canvas.height = fontAtlas.canvas.width * this.deltaHeight;
 
-        fontUrl !== null ? this.loadFont(fontAtlas, fontFamily, fontUrl) : this.renderAtlas(fontAtlas, fontFamily);
+        fontUrl !== null
+            ? await this.loadFont(fontAtlas, fontFamily, fontUrl)
+            : this.renderAtlas(fontAtlas, fontFamily);
 
         return fontAtlas;
     }
 
-    private loadFont(fontAtlas: FontAtlas, family: string, url: string): void {
+    private async loadFont(fontAtlas: FontAtlas, family: string, url: string): Promise<void> {
         // @ts-ignore
         const font: FontFace = new FontFace(family, `url(${url})`);
 
-        font.load().then((loadedFontFace: any) => {
-            // @ts-ignore
-            document.fonts.add(font);
-            this.renderAtlas(fontAtlas, loadedFontFace.family);
-        });
+        const loadedFontFace: any = await font.load();
+        // @ts-ignore
+        document.fonts.add(font);
+        this.renderAtlas(fontAtlas, loadedFontFace.family);
     }
 
     private renderAtlas(fontAtlas: FontAtlas, fontFamily: string): void {

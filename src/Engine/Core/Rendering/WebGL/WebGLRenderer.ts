@@ -99,9 +99,8 @@ export class WebGLRenderer implements IContextRenderer {
     private renderText(camera: CameraData, renderData: TextRenderData): void {
         const symbol: symbol = Symbol.for(renderData.fontFamily);
         if (this.fontAtlas.has(symbol) === false) {
-            this.fontAtlas.set(
-                symbol,
-                this.fontAtlasFactory.create(
+            this.fontAtlasFactory
+                .create(
                     [
                         [32, 126],
                         [161, 255],
@@ -109,9 +108,23 @@ export class WebGLRenderer implements IContextRenderer {
                     renderData.fontFamily,
                     renderData.fontUrl
                 )
-            );
+                .then((fontAtlas: FontAtlas) => {
+                    this.fontAtlas.set(symbol, fontAtlas);
+                    this.fontAtlasLoaded(fontAtlas, camera, renderData);
+                });
+        } else {
+            this.fontAtlasLoaded(this.fontAtlas.get(symbol), camera, renderData);
         }
+    }
 
-        const fontAtlas = this.fontAtlas.get(symbol);
+    private fontAtlasLoaded(fontAtlas: FontAtlas, camera: CameraData, renderData: TextRenderData): void {
+        this.imageRenderer.renderText(
+            renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
+            this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, false),
+            renderData.positionInViewport,
+            renderData.text,
+            renderData.fontSize,
+            fontAtlas
+        );
     }
 }
