@@ -71,15 +71,7 @@ export class WebGLRenderer implements IContextRenderer {
         this.imageRenderer.renderImage(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
             this.textureManager.getOrCreateTextureFromImage(renderData.image, renderData.smooth),
-            renderData.image,
-            renderData.positionInViewport,
-            renderData.width,
-            renderData.height,
-            renderData.slice,
-            renderData.rotation,
-            renderData.flipHorizontal,
-            renderData.flipVertical,
-            renderData.alpha
+            renderData
         );
     }
 

@@ -1,10 +1,10 @@
 import { mat4 } from "gl-matrix";
 import { Vector2 } from "../../../Math/Vector2";
 import { Rectangle } from "../../../Math/Rectangle";
-import { Slice } from "../RenderData/ImageRenderData";
+import { ImageRenderData, Slice } from "../RenderData/ImageRenderData";
 import { WebGLContextVersion } from "./WebGLRenderer";
 import { FontAtlas } from "../FontAtlasFactory";
-import { hexToRgb } from "./Utils";
+import { hexToRgb, RGB } from "./Utils";
 import { TextRenderData } from "../RenderData/TextRenderData";
 
 export class WebGLImageRenderer {
@@ -43,9 +43,10 @@ export class WebGLImageRenderer {
     private textTexVertices: number[] = [];
     private textPosVerticesSize: Vector2 = new Vector2();
 
-    // performance
+    // cache
     private lastTexture: WebGLTexture = null;
     private lastRender: "image" | "text" = null;
+    private maskColor: RGB = null;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -89,19 +90,7 @@ export class WebGLImageRenderer {
         this.imageTexVertices = [0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0];
     }
 
-    public renderImage(
-        viewportRect: Rectangle,
-        texture: WebGLTexture,
-        image: HTMLImageElement,
-        position: Vector2,
-        width: number,
-        height: number,
-        slice: Slice | null = null,
-        rotation: number = 0,
-        flipHorizontal: boolean = false,
-        flipVertical: boolean = false,
-        alpha: number = 1
-    ): void {
+    public renderImage(viewportRect: Rectangle, texture: WebGLTexture, renderData: ImageRenderData): void {
         if (this.lastRender !== "image") {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.imagePosVertices), this.gl.STATIC_DRAW);
@@ -111,25 +100,29 @@ export class WebGLImageRenderer {
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        mat4.translate(this.modelMatrix, this.modelMatrix, [position.x, position.y, 0]);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [
+            renderData.positionInViewport.x,
+            renderData.positionInViewport.y,
+            0,
+        ]);
         mat4.scale(this.modelMatrix, this.modelMatrix, [
-            width * (flipHorizontal ? -1 : 1),
-            height * (flipVertical ? -1 : 1),
+            renderData.width * (renderData.flipHorizontal ? -1 : 1),
+            renderData.height * (renderData.flipVertical ? -1 : 1),
             1,
         ]);
-        mat4.rotateZ(this.modelMatrix, this.modelMatrix, rotation * (Math.PI / 180));
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation * (Math.PI / 180));
 
         this.textureMatrix = mat4.identity(this.textureMatrix);
-        if (slice !== null) {
+        if (renderData.slice !== null) {
             mat4.translate(this.textureMatrix, this.textureMatrix, [
-                slice.x / image.naturalWidth,
-                slice.y / image.naturalHeight,
+                renderData.slice.x / renderData.image.naturalWidth,
+                renderData.slice.y / renderData.image.naturalHeight,
                 0,
             ]);
             // subtracting 0.5 to avoid bleeding (half-pixel correction)
             mat4.scale(this.textureMatrix, this.textureMatrix, [
-                (slice.width - 0.5) / image.naturalWidth,
-                (slice.height - 0.5) / image.naturalHeight,
+                (renderData.slice.width - 0.5) / renderData.image.naturalWidth,
+                (renderData.slice.height - 0.5) / renderData.image.naturalHeight,
                 1,
             ]);
         }
@@ -141,7 +134,7 @@ export class WebGLImageRenderer {
         this.gl.uniformMatrix4fv(this.modelMatrixUniform, false, this.modelMatrix);
         this.gl.uniformMatrix4fv(this.textureMatrixUniform, false, this.textureMatrix);
 
-        if (alpha < 1) {
+        if (renderData.alpha < 1) {
             this.gl.enable(this.gl.BLEND);
         } else {
             this.gl.disable(this.gl.BLEND);
@@ -153,9 +146,12 @@ export class WebGLImageRenderer {
             this.lastTexture = texture;
         }
 
-        this.gl.uniform1f(this.alphaUniform, alpha);
-        this.gl.uniform4f(this.colorUniform, 1, 1, 1, 1);
-        this.gl.uniform1f(this.colorMixUniform, 0);
+        this.gl.uniform1f(this.alphaUniform, renderData.alpha);
+
+        this.maskColor = renderData.maskColor !== null ? hexToRgb(renderData.maskColor) : { r: 1, g: 1, b: 1 };
+
+        this.gl.uniform4f(this.colorUniform, this.maskColor.r, this.maskColor.g, this.maskColor.b, 1);
+        this.gl.uniform1f(this.colorMixUniform, renderData.maskColorMix);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
 
@@ -180,7 +176,12 @@ export class WebGLImageRenderer {
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
         mat4.translate(this.modelMatrix, this.modelMatrix, [
-            renderData.positionInViewport.x - this.textPosVerticesSize.x / 2,
+            renderData.positionInViewport.x +
+                (renderData.pivot === "center"
+                    ? -this.textPosVerticesSize.x / 2
+                    : renderData.pivot === "right"
+                    ? -this.textPosVerticesSize.x
+                    : 0),
             renderData.positionInViewport.y - this.textPosVerticesSize.y / 2,
             0,
         ]);
@@ -204,8 +205,8 @@ export class WebGLImageRenderer {
 
         this.gl.uniform1f(this.alphaUniform, 1);
 
-        const rgbColor = hexToRgb(renderData.color);
-        this.gl.uniform4f(this.colorUniform, rgbColor.r, rgbColor.g, rgbColor.b, 1);
+        this.maskColor = hexToRgb(renderData.color);
+        this.gl.uniform4f(this.colorUniform, this.maskColor.r, this.maskColor.g, this.maskColor.b, 1);
         this.gl.uniform1f(this.colorMixUniform, 1);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.textPosVertices.length / 2);

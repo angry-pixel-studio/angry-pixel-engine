@@ -1,5 +1,5 @@
 import { RenderComponent } from "../../Component";
-import { TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
+import { Pivot, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 
@@ -9,10 +9,9 @@ interface Config {
     fontUrl?: string;
     size?: number;
     color?: string;
-    bold?: boolean;
-    italic?: boolean;
     lineSeparation?: number;
     letterSpacing?: number;
+    pivot?: Pivot;
 }
 
 export const TYPE_TEXT_RENDERER = "TextRenderer";
@@ -25,6 +24,7 @@ export class TextRenderer extends RenderComponent {
     public color: string = "#000000";
     public lineSeparation: number = 0;
     public letterSpacing: number = 0;
+    public pivot: Pivot = "left";
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
@@ -41,6 +41,7 @@ export class TextRenderer extends RenderComponent {
         this.color = config.color ?? this.color;
         this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
         this.letterSpacing = config.letterSpacing ?? this.letterSpacing;
+        this.pivot = config.pivot ?? this.pivot;
 
         if (this.lineSeparation % 2 !== 0) {
             throw new Error("TextRenderer.lineSeparation must be multiple of 2");
@@ -58,6 +59,7 @@ export class TextRenderer extends RenderComponent {
         this.renderData.fontUrl = this.fontUrl;
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.letterSpacing = this.letterSpacing;
+        this.renderData.pivot = this.pivot;
     }
 
     protected update(): void {

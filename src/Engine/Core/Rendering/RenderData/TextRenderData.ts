@@ -1,5 +1,7 @@
 import { RenderData, RenderDataType } from "./RenderData";
 
+export type Pivot = "left" | "center" | "right";
+
 export class TextRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Text;
     public color: string = null;
@@ -11,4 +13,5 @@ export class TextRenderData extends RenderData {
     public letterSpacing: number = null;
     public bold: boolean = false;
     public italic: boolean = false;
+    public pivot: Pivot = null;
 }

@@ -1,4 +1,6 @@
-export const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
+export type RGB = { r: number; g: number; b: number };
+
+export const hexToRgb = (hex: string): RGB | null => {
     const result: string[] = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
     return result
