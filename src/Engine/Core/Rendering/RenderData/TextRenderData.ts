@@ -8,6 +8,7 @@ export class TextRenderData extends RenderData {
     public fontUrl: string = null;
     public fontSize: number = null;
     public lineSeparation: number = null;
+    public letterSpacing: number = null;
     public bold: boolean = false;
     public italic: boolean = false;
 }

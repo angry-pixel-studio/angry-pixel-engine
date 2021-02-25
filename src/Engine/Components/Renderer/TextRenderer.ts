@@ -12,6 +12,7 @@ interface Config {
     bold?: boolean;
     italic?: boolean;
     lineSeparation?: number;
+    letterSpacing?: number;
 }
 
 export const TYPE_TEXT_RENDERER = "TextRenderer";
@@ -22,9 +23,8 @@ export class TextRenderer extends RenderComponent {
     public fontUrl: string = null;
     public size: number = 12;
     public color: string = "#000000";
-    public bold: boolean = false;
-    public italic: boolean = false;
-    public lineSeparation: number = 5;
+    public lineSeparation: number = 0;
+    public letterSpacing: number = 0;
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
@@ -39,9 +39,12 @@ export class TextRenderer extends RenderComponent {
         this.fontUrl = config.fontUrl ?? this.fontUrl;
         this.size = config.size ?? this.size;
         this.color = config.color ?? this.color;
-        this.bold = config.bold ?? this.bold;
-        this.italic = config.italic ?? this.italic;
         this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
+        this.letterSpacing = config.letterSpacing ?? this.letterSpacing;
+
+        if (this.lineSeparation % 2 !== 0) {
+            throw new Error("TextRenderer.lineSeparation must be multiple of 2");
+        }
     }
 
     protected start(): void {
@@ -53,8 +56,8 @@ export class TextRenderer extends RenderComponent {
         this.renderData.ui = this.gameObject.ui;
         this.renderData.fontFamily = this.fontFamily;
         this.renderData.fontUrl = this.fontUrl;
-        this.renderData.bold = this.bold;
-        this.renderData.italic = this.italic;
+        this.renderData.lineSeparation = this.lineSeparation;
+        this.renderData.letterSpacing = this.letterSpacing;
     }
 
     protected update(): void {
@@ -66,7 +69,6 @@ export class TextRenderer extends RenderComponent {
         this.renderData.fontSize = this.size;
         this.renderData.color = this.color;
         this.renderData.position.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
-        this.renderData.lineSeparation = this.lineSeparation;
 
         this.renderManager.addToRenderStack(this.renderData);
     }

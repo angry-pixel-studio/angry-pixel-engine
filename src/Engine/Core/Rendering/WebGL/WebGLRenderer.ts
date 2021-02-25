@@ -110,11 +110,8 @@ export class WebGLRenderer implements IContextRenderer {
         this.imageRenderer.renderText(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
             this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, true),
-            renderData.positionInViewport,
-            renderData.text,
-            renderData.fontSize,
-            renderData.color,
-            fontAtlas
+            fontAtlas,
+            renderData
         );
     }
 }
