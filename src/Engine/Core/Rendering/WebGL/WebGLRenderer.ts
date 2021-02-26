@@ -14,9 +14,10 @@ import { imageFragmentShader as legacyImageFragmentRenderer } from "./Shader/Leg
 import { imageVertexShader as legacyImageVertexRenderer } from "./Shader/Legacy/imageVertexShader";
 import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
 import { hexToRgb } from "./Utils";
+import { ColliderRenderData } from "../RenderData/ColliderRenderData";
 
 export enum WebGLContextVersion {
-    LegacyWebGl = "webgl",
+    LegacyWebGL = "webgl",
     WebGL2 = "webgl2",
 }
 
@@ -62,8 +63,12 @@ export class WebGLRenderer implements IContextRenderer {
     public render(camera: CameraData, renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
             this.renderImage(camera, renderData as ImageRenderData);
-        } else if (renderData.type === RenderDataType.Text) {
+        }
+        if (renderData.type === RenderDataType.Text) {
             this.renderText(camera, renderData as TextRenderData);
+        }
+        if (renderData.type === RenderDataType.Collider) {
+            this.imageRenderer.renderCollider(camera.viewportRect, renderData as ColliderRenderData);
         }
     }
 

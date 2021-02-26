@@ -6,6 +6,7 @@ import { WebGLContextVersion } from "./WebGLRenderer";
 import { FontAtlas } from "../FontAtlasFactory";
 import { hexToRgb, RGB } from "./Utils";
 import { TextRenderData } from "../RenderData/TextRenderData";
+import { ColliderRenderData } from "../RenderData/ColliderRenderData";
 
 export class WebGLImageRenderer {
     private gl: WebGLRenderingContext;
@@ -30,6 +31,7 @@ export class WebGLImageRenderer {
     private alphaUniform: WebGLUniformLocation;
     private colorUniform: WebGLUniformLocation;
     private colorMixUniform: WebGLUniformLocation;
+    private renderTextureUniform: WebGLUniformLocation;
 
     // matrices
     private projectionMatrix: mat4;
@@ -45,7 +47,7 @@ export class WebGLImageRenderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private lastRender: "image" | "text" = null;
+    private lastRender: "image" | "text" | "collider" = null;
     private maskColor: RGB = null;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement) {
@@ -73,6 +75,7 @@ export class WebGLImageRenderer {
         this.alphaUniform = this.gl.getUniformLocation(this.program, "u_alpha");
         this.colorUniform = this.gl.getUniformLocation(this.program, "u_color");
         this.colorMixUniform = this.gl.getUniformLocation(this.program, "u_colorMix");
+        this.renderTextureUniform = this.gl.getUniformLocation(this.program, "u_renderTexture");
 
         this.gl.useProgram(this.program);
 
@@ -146,6 +149,7 @@ export class WebGLImageRenderer {
             this.lastTexture = texture;
         }
 
+        this.gl.uniform1i(this.renderTextureUniform, 1);
         this.gl.uniform1f(this.alphaUniform, renderData.alpha);
 
         this.maskColor = renderData.maskColor !== null ? hexToRgb(renderData.maskColor) : { r: 1, g: 1, b: 1 };
@@ -203,6 +207,7 @@ export class WebGLImageRenderer {
             this.lastTexture = texture;
         }
 
+        this.gl.uniform1i(this.renderTextureUniform, 1);
         this.gl.uniform1f(this.alphaUniform, 1);
 
         this.maskColor = hexToRgb(renderData.color);
@@ -271,5 +276,75 @@ export class WebGLImageRenderer {
         }
 
         this.textPosVerticesSize.set(maxX, Math.abs(p.y2));
+    }
+
+    public renderCollider(viewportRect: Rectangle, renderData: ColliderRenderData): void {
+        const w: number = renderData.shape.width;
+        const h: number = renderData.shape.height;
+        const l: number = 1;
+
+        // prettier-ignore
+        const posVertices: number[] = [
+            0, 0,
+            w, 0,
+            0, l,
+            0, l,
+            w, 0,
+            w, l,
+            //--//
+            w - l, 0,
+            w, 0,
+            w - l, h,
+            w - l, h,
+            w, 0,
+            w, h,
+            //--//
+            0, h - l,
+            w, h - l,
+            0, h,
+            0, h,
+            w, h - l,
+            w, h,
+            //--//
+            0, 0,
+            l, 0,
+            0, h,
+            0, h,
+            l, 0,
+            l, h,
+        ];
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(posVertices), this.gl.DYNAMIC_DRAW);
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bufferData(
+            this.gl.ARRAY_BUFFER,
+            new Float32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+            this.gl.DYNAMIC_DRAW
+        );
+
+        this.modelMatrix = mat4.identity(this.modelMatrix);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [
+            renderData.positionInViewport.x - w / 2,
+            renderData.positionInViewport.y - h / 2,
+            0,
+        ]);
+
+        this.textureMatrix = mat4.identity(this.textureMatrix);
+
+        this.projectionMatrix = mat4.identity(this.projectionMatrix);
+        mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
+
+        this.gl.uniformMatrix4fv(this.projectionMatrixUniform, false, this.projectionMatrix);
+        this.gl.uniformMatrix4fv(this.modelMatrixUniform, false, this.modelMatrix);
+        this.gl.uniformMatrix4fv(this.textureMatrixUniform, false, this.textureMatrix);
+
+        this.gl.uniform1i(this.renderTextureUniform, 0);
+        this.gl.uniform4f(this.colorUniform, 0, 1, 0, 1);
+
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, posVertices.length / 2);
+
+        this.lastRender = "collider";
     }
 }

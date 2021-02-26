@@ -8,14 +8,16 @@ import { CameraData } from "./CameraData";
 
 export class RenderManager {
     private gameRenderer: IContextRenderer = null;
+    private debug: boolean = false;
 
     private renderStack: RenderData[] = [];
     private cameras: CameraData[] = [];
 
     private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    constructor(gameRenderer: IContextRenderer) {
+    constructor(gameRenderer: IContextRenderer, debug: boolean = false) {
         this.gameRenderer = gameRenderer;
+        this.debug = debug;
     }
 
     public clearCanvas(color: string | null = null): void {
@@ -53,8 +55,8 @@ export class RenderManager {
 
             if (renderData.ui === true) {
                 this.gameRenderer.render(camera, renderData);
-            } else if (renderData.debug === true) {
-                // render debug
+            } else if (this.debug === true && renderData.debug === true) {
+                this.gameRenderer.render(camera, renderData);
             } else if (this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false) {
                 this.gameRenderer.render(camera, renderData);
             }

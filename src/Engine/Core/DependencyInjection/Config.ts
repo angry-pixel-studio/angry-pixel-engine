@@ -53,7 +53,10 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
         throw new Error("WebGL is not supported, use context2d instead.");
     }
 
-    container.add("RenderManager", () => new RenderManager(container.getSingleton<WebGLRenderer>("Renderer")));
+    container.add(
+        "RenderManager",
+        () => new RenderManager(container.getSingleton<WebGLRenderer>("Renderer"), game.config.debugEnabled)
+    );
 };
 
 const webGLDependencies = (
@@ -97,7 +100,7 @@ const inputDependencies = (container: Container, domManager: DomManager): void =
 const getWebGLContextVersion = (): WebGLContextVersion | null => {
     return document.createElement("canvas").getContext(WebGLContextVersion.WebGL2) !== null
         ? WebGLContextVersion.WebGL2
-        : document.createElement("canvas").getContext(WebGLContextVersion.LegacyWebGl) !== null
-        ? WebGLContextVersion.LegacyWebGl
+        : document.createElement("canvas").getContext(WebGLContextVersion.LegacyWebGL) !== null
+        ? WebGLContextVersion.LegacyWebGL
         : null;
 };
