@@ -1,6 +1,6 @@
 import { Component, PhysicsComponent } from "../Component";
 import { Collision } from "../Core/Collision/CollisionManager";
-import { TimeManager } from "../Core/Time/TimeManager";
+import { PhysicsIterationManager } from "../Core/Physics/PhysicsIterationManager";
 import { container } from "../Game";
 import { Vector2 } from "../Math/Vector2";
 import { ColliderComponent } from "./Colliders/ColliderComponent";
@@ -19,14 +19,10 @@ interface Config {
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
-    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
-
+    private readonly iterationManager: PhysicsIterationManager = container.getSingleton<PhysicsIterationManager>(
+        "PhysicsIterationManager"
+    );
     private readonly gravityScale: number = 9.8;
-    private readonly physicsFramerate: number = 60;
-    private readonly physicsIterations: number = 12;
-
-    private physicsDeltaTime: number = 0;
-    private deltaTimeAccumulator: number = 0;
 
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: ColliderComponent[] = [];
@@ -55,8 +51,6 @@ export class RigidBody extends PhysicsComponent {
         this._rigidBodyType = config.rigidBodyType;
         this._layersToCollide = config.layersToCollide;
         this._gravity.set(0, config.gravity ?? this._gravity.y);
-
-        this.physicsDeltaTime = parseFloat((1 / this.physicsFramerate / this.physicsIterations).toFixed(6));
     }
 
     public get rigidBodyType(): RigidBodyType {
@@ -98,14 +92,8 @@ export class RigidBody extends PhysicsComponent {
             return;
         }
 
-        this.deltaTimeAccumulator += this.timeManager.deltaTime;
-
-        while (this.deltaTimeAccumulator >= this.physicsDeltaTime) {
-            this.applyGravity();
-            this.applyVelocity();
-
-            this.deltaTimeAccumulator -= this.physicsDeltaTime;
-        }
+        this.applyGravity();
+        this.applyVelocity();
     }
 
     private applyGravity(): void {
@@ -113,13 +101,21 @@ export class RigidBody extends PhysicsComponent {
             this._velocity = Vector2.add(
                 this._velocity,
                 this._velocity,
-                Vector2.scale(this.deltaGravity, this._gravity, -this.gravityScale * this.physicsDeltaTime)
+                Vector2.scale(
+                    this.deltaGravity,
+                    this._gravity,
+                    -this.gravityScale * this.iterationManager.physicsDeltaTime
+                )
             );
         }
     }
 
     private applyVelocity(): void {
-        Vector2.scale(this.deltaVelocity, this._velocity, this.physicsFramerate * this.physicsDeltaTime);
+        Vector2.scale(
+            this.deltaVelocity,
+            this._velocity,
+            this.iterationManager.physicsFramerate * this.iterationManager.physicsDeltaTime
+        );
 
         if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
             this.move();

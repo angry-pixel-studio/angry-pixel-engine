@@ -22,6 +22,7 @@ import { ProgramManager } from "../Rendering/WebGL/ProgramManager";
 import { FontAtlasFactory } from "../Rendering/FontAtlasFactory";
 import { TextRenderer } from "../Rendering/WebGL/Renderer/TextRenderer";
 import { GeometricRenderer } from "../Rendering/WebGL/Renderer/GeometricRenderer";
+import { PhysicsIterationManager } from "../Physics/PhysicsIterationManager";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.add(
@@ -42,6 +43,15 @@ export const loadDependencies = (container: Container, game: Game): void => {
     container.add("GameObjectManager", () => new GameObjectManager());
     container.add("AssetManager", () => new AssetManager());
     container.add("TimeManager", () => new TimeManager());
+    container.add(
+        "PhysicsIterationManager",
+        () =>
+            new PhysicsIterationManager(
+                container.getSingleton<TimeManager>("TimeManager"),
+                game.config.physicsFramerate,
+                game.config.physicsIterations
+            )
+    );
 };
 
 const renderingDependencies = (container: Container, game: Game, domManager: DomManager): void => {
