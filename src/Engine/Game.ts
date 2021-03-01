@@ -9,6 +9,7 @@ import { DomManagerFacade } from "./Facades/DomManagerFacade";
 import { InputManagerFacade } from "./Facades/InputManagerFacade";
 import { SceneManagerFacade } from "./Facades/SceneManagerFacade";
 import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
+import { DEFAULT_FRAMERATE, DEFAULT_ITERATIONS, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -24,6 +25,8 @@ export interface IGameConfig {
     debugEnabled?: boolean;
     bgColor?: string;
     context2d?: string;
+    physicsFramerate?: number;
+    physicsIterations?: number;
 }
 
 const defaultConfig: IGameConfig = {
@@ -33,6 +36,8 @@ const defaultConfig: IGameConfig = {
     debugEnabled: false,
     bgColor: "#000000",
     context2d: "fallback",
+    physicsFramerate: DEFAULT_FRAMERATE,
+    physicsIterations: DEFAULT_ITERATIONS,
 };
 
 export class Game {
@@ -40,6 +45,7 @@ export class Game {
     private renderManager: RenderManager;
     private collisionManager: CollisionManager;
     private timeManager: TimeManager;
+    private physicsIterationManager: PhysicsIterationManager;
 
     private _config: IGameConfig;
 
@@ -67,6 +73,7 @@ export class Game {
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
         this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
         this.timeManager = container.getSingleton<TimeManager>("TimeManager");
+        this.physicsIterationManager = container.getSingleton<PhysicsIterationManager>("PhysicsIterationManager");
     }
 
     private initializeFacades(): void {
@@ -113,7 +120,7 @@ export class Game {
 
             this.dispatchFrameEvent(EVENT_START);
             this.dispatchFrameEvent(EVENT_UPDATE);
-            this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+            this.physicsIterationManager.update(() => this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS));
             this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
             this.renderManager.clearCanvas(this._config.bgColor);
