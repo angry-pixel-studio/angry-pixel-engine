@@ -9,7 +9,7 @@ import { KeyboardController } from "../Input/KeyboardController";
 import { MouseController } from "../Input/MouseController";
 import { Context2DRenderer } from "../Rendering/Context2D/Context2DRenderer";
 import { RenderManager } from "../Rendering/RenderManager";
-import { WebGLImageRenderer } from "../Rendering/WebGL/WebGLImageRenderer";
+import { ImageRenderer } from "../Rendering/WebGL/Renderer/ImageRenderer";
 import { ProgramFactory } from "../Rendering/WebGL/ProgramFactory";
 import { ShaderLoader } from "../Rendering/WebGL/ShaderLoader";
 import { TextureFactory } from "../Rendering/WebGL/TextureFactory";
@@ -18,6 +18,10 @@ import { SceneManager } from "../Scene/SceneManager";
 import { TimeManager } from "../Time/TimeManager";
 import { Container } from "./Container";
 import { TextureManager } from "../Rendering/WebGL/TextureManager";
+import { ProgramManager } from "../Rendering/WebGL/ProgramManager";
+import { FontAtlasFactory } from "../Rendering/FontAtlasFactory";
+import { TextRenderer } from "../Rendering/WebGL/Renderer/TextRenderer";
+import { GeometricRenderer } from "../Rendering/WebGL/Renderer/GeometricRenderer";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.add(
@@ -57,6 +61,7 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
         "RenderManager",
         () => new RenderManager(container.getSingleton<WebGLRenderer>("Renderer"), game.config.debugEnabled)
     );
+    container.add("FontAtlasFactory", () => new FontAtlasFactory());
 };
 
 const webGLDependencies = (
@@ -66,18 +71,61 @@ const webGLDependencies = (
 ): void => {
     container.add("ShaderLoader", () => new ShaderLoader());
     container.add("ProgramFactory", () => new ProgramFactory(container.getSingleton<ShaderLoader>("ShaderLoader")));
+    container.add(
+        "ProgramManager",
+        () =>
+            new ProgramManager(
+                container.getSingleton<ProgramFactory>("ProgramFactory"),
+                webglContextVersion,
+                domManager.canvas
+            )
+    );
+
     container.add("TextureFactory", () => new TextureFactory(webglContextVersion, domManager.canvas));
     container.add("TextureManager", () => new TextureManager(container.getSingleton<TextureFactory>("TextureFactory")));
-    container.add("WebGLImageRenderer", () => new WebGLImageRenderer(webglContextVersion, domManager.canvas));
+
+    container.add(
+        "WebGLImageRenderer",
+        () =>
+            new ImageRenderer(
+                webglContextVersion,
+                domManager.canvas,
+                container.getSingleton<ProgramManager>("ProgramManager")
+            )
+    );
+
+    container.add(
+        "WebGLTextRenderer",
+        () =>
+            new TextRenderer(
+                webglContextVersion,
+                domManager.canvas,
+                container.getSingleton<ProgramManager>("ProgramManager")
+            )
+    );
+
+    container.add(
+        "WebGLGeometricRenderer",
+        () =>
+            new GeometricRenderer(
+                webglContextVersion,
+                domManager.canvas,
+                container.getSingleton<ProgramManager>("ProgramManager")
+            )
+    );
+
     container.add(
         "Renderer",
         () =>
             new WebGLRenderer(
                 webglContextVersion,
                 domManager.canvas,
-                container.getSingleton<ProgramFactory>("ProgramFactory"),
+                container.getSingleton<ProgramManager>("ProgramManager"),
                 container.getSingleton<TextureManager>("TextureManager"),
-                container.getSingleton<WebGLImageRenderer>("WebGLImageRenderer")
+                container.getSingleton<FontAtlasFactory>("FontAtlasFactory"),
+                container.getSingleton<ImageRenderer>("WebGLImageRenderer"),
+                container.getSingleton<TextRenderer>("WebGLTextRenderer"),
+                container.getSingleton<GeometricRenderer>("WebGLGeometricRenderer")
             )
     );
 };

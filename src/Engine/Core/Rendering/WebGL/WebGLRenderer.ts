@@ -3,54 +3,59 @@ import { IContextRenderer } from "../IContextRenderer";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
 import { TextRenderData } from "../RenderData/TextRenderData";
-import { ProgramFactory } from "./ProgramFactory";
 import { TextureManager } from "./TextureManager";
-import { WebGLImageRenderer } from "./WebGLImageRenderer";
+import { ImageRenderer } from "./Renderer/ImageRenderer";
 
-// shaders
-import { imageFragmentShader } from "./Shader/imageFragmentShader";
-import { imageVertexShader } from "./Shader/imageVertexShader";
-import { imageFragmentShader as legacyImageFragmentRenderer } from "./Shader/Legacy/imageFragmentShader";
-import { imageVertexShader as legacyImageVertexRenderer } from "./Shader/Legacy/imageVertexShader";
 import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
 import { hexToRgb } from "./Utils";
 import { ColliderRenderData } from "../RenderData/ColliderRenderData";
+import { ProgramManager } from "./ProgramManager";
+import { TextRenderer } from "./Renderer/TextRenderer";
+import { GeometricRenderer } from "./Renderer/GeometricRenderer";
 
 export enum WebGLContextVersion {
     LegacyWebGL = "webgl",
     WebGL2 = "webgl2",
 }
 
+export type LastRender = "image" | "text" | "geometric";
+
 export class WebGLRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
 
-    private program: WebGLProgram;
     private textureManager: TextureManager;
-    private imageRenderer: WebGLImageRenderer;
     private fontAtlasFactory: FontAtlasFactory;
+
+    private imageRenderer: ImageRenderer;
+    private textRenderer: TextRenderer;
+    private geometricRenderer: GeometricRenderer;
+
+    // cache
+    private lastRender: LastRender;
+    private fontAtlas: Map<symbol, FontAtlas> = new Map<symbol, FontAtlas>();
 
     public constructor(
         contextVersion: WebGLContextVersion,
         canvas: HTMLCanvasElement,
-        programFactory: ProgramFactory,
+        programManager: ProgramManager,
         textureManager: TextureManager,
-        imageRenderer: WebGLImageRenderer
+        fontAtlasFactory: FontAtlasFactory,
+        imageRenderer: ImageRenderer,
+        textRenderer: TextRenderer,
+        geometricRenderer: GeometricRenderer
     ) {
         this.canvas = canvas;
         this.gl = this.canvas.getContext(contextVersion) as WebGLRenderingContext;
-
-        this.program =
-            contextVersion === WebGLContextVersion.WebGL2
-                ? programFactory.create(this.gl, imageVertexShader, imageFragmentShader)
-                : programFactory.create(this.gl, legacyImageVertexRenderer, legacyImageFragmentRenderer);
+        programManager.loadProgram();
 
         this.textureManager = textureManager;
+
         this.imageRenderer = imageRenderer;
+        this.textRenderer = textRenderer;
+        this.geometricRenderer = geometricRenderer;
 
-        this.imageRenderer.setProgram(this.program);
-
-        this.fontAtlasFactory = new FontAtlasFactory();
+        this.fontAtlasFactory = fontAtlasFactory;
     }
 
     public clearCanvas(color: string): void {
@@ -63,24 +68,30 @@ export class WebGLRenderer implements IContextRenderer {
     public render(camera: CameraData, renderData: RenderData): void {
         if (renderData.type === RenderDataType.Image) {
             this.renderImage(camera, renderData as ImageRenderData);
+            this.lastRender = "image";
         }
         if (renderData.type === RenderDataType.Text) {
             this.renderText(camera, renderData as TextRenderData);
+            this.lastRender = "text";
         }
         if (renderData.type === RenderDataType.Collider) {
-            this.imageRenderer.renderCollider(camera.viewportRect, renderData as ColliderRenderData);
+            this.geometricRenderer.renderCollider(
+                camera.viewportRect,
+                renderData as ColliderRenderData,
+                this.lastRender
+            );
+            this.lastRender = "geometric";
         }
     }
 
     private renderImage(camera: CameraData, renderData: ImageRenderData): void {
-        this.imageRenderer.renderImage(
+        this.imageRenderer.render(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
             this.textureManager.getOrCreateTextureFromImage(renderData.image, renderData.smooth),
-            renderData
+            renderData,
+            this.lastRender
         );
     }
-
-    private fontAtlas: Map<symbol, FontAtlas> = new Map<symbol, FontAtlas>();
 
     private renderText(camera: CameraData, renderData: TextRenderData): void {
         const symbol: symbol = Symbol.for(renderData.fontFamily);
@@ -104,11 +115,12 @@ export class WebGLRenderer implements IContextRenderer {
     }
 
     private fontAtlasLoaded(fontAtlas: FontAtlas, camera: CameraData, renderData: TextRenderData): void {
-        this.imageRenderer.renderText(
+        this.textRenderer.render(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
             this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, true),
             fontAtlas,
-            renderData
+            renderData,
+            this.lastRender
         );
     }
 }
