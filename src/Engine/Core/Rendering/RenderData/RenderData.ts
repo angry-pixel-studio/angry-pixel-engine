@@ -16,7 +16,7 @@ export abstract class RenderData {
     public viwportRect: Rectangle;
 
     private _position: Vector2 = new Vector2(0, 0);
-    private _viewportPosition: Vector2 = new Vector2(0, 0);
+    private _positionInViewport: Vector2 = new Vector2(0, 0);
 
     public get position(): Vector2 {
         return this._position;
@@ -26,11 +26,11 @@ export abstract class RenderData {
         this._position.set(position.x, position.y);
     }
 
-    public get viewportPosition(): Vector2 {
-        return this._viewportPosition;
+    public get positionInViewport(): Vector2 {
+        return this._positionInViewport;
     }
 
-    public set viewportPosition(position: Vector2) {
-        this._viewportPosition.set(position.x, position.y);
+    public set positionInViewport(position: Vector2) {
+        this._positionInViewport.set(position.x, position.y);
     }
 }

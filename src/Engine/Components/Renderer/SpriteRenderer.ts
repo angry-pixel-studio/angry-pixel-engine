@@ -14,6 +14,8 @@ interface Config {
     flipVertical?: boolean;
     opacity?: number;
     tiled?: Vector2;
+    maskColor?: string;
+    maskColorMix?: number;
 }
 
 export const TYPE_SPRITE_RENDERER: string = "SpriteRenderer";
@@ -29,6 +31,8 @@ export class SpriteRenderer extends RenderComponent {
     public smooth: boolean = true;
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
+    private maskColor: string = "#ffffff";
+    private maskColorMix: number = 0;
 
     private renderData: ImageRenderData[] = [];
 
@@ -49,6 +53,8 @@ export class SpriteRenderer extends RenderComponent {
         this.flipVertical = config.flipVertical ?? this.flipVertical;
         this.opacity = config.opacity ?? this.opacity;
         this.tiled = config.tiled ?? this._tiled;
+        this.maskColor = config.maskColor ?? this.maskColor;
+        this.maskColorMix = config.maskColorMix ?? this.maskColorMix;
     }
 
     public get tiled(): Vector2 {
@@ -65,7 +71,6 @@ export class SpriteRenderer extends RenderComponent {
 
     protected start(): void {
         this.goPosition = this.gameObject.transform.position;
-        this.update();
     }
 
     protected update(): void {
@@ -103,6 +108,8 @@ export class SpriteRenderer extends RenderComponent {
         this.renderData[index].rotation = this.gameObject.transform.rotation + this.rotation;
         this.renderData[index].smooth = this.sprite.smooth;
         this.renderData[index].alpha = this.opacity;
+        this.renderData[index].maskColor = this.maskColor;
+        this.renderData[index].maskColorMix = this.maskColorMix;
 
         this.calculateRenderPosition(index, tileX, tileY);
         this.renderManager.addToRenderStack(this.renderData[index]);

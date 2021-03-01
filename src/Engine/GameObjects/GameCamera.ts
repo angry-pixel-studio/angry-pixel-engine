@@ -37,6 +37,10 @@ export class GameCamera extends GameObject {
         return this.camera.zoom;
     }
 
+    public get originalViewporRect(): Rectangle {
+        return this.camera.originalViewportRect;
+    }
+
     public get worldSpaceRect(): Rectangle {
         return this.camera.worldSpaceRect;
     }

@@ -8,36 +8,20 @@ import { CameraData } from "./CameraData";
 
 export class RenderManager {
     private gameRenderer: IContextRenderer = null;
-    private uiRenderer: IContextRenderer = null;
-    private debugRenderer: IContextRenderer = null;
+    private debug: boolean = false;
 
     private renderStack: RenderData[] = [];
     private cameras: CameraData[] = [];
 
     private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    constructor(
-        gameRenderer: IContextRenderer,
-        uiRenderer: IContextRenderer = null,
-        debugRenderer: IContextRenderer = null
-    ) {
+    constructor(gameRenderer: IContextRenderer, debug: boolean = false) {
         this.gameRenderer = gameRenderer;
-        this.uiRenderer = uiRenderer;
-        this.debugRenderer = debugRenderer;
+        this.debug = debug;
     }
 
     public clearCanvas(color: string | null = null): void {
         this.gameRenderer.clearCanvas(color);
-
-        // If UI enabled
-        if (this.uiRenderer !== null) {
-            this.uiRenderer.clearCanvas(null);
-        }
-
-        // If debug enabled
-        if (this.debugRenderer !== null) {
-            this.debugRenderer.clearCanvas(null);
-        }
     }
 
     public addToRenderStack(renderData: RenderData): void {
@@ -67,37 +51,33 @@ export class RenderManager {
                 return;
             }
 
-            this.setViewportPosition(camera, renderData);
+            this.setPositionInViewport(camera, renderData);
 
-            if (this.uiRenderer !== null && renderData.ui === true) {
-                this.uiRenderer.render(camera, renderData);
-            } else if (this.debugRenderer !== null && renderData.debug === true) {
-                this.debugRenderer.render(camera, renderData);
-            } else if (
-                renderData.ui !== true &&
-                renderData.debug !== true &&
-                this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false
-            ) {
+            if (renderData.ui === true) {
+                this.gameRenderer.render(camera, renderData);
+            } else if (this.debug === true && renderData.debug === true) {
+                this.gameRenderer.render(camera, renderData);
+            } else if (this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false) {
                 this.gameRenderer.render(camera, renderData);
             }
         });
     }
 
-    private setViewportPosition(camera: CameraData, renderData: RenderData): void {
+    private setPositionInViewport(camera: CameraData, renderData: RenderData): void {
         if (renderData.ui !== true) {
-            renderData.viewportPosition.set(
+            renderData.positionInViewport.set(
                 Number((renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2).toFixed(0)),
                 Number((renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2).toFixed(0))
             );
         } else {
-            renderData.viewportPosition = renderData.position;
+            renderData.positionInViewport = renderData.position;
         }
     }
 
     private isInsideViewportRect(camera: CameraData, renderData: ImageRenderData): boolean {
         this.cacheRect.set(
-            renderData.viewportPosition.x - renderData.width / 2,
-            renderData.viewportPosition.y - renderData.height / 2,
+            renderData.positionInViewport.x - renderData.width / 2,
+            renderData.positionInViewport.y - renderData.height / 2,
             renderData.width,
             renderData.height
         );

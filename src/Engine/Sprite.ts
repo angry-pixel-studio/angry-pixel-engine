@@ -15,31 +15,30 @@ interface Slice {
 }
 
 export class Sprite {
-    public image: HTMLImageElement = null;
-    public width: number = null;
-    public height: number = null;
-    public slice: Slice = null;
-    public scale: Vector2 = new Vector2(1, 1);
-    public smooth: boolean = true;
-
+    private _image: HTMLImageElement = null;
+    private _slice: Slice = null;
+    private _scale: Vector2 = new Vector2(1, 1);
+    private _smooth: boolean = true;
+    private _width: number = null;
+    private _height: number = null;
     private _loaded: boolean = false;
 
     constructor(config: Config) {
-        this.image = config.image;
+        this._image = config.image;
 
-        this.slice = config.slice ?? this.slice;
-        if (this.slice !== null) {
-            this.width = this.slice.width;
-            this.height = this.slice.height;
+        this._slice = config.slice ?? this._slice;
+        if (this._slice !== null) {
+            this._width = this._slice.width;
+            this._height = this._slice.height;
         }
 
-        this.scale = config.scale ?? this.scale;
-        this.smooth = config.smooth ?? this.smooth;
+        this._scale = config.scale ?? this._scale;
+        this._smooth = config.smooth ?? this._smooth;
 
-        if (this.image.naturalWidth) {
+        if (this._image.naturalWidth) {
             this.onLoad();
         } else {
-            this.image.addEventListener("load", () => this.onLoad());
+            this._image.addEventListener("load", () => this.onLoad());
         }
     }
 
@@ -47,9 +46,33 @@ export class Sprite {
         return this._loaded;
     }
 
+    public get image(): HTMLImageElement {
+        return this._image;
+    }
+
+    public get slice(): Slice {
+        return this._slice;
+    }
+
+    public get scale(): Vector2 {
+        return this._scale;
+    }
+
+    public get smooth(): boolean {
+        return this._smooth;
+    }
+
+    public get width(): number {
+        return this._width;
+    }
+
+    public get height(): number {
+        return this._height;
+    }
+
     private onLoad(): void {
-        this.width = (this.width ?? this.image.naturalWidth) * this.scale.x;
-        this.height = (this.height ?? this.image.naturalHeight) * this.scale.y;
+        this._width = (this._width ?? this._image.naturalWidth) * this._scale.x;
+        this._height = (this._height ?? this._image.naturalHeight) * this._scale.y;
 
         this._loaded = true;
     }

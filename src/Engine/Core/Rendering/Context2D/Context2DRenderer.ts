@@ -65,13 +65,13 @@ export class Context2DRenderer implements IContextRenderer {
 
         if (renderData.rotation) {
             this.canvasContext.translate(
-                renderData.viewportPosition.x + renderData.width / 2,
-                renderData.viewportPosition.y + renderData.height / 2
+                renderData.positionInViewport.x + renderData.width / 2,
+                renderData.positionInViewport.y + renderData.height / 2
             );
             this.imagePosition.set(-renderData.width / 2, -renderData.height / 2);
             this.canvasContext.rotate(-(renderData.rotation * Math.PI) / 180);
         } else {
-            this.canvasContext.translate(renderData.viewportPosition.x, renderData.viewportPosition.y);
+            this.canvasContext.translate(renderData.positionInViewport.x, renderData.positionInViewport.y);
             this.imagePosition.set(
                 renderData.flipHorizontal ? -renderData.width : this.imagePosition.x,
                 renderData.flipVertical ? -renderData.height : this.imagePosition.y
@@ -115,8 +115,8 @@ export class Context2DRenderer implements IContextRenderer {
         const font = [
             renderData.bold ? "bold" : "",
             renderData.italic ? "italic" : "",
-            renderData.textSize + "px",
-            renderData.font,
+            renderData.fontSize + "px",
+            renderData.fontFamily,
         ];
 
         this.canvasContext.font = font.join(" ");
@@ -127,12 +127,16 @@ export class Context2DRenderer implements IContextRenderer {
             renderData.text.forEach((text: string, index: number) => {
                 this.canvasContext.fillText(
                     text,
-                    renderData.viewportPosition.x,
-                    renderData.viewportPosition.y + (renderData.lineSeparation + renderData.textSize) * index
+                    renderData.positionInViewport.x,
+                    renderData.positionInViewport.y + (renderData.lineSeparation + renderData.fontSize) * index
                 );
             });
         } else {
-            this.canvasContext.fillText(renderData.text, renderData.viewportPosition.x, renderData.viewportPosition.y);
+            this.canvasContext.fillText(
+                renderData.text,
+                renderData.positionInViewport.x,
+                renderData.positionInViewport.y
+            );
         }
 
         this.canvasContext.restore();
@@ -147,8 +151,8 @@ export class Context2DRenderer implements IContextRenderer {
             case GEOMETRIC_RECTANGLE:
                 this.canvasContext.strokeStyle = renderData.color;
                 this.canvasContext.strokeRect(
-                    renderData.viewportPosition.x,
-                    renderData.viewportPosition.y,
+                    renderData.positionInViewport.x,
+                    renderData.positionInViewport.y,
                     renderData.geometric.width,
                     renderData.geometric.height
                 );
@@ -180,7 +184,7 @@ export class Context2DRenderer implements IContextRenderer {
         this.canvasContext.strokeStyle = renderData.color;
 
         const shape = renderData.shape.clone();
-        shape.position = renderData.viewportPosition;
+        shape.position = renderData.positionInViewport;
         shape.update();
 
         switch (shape.type) {
@@ -203,16 +207,16 @@ export class Context2DRenderer implements IContextRenderer {
             this.centerImage(renderData as ImageRenderData);
         }
 
-        renderData.viewportPosition.set(
-            Number((renderData.viewportPosition.x + this.canvas.width / 2).toFixed(0)),
-            Number((this.canvas.height / 2 - renderData.viewportPosition.y).toFixed(0))
+        renderData.positionInViewport.set(
+            Number((renderData.positionInViewport.x + this.canvas.width / 2).toFixed(0)),
+            Number((this.canvas.height / 2 - renderData.positionInViewport.y).toFixed(0))
         );
     }
 
     private centerImage(renderData: ImageRenderData) {
-        renderData.viewportPosition.set(
-            renderData.viewportPosition.x - Math.floor(renderData.width / 2),
-            renderData.viewportPosition.y + Math.floor(renderData.height / 2)
+        renderData.positionInViewport.set(
+            renderData.positionInViewport.x - Math.floor(renderData.width / 2),
+            renderData.positionInViewport.y + Math.floor(renderData.height / 2)
         );
     }
 }

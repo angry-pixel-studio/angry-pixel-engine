@@ -18,4 +18,6 @@ export class ImageRenderData extends RenderData {
     public rotation: number = null;
     public smooth: boolean = true;
     public alpha: number = 1;
+    public maskColor: string = null;
+    public maskColorMix: number = null;
 }
