@@ -11,4 +11,16 @@ export class TimeManagerFacade {
     public static get deltaTime(): number {
         return this.timeManager.deltaTime;
     }
+
+    public static getTimeScale(): number {
+        return this.timeManager.timeScale;
+    }
+
+    public static setTimeScale(scale: number): void {
+        this.timeManager.timeScale = scale;
+    }
+
+    public static get unscaledDeltaTime(): number {
+        return this.timeManager.unscaledDeltaTime;
+    }
 }

@@ -8,8 +8,9 @@ export class PhysicsIterationManager {
 
     private readonly _physicsFramerate: number;
     private readonly _physicsIterations: number;
-    private readonly _physicsDeltaTime: number;
+    private readonly _unscaledPhysicsDeltaTime: number;
 
+    private _physicsDeltaTime: number = 0;
     private _deltaTimeAccumulator: number = 0;
 
     constructor(timeManager: TimeManager, physicsFramerate: number, physicsIterations: number) {
@@ -17,8 +18,7 @@ export class PhysicsIterationManager {
 
         this._physicsFramerate = physicsFramerate;
         this._physicsIterations = physicsIterations;
-
-        this._physicsDeltaTime = parseFloat((1 / this._physicsFramerate / this._physicsIterations).toFixed(6));
+        this._unscaledPhysicsDeltaTime = parseFloat((1 / this._physicsFramerate / this._physicsIterations).toFixed(6));
     }
 
     public get physicsFramerate(): number {
@@ -34,11 +34,16 @@ export class PhysicsIterationManager {
     }
 
     public update(callback: () => void): void {
-        this._deltaTimeAccumulator += this.timeManager.deltaTime;
+        if (this.timeManager.timeScale === 0) {
+            return;
+        }
 
-        while (this._deltaTimeAccumulator >= this._physicsDeltaTime) {
+        this._physicsDeltaTime = this._unscaledPhysicsDeltaTime * this.timeManager.timeScale;
+        this._deltaTimeAccumulator += this.timeManager.unscaledDeltaTime;
+
+        while (this._deltaTimeAccumulator >= this._unscaledPhysicsDeltaTime) {
             callback();
-            this._deltaTimeAccumulator -= this._physicsDeltaTime;
+            this._deltaTimeAccumulator -= this._unscaledPhysicsDeltaTime;
         }
     }
 }

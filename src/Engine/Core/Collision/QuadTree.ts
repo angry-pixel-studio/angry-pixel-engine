@@ -33,7 +33,7 @@ export class QuadTree {
 
         this.colliders.push(collider);
 
-        if (!this.isQuadFull()) {
+        if (this.isQuadFull() === false) {
             return;
         }
 
