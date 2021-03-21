@@ -1,9 +1,10 @@
+import { Rectangle } from "../../../Math/Rectangle";
 import { Vector2 } from "../../../Math/Vector2";
 import { ShapeType } from "../../Collision/Shape/Shape";
 import { CameraData } from "../CameraData";
 import { IContextRenderer } from "../IContextRenderer";
 import { ColliderRenderData } from "../RenderData/ColliderRenderData";
-import { GeometricRenderData, GEOMETRIC_POLYGON, GEOMETRIC_RECTANGLE } from "../RenderData/GeometricRenderData";
+import { GeometricRenderData } from "../RenderData/GeometricRenderData";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
 import { TextRenderData } from "../RenderData/TextRenderData";
@@ -38,7 +39,7 @@ export class Context2DRenderer implements IContextRenderer {
         }
 
         if (renderData.type === RenderDataType.Geometric) {
-            this.renderGeometric(renderData as GeometricRenderData);
+            this.renderGeometric(renderData as GeometricRenderData, camera.zoom);
         }
 
         if (renderData.type === RenderDataType.Collider) {
@@ -142,23 +143,30 @@ export class Context2DRenderer implements IContextRenderer {
         this.canvasContext.restore();
     }
 
-    private renderGeometric(renderData: GeometricRenderData): void {
+    private renderGeometric(renderData: GeometricRenderData, zoom: number): void {
         this.canvasContext.save();
+
+        if (renderData.ui !== true) {
+            this.canvasContext.setTransform(
+                zoom,
+                0,
+                0,
+                zoom,
+                (this.canvas.width * (1 - zoom)) / 2, // todo: use camera viewport
+                (this.canvas.height * (1 - zoom)) / 2
+            );
+        }
 
         this.updateRenderPosition(renderData);
 
-        switch (renderData.geometricType) {
-            case GEOMETRIC_RECTANGLE:
-                this.canvasContext.strokeStyle = renderData.color;
-                this.canvasContext.strokeRect(
-                    renderData.positionInViewport.x,
-                    renderData.positionInViewport.y,
-                    renderData.geometric.width,
-                    renderData.geometric.height
-                );
-                break;
-            case GEOMETRIC_POLYGON:
-                break;
+        if (renderData.geometricType === "Rectangle") {
+            this.canvasContext.strokeStyle = renderData.color;
+            this.canvasContext.strokeRect(
+                renderData.positionInViewport.x - renderData.getGeometric<Rectangle>().width / 2,
+                renderData.positionInViewport.y - renderData.getGeometric<Rectangle>().width / 2,
+                renderData.getGeometric<Rectangle>().width,
+                renderData.getGeometric<Rectangle>().height
+            );
         }
 
         this.canvasContext.restore();

@@ -27,6 +27,7 @@ export interface IGameConfig {
     context2d?: string;
     physicsFramerate?: number;
     physicsIterations?: number;
+    collisionsQuadrant?: { width: number; height: number };
 }
 
 const defaultConfig: IGameConfig = {
@@ -38,6 +39,7 @@ const defaultConfig: IGameConfig = {
     context2d: "fallback",
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
+    collisionsQuadrant: null,
 };
 
 export class Game {
@@ -116,10 +118,11 @@ export class Game {
             this._running = true;
 
             this.timeManager.update(time);
-            this.collisionManager.prepare();
 
             this.dispatchFrameEvent(EVENT_START);
             this.dispatchFrameEvent(EVENT_UPDATE);
+
+            this.collisionManager.update();
             this.physicsIterationManager.update(() => this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS));
             this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 

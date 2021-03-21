@@ -23,6 +23,7 @@ import { FontAtlasFactory } from "../Rendering/FontAtlasFactory";
 import { TextRenderer } from "../Rendering/WebGL/Renderer/TextRenderer";
 import { GeometricRenderer } from "../Rendering/WebGL/Renderer/GeometricRenderer";
 import { PhysicsIterationManager } from "../Physics/PhysicsIterationManager";
+import { SatResolver } from "../Collision/Sat/SatResolver";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.add(
@@ -34,12 +35,9 @@ export const loadDependencies = (container: Container, game: Game): void => {
 
     renderingDependencies(container, game, domManager);
     inputDependencies(container, domManager);
+    collisionDependencies(container, game);
 
     container.add("SceneManager", () => new SceneManager(game, container.getSingleton<RenderManager>("RenderManager")));
-    container.add(
-        "CollisionManager",
-        () => new CollisionManager(container.getSingleton<RenderManager>("RenderManager"))
-    );
     container.add("GameObjectManager", () => new GameObjectManager());
     container.add("AssetManager", () => new AssetManager());
     container.add("TimeManager", () => new TimeManager());
@@ -50,6 +48,20 @@ export const loadDependencies = (container: Container, game: Game): void => {
                 container.getSingleton<TimeManager>("TimeManager"),
                 game.config.physicsFramerate,
                 game.config.physicsIterations
+            )
+    );
+};
+
+const collisionDependencies = (container: Container, game: Game): void => {
+    container.add("SatResolver", () => new SatResolver());
+    container.add(
+        "CollisionManager",
+        () =>
+            new CollisionManager(
+                game.config.collisionsQuadrant,
+                container.getSingleton<SatResolver>("SatResolver"),
+                game.config.debugEnabled,
+                container.getSingleton<RenderManager>("RenderManager")
             )
     );
 };

@@ -69,6 +69,20 @@ export class Rectangle {
         this._height = height;
     }
 
+    /**
+     * Compare if two rectangles are equals
+     *
+     * @param vector The rectangle to compare
+     * @returns True if the rectangles are equals, false if not
+     */
+    public equals(rectangle: Rectangle): boolean {
+        return (
+            this.position.equals(rectangle.position) &&
+            this.width === rectangle.width &&
+            this.height === rectangle.height
+        );
+    }
+
     public updateFromRect(rect: Rectangle): void {
         this.set(rect.x, rect.y, rect.width, rect.height);
     }
