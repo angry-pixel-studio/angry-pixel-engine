@@ -58,10 +58,11 @@ const collisionDependencies = (container: Container, game: Game): void => {
         "CollisionManager",
         () =>
             new CollisionManager(
-                game.config.collisionsQuadrant,
                 container.getSingleton<SatResolver>("SatResolver"),
-                game.config.debugEnabled,
-                container.getSingleton<RenderManager>("RenderManager")
+                container.getSingleton<RenderManager>("RenderManager"),
+                game.config.collisions.quadTree === "fixed",
+                game.config.collisions.quadTreeSize ?? null,
+                game.config.debugEnabled && game.config.collisions.debugQuadTree
             )
     );
 };

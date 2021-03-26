@@ -20,7 +20,7 @@ export class CollisionManager {
     private colliders: ICollider[];
     private quadTree: QuadTree;
     private bounds: Rectangle;
-    private fixed: boolean;
+    private fixedQuadTree: boolean;
     private satResolver: SatResolver;
     private renderManager: RenderManager;
 
@@ -30,23 +30,28 @@ export class CollisionManager {
     private newBounds: Rectangle = new Rectangle(0, 0, 0, 0);
 
     constructor(
-        quadBounds: { width: number; height: number } | null,
         satResolver: SatResolver,
-        debug: boolean,
-        renderManager: RenderManager
+        renderManager: RenderManager,
+        fixedQuadTree: boolean,
+        quadTreeSize: { width: number; height: number } | null = null,
+        debug: boolean = false
     ) {
-        this.fixed = quadBounds !== null;
+        this.fixedQuadTree = fixedQuadTree;
+        if (this.fixedQuadTree && quadTreeSize === null) {
+            throw new Error("quadTreeSize cannot be null if quad tree is fixed");
+        }
+
         this.satResolver = satResolver;
         this.debug = debug;
         this.renderManager = renderManager;
         this.colliders = [];
 
-        if (this.fixed) {
+        if (this.fixedQuadTree) {
             this.bounds = new Rectangle(
-                -quadBounds.width / 2,
-                -quadBounds.height / 2,
-                quadBounds.width,
-                quadBounds.height
+                -quadTreeSize.width / 2,
+                -quadTreeSize.height / 2,
+                quadTreeSize.width,
+                quadTreeSize.height
             );
         } else {
             this.bounds = new Rectangle(0, 0, 0, 0);
@@ -97,7 +102,7 @@ export class CollisionManager {
         this.quadTree.clearColliders();
         this.quadTree.clearQuadrants();
 
-        if (this.fixed === false) {
+        if (this.fixedQuadTree === false) {
             this.updateNewBounds();
             if (this.newBounds.equals(this.bounds) === false) {
                 this.bounds.updateFromRect(this.newBounds);

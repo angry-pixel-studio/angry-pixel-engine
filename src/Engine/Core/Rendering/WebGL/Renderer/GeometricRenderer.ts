@@ -20,7 +20,14 @@ export class GeometricRenderer {
     private textureMatrix: mat4;
 
     // cache
-    private readonly vertices: Map<symbol, number[]> = new Map<symbol, number[]>();
+    private readonly vertices: Map<symbol, Float32Array> = new Map<symbol, Float32Array>();
+    // prettier-ignore
+    private readonly texVertices: Float32Array = new Float32Array([
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]);
     private lastVertices: symbol = null;
     private lastRender: LastRender = null;
     private rgbColor: RGB;
@@ -74,23 +81,22 @@ export class GeometricRenderer {
     ): void {
         const verticesKey: symbol = Symbol.for(`RW${size.width}H${size.height}`);
         if (this.vertices.has(verticesKey) === false) {
-            this.vertices.set(verticesKey, this.generateRectangleVertices(size.width, size.height, LINE_WEIGHT));
+            this.vertices.set(
+                verticesKey,
+                new Float32Array(this.generateRectangleVertices(size.width, size.height, LINE_WEIGHT))
+            );
         }
-        const posVertices: number[] = this.vertices.get(verticesKey);
+        const posVertices: Float32Array = this.vertices.get(verticesKey);
 
         if (this.lastVertices !== verticesKey || this.lastRender !== "geometric") {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(posVertices), this.gl.DYNAMIC_DRAW);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, posVertices, this.gl.DYNAMIC_DRAW);
         }
         this.lastVertices = verticesKey;
 
         if (this.lastRender !== "geometric") {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
-            this.gl.bufferData(
-                this.gl.ARRAY_BUFFER,
-                new Float32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-                this.gl.DYNAMIC_DRAW
-            );
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.texVertices, this.gl.DYNAMIC_DRAW);
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);

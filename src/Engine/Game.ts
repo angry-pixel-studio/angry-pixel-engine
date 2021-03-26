@@ -27,7 +27,11 @@ export interface IGameConfig {
     context2d?: string;
     physicsFramerate?: number;
     physicsIterations?: number;
-    collisionsQuadrant?: { width: number; height: number };
+    collisions?: {
+        quadTree: string;
+        quadTreeSize?: { width: number; height: number };
+        debugQuadTree?: boolean;
+    };
 }
 
 const defaultConfig: IGameConfig = {
@@ -39,7 +43,7 @@ const defaultConfig: IGameConfig = {
     context2d: "fallback",
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
-    collisionsQuadrant: null,
+    collisions: { quadTree: "dynamic", quadTreeSize: null, debugQuadTree: false },
 };
 
 export class Game {
