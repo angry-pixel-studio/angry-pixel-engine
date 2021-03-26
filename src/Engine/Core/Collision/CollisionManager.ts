@@ -1,12 +1,13 @@
-import { GeometricRenderData, GEOMETRIC_RECTANGLE } from "../Rendering/RenderData/GeometricRenderData";
-import { LAYER_DEFAULT } from "./../../GameObject";
 import { Rectangle } from "../../Math/Rectangle";
 import { Vector2 } from "../../Math/Vector2";
-import { RenderManager } from "./../Rendering/RenderManager";
+import { GeometricRenderData } from "../Rendering/RenderData/GeometricRenderData";
+import { RenderManager } from "../Rendering/RenderManager";
 import { ICollider } from "./Collider/ICollider";
 import { QuadTree } from "./QuadTree";
-import { SatResolver } from "./Sat/SatResolver";
 import { SatData } from "./Sat/SatData";
+import { SatResolver } from "./Sat/SatResolver";
+
+const EXTRA_BOUND: number = 0;
 
 export interface Collision {
     localCollider: ICollider;
@@ -15,25 +16,48 @@ export interface Collision {
 }
 
 export class CollisionManager {
-    private debug: boolean = false;
+    private debug: boolean;
+    private colliders: ICollider[];
+    private quadTree: QuadTree;
+    private bounds: Rectangle;
+    private fixedQuadTree: boolean;
+    private satResolver: SatResolver;
     private renderManager: RenderManager;
-    private colliders: Array<ICollider> = [];
-    private quad: QuadTree;
-    private satResolver: SatResolver = new SatResolver();
 
-    constructor(renderManager: RenderManager) {
-        this.renderManager = renderManager;
+    // cache
+    private minBounds: Vector2 = new Vector2();
+    private maxBounds: Vector2 = new Vector2();
+    private newBounds: Rectangle = new Rectangle(0, 0, 0, 0);
 
-        // TODO: remove hardcoded quad size
-        this.quad = new QuadTree(0, new Rectangle(-2500, -2500, 5000, 5000));
-    }
-
-    public prepare(): void {
-        if (this.debug === true) {
-            this.debugQuads(this.quad);
+    constructor(
+        satResolver: SatResolver,
+        renderManager: RenderManager,
+        fixedQuadTree: boolean,
+        quadTreeSize: { width: number; height: number } | null = null,
+        debug: boolean = false
+    ) {
+        this.fixedQuadTree = fixedQuadTree;
+        if (this.fixedQuadTree && quadTreeSize === null) {
+            throw new Error("quadTreeSize cannot be null if quad tree is fixed");
         }
 
-        this.refreshQuad();
+        this.satResolver = satResolver;
+        this.debug = debug;
+        this.renderManager = renderManager;
+        this.colliders = [];
+
+        if (this.fixedQuadTree) {
+            this.bounds = new Rectangle(
+                -quadTreeSize.width / 2,
+                -quadTreeSize.height / 2,
+                quadTreeSize.width,
+                quadTreeSize.height
+            );
+        } else {
+            this.bounds = new Rectangle(0, 0, 0, 0);
+        }
+
+        this.quadTree = new QuadTree(0, this.bounds);
     }
 
     public addCollider(collider: ICollider): void {
@@ -48,15 +72,13 @@ export class CollisionManager {
         }
     }
 
-    public getCollisionsForCollider(collider: ICollider): Array<Collision> {
-        const colliders = this.broadPhase(collider);
-
-        return this.narrowPhase(collider, colliders);
+    public getCollisionsForCollider(collider: ICollider): Collision[] {
+        return this.narrowPhase(collider, this.broadPhase(collider));
     }
 
     // broadPhase takes care of looking for possible collisions
     private broadPhase(collider: ICollider): ICollider[] {
-        return this.quad.retrieve(collider);
+        return this.quadTree.retrieve(collider);
     }
 
     // narrowPhase takes care of checking for actual collision
@@ -76,27 +98,70 @@ export class CollisionManager {
         return collisions;
     }
 
-    private refreshQuad(): void {
-        this.quad.clear();
+    public update(): void {
+        this.quadTree.clearColliders();
+        this.quadTree.clearQuadrants();
+
+        if (this.fixedQuadTree === false) {
+            this.updateNewBounds();
+            if (this.newBounds.equals(this.bounds) === false) {
+                this.bounds.updateFromRect(this.newBounds);
+                this.quadTree.updateBounds(this.bounds);
+            }
+        }
+
         for (const collider of this.colliders) {
-            this.quad.insert(collider);
+            this.quadTree.addCollider(collider);
+        }
+
+        if (this.debug) {
+            this.debugQuads(this.quadTree);
         }
     }
 
+    private updateNewBounds(): void {
+        this.colliders.forEach((collider: ICollider) => {
+            this.minBounds.set(
+                collider.bottomLeftQuadVertex.x < this.minBounds.x ? collider.bottomLeftQuadVertex.x : this.minBounds.x,
+                collider.bottomLeftQuadVertex.y < this.minBounds.y ? collider.bottomLeftQuadVertex.y : this.minBounds.y
+            );
+
+            this.maxBounds.set(
+                collider.topRightQuadVertex.x > this.maxBounds.x ? collider.topRightQuadVertex.x : this.maxBounds.x,
+                collider.topRightQuadVertex.y > this.maxBounds.y ? collider.topRightQuadVertex.y : this.maxBounds.y
+            );
+        });
+
+        this.newBounds.set(
+            this.minBounds.x - EXTRA_BOUND,
+            this.minBounds.y - EXTRA_BOUND,
+            this.maxBounds.x - this.minBounds.x + 2 * EXTRA_BOUND,
+            this.maxBounds.y - this.minBounds.y + 2 * EXTRA_BOUND
+        );
+    }
+
     private debugQuads(quad: QuadTree) {
-        const renderData = new GeometricRenderData();
-
-        renderData.debug = true;
-        renderData.position = new Vector2(quad.bounds.x, quad.bounds.y);
-        renderData.layer = LAYER_DEFAULT;
-        renderData.geometric = quad.bounds;
-        renderData.geometricType = GEOMETRIC_RECTANGLE;
-        renderData.color = "#0000FF";
-
-        this.renderManager.addToRenderStack(renderData);
-
         for (const q of quad.quadrants) {
             this.debugQuads(q);
         }
+
+        if (quad.quadrants.length > 0) {
+            return;
+        }
+
+        const renderData = new GeometricRenderData();
+
+        renderData.debug = true;
+        renderData.position = new Vector2(
+            quad.bounds.x + quad.bounds.width / 2,
+            quad.bounds.y + quad.bounds.height / 2
+        );
+
+        renderData.layer = "Player";
+        renderData.geometric = quad.bounds;
+        renderData.geometricType = "Rectangle";
+        renderData.color = "#0000FF";
+
+        this.renderManager.addToRenderStack(renderData);
     }
 }

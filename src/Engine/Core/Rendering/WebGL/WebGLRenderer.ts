@@ -12,6 +12,7 @@ import { ColliderRenderData } from "../RenderData/ColliderRenderData";
 import { ProgramManager } from "./ProgramManager";
 import { TextRenderer } from "./Renderer/TextRenderer";
 import { GeometricRenderer } from "./Renderer/GeometricRenderer";
+import { GeometricRenderData } from "../RenderData/GeometricRenderData";
 
 export enum WebGLContextVersion {
     LegacyWebGL = "webgl",
@@ -78,6 +79,14 @@ export class WebGLRenderer implements IContextRenderer {
             this.geometricRenderer.renderCollider(
                 camera.viewportRect,
                 renderData as ColliderRenderData,
+                this.lastRender
+            );
+            this.lastRender = "geometric";
+        }
+        if (renderData.type === RenderDataType.Geometric) {
+            this.geometricRenderer.renderGeometric(
+                camera.viewportRect,
+                renderData as GeometricRenderData,
                 this.lastRender
             );
             this.lastRender = "geometric";

@@ -8,14 +8,14 @@ export class RectangleCollider implements ICollider {
     public readonly shape: Rectangle;
     public readonly physics: boolean;
 
-    private _quadVertex: Vector2[];
+    private _quadVertices: Vector2[];
     private _position: Vector2 = new Vector2(0, 0);
     private _width: number = 0;
     private _height: number = 0;
 
     constructor(position: Vector2, width: number, height: number, physics: boolean, gameObject: GameObject) {
         this._position.set(position.x, position.y);
-        this._quadVertex = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
+        this._quadVertices = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
         this._width = width;
         this._height = height;
         this.gameObject = gameObject;
@@ -28,12 +28,12 @@ export class RectangleCollider implements ICollider {
             this._position.y + this._height / 2
         );
 
-        this.updateQuadVertex();
+        this.updateQuadVertices();
     }
 
     public set position(coordinates: Vector2) {
         this._position.set(coordinates.x, coordinates.y);
-        this.updateQuadVertex();
+        this.updateQuadVertices();
         this.updateShape();
     }
 
@@ -43,7 +43,7 @@ export class RectangleCollider implements ICollider {
 
     public set width(width: number) {
         this._width = width;
-        this.updateQuadVertex();
+        this.updateQuadVertices();
     }
 
     public get width(): number {
@@ -52,7 +52,7 @@ export class RectangleCollider implements ICollider {
 
     public set height(height: number) {
         this._height = height;
-        this.updateQuadVertex();
+        this.updateQuadVertices();
     }
 
     public get height(): number {
@@ -60,19 +60,19 @@ export class RectangleCollider implements ICollider {
     }
 
     public get bottomLeftQuadVertex(): Vector2 {
-        return this._quadVertex[0];
+        return this._quadVertices[0];
     }
 
-    public get bottomRightQuadvertex(): Vector2 {
-        return this._quadVertex[3];
+    public get bottomRightQuadVertex(): Vector2 {
+        return this._quadVertices[3];
     }
 
     public get topLeftQuadVertex(): Vector2 {
-        return this._quadVertex[1];
+        return this._quadVertices[1];
     }
 
     public get topRightQuadVertex(): Vector2 {
-        return this._quadVertex[2];
+        return this._quadVertices[2];
     }
 
     private updateShape(): void {
@@ -81,10 +81,10 @@ export class RectangleCollider implements ICollider {
     }
 
     // TODO:update using shape vertex
-    private updateQuadVertex(): void {
-        this._quadVertex[0].set(this._position.x - this._width / 2, this._position.y - this._height / 2);
-        this._quadVertex[1].set(this._position.x - this._width / 2, this._position.y + this._height / 2);
-        this._quadVertex[2].set(this._position.x + this._width / 2, this._position.y + this._height / 2);
-        this._quadVertex[3].set(this._position.x + this._width / 2, this._position.y - this._height / 2);
+    private updateQuadVertices(): void {
+        this._quadVertices[0].set(this._position.x - this._width / 2, this._position.y - this._height / 2);
+        this._quadVertices[1].set(this._position.x - this._width / 2, this._position.y + this._height / 2);
+        this._quadVertices[2].set(this._position.x + this._width / 2, this._position.y + this._height / 2);
+        this._quadVertices[3].set(this._position.x + this._width / 2, this._position.y - this._height / 2);
     }
 }

@@ -27,6 +27,11 @@ export interface IGameConfig {
     context2d?: string;
     physicsFramerate?: number;
     physicsIterations?: number;
+    collisions?: {
+        quadTree: string;
+        quadTreeSize?: { width: number; height: number };
+        debugQuadTree?: boolean;
+    };
 }
 
 const defaultConfig: IGameConfig = {
@@ -38,6 +43,7 @@ const defaultConfig: IGameConfig = {
     context2d: "fallback",
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
+    collisions: { quadTree: "dynamic", quadTreeSize: null, debugQuadTree: false },
 };
 
 export class Game {
@@ -116,10 +122,11 @@ export class Game {
             this._running = true;
 
             this.timeManager.update(time);
-            this.collisionManager.prepare();
 
             this.dispatchFrameEvent(EVENT_START);
             this.dispatchFrameEvent(EVENT_UPDATE);
+
+            this.collisionManager.update();
             this.physicsIterationManager.update(() => this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS));
             this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 

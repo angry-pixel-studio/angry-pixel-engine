@@ -8,7 +8,7 @@ export interface ICollider {
     readonly gameObject: GameObject;
     readonly physics: boolean;
     readonly bottomLeftQuadVertex: Vector2;
-    readonly bottomRightQuadvertex: Vector2;
+    readonly bottomRightQuadVertex: Vector2;
     readonly topLeftQuadVertex: Vector2;
     readonly topRightQuadVertex: Vector2;
 }

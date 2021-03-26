@@ -15,8 +15,8 @@ export class ImageRenderer {
     private textureMatrix: mat4;
 
     // vertices
-    private posVertices: number[] = [];
-    private texVertices: number[] = [];
+    private posVertices: Float32Array;
+    private texVertices: Float32Array;
 
     // cache
     private lastTexture: WebGLTexture = null;
@@ -30,8 +30,8 @@ export class ImageRenderer {
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
 
-        this.posVertices = [-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5];
-        this.texVertices = [0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0];
+        this.posVertices = new Float32Array([-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
+        this.texVertices = new Float32Array([0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0]);
     }
 
     public render(
@@ -42,10 +42,10 @@ export class ImageRenderer {
     ): void {
         if (lastRender !== "image") {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.STATIC_DRAW);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.posVertices, this.gl.STATIC_DRAW);
 
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.STATIC_DRAW);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.texVertices, this.gl.STATIC_DRAW);
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
