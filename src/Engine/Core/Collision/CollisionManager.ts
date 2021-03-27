@@ -8,6 +8,7 @@ import { SatData } from "./Sat/SatData";
 import { SatResolver } from "./Sat/SatResolver";
 
 const EXTRA_BOUND: number = 0;
+const DEBUG_RENDER_LAYER = "QuadTree";
 
 export interface Collision {
     localCollider: ICollider;
@@ -157,7 +158,7 @@ export class CollisionManager {
             quad.bounds.y + quad.bounds.height / 2
         );
 
-        renderData.layer = "Player";
+        renderData.layer = DEBUG_RENDER_LAYER;
         renderData.geometric = quad.bounds;
         renderData.geometricType = "Rectangle";
         renderData.color = "#0000FF";

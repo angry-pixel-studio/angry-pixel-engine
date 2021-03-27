@@ -70,7 +70,7 @@ export class TextRenderer {
 
         this.gl.disable(this.gl.BLEND);
 
-        if (this.lastTexture !== texture || lastRender === "image") {
+        if (this.lastTexture !== texture || lastRender !== "text") {
             this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
             this.gl.uniform1i(this.programManager.textureUniform, 0);
             this.lastTexture = texture;

@@ -31,8 +31,8 @@ export class SpriteRenderer extends RenderComponent {
     public smooth: boolean = true;
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
-    private maskColor: string = "#ffffff";
-    private maskColorMix: number = 0;
+    public maskColor: string = "#ffffff";
+    public maskColorMix: number = 0;
 
     private renderData: ImageRenderData[] = [];
 

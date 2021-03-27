@@ -10,6 +10,7 @@ import { InputManagerFacade } from "./Facades/InputManagerFacade";
 import { SceneManagerFacade } from "./Facades/SceneManagerFacade";
 import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
 import { DEFAULT_FRAMERATE, DEFAULT_ITERATIONS, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
+import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -29,7 +30,7 @@ export interface IGameConfig {
     physicsIterations?: number;
     collisions?: {
         quadTree: string;
-        quadTreeSize?: { width: number; height: number };
+        quadTreeSize?: { width: number; height: number }; // TODO: one different size per scene
         debugQuadTree?: boolean;
     };
 }
@@ -88,6 +89,7 @@ export class Game {
         InputManagerFacade.initialize();
         SceneManagerFacade.initialize();
         TimeManagerFacade.initialize();
+        GameObjectManagerFacade.initialize();
     }
 
     public get config(): IGameConfig {

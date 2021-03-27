@@ -46,6 +46,8 @@ export class RenderManager {
     }
 
     private renderByCamera(camera: CameraData): void {
+        this.orderRenderStack(camera);
+
         this.renderStack.forEach((renderData: RenderData) => {
             if (camera.layers.includes(renderData.layer) === false) {
                 return;
@@ -61,6 +63,12 @@ export class RenderManager {
                 this.gameRenderer.render(camera, renderData);
             }
         });
+    }
+
+    private orderRenderStack(camera: CameraData): void {
+        this.renderStack.sort(
+            (a: RenderData, b: RenderData) => camera.layers.indexOf(a.layer) - camera.layers.indexOf(b.layer)
+        );
     }
 
     private setPositionInViewport(camera: CameraData, renderData: RenderData): void {
