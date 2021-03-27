@@ -46,6 +46,8 @@ export class MouseController {
     }
 
     private updateButtonDown(event: MouseEvent) {
+        this.canvas.focus();
+
         event.preventDefault();
         event.stopPropagation();
 

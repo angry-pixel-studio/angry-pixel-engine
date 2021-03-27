@@ -1,9 +1,12 @@
 export class KeyboardController {
+    private canvas: HTMLCanvasElement;
     private keyPresses: Map<string, boolean> = new Map<string, boolean>();
 
-    constructor() {
-        window.addEventListener("keydown", this.eventHandler);
-        window.addEventListener("keyup", this.eventHandler);
+    constructor(canvas: HTMLCanvasElement) {
+        this.canvas = canvas;
+
+        this.canvas.addEventListener("keydown", this.eventHandler);
+        this.canvas.addEventListener("keyup", this.eventHandler);
     }
 
     private eventHandler = (event: KeyboardEvent) => {

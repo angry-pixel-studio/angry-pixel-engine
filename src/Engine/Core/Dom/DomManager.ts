@@ -24,8 +24,12 @@ export class DomManager {
         this._canvas.id = CANVAS_ID;
         this._canvas.width = Math.floor(this.gameWidth);
         this._canvas.height = Math.floor(this.gameHeight);
+        this.canvas.tabIndex = 0;
+
         this._canvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
 
         this.containerNode.appendChild(this._canvas);
+
+        this.canvas.focus();
     }
 }
