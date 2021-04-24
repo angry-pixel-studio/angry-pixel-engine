@@ -25,23 +25,32 @@ export class TiledTilemapRenderer extends TilemapRenderer {
     }
 
     protected processTilemap(): void {
-        this.tiledTilemap.layers.forEach((layer: TiledLayer) =>
-            this.tiledTilemap.infinite === true
-                ? layer.chunks.forEach((chunk: TiledChunk) => this.processChunk(chunk, layer.opacity))
-                : this.processChunk(layer, layer.opacity)
-        );
+        this.tiledTilemap.layers.forEach((layer: TiledLayer) => {
+            if (layer.visible === true) {
+                this.tiledTilemap.infinite === true
+                    ? layer.chunks.forEach((chunk: TiledChunk) =>
+                          this.processChunk(chunk, layer.opacity, layer.startx, layer.starty)
+                      )
+                    : this.processChunk(layer, layer.opacity);
+            }
+        });
 
         this.tilemapProcessed = true;
     }
 
-    private processChunk(chunk: TiledChunk | TiledLayer, alpha: number = 1): void {
+    private processChunk(
+        chunk: TiledChunk | TiledLayer,
+        alpha: number = 1,
+        startX: number = 0,
+        startY: number = 0
+    ): void {
         let dataIndex: number = 0;
 
         for (let row = 0; row < chunk.height; row++) {
             for (let col = 0; col < chunk.width; col++) {
                 const tile: Tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
                 if (tile !== null) {
-                    this.processTile(tile, col + chunk.x, row + chunk.y, alpha);
+                    this.processTile(tile, col + chunk.x - startX, row + chunk.y + startY, alpha);
                 }
 
                 dataIndex++;

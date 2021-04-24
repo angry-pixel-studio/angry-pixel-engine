@@ -40,3 +40,8 @@ export { GameObjectManagerFacade as GameObjectManager } from "./Engine/Facades/G
 export * from "./Engine/Core/Input/KeyboardController";
 export * from "./Engine/Core/Input/MouseController";
 export * from "./Engine/Core/Input/GamepadController";
+
+// Others
+export { Collision } from "./Engine/Core/Collision/CollisionManager";
+export { ICollider } from "./Engine/Core/Collision/Collider/ICollider";
+export { SatData } from "./Engine/Core/Collision/Sat/SatData";

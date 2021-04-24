@@ -23,6 +23,9 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected tilemapProcessed: boolean = false;
     protected tilesRenderData: ImageRenderData[] = [];
 
+    private cols: number[] = [];
+    private rows: number[] = [];
+
     protected _width: number = 0;
     protected _height: number = 0;
 
@@ -62,7 +65,7 @@ export abstract class TilemapRenderer extends RenderComponent {
         flip: { h: boolean; v: boolean } = { h: false, v: false }
     ): void {
         const renderData = this.createRenderData(tile, col, row, alpha, flip);
-        this.updateSizeInfo(col + 1, row + 1);
+        this.updateSizeInfo(col, row);
         this.tilesRenderData.push(renderData);
     }
 
@@ -99,15 +102,11 @@ export abstract class TilemapRenderer extends RenderComponent {
     }
 
     private updateSizeInfo(col: number, row: number): void {
-        if (this._width < col) {
-            this._width = col;
-            this._realWidth += this.tileWidth;
-        }
+        this._width = this.cols.includes(col) === false ? this.cols.push(col) : this._width;
+        this._height = this.rows.includes(row) === false ? this.rows.push(row) : this._height;
 
-        if (this._height < row) {
-            this._height = row;
-            this._realHeight += this.tileHeight;
-        }
+        this._realWidth = this._width * this.tileWidth;
+        this._realHeight = this._height * this.tileHeight;
     }
 
     protected updateTilesPosition(): void {

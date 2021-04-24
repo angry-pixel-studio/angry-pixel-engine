@@ -2,7 +2,6 @@ import { ICollider } from "../../Core/Collision/Collider/ICollider";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
-import { LAYER_DEFAULT } from "../../GameObject";
 import { TilemapRenderer } from "../Renderer/TilemapRenderer";
 import { ColliderComponent } from "./ColliderComponent";
 import { TileData } from "../../Core/Tilemap/TileData";

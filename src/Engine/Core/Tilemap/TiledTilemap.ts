@@ -22,4 +22,6 @@ export interface TiledLayer {
     height: number;
     opacity: number;
     visible: boolean;
+    startx?: number;
+    starty?: number;
 }

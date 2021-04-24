@@ -41,7 +41,7 @@ export class BoxCollider extends ColliderComponent {
         this.height = config.height;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
-        this._physics = config.physics ?? this.physics;
+        this._physics = config.physics ?? this._physics;
         this.debug = config.debug ?? this.debug;
     }
 

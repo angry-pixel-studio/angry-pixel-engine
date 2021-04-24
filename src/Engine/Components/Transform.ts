@@ -10,6 +10,7 @@ export class Transform extends Component {
     private _rotation: number = 0;
 
     private parentTransform: Transform = null;
+    private v2: Vector2 = new Vector2();
 
     constructor() {
         super();
@@ -23,6 +24,9 @@ export class Transform extends Component {
     }
 
     public set position(position: Vector2) {
+        if (this.parentTransform !== null) {
+            Vector2.add(this._innerPosition, this._innerPosition, Vector2.subtract(this.v2, position, this._position));
+        }
         this._position.set(position.x, position.y);
     }
 
@@ -53,6 +57,7 @@ export class Transform extends Component {
     protected update(): void {
         if (this.parentTransform === null && this.gameObject.parent !== null) {
             this.parentTransform = this.gameObject.parent.transform;
+            this.setInnerPositionFromParent();
         }
 
         if (this.parentTransform !== null && this.gameObject.parent === null) {
@@ -67,18 +72,25 @@ export class Transform extends Component {
     }
 
     private translateFromParent(): void {
-        const parentRad: number = (this.parentTransform._rotation * Math.PI) / 180.0;
+        const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
         const thisRad: number = Math.atan2(this._innerPosition.x, this._innerPosition.y);
         const radius: number = Math.hypot(this._innerPosition.x, this._innerPosition.y);
 
         this._position.set(
-            this.parentTransform._position.x + radius * Math.sin(thisRad - parentRad),
-            this.parentTransform._position.y + radius * Math.cos(thisRad - parentRad)
+            this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad),
+            this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad)
         );
-        this._rotation = this.parentTransform._rotation;
+        this._rotation = this.parentTransform.rotation;
     }
 
     public forceUpdate(): void {
         this.update();
+    }
+
+    private setInnerPositionFromParent(): void {
+        this._innerPosition.set(
+            this._position.x - this.parentTransform.position.x,
+            this._position.y - this.parentTransform.position.y
+        );
     }
 }
