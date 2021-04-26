@@ -24,6 +24,7 @@ import { TextRenderer } from "../Rendering/WebGL/Renderer/TextRenderer";
 import { GeometricRenderer } from "../Rendering/WebGL/Renderer/GeometricRenderer";
 import { PhysicsIterationManager } from "../Physics/PhysicsIterationManager";
 import { SatResolver } from "../Collision/Sat/SatResolver";
+import { TouchController } from "../Input/TouchController";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.add(
@@ -157,13 +158,15 @@ const inputDependencies = (container: Container, domManager: DomManager): void =
     container.add("Mouse", () => new MouseController(domManager.canvas));
     container.add("Keyboard", () => new KeyboardController(domManager.canvas));
     container.add("Gamepad", () => new GamepadController());
+    container.add("Touch", () => new TouchController(domManager.canvas));
     container.add(
         "InputManager",
         () =>
             new InputManager(
                 container.getSingleton<MouseController>("Mouse"),
                 container.getSingleton<KeyboardController>("Keyboard"),
-                container.getSingleton<GamepadController>("Gamepad")
+                container.getSingleton<GamepadController>("Gamepad"),
+                container.getSingleton<TouchController>("Touch")
             )
     );
 };

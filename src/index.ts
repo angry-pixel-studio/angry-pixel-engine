@@ -40,6 +40,7 @@ export { GameObjectManagerFacade as GameObjectManager } from "./Engine/Facades/G
 export * from "./Engine/Core/Input/KeyboardController";
 export * from "./Engine/Core/Input/MouseController";
 export * from "./Engine/Core/Input/GamepadController";
+export * from "./Engine/Core/Input/TouchController";
 
 // Others
 export { Collision } from "./Engine/Core/Collision/CollisionManager";

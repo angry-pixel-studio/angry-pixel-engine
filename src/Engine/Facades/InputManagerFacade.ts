@@ -2,6 +2,7 @@ import { GamepadController } from "../Core/Input/GamepadController";
 import { InputManager } from "../Core/Input/InputManager";
 import { KeyboardController } from "../Core/Input/KeyboardController";
 import { MouseController } from "../Core/Input/MouseController";
+import { TouchController } from "../Core/Input/TouchController";
 import { container } from "../Game";
 
 export class InputManagerFacade {
@@ -21,5 +22,9 @@ export class InputManagerFacade {
 
     public static get gamepad(): GamepadController {
         return this.inputManager.gamepad;
+    }
+
+    public static get touch(): TouchController {
+        return this.inputManager.touch;
     }
 }
