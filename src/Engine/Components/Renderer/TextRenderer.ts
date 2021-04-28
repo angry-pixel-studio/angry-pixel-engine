@@ -4,7 +4,7 @@ import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 
 interface Config {
-    text: string | string[];
+    text: string;
     fontFamily?: string;
     fontUrl?: string;
     size?: number;
@@ -17,7 +17,7 @@ interface Config {
 export const TYPE_TEXT_RENDERER = "TextRenderer";
 
 export class TextRenderer extends RenderComponent {
-    public text: string | string[] = null;
+    public text: string = null;
     public fontFamily: string = "Sans";
     public fontUrl: string = null;
     public size: number = 12;
