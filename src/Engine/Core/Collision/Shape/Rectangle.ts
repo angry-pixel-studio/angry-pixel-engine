@@ -1,62 +1,60 @@
-import { Matrix2 } from "../../../Math/Matrix2";
 import { Vector2 } from "../../../Math/Vector2";
 import { Shape, ShapeType } from "./Shape";
 
 export class Rectangle extends Shape {
-    private _refDirection: Vector2;
-    private _rotationMatrix: Matrix2 = new Matrix2();
-
-    private vertexHelper: Vector2[] = [new Vector2(-1, -1), new Vector2(-1, 1), new Vector2(1, 1), new Vector2(1, -1)];
     private cacheVector: Vector2 = new Vector2();
+    private axes: Vector2[] = [];
 
-    constructor(x1: number, y1: number, x2: number, y2: number) {
+    constructor(position: Vector2, width: number, height: number, angle: number = 0) {
         super();
 
         this._type = ShapeType.Rectangle;
 
-        this._vertex[0] = new Vector2(x1, y1);
-        this._vertex[1] = new Vector2(x1, y2);
-        this._vertex[2] = new Vector2(x2, y2);
-        this._vertex[3] = new Vector2(x2, y1);
+        this._position.set(position.x, position.y);
+        this._width = width;
+        this._height = height;
+        this._angle = angle;
 
-        Vector2.unit(this._direction, Vector2.subtract(new Vector2(), this._vertex[1], this._vertex[0]));
-        this._refDirection = this._direction.clone();
-        this._height = Vector2.subtract(new Vector2(), this._vertex[1], this._vertex[0]).magnitude;
-        this._width = Vector2.subtract(new Vector2(), this._vertex[2], this._vertex[1]).magnitude;
+        this._model = [
+            new Vector2(-width / 2, -height / 2),
+            new Vector2(-width / 2, height / 2),
+            new Vector2(width / 2, height / 2),
+            new Vector2(width / 2, -height / 2),
+        ];
 
-        Vector2.add(this._position, this._vertex[0], Vector2.scale(new Vector2(), this._direction, this._height / 2));
-        Vector2.add(
-            this._position,
-            this._position,
-            Vector2.scale(new Vector2(), Vector2.normal(new Vector2(), this._direction), this._width / 2)
-        );
+        this._vertices = [new Vector2(), new Vector2(), new Vector2(), new Vector2()];
 
-        this._angle = 0;
+        this.axes = [new Vector2(), new Vector2()];
+
+        this.update();
     }
 
     public update(): void {
-        this._rotationMatrix.rotate(this.angle);
-        this._direction = this._rotationMatrix.multiplyVector2(this._refDirection);
+        for (let i = 0; i < this._model.length; i++) {
+            this._vertices[i].set(
+                this._model[i].x * Math.cos(this._angle) - this._model[i].y * Math.sin(this._angle) + this._position.x,
+                this._model[i].x * Math.sin(this._angle) + this._model[i].y * Math.cos(this._angle) + this._position.y
+            );
+        }
 
-        this.vertexHelper.forEach((v: Vector2, i: number) => {
-            Vector2.add(
-                this._vertex[i],
-                this._position,
-                Vector2.scale(
-                    this.cacheVector,
-                    Vector2.normal(this.cacheVector, this._direction),
-                    (v.x * this._width) / 2
-                )
-            );
-            Vector2.add(
-                this._vertex[i],
-                this._vertex[i],
-                Vector2.scale(this.cacheVector, this._direction, (v.y * this._height) / 2)
-            );
-        });
+        this.updateDirection();
+        this.updateAxes();
+    }
+
+    private updateDirection(): void {
+        Vector2.unit(this._direction, Vector2.subtract(this.cacheVector, this._vertices[1], this._vertices[0]));
+    }
+
+    private updateAxes(): void {
+        Vector2.normal(this.axes[0], this.direction);
+        this.axes[1].set(this.direction.x, this.direction.y);
     }
 
     public clone(): Rectangle {
-        return new Rectangle(this._vertex[0].x, this._vertex[0].y, this._vertex[2].x, this._vertex[2].y);
+        return new Rectangle(this._position, this._width, this._height, this._angle);
+    }
+
+    public getAxes(): Vector2[] {
+        return this.axes;
     }
 }

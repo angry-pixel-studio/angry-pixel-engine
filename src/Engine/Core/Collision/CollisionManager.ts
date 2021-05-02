@@ -85,7 +85,11 @@ export class CollisionManager {
     // narrowPhase takes care of checking for actual collision
     private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<Collision> {
         const collisions: Array<Collision> = [];
-        for (const remoteCollider of colliders) {
+        colliders.forEach((remoteCollider: ICollider) => {
+            if (remoteCollider.gameObject === collider.gameObject) {
+                return;
+            }
+
             const satData = this.satResolver.getSatData(collider.shape, remoteCollider.shape);
             if (satData !== null) {
                 collisions.push({
@@ -94,7 +98,7 @@ export class CollisionManager {
                     collisionData: satData,
                 });
             }
-        }
+        });
 
         return collisions;
     }

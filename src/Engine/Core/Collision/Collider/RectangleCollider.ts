@@ -21,12 +21,7 @@ export class RectangleCollider implements ICollider {
         this.gameObject = gameObject;
         this.physics = physics;
 
-        this.shape = new Rectangle(
-            this.position.x - this.width / 2,
-            this._position.y - this._height / 2,
-            this.position.x + this.width / 2,
-            this._position.y + this._height / 2
-        );
+        this.shape = new Rectangle(this._position, this._width, this._height);
 
         this.updateQuadVertices();
     }
@@ -80,7 +75,6 @@ export class RectangleCollider implements ICollider {
         this.shape.update();
     }
 
-    // TODO:update using shape vertex
     private updateQuadVertices(): void {
         this._quadVertices[0].set(this._position.x - this._width / 2, this._position.y - this._height / 2);
         this._quadVertices[1].set(this._position.x - this._width / 2, this._position.y + this._height / 2);
