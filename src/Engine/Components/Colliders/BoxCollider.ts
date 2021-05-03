@@ -2,7 +2,7 @@ import { LAYER_DEFAULT } from "../../GameObject";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
-import { ColliderComponent } from "./ColliderComponent";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
 import { Vector2 } from "../../Math/Vector2";
 import { RenderComponent } from "../../Component";
@@ -19,7 +19,7 @@ interface Config {
 
 export const TYPE_BOX_COLLIDER: string = "BoxCollider";
 
-export class BoxCollider extends ColliderComponent {
+export class BoxCollider extends AbstractColliderComponent {
     public debug: boolean = false;
 
     private width: number;

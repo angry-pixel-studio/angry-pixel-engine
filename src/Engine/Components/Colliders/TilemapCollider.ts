@@ -3,7 +3,7 @@ import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollid
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { TilemapRenderer } from "../Renderer/TilemapRenderer";
-import { ColliderComponent } from "./ColliderComponent";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 import { TileData } from "../../Core/Tilemap/TileData";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
 import { RenderComponent } from "../../Component";
@@ -16,7 +16,7 @@ interface Config {
 
 export const TYPE_TILEMAP_COLLIDER: string = "TilemapCollider";
 
-export class TilemapCollider extends ColliderComponent {
+export class TilemapCollider extends AbstractColliderComponent {
     private tilemapRenderer: TilemapRenderer = null;
     private debug: boolean = false;
     private cacheVertex: Vector2[];

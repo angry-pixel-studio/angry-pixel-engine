@@ -14,6 +14,8 @@ import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
+export const EVENT_UPDATE_ENGINE: string = "mini-engine-update-engine";
+export const EVENT_UPDATE_COLLIDER: string = "mini-engine-update-collider";
 export const EVENT_UPDATE_PHYSICS: string = "mini-engine-update-physics";
 export const EVENT_UPDATE_RENDER: string = "mini-engine-update-render";
 
@@ -125,11 +127,23 @@ export class Game {
 
             this.timeManager.update(time);
 
+            // Start all components
             this.dispatchFrameEvent(EVENT_START);
+            // Update custom components
             this.dispatchFrameEvent(EVENT_UPDATE);
+            // Update engine components
+            this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
 
+            // Update collider components
+            this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
             this.collisionManager.update();
-            this.physicsIterationManager.update(() => this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS));
+
+            // Update physics components
+            this.physicsIterationManager.update(() => {
+                this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+                this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
+            });
+            // Update Rendering componets
             this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
             this.renderManager.clearCanvas(this._config.bgColor);

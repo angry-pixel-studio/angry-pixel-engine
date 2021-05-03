@@ -1,9 +1,9 @@
-import { Component } from "../Component";
+import { EngineComponent } from "../Component";
 import { Vector2 } from "../Math/Vector2";
 
 export const TYPE_TRANSFORM: string = "Transform";
 
-export class Transform extends Component {
+export class Transform extends EngineComponent {
     private _position: Vector2 = new Vector2(0, 0);
     private _innerPosition: Vector2 = new Vector2(0, 0);
     private _scale: Vector2 = new Vector2(1, 1);

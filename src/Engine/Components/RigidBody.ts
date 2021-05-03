@@ -3,7 +3,7 @@ import { Collision } from "../Core/Collision/CollisionManager";
 import { PhysicsIterationManager } from "../Core/Physics/PhysicsIterationManager";
 import { container } from "../Game";
 import { Vector2 } from "../Math/Vector2";
-import { ColliderComponent } from "./Colliders/ColliderComponent";
+import { AbstractColliderComponent } from "./Colliders/AbstractColliderComponent";
 
 export enum RigidBodyType {
     Static,
@@ -25,7 +25,7 @@ export class RigidBody extends PhysicsComponent {
     private readonly gravityScale: number = 9.8;
 
     private _rigidBodyType: RigidBodyType;
-    private _colliderComponents: ColliderComponent[] = [];
+    private _colliderComponents: AbstractColliderComponent[] = [];
     private _layersToCollide: string[] = [];
     private _velocity: Vector2 = new Vector2();
     private _gravity: Vector2 = new Vector2();
@@ -78,7 +78,7 @@ export class RigidBody extends PhysicsComponent {
         this.gameObject
             .getComponents()
             .forEach((component: Component) =>
-                component instanceof ColliderComponent && component.physics
+                component instanceof AbstractColliderComponent && component.physics
                     ? this._colliderComponents.push(component)
                     : null
             );
@@ -184,7 +184,7 @@ export class RigidBody extends PhysicsComponent {
     private updateCollisions(): void {
         this.collisions = [];
 
-        this._colliderComponents.forEach((collider: ColliderComponent) =>
+        this._colliderComponents.forEach((collider: AbstractColliderComponent) =>
             this._layersToCollide.forEach((layer: string) =>
                 collider
                     .getCollisionsWithLayer(layer)

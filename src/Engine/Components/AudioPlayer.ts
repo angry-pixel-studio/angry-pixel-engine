@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { EngineComponent } from "../Component";
 
 interface Config {
     audio?: HTMLAudioElement;
@@ -21,7 +21,7 @@ const userInputEventNames = [
 
 export const TYPE_AUDIO_PLAYER: string = "AudioPlayer";
 
-export class AudioPlayer extends Component {
+export class AudioPlayer extends EngineComponent {
     public volume: number = 1;
     public loop: boolean = false;
     public audio: HTMLAudioElement = null;

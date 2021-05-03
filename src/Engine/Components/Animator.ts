@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { EngineComponent } from "../Component";
 import { SpriteRenderer } from "./Renderer/SpriteRenderer";
 import { Sprite } from "../Sprite";
 import { Animation } from "../Animation";
@@ -11,7 +11,7 @@ interface Config {
 
 export const TYPE_ANIMATOR: string = "Animator";
 
-export class Animator extends Component {
+export class Animator extends EngineComponent {
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
     private spriteRenderer: SpriteRenderer = null;
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
