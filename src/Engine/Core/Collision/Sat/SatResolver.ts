@@ -8,54 +8,44 @@ type AxisProjection = {
 };
 
 export class SatResolver {
+    private axes: Vector2[];
     private proj1: AxisProjection = { min: 0, max: 0 };
     private proj2: AxisProjection = { min: 0, max: 0 };
     private currentOverlap: number;
+    private minOverlap: number;
+    private displaceDirection: Vector2;
 
     public getSatData(shape1: Shape, shape2: Shape): SatData | null {
         this.currentOverlap = null;
+        this.minOverlap = null;
+        this.displaceDirection = null;
 
-        let minOverlap: number = null;
-        let smallestAxis: Vector2 = null;
+        this.axes = [...shape1.getAxes(), ...shape2.getAxes()];
 
-        const axes: Vector2[] = [...shape1.getAxes(), ...shape2.getAxes()];
-
-        for (let i = 0; i < axes.length; i++) {
-            this.projectShapeOntoAxis(this.proj1, axes[i], shape1);
-            this.projectShapeOntoAxis(this.proj2, axes[i], shape2);
+        for (let i = 0; i < this.axes.length; i++) {
+            this.projectShapeOntoAxis(this.proj1, this.axes[i], shape1);
+            this.projectShapeOntoAxis(this.proj2, this.axes[i], shape2);
 
             this.currentOverlap = Math.min(this.proj1.max, this.proj2.max) - Math.max(this.proj1.min, this.proj2.min);
-            if (this.currentOverlap < 0) {
+            if (this.currentOverlap <= 0) {
                 return null;
             }
 
             // to prevent containment (bigger shape containing smaller shape)
-            if (
-                (this.proj1.max > this.proj2.max && this.proj1.min < this.proj2.min) ||
-                (this.proj1.max < this.proj2.max && this.proj1.min > this.proj2.min)
-            ) {
-                const mins = Math.abs(this.proj1.min - this.proj2.min);
-                const maxs = Math.abs(this.proj1.max - this.proj2.max);
-                if (mins < maxs) {
-                    this.currentOverlap += mins;
-                } else {
-                    this.currentOverlap += maxs;
-                    Vector2.scale(axes[i], axes[i], -1);
-                }
-            }
+            this.preventContainment(i);
 
-            if (this.currentOverlap < minOverlap || minOverlap === null) {
-                minOverlap = this.currentOverlap;
-                smallestAxis = axes[i];
+            if (this.currentOverlap < this.minOverlap || this.minOverlap === null) {
+                this.minOverlap = this.currentOverlap;
+                this.displaceDirection = this.axes[i];
 
                 // negate the axis in order to use as displacment direction
                 if (this.proj1.max < this.proj2.max) {
-                    Vector2.scale(smallestAxis, smallestAxis, -1);
+                    Vector2.scale(this.displaceDirection, this.displaceDirection, -1);
                 }
             }
         }
 
-        return new SatData(minOverlap, Vector2.unit(smallestAxis, smallestAxis));
+        return new SatData(this.minOverlap, this.displaceDirection);
     }
 
     private projectShapeOntoAxis(projection: AxisProjection, axis: Vector2, shape: Shape): AxisProjection {
@@ -68,5 +58,21 @@ export class SatResolver {
         });
 
         return projection;
+    }
+
+    private preventContainment(axisIndex: number): void {
+        if (
+            (this.proj1.max > this.proj2.max && this.proj1.min < this.proj2.min) ||
+            (this.proj1.max < this.proj2.max && this.proj1.min > this.proj2.min)
+        ) {
+            const mins = Math.abs(this.proj1.min - this.proj2.min);
+            const maxs = Math.abs(this.proj1.max - this.proj2.max);
+            if (mins < maxs) {
+                this.currentOverlap += mins;
+            } else {
+                this.currentOverlap += maxs;
+                Vector2.scale(this.axes[axisIndex], this.axes[axisIndex], -1);
+            }
+        }
     }
 }

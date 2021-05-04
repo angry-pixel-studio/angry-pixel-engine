@@ -3,7 +3,7 @@ import { Vector2 } from "../../Math/Vector2";
 import { ICollider } from "./Collider/ICollider";
 
 const MAX_COLLIDERS: number = 20;
-const MAX_LEVELS: number = 5;
+const MAX_LEVELS: number = 6;
 
 export class QuadTree {
     private _bounds: Rectangle = new Rectangle(0, 0, 0, 0);

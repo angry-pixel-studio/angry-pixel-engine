@@ -54,12 +54,12 @@ export class ImageRenderer {
             renderData.positionInViewport.y,
             0,
         ]);
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation * (Math.PI / 180));
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             renderData.width * (renderData.flipHorizontal ? -1 : 1),
             renderData.height * (renderData.flipVertical ? -1 : 1),
             1,
         ]);
-        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation * (Math.PI / 180));
 
         this.textureMatrix = mat4.identity(this.textureMatrix);
         if (renderData.slice !== null) {

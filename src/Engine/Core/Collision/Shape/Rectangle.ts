@@ -46,8 +46,8 @@ export class Rectangle extends Shape {
     }
 
     private updateAxes(): void {
-        Vector2.normal(this.axes[0], this.direction);
-        this.axes[1].set(this.direction.x, this.direction.y);
+        Vector2.normal(this.axes[0], this._direction);
+        this.axes[1].set(this._direction.x, this._direction.y);
     }
 
     public clone(): Rectangle {
