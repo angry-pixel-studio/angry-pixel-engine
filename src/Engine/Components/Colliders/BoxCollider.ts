@@ -1,8 +1,7 @@
-import { LAYER_DEFAULT } from "../../GameObject";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
-import { ColliderComponent } from "./ColliderComponent";
+import { AbstractColliderComponent } from "./AbstractColliderComponent";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
 import { Vector2 } from "../../Math/Vector2";
 import { RenderComponent } from "../../Component";
@@ -13,24 +12,26 @@ interface Config {
     height: number;
     offsetX?: number;
     offsetY?: number;
+    rotation?: number;
     physics?: boolean;
     debug?: boolean;
 }
 
 export const TYPE_BOX_COLLIDER: string = "BoxCollider";
 
-export class BoxCollider extends ColliderComponent {
+export class BoxCollider extends AbstractColliderComponent {
     public debug: boolean = false;
-
-    private width: number;
-    private height: number;
-    private offsetX: number = 0;
-    private offsetY: number = 0;
+    public width: number;
+    public height: number;
+    public offsetX: number = 0;
+    public offsetY: number = 0;
+    public rotation: number = 0;
 
     private realWidth: number = 0;
     private realHeight: number = 0;
     private realOffset: Vector2 = new Vector2();
     private realPosition: Vector2 = new Vector2();
+    private realRotation: number = 0;
 
     constructor(config: Config) {
         super();
@@ -43,6 +44,7 @@ export class BoxCollider extends ColliderComponent {
         this.offsetY = config.offsetY ?? this.offsetY;
         this._physics = config.physics ?? this._physics;
         this.debug = config.debug ?? this.debug;
+        this.rotation = config.rotation ?? this.rotation;
     }
 
     protected start(): void {
@@ -78,6 +80,12 @@ export class BoxCollider extends ColliderComponent {
             this.gameObject.transform.position,
             this.realOffset
         );
+
+        this.realRotation = this.gameObject.transform.rotation + this.rotation;
+        if (this.realRotation !== 0) {
+            (this.colliders[0] as RectangleCollider).angle = this.realRotation;
+            this.translate();
+        }
     }
 
     private updateRealSize(): void {
@@ -86,6 +94,24 @@ export class BoxCollider extends ColliderComponent {
 
         this.realOffset.x = this.offsetX * this.gameObject.transform.scale.x;
         this.realOffset.y = this.offsetY * this.gameObject.transform.scale.y;
+    }
+
+    private translate(): void {
+        const goRad: number = (this.realRotation * Math.PI) / 180.0;
+        const thisRad: number = Math.atan2(
+            this.colliders[0].position.x - this.gameObject.transform.position.x,
+            this.colliders[0].position.y - this.gameObject.transform.position.y
+        );
+        const radius: number = Math.hypot(
+            this.colliders[0].position.x - this.gameObject.transform.position.x,
+            this.colliders[0].position.y - this.gameObject.transform.position.y
+        );
+
+        this.realPosition.set(
+            this.gameObject.transform.position.x + radius * Math.sin(thisRad - goRad),
+            this.gameObject.transform.position.y + radius * Math.cos(thisRad - goRad)
+        );
+        this.colliders[0].position = this.realPosition;
     }
 }
 

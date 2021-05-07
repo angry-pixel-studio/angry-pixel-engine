@@ -1,9 +1,9 @@
-import { Component } from "../../Component";
+import { ColliderComponent } from "../../Component";
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
 import { Collision, CollisionManager } from "../../Core/Collision/CollisionManager";
 import { container } from "../../Game";
 
-export abstract class ColliderComponent extends Component {
+export abstract class AbstractColliderComponent extends ColliderComponent {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected colliders: ICollider[] = [];
     protected _physics: boolean = true;

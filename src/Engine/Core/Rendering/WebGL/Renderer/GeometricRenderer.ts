@@ -52,7 +52,8 @@ export class GeometricRenderer {
                     width: renderData.shape.width,
                     height: renderData.shape.height,
                 },
-                renderData.color
+                renderData.color,
+                renderData.shape.angle
             );
         }
     }
@@ -77,13 +78,14 @@ export class GeometricRenderer {
         viewportRect: Rectangle,
         positionInViewport: Vector2,
         size: { width: number; height: number },
-        color: string
+        color: string,
+        angleInRadians: number = 0
     ): void {
         const verticesKey: symbol = Symbol.for(`RW${size.width}H${size.height}`);
         if (this.vertices.has(verticesKey) === false) {
             this.vertices.set(
                 verticesKey,
-                new Float32Array(this.generateRectangleVertices(size.width, size.height, LINE_WEIGHT))
+                new Float32Array(this.generateRectangleVertices(size.width / 2, size.height / 2, LINE_WEIGHT))
             );
         }
         const posVertices: Float32Array = this.vertices.get(verticesKey);
@@ -100,11 +102,8 @@ export class GeometricRenderer {
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        mat4.translate(this.modelMatrix, this.modelMatrix, [
-            positionInViewport.x - size.width / 2,
-            positionInViewport.y - size.height / 2,
-            0,
-        ]);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [positionInViewport.x, positionInViewport.y, 0]);
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, angleInRadians);
 
         this.projectionMatrix = mat4.identity(this.projectionMatrix);
         mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
@@ -121,36 +120,36 @@ export class GeometricRenderer {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, posVertices.length / 2);
     }
 
-    private generateRectangleVertices(w: number, h: number, l: number): number[] {
+    private generateRectangleVertices(hw: number, hh: number, lw: number): number[] {
         // prettier-ignore
         return [
-            0, 0,
-            w, 0,
-            0, l,
-            0, l,
-            w, 0,
-            w, l,
+            -hw, -hh,
+            hw, -hh,
+            -hw, -hh + lw,
+            -hw, -hh + lw,
+            hw, -hh,
+            hw, -hh + lw,
             //--//
-            w - l, 0,
-            w, 0,
-            w - l, h,
-            w - l, h,
-            w, 0,
-            w, h,
+            hw - lw, -hh,
+            hw, -hh,
+            hw - lw, hh,
+            hw - lw, hh,
+            hw, -hh,
+            hw, hh,
             //--//
-            0, h - l,
-            w, h - l,
-            0, h,
-            0, h,
-            w, h - l,
-            w, h,
+            -hw, hh - lw,
+            hw, hh - lw,
+            -hw, hh,
+            -hw, hh,
+            hw, hh - lw,
+            hw, hh,
             //--//
-            0, 0,
-            l, 0,
-            0, h,
-            0, h,
-            l, 0,
-            l, h,
+            -hw, -hh,
+            -hw + lw, -hh,
+            -hw, hh,
+            -hw, hh,
+            -hw + lw, -hh,
+            -hw + lw, hh,
         ];
     }
 }

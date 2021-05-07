@@ -191,9 +191,9 @@ export class Context2DRenderer implements IContextRenderer {
 
         switch (shape.type) {
             case ShapeType.Rectangle:
-                this.canvasContext.moveTo(shape.vertex[0].x, shape.vertex[0].y);
+                this.canvasContext.moveTo(shape.vertices[0].x, shape.vertices[0].y);
                 [1, 2, 3, 0].forEach((index: number) => {
-                    this.canvasContext.lineTo(shape.vertex[index].x, shape.vertex[index].y);
+                    this.canvasContext.lineTo(shape.vertices[index].x, shape.vertices[index].y);
                 });
         }
 

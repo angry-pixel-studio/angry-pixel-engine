@@ -35,6 +35,8 @@ export class CollisionManager {
         renderManager: RenderManager,
         fixedQuadTree: boolean,
         quadTreeSize: { width: number; height: number } | null = null,
+        quadMaxLevel: number,
+        collidersPerQuad: number,
         debug: boolean = false
     ) {
         this.fixedQuadTree = fixedQuadTree;
@@ -58,7 +60,7 @@ export class CollisionManager {
             this.bounds = new Rectangle(0, 0, 0, 0);
         }
 
-        this.quadTree = new QuadTree(0, this.bounds);
+        this.quadTree = new QuadTree(0, this.bounds, quadMaxLevel, collidersPerQuad);
     }
 
     public addCollider(collider: ICollider): void {
@@ -85,16 +87,18 @@ export class CollisionManager {
     // narrowPhase takes care of checking for actual collision
     private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<Collision> {
         const collisions: Array<Collision> = [];
-        for (const remoteCollider of colliders) {
-            const satData = this.satResolver.getSatData(collider.shape, remoteCollider.shape);
-            if (satData !== null) {
-                collisions.push({
-                    localCollider: collider,
-                    remoteCollider: remoteCollider,
-                    collisionData: satData,
-                });
-            }
-        }
+        colliders
+            .filter((remoteCollider: ICollider) => remoteCollider.gameObject !== collider.gameObject)
+            .forEach((remoteCollider: ICollider) => {
+                const satData = this.satResolver.getSatData(collider.shape, remoteCollider.shape);
+                if (satData !== null) {
+                    collisions.push({
+                        localCollider: collider,
+                        remoteCollider: remoteCollider,
+                        collisionData: satData,
+                    });
+                }
+            });
 
         return collisions;
     }

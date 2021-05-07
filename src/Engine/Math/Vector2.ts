@@ -63,6 +63,16 @@ export class Vector2 {
     }
 
     /**
+     * Get the distance with another vector
+     *
+     * @param vector The vector to compare
+     * @returns The magnitude of the distance
+     */
+    public distance(vector: Vector2): number {
+        return Math.sqrt((this._x - vector.x) ** 2 + (this._y - vector.y) ** 2);
+    }
+
+    /**
      * Calculates a + b
      *
      * @param out The output vector

@@ -6,7 +6,8 @@ export enum ShapeType {
 
 export abstract class Shape {
     protected _type: ShapeType;
-    protected _vertex: Vector2[] = [];
+    protected _model: Vector2[] = [];
+    protected _vertices: Vector2[] = [];
     protected _position: Vector2 = new Vector2();
     protected _direction: Vector2 = new Vector2();
     protected _height: number = 0;
@@ -45,11 +46,13 @@ export abstract class Shape {
         return this._direction;
     }
 
-    public get vertex(): Vector2[] {
-        return this._vertex;
+    public get vertices(): Vector2[] {
+        return this._vertices;
     }
 
     public abstract update(): void;
 
     public abstract clone(): Shape;
+
+    public abstract getAxes(): Vector2[];
 }

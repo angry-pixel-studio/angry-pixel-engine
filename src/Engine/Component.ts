@@ -1,7 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 import { GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
-import { container, EVENT_START, EVENT_UPDATE, EVENT_UPDATE_PHYSICS, EVENT_UPDATE_RENDER } from "./Game";
+import {
+    container,
+    EVENT_START,
+    EVENT_UPDATE,
+    EVENT_UPDATE_COLLIDER,
+    EVENT_UPDATE_ENGINE,
+    EVENT_UPDATE_PHYSICS,
+    EVENT_UPDATE_RENDER,
+} from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 
@@ -101,6 +109,18 @@ export abstract class Component {
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
+    }
+}
+
+export abstract class EngineComponent extends Component {
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_ENGINE;
+    }
+}
+
+export abstract class ColliderComponent extends Component {
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_COLLIDER;
     }
 }
 
