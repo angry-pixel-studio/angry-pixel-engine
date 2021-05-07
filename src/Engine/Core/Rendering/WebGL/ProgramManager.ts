@@ -38,7 +38,7 @@ export class ProgramManager {
         this.contextVersion = contextVersion;
     }
 
-    public loadProgram() {
+    public loadProgram(): void {
         this.program =
             this.contextVersion === WebGLContextVersion.WebGL2
                 ? this.programFactory.create(this.gl, imageVertexShader, imageFragmentShader)
