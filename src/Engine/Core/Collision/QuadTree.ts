@@ -2,14 +2,16 @@ import { Rectangle } from "../../Math/Rectangle";
 import { Vector2 } from "../../Math/Vector2";
 import { ICollider } from "./Collider/ICollider";
 
-const MAX_COLLIDERS: number = 20;
-const MAX_LEVELS: number = 6;
+export const DEFAULT_MAX_COLLIDERS: number = 15;
+export const DEFAULT_MAX_LEVELS: number = 6;
 
 export class QuadTree {
     private _bounds: Rectangle = new Rectangle(0, 0, 0, 0);
     private _quadrants: QuadTree[] = [];
 
-    private level: number;
+    private readonly maxLevels: number;
+    private readonly maxColliders: number;
+    private readonly level: number;
     private colliders: ICollider[] = [];
 
     // Quads cardinal positions
@@ -24,9 +26,18 @@ export class QuadTree {
     private childrenHeight: number = 0;
     private quadrantsForCollider: QuadTree[] = [];
 
-    constructor(level: number, bounds: Rectangle) {
+    constructor(
+        level: number,
+        bounds: Rectangle,
+        maxLevels: number = DEFAULT_MAX_LEVELS,
+        maxColliders: number = DEFAULT_MAX_COLLIDERS
+    ) {
         this.level = level;
         this._bounds.updateFromRect(bounds);
+
+        this.maxLevels = maxLevels;
+        this.maxColliders = maxColliders;
+
         this.updateCache();
     }
 
@@ -61,7 +72,7 @@ export class QuadTree {
 
         this.colliders.push(collider);
 
-        if (this.colliders.length > MAX_COLLIDERS && this.level < MAX_LEVELS) {
+        if (this.colliders.length > this.maxColliders && this.level < this.maxLevels) {
             this.splitQuad();
         }
     }
@@ -87,38 +98,18 @@ export class QuadTree {
 
     private splitQuad(): void {
         this._quadrants = [
-            new QuadTree(
-                this.level + 1,
-                new Rectangle(
-                    this.center.x - this.childrenWidth,
-                    this.center.y - this.childrenHeight,
-                    this.childrenWidth,
-                    this.childrenHeight
-                )
+            new Rectangle(
+                this.center.x - this.childrenWidth,
+                this.center.y - this.childrenHeight,
+                this.childrenWidth,
+                this.childrenHeight
             ),
-            new QuadTree(
-                this.level + 1,
-                new Rectangle(
-                    this.center.x,
-                    this.center.y - this.childrenHeight,
-                    this.childrenWidth,
-                    this.childrenHeight
-                )
-            ),
-            new QuadTree(
-                this.level + 1,
-                new Rectangle(
-                    this.center.x - this.childrenWidth,
-                    this.center.y,
-                    this.childrenWidth,
-                    this.childrenHeight
-                )
-            ),
-            new QuadTree(
-                this.level + 1,
-                new Rectangle(this.center.x, this.center.y, this.childrenWidth, this.childrenHeight)
-            ),
-        ];
+            new Rectangle(this.center.x, this.center.y - this.childrenHeight, this.childrenWidth, this.childrenHeight),
+            new Rectangle(this.center.x - this.childrenWidth, this.center.y, this.childrenWidth, this.childrenHeight),
+            new Rectangle(this.center.x, this.center.y, this.childrenWidth, this.childrenHeight),
+        ].map<QuadTree>(
+            (rectangle: Rectangle) => new QuadTree(this.level + 1, rectangle, this.maxLevels, this.maxColliders)
+        );
 
         for (const collider of this.colliders) {
             this.insertColliderIntoChildrenQuads(collider);

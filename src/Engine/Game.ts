@@ -11,6 +11,7 @@ import { SceneManagerFacade } from "./Facades/SceneManagerFacade";
 import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
 import { DEFAULT_FRAMERATE, DEFAULT_ITERATIONS, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
 import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
+import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -34,6 +35,8 @@ export interface IGameConfig {
         quadTree: string;
         quadTreeSize?: { width: number; height: number }; // TODO: one different size per scene
         debugQuadTree?: boolean;
+        quadMaxLevel?: number;
+        collidersPerQuad?: number;
     };
 }
 
@@ -46,7 +49,13 @@ const defaultConfig: IGameConfig = {
     context2d: "fallback",
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
-    collisions: { quadTree: "dynamic", quadTreeSize: null, debugQuadTree: false },
+    collisions: {
+        quadTree: "dynamic",
+        quadTreeSize: null,
+        debugQuadTree: false,
+        quadMaxLevel: DEFAULT_MAX_LEVELS,
+        collidersPerQuad: DEFAULT_MAX_COLLIDERS,
+    },
 };
 
 export class Game {
@@ -108,7 +117,6 @@ export class Game {
 
     public run(): void {
         this.sceneManager.loadOpeningScene();
-        this.timeManager.start();
 
         this.requestAnimationFrame();
     }

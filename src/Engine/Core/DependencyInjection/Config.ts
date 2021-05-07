@@ -63,6 +63,8 @@ const collisionDependencies = (container: Container, game: Game): void => {
                 container.getSingleton<RenderManager>("RenderManager"),
                 game.config.collisions.quadTree === "fixed",
                 game.config.collisions.quadTreeSize ?? null,
+                game.config.collisions.quadMaxLevel,
+                game.config.collisions.collidersPerQuad,
                 game.config.debugEnabled && game.config.collisions.debugQuadTree
             )
     );

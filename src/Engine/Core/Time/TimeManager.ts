@@ -6,10 +6,6 @@ export class TimeManager {
     private _timeScale: number = 1;
     private _unscaledDeltaTime: number = 0;
 
-    public start(): void {
-        this.then = Date.now();
-    }
-
     public update(time: number): void {
         const now: number = time * 0.001;
         this._unscaledDeltaTime = Math.min(Math.max(0, now - this.then), this.max);

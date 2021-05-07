@@ -35,6 +35,8 @@ export class CollisionManager {
         renderManager: RenderManager,
         fixedQuadTree: boolean,
         quadTreeSize: { width: number; height: number } | null = null,
+        quadMaxLevel: number,
+        collidersPerQuad: number,
         debug: boolean = false
     ) {
         this.fixedQuadTree = fixedQuadTree;
@@ -58,7 +60,7 @@ export class CollisionManager {
             this.bounds = new Rectangle(0, 0, 0, 0);
         }
 
-        this.quadTree = new QuadTree(0, this.bounds);
+        this.quadTree = new QuadTree(0, this.bounds, quadMaxLevel, collidersPerQuad);
     }
 
     public addCollider(collider: ICollider): void {

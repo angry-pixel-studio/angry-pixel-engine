@@ -27,7 +27,7 @@ export class SatResolver {
             this.projectShapeOntoAxis(this.proj2, this.axes[i], shape2);
 
             this.currentOverlap = Math.min(this.proj1.max, this.proj2.max) - Math.max(this.proj1.min, this.proj2.min);
-            if (this.currentOverlap <= 0) {
+            if (this.currentOverlap < 0) {
                 return null;
             }
 

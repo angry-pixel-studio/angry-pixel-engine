@@ -16,6 +16,8 @@ interface Config {
     gravity?: number;
 }
 
+type Axis = "x" | "y";
+
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
@@ -23,6 +25,7 @@ export class RigidBody extends PhysicsComponent {
         "PhysicsIterationManager"
     );
     private readonly gravityScale: number = 9.8;
+    private readonly velocityScale: number = 60;
 
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: AbstractColliderComponent[] = [];
@@ -94,8 +97,14 @@ export class RigidBody extends PhysicsComponent {
         }
 
         this.applyGravity();
-        this.applyVelocity();
-        this.applyReposition();
+
+        this.deltaVelocity.set(0, 0);
+        this.applyVelocity("x");
+        this.applyReposition("x");
+
+        this.deltaVelocity.set(0, 0);
+        this.applyVelocity("y");
+        this.applyReposition("y");
     }
 
     private applyGravity(): void {
@@ -112,12 +121,8 @@ export class RigidBody extends PhysicsComponent {
         }
     }
 
-    private applyVelocity(): void {
-        Vector2.scale(
-            this.deltaVelocity,
-            this._velocity,
-            this.iterationManager.physicsFramerate * this.iterationManager.physicsDeltaTime
-        );
+    private applyVelocity(axis: Axis): void {
+        this.deltaVelocity[axis] = this._velocity[axis] * this.velocityScale * this.iterationManager.physicsDeltaTime;
 
         if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
             this.gameObject.transform.position = Vector2.add(
@@ -128,11 +133,10 @@ export class RigidBody extends PhysicsComponent {
         }
     }
 
-    private applyReposition(): void {
+    private applyReposition(axis: Axis): void {
         this.updatePosition = false;
         this.penetrationResolution.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
-        this.penetrationPerDirection.x.clear();
-        this.penetrationPerDirection.y.clear();
+        this.penetrationPerDirection[axis].clear();
 
         this.updateCollisions();
 
@@ -141,25 +145,20 @@ export class RigidBody extends PhysicsComponent {
                 collision.remoteCollider.physics === true &&
                 collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null
             ) {
-                if (collision.collisionData.direction.x !== 0) {
-                    this.setPenetrationPerDirectionPerAxis("x", collision);
-                }
-
-                if (collision.collisionData.direction.y !== 0) {
-                    this.setPenetrationPerDirectionPerAxis("y", collision);
+                if (collision.collisionData.direction[axis] !== 0) {
+                    this.setPenetrationPerDirectionPerAxis(axis, collision);
                 }
             }
         });
 
-        this.setPenetrationResolution("x");
-        this.setPenetrationResolution("y");
+        this.setPenetrationResolution(axis);
 
         if (this.updatePosition) {
             this.gameObject.transform.position = this.penetrationResolution;
         }
     }
 
-    private setPenetrationPerDirectionPerAxis(axis: "x" | "y", collision: Collision): void {
+    private setPenetrationPerDirectionPerAxis(axis: Axis, collision: Collision): void {
         this.penetrationPerDirection[axis].set(
             collision.collisionData.direction[axis],
             Math.max(
@@ -169,7 +168,7 @@ export class RigidBody extends PhysicsComponent {
         );
     }
 
-    private setPenetrationResolution(axis: "x" | "y"): void {
+    private setPenetrationResolution(axis: Axis): void {
         this.penetrationPerDirection[axis].forEach((penetration: number, direction: number) => {
             this.penetrationResolution[axis] += direction * penetration;
 
