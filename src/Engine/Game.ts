@@ -32,7 +32,8 @@ export interface IGameConfig {
     physicsFramerate?: number;
     physicsIterations?: number;
     collisions?: {
-        quadTree: string;
+        method?: string;
+        quadTree?: string;
         quadTreeSize?: { width: number; height: number }; // TODO: one different size per scene
         debugQuadTree?: boolean;
         quadMaxLevel?: number;
@@ -50,6 +51,7 @@ const defaultConfig: IGameConfig = {
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
     collisions: {
+        method: "sat",
         quadTree: "dynamic",
         quadTreeSize: null,
         debugQuadTree: false,
@@ -74,6 +76,10 @@ export class Game {
         this._config = {
             ...defaultConfig,
             ...config,
+        };
+        this._config.collisions = {
+            ...defaultConfig.collisions,
+            ...config.collisions,
         };
 
         if (this.config.containerNode === null) {

@@ -4,8 +4,8 @@ import { GeometricRenderData } from "../Rendering/RenderData/GeometricRenderData
 import { RenderManager } from "../Rendering/RenderManager";
 import { ICollider } from "./Collider/ICollider";
 import { QuadTree } from "./QuadTree";
-import { SatData } from "./Sat/SatData";
-import { SatResolver } from "./Sat/SatResolver";
+import { CollisionData } from "./CollisionData";
+import { ICollisionResolver } from "./Resolver/ICollisionResolver";
 
 const EXTRA_BOUND: number = 0;
 const DEBUG_RENDER_LAYER = "QuadTree";
@@ -13,7 +13,7 @@ const DEBUG_RENDER_LAYER = "QuadTree";
 export interface Collision {
     localCollider: ICollider;
     remoteCollider: ICollider;
-    collisionData: SatData;
+    collisionData: CollisionData;
 }
 
 export class CollisionManager {
@@ -22,7 +22,7 @@ export class CollisionManager {
     private quadTree: QuadTree;
     private bounds: Rectangle;
     private fixedQuadTree: boolean;
-    private satResolver: SatResolver;
+    private resolver: ICollisionResolver;
     private renderManager: RenderManager;
 
     // cache
@@ -31,7 +31,7 @@ export class CollisionManager {
     private newBounds: Rectangle = new Rectangle(0, 0, 0, 0);
 
     constructor(
-        satResolver: SatResolver,
+        resolver: ICollisionResolver,
         renderManager: RenderManager,
         fixedQuadTree: boolean,
         quadTreeSize: { width: number; height: number } | null = null,
@@ -44,7 +44,7 @@ export class CollisionManager {
             throw new Error("quadTreeSize cannot be null if quad tree is fixed");
         }
 
-        this.satResolver = satResolver;
+        this.resolver = resolver;
         this.debug = debug;
         this.renderManager = renderManager;
         this.colliders = [];
@@ -90,12 +90,12 @@ export class CollisionManager {
         colliders
             .filter((remoteCollider: ICollider) => remoteCollider.gameObject !== collider.gameObject)
             .forEach((remoteCollider: ICollider) => {
-                const satData = this.satResolver.getSatData(collider.shape, remoteCollider.shape);
-                if (satData !== null) {
+                const collisionData = this.resolver.getCollisionData(collider.shape, remoteCollider.shape);
+                if (collisionData !== null) {
                     collisions.push({
                         localCollider: collider,
                         remoteCollider: remoteCollider,
-                        collisionData: satData,
+                        collisionData: collisionData,
                     });
                 }
             });

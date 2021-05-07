@@ -1,6 +1,6 @@
-import { Vector2 } from "../../../Math/Vector2";
+import { Vector2 } from "../../Math/Vector2";
 
-export class SatData {
+export class CollisionData {
     private _penetration: number;
     private _direction: Vector2 = new Vector2();
     private _contactVertex: Vector2 = new Vector2();

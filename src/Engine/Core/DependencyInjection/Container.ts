@@ -3,6 +3,7 @@ type constructor = () => unknown;
 export class Container {
     private instances: Map<string, unknown> = new Map<string, unknown>();
     private constructors: Map<string, constructor> = new Map<string, constructor>();
+    private constants: Map<string, unknown> = new Map<string, unknown>();
 
     public add(name: string, constructor: constructor): void {
         if (this.constructors.has(name)) {
@@ -30,5 +31,21 @@ export class Container {
         }
 
         return this.constructors.get(name)() as T;
+    }
+
+    public addConstant(name: string, value: unknown): void {
+        if (this.constants.has(name)) {
+            throw new Error(`There is already a constant value with the name ${name}`);
+        }
+
+        this.constants.set(name, value);
+    }
+
+    public getConstant<T>(name: string): T {
+        if (this.constants.has(name) === false) {
+            throw new Error(`Invalid constant name: ${name}`);
+        }
+
+        return this.constants.get(name) as T;
     }
 }

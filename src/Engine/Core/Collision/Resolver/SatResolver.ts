@@ -1,13 +1,14 @@
 import { Vector2 } from "../../../Math/Vector2";
 import { Shape } from "../Shape/Shape";
-import { SatData } from "./SatData";
+import { CollisionData } from "../CollisionData";
+import { ICollisionResolver } from "./ICollisionResolver";
 
 type AxisProjection = {
     min: number;
     max: number;
 };
 
-export class SatResolver {
+export class SatResolver implements ICollisionResolver {
     private axes: Vector2[];
     private proj1: AxisProjection = { min: 0, max: 0 };
     private proj2: AxisProjection = { min: 0, max: 0 };
@@ -15,7 +16,7 @@ export class SatResolver {
     private minOverlap: number;
     private displaceDirection: Vector2;
 
-    public getSatData(shape1: Shape, shape2: Shape): SatData | null {
+    public getCollisionData(shape1: Shape, shape2: Shape): CollisionData | null {
         this.currentOverlap = null;
         this.minOverlap = null;
         this.displaceDirection = null;
@@ -45,7 +46,7 @@ export class SatResolver {
             }
         }
 
-        return new SatData(this.minOverlap, this.displaceDirection);
+        return new CollisionData(this.minOverlap, this.displaceDirection);
     }
 
     private projectShapeOntoAxis(projection: AxisProjection, axis: Vector2, shape: Shape): AxisProjection {

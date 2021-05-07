@@ -45,4 +45,4 @@ export * from "./Engine/Core/Input/TouchController";
 // Others
 export { Collision } from "./Engine/Core/Collision/CollisionManager";
 export { ICollider } from "./Engine/Core/Collision/Collider/ICollider";
-export { SatData } from "./Engine/Core/Collision/Sat/SatData";
+export { CollisionData } from "./Engine/Core/Collision/CollisionData";

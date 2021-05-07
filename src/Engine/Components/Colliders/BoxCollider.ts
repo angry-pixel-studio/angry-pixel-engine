@@ -1,5 +1,5 @@
 import { RenderManager } from "../../Core/Rendering/RenderManager";
-import { container } from "../../Game";
+import { container, IGameConfig } from "../../Game";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
 import { AbstractColliderComponent } from "./AbstractColliderComponent";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
@@ -32,6 +32,8 @@ export class BoxCollider extends AbstractColliderComponent {
     private realOffset: Vector2 = new Vector2();
     private realPosition: Vector2 = new Vector2();
     private realRotation: number = 0;
+
+    private applyRotation: boolean = container.getConstant<IGameConfig>("GameConfig").collisions.method === "sat";
 
     constructor(config: Config) {
         super();
@@ -82,8 +84,11 @@ export class BoxCollider extends AbstractColliderComponent {
         );
 
         this.realRotation = this.gameObject.transform.rotation + this.rotation;
-        if (this.realRotation !== 0) {
+        if (this.realRotation !== 0 && this.applyRotation) {
             (this.colliders[0] as RectangleCollider).angle = this.realRotation;
+        }
+
+        if (this.gameObject.transform.rotation !== 0) {
             this.translate();
         }
     }
@@ -97,7 +102,7 @@ export class BoxCollider extends AbstractColliderComponent {
     }
 
     private translate(): void {
-        const goRad: number = (this.realRotation * Math.PI) / 180.0;
+        const goRad: number = (this.gameObject.transform.rotation * Math.PI) / 180.0;
         const thisRad: number = Math.atan2(
             this.colliders[0].position.x - this.gameObject.transform.position.x,
             this.colliders[0].position.y - this.gameObject.transform.position.y

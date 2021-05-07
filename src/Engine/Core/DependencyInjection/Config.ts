@@ -23,10 +23,15 @@ import { FontAtlasFactory } from "../Rendering/FontAtlasFactory";
 import { TextRenderer } from "../Rendering/WebGL/Renderer/TextRenderer";
 import { GeometricRenderer } from "../Rendering/WebGL/Renderer/GeometricRenderer";
 import { PhysicsIterationManager } from "../Physics/PhysicsIterationManager";
-import { SatResolver } from "../Collision/Sat/SatResolver";
+import { SatResolver } from "../Collision/Resolver/SatResolver";
 import { TouchController } from "../Input/TouchController";
+import { AABBResolver } from "../Collision/Resolver/AABBResolver";
+import { ICollisionResolver } from "../Collision/Resolver/ICollisionResolver";
+import { IContextRenderer } from "../Rendering/IContextRenderer";
 
 export const loadDependencies = (container: Container, game: Game): void => {
+    container.addConstant("GameConfig", game.config);
+
     container.add(
         "DomManager",
         () => new DomManager(game.config.containerNode, game.config.gameWidth, game.config.gameHeight)
@@ -54,12 +59,19 @@ export const loadDependencies = (container: Container, game: Game): void => {
 };
 
 const collisionDependencies = (container: Container, game: Game): void => {
-    container.add("SatResolver", () => new SatResolver());
+    if (game.config.collisions.method === "aabb") {
+        container.add("CollisionResolver", () => new AABBResolver());
+    } else if (game.config.collisions.method === "sat") {
+        container.add("CollisionResolver", () => new SatResolver());
+    } else {
+        throw new Error("Invalid collision method.");
+    }
+
     container.add(
         "CollisionManager",
         () =>
             new CollisionManager(
-                container.getSingleton<SatResolver>("SatResolver"),
+                container.getSingleton<ICollisionResolver>("CollisionResolver"),
                 container.getSingleton<RenderManager>("RenderManager"),
                 game.config.collisions.quadTree === "fixed",
                 game.config.collisions.quadTreeSize ?? null,
@@ -85,7 +97,7 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
 
     container.add(
         "RenderManager",
-        () => new RenderManager(container.getSingleton<WebGLRenderer>("Renderer"), game.config.debugEnabled)
+        () => new RenderManager(container.getSingleton<IContextRenderer>("Renderer"), game.config.debugEnabled)
     );
     container.add("FontAtlasFactory", () => new FontAtlasFactory());
 };
