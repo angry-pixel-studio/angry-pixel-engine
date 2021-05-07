@@ -30,7 +30,7 @@ export class FontAtlasFactory {
         // @ts-ignore
         const font: FontFace = new FontFace(family, `url(${url})`);
 
-        const loadedFontFace: any = await font.load();
+        const loadedFontFace = await font.load();
         // @ts-ignore
         document.fonts.add(font);
         this.renderAtlas(fontAtlas, loadedFontFace.family);

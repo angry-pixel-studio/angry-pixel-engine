@@ -1,9 +1,7 @@
-import { Vector2 } from "../../Math/Vector2";
 import { Rectangle } from "../../Math/Rectangle";
 import { IContextRenderer } from "./IContextRenderer";
-import { GeometricRenderData } from "./RenderData/GeometricRenderData";
 import { ImageRenderData } from "./RenderData/ImageRenderData";
-import { RenderData, RenderDataType } from "./RenderData/RenderData";
+import { RenderData } from "./RenderData/RenderData";
 import { CameraData } from "./CameraData";
 
 export class RenderManager {

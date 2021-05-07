@@ -69,7 +69,7 @@ export class BoxCollider extends AbstractColliderComponent {
         this.updatePosition();
     }
 
-    protected updatePosition() {
+    protected updatePosition(): void {
         this.updateRealSize();
 
         (this.colliders[0] as RectangleCollider).width = this.realWidth;
