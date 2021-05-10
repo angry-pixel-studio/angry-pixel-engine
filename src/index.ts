@@ -1,7 +1,6 @@
 // math
 export * from "./Engine/Math/Vector2";
 export * from "./Engine/Math/Rectangle";
-export * from "./Engine/Math/Matrix2";
 
 // main
 export { Game, IGameConfig } from "./Engine/Game";
