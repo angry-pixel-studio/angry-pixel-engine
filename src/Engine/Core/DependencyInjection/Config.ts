@@ -1,4 +1,4 @@
-import { Game } from "../../Game";
+import { CollisionMethodConfig, ContextConfig, Game, QuadTreeConfig } from "../../Game";
 import { AssetManager } from "../Asset/AssetManager";
 import { CollisionManager } from "../Collision/CollisionManager";
 import { DomManager } from "../Dom/DomManager";
@@ -59,9 +59,9 @@ export const loadDependencies = (container: Container, game: Game): void => {
 };
 
 const collisionDependencies = (container: Container, game: Game): void => {
-    if (game.config.collisions.method === "aabb") {
+    if (game.config.collisions.method === CollisionMethodConfig.AABB) {
         container.add("CollisionResolver", () => new AABBResolver());
-    } else if (game.config.collisions.method === "sat") {
+    } else if (game.config.collisions.method === CollisionMethodConfig.SAT) {
         container.add("CollisionResolver", () => new SatResolver());
     } else {
         throw new Error("Invalid collision method.");
@@ -73,7 +73,7 @@ const collisionDependencies = (container: Container, game: Game): void => {
             new CollisionManager(
                 container.getSingleton<ICollisionResolver>("CollisionResolver"),
                 container.getSingleton<RenderManager>("RenderManager"),
-                game.config.collisions.quadTree === "fixed",
+                game.config.collisions.quadTree === QuadTreeConfig.Fixed,
                 game.config.collisions.quadTreeSize ?? null,
                 game.config.collisions.quadMaxLevel,
                 game.config.collisions.collidersPerQuad,
@@ -85,7 +85,10 @@ const collisionDependencies = (container: Container, game: Game): void => {
 const renderingDependencies = (container: Container, game: Game, domManager: DomManager): void => {
     const webglContextVersion: WebGLContextVersion = getWebGLContextVersion();
 
-    if (game.config.context2d === "default" || (game.config.context2d === "fallback" && webglContextVersion === null)) {
+    if (
+        game.config.context2d === ContextConfig.Default ||
+        (game.config.context2d === ContextConfig.Fallback && webglContextVersion === null)
+    ) {
         container.add("Renderer", () => new Context2DRenderer(domManager.canvas));
         if (game.config.debugEnabled) console.log("Using 2d rendering context");
     } else if (webglContextVersion !== null) {
