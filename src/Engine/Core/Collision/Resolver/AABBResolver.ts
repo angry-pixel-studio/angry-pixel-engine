@@ -26,17 +26,17 @@ export class AABBResolver implements ICollisionResolver {
 
         if (this.overlapX === this.overlapY) {
             this.minOverlap = this.overlapX;
-            this.displaceDirection.set(1, 1);
+            this.displaceDirection.set(
+                Math.sign(this.shape1Rect.x1 - this.shape2Rect.x1),
+                Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1)
+            );
         } else if (this.overlapX < this.overlapY) {
             this.minOverlap = this.overlapX;
-            this.displaceDirection.set(1, 0);
+            this.displaceDirection.set(Math.sign(this.shape1Rect.x1 - this.shape2Rect.x1), 0);
         } else {
             this.minOverlap = this.overlapY;
-            this.displaceDirection.set(0, 1);
+            this.displaceDirection.set(0, Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1));
         }
-
-        this.displaceDirection.x *= Math.sign(this.shape1Rect.x1 - this.shape2Rect.x1);
-        this.displaceDirection.y *= Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1);
 
         return new CollisionData(this.minOverlap, this.displaceDirection);
     }
