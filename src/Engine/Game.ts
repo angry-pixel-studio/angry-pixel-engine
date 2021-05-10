@@ -28,16 +28,31 @@ export interface IGameConfig {
     gameHeight?: number;
     debugEnabled?: boolean;
     bgColor?: string;
-    context2d?: string;
+    context2d?: ContextConfig;
     physicsFramerate?: number;
     physicsIterations?: number;
     collisions?: {
-        quadTree: string;
+        method?: CollisionMethodConfig;
+        quadTree?: QuadTreeConfig;
         quadTreeSize?: { width: number; height: number }; // TODO: one different size per scene
         debugQuadTree?: boolean;
         quadMaxLevel?: number;
         collidersPerQuad?: number;
     };
+}
+
+export enum ContextConfig {
+    Default = "default",
+    Disabled = "disabled",
+    Fallback = "fallback",
+}
+export enum CollisionMethodConfig {
+    AABB = "aabb",
+    SAT = "sat",
+}
+export enum QuadTreeConfig {
+    Dynamic = "dynamic",
+    Fixed = "fixed",
 }
 
 const defaultConfig: IGameConfig = {
@@ -46,11 +61,12 @@ const defaultConfig: IGameConfig = {
     gameHeight: 180,
     debugEnabled: false,
     bgColor: "#000000",
-    context2d: "fallback",
+    context2d: ContextConfig.Fallback,
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
     collisions: {
-        quadTree: "dynamic",
+        method: CollisionMethodConfig.AABB,
+        quadTree: QuadTreeConfig.Dynamic,
         quadTreeSize: null,
         debugQuadTree: false,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
@@ -74,6 +90,10 @@ export class Game {
         this._config = {
             ...defaultConfig,
             ...config,
+        };
+        this._config.collisions = {
+            ...defaultConfig.collisions,
+            ...config.collisions,
         };
 
         if (this.config.containerNode === null) {

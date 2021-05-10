@@ -50,6 +50,7 @@ export class RectangleCollider implements ICollider {
 
     public set width(width: number) {
         this._width = width;
+        this.updateShape();
         this.updateQuadVertices();
     }
 
@@ -59,6 +60,7 @@ export class RectangleCollider implements ICollider {
 
     public set height(height: number) {
         this._height = height;
+        this.updateShape();
         this.updateQuadVertices();
     }
 
@@ -92,6 +94,8 @@ export class RectangleCollider implements ICollider {
 
     private updateShape(): void {
         this.shape.position = this._position;
+        this.shape.width = this._width;
+        this.shape.height = this.height;
         this.shape.angle = this._angle * (Math.PI / 180);
         this.shape.update();
     }

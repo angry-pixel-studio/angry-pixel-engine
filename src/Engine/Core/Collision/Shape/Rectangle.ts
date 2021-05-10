@@ -30,6 +30,8 @@ export class Rectangle extends Shape {
     }
 
     public update(): void {
+        this.updateModel();
+
         for (let i = 0; i < this._model.length; i++) {
             this._vertices[i].set(
                 this._model[i].x * Math.cos(this._angle) - this._model[i].y * Math.sin(this._angle) + this._position.x,
@@ -39,6 +41,13 @@ export class Rectangle extends Shape {
 
         this.updateDirection();
         this.updateAxes();
+    }
+
+    private updateModel(): void {
+        this._model[0].set(-this._width / 2, -this._height / 2);
+        this._model[1].set(-this._width / 2, this._height / 2);
+        this._model[2].set(this._width / 2, this._height / 2);
+        this._model[3].set(this._width / 2, -this._height / 2);
     }
 
     private updateDirection(): void {
