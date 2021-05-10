@@ -9,7 +9,7 @@ import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRend
 import { RenderComponent } from "../../Component";
 import { Vector2 } from "../../Math/Vector2";
 
-interface Config {
+export interface TilemapColliderConfig {
     tilemapRenderer: TilemapRenderer;
     debug?: boolean;
 }
@@ -21,7 +21,7 @@ export class TilemapCollider extends AbstractColliderComponent {
     private debug: boolean = false;
     private cacheVertex: Vector2[];
 
-    constructor(config: Config) {
+    constructor(config: TilemapColliderConfig) {
         super();
 
         this.type = TYPE_TILEMAP_COLLIDER;

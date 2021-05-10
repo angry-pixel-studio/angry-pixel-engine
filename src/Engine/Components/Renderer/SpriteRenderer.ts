@@ -5,7 +5,7 @@ import { container } from "../../Game";
 import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
 
-interface Config {
+export interface SpriteRendererConfig {
     sprite: Sprite;
     offset?: Vector2;
     smooth?: boolean;
@@ -40,7 +40,7 @@ export class SpriteRenderer extends RenderComponent {
     private cachePosition: Vector2 = new Vector2();
     private cacheRenderPosition: Vector2 = new Vector2();
 
-    constructor(config: Config) {
+    constructor(config: SpriteRendererConfig) {
         super();
 
         this.type = TYPE_SPRITE_RENDERER;

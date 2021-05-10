@@ -5,7 +5,7 @@ import { Animation } from "../Animation";
 import { TimeManager } from "../Core/Time/TimeManager";
 import { container } from "../Game";
 
-interface Config {
+export interface AnimatorConfig {
     spriteRenderer: SpriteRenderer;
 }
 
@@ -18,7 +18,7 @@ export class Animator extends EngineComponent {
     private currentAnimation: AnimationPlayer = null;
     private defaultSprite: Sprite = null;
 
-    constructor(config: Config) {
+    constructor(config: AnimatorConfig) {
         super();
 
         this.type = TYPE_ANIMATOR;

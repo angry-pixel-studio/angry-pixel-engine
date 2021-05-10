@@ -1,13 +1,13 @@
 import { Vector2 } from "./Math/Vector2";
 
-interface Config {
+export interface SpriteConfig {
     image: HTMLImageElement;
     scale?: Vector2;
     slice?: Slice | null;
     smooth?: boolean;
 }
 
-interface Slice {
+export interface Slice {
     x: number;
     y: number;
     width: number;
@@ -23,7 +23,7 @@ export class Sprite {
     private _height: number = null;
     private _loaded: boolean = false;
 
-    constructor(config: Config) {
+    constructor(config: SpriteConfig) {
         this._image = config.image;
 
         this._slice = config.slice ?? this._slice;

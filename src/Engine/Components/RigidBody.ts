@@ -10,7 +10,7 @@ export enum RigidBodyType {
     Dynamic,
 }
 
-interface Config {
+export interface RigidBodyConfig {
     rigidBodyType: RigidBodyType;
     layersToCollide: string[];
     gravity?: number;
@@ -46,7 +46,7 @@ export class RigidBody extends PhysicsComponent {
     private penetrationResolution: Vector2 = new Vector2();
     private nextObjectPosition: Vector2 = new Vector2();
 
-    constructor(config: Config) {
+    constructor(config: RigidBodyConfig) {
         super();
 
         this.type = TYPE_RIGIDBODY;

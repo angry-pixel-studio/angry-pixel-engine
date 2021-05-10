@@ -3,7 +3,7 @@ import { TiledChunk, TiledLayer, TiledTilemap } from "../../Core/Tilemap/TiledTi
 import { TilemapRenderer } from "./TilemapRenderer";
 import { Tile } from "../../Core/Tilemap/Tile";
 
-interface Config {
+export interface TiledTilemapConfig {
     tileset: Tileset;
     tilemapData: TiledTilemap;
     tileScale?: number;
@@ -13,7 +13,7 @@ interface Config {
 export const TYPE_TILED_RENDERER: string = "TiledRenderer";
 
 export class TiledTilemapRenderer extends TilemapRenderer {
-    constructor(config: Config) {
+    constructor(config: TiledTilemapConfig) {
         super();
 
         this.type = TYPE_TILED_RENDERER;

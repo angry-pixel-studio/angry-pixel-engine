@@ -39,6 +39,11 @@ export abstract class Component {
         return this._active;
     }
 
+    /**
+     * If the component become inactive, will stop its execution
+     *
+     * @param active TRUE or FALSE
+     */
     public setActive(active: boolean): void {
         this._active = active;
     }
@@ -64,38 +69,73 @@ export abstract class Component {
         return;
     }
 
+    /**
+     * @returns The current loaded scene
+     */
     public getCurrentScene<T extends Scene>(): T {
         return this.sceneManager.getCurrentScene<T>();
     }
 
+    /**
+     * @param name The name of the component to find
+     * @returns The found component
+     */
     public getComponentByName<T extends Component>(name: string): T | null {
         return this.gameObject.getComponentByName<T>(name);
     }
 
+    /**
+     * @param type The type of the component to find
+     * @returns The found component
+     */
     public getComponentByType<T extends Component>(type: string): T | null {
         return this.gameObject.getComponentByType<T>(type);
     }
 
+    /**
+     * @param type The type of the components to find
+     * @returns The found components
+     */
     public getComponentsByType<T extends Component>(type: string): T[] {
         return this.gameObject.getComponentsByType<T>(type);
     }
 
+    /**
+     * @param name The name of the game object to find
+     * @returns The found game object
+     */
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
+    /**
+     * @param tag The tag of the game objects to find
+     * @returns The found game objects
+     */
     public findGameObjectsByTag(tag: string): GameObject[] {
         return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
+    /**
+     * @param tag The tag of the game object to find
+     * @returns The found game object
+     */
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
+    /**
+     * Destroy one game objects by its name
+     * @param name The name of the game object
+     */
     public destroyGameObjectByName(name: string): void {
         this.destroyGameObject(this.findGameObjectByName(name));
     }
 
+    /**
+     * Destroy the game objects
+     * @param gameObject The game object to destory
+     */
     public destroyGameObject(gameObject: GameObject): void {
         this.gameObjectManager.destroyGameObject(gameObject);
     }

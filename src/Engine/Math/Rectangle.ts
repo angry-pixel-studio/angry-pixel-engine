@@ -63,6 +63,14 @@ export class Rectangle {
         return this._center;
     }
 
+    /**
+     * Set the rectangle
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public set(x: number, y: number, width: number, height: number): void {
         this._position.set(x, y);
         this._width = width;
@@ -83,10 +91,21 @@ export class Rectangle {
         );
     }
 
+    /**
+     * Set the rectangle properties from another rectangle
+     *
+     * @param rect The rectangleto to update from
+     */
     public updateFromRect(rect: Rectangle): void {
         this.set(rect.x, rect.y, rect.width, rect.height);
     }
 
+    /**
+     * Check if the rectangle is overlapping another rectangle
+     *
+     * @param rect The rectangle to compare
+     * @returns TRUE or FALSE
+     */
     public overlappingRectangle(rect: Rectangle): boolean {
         return this.x1 >= rect.x && this.x <= rect.x1 && this.y1 >= rect.y && this.y <= rect.y1;
     }

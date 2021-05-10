@@ -1,6 +1,6 @@
 import { EngineComponent } from "../Component";
 
-interface Config {
+export interface AudioPlayerConfig {
     audio?: HTMLAudioElement;
     volume?: number;
     loop?: boolean;
@@ -30,7 +30,7 @@ export class AudioPlayer extends EngineComponent {
     private _playing: boolean = false;
     private _paused: boolean = false;
 
-    constructor(config: Config = { audio: null, volume: 1, loop: false }) {
+    constructor(config: AudioPlayerConfig = { audio: null, volume: 1, loop: false }) {
         super();
 
         this.allowMultiple = false;

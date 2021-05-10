@@ -3,7 +3,7 @@ import { Pivot, TextRenderData } from "../../Core/Rendering/RenderData/TextRende
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 
-interface Config {
+export interface TextRendererConfig {
     text: string;
     fontFamily?: string;
     fontUrl?: string;
@@ -29,7 +29,7 @@ export class TextRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
 
-    constructor(config: Config) {
+    constructor(config: TextRendererConfig) {
         super();
 
         this.type = TYPE_TEXT_RENDERER;

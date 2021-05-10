@@ -8,7 +8,7 @@ import { Scene } from "./Scene";
 
 export const LAYER_DEFAULT = "Default";
 
-type ComponentConstructor = () => Component;
+export type ComponentFactory = () => Component;
 
 export class GameObject {
     private readonly _uuid: string = uuidv4();
@@ -56,6 +56,9 @@ export class GameObject {
         this.transform.forceUpdate();
     }
 
+    /**
+     * @returns The current loaded scene
+     */
     public getCurrentScene<T extends Scene>(): T {
         return this.sceneManager.getCurrentScene<T>();
     }
@@ -73,31 +76,53 @@ export class GameObject {
         }
     };
 
+    /**
+     * This method is called on the first frame
+     */
     protected start(): void {
         return;
     }
 
+    /**
+     * This method is called on every frame
+     */
     protected update(): void {
         return;
     }
 
+    /**
+     * @param name The name of the game object to find
+     * @returns The found game object
+     */
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
+    /**
+     * @param tag The tag of the game objects to find
+     * @returns The found game objects
+     */
     public findGameObjectsByTag(tag: string): GameObject[] {
         return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
+    /**
+     * @param tag The tag of the game object to find
+     * @returns The found game object
+     */
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
-    public addComponent<T extends Component>(
-        componentConstructor: ComponentConstructor,
-        name: string | null = null
-    ): T {
-        const component = componentConstructor();
+    /**
+     * Add a components to the game obejct
+     *
+     * @param componentFactory The factory function for the component
+     * @param name (optional) The name of the component, this must not be used by another component
+     * @returns The added component
+     */
+    public addComponent<T extends Component>(componentFactory: ComponentFactory, name: string | null = null): T {
+        const component = componentFactory();
         this.checkMultipleComponent(component);
 
         component.name = name;
@@ -113,30 +138,56 @@ export class GameObject {
         }
     }
 
+    /**
+     * @returns All the added components
+     */
     public getComponents(): Component[] {
         return this.components;
     }
 
+    /**
+     * @param name The name of the component to find
+     * @returns The found component
+     */
     public getComponentByName<T extends Component>(name: string): T | null {
         return this.components.reduce((prev, component) => (component.name === name ? component : prev), null) as T;
     }
 
+    /**
+     * @param type The type of the component to find
+     * @returns The found component
+     */
     public getComponentByType<T extends Component>(type: string): T | null {
         return this.components.reduce((prev, component) => (component.type === type ? component : prev), null) as T;
     }
 
+    /**
+     * @param type The type of the components to find
+     * @returns The found components
+     */
     public getComponentsByType<T extends Component>(type: string): T[] {
         return this.components.filter<T>((component: Component): component is T => component.type === type);
     }
 
+    /**
+     * @param name The name of the component to find
+     * @returns TRUE or FALSE
+     */
     public hasComponentOfName(name: string): boolean {
         return this.getComponentByName(name) !== null;
     }
 
+    /**
+     * @param type The type of the component to find
+     * @returns TRUE or FALSE
+     */
     public hasComponentOfType(type: string): boolean {
         return this.getComponentByType(type) !== null;
     }
 
+    /**
+     * @param name The name of the component to remove
+     */
     public removeComponentByName(name: string): void {
         this.components.every((component: Component, index: number) => {
             if (component.name === name) {
@@ -148,6 +199,9 @@ export class GameObject {
         });
     }
 
+    /**
+     * @param type The tyepe of the component to remove
+     */
     public removeComponentByType(type: string): void {
         this.components.every((component: Component, index: number) => {
             if (component.type === type) {
@@ -159,6 +213,9 @@ export class GameObject {
         });
     }
 
+    /**
+     * Remove all added components
+     */
     public removeComponents(): void {
         this.components.every((component: Component, index: number) => {
             component.destroy();
@@ -168,24 +225,46 @@ export class GameObject {
         this.components = [];
     }
 
+    /**
+     * Add a child game object.
+     *
+     * @param gameObjectFactory The factory of the child game object
+     * @param name The name of the child game object, this must not be used by another game object
+     * @returns The added child game object
+     */
     public addChild<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
         return this.gameObjectManager.addGameObject(gameObjectFactory, name, this) as T;
     }
 
+    /**
+     * @returns The children game objects
+     */
     public getChildren(): GameObject[] {
         return this.gameObjectManager.findGameObjectsByParent(this);
     }
 
+    /**
+     * @param name The name of the child game object to find
+     * @returns The found child game object
+     */
     public getChild<T extends GameObject>(name: string): T {
         return this.gameObjectManager.findGameObjectByParentAndName(this, name) as T;
     }
 
+    /**
+     * Destroy all the children game objects
+     */
     public destroyChildren(): void {
         this.gameObjectManager
             .findGameObjectsByParent(this)
             .forEach((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
+    /**
+     * If the object become inactive, every component and child game object will stop their execution.
+     *
+     * @param active TRUE or FALE
+     */
     public setActive(active: boolean): void {
         if (active === false) {
             this.updateInactiveCache();
@@ -216,10 +295,18 @@ export class GameObject {
             .forEach((gameObject: GameObject) => this.inactiveChildren.push(gameObject.uuid));
     }
 
+    /**
+     * Destroy one game objects by its name
+     * @param name The name of the game object
+     */
     public destroyGameObjectByName(name: string): void {
         this.destroyGameObject(this.findGameObjectByName(name));
     }
 
+    /**
+     * Destroy the game objects
+     * @param gameObject The game object to destory
+     */
     public destroyGameObject(gameObject: GameObject): void {
         this.gameObjectManager.destroyGameObject(gameObject);
     }

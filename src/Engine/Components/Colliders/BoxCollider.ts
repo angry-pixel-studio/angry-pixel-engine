@@ -7,7 +7,7 @@ import { Vector2 } from "../../Math/Vector2";
 import { RenderComponent } from "../../Component";
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
 
-interface Config {
+export interface BoxColliderConfig {
     width: number;
     height: number;
     offsetX?: number;
@@ -36,7 +36,7 @@ export class BoxCollider extends AbstractColliderComponent {
     private applyRotation: boolean =
         container.getConstant<IGameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
 
-    constructor(config: Config) {
+    constructor(config: BoxColliderConfig) {
         super();
 
         this.type = TYPE_BOX_COLLIDER;

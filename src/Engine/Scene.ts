@@ -29,46 +29,84 @@ export class Scene {
         }
     };
 
-    protected start(): void {
-        return;
-    }
-
-    protected update(): void {
-        return;
-    }
-
     public get gameCamera(): GameCamera {
         return this.findGameObjectByName(GAME_CAMERA_ID);
     }
 
+    /**
+     * This method is called on the first frame
+     */
+    protected start(): void {
+        return;
+    }
+
+    /**
+     * This method is called on every frame
+     */
+    protected update(): void {
+        return;
+    }
+
+    /**
+     * @param gameObjectFactory The factory function for the game object
+     * @param name The name of the game object, this must not be used by another game object
+     * @returns The added game object
+     */
     public addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
         return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
     }
 
+    /**
+     * @returns The game objects with no parents
+     */
     public getRootGameObjects(): GameObject[] {
         return this.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.parent === null);
     }
 
+    /**
+     * @param name The name of the game object to find
+     * @returns The found game object
+     */
     public findGameObjectByName<T extends GameObject>(name: string): T | null {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
+    /**
+     * @param tag The tag of the game objects to find
+     * @returns The found game objects
+     */
     public findGameObjectsByTag(tag: string): GameObject[] {
         return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
+    /**
+     * @param tag The tag of the game object to find
+     * @returns The found game object
+     */
     public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
+    /**
+     * Desroy all the loaded game objects
+     */
     public destroyAllGameObjects(): void {
         this.gameObjectManager.destroyAllGameObjects();
     }
 
+    /**
+     * Destroy one game objects by its name
+     * @param name The name of the game object
+     */
     public destroyGameObjectByName(name: string): void {
         this.destroyGameObject(this.findGameObjectByName(name));
     }
 
+    /**
+     * Destroy the game objects
+     *
+     * @param gameObject The game object to destory
+     */
     public destroyGameObject(gameObject: GameObject): void {
         this.gameObjectManager.destroyGameObject(gameObject);
     }

@@ -55,7 +55,7 @@ export class SceneManager {
         const resetLoop = this.game.running;
 
         if (resetLoop) {
-            this.game.stopLoop();
+            this.game.pauseLoop();
         }
 
         this.unloadCurrentScene();

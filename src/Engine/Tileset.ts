@@ -1,7 +1,7 @@
 import { Vector2 } from "./Math/Vector2";
 import { Tile } from "./Core/Tilemap/Tile";
 
-interface Config {
+export interface TilesetConfig {
     image: HTMLImageElement;
     tileWidth: number;
     tileHeight: number;
@@ -22,7 +22,7 @@ export class Tileset {
 
     private _tiles: Tile[] = [];
 
-    constructor(config: Config) {
+    constructor(config: TilesetConfig) {
         this.image = config.image;
         this.tileWidth = config.tileWidth;
         this.tileHeight = config.tileHeight;

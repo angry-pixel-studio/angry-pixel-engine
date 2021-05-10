@@ -1,4 +1,4 @@
-import { SceneManager, SceneConstructor } from "./Core/Scene/SceneManager";
+import { SceneManager, SceneConstructor as SceneFactory } from "./Core/Scene/SceneManager";
 import { RenderManager } from "./Core/Rendering/RenderManager";
 import { CollisionManager } from "./Core/Collision/CollisionManager";
 import { loadDependencies } from "./Core/DependencyInjection/Config";
@@ -131,18 +131,31 @@ export class Game {
         return this._running;
     }
 
-    public addScene(name: string, sceneFunction: SceneConstructor, openingScene: boolean = false): void {
-        this.sceneManager.addScene(name, sceneFunction, openingScene);
+    /**
+     * Add a scene to the game
+     *
+     * @param name The name of the scene
+     * @param sceneFactory The factory funciton for the escene
+     * @param openingScene If this is the opening scene, set TRUE, FALSE instead
+     */
+    public addScene(name: string, sceneFactory: SceneFactory, openingScene: boolean = false): void {
+        this.sceneManager.addScene(name, sceneFactory, openingScene);
     }
 
+    /**
+     * Run the game
+     */
     public run(): void {
         this.sceneManager.loadOpeningScene();
 
         this.requestAnimationFrame();
     }
 
+    /**
+     * Stop the game
+     */
     public stop(): void {
-        this.stopLoop();
+        this.pauseLoop();
         setTimeout(() => {
             this.sceneManager.unloadCurrentScene();
             this.renderManager.clearCanvas(this._config.bgColor);
@@ -180,17 +193,23 @@ export class Game {
             this.requestAnimationFrame();
         } catch (error) {
             console.error("Mini Engine Error: " + error);
-            this.stopLoop();
+            this.pauseLoop();
             // throw error;
         }
     }
 
-    public stopLoop(): void {
+    /**
+     * Pauses the game loop
+     */
+    public pauseLoop(): void {
         window.cancelAnimationFrame(this.frameRequestId);
         this._running = false;
         this.frameRequestId = null;
     }
 
+    /**
+     * Resumes the paused game loop
+     */
     public resumeLoop(): void {
         if (this._running == false && this.frameRequestId === null) {
             this.requestAnimationFrame();

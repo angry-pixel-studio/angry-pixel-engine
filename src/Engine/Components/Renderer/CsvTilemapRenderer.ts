@@ -2,7 +2,7 @@ import { Tile } from "../../Core/Tilemap/Tile";
 import { Tileset } from "../../Tileset";
 import { TilemapRenderer } from "./TilemapRenderer";
 
-interface Config {
+export interface CsvTilemapConfig {
     tileset: Tileset;
     tilemapData: string;
     tileScale?: number;
@@ -20,7 +20,7 @@ export const TYPE_TILEMAP_RENDERER: string = "TilemapRenderer";
 export class CsvTilemapRenderer extends TilemapRenderer {
     private alpha: number = 1;
 
-    constructor(config: Config) {
+    constructor(config: CsvTilemapConfig) {
         super();
 
         this.type = TYPE_TILEMAP_RENDERER;
