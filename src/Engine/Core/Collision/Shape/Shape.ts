@@ -38,8 +38,16 @@ export abstract class Shape {
         return this._width;
     }
 
+    public set width(width: number) {
+        this._width = width;
+    }
+
     public get height(): number {
         return this._height;
+    }
+
+    public set height(height: number) {
+        this._height = height;
     }
 
     public get direction(): Vector2 {
