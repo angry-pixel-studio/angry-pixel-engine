@@ -3,7 +3,7 @@ export * from "./Engine/Math/Vector2";
 export * from "./Engine/Math/Rectangle";
 
 // main
-export { Game, IGameConfig } from "./Engine/Game";
+export { Game, GameConfig, CollisionMethodConfig, QuadTreeConfig, Context2DConfig } from "./Engine/Game";
 export * from "./Engine/Scene";
 export * from "./Engine/GameObject";
 export * from "./Engine/Component";

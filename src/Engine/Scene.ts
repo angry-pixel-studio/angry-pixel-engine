@@ -52,14 +52,14 @@ export class Scene {
      * @param name The name of the game object, this must not be used by another game object
      * @returns The added game object
      */
-    public addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
+    protected addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
         return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
     }
 
     /**
      * @returns The game objects with no parents
      */
-    public getRootGameObjects(): GameObject[] {
+    protected getRootGameObjects(): GameObject[] {
         return this.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.parent === null);
     }
 
@@ -67,7 +67,7 @@ export class Scene {
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    public findGameObjectByName<T extends GameObject>(name: string): T | null {
+    protected findGameObjectByName<T extends GameObject>(name: string): T | null {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
@@ -75,7 +75,7 @@ export class Scene {
      * @param tag The tag of the game objects to find
      * @returns The found game objects
      */
-    public findGameObjectsByTag(tag: string): GameObject[] {
+    protected findGameObjectsByTag(tag: string): GameObject[] {
         return this.gameObjectManager.findGameObjectsByTag(tag);
     }
 
@@ -83,14 +83,14 @@ export class Scene {
      * @param tag The tag of the game object to find
      * @returns The found game object
      */
-    public findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+    protected findGameObjectByTag<T extends GameObject>(tag: string): T | null {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
     /**
      * Desroy all the loaded game objects
      */
-    public destroyAllGameObjects(): void {
+    protected destroyAllGameObjects(): void {
         this.gameObjectManager.destroyAllGameObjects();
     }
 
@@ -98,7 +98,7 @@ export class Scene {
      * Destroy one game objects by its name
      * @param name The name of the game object
      */
-    public destroyGameObjectByName(name: string): void {
+    protected destroyGameObjectByName(name: string): void {
         this.destroyGameObject(this.findGameObjectByName(name));
     }
 
@@ -107,7 +107,7 @@ export class Scene {
      *
      * @param gameObject The game object to destory
      */
-    public destroyGameObject(gameObject: GameObject): void {
+    protected destroyGameObject(gameObject: GameObject): void {
         this.gameObjectManager.destroyGameObject(gameObject);
     }
 

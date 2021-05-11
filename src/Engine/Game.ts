@@ -22,13 +22,13 @@ export const EVENT_UPDATE_RENDER: string = "mini-engine-update-render";
 
 export const container: Container = new Container();
 
-export interface IGameConfig {
+export interface GameConfig {
     containerNode: HTMLElement;
     gameWidth?: number;
     gameHeight?: number;
     debugEnabled?: boolean;
     bgColor?: string;
-    context2d?: ContextConfig;
+    context2d?: Context2DConfig;
     physicsFramerate?: number;
     physicsIterations?: number;
     collisions?: {
@@ -41,7 +41,7 @@ export interface IGameConfig {
     };
 }
 
-export enum ContextConfig {
+export enum Context2DConfig {
     Default = "default",
     Disabled = "disabled",
     Fallback = "fallback",
@@ -55,13 +55,13 @@ export enum QuadTreeConfig {
     Fixed = "fixed",
 }
 
-const defaultConfig: IGameConfig = {
+const defaultConfig: GameConfig = {
     containerNode: null,
     gameWidth: 320,
     gameHeight: 180,
     debugEnabled: false,
     bgColor: "#000000",
-    context2d: ContextConfig.Fallback,
+    context2d: Context2DConfig.Fallback,
     physicsFramerate: DEFAULT_FRAMERATE,
     physicsIterations: DEFAULT_ITERATIONS,
     collisions: {
@@ -81,12 +81,12 @@ export class Game {
     private timeManager: TimeManager;
     private physicsIterationManager: PhysicsIterationManager;
 
-    private _config: IGameConfig;
+    private _config: GameConfig;
 
     private _running: boolean = false;
     private frameRequestId: number = null;
 
-    constructor(config: IGameConfig) {
+    constructor(config: GameConfig) {
         this._config = {
             ...defaultConfig,
             ...config,
@@ -123,7 +123,7 @@ export class Game {
         GameObjectManagerFacade.initialize();
     }
 
-    public get config(): IGameConfig {
+    public get config(): GameConfig {
         return this._config;
     }
 

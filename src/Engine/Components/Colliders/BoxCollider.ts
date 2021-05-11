@@ -1,5 +1,5 @@
 import { RenderManager } from "../../Core/Rendering/RenderManager";
-import { CollisionMethodConfig, container, IGameConfig } from "../../Game";
+import { CollisionMethodConfig, container, GameConfig } from "../../Game";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
 import { AbstractColliderComponent } from "./AbstractColliderComponent";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
@@ -34,7 +34,7 @@ export class BoxCollider extends AbstractColliderComponent {
     private realRotation: number = 0;
 
     private applyRotation: boolean =
-        container.getConstant<IGameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
+        container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
 
     constructor(config: BoxColliderConfig) {
         super();

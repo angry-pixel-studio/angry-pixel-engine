@@ -1,4 +1,4 @@
-import { CollisionMethodConfig, ContextConfig, Game, QuadTreeConfig } from "../../Game";
+import { CollisionMethodConfig, Context2DConfig, Game, QuadTreeConfig } from "../../Game";
 import { AssetManager } from "../Asset/AssetManager";
 import { CollisionManager } from "../Collision/CollisionManager";
 import { DomManager } from "../Dom/DomManager";
@@ -86,8 +86,8 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
     const webglContextVersion: WebGLContextVersion = getWebGLContextVersion();
 
     if (
-        game.config.context2d === ContextConfig.Default ||
-        (game.config.context2d === ContextConfig.Fallback && webglContextVersion === null)
+        game.config.context2d === Context2DConfig.Default ||
+        (game.config.context2d === Context2DConfig.Fallback && webglContextVersion === null)
     ) {
         container.add("Renderer", () => new Context2DRenderer(domManager.canvas));
         if (game.config.debugEnabled) console.log("Using 2d rendering context");
