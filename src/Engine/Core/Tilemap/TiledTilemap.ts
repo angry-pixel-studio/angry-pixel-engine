@@ -3,6 +3,7 @@ export interface TiledTilemap {
     height: number;
     infinite: boolean;
     layers: TiledLayer[];
+    renderorder: string;
 }
 
 export interface TiledChunk {
@@ -14,6 +15,8 @@ export interface TiledChunk {
 }
 
 export interface TiledLayer {
+    name: string;
+    id: number;
     chunks?: TiledChunk[];
     data?: number[];
     x: number;
@@ -24,4 +27,6 @@ export interface TiledLayer {
     visible: boolean;
     startx?: number;
     starty?: number;
+    offsetx?: number;
+    offsety?: number;
 }

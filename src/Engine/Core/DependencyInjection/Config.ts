@@ -1,4 +1,4 @@
-import { CollisionMethodConfig, Context2DConfig, Game, QuadTreeConfig } from "../../Game";
+import { CollisionMethodConfig, Context2DConfig, Game } from "../../Game";
 import { AssetManager } from "../Asset/AssetManager";
 import { CollisionManager } from "../Collision/CollisionManager";
 import { DomManager } from "../Dom/DomManager";
@@ -73,8 +73,7 @@ const collisionDependencies = (container: Container, game: Game): void => {
             new CollisionManager(
                 container.getSingleton<ICollisionResolver>("CollisionResolver"),
                 container.getSingleton<RenderManager>("RenderManager"),
-                game.config.collisions.quadTree === QuadTreeConfig.Fixed,
-                game.config.collisions.quadTreeSize ?? null,
+                game.config.collisions.quadTreeBounds,
                 game.config.collisions.quadMaxLevel,
                 game.config.collisions.collidersPerQuad,
                 game.config.debugEnabled && game.config.collisions.debugQuadTree

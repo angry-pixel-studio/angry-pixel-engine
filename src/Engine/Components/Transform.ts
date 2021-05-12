@@ -35,7 +35,10 @@ export class Transform extends EngineComponent {
     }
 
     public set innerPosition(innerPosition: Vector2) {
-        this._innerPosition.set(innerPosition.x, innerPosition.y);
+        if (innerPosition.equals(this._innerPosition) === false) {
+            this._innerPosition.set(innerPosition.x, innerPosition.y);
+            this.update();
+        }
     }
 
     public get scale(): Vector2 {
@@ -72,14 +75,19 @@ export class Transform extends EngineComponent {
     }
 
     private translateFromParent(): void {
-        const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
-        const thisRad: number = Math.atan2(this._innerPosition.x, this._innerPosition.y);
-        const radius: number = Math.hypot(this._innerPosition.x, this._innerPosition.y);
+        if (this._innerPosition.magnitude > 0) {
+            const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
+            const thisRad: number = Math.atan2(this._innerPosition.x, this._innerPosition.y);
+            const radius: number = Math.hypot(this._innerPosition.x, this._innerPosition.y);
 
-        this._position.set(
-            this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad),
-            this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad)
-        );
+            this._position.set(
+                this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad),
+                this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad)
+            );
+        } else {
+            this._position.set(this.parentTransform.position.x, this.parentTransform.position.y);
+        }
+
         this._rotation = this.parentTransform.rotation;
     }
 

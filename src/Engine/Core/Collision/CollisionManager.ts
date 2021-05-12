@@ -33,29 +33,19 @@ export class CollisionManager {
     constructor(
         resolver: ICollisionResolver,
         renderManager: RenderManager,
-        fixedQuadTree: boolean,
-        quadTreeSize: { width: number; height: number } | null = null,
+        quadTreeBounds: Rectangle | null = null,
         quadMaxLevel: number,
         collidersPerQuad: number,
         debug: boolean = false
     ) {
-        this.fixedQuadTree = fixedQuadTree;
-        if (this.fixedQuadTree && quadTreeSize === null) {
-            throw new Error("quadTreeSize cannot be null if quad tree is fixed");
-        }
-
+        this.fixedQuadTree = quadTreeBounds !== null;
         this.resolver = resolver;
         this.debug = debug;
         this.renderManager = renderManager;
         this.colliders = [];
 
         if (this.fixedQuadTree) {
-            this.bounds = new Rectangle(
-                -quadTreeSize.width / 2,
-                -quadTreeSize.height / 2,
-                quadTreeSize.width,
-                quadTreeSize.height
-            );
+            this.bounds = quadTreeBounds;
         } else {
             this.bounds = new Rectangle(0, 0, 0, 0);
         }
@@ -104,6 +94,10 @@ export class CollisionManager {
     }
 
     public update(): void {
+        if (this.colliders.length === 0) {
+            return;
+        }
+
         this.quadTree.clearColliders();
         this.quadTree.clearQuadrants();
 

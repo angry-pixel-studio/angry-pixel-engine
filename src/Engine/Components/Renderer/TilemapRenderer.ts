@@ -8,12 +8,17 @@ import { TileData } from "../../Core/Tilemap/TileData";
 import { TiledTilemap } from "../../Core/Tilemap/TiledTilemap";
 import { Tile } from "../../Core/Tilemap/Tile";
 
+export type Flip = { h: boolean; v: boolean };
+export type Offset = { x: number; y: number };
+export type RenderOrder = "center" | "right-down" | "right-up" | "left-down" | "left-right";
+
 export abstract class TilemapRenderer extends RenderComponent {
-    public tileset: Tileset = null;
-    public tilemapData: string;
-    public tiledTilemap: TiledTilemap;
-    public tileScale: number = 1;
-    public smooth: boolean = true; // set to FALSE to avoid bleeding
+    protected tileset: Tileset = null;
+    protected tilemapData: string;
+    protected tiledTilemap: TiledTilemap;
+    protected tileScale: number = 1;
+    protected smooth: boolean = true; // set to FALSE to avoid bleeding
+    protected renderOrder: RenderOrder = "center";
 
     protected tileWidth: number = 0;
     protected tileHeight: number = 0;
@@ -33,6 +38,8 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected _realWidth: number = 0;
     protected _realHeight: number = 0;
 
+    private cacheV2: Vector2 = new Vector2();
+
     constructor() {
         super();
 
@@ -48,7 +55,7 @@ export abstract class TilemapRenderer extends RenderComponent {
         );
 
         this.processTilemap();
-        this.updateTilesPosition();
+        this.updatePosition();
     }
 
     protected update(): void {
@@ -62,11 +69,15 @@ export abstract class TilemapRenderer extends RenderComponent {
         col: number,
         row: number,
         alpha: number = 1,
-        flip: { h: boolean; v: boolean } = { h: false, v: false }
+        flip: Flip = { h: false, v: false },
+        offset: Offset = { x: 0, y: 0 }
     ): void {
-        const renderData = this.createRenderData(tile, col, row, alpha, flip);
+        if (tile !== null) {
+            const renderData = this.createRenderData(tile, col, row, alpha, flip, offset);
+            this.tilesRenderData.push(renderData);
+        }
+
         this.updateSizeInfo(col, row);
-        this.tilesRenderData.push(renderData);
     }
 
     private createRenderData(
@@ -74,16 +85,19 @@ export abstract class TilemapRenderer extends RenderComponent {
         col: number,
         row: number,
         alpha: number = 1,
-        flip: { h: boolean; v: boolean } = { h: false, v: false }
+        flip: Flip,
+        offset: Offset
     ): ImageRenderData {
         const renderData: ImageRenderData = new ImageRenderData();
 
         renderData.position.set(
             this.gameObject.transform.position.x +
                 col * this.tileWidth * this.orientation.x +
+                offset.x * Math.abs(this.gameObject.transform.scale.x) +
                 (this.tileWidth * this.orientation.x) / 2,
             this.gameObject.transform.position.y -
                 row * this.tileHeight * this.orientation.y -
+                offset.y * Math.abs(this.gameObject.transform.scale.y) -
                 (this.tileHeight * this.orientation.y) / 2
         );
 
@@ -109,12 +123,22 @@ export abstract class TilemapRenderer extends RenderComponent {
         this._realHeight = this._height * this.tileHeight;
     }
 
-    protected updateTilesPosition(): void {
+    private updatePosition(): void {
+        this.cacheV2.set(
+            (this.renderOrder === "center"
+                ? -Math.round(this._realWidth / 2)
+                : ["left-down", "left-up"].includes(this.renderOrder)
+                ? -this._realWidth
+                : 0) * this.orientation.x,
+            (this.renderOrder === "center"
+                ? Math.round(this._realHeight / 2)
+                : ["right-up", "left-up"].includes(this.renderOrder)
+                ? this._realHeight
+                : 0) * this.orientation.y
+        );
+
         this.tilesRenderData.forEach((renderData) => {
-            renderData.position.set(
-                renderData.position.x - Math.round(this._realWidth / 2) * this.orientation.x,
-                renderData.position.y + Math.round(this._realHeight / 2) * this.orientation.y
-            );
+            Vector2.add(renderData.position, renderData.position, this.cacheV2);
             this.addTileData(renderData);
         });
     }

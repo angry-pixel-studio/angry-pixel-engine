@@ -1,6 +1,6 @@
 import { Tile } from "../../Core/Tilemap/Tile";
 import { Tileset } from "../../Tileset";
-import { TilemapRenderer } from "./TilemapRenderer";
+import { Flip, RenderOrder, TilemapRenderer } from "./TilemapRenderer";
 
 export interface CsvTilemapConfig {
     tileset: Tileset;
@@ -8,6 +8,7 @@ export interface CsvTilemapConfig {
     tileScale?: number;
     smooth?: boolean;
     alpha?: number;
+    renderOrder?: RenderOrder;
 }
 
 const MAX_TILES: number = 999;
@@ -30,6 +31,7 @@ export class CsvTilemapRenderer extends TilemapRenderer {
         this.tileScale = config.tileScale ?? 1;
         this.smooth = config.smooth ?? false;
         this.alpha = config.alpha ?? 1;
+        this.renderOrder = config.renderOrder ?? this.renderOrder;
     }
 
     protected processTilemap(): void {
@@ -40,18 +42,18 @@ export class CsvTilemapRenderer extends TilemapRenderer {
 
             parsedRow.forEach((data: string, col: number) => {
                 const parsed: number = parseInt(data.trim());
+                let tile: Tile = null;
+                const flip: Flip = { h: false, v: false };
 
                 if (isNaN(parsed) === false) {
                     const id: number = parsed > MAX_TILES ? parsed % 1000 : parsed;
                     const flipDigit: number = Math.round(parsed / 1000);
 
-                    const tile: Tile = this.tileset.getTile(id);
-                    const flip = { h: [FLIP_H, FLIP_B].includes(flipDigit), v: [FLIP_V, FLIP_B].includes(flipDigit) };
-
-                    if (tile !== null) {
-                        this.processTile(tile, col, row, this.alpha, flip);
-                    }
+                    tile = this.tileset.getTile(id);
+                    flip.h = [FLIP_H, FLIP_B].includes(flipDigit);
+                    flip.v = [FLIP_V, FLIP_B].includes(flipDigit);
                 }
+                this.processTile(tile, col, row, this.alpha, flip);
             });
         });
         this.tilemapProcessed = true;

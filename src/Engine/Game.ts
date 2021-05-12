@@ -12,6 +12,7 @@ import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
 import { DEFAULT_FRAMERATE, DEFAULT_ITERATIONS, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
 import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
+import { Rectangle } from "./Math/Rectangle";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -33,8 +34,7 @@ export interface GameConfig {
     physicsIterations?: number;
     collisions?: {
         method?: CollisionMethodConfig;
-        quadTree?: QuadTreeConfig;
-        quadTreeSize?: { width: number; height: number }; // TODO: one different size per scene
+        quadTreeBounds?: Rectangle; // implement different bounds per scene
         debugQuadTree?: boolean;
         quadMaxLevel?: number;
         collidersPerQuad?: number;
@@ -50,10 +50,6 @@ export enum CollisionMethodConfig {
     AABB = "aabb",
     SAT = "sat",
 }
-export enum QuadTreeConfig {
-    Dynamic = "dynamic",
-    Fixed = "fixed",
-}
 
 const defaultConfig: GameConfig = {
     containerNode: null,
@@ -66,8 +62,7 @@ const defaultConfig: GameConfig = {
     physicsIterations: DEFAULT_ITERATIONS,
     collisions: {
         method: CollisionMethodConfig.AABB,
-        quadTree: QuadTreeConfig.Dynamic,
-        quadTreeSize: null,
+        quadTreeBounds: null,
         debugQuadTree: false,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
         collidersPerQuad: DEFAULT_MAX_COLLIDERS,
