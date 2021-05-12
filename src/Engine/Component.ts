@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { MiniEngineException } from "./Core/Exception/MiniEngineException";
 import { GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
 import {
@@ -53,11 +54,19 @@ export abstract class Component {
             return;
         }
 
-        if (this.started === false && event.type === EVENT_START) {
-            this.start();
-            this.started = true;
-        } else if (this.started === true && event.type === this.updateEvent) {
-            this.update();
+        try {
+            if (this.started === false && event.type === EVENT_START) {
+                this.start();
+                this.started = true;
+            } else if (this.started === true && event.type === this.updateEvent) {
+                this.update();
+            }
+        } catch (error) {
+            if (error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+                throw error;
+            } else {
+                throw new MiniEngineException(error.message);
+            }
         }
     };
 

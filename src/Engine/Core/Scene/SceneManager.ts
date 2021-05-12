@@ -1,5 +1,6 @@
 import { Game } from "../../Game";
 import { Scene } from "../../Scene";
+import { MiniEngineException } from "../Exception/MiniEngineException";
 import { RenderManager } from "../Rendering/RenderManager";
 
 export type SceneConstructor = () => Scene;
@@ -25,7 +26,7 @@ export class SceneManager {
 
     public addScene(name: string, sceneConstructor: SceneConstructor, openingScene: boolean = false): void {
         if (this.scenes.has(name)) {
-            throw new Error(`There is already a scene with the name '${name}'`);
+            throw new MiniEngineException(`There is already a scene with the name '${name}'`);
         }
 
         this.scenes.set(name, sceneConstructor);
@@ -37,7 +38,7 @@ export class SceneManager {
 
     public loadOpeningScene(): void {
         if (this.openingSceneName === null) {
-            throw new Error(`There is no opening scene`);
+            throw new MiniEngineException(`There is no opening scene`);
         }
 
         this.loadScene(this.openingSceneName);
@@ -45,11 +46,11 @@ export class SceneManager {
 
     public loadScene(name: string): void {
         if (this.game === null) {
-            throw new Error("Game not initialized.");
+            throw new MiniEngineException("Game not initialized.");
         }
 
         if (this.scenes.has(name) === false) {
-            throw new Error(`Scene with name ${name} does not exists`);
+            throw new MiniEngineException(`Scene with name ${name} does not exists`);
         }
 
         const resetLoop = this.game.running;

@@ -1,3 +1,5 @@
+import { MiniEngineException } from "../Exception/MiniEngineException";
+
 type constructor = () => unknown;
 
 export class Container {
@@ -7,7 +9,7 @@ export class Container {
 
     public add(name: string, constructor: constructor): void {
         if (this.constructors.has(name)) {
-            throw new Error(`There is already an object constructor with the name ${name}`);
+            throw new MiniEngineException(`There is already an object constructor with the name ${name}`);
         }
 
         this.constructors.set(name, constructor);
@@ -15,7 +17,7 @@ export class Container {
 
     public getSingleton<T>(name: string): T {
         if (this.constructors.has(name) === false) {
-            throw new Error(`Invalid object constructor name: ${name}`);
+            throw new MiniEngineException(`Invalid object constructor name: ${name}`);
         }
 
         if (this.instances.has(name) === false) {
@@ -27,7 +29,7 @@ export class Container {
 
     public getTranscient<T>(name: string): T {
         if (this.constructors.has(name) === false) {
-            throw new Error(`Invalid object constructor name: ${name}`);
+            throw new MiniEngineException(`Invalid object constructor name: ${name}`);
         }
 
         return this.constructors.get(name)() as T;
@@ -35,7 +37,7 @@ export class Container {
 
     public addConstant(name: string, value: unknown): void {
         if (this.constants.has(name)) {
-            throw new Error(`There is already a constant value with the name ${name}`);
+            throw new MiniEngineException(`There is already a constant value with the name ${name}`);
         }
 
         this.constants.set(name, value);
@@ -43,7 +45,7 @@ export class Container {
 
     public getConstant<T>(name: string): T {
         if (this.constants.has(name) === false) {
-            throw new Error(`Invalid constant name: ${name}`);
+            throw new MiniEngineException(`Invalid constant name: ${name}`);
         }
 
         return this.constants.get(name) as T;

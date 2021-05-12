@@ -28,6 +28,7 @@ import { TouchController } from "../Input/TouchController";
 import { AABBResolver } from "../Collision/Resolver/AABBResolver";
 import { ICollisionResolver } from "../Collision/Resolver/ICollisionResolver";
 import { IContextRenderer } from "../Rendering/IContextRenderer";
+import { MiniEngineException } from "../Exception/MiniEngineException";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.addConstant("GameConfig", game.config);
@@ -64,7 +65,7 @@ const collisionDependencies = (container: Container, game: Game): void => {
     } else if (game.config.collisions.method === CollisionMethodConfig.SAT) {
         container.add("CollisionResolver", () => new SatResolver());
     } else {
-        throw new Error("Invalid collision method.");
+        throw new MiniEngineException("Invalid collision method.");
     }
 
     container.add(
@@ -94,7 +95,7 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
         webGLDependencies(webglContextVersion, container, domManager);
         if (game.config.debugEnabled) console.log(`Using WebGL rendering context (version: ${webglContextVersion})`);
     } else {
-        throw new Error("WebGL is not supported, use context2d instead.");
+        throw new MiniEngineException("WebGL is not supported, use context2d instead.");
     }
 
     container.add(

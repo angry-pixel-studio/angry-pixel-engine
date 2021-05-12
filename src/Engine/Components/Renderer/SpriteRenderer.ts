@@ -1,4 +1,5 @@
 import { RenderComponent } from "../../Component";
+import { MiniEngineException } from "../../Core/Exception/MiniEngineException";
 import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
@@ -63,7 +64,7 @@ export class SpriteRenderer extends RenderComponent {
 
     public set tiled(tiled: Vector2) {
         if (tiled.x % 1 !== 0 || tiled.y % 1 !== 0) {
-            throw new Error("SpriteRenderer.tiled: Vector2 components must be integer");
+            throw new MiniEngineException("SpriteRenderer.tiled: Vector2 components must be integer");
         }
 
         this._tiled.set(tiled.x, tiled.y);

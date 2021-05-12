@@ -1,4 +1,5 @@
 import { GameObject } from "../../GameObject";
+import { MiniEngineException } from "../Exception/MiniEngineException";
 
 export type GameObjectFactory = () => GameObject;
 
@@ -11,7 +12,7 @@ export class GameObjectManager {
         parent: GameObject | null = null
     ): GameObject {
         if (this.findGameObjectByName(name)) {
-            throw new Error(`There is already a GameObject with the name ${name}`);
+            throw new MiniEngineException(`There is already a GameObject with the name ${name}`);
         }
 
         const gameObject: GameObject = gameObjectFactory();

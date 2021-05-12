@@ -4,6 +4,7 @@ import { Sprite } from "../Sprite";
 import { Animation } from "../Animation";
 import { TimeManager } from "../Core/Time/TimeManager";
 import { container } from "../Game";
+import { MiniEngineException } from "../Core/Exception/MiniEngineException";
 
 export interface AnimatorConfig {
     spriteRenderer: SpriteRenderer;
@@ -56,7 +57,7 @@ export class Animator extends EngineComponent {
         }
 
         if (this.animations.has(name) === false) {
-            throw new Error(`Animation with name ${name} does not exist.`);
+            throw new MiniEngineException(`Animation with name ${name} does not exist.`);
         }
 
         this.currentAnimation = this.animations.get(name);

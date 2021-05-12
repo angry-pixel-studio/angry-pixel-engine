@@ -13,6 +13,7 @@ import { DEFAULT_FRAMERATE, DEFAULT_ITERATIONS, PhysicsIterationManager } from "
 import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
 import { Rectangle } from "./Math/Rectangle";
+import { MiniEngineException } from "./Core/Exception/MiniEngineException";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -79,6 +80,7 @@ export class Game {
     private _config: GameConfig;
 
     private _running: boolean = false;
+    private _stop: boolean = false;
     private frameRequestId: number = null;
 
     constructor(config: GameConfig) {
@@ -91,13 +93,26 @@ export class Game {
             ...config.collisions,
         };
 
+        window.addEventListener("error", this.exceptionEventHandler);
+
         if (this.config.containerNode === null) {
-            throw new Error("Config parameter 'containerNode' cannot be empty.");
+            throw new MiniEngineException("Config parameter 'containerNode' cannot be empty.");
         }
 
         this.setupManagers();
         this.initializeFacades();
     }
+
+    private exceptionEventHandler = (event: ErrorEvent): void => {
+        if (event.error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+            this.stop();
+
+            event.stopPropagation();
+            event.preventDefault();
+
+            console.error(event.error.message);
+        }
+    };
 
     private setupManagers(): void {
         loadDependencies(container, this);
@@ -151,54 +166,49 @@ export class Game {
      */
     public stop(): void {
         this.pauseLoop();
-        setTimeout(() => {
-            this.sceneManager.unloadCurrentScene();
-            this.renderManager.clearCanvas(this._config.bgColor);
-        }, 100);
+        this.sceneManager.unloadCurrentScene();
+        this.renderManager.clearCanvas(this._config.bgColor);
     }
 
     private gameLoop(time: number): void {
-        try {
-            this._running = true;
-
-            this.timeManager.update(time);
-
-            // Start all components
-            this.dispatchFrameEvent(EVENT_START);
-            // Update custom components
-            this.dispatchFrameEvent(EVENT_UPDATE);
-            // Update engine components
-            this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
-
-            // Update collider components
-            this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
-            this.collisionManager.update();
-
-            // Update physics components
-            this.physicsIterationManager.update(() => {
-                this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
-                this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
-            });
-            // Update Rendering componets
-            this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
-
-            this.renderManager.clearCanvas(this._config.bgColor);
-            this.renderManager.render();
-
-            this.requestAnimationFrame();
-        } catch (error) {
-            console.error("Mini Engine Error: " + error);
-            this.pauseLoop();
-            // throw error;
+        if (this._stop === true) {
+            this._running = false;
+            return;
         }
+
+        this.timeManager.update(time);
+
+        // Start all components
+        this.dispatchFrameEvent(EVENT_START);
+        // Update custom components
+        this.dispatchFrameEvent(EVENT_UPDATE);
+        // Update engine components
+        this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
+
+        // Update collider components
+        this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
+        this.collisionManager.update();
+
+        // Update physics components
+        this.physicsIterationManager.update(() => {
+            this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+            this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
+        });
+        // Update Rendering componets
+        this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
+
+        this.renderManager.clearCanvas(this._config.bgColor);
+        this.renderManager.render();
+
+        this.requestAnimationFrame();
     }
 
     /**
      * Pauses the game loop
      */
     public pauseLoop(): void {
+        this._stop = true;
         window.cancelAnimationFrame(this.frameRequestId);
-        this._running = false;
         this.frameRequestId = null;
     }
 
@@ -207,6 +217,7 @@ export class Game {
      */
     public resumeLoop(): void {
         if (this._running == false && this.frameRequestId === null) {
+            this._stop = false;
             this.requestAnimationFrame();
         }
     }

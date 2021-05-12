@@ -1,4 +1,5 @@
 import { RenderComponent } from "../../Component";
+import { MiniEngineException } from "../../Core/Exception/MiniEngineException";
 import { Pivot, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
@@ -44,13 +45,13 @@ export class TextRenderer extends RenderComponent {
         this.pivot = config.pivot ?? this.pivot;
 
         if (this.lineSeparation % 2 !== 0) {
-            throw new Error("TextRenderer.lineSeparation must be multiple of 2");
+            throw new MiniEngineException("TextRenderer.lineSeparation must be multiple of 2");
         }
     }
 
     protected start(): void {
         if (this.gameObject.ui === false) {
-            throw new Error("TextRenderer only can be used on UI GameObjects");
+            throw new MiniEngineException("TextRenderer only can be used on UI GameObjects");
         }
 
         this.renderData.layer = this.gameObject.layer;
@@ -64,7 +65,7 @@ export class TextRenderer extends RenderComponent {
 
     protected update(): void {
         if (this.gameObject.ui === false) {
-            throw new Error("TextRenderer only can be used on UI GameObjects");
+            throw new MiniEngineException("TextRenderer only can be used on UI GameObjects");
         }
 
         this.renderData.text = this.text;

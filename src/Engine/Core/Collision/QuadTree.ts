@@ -1,5 +1,6 @@
 import { Rectangle } from "../../Math/Rectangle";
 import { Vector2 } from "../../Math/Vector2";
+import { MiniEngineException } from "../Exception/MiniEngineException";
 import { ICollider } from "./Collider/ICollider";
 
 export const DEFAULT_MAX_COLLIDERS: number = 15;
@@ -120,7 +121,7 @@ export class QuadTree {
 
     private getChildrenQuadrantForCollider(collider: ICollider): Array<QuadTree> {
         if (this._quadrants.length === 0) {
-            throw new Error("Current quadrant does not have quadrant children.");
+            throw new MiniEngineException("Current quadrant does not have quadrant children.");
         }
 
         this.quadrantsForCollider = [];
@@ -142,7 +143,7 @@ export class QuadTree {
         }
 
         if (this.quadrantsForCollider.length === 0) {
-            throw new Error("Children does not fit in any children quadrant");
+            throw new MiniEngineException("Children does not fit in any children quadrant");
         }
 
         return this.quadrantsForCollider;

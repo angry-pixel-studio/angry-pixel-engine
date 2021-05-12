@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Component } from "./Component";
 import { Transform, TYPE_TRANSFORM } from "./Components/Transform";
+import { MiniEngineException } from "./Core/Exception/MiniEngineException";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
 import { container, EVENT_START, EVENT_UPDATE } from "./Game";
@@ -61,11 +62,19 @@ export class GameObject {
             return;
         }
 
-        if (this.started === false && event.type === EVENT_START) {
-            this.start();
-            this.started = true;
-        } else if (this.started === true && event.type === EVENT_UPDATE) {
-            this.update();
+        try {
+            if (this.started === false && event.type === EVENT_START) {
+                this.start();
+                this.started = true;
+            } else if (this.started === true && event.type === EVENT_UPDATE) {
+                this.update();
+            }
+        } catch (error) {
+            if (error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+                throw error;
+            } else {
+                throw new MiniEngineException(error.message);
+            }
         }
     };
 
@@ -134,7 +143,7 @@ export class GameObject {
 
     private checkMultipleComponent(component: Component): void {
         if (component.allowMultiple === false && this.hasComponentOfType(component.type)) {
-            throw new Error(`GameObject only allows one component of type ${component.type}`);
+            throw new MiniEngineException(`GameObject only allows one component of type ${component.type}`);
         }
     }
 

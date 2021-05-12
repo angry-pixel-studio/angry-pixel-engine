@@ -2,6 +2,7 @@ import { GameCamera } from "./GameObjects/GameCamera";
 import { Game, container, EVENT_UPDATE, EVENT_START } from "./Game";
 import { GameObject } from "./GameObject";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
+import { MiniEngineException } from "./Core/Exception/MiniEngineException";
 
 export const GAME_CAMERA_ID = "GameCamera";
 
@@ -21,11 +22,19 @@ export class Scene {
     }
 
     private gameLoopEventHandler = (event: Event): void => {
-        if (this.started === false && event.type === EVENT_START) {
-            this.start();
-            this.started = true;
-        } else if (this.started === true && event.type === EVENT_UPDATE) {
-            this.update();
+        try {
+            if (this.started === false && event.type === EVENT_START) {
+                this.start();
+                this.started = true;
+            } else if (this.started === true && event.type === EVENT_UPDATE) {
+                this.update();
+            }
+        } catch (error) {
+            if (error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+                throw error;
+            } else {
+                throw new MiniEngineException(error.message);
+            }
         }
     };
 

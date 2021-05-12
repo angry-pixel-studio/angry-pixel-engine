@@ -1,5 +1,6 @@
 import { Component, PhysicsComponent } from "../Component";
 import { Collision } from "../Core/Collision/CollisionManager";
+import { MiniEngineException } from "../Core/Exception/MiniEngineException";
 import { PhysicsIterationManager } from "../Core/Physics/PhysicsIterationManager";
 import { container } from "../Game";
 import { Vector2 } from "../Math/Vector2";
@@ -87,7 +88,7 @@ export class RigidBody extends PhysicsComponent {
             );
 
         if (this._colliderComponents.length === 0) {
-            throw new Error("RigidBody needs at least one Collider");
+            throw new MiniEngineException("RigidBody needs at least one Collider");
         }
     }
 
