@@ -35,7 +35,7 @@ export interface GameConfig {
     physicsIterations?: number;
     collisions?: {
         method?: CollisionMethodConfig;
-        quadTreeBounds?: Rectangle; // implement different bounds per scene
+        quadTreeBounds?: Rectangle; // TODO: implement different bounds per scene
         debugQuadTree?: boolean;
         quadMaxLevel?: number;
         collidersPerQuad?: number;
@@ -47,6 +47,7 @@ export enum Context2DConfig {
     Disabled = "disabled",
     Fallback = "fallback",
 }
+
 export enum CollisionMethodConfig {
     AABB = "aabb",
     SAT = "sat",
@@ -93,17 +94,13 @@ export class Game {
             ...config.collisions,
         };
 
-        window.addEventListener("error", this.exceptionEventHandler);
-
-        if (this.config.containerNode === null) {
-            throw new MiniEngineException("Config parameter 'containerNode' cannot be empty.");
-        }
+        window.addEventListener("error", this.errorEventHandler);
 
         this.setupManagers();
         this.initializeFacades();
     }
 
-    private exceptionEventHandler = (event: ErrorEvent): void => {
+    private errorEventHandler = (event: ErrorEvent): void => {
         if (event.error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
             this.stop();
 
@@ -171,30 +168,30 @@ export class Game {
     }
 
     private gameLoop(time: number): void {
-        if (this._stop === true) {
-            this._running = false;
-            return;
-        }
+        if (this._stop === true) return;
+
+        this._running = true;
 
         this.timeManager.update(time);
 
-        // Start all components
+        // Starts all game objects and components
         this.dispatchFrameEvent(EVENT_START);
-        // Update custom components
+        // Updates all game objects and custom components
         this.dispatchFrameEvent(EVENT_UPDATE);
-        // Update engine components
+        // Updates engine components
         this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
 
-        // Update collider components
+        // Updates collider components
         this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
         this.collisionManager.update();
 
-        // Update physics components
+        // Updates physics components
         this.physicsIterationManager.update(() => {
             this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
             this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
         });
-        // Update Rendering componets
+
+        // Updates Rendering componets
         this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
         this.renderManager.clearCanvas(this._config.bgColor);
@@ -208,6 +205,8 @@ export class Game {
      */
     public pauseLoop(): void {
         this._stop = true;
+        this._running = false;
+
         window.cancelAnimationFrame(this.frameRequestId);
         this.frameRequestId = null;
     }

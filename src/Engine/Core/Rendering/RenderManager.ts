@@ -1,7 +1,7 @@
 import { Rectangle } from "../../Math/Rectangle";
 import { IContextRenderer } from "./IContextRenderer";
 import { ImageRenderData } from "./RenderData/ImageRenderData";
-import { RenderData } from "./RenderData/RenderData";
+import { RenderData, RenderDataType } from "./RenderData/RenderData";
 import { CameraData } from "./CameraData";
 
 export class RenderManager {
@@ -53,11 +53,12 @@ export class RenderManager {
 
             this.setPositionInViewport(camera, renderData);
 
-            if (renderData.ui === true) {
-                this.gameRenderer.render(camera, renderData);
-            } else if (this.debug === true && renderData.debug === true) {
-                this.gameRenderer.render(camera, renderData);
-            } else if (this.isInsideViewportRect(camera, renderData as ImageRenderData) !== false) {
+            if (
+                renderData.ui === true ||
+                (this.debug === true && renderData.debug === true) ||
+                (renderData.type === RenderDataType.Image &&
+                    this.isInsideViewportRect(camera, renderData as ImageRenderData))
+            ) {
                 this.gameRenderer.render(camera, renderData);
             }
         });
@@ -72,8 +73,8 @@ export class RenderManager {
     private setPositionInViewport(camera: CameraData, renderData: RenderData): void {
         if (renderData.ui !== true) {
             renderData.positionInViewport.set(
-                Number((renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2).toFixed(0)),
-                Number((renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2).toFixed(0))
+                (renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2) | 0,
+                (renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2) | 0
             );
         } else {
             renderData.positionInViewport = renderData.position;
@@ -81,13 +82,11 @@ export class RenderManager {
     }
 
     private isInsideViewportRect(camera: CameraData, renderData: ImageRenderData): boolean {
-        this.cacheRect.set(
-            renderData.positionInViewport.x - renderData.width / 2,
-            renderData.positionInViewport.y - renderData.height / 2,
-            renderData.width,
-            renderData.height
+        return (
+            camera.viewportRect.x1 >= renderData.positionInViewport.x - renderData.width / 2 &&
+            camera.viewportRect.x <= renderData.positionInViewport.x + renderData.width &&
+            camera.viewportRect.y1 >= renderData.positionInViewport.y - renderData.height / 2 &&
+            camera.viewportRect.y <= renderData.positionInViewport.y + renderData.height
         );
-
-        return camera.viewportRect.overlappingRectangle(this.cacheRect);
     }
 }

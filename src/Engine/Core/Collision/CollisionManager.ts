@@ -7,7 +7,6 @@ import { QuadTree } from "./QuadTree";
 import { CollisionData } from "./CollisionData";
 import { ICollisionResolver } from "./Resolver/ICollisionResolver";
 
-const EXTRA_BOUND: number = 0;
 const DEBUG_RENDER_LAYER = "QuadTree";
 
 export interface Collision {
@@ -121,21 +120,21 @@ export class CollisionManager {
     private updateNewBounds(): void {
         this.colliders.forEach((collider: ICollider) => {
             this.minBounds.set(
-                collider.bottomLeftQuadVertex.x < this.minBounds.x ? collider.bottomLeftQuadVertex.x : this.minBounds.x,
-                collider.bottomLeftQuadVertex.y < this.minBounds.y ? collider.bottomLeftQuadVertex.y : this.minBounds.y
+                Math.min(collider.bottomLeftQuadVertex.x, this.minBounds.x),
+                Math.min(collider.bottomLeftQuadVertex.y, this.minBounds.y)
             );
 
             this.maxBounds.set(
-                collider.topRightQuadVertex.x > this.maxBounds.x ? collider.topRightQuadVertex.x : this.maxBounds.x,
-                collider.topRightQuadVertex.y > this.maxBounds.y ? collider.topRightQuadVertex.y : this.maxBounds.y
+                Math.max(collider.topRightQuadVertex.x, this.maxBounds.x),
+                Math.max(collider.topRightQuadVertex.y, this.maxBounds.y)
             );
         });
 
         this.newBounds.set(
-            this.minBounds.x - EXTRA_BOUND,
-            this.minBounds.y - EXTRA_BOUND,
-            this.maxBounds.x - this.minBounds.x + 2 * EXTRA_BOUND,
-            this.maxBounds.y - this.minBounds.y + 2 * EXTRA_BOUND
+            this.minBounds.x,
+            this.minBounds.y,
+            this.maxBounds.x - this.minBounds.x,
+            this.maxBounds.y - this.minBounds.y
         );
     }
 
