@@ -9,7 +9,7 @@ import { DomManagerFacade } from "./Facades/DomManagerFacade";
 import { InputManagerFacade } from "./Facades/InputManagerFacade";
 import { SceneManagerFacade } from "./Facades/SceneManagerFacade";
 import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
-import { DEFAULT_FRAMERATE, DEFAULT_ITERATIONS, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
+import { DEFAULT_FRAMERATE, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
 import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
 import { Rectangle } from "./Math/Rectangle";
@@ -32,7 +32,6 @@ export interface GameConfig {
     bgColor?: string;
     context2d?: Context2DConfig;
     physicsFramerate?: number;
-    physicsIterations?: number;
     collisions?: {
         method?: CollisionMethodConfig;
         quadTreeBounds?: Rectangle; // TODO: implement different bounds per scene
@@ -61,7 +60,6 @@ const defaultConfig: GameConfig = {
     bgColor: "#000000",
     context2d: Context2DConfig.Fallback,
     physicsFramerate: DEFAULT_FRAMERATE,
-    physicsIterations: DEFAULT_ITERATIONS,
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadTreeBounds: null,

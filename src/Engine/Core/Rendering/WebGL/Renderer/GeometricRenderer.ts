@@ -85,7 +85,7 @@ export class GeometricRenderer {
         if (this.vertices.has(verticesKey) === false) {
             this.vertices.set(
                 verticesKey,
-                new Float32Array(this.generateRectangleVertices(size.width / 2, size.height / 2, LINE_WEIGHT))
+                new Float32Array(this.generateRectangleVertices(size.width, size.height, LINE_WEIGHT))
             );
         }
         const posVertices: Float32Array = this.vertices.get(verticesKey);
@@ -120,36 +120,27 @@ export class GeometricRenderer {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, posVertices.length / 2);
     }
 
-    private generateRectangleVertices(hw: number, hh: number, lw: number): number[] {
+    private generateRectangleVertices(width: number, height: number, lineHeight: number): number[] {
+        const halfHeight = height / 2;
+        const halfWidth = width / 2;
+
+        return [
+            ...this.generateLineVertices(-halfWidth, -halfHeight, halfWidth, -halfHeight + lineHeight),
+            ...this.generateLineVertices(halfWidth - lineHeight, -halfHeight, halfWidth, halfHeight),
+            ...this.generateLineVertices(-halfWidth, halfHeight - lineHeight, halfWidth, halfHeight),
+            ...this.generateLineVertices(-halfWidth, -halfHeight, -halfWidth + lineHeight, halfHeight),
+        ];
+    }
+
+    private generateLineVertices(x1: number, y1: number, x2: number, y2: number): number[] {
         // prettier-ignore
         return [
-            -hw, -hh,
-            hw, -hh,
-            -hw, -hh + lw,
-            -hw, -hh + lw,
-            hw, -hh,
-            hw, -hh + lw,
-            //--//
-            hw - lw, -hh,
-            hw, -hh,
-            hw - lw, hh,
-            hw - lw, hh,
-            hw, -hh,
-            hw, hh,
-            //--//
-            -hw, hh - lw,
-            hw, hh - lw,
-            -hw, hh,
-            -hw, hh,
-            hw, hh - lw,
-            hw, hh,
-            //--//
-            -hw, -hh,
-            -hw + lw, -hh,
-            -hw, hh,
-            -hw, hh,
-            -hw + lw, -hh,
-            -hw + lw, hh,
-        ];
+            x1, y1,
+            x2, y1,
+            x1, y2,
+            x1, y2,
+            x2, y1,
+            x2, y2
+        ]
     }
 }

@@ -53,8 +53,7 @@ export const loadDependencies = (container: Container, game: Game): void => {
         () =>
             new PhysicsIterationManager(
                 container.getSingleton<TimeManager>("TimeManager"),
-                game.config.physicsFramerate,
-                game.config.physicsIterations
+                game.config.physicsFramerate ?? null
             )
     );
 };

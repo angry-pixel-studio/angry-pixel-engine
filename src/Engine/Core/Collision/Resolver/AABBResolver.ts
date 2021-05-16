@@ -17,25 +17,27 @@ export class AABBResolver implements ICollisionResolver {
         this.setShapeRect(shape1, this.shape1Rect);
         this.setShapeRect(shape2, this.shape2Rect);
 
-        if (this.shape1Rect.overlappingRectangle(this.shape2Rect) === false) {
+        this.overlapX =
+            Math.min(this.shape1Rect.x1, this.shape2Rect.x1) - Math.max(this.shape1Rect.x, this.shape2Rect.x);
+        this.overlapY =
+            Math.min(this.shape1Rect.y1, this.shape2Rect.y1) - Math.max(this.shape1Rect.y, this.shape2Rect.y);
+
+        if (this.overlapX < 0 || this.overlapY < 0) {
             return null;
         }
 
-        this.overlapX = Math.min(this.shape1Rect.x1 - this.shape2Rect.x, this.shape2Rect.x1 - this.shape1Rect.x);
-        this.overlapY = Math.min(this.shape1Rect.y1 - this.shape2Rect.y, this.shape2Rect.y1 - this.shape1Rect.y);
+        if (this.overlapY < this.overlapX) {
+            this.minOverlap = this.overlapY;
+            this.displaceDirection.set(0, Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1));
 
-        if (this.overlapX === this.overlapY) {
+            this.preventContainment(this.shape1Rect.y, this.shape2Rect.y, this.shape1Rect.y1, this.shape2Rect.y1);
+        } else {
             this.minOverlap = this.overlapX;
             this.displaceDirection.set(
                 Math.sign(this.shape1Rect.x1 - this.shape2Rect.x1),
-                Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1)
+                this.overlapY === this.overlapX ? Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1) : 0
             );
-        } else if (this.overlapX < this.overlapY) {
-            this.minOverlap = this.overlapX;
-            this.displaceDirection.set(Math.sign(this.shape1Rect.x1 - this.shape2Rect.x1), 0);
-        } else {
-            this.minOverlap = this.overlapY;
-            this.displaceDirection.set(0, Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1));
+            this.preventContainment(this.shape1Rect.x, this.shape2Rect.x, this.shape1Rect.x1, this.shape2Rect.x1);
         }
 
         return new CollisionData(this.minOverlap, this.displaceDirection);
@@ -43,5 +45,19 @@ export class AABBResolver implements ICollisionResolver {
 
     private setShapeRect(shape: Shape, rect: Rectangle): void {
         rect.set(shape.position.x - shape.width / 2, shape.position.y - shape.height / 2, shape.width, shape.height);
+    }
+
+    private preventContainment(min1: number, max1: number, min2: number, max2: number): void {
+        if ((min1 > min2 && max1 < max2) || (min2 > min1 && max2 < max1)) {
+            const minSep = Math.abs(min1 - min2);
+            const maxSep = Math.abs(max1 - max2);
+
+            if (minSep < maxSep) {
+                this.minOverlap += minSep;
+            } else {
+                this.minOverlap += maxSep;
+                Vector2.scale(this.displaceDirection, this.displaceDirection, -1);
+            }
+        }
     }
 }

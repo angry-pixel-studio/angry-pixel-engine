@@ -2,18 +2,18 @@ import { Vector2 } from "../../Math/Vector2";
 
 export class CollisionData {
     private _penetration: number;
-    private _direction: Vector2 = new Vector2();
+    private _displacementDirection: Vector2 = new Vector2();
 
-    constructor(penetration: number, direction: Vector2) {
+    constructor(penetration: number, displacementDirection: Vector2) {
         this._penetration = penetration;
-        this._direction.set(direction.x, direction.y);
+        this._displacementDirection.set(displacementDirection.x, displacementDirection.y);
     }
 
     public get penetration(): number {
         return this._penetration;
     }
 
-    public get direction(): Vector2 {
-        return this._direction;
+    public get displacementDirection(): Vector2 {
+        return this._displacementDirection;
     }
 }

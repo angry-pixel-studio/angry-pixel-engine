@@ -1,5 +1,5 @@
 export class TimeManager {
-    private readonly max: number = 0.1;
+    private readonly max: number = 1 / 15;
     private then: number = 0;
 
     private _deltaTime: number = 0;
