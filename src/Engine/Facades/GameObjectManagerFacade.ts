@@ -15,12 +15,12 @@ export class GameObjectManagerFacade {
      * @param parent (optional) The parent game object
      * @returns the added game object
      */
-    public static addGameObject(
+    public static addGameObject<T extends GameObject>(
         gameObjectFactory: GameObjectFactory,
         name: string,
         parent: GameObject | null = null
-    ): GameObject {
-        return this.manager.addGameObject(gameObjectFactory, name, parent);
+    ): T {
+        return this.manager.addGameObject<T>(gameObjectFactory, name, parent) as T;
     }
 
     /**

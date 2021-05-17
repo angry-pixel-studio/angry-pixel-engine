@@ -41,7 +41,7 @@ export class SpriteRenderer extends RenderComponent {
     private cachePosition: Vector2 = new Vector2();
     private cacheRenderPosition: Vector2 = new Vector2();
 
-    constructor(config: SpriteRendererConfig) {
+    constructor(config: SpriteRendererConfig = { sprite: null }) {
         super();
 
         this.type = TYPE_SPRITE_RENDERER;
@@ -75,7 +75,7 @@ export class SpriteRenderer extends RenderComponent {
     }
 
     protected update(): void {
-        if (this.sprite.loaded === true) {
+        if (this.sprite && this.sprite.loaded === true) {
             this.updateRenderDataArray();
 
             let index = 0;

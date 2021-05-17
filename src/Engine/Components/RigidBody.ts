@@ -13,7 +13,7 @@ export enum RigidBodyType {
 
 export interface RigidBodyConfig {
     rigidBodyType: RigidBodyType;
-    layersToCollide: string[];
+    layersToCollide?: string[];
     gravity?: number;
 }
 
@@ -54,7 +54,7 @@ export class RigidBody extends PhysicsComponent {
         this.allowMultiple = false;
 
         this._rigidBodyType = config.rigidBodyType;
-        this._layersToCollide = config.layersToCollide;
+        this._layersToCollide = config.layersToCollide ?? this._layersToCollide;
         this._gravity.set(0, config.gravity ?? this._gravity.y);
     }
 

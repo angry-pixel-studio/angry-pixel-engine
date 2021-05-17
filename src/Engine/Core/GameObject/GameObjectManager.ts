@@ -6,11 +6,11 @@ export type GameObjectFactory = () => GameObject;
 export class GameObjectManager {
     private gameObjects: GameObject[] = [];
 
-    public addGameObject(
+    public addGameObject<T extends GameObject>(
         gameObjectFactory: GameObjectFactory,
         name: string,
         parent: GameObject | null = null
-    ): GameObject {
+    ): T {
         if (this.findGameObjectByName(name)) {
             throw new MiniEngineException(`There is already a GameObject with the name ${name}`);
         }
@@ -21,7 +21,7 @@ export class GameObjectManager {
 
         this.gameObjects.push(gameObject);
 
-        return gameObject;
+        return gameObject as T;
     }
 
     public getGameObjects(): GameObject[] {
