@@ -65,6 +65,8 @@ export class CollisionManager {
     }
 
     public getCollisionsForCollider(collider: ICollider): Collision[] {
+        if (this.colliders.indexOf(collider) === -1) return [];
+
         return this.narrowPhase(collider, this.broadPhase(collider));
     }
 

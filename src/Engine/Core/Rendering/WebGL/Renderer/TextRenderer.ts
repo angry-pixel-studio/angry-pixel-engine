@@ -57,7 +57,7 @@ export class TextRenderer {
                     : renderData.pivot === "right"
                     ? -this.posVerticesSize.x
                     : 0),
-            renderData.positionInViewport.y - this.posVerticesSize.y / 2,
+            renderData.positionInViewport.y + this.posVerticesSize.y / 2,
             0,
         ]);
 
@@ -91,9 +91,10 @@ export class TextRenderer {
         this.texVertices = [];
 
         const correction: number = 1;
-        const p = { x1: 0, y1: 0, x2: 0, y2: renderData.fontSize };
+        const p = { x1: 0, y1: -renderData.fontSize, x2: 0, y2: 0 };
         const t = { u1: 0, v1: 0, u2: 0, v2: 0 };
         let maxX: number = 0;
+        let lines: number = 1;
 
         for (let i = 0; i < renderData.text.length; i++) {
             const letter = renderData.text[i];
@@ -103,6 +104,8 @@ export class TextRenderer {
                 p.y2 = p.y1 + renderData.fontSize;
                 p.x1 = 0;
 
+                lines++;
+
                 continue;
             }
 
@@ -111,7 +114,7 @@ export class TextRenderer {
             if (glyphInfo) {
                 p.x2 = p.x1 + renderData.fontSize;
 
-                maxX = p.x2 > maxX ? p.x2 : maxX;
+                maxX = Math.max(p.x2, maxX);
 
                 t.u1 = glyphInfo.x / fontAtlas.canvas.width;
                 t.v1 = (glyphInfo.y + glyphInfo.height - correction) / fontAtlas.canvas.height;
@@ -142,6 +145,6 @@ export class TextRenderer {
             p.x1 += renderData.fontSize + renderData.letterSpacing;
         }
 
-        this.posVerticesSize.set(maxX, Math.abs(p.y2));
+        this.posVerticesSize.set(maxX, lines * renderData.fontSize + (lines - 1) * renderData.lineSeparation);
     }
 }

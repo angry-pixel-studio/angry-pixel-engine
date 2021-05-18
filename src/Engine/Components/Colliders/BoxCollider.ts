@@ -64,7 +64,7 @@ export class BoxCollider extends AbstractColliderComponent {
         );
 
         if (this.debug) {
-            this.gameObject.addComponent(() => new BoxColliderRenderer(this.colliders[0]));
+            this.renderer = this.gameObject.addComponent(() => new BoxColliderRenderer(this.colliders[0]));
         }
     }
 

@@ -58,6 +58,7 @@ export class AudioPlayer extends EngineComponent {
         }
 
         if (this._paused) {
+            this._paused = false;
             this.audio.play();
             return;
         }
@@ -96,7 +97,7 @@ export class AudioPlayer extends EngineComponent {
     public pause(): void {
         if (this._playing && this._paused === false) {
             this.audio.pause();
-            this._paused;
+            this._paused = true;
         }
     }
 
@@ -115,4 +116,19 @@ export class AudioPlayer extends EngineComponent {
 
         this.audio.play();
     };
+
+    public setActive(active: boolean): void {
+        if (active === false) {
+            this.stop();
+        }
+        super.setActive(active);
+    }
+
+    /**
+     * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
+     */
+    public destroy(): void {
+        this.stop();
+        super.destroy();
+    }
 }

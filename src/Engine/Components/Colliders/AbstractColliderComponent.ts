@@ -1,4 +1,4 @@
-import { ColliderComponent } from "../../Component";
+import { ColliderComponent, RenderComponent } from "../../Component";
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
 import { Collision, CollisionManager } from "../../Core/Collision/CollisionManager";
 import { container } from "../../Game";
@@ -7,6 +7,7 @@ export abstract class AbstractColliderComponent extends ColliderComponent {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected colliders: ICollider[] = [];
     protected _physics: boolean = true;
+    protected renderer: RenderComponent = null;
 
     private collisionsCache: Collision[] = [];
 
@@ -68,9 +69,14 @@ export abstract class AbstractColliderComponent extends ColliderComponent {
             this.colliders.forEach((collider: ICollider) => this.collisionManager.removeCollider(collider));
         }
 
+        if (this.renderer) this.renderer.setActive(active);
+
         super.setActive(active);
     }
 
+    /**
+     * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
+     */
     public destroy(): void {
         this.colliders.forEach((collider: ICollider) => this.collisionManager.removeCollider(collider));
         super.destroy();

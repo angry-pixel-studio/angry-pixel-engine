@@ -46,7 +46,7 @@ export class TilemapCollider extends AbstractColliderComponent {
         });
 
         if (this.debug) {
-            this.gameObject.addComponent(() => new TilemapColliderRenderer(this.colliders));
+            this.renderer = this.gameObject.addComponent(() => new TilemapColliderRenderer(this.colliders));
         }
     }
 
