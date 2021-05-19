@@ -106,14 +106,7 @@ export class WebGLRenderer implements IContextRenderer {
         const symbol: symbol = Symbol.for(renderData.fontFamily);
         if (this.fontAtlas.has(symbol) === false) {
             this.fontAtlasFactory
-                .create(
-                    [
-                        [32, 126],
-                        [161, 255],
-                    ],
-                    renderData.fontFamily,
-                    renderData.fontUrl
-                )
+                .create(renderData.charRanges, renderData.fontFamily, renderData.fontUrl, renderData.bitmapSize)
                 .then((fontAtlas: FontAtlas) => {
                     this.fontAtlas.set(symbol, fontAtlas);
                     this.fontAtlasLoaded(fontAtlas, camera, renderData);
@@ -126,7 +119,7 @@ export class WebGLRenderer implements IContextRenderer {
     private fontAtlasLoaded(fontAtlas: FontAtlas, camera: CameraData, renderData: TextRenderData): void {
         this.textRenderer.render(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
-            this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, true),
+            this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, false),
             fontAtlas,
             renderData,
             this.lastRender

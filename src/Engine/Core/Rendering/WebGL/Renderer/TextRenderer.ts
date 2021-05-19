@@ -7,6 +7,8 @@ import { hexToRgb, RGB } from "../Utils";
 import { TextRenderData } from "../../RenderData/TextRenderData";
 import { ProgramManager } from "../ProgramManager";
 
+const TEXTURE_CORRECTION = 0.5;
+
 export class TextRenderer {
     private gl: WebGLRenderingContext;
     private programManager: ProgramManager;
@@ -61,6 +63,13 @@ export class TextRenderer {
             0,
         ]);
 
+        this.textureMatrix = mat4.identity(this.textureMatrix);
+        mat4.scale(this.textureMatrix, this.textureMatrix, [
+            1 / fontAtlas.canvas.width,
+            1 / fontAtlas.canvas.height,
+            1,
+        ]);
+
         this.projectionMatrix = mat4.identity(this.projectionMatrix);
         mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
 
@@ -90,9 +99,9 @@ export class TextRenderer {
         this.posVertices = [];
         this.texVertices = [];
 
-        const correction: number = 1;
         const p = { x1: 0, y1: -renderData.fontSize, x2: 0, y2: 0 };
-        const t = { u1: 0, v1: 0, u2: 0, v2: 0 };
+        const t = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
         let maxX: number = 0;
         let lines: number = 1;
 
@@ -109,6 +118,12 @@ export class TextRenderer {
                 continue;
             }
 
+            if (letter === " ") {
+                p.x1 += renderData.fontSize + renderData.letterSpacing;
+
+                continue;
+            }
+
             const glyphInfo = fontAtlas.glyphsData.get(letter);
 
             if (glyphInfo) {
@@ -116,10 +131,10 @@ export class TextRenderer {
 
                 maxX = Math.max(p.x2, maxX);
 
-                t.u1 = glyphInfo.x / fontAtlas.canvas.width;
-                t.v1 = (glyphInfo.y + glyphInfo.height - correction) / fontAtlas.canvas.height;
-                t.u2 = (glyphInfo.x + glyphInfo.width - correction) / fontAtlas.canvas.width;
-                t.v2 = glyphInfo.y / fontAtlas.canvas.height;
+                t.x1 = glyphInfo.x;
+                t.y1 = glyphInfo.y;
+                t.x2 = glyphInfo.x + glyphInfo.width - TEXTURE_CORRECTION;
+                t.y2 = glyphInfo.y + glyphInfo.height - TEXTURE_CORRECTION;
 
                 // prettier-ignore
                 this.posVertices = [...this.posVertices, ...[
@@ -133,12 +148,12 @@ export class TextRenderer {
 
                 // prettier-ignore
                 this.texVertices = [...this.texVertices, ...[
-                    t.u1, t.v1,
-                    t.u2, t.v1,
-                    t.u1, t.v2,
-                    t.u1, t.v2,
-                    t.u2, t.v1,
-                    t.u2, t.v2
+                    t.x1, t.y2,
+                    t.x2, t.y2,
+                    t.x1, t.y1,
+                    t.x1, t.y1,
+                    t.x2, t.y2,
+                    t.x2, t.y1
                 ]];
             }
 

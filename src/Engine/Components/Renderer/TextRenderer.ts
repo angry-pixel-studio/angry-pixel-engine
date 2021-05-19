@@ -3,6 +3,7 @@ import { MiniEngineException } from "../../Core/Exception/MiniEngineException";
 import { Pivot, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
+import { Vector2 } from "../../Math/Vector2";
 
 export interface TextRendererConfig {
     text: string;
@@ -13,6 +14,10 @@ export interface TextRendererConfig {
     lineSeparation?: number;
     letterSpacing?: number;
     pivot?: Pivot;
+    smooth?: boolean; // todo
+    charRanges?: number[];
+    bitmapSize?: number;
+    bitmapOffset?: Vector2; // todo
 }
 
 export const TYPE_TEXT_RENDERER = "TextRenderer";
@@ -26,6 +31,8 @@ export class TextRenderer extends RenderComponent {
     public lineSeparation: number = 0;
     public letterSpacing: number = 0;
     public pivot: Pivot = "left";
+    public bitmapSize: number = 64;
+    public charRanges: number[] = [32, 126, 161, 255];
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
@@ -43,6 +50,12 @@ export class TextRenderer extends RenderComponent {
         this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
         this.letterSpacing = config.letterSpacing ?? this.letterSpacing;
         this.pivot = config.pivot ?? this.pivot;
+        this.bitmapSize = config.bitmapSize ?? this.bitmapSize;
+        this.charRanges = config.charRanges ?? this.charRanges;
+
+        if (this.charRanges.length % 2 !== 0) {
+            throw new MiniEngineException("TextRenderer.charRanges must be a 2 column matrix");
+        }
 
         if (this.lineSeparation % 2 !== 0) {
             throw new MiniEngineException("TextRenderer.lineSeparation must be multiple of 2");
@@ -61,6 +74,8 @@ export class TextRenderer extends RenderComponent {
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.letterSpacing = this.letterSpacing;
         this.renderData.pivot = this.pivot;
+        this.renderData.bitmapSize = this.bitmapSize;
+        this.renderData.charRanges = this.charRanges;
     }
 
     protected update(): void {

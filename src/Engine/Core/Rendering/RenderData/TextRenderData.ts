@@ -12,4 +12,6 @@ export class TextRenderData extends RenderData {
     public lineSeparation: number = null;
     public letterSpacing: number = null;
     public pivot: Pivot = null;
+    public bitmapSize: number = null;
+    public charRanges: number[] = null;
 }

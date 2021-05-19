@@ -105,7 +105,7 @@ export class Game {
             event.stopPropagation();
             event.preventDefault();
 
-            console.error(event.error.message);
+            console.error(`${event.error.message}\n${event.filename}:${event.lineno}`);
         }
     };
 

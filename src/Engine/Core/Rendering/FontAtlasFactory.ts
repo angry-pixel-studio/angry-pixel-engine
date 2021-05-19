@@ -1,23 +1,25 @@
 export class FontAtlasFactory {
-    private readonly fontSize: number = 70;
-    private readonly deltaHeight: number = 1.0;
-    private readonly step: number[] = [this.fontSize, this.fontSize * this.deltaHeight];
-
-    // cache
+    private bitmapSize: number = 64;
     private chars: string[];
 
-    public async create(charRanges: number[][], fontFamily: string, fontUrl: string = null): Promise<FontAtlas> {
+    public async create(
+        charRanges: number[],
+        fontFamily: string,
+        fontUrl: string = null,
+        bitmapSize: number = null
+    ): Promise<FontAtlas> {
+        this.bitmapSize = bitmapSize ?? this.bitmapSize;
         const fontAtlas: FontAtlas = new FontAtlas(fontFamily);
 
         this.chars = [];
-        charRanges.forEach((range: number[]) => {
-            for (let i = range[0]; i <= range[1]; i++) {
-                this.chars.push(String.fromCharCode(i));
+        for (let i = 0; i < charRanges.length; i = i + 2) {
+            for (let j = charRanges[i]; j <= charRanges[i + 1]; j++) {
+                this.chars.push(String.fromCharCode(j));
             }
-        });
+        }
 
-        fontAtlas.canvas.width = Math.round(Math.sqrt(this.chars.length)) * this.fontSize;
-        fontAtlas.canvas.height = fontAtlas.canvas.width * this.deltaHeight;
+        fontAtlas.canvas.width = Math.round(Math.sqrt(this.chars.length)) * this.bitmapSize;
+        fontAtlas.canvas.height = fontAtlas.canvas.width;
 
         fontUrl !== null
             ? await this.loadFont(fontAtlas, fontFamily, fontUrl)
@@ -42,7 +44,7 @@ export class FontAtlasFactory {
         ctx.clearRect(0, 0, fontAtlas.canvas.width, fontAtlas.canvas.height);
         ctx.textBaseline = "top";
         ctx.fillStyle = "#000";
-        ctx.font = `${this.fontSize}px ${fontFamily}`;
+        ctx.font = `${this.bitmapSize}px ${fontFamily}`;
 
         let x: number = 0;
         let y: number = 0;
@@ -53,13 +55,13 @@ export class FontAtlasFactory {
             fontAtlas.glyphsData.set(this.chars[i], {
                 x: x,
                 y: y,
-                width: this.fontSize,
-                height: this.fontSize * this.deltaHeight,
+                width: this.bitmapSize,
+                height: this.bitmapSize,
             });
 
-            if ((x += this.step[0]) > fontAtlas.canvas.width - this.step[0]) {
+            if ((x += this.bitmapSize) > fontAtlas.canvas.width - this.bitmapSize) {
                 x = 0;
-                y += this.step[1];
+                y += this.bitmapSize;
             }
         }
     }

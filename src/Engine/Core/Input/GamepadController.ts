@@ -124,11 +124,11 @@ export class GamepadData {
         return this.buttons.get(7) ?? false;
     }
 
-    public get start(): boolean {
+    public get back(): boolean {
         return this.buttons.get(8) ?? false;
     }
 
-    public get back(): boolean {
+    public get start(): boolean {
         return this.buttons.get(9) ?? false;
     }
 
@@ -145,7 +145,7 @@ export class GamepadData {
     }
 
     public get leftStickVertical(): number {
-        return this.axes.get(1) ?? 0;
+        return -this.axes.get(1) ?? 0;
     }
 
     public get rightStickHorizontal(): number {
@@ -153,6 +153,6 @@ export class GamepadData {
     }
 
     public get rightStickVertical(): number {
-        return this.axes.get(3) ?? 0;
+        return -this.axes.get(3) ?? 0;
     }
 }
