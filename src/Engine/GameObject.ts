@@ -100,6 +100,15 @@ export class GameObject {
     }
 
     /**
+     * @param gameObjectFactory The factory function for the game object
+     * @param name The name of the game object, this must not be used by another game object
+     * @returns The added game object
+     */
+    protected addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
+        return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
+    }
+
+    /**
      * @param name The name of the game object to find
      * @returns The found game object
      */
@@ -308,7 +317,7 @@ export class GameObject {
      * Destroy one game objects by its name
      * @param name The name of the game object
      */
-    protected destroyGameObjectByName(name: string): void {
+    public destroyGameObjectByName(name: string): void {
         this.destroyGameObject(this.findGameObjectByName(name));
     }
 
@@ -316,7 +325,7 @@ export class GameObject {
      * Destroy the game objects
      * @param gameObject The game object to destory
      */
-    protected destroyGameObject(gameObject: GameObject): void {
+    public destroyGameObject(gameObject: GameObject): void {
         this.gameObjectManager.destroyGameObject(gameObject);
     }
 

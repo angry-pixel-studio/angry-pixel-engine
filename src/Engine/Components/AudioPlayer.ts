@@ -26,7 +26,7 @@ export class AudioPlayer extends EngineComponent {
     public loop: boolean = false;
     public audio: HTMLAudioElement = null;
 
-    private audioClone: HTMLAudioElement = null;
+    private clones: Map<symbol, HTMLAudioElement> = new Map<symbol, HTMLAudioElement>();
     private _playing: boolean = false;
     private _paused: boolean = false;
 
@@ -42,10 +42,19 @@ export class AudioPlayer extends EngineComponent {
     }
 
     public playAudio(audio: HTMLAudioElement, volume: number | null = null): void {
-        this.audioClone = audio.cloneNode() as HTMLAudioElement;
+        if (this.clones.has(Symbol.for(audio.src)) === false) this.cloneAudio(audio);
 
-        this.audioClone.volume = volume ?? this.volume;
-        this.audioClone.play();
+        const clone = this.clones.get(Symbol.for(audio.src));
+
+        if (clone.currentTime > 0) clone.currentTime = 0;
+
+        clone.volume = volume ?? this.volume;
+        clone.play();
+    }
+
+    private cloneAudio(audio: HTMLAudioElement): void {
+        const clone = audio.cloneNode() as HTMLAudioElement;
+        this.clones.set(Symbol.for(audio.src), clone);
     }
 
     public play(): void {

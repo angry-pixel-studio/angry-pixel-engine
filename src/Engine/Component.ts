@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { MiniEngineException } from "./Core/Exception/MiniEngineException";
-import { GameObjectManager } from "./Core/GameObject/GameObjectManager";
+import { GameObjectFactory, GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
 import {
     container,
@@ -86,6 +86,15 @@ export abstract class Component {
     }
 
     /**
+     * @param gameObjectFactory The factory function for the game object
+     * @param name The name of the game object, this must not be used by another game object
+     * @returns The added game object
+     */
+    protected addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
+        return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
+    }
+
+    /**
      * @param name The name of the component to find
      * @returns The found component
      */
@@ -147,6 +156,36 @@ export abstract class Component {
      */
     protected destroyGameObject(gameObject: GameObject): void {
         this.gameObjectManager.destroyGameObject(gameObject);
+    }
+
+    /**
+     * @param name The name of the component to find
+     * @returns TRUE or FALSE
+     */
+    public hasComponentOfName(name: string): boolean {
+        return this.getComponentByName(name) !== null;
+    }
+
+    /**
+     * @param type The type of the component to find
+     * @returns TRUE or FALSE
+     */
+    public hasComponentOfType(type: string): boolean {
+        return this.getComponentByType(type) !== null;
+    }
+
+    /**
+     * @param name The name of the component to remove
+     */
+    public removeComponentByName(name: string): void {
+        this.gameObject.removeComponentByName(name);
+    }
+
+    /**
+     * @param type The tyepe of the component to remove
+     */
+    public removeComponentByType(type: string): void {
+        this.gameObject.removeComponentByType(type);
     }
 
     /**

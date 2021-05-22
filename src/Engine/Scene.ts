@@ -66,10 +66,10 @@ export class Scene {
     }
 
     /**
-     * @returns The game objects with no parents
+     * @returns The all the loaded game objects
      */
-    protected getRootGameObjects(): GameObject[] {
-        return this.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.parent === null);
+    protected getGameObjects(): GameObject[] {
+        return this.gameObjectManager.getGameObjects();
     }
 
     /**

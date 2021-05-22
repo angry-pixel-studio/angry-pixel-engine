@@ -7,7 +7,7 @@ import { Vector2 } from "../../Math/Vector2";
 
 export interface TextRendererConfig {
     text: string;
-    fontFamily?: string;
+    fontFamily: string;
     fontUrl?: string;
     size?: number;
     color?: string;
@@ -43,7 +43,7 @@ export class TextRenderer extends RenderComponent {
         this.type = TYPE_TEXT_RENDERER;
 
         this.text = config.text;
-        this.fontFamily = config.fontFamily ?? this.fontFamily;
+        this.fontFamily = config.fontFamily;
         this.fontUrl = config.fontUrl ?? this.fontUrl;
         this.size = config.size ?? this.size;
         this.color = config.color ?? this.color;
