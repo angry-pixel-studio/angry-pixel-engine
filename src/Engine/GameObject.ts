@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { Component } from "./Component";
 import { Transform, TYPE_TRANSFORM } from "./Components/Transform";
 import { MiniEngineException } from "./Core/Exception/MiniEngineException";
@@ -6,14 +5,14 @@ import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObje
 import { SceneManager } from "./Core/Scene/SceneManager";
 import { container, EVENT_START, EVENT_UPDATE } from "./Game";
 import { Scene } from "./Scene";
+import { uuid } from "./Utils/uuid";
 
 export const LAYER_DEFAULT = "Default";
 
 export type ComponentFactory = () => Component;
 
 export class GameObject {
-    private readonly _uuid: string = uuidv4();
-
+    public readonly id: string = uuid();
     public name: string = null;
     public tag: string = null;
     public layer: string = LAYER_DEFAULT;
@@ -34,10 +33,6 @@ export class GameObject {
 
         window.addEventListener(EVENT_START, this.gameLoopEventHandler);
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-    }
-
-    public get uuid(): string {
-        return this._uuid;
     }
 
     public get transform(): Transform {
@@ -289,11 +284,11 @@ export class GameObject {
         }
 
         this.components
-            .filter((component: Component) => this.inactiveComponents.indexOf(component.uuid) === -1)
+            .filter((component: Component) => this.inactiveComponents.indexOf(component.id) === -1)
             .forEach((component: Component) => component.setActive(active));
 
         this.getChildren()
-            .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.uuid) === -1)
+            .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.id) === -1)
             .forEach((gameObject: GameObject) => gameObject.setActive(active));
 
         this.transform.forceUpdate();
@@ -306,11 +301,11 @@ export class GameObject {
 
         this.components
             .filter((component: Component) => component.active === false)
-            .forEach((component: Component) => this.inactiveComponents.push(component.uuid));
+            .forEach((component: Component) => this.inactiveComponents.push(component.id));
 
         this.getChildren()
             .filter((gameObject: GameObject) => gameObject.active === false)
-            .forEach((gameObject: GameObject) => this.inactiveChildren.push(gameObject.uuid));
+            .forEach((gameObject: GameObject) => this.inactiveChildren.push(gameObject.id));
     }
 
     /**

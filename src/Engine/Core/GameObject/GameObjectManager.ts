@@ -28,8 +28,8 @@ export class GameObjectManager {
         return this.gameObjects;
     }
 
-    public findGameObjectByUuid(uuid: string): GameObject | null {
-        return this.gameObjects.reduce((prev, gameObject) => (gameObject.uuid === uuid ? gameObject : prev), null);
+    public findGameObjectById(id: string): GameObject | null {
+        return this.gameObjects.reduce((prev, gameObject) => (gameObject.id === id ? gameObject : prev), null);
     }
 
     public findGameObjectByName(name: string): GameObject | null {

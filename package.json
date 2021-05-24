@@ -4,8 +4,9 @@
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "module": "lib/index.esm.js",
     "scripts": {
-        "build": "tsc --build",
+        "build": "rollup -c",
         "clean": "tsc --build --clean",
         "prepare": "npm run build",
         "lint": "eslint . --ext .ts",
@@ -36,16 +37,20 @@
         "access": "public"
     },
     "devDependencies": {
-        "@types/crypto-js": "^4.0.1",
-        "@types/uuid": "^8.3.0",
         "@typescript-eslint/eslint-plugin": "^4.2.0",
         "@typescript-eslint/parser": "^4.2.0",
         "eslint": "^7.26.0",
         "prettier": "^2.1.2",
+        "rollup": "^2.49.0",
+        "rollup-plugin-auto-named-exports": "^1.0.0-beta.3",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-node-builtins": "^2.1.2",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "rollup-plugin-typescript2": "^0.30.0",
         "typescript": "^4.0.2"
     },
     "dependencies": {
-        "gl-matrix": "^3.3.0",
-        "uuid": "^8.3.2"
+        "gl-matrix": "^3.3.0"
     }
 }
