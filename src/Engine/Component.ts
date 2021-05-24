@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { MiniEngineException } from "./Core/Exception/MiniEngineException";
 import { GameObjectFactory, GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
@@ -13,12 +12,13 @@ import {
 } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
+import { uuid } from "./Utils/uuid";
 
 export abstract class Component {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 
-    public readonly uuid: string = uuidv4();
+    public readonly id: string = uuid();
     public allowMultiple: boolean = true;
     public type: string = null;
     public name: string = null;
