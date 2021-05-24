@@ -17,7 +17,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     protected tilemapData: string;
     protected tiledTilemap: TiledTilemap;
     protected tileScale: number = 1;
-    protected smooth: boolean = true; // set to FALSE to avoid bleeding
+    protected smooth: boolean = false; // set to FALSE to avoid bleeding
     protected renderOrder: RenderOrder = "center";
 
     protected tileWidth: number = 0;

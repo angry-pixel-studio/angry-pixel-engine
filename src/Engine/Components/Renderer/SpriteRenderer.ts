@@ -29,7 +29,7 @@ export class SpriteRenderer extends RenderComponent {
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
     public rotation: number = 0;
-    public smooth: boolean = true;
+    public smooth: boolean = false;
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
     public maskColor: string = "#ffffff";

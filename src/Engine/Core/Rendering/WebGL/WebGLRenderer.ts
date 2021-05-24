@@ -119,7 +119,11 @@ export class WebGLRenderer implements IContextRenderer {
     private fontAtlasLoaded(fontAtlas: FontAtlas, camera: CameraData, renderData: TextRenderData): void {
         this.textRenderer.render(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
-            this.textureManager.getOrCreateTextureFromCanvas(renderData.fontFamily, fontAtlas.canvas, false),
+            this.textureManager.getOrCreateTextureFromCanvas(
+                renderData.fontFamily,
+                fontAtlas.canvas,
+                renderData.smooth
+            ),
             fontAtlas,
             renderData,
             this.lastRender

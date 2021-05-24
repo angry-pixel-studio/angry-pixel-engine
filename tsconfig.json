@@ -9,7 +9,9 @@
     "strict": true,
     "strictNullChecks": false,
     "sourceMap": true,
-    "suppressExcessPropertyErrors": true
+    "suppressExcessPropertyErrors": true,
+    "moduleResolution": "Node",
+    "esModuleInterop": true 
   },
   "include": ["src"],
   "exclude": ["node_modules", "lib"]

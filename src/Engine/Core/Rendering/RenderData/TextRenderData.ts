@@ -1,3 +1,4 @@
+import { Vector2 } from "../../../Math/Vector2";
 import { RenderData, RenderDataType } from "./RenderData";
 
 export type Pivot = "left" | "center" | "right";
@@ -14,4 +15,6 @@ export class TextRenderData extends RenderData {
     public pivot: Pivot = null;
     public bitmapSize: number = null;
     public charRanges: number[] = null;
+    public smooth: boolean = false;
+    public bitmapOffset: Vector2 = null;
 }

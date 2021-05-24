@@ -7,7 +7,7 @@ import { hexToRgb, RGB } from "../Utils";
 import { TextRenderData } from "../../RenderData/TextRenderData";
 import { ProgramManager } from "../ProgramManager";
 
-const TEXTURE_CORRECTION = 0.5;
+const TEXTURE_CORRECTION = 1;
 
 export class TextRenderer {
     private gl: WebGLRenderingContext;
@@ -131,8 +131,8 @@ export class TextRenderer {
 
                 maxX = Math.max(p.x2, maxX);
 
-                t.x1 = glyphInfo.x;
-                t.y1 = glyphInfo.y;
+                t.x1 = glyphInfo.x + renderData.bitmapOffset.x;
+                t.y1 = glyphInfo.y + renderData.bitmapOffset.y;
                 t.x2 = glyphInfo.x + glyphInfo.width - TEXTURE_CORRECTION;
                 t.y2 = glyphInfo.y + glyphInfo.height - TEXTURE_CORRECTION;
 

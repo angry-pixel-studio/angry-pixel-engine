@@ -14,10 +14,10 @@ export interface TextRendererConfig {
     lineSeparation?: number;
     letterSpacing?: number;
     pivot?: Pivot;
-    smooth?: boolean; // todo
+    smooth?: boolean;
     charRanges?: number[];
     bitmapSize?: number;
-    bitmapOffset?: Vector2; // todo
+    bitmapOffset?: Vector2;
 }
 
 export const TYPE_TEXT_RENDERER = "TextRenderer";
@@ -33,6 +33,8 @@ export class TextRenderer extends RenderComponent {
     public pivot: Pivot = "left";
     public bitmapSize: number = 64;
     public charRanges: number[] = [32, 126, 161, 255];
+    public smooth: boolean = false;
+    public bitmapOffset: Vector2 = new Vector2();
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
@@ -52,6 +54,8 @@ export class TextRenderer extends RenderComponent {
         this.pivot = config.pivot ?? this.pivot;
         this.bitmapSize = config.bitmapSize ?? this.bitmapSize;
         this.charRanges = config.charRanges ?? this.charRanges;
+        this.smooth = config.smooth ?? this.smooth;
+        this.bitmapOffset = config.bitmapOffset ?? this.bitmapOffset;
 
         if (this.charRanges.length % 2 !== 0) {
             throw new MiniEngineException("TextRenderer.charRanges must be a 2 column matrix");
@@ -76,6 +80,8 @@ export class TextRenderer extends RenderComponent {
         this.renderData.pivot = this.pivot;
         this.renderData.bitmapSize = this.bitmapSize;
         this.renderData.charRanges = this.charRanges;
+        this.renderData.smooth = this.smooth;
+        this.renderData.bitmapOffset = this.bitmapOffset;
     }
 
     protected update(): void {
