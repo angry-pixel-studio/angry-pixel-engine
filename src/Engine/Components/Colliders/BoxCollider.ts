@@ -46,7 +46,7 @@ export class BoxCollider extends AbstractColliderComponent {
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this._physics = config.physics ?? this._physics;
-        this.debug = config.debug ?? this.debug;
+        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.rotation = config.rotation ?? this.rotation;
     }
 
@@ -145,6 +145,6 @@ class BoxColliderRenderer extends RenderComponent {
         this.renderData.layer = this.gameObject.layer;
         this.renderData.position = this.collider.position;
         this.renderData.shape = this.collider.shape;
-        this.renderManager.addToRenderStack(this.renderData);
+        this.renderManager.addRenderData(this.renderData);
     }
 }

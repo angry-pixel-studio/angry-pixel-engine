@@ -8,7 +8,7 @@ export interface TilesetConfig {
     gridWidth: number;
     gridHeight: number;
     offset?: Vector2;
-    tileOffset?: Vector2;
+    spacing?: Vector2;
 }
 
 export class Tileset {
@@ -18,7 +18,7 @@ export class Tileset {
     public gridWidth: number; // in number of tails
     public gridHeight: number; // in number of tails
     public offset: Vector2 = new Vector2(0, 0);
-    public tileOffset: Vector2 = new Vector2(0, 0);
+    public tileSpacing: Vector2 = new Vector2(0, 0);
 
     private _tiles: Tile[] = [];
 
@@ -29,7 +29,7 @@ export class Tileset {
         this.gridWidth = config.gridWidth;
         this.gridHeight = config.gridHeight;
         this.offset = config.offset ?? this.offset;
-        this.tileOffset = config.tileOffset ?? this.tileOffset;
+        this.tileSpacing = config.spacing ?? this.tileSpacing;
 
         this.generateTiles();
     }
@@ -40,8 +40,8 @@ export class Tileset {
         for (let row: number = 0; row < this.gridHeight; row++) {
             for (let col: number = 0; col < this.gridWidth; col++) {
                 this._tiles[index] = new Tile(
-                    col * this.tileWidth + this.offset.x + this.tileOffset.x,
-                    row * this.tileHeight - this.offset.y - this.tileOffset.y,
+                    col * this.tileWidth + col * this.tileSpacing.x + this.offset.x,
+                    row * this.tileHeight + row * this.tileSpacing.y + this.offset.y,
                     this.tileWidth,
                     this.tileHeight
                 );

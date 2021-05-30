@@ -6,6 +6,7 @@ export enum RenderDataType {
     Text,
     Geometric,
     Collider,
+    Tilemap,
 }
 
 export abstract class RenderData {

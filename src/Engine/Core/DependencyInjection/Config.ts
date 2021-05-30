@@ -29,6 +29,8 @@ import { AABBResolver } from "../Collision/Resolver/AABBResolver";
 import { ICollisionResolver } from "../Collision/Resolver/ICollisionResolver";
 import { IContextRenderer } from "../Rendering/IContextRenderer";
 import { MiniEngineException } from "../Exception/MiniEngineException";
+import { CullingService } from "../Rendering/CullingService";
+import { TilemapRenderer } from "../Rendering/WebGL/Renderer/TilemapRenderer";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.addConstant("GameConfig", game.config);
@@ -97,11 +99,17 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
         throw new MiniEngineException("WebGL is not supported, use context2d instead.");
     }
 
+    container.add("FontAtlasFactory", () => new FontAtlasFactory());
+    container.add("CullingService", () => new CullingService());
     container.add(
         "RenderManager",
-        () => new RenderManager(container.getSingleton<IContextRenderer>("Renderer"), game.config.debugEnabled)
+        () =>
+            new RenderManager(
+                container.getSingleton<IContextRenderer>("Renderer"),
+                container.getSingleton<CullingService>("CullingService"),
+                game.config.debugEnabled
+            )
     );
-    container.add("FontAtlasFactory", () => new FontAtlasFactory());
 };
 
 const webGLDependencies = (
@@ -155,6 +163,16 @@ const webGLDependencies = (
     );
 
     container.add(
+        "WebGLTilemapRenderer",
+        () =>
+            new TilemapRenderer(
+                webglContextVersion,
+                domManager.canvas,
+                container.getSingleton<ProgramManager>("ProgramManager")
+            )
+    );
+
+    container.add(
         "Renderer",
         () =>
             new WebGLRenderer(
@@ -164,6 +182,7 @@ const webGLDependencies = (
                 container.getSingleton<TextureManager>("TextureManager"),
                 container.getSingleton<FontAtlasFactory>("FontAtlasFactory"),
                 container.getSingleton<ImageRenderer>("WebGLImageRenderer"),
+                container.getSingleton<TilemapRenderer>("WebGLTilemapRenderer"),
                 container.getSingleton<TextRenderer>("WebGLTextRenderer"),
                 container.getSingleton<GeometricRenderer>("WebGLGeometricRenderer")
             )

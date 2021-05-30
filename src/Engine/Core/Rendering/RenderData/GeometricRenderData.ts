@@ -8,13 +8,9 @@ export class GeometricRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Geometric;
     public color: string = null;
     public geometricType: GeometricType = null;
-    private _geometric: Geometric = null;
-
-    public set geometric(geometric: Geometric) {
-        this._geometric = geometric;
-    }
+    public geometric: Geometric = null;
 
     public getGeometric<T extends Geometric>(): T {
-        return this._geometric as T;
+        return this.geometric as T;
     }
 }

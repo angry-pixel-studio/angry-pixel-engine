@@ -14,6 +14,7 @@ import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
 import { Rectangle } from "./Math/Rectangle";
 import { MiniEngineException } from "./Core/Exception/MiniEngineException";
+import { Vector2 } from "./Math/Vector2";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -32,6 +33,7 @@ export interface GameConfig {
     bgColor?: string;
     context2d?: Context2DConfig;
     physicsFramerate?: number;
+    spriteDefaultScale?: Vector2;
     collisions?: {
         method?: CollisionMethodConfig;
         quadTreeBounds?: Rectangle; // TODO: implement different bounds per scene
@@ -59,6 +61,7 @@ const defaultConfig: GameConfig = {
     debugEnabled: false,
     bgColor: "#000000",
     context2d: Context2DConfig.Fallback,
+    spriteDefaultScale: null,
     physicsFramerate: DEFAULT_FRAMERATE,
     collisions: {
         method: CollisionMethodConfig.AABB,

@@ -1,7 +1,7 @@
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
 import { RectangleCollider } from "../../Core/Collision/Collider/RectangleCollider";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
-import { container } from "../../Game";
+import { container, GameConfig } from "../../Game";
 import { TilemapRenderer } from "../Renderer/TilemapRenderer";
 import { AbstractColliderComponent } from "./AbstractColliderComponent";
 import { TileData } from "../../Core/Tilemap/TileData";
@@ -26,7 +26,7 @@ export class TilemapCollider extends AbstractColliderComponent {
 
         this.type = TYPE_TILEMAP_COLLIDER;
         this.tilemapRenderer = config.tilemapRenderer;
-        this.debug = config.debug ?? this.debug;
+        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this._physics = true; // todo: fix this shit
 
         this.cacheVertex = [new Vector2(), new Vector2(), new Vector2(), new Vector2()];
@@ -100,7 +100,7 @@ class TilemapColliderRenderer extends RenderComponent {
             this.renderData[index].layer = this.gameObject.layer;
             this.renderData[index].position = collider.position;
             this.renderData[index].shape = collider.shape;
-            this.renderManager.addToRenderStack(this.renderData[index]);
+            this.renderManager.addRenderData(this.renderData[index]);
         });
     }
 }

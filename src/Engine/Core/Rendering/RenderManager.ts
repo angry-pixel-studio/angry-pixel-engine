@@ -1,20 +1,20 @@
-import { Rectangle } from "../../Math/Rectangle";
 import { IContextRenderer } from "./IContextRenderer";
-import { ImageRenderData } from "./RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "./RenderData/RenderData";
 import { CameraData } from "./CameraData";
+import { CullingService } from "./CullingService";
+import { TilemapRenderData, TileRenderData } from "./RenderData/TilemapRenderData";
 
 export class RenderManager {
-    private gameRenderer: IContextRenderer = null;
+    private gameRenderer: IContextRenderer;
+    private cullingService: CullingService;
     private debug: boolean = false;
 
-    private renderStack: RenderData[] = [];
-    private cameras: CameraData[] = [];
+    private renderData: RenderData[] = [];
+    private cameraData: CameraData[] = [];
 
-    private cacheRect: Rectangle = new Rectangle(0, 0, 0, 0);
-
-    constructor(gameRenderer: IContextRenderer, debug: boolean = false) {
+    constructor(gameRenderer: IContextRenderer, cullingService: CullingService, debug: boolean = false) {
         this.gameRenderer = gameRenderer;
+        this.cullingService = cullingService;
         this.debug = debug;
     }
 
@@ -22,71 +22,62 @@ export class RenderManager {
         this.gameRenderer.clearCanvas(color);
     }
 
-    public addToRenderStack(renderData: RenderData): void {
-        this.renderStack.push(renderData);
+    public addRenderData(renderData: RenderData): void {
+        if (this.debug === false && renderData.debug) return;
+
+        this.renderData.push(renderData);
     }
 
     public addCameraData(cameraData: CameraData): void {
-        this.cameras.push(cameraData);
+        this.cameraData.push(cameraData);
     }
 
     public render(): void {
-        this.cameras
+        this.cameraData
             .sort((a: CameraData, b: CameraData) => a.depth - b.depth)
             .forEach((camera: CameraData) => this.renderByCamera(camera));
 
-        this.clear();
+        this.clearData();
     }
 
-    public clear(): void {
-        this.renderStack = [];
-        this.cameras = [];
+    public clearData(): void {
+        this.renderData = [];
+        this.cameraData = [];
     }
 
     private renderByCamera(camera: CameraData): void {
-        this.orderRenderStack(camera);
+        this.orderRendeData(camera);
 
-        this.renderStack.forEach((renderData: RenderData) => {
-            if (camera.layers.includes(renderData.layer) === false) {
-                return;
-            }
-
-            this.setPositionInViewport(camera, renderData);
-
-            if (
-                renderData.ui === true ||
-                (this.debug === true && renderData.debug === true) ||
-                (renderData.type === RenderDataType.Image &&
-                    this.isInsideViewportRect(camera, renderData as ImageRenderData))
-            ) {
-                this.gameRenderer.render(camera, renderData);
-            }
+        this.cullingService.applyCulling(camera, this.renderData).forEach((renderData: RenderData) => {
+            this.updateFromCameraViewport(camera, renderData);
+            this.gameRenderer.render(camera, renderData);
         });
     }
 
-    private orderRenderStack(camera: CameraData): void {
-        this.renderStack.sort(
+    private orderRendeData(camera: CameraData): void {
+        this.renderData.sort(
             (a: RenderData, b: RenderData) => camera.layers.indexOf(a.layer) - camera.layers.indexOf(b.layer)
         );
     }
 
-    private setPositionInViewport(camera: CameraData, renderData: RenderData): void {
+    private updateFromCameraViewport(camera: CameraData, renderData: RenderData): void {
         if (renderData.ui !== true) {
-            renderData.positionInViewport.set(
-                (renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2) | 0,
-                (renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2) | 0
-            );
+            if (renderData.type === RenderDataType.Tilemap) {
+                (renderData as TilemapRenderData).tilesToRender.forEach((tileRenderData) =>
+                    this.setPositionInViewport(camera, tileRenderData)
+                );
+            } else {
+                this.setPositionInViewport(camera, renderData);
+            }
         } else {
             renderData.positionInViewport = renderData.position;
         }
     }
 
-    private isInsideViewportRect(camera: CameraData, renderData: ImageRenderData): boolean {
-        return (
-            camera.viewportRect.x1 >= renderData.positionInViewport.x - renderData.width / 2 &&
-            camera.viewportRect.x <= renderData.positionInViewport.x + renderData.width &&
-            camera.viewportRect.y1 >= renderData.positionInViewport.y - renderData.height / 2 &&
-            camera.viewportRect.y <= renderData.positionInViewport.y + renderData.height
+    private setPositionInViewport(camera: CameraData, renderData: RenderData | TileRenderData): void {
+        renderData.positionInViewport.set(
+            renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2,
+            renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2
         );
     }
 }

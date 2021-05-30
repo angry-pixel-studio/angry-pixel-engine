@@ -162,6 +162,6 @@ export class CollisionManager {
         renderData.geometricType = "Rectangle";
         renderData.color = "#0000FF";
 
-        this.renderManager.addToRenderStack(renderData);
+        this.renderManager.addRenderData(renderData);
     }
 }
