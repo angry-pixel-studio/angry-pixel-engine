@@ -5,7 +5,9 @@ import { hexToRgb, RGB } from "../Utils";
 import { ProgramManager } from "../ProgramManager";
 import { TilemapRenderData, TileRenderData } from "../../RenderData/TilemapRenderData";
 
-const TILE_CORRECTION = 0.5;
+const TEXTURE_CORRECTION = 0;
+
+const roundFixed = (number: number, decimals: number) => Math.round(number * (10 ^ decimals)) / (10 ^ decimals);
 
 export class TilemapRenderer {
     private gl: WebGLRenderingContext;
@@ -111,8 +113,8 @@ export class TilemapRenderer {
 
             this.t.x1 = tileData.tile.x;
             this.t.y1 = tileData.tile.y;
-            this.t.x2 = tileData.tile.x + tileData.tile.width - (renderData.tileCorrection ?? TILE_CORRECTION);
-            this.t.y2 = tileData.tile.y + tileData.tile.height - (renderData.tileCorrection ?? TILE_CORRECTION);
+            this.t.x2 = tileData.tile.x + tileData.tile.width - (renderData.textureCorrection ?? TEXTURE_CORRECTION);
+            this.t.y2 = tileData.tile.y + tileData.tile.height - (renderData.textureCorrection ?? TEXTURE_CORRECTION);
 
             // prettier-ignore
             this.texVertices.push( 

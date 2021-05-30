@@ -19,5 +19,5 @@ export class TilemapRenderData extends RenderData {
     public tilesToRender: TileRenderData[] = [];
     public tileWidth: number;
     public tileHeight: number;
-    public tileCorrection: number;
+    public textureCorrection: number;
 }

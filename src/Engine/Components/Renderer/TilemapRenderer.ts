@@ -15,7 +15,7 @@ export interface TilemapRendererConfig {
     tileset: Tileset;
     renderOrder?: RenderOrder;
     smooth?: boolean;
-    tileCorrection?: number;
+    textureCorrection?: number;
     tileScale?: Vector2;
 }
 
@@ -23,7 +23,7 @@ export abstract class TilemapRenderer extends RenderComponent {
     public readonly tileset: Tileset;
     public readonly renderOrder: RenderOrder = "center";
     public readonly smooth: boolean = false;
-    public readonly tileCorrection: number = null;
+    public readonly textureCorrection: number = null;
     public readonly tileScale: Vector2 =
         container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
 
@@ -33,7 +33,7 @@ export abstract class TilemapRenderer extends RenderComponent {
 
     protected renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     protected tilemapProcessed: boolean = false;
-    protected renderData: TilemapRenderData = new TilemapRenderData();
+    protected renderData: Map<number, TilemapRenderData> = new Map<number, TilemapRenderData>();
 
     private cols: number[] = [];
     private rows: number[] = [];
@@ -56,7 +56,7 @@ export abstract class TilemapRenderer extends RenderComponent {
         this.tileScale = config.tileScale ?? this.tileScale;
         this.smooth = config.smooth ?? this.smooth;
         this.renderOrder = config.renderOrder ?? this.renderOrder;
-        this.tileCorrection = config.tileCorrection ?? this.tileCorrection;
+        this.textureCorrection = config.textureCorrection ?? this.textureCorrection;
     }
 
     protected start(): void {
@@ -67,21 +67,12 @@ export abstract class TilemapRenderer extends RenderComponent {
             Math.sign(this.gameObject.transform.scale.y)
         );
 
-        this.renderData.ui = false;
-        this.renderData.alpha = 1;
-        this.renderData.image = this.tileset.image;
-        this.renderData.layer = this.gameObject.layer;
-        this.renderData.smooth = this.smooth;
-        this.renderData.tileWidth = this.tileWidth;
-        this.renderData.tileHeight = this.tileHeight;
-        this.renderData.tileCorrection = this.tileCorrection;
-
         this.processTilemap();
         this.updatePosition();
     }
 
     protected update(): void {
-        this.renderManager.addRenderData(this.renderData);
+        this.renderData.forEach((renderData) => this.renderManager.addRenderData(renderData));
     }
 
     protected abstract processTilemap(): void;
@@ -95,13 +86,17 @@ export abstract class TilemapRenderer extends RenderComponent {
         offset: Offset = { x: 0, y: 0 }
     ): void {
         if (tile !== null) {
-            this.addTileToRenderData(tile, col, row, flip, offset);
+            this.addTileToRenderData(tile, col, row, alpha, flip, offset);
         }
 
         this.updateSizeInfo(col, row);
     }
 
-    private addTileToRenderData(tile: Tile, col: number, row: number, flip: Flip, offset: Offset): void {
+    private addTileToRenderData(tile: Tile, col: number, row: number, alpha: number, flip: Flip, offset: Offset): void {
+        if (this.renderData.has(alpha) === false) {
+            this.renderData.set(alpha, this.createRenderDataForAlpha(alpha));
+        }
+
         const tileRenderData: TileRenderData = new TileRenderData();
 
         tileRenderData.tile = tile;
@@ -118,7 +113,22 @@ export abstract class TilemapRenderer extends RenderComponent {
         tileRenderData.flipHorizontal = flip.h !== this.orientation.x < 0;
         tileRenderData.flipVertical = flip.v !== this.orientation.y < 0;
 
-        this.renderData.tilesData.push(tileRenderData);
+        this.renderData.get(alpha).tilesData.push(tileRenderData);
+    }
+
+    private createRenderDataForAlpha(alpha: number): TilemapRenderData {
+        const renderData = new TilemapRenderData();
+
+        renderData.ui = false;
+        renderData.alpha = alpha;
+        renderData.image = this.tileset.image;
+        renderData.layer = this.gameObject.layer;
+        renderData.smooth = this.smooth;
+        renderData.tileWidth = this.tileWidth;
+        renderData.tileHeight = this.tileHeight;
+        renderData.textureCorrection = this.textureCorrection;
+
+        return renderData;
     }
 
     private updateSizeInfo(col: number, row: number): void {
@@ -143,10 +153,12 @@ export abstract class TilemapRenderer extends RenderComponent {
                 : 0) * this.orientation.y
         );
 
-        this.renderData.tilesData.forEach((tileRenderData) => {
-            Vector2.add(tileRenderData.position, tileRenderData.position, this.cacheV2);
-            this.addTileData(tileRenderData);
-        });
+        this.renderData.forEach((renderData) =>
+            renderData.tilesData.forEach((tileRenderData) => {
+                Vector2.add(tileRenderData.position, tileRenderData.position, this.cacheV2);
+                this.addTileData(tileRenderData);
+            })
+        );
     }
 
     protected addTileData(tileRenderData: TileRenderData): void {
