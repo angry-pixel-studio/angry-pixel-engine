@@ -1,33 +1,25 @@
-import { Tileset } from "../../Tileset";
-import { TiledChunk, TiledLayer, TiledTilemap } from "../../Core/Tilemap/TiledTilemap";
-import { Offset, RenderOrder, TilemapRenderer } from "./TilemapRenderer";
+import { Offset, RenderOrder, TilemapRenderer, TilemapRendererConfig } from "./TilemapRenderer";
 import { Tile } from "../../Core/Tilemap/Tile";
 
-export interface TiledTilemapConfig {
-    tileset: Tileset;
+export interface TiledTilemapConfig extends TilemapRendererConfig {
     tilemapData: TiledTilemap;
     layerName?: string;
-    tileScale?: number;
-    smooth?: boolean;
-    renderOrder?: RenderOrder;
 }
 
 export const TYPE_TILED_RENDERER: string = "TiledRenderer";
 
 export class TiledTilemapRenderer extends TilemapRenderer {
-    public layerName: string;
+    public readonly tiledTilemap: TiledTilemap;
+    public readonly layerName: string;
 
     constructor(config: TiledTilemapConfig) {
-        super();
+        config.renderOrder = config.tilemapData.renderorder as RenderOrder;
+        super(config);
 
         this.type = TYPE_TILED_RENDERER;
 
-        this.tileset = config.tileset;
         this.tiledTilemap = config.tilemapData;
-        this.tileScale = config.tileScale ?? 1;
-        this.smooth = config.smooth ?? false;
         this.layerName = config.layerName ?? null;
-        this.renderOrder = config.renderOrder ?? (this.tiledTilemap.renderorder as RenderOrder);
     }
 
     protected processTilemap(): void {
@@ -57,4 +49,37 @@ export class TiledTilemapRenderer extends TilemapRenderer {
             }
         }
     }
+}
+
+export interface TiledTilemap {
+    width: number;
+    height: number;
+    infinite: boolean;
+    layers: TiledLayer[];
+    renderorder: string;
+}
+
+export interface TiledChunk {
+    data: number[];
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+export interface TiledLayer {
+    name: string;
+    id: number;
+    chunks?: TiledChunk[];
+    data?: number[];
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    opacity: number;
+    visible: boolean;
+    startx?: number;
+    starty?: number;
+    offsetx?: number;
+    offsety?: number;
 }

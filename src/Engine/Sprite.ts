@@ -1,3 +1,4 @@
+import { container, GameConfig } from "./Game";
 import { Vector2 } from "./Math/Vector2";
 
 export interface SpriteConfig {
@@ -17,7 +18,7 @@ export interface Slice {
 export class Sprite {
     private _image: HTMLImageElement = null;
     private _slice: Slice = null;
-    private _scale: Vector2 = new Vector2(1, 1);
+    private _scale: Vector2 = container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
     private _smooth: boolean = true;
     private _width: number = null;
     private _height: number = null;
@@ -33,6 +34,7 @@ export class Sprite {
         }
 
         this._scale = config.scale ?? this._scale;
+
         this._smooth = config.smooth ?? this._smooth;
 
         if (this._image.naturalWidth) {

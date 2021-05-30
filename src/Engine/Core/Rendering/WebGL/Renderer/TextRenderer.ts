@@ -137,24 +137,24 @@ export class TextRenderer {
                 t.y2 = glyphInfo.y + glyphInfo.height - TEXTURE_CORRECTION;
 
                 // prettier-ignore
-                this.posVertices = [...this.posVertices, ...[
+                this.posVertices.push(
                     p.x1, p.y1,
                     p.x2, p.y1,
                     p.x1, p.y2,
                     p.x1, p.y2,
                     p.x2, p.y1,
                     p.x2, p.y2
-                ]];
+                );
 
                 // prettier-ignore
-                this.texVertices = [...this.texVertices, ...[
+                this.texVertices.push(
                     t.x1, t.y2,
                     t.x2, t.y2,
                     t.x1, t.y1,
                     t.x1, t.y1,
                     t.x2, t.y2,
                     t.x2, t.y1
-                ]];
+                );
             }
 
             p.x1 += renderData.fontSize + renderData.letterSpacing;

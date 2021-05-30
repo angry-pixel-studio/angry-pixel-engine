@@ -20,13 +20,14 @@
     },
     "homepage": "https://mini-engine.co",
     "keywords": [
-        "game-engine",
-        "videogame",
+        "game engine",
+        "video games",
         "engine",
-        "2d-engine",
+        "2d engine",
         "webgl",
         "canvas",
-        "typescript"
+        "typescript",
+        "game development"
     ],
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "contributors": [

@@ -94,6 +94,6 @@ export class TextRenderer extends RenderComponent {
         this.renderData.color = this.color;
         this.renderData.position.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
 
-        this.renderManager.addToRenderStack(this.renderData);
+        this.renderManager.addRenderData(this.renderData);
     }
 }

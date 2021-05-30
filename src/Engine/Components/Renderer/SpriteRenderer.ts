@@ -113,7 +113,7 @@ export class SpriteRenderer extends RenderComponent {
         this.renderData[index].maskColorMix = this.maskColorMix;
 
         this.calculateRenderPosition(index, tileX, tileY);
-        this.renderManager.addToRenderStack(this.renderData[index]);
+        this.renderManager.addRenderData(this.renderData[index]);
     }
 
     private calculateRenderPosition(index: number, tileX: number, tileY: number): void {

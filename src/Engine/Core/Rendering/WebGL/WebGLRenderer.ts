@@ -13,13 +13,15 @@ import { ProgramManager } from "./ProgramManager";
 import { TextRenderer } from "./Renderer/TextRenderer";
 import { GeometricRenderer } from "./Renderer/GeometricRenderer";
 import { GeometricRenderData } from "../RenderData/GeometricRenderData";
+import { TilemapRenderData } from "../RenderData/TilemapRenderData";
+import { TilemapRenderer } from "./Renderer/TilemapRenderer";
 
 export enum WebGLContextVersion {
     LegacyWebGL = "webgl",
     WebGL2 = "webgl2",
 }
 
-export type LastRender = "image" | "text" | "geometric";
+export type LastRender = "image" | "text" | "geometric" | "tilemap";
 
 export class WebGLRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement;
@@ -31,6 +33,7 @@ export class WebGLRenderer implements IContextRenderer {
     private imageRenderer: ImageRenderer;
     private textRenderer: TextRenderer;
     private geometricRenderer: GeometricRenderer;
+    private tilemapRenderer: TilemapRenderer;
 
     // cache
     private lastRender: LastRender;
@@ -43,6 +46,7 @@ export class WebGLRenderer implements IContextRenderer {
         textureManager: TextureManager,
         fontAtlasFactory: FontAtlasFactory,
         imageRenderer: ImageRenderer,
+        tilemapRenderer: TilemapRenderer,
         textRenderer: TextRenderer,
         geometricRenderer: GeometricRenderer
     ) {
@@ -53,6 +57,7 @@ export class WebGLRenderer implements IContextRenderer {
         this.textureManager = textureManager;
 
         this.imageRenderer = imageRenderer;
+        this.tilemapRenderer = tilemapRenderer;
         this.textRenderer = textRenderer;
         this.geometricRenderer = geometricRenderer;
 
@@ -70,6 +75,10 @@ export class WebGLRenderer implements IContextRenderer {
         if (renderData.type === RenderDataType.Image) {
             this.renderImage(camera, renderData as ImageRenderData);
             this.lastRender = "image";
+        }
+        if (renderData.type === RenderDataType.Tilemap) {
+            this.renderTilemap(camera, renderData as TilemapRenderData);
+            this.lastRender = "tilemap";
         }
         if (renderData.type === RenderDataType.Text) {
             this.renderText(camera, renderData as TextRenderData);
@@ -95,6 +104,15 @@ export class WebGLRenderer implements IContextRenderer {
 
     private renderImage(camera: CameraData, renderData: ImageRenderData): void {
         this.imageRenderer.render(
+            renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
+            this.textureManager.getOrCreateTextureFromImage(renderData.image, renderData.smooth),
+            renderData,
+            this.lastRender
+        );
+    }
+
+    private renderTilemap(camera: CameraData, renderData: TilemapRenderData): void {
+        this.tilemapRenderer.render(
             renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
             this.textureManager.getOrCreateTextureFromImage(renderData.image, renderData.smooth),
             renderData,
