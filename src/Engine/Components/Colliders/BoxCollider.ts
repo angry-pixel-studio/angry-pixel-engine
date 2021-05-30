@@ -46,8 +46,7 @@ export class BoxCollider extends AbstractColliderComponent {
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this._physics = config.physics ?? this._physics;
-        this.debug = this.debug =
-            (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.rotation = config.rotation ?? this.rotation;
     }
 
