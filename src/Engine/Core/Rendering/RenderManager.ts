@@ -3,7 +3,6 @@ import { RenderData, RenderDataType } from "./RenderData/RenderData";
 import { CameraData } from "./CameraData";
 import { CullingService } from "./CullingService";
 import { TilemapRenderData, TileRenderData } from "./RenderData/TilemapRenderData";
-import { Vector2 } from "../../Math/Vector2";
 
 export class RenderManager {
     private gameRenderer: IContextRenderer;

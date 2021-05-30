@@ -1,13 +1,11 @@
 import { mat4 } from "gl-matrix";
 import { Rectangle } from "../../../../Math/Rectangle";
 import { LastRender, WebGLContextVersion } from "../WebGLRenderer";
-import { hexToRgb, RGB } from "../Utils";
+import { RGB } from "../Utils";
 import { ProgramManager } from "../ProgramManager";
 import { TilemapRenderData, TileRenderData } from "../../RenderData/TilemapRenderData";
 
 const TEXTURE_CORRECTION = 0;
-
-const roundFixed = (number: number, decimals: number) => Math.round(number * (10 ^ decimals)) / (10 ^ decimals);
 
 export class TilemapRenderer {
     private gl: WebGLRenderingContext;
