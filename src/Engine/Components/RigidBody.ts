@@ -32,7 +32,7 @@ export class RigidBody extends PhysicsComponent {
     private _colliderComponents: AbstractColliderComponent[] = [];
     private _layersToCollide: string[] = [];
     private _velocity: Vector2 = new Vector2();
-    private _gravity: Vector2 = new Vector2();
+    private _gravity: Vector2 = new Vector2(0, 1);
 
     private deltaGravity: Vector2 = new Vector2();
     private deltaVelocity: Vector2 = new Vector2();

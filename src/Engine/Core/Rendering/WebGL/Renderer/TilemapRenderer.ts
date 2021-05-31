@@ -94,10 +94,10 @@ export class TilemapRenderer {
         this.texVertices = [];
 
         renderData.tilesToRender.forEach((tileData: TileRenderData) => {
-            this.p.x1 = Math.round(tileData.positionInViewport.x) - renderData.tileWidth / 2;
-            this.p.x2 = Math.round(tileData.positionInViewport.x) + renderData.tileWidth / 2;
-            this.p.y1 = Math.round(tileData.positionInViewport.y) - renderData.tileHeight / 2;
-            this.p.y2 = Math.round(tileData.positionInViewport.y) + renderData.tileHeight / 2;
+            this.p.x1 = tileData.positionInViewport.x - renderData.tileWidth / 2;
+            this.p.x2 = tileData.positionInViewport.x + renderData.tileWidth / 2;
+            this.p.y1 = tileData.positionInViewport.y - renderData.tileHeight / 2;
+            this.p.y2 = tileData.positionInViewport.y + renderData.tileHeight / 2;
 
             // prettier-ignore
             this.posVertices.push(

@@ -76,8 +76,8 @@ export class RenderManager {
 
     private setPositionInViewport(camera: CameraData, renderData: RenderData | TileRenderData): void {
         renderData.positionInViewport.set(
-            renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2,
-            renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2
+            Math.round(renderData.position.x - camera.worldSpaceRect.x - camera.worldSpaceRect.width / 2),
+            Math.round(renderData.position.y - camera.worldSpaceRect.y - camera.worldSpaceRect.height / 2)
         );
     }
 }
