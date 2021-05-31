@@ -93,7 +93,7 @@ export class Camera extends RenderComponent {
     }
 
     private updateViewportRect(): void {
-        const inverseZoom: number = 1 / this.zoom;
+        const inverseZoom: number = 1 / this._zoom;
 
         this._viewportRect.x = this._originalViewportRect.x * inverseZoom;
         this._viewportRect.y = this._originalViewportRect.y * inverseZoom;

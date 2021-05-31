@@ -7,7 +7,7 @@ import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
 
 export interface SpriteRendererConfig {
-    sprite: Sprite;
+    sprite?: Sprite;
     offset?: Vector2;
     smooth?: boolean;
     rotation?: number;

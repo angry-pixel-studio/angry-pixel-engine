@@ -19,7 +19,7 @@ export class Sprite {
     private _image: HTMLImageElement = null;
     private _slice: Slice = null;
     private _scale: Vector2 = container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
-    private _smooth: boolean = true;
+    private _smooth: boolean = false;
     private _width: number = null;
     private _height: number = null;
     private _loaded: boolean = false;

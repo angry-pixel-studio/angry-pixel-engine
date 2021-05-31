@@ -33,7 +33,7 @@ export class CullingService {
             x: renderData.position.x - renderData.width / 2,
             x1: renderData.position.x + renderData.width / 2,
             y: renderData.position.y - renderData.height / 2,
-            y1: renderData.position.x + renderData.height / 2,
+            y1: renderData.position.y + renderData.height / 2,
         });
     }
 
@@ -55,7 +55,7 @@ export class CullingService {
             x: renderData.position.x - renderData.shape.width / 2,
             x1: renderData.position.x + renderData.shape.width / 2,
             y: renderData.position.y - renderData.shape.height / 2,
-            y1: renderData.position.x + renderData.shape.height / 2,
+            y1: renderData.position.y + renderData.shape.height / 2,
         });
     }
 
@@ -64,7 +64,7 @@ export class CullingService {
             x: renderData.position.x - renderData.geometric.width / 2,
             x1: renderData.position.x + renderData.geometric.width / 2,
             y: renderData.position.y - renderData.geometric.height / 2,
-            y1: renderData.position.x + renderData.geometric.height / 2,
+            y1: renderData.position.y + renderData.geometric.height / 2,
         });
     }
 

@@ -1,6 +1,7 @@
 // math
 export * from "./Engine/Math/Vector2";
 export * from "./Engine/Math/Rectangle";
+export * from "./Engine/Math/Utils";
 
 // main
 export { Game, GameConfig, CollisionMethodConfig, Context2DConfig } from "./Engine/Game";
