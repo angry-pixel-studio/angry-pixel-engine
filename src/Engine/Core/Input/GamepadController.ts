@@ -1,7 +1,7 @@
 import { EVENT_UPDATE } from "../../Game";
 
 export class GamepadController {
-    private readonly gamepads: GamepadData[] = [];
+    private readonly gamepads: Map<number, GamepadData> = new Map<number, GamepadData>();
 
     constructor() {
         // @ts-ignore
@@ -10,14 +10,10 @@ export class GamepadController {
         window.addEventListener("gamepaddisconnected", this.eventHandler);
 
         window.addEventListener(EVENT_UPDATE, () => this.update());
-
-        for (let i: number = 0; i < navigator.getGamepads().length; i++) {
-            this.gamepads[i] = new GamepadData();
-        }
     }
 
     public getGamepad(index: number): GamepadData | null {
-        return this.gamepads[index] ?? null;
+        return this.gamepads.get(index) ?? null;
     }
 
     private eventHandler = (e: GamepadEvent) => {
@@ -29,11 +25,12 @@ export class GamepadController {
     };
 
     private gamepadConnected(gamepad: Gamepad): void {
-        this.gamepads[gamepad.index].updateFromGamepad(gamepad);
+        this.gamepads.set(gamepad.index, new GamepadData());
+        this.gamepads.get(gamepad.index).updateFromGamepad(gamepad);
     }
 
     private gamepadDisconected(gamepad: Gamepad): void {
-        this.gamepads[gamepad.index].updateFromGamepad(gamepad);
+        this.gamepads.delete(gamepad.index);
     }
 
     private update(): void {
@@ -42,7 +39,11 @@ export class GamepadController {
                 continue;
             }
 
-            this.gamepads[gamepad.index].updateFromGamepad(gamepad);
+            if (this.gamepads.has(gamepad.index) === false) {
+                this.gamepadConnected(gamepad);
+            }
+
+            this.gamepads.get(gamepad.index).updateFromGamepad(gamepad);
         }
     }
 }

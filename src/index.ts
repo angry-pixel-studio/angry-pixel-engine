@@ -27,6 +27,7 @@ export * from "./Engine/Components/Transform";
 
 // game objects
 export * from "./Engine/GameObjects/GameCamera";
+export * from "./Engine/GameObjects/SpacePointer";
 
 // facades
 export { SceneManagerFacade as SceneManager } from "./Engine/Facades/SceneManagerFacade";

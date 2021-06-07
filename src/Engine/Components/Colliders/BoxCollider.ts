@@ -59,7 +59,8 @@ export class BoxCollider extends AbstractColliderComponent {
                 this.realWidth,
                 this.realHeight,
                 this._physics,
-                this.gameObject
+                this.gameObject,
+                this.realRotation
             )
         );
 
@@ -84,7 +85,6 @@ export class BoxCollider extends AbstractColliderComponent {
             this.realOffset
         );
 
-        this.realRotation = this.gameObject.transform.rotation + this.rotation;
         if (this.realRotation !== 0 && this.applyRotation) {
             (this.colliders[0] as RectangleCollider).angle = this.realRotation;
         }
@@ -100,6 +100,8 @@ export class BoxCollider extends AbstractColliderComponent {
 
         this.realOffset.x = this.offsetX * this.gameObject.transform.scale.x;
         this.realOffset.y = this.offsetY * this.gameObject.transform.scale.y;
+
+        this.realRotation = this.gameObject.transform.rotation + this.rotation;
     }
 
     private translate(): void {
