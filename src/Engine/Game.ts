@@ -1,20 +1,19 @@
 import { SceneManager, SceneConstructor as SceneFactory } from "./Core/Scene/SceneManager";
 import { RenderManager } from "./Core/Rendering/RenderManager";
-import { CollisionManager } from "./Core/Collision/CollisionManager";
 import { loadDependencies } from "./Core/DependencyInjection/Config";
 import { Container } from "./Core/DependencyInjection/Container";
-import { TimeManager } from "./Core/Time/TimeManager";
+import { DEFAULT_GAME_FRAMERATE, DEFAULT_PHYSICS_FRAMERATE } from "./Core/GameLoop/TimeManager";
 import { AssetManagerFacade } from "./Facades/AssetManagerFacade";
 import { DomManagerFacade } from "./Facades/DomManagerFacade";
 import { InputManagerFacade } from "./Facades/InputManagerFacade";
 import { SceneManagerFacade } from "./Facades/SceneManagerFacade";
 import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
-import { DEFAULT_FRAMERATE, PhysicsIterationManager } from "./Core/Physics/PhysicsIterationManager";
 import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
 import { Rectangle } from "./Math/Rectangle";
 import { MiniEngineException } from "./Core/Exception/MiniEngineException";
 import { Vector2 } from "./Math/Vector2";
+import { IterationManager } from "./Core/GameLoop/IterationManager";
 
 export const EVENT_START: string = "mini-engine-start";
 export const EVENT_UPDATE: string = "mini-engine-update";
@@ -30,8 +29,9 @@ export interface GameConfig {
     gameWidth?: number;
     gameHeight?: number;
     debugEnabled?: boolean;
-    bgColor?: string;
+    canvasColor?: string;
     context2d?: Context2DConfig;
+    gameFrameRate?: number;
     physicsFramerate?: number;
     spriteDefaultScale?: Vector2;
     collisions?: {
@@ -59,10 +59,11 @@ const defaultConfig: GameConfig = {
     gameWidth: 320,
     gameHeight: 180,
     debugEnabled: false,
-    bgColor: "#000000",
+    canvasColor: "#000000",
     context2d: Context2DConfig.Fallback,
     spriteDefaultScale: null,
-    physicsFramerate: DEFAULT_FRAMERATE,
+    gameFrameRate: DEFAULT_GAME_FRAMERATE,
+    physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadTreeBounds: null,
@@ -75,9 +76,7 @@ const defaultConfig: GameConfig = {
 export class Game {
     private sceneManager: SceneManager;
     private renderManager: RenderManager;
-    private collisionManager: CollisionManager;
-    private timeManager: TimeManager;
-    private physicsIterationManager: PhysicsIterationManager;
+    private iterationManager: IterationManager;
 
     private _config: GameConfig;
 
@@ -117,9 +116,7 @@ export class Game {
 
         this.renderManager = container.getSingleton<RenderManager>("RenderManager");
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
-        this.collisionManager = container.getSingleton<CollisionManager>("CollisionManager");
-        this.timeManager = container.getSingleton<TimeManager>("TimeManager");
-        this.physicsIterationManager = container.getSingleton<PhysicsIterationManager>("PhysicsIterationManager");
+        this.iterationManager = container.getSingleton<IterationManager>("IterationManager");
     }
 
     private initializeFacades(): void {
@@ -155,7 +152,6 @@ export class Game {
      */
     public run(): void {
         this.sceneManager.loadOpeningScene();
-
         this.requestAnimationFrame();
     }
 
@@ -165,39 +161,14 @@ export class Game {
     public stop(): void {
         this.pauseLoop();
         this.sceneManager.unloadCurrentScene();
-        this.renderManager.clearCanvas(this._config.bgColor);
+        this.renderManager.clearCanvas(this._config.canvasColor);
     }
 
     private gameLoop(time: number): void {
         if (this._stop === true) return;
 
         this._running = true;
-
-        this.timeManager.update(time);
-
-        // Starts all game objects and components
-        this.dispatchFrameEvent(EVENT_START);
-        // Updates all game objects and custom components
-        this.dispatchFrameEvent(EVENT_UPDATE);
-        // Updates engine components
-        this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
-
-        // Updates collider components
-        this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
-        this.collisionManager.update();
-
-        // Updates physics components
-        this.physicsIterationManager.update(() => {
-            this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
-            this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
-        });
-
-        // Updates Rendering componets
-        this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
-
-        this.renderManager.clearCanvas(this._config.bgColor);
-        this.renderManager.render();
-
+        this.iterationManager.update(time);
         this.requestAnimationFrame();
     }
 
@@ -224,9 +195,5 @@ export class Game {
 
     private requestAnimationFrame(): void {
         this.frameRequestId = window.requestAnimationFrame((time) => this.gameLoop(time));
-    }
-
-    private dispatchFrameEvent(event: string): void {
-        window.dispatchEvent(new CustomEvent(event));
     }
 }

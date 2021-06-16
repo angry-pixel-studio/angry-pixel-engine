@@ -1,7 +1,7 @@
+import { TimeManager } from "../Core/GameLoop/TimeManager";
 import { Component, PhysicsComponent } from "../Component";
 import { Collision } from "../Core/Collision/CollisionManager";
 import { MiniEngineException } from "../Core/Exception/MiniEngineException";
-import { PhysicsIterationManager } from "../Core/Physics/PhysicsIterationManager";
 import { container } from "../Game";
 import { Vector2 } from "../Math/Vector2";
 import { AbstractColliderComponent } from "./Colliders/AbstractColliderComponent";
@@ -22,9 +22,7 @@ type Axis = "x" | "y";
 export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
-    private readonly iterationManager: PhysicsIterationManager = container.getSingleton<PhysicsIterationManager>(
-        "PhysicsIterationManager"
-    );
+    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
     private readonly gravityScale: number = 9.8;
     private readonly velocityScale: number = 60;
 
@@ -112,12 +110,12 @@ export class RigidBody extends PhysicsComponent {
         this._velocity = Vector2.add(
             this._velocity,
             this._velocity,
-            Vector2.scale(this.deltaGravity, this._gravity, -this.gravityScale * this.iterationManager.physicsDeltaTime)
+            Vector2.scale(this.deltaGravity, this._gravity, -this.gravityScale * this.timeManager.physicsDeltaTime)
         );
     }
 
     private applyVelocity(axis: Axis): void {
-        this.deltaVelocity[axis] = this._velocity[axis] * this.velocityScale * this.iterationManager.physicsDeltaTime;
+        this.deltaVelocity[axis] = this._velocity[axis] * this.velocityScale * this.timeManager.physicsDeltaTime;
 
         if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
             this.gameObject.transform.position = Vector2.add(

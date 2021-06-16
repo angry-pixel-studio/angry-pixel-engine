@@ -1,4 +1,4 @@
-import { TimeManager } from "../Core/Time/TimeManager";
+import { TimeManager } from "../Core/GameLoop/TimeManager";
 import { container } from "../Game";
 
 export class TimeManagerFacade {
@@ -21,6 +21,6 @@ export class TimeManagerFacade {
     }
 
     public static get unscaledDeltaTime(): number {
-        return this.timeManager.unscaledDeltaTime;
+        return this.timeManager.unscaledGameDeltaTime;
     }
 }

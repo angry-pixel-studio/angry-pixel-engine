@@ -44,6 +44,15 @@ export class Vector2 {
     }
 
     /**
+     * Copy the target vector properties
+     *
+     * @param vector
+     */
+    public copy(vector: Vector2): void {
+        this.set(vector.x, vector.y);
+    }
+
+    /**
      * Compare if two vector are equals
      *
      * @param vector The vector to compare

@@ -7,19 +7,26 @@ import { TilemapRenderData, TileRenderData } from "./RenderData/TilemapRenderDat
 export class RenderManager {
     private gameRenderer: IContextRenderer;
     private cullingService: CullingService;
+    private canvasColor: string;
     private debug: boolean = false;
 
     private renderData: RenderData[] = [];
     private cameraData: CameraData[] = [];
 
-    constructor(gameRenderer: IContextRenderer, cullingService: CullingService, debug: boolean = false) {
+    constructor(
+        gameRenderer: IContextRenderer,
+        cullingService: CullingService,
+        canvasColor: string,
+        debug: boolean = false
+    ) {
         this.gameRenderer = gameRenderer;
         this.cullingService = cullingService;
+        this.canvasColor = canvasColor;
         this.debug = debug;
     }
 
-    public clearCanvas(color: string | null = null): void {
-        this.gameRenderer.clearCanvas(color);
+    public clearCanvas(): void {
+        this.gameRenderer.clearCanvas(this.canvasColor);
     }
 
     public addRenderData(renderData: RenderData): void {

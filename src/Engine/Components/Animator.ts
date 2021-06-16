@@ -2,7 +2,7 @@ import { EngineComponent } from "../Component";
 import { SpriteRenderer } from "./Renderer/SpriteRenderer";
 import { Sprite } from "../Sprite";
 import { Animation } from "../Animation";
-import { TimeManager } from "../Core/Time/TimeManager";
+import { TimeManager } from "../Core/GameLoop/TimeManager";
 import { container } from "../Game";
 import { MiniEngineException } from "../Core/Exception/MiniEngineException";
 

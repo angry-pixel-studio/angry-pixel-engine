@@ -53,20 +53,10 @@ export class SceneManager {
             throw new MiniEngineException(`Scene with name ${name} does not exists`);
         }
 
-        const resetLoop = this.game.running;
-
-        if (resetLoop) {
-            this.game.pauseLoop();
-        }
-
         this.unloadCurrentScene();
         this.currentScene = this.scenes.get(name)();
         this.currentScene.name = name;
         this.currentScene.game = this.game;
-
-        if (resetLoop) {
-            this.game.resumeLoop();
-        }
     }
 
     public unloadCurrentScene(): void {

@@ -15,14 +15,13 @@ import { ShaderLoader } from "../Rendering/WebGL/ShaderLoader";
 import { TextureFactory } from "../Rendering/WebGL/TextureFactory";
 import { WebGLContextVersion, WebGLRenderer } from "../Rendering/WebGL/WebGLRenderer";
 import { SceneManager } from "../Scene/SceneManager";
-import { TimeManager } from "../Time/TimeManager";
+import { TimeManager } from "../GameLoop/TimeManager";
 import { Container } from "./Container";
 import { TextureManager } from "../Rendering/WebGL/TextureManager";
 import { ProgramManager } from "../Rendering/WebGL/ProgramManager";
 import { FontAtlasFactory } from "../Rendering/FontAtlasFactory";
 import { TextRenderer } from "../Rendering/WebGL/Renderer/TextRenderer";
 import { GeometricRenderer } from "../Rendering/WebGL/Renderer/GeometricRenderer";
-import { PhysicsIterationManager } from "../Physics/PhysicsIterationManager";
 import { SatResolver } from "../Collision/Resolver/SatResolver";
 import { TouchController } from "../Input/TouchController";
 import { AABBResolver } from "../Collision/Resolver/AABBResolver";
@@ -31,6 +30,7 @@ import { IContextRenderer } from "../Rendering/IContextRenderer";
 import { MiniEngineException } from "../Exception/MiniEngineException";
 import { CullingService } from "../Rendering/CullingService";
 import { TilemapRenderer } from "../Rendering/WebGL/Renderer/TilemapRenderer";
+import { IterationManager } from "../GameLoop/IterationManager";
 
 export const loadDependencies = (container: Container, game: Game): void => {
     container.addConstant("GameConfig", game.config);
@@ -49,13 +49,14 @@ export const loadDependencies = (container: Container, game: Game): void => {
     container.add("SceneManager", () => new SceneManager(game, container.getSingleton<RenderManager>("RenderManager")));
     container.add("GameObjectManager", () => new GameObjectManager());
     container.add("AssetManager", () => new AssetManager());
-    container.add("TimeManager", () => new TimeManager());
+    container.add("TimeManager", () => new TimeManager(game.config.gameFrameRate, game.config.physicsFramerate));
     container.add(
-        "PhysicsIterationManager",
+        "IterationManager",
         () =>
-            new PhysicsIterationManager(
+            new IterationManager(
                 container.getSingleton<TimeManager>("TimeManager"),
-                game.config.physicsFramerate ?? null
+                container.getSingleton<CollisionManager>("CollisionManager"),
+                container.getSingleton<RenderManager>("RenderManager")
             )
     );
 };
@@ -107,6 +108,7 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
             new RenderManager(
                 container.getSingleton<IContextRenderer>("Renderer"),
                 container.getSingleton<CullingService>("CullingService"),
+                game.config.canvasColor,
                 game.config.debugEnabled
             )
     );
