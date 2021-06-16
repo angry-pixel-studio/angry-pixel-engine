@@ -161,7 +161,7 @@ export class Game {
     public stop(): void {
         this.pauseLoop();
         this.sceneManager.unloadCurrentScene();
-        this.renderManager.clearCanvas(this._config.canvasColor);
+        this.renderManager.clearCanvas();
     }
 
     private gameLoop(time: number): void {
