@@ -20,12 +20,15 @@ export const EVENT_UPDATE: string = "mini-engine-update";
 export const EVENT_UPDATE_ENGINE: string = "mini-engine-update-engine";
 export const EVENT_UPDATE_COLLIDER: string = "mini-engine-update-collider";
 export const EVENT_UPDATE_PHYSICS: string = "mini-engine-update-physics";
+export const EVENT_UPDATE_TRANSFORM: string = "mini-engine-update-transform";
+export const EVENT_UPDATE_PRERENDER: string = "mini-engine-update-prerender";
+export const EVENT_UPDATE_CAMERA: string = "mini-engine-update-camera";
 export const EVENT_UPDATE_RENDER: string = "mini-engine-update-render";
 
 export const container: Container = new Container();
 
 export interface GameConfig {
-    containerNode: HTMLElement;
+    containerNode: HTMLElement | null;
     gameWidth?: number;
     gameHeight?: number;
     debugEnabled?: boolean;
@@ -33,10 +36,10 @@ export interface GameConfig {
     context2d?: Context2DConfig;
     gameFrameRate?: number;
     physicsFramerate?: number;
-    spriteDefaultScale?: Vector2;
+    spriteDefaultScale?: Vector2 | null;
     collisions?: {
         method?: CollisionMethodConfig;
-        quadTreeBounds?: Rectangle; // TODO: implement different bounds per scene
+        quadTreeBounds?: Rectangle | null; // TODO: implement different bounds per scene
         debugQuadTree?: boolean;
         quadMaxLevel?: number;
         collidersPerQuad?: number;
@@ -74,15 +77,16 @@ const defaultConfig: GameConfig = {
 };
 
 export class Game {
+    // managers
     private sceneManager: SceneManager;
     private renderManager: RenderManager;
     private iterationManager: IterationManager;
 
+    // state
     private _config: GameConfig;
-
     private _running: boolean = false;
     private _stop: boolean = false;
-    private frameRequestId: number = null;
+    private frameRequestId: number | null = null;
 
     constructor(config: GameConfig) {
         this._config = {
@@ -128,10 +132,16 @@ export class Game {
         GameObjectManagerFacade.initialize();
     }
 
+    /**
+     * @returns GameConfig
+     */
     public get config(): GameConfig {
         return this._config;
     }
 
+    /**
+     * @returns running
+     */
     public get running(): boolean {
         return this._running;
     }
@@ -179,8 +189,10 @@ export class Game {
         this._stop = true;
         this._running = false;
 
-        window.cancelAnimationFrame(this.frameRequestId);
-        this.frameRequestId = null;
+        if (this.frameRequestId !== null) {
+            window.cancelAnimationFrame(this.frameRequestId);
+            this.frameRequestId = null;
+        }
     }
 
     /**

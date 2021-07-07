@@ -1,16 +1,21 @@
-import { EngineComponent } from "../Component";
+import { TransformComponent } from "../Component";
+import { Rotation } from "../Math/Rotation";
 import { Vector2 } from "../Math/Vector2";
 
 export const TYPE_TRANSFORM: string = "Transform";
 
-export class Transform extends EngineComponent {
-    private _position: Vector2 = new Vector2(0, 0);
-    private _innerPosition: Vector2 = new Vector2(0, 0);
+export class Transform extends TransformComponent {
+    private _position: Vector2 = new Vector2();
     private _scale: Vector2 = new Vector2(1, 1);
-    private _rotation: number = 0;
+    private _rotation: Rotation = new Rotation();
+    private _innerPosition: Vector2 = new Vector2();
+    private _parent: Transform | null = null;
 
-    private parentTransform: Transform = null;
-    private v2: Vector2 = new Vector2();
+    public parentScale: boolean = true;
+    public parentRotation: boolean = true;
+
+    private cache: Vector2 = new Vector2();
+    private lastParentRadians: number = 0;
 
     constructor() {
         super();
@@ -24,21 +29,9 @@ export class Transform extends EngineComponent {
     }
 
     public set position(position: Vector2) {
-        if (this.parentTransform !== null) {
-            Vector2.add(this._innerPosition, this._innerPosition, Vector2.subtract(this.v2, position, this._position));
-        }
-        this._position.set(position.x, position.y);
-    }
+        if (this._parent) this.updateInnerPosition(this._parent.position);
 
-    public get innerPosition(): Vector2 {
-        return this._innerPosition;
-    }
-
-    public set innerPosition(innerPosition: Vector2) {
-        if (innerPosition.equals(this._innerPosition) === false) {
-            this._innerPosition.set(innerPosition.x, innerPosition.y);
-            this.update();
-        }
+        this._position.copy(position);
     }
 
     public get scale(): Vector2 {
@@ -46,59 +39,67 @@ export class Transform extends EngineComponent {
     }
 
     public set scale(scale: Vector2) {
-        this._scale.set(scale.x, scale.y);
+        this._scale.copy(scale);
     }
 
-    public get rotation(): number {
+    public get rotation(): Rotation {
         return this._rotation;
     }
 
-    public set rotation(rotation: number) {
-        this._rotation = rotation;
+    public get direction(): Vector2 {
+        return this._rotation.direction;
+    }
+
+    public get innerPosition(): Vector2 {
+        return this._innerPosition;
+    }
+
+    public set innerPosition(innerPosition: Vector2) {
+        // if (!innerPosition.equals(this._innerPosition)) this.update();
+        this._innerPosition.copy(innerPosition);
+    }
+
+    public get parent(): Transform | null {
+        return this._parent;
+    }
+
+    public set parent(parent: Transform | null) {
+        if (this._parent === null && parent !== null) {
+            this.updateInnerPosition(parent.position);
+        }
+        this._parent = parent;
+    }
+
+    private updateInnerPosition(parentPosition: Vector2): void {
+        Vector2.subtract(this._innerPosition, this._position, parentPosition);
     }
 
     protected update(): void {
-        if (this.parentTransform === null && this.gameObject.parent !== null) {
-            this.parentTransform = this.gameObject.parent.transform;
-            this.setInnerPositionFromParent();
-        }
-
-        if (this.parentTransform !== null && this.gameObject.parent === null) {
-            this.parentTransform = null;
-        }
-
-        if (this.parentTransform !== null) {
-            this.translateFromParent();
-        } else {
-            this._innerPosition.set(this._position.x, this._position.y);
-        }
+        this._parent !== null ? this.setPositionFromParent() : this._innerPosition.copy(this._position);
     }
 
-    private translateFromParent(): void {
+    private setPositionFromParent(): void {
         if (this._innerPosition.magnitude > 0) {
-            const parentRad: number = (this.parentTransform.rotation * Math.PI) / 180.0;
-            const thisRad: number = Math.atan2(this._innerPosition.x, this._innerPosition.y);
-            const radius: number = Math.hypot(this._innerPosition.x, this._innerPosition.y);
+            if (this._parent.rotation.radians !== 0 && this.lastParentRadians !== this._parent.rotation.radians) {
+                this.translateInnerPosition();
+                this.lastParentRadians = this._parent.rotation.radians;
+            }
 
-            this._position.set(
-                this.parentTransform.position.x + radius * Math.sin(thisRad - parentRad),
-                this.parentTransform.position.y + radius * Math.cos(thisRad - parentRad)
-            );
+            Vector2.add(this._position, this._parent.position, this._innerPosition);
         } else {
-            this._position.set(this.parentTransform.position.x, this.parentTransform.position.y);
+            this._position.copy(this._parent.position);
         }
 
-        this._rotation = this.parentTransform.rotation;
+        this._rotation.radians = this.parentRotation ? this._parent.rotation.radians : this.rotation.radians;
+        this.parentScale ? this._scale.copy(this._parent.scale) : null;
     }
 
-    public forceUpdate(): void {
-        this.update();
-    }
+    private translateInnerPosition(): void {
+        const translatedRadians =
+            Math.atan2(this._innerPosition.y, this._innerPosition.x) +
+            (this._parent.rotation.radians - this.lastParentRadians);
+        this.cache.set(Math.cos(translatedRadians), Math.sin(translatedRadians));
 
-    private setInnerPositionFromParent(): void {
-        this._innerPosition.set(
-            this._position.x - this.parentTransform.position.x,
-            this._position.y - this.parentTransform.position.y
-        );
+        Vector2.scale(this._innerPosition, this.cache, this._innerPosition.magnitude);
     }
 }

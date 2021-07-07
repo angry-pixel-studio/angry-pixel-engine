@@ -64,13 +64,13 @@ export class Context2DRenderer implements IContextRenderer {
             );
         }
 
-        if (renderData.rotation) {
+        if (renderData.rotation !== 0) {
             this.canvasContext.translate(
                 renderData.positionInViewport.x + renderData.width / 2,
                 renderData.positionInViewport.y + renderData.height / 2
             );
             this.imagePosition.set(-renderData.width / 2, -renderData.height / 2);
-            this.canvasContext.rotate(-(renderData.rotation * Math.PI) / 180);
+            this.canvasContext.rotate(-renderData.rotation);
         } else {
             this.canvasContext.translate(renderData.positionInViewport.x, renderData.positionInViewport.y);
             this.imagePosition.set(

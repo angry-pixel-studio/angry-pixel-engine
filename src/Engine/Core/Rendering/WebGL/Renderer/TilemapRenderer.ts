@@ -86,6 +86,7 @@ export class TilemapRenderer {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
     }
 
+    // cache
     private p = { x1: 0, y1: 0, x2: 0, y2: 0 };
     private t = { x1: 0, y1: 0, x2: 0, y2: 0 };
 

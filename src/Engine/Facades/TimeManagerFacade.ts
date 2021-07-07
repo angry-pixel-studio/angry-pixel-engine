@@ -23,4 +23,8 @@ export class TimeManagerFacade {
     public static get unscaledDeltaTime(): number {
         return this.timeManager.unscaledGameDeltaTime;
     }
+
+    public static get physicsDeltaTime(): number {
+        return this.timeManager.physicsDeltaTime;
+    }
 }

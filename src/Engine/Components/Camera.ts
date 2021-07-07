@@ -1,4 +1,4 @@
-import { RenderComponent } from "../Component";
+import { CameraComponent } from "../Component";
 import { DomManager } from "../Core/Dom/DomManager";
 import { MiniEngineException } from "../Core/Exception/MiniEngineException";
 import { CameraData } from "../Core/Rendering/CameraData";
@@ -11,7 +11,7 @@ const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
 export const TYPE_CAMERA: string = "Camera";
 
-export class Camera extends RenderComponent {
+export class Camera extends CameraComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private domManager: DomManager = container.getSingleton<DomManager>("DomManager");
 

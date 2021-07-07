@@ -7,7 +7,7 @@ export * from "./Engine/Math/Utils";
 export { Game, GameConfig, CollisionMethodConfig, Context2DConfig } from "./Engine/Game";
 export * from "./Engine/Scene";
 export * from "./Engine/GameObject";
-export * from "./Engine/Component";
+export { Component, PhysicsComponent, PreRenderComponent } from "./Engine/Component";
 export * from "./Engine/Sprite";
 export * from "./Engine/Animation";
 export * from "./Engine/Tileset";

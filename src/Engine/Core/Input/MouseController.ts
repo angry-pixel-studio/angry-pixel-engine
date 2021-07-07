@@ -76,12 +76,9 @@ export class MouseController {
     }
 
     private update(): void {
-        if (
-            this._positionInViewport.x !== this.lastPositionInViewport.x ||
-            this._positionInViewport.y !== this.lastPositionInViewport.y
-        ) {
+        if (this._positionInViewport.equals(this.lastPositionInViewport) === false) {
             this._hasMoved = true;
-            this.lastPositionInViewport.set(this._positionInViewport.x, this._positionInViewport.y);
+            this.lastPositionInViewport.copy(this._positionInViewport);
         } else {
             this._hasMoved = false;
         }

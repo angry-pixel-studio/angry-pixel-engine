@@ -6,13 +6,14 @@ import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRend
 import { Vector2 } from "../../Math/Vector2";
 import { RenderComponent } from "../../Component";
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
+import { Rotation } from "../../Math/Rotation";
 
 export interface BoxColliderConfig {
     width: number;
     height: number;
     offsetX?: number;
     offsetY?: number;
-    rotation?: number;
+    rotation?: Rotation;
     physics?: boolean;
     debug?: boolean;
 }
@@ -25,7 +26,7 @@ export class BoxCollider extends AbstractColliderComponent {
     public height: number;
     public offsetX: number = 0;
     public offsetY: number = 0;
-    public rotation: number = 0;
+    public rotation: Rotation;
 
     private realWidth: number = 0;
     private realHeight: number = 0;
@@ -35,6 +36,7 @@ export class BoxCollider extends AbstractColliderComponent {
 
     private applyRotation: boolean =
         container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
+    private innerPosition: Vector2 = new Vector2();
 
     constructor(config: BoxColliderConfig) {
         super();
@@ -47,7 +49,7 @@ export class BoxCollider extends AbstractColliderComponent {
         this.offsetY = config.offsetY ?? this.offsetY;
         this._physics = config.physics ?? this._physics;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
-        this.rotation = config.rotation ?? this.rotation;
+        this.rotation = config.rotation ?? new Rotation();
     }
 
     protected start(): void {
@@ -89,7 +91,7 @@ export class BoxCollider extends AbstractColliderComponent {
             (this.colliders[0] as RectangleCollider).angle = this.realRotation;
         }
 
-        if (this.gameObject.transform.rotation !== 0) {
+        if (this.gameObject.transform.rotation.radians !== 0) {
             this.translate();
         }
     }
@@ -101,23 +103,16 @@ export class BoxCollider extends AbstractColliderComponent {
         this.realOffset.x = this.offsetX * this.gameObject.transform.scale.x;
         this.realOffset.y = this.offsetY * this.gameObject.transform.scale.y;
 
-        this.realRotation = this.gameObject.transform.rotation + this.rotation;
+        this.realRotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
     }
 
     private translate(): void {
-        const goRad: number = (this.gameObject.transform.rotation * Math.PI) / 180.0;
-        const thisRad: number = Math.atan2(
-            this.colliders[0].position.x - this.gameObject.transform.position.x,
-            this.colliders[0].position.y - this.gameObject.transform.position.y
-        );
-        const radius: number = Math.hypot(
-            this.colliders[0].position.x - this.gameObject.transform.position.x,
-            this.colliders[0].position.y - this.gameObject.transform.position.y
-        );
-
+        Vector2.subtract(this.innerPosition, this.colliders[0].position, this.gameObject.transform.position);
+        const translatedAngle: number =
+            Math.atan2(this.innerPosition.y, this.innerPosition.x) + this.gameObject.transform.rotation.radians;
         this.realPosition.set(
-            this.gameObject.transform.position.x + radius * Math.sin(thisRad - goRad),
-            this.gameObject.transform.position.y + radius * Math.cos(thisRad - goRad)
+            this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
+            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
         );
         this.colliders[0].position = this.realPosition;
     }

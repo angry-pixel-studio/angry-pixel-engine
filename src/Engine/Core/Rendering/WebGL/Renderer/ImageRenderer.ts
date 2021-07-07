@@ -54,7 +54,7 @@ export class ImageRenderer {
             renderData.positionInViewport.y,
             0,
         ]);
-        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation * (Math.PI / 180));
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation);
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             renderData.width * (renderData.flipHorizontal ? -1 : 1),
             renderData.height * (renderData.flipVertical ? -1 : 1),
@@ -68,10 +68,9 @@ export class ImageRenderer {
                 renderData.slice.y / renderData.image.naturalHeight,
                 0,
             ]);
-            // subtracting 0.5 to avoid bleeding (half-pixel correction)
             mat4.scale(this.textureMatrix, this.textureMatrix, [
-                (renderData.slice.width - 0.5) / renderData.image.naturalWidth,
-                (renderData.slice.height - 0.5) / renderData.image.naturalHeight,
+                renderData.slice.width / renderData.image.naturalWidth,
+                renderData.slice.height / renderData.image.naturalHeight,
                 1,
             ]);
         }

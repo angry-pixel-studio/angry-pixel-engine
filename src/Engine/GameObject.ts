@@ -49,7 +49,7 @@ export class GameObject {
 
     public set parent(parent: GameObject | null) {
         this._parent = parent;
-        this.transform.forceUpdate();
+        this.transform.parent = parent ? parent.transform : null;
     }
 
     private gameLoopEventHandler = (event: Event): void => {
@@ -291,7 +291,7 @@ export class GameObject {
             .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.id) === -1)
             .forEach((gameObject: GameObject) => gameObject.setActive(active));
 
-        this.transform.forceUpdate();
+        // this.transform.forceUpdate();
         this._active = active;
     }
 

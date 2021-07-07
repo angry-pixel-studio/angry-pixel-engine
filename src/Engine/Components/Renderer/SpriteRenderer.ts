@@ -3,6 +3,7 @@ import { MiniEngineException } from "../../Core/Exception/MiniEngineException";
 import { ImageRenderData } from "../../Core/Rendering/RenderData/ImageRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
+import { Rotation } from "../../Math/Rotation";
 import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
 
@@ -10,7 +11,7 @@ export interface SpriteRendererConfig {
     sprite?: Sprite;
     offset?: Vector2;
     smooth?: boolean;
-    rotation?: number;
+    rotation?: Rotation;
     flipHorizontal?: boolean;
     flipVertical?: boolean;
     opacity?: number;
@@ -28,7 +29,7 @@ export class SpriteRenderer extends RenderComponent {
     public offset: Vector2 = new Vector2();
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
-    public rotation: number = 0;
+    public rotation: Rotation = new Rotation();
     public smooth: boolean = false;
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
@@ -37,7 +38,7 @@ export class SpriteRenderer extends RenderComponent {
 
     private renderData: ImageRenderData[] = [];
 
-    private goPosition: Vector2 = null;
+    private innerPosition: Vector2 = new Vector2();
     private cachePosition: Vector2 = new Vector2();
     private cacheRenderPosition: Vector2 = new Vector2();
 
@@ -64,14 +65,10 @@ export class SpriteRenderer extends RenderComponent {
 
     public set tiled(tiled: Vector2) {
         if (tiled.x % 1 !== 0 || tiled.y % 1 !== 0) {
-            throw new MiniEngineException("SpriteRenderer.tiled: Vector2 components must be integer");
+            throw new MiniEngineException("SpriteRenderer.tiled: Vector2 components must be integers");
         }
 
         this._tiled.set(tiled.x, tiled.y);
-    }
-
-    protected start(): void {
-        this.goPosition = this.gameObject.transform.position;
     }
 
     protected update(): void {
@@ -106,7 +103,7 @@ export class SpriteRenderer extends RenderComponent {
         this.renderData[index].slice = this.sprite.slice;
         this.renderData[index].flipHorizontal = this.flipHorizontal !== this.gameObject.transform.scale.x < 0;
         this.renderData[index].flipVertical = this.flipVertical !== this.gameObject.transform.scale.y < 0;
-        this.renderData[index].rotation = this.gameObject.transform.rotation + this.rotation;
+        this.renderData[index].rotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
         this.renderData[index].smooth = this.sprite.smooth;
         this.renderData[index].alpha = this.opacity;
         this.renderData[index].maskColor = this.maskColor;
@@ -130,25 +127,19 @@ export class SpriteRenderer extends RenderComponent {
 
         this.renderData[index].position = this.cachePosition;
 
-        if (this.gameObject.transform.rotation !== 0) {
+        if (this.gameObject.transform.rotation.radians !== 0) {
             this.translateRenderPosition(index);
         }
     }
 
     private translateRenderPosition(index: number): void {
-        const goRad: number = (this.gameObject.transform.rotation * Math.PI) / 180.0;
-        const thisRad: number = Math.atan2(
-            this.renderData[index].position.x - this.goPosition.x,
-            this.renderData[index].position.y - this.goPosition.y
-        );
-        const radius: number = Math.hypot(
-            this.renderData[index].position.x - this.goPosition.x,
-            this.renderData[index].position.y - this.goPosition.y
-        );
+        Vector2.subtract(this.innerPosition, this.renderData[index].position, this.gameObject.transform.position);
+        const translatedAngle: number =
+            Math.atan2(this.innerPosition.y, this.innerPosition.x) + this.gameObject.transform.rotation.radians;
 
         this.renderData[index].position.set(
-            this.goPosition.x + radius * Math.sin(thisRad - goRad),
-            this.goPosition.y + radius * Math.cos(thisRad - goRad)
+            this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
+            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
         );
     }
 }

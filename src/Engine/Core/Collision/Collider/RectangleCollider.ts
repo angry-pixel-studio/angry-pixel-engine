@@ -96,7 +96,7 @@ export class RectangleCollider implements ICollider {
         this.shape.position = this._position;
         this.shape.width = this._width;
         this.shape.height = this.height;
-        this.shape.angle = this._angle * (Math.PI / 180);
+        this.shape.angle = this._angle;
         this.shape.update();
     }
 

@@ -5,10 +5,13 @@ import {
     container,
     EVENT_START,
     EVENT_UPDATE,
+    EVENT_UPDATE_CAMERA,
     EVENT_UPDATE_COLLIDER,
     EVENT_UPDATE_ENGINE,
     EVENT_UPDATE_PHYSICS,
+    EVENT_UPDATE_PRERENDER,
     EVENT_UPDATE_RENDER,
+    EVENT_UPDATE_TRANSFORM,
 } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
@@ -215,6 +218,24 @@ export abstract class ColliderComponent extends Component {
 export abstract class PhysicsComponent extends Component {
     protected get updateEvent(): string {
         return EVENT_UPDATE_PHYSICS;
+    }
+}
+
+export abstract class TransformComponent extends Component {
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_TRANSFORM;
+    }
+}
+
+export abstract class PreRenderComponent extends Component {
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_PRERENDER;
+    }
+}
+
+export abstract class CameraComponent extends Component {
+    protected get updateEvent(): string {
+        return EVENT_UPDATE_CAMERA;
     }
 }
 

@@ -1,10 +1,13 @@
 import {
     EVENT_START,
     EVENT_UPDATE,
+    EVENT_UPDATE_CAMERA,
     EVENT_UPDATE_COLLIDER,
     EVENT_UPDATE_ENGINE,
     EVENT_UPDATE_PHYSICS,
+    EVENT_UPDATE_PRERENDER,
     EVENT_UPDATE_RENDER,
+    EVENT_UPDATE_TRANSFORM,
 } from "../../Game";
 import { CollisionManager } from "../Collision/CollisionManager";
 import { RenderManager } from "../Rendering/RenderManager";
@@ -41,7 +44,7 @@ export class IterationManager {
         this.timeManager.unscaledPhysicsDeltaTime = this.timeManager.maxPhysicsDeltaTime;
 
         if (this.gameLoopAccumulator > this.timeManager.maxGameDeltatime) {
-            this.gameLogicIteration();
+            this.mainIteration();
             this.gameLoopAccumulator -= this.timeManager.maxGameDeltatime;
         }
 
@@ -50,30 +53,36 @@ export class IterationManager {
             this.physicsLoopAccumulator -= this.timeManager.maxPhysicsDeltaTime;
         }
 
+        this.preRenderIteration();
         this.renderIteration();
     }
 
-    private gameLogicIteration(): void {
-        // Starts all game objects and components
+    private mainIteration(): void {
+        // starts all game objects and components
         this.dispatchFrameEvent(EVENT_START);
-        // Updates all game objects and custom components
+        // updates all game objects and custom components
         this.dispatchFrameEvent(EVENT_UPDATE);
-        // Updates engine components
+        // updates engine components
         this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
 
-        // Updates collider components
+        // pre-physics updates
+        this.dispatchFrameEvent(EVENT_UPDATE_TRANSFORM);
         this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
         this.collisionManager.update();
     }
 
     private physicsIteration(): void {
-        // Updates physics components
         this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
         this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
     }
 
+    private preRenderIteration(): void {
+        this.dispatchFrameEvent(EVENT_UPDATE_TRANSFORM);
+        this.dispatchFrameEvent(EVENT_UPDATE_PRERENDER);
+        this.dispatchFrameEvent(EVENT_UPDATE_CAMERA);
+    }
+
     private renderIteration(): void {
-        // Updates Rendering componets
         this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
 
         this.renderManager.clearCanvas();
