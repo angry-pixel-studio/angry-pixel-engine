@@ -11,7 +11,7 @@
         "prepare": "npm run build",
         "lint": "eslint . --ext .ts",
         "lint-and-fix": "eslint . --ext .ts --fix",
-        "prettier": "prettier --write 'src/**/*.{ts,js,css,html}'",
+        "prettier-format": "prettier --write 'src/**/*.{ts,js,css,html}'",
         "prettier-check": "prettier --check 'src/**/*.{ts,js,css,html}'"
     },
     "repository": {
@@ -42,7 +42,7 @@
         "@rollup/plugin-node-resolve": "^13.0.0",
         "@typescript-eslint/eslint-plugin": "^4.2.0",
         "@typescript-eslint/parser": "^4.2.0",
-        "eslint": "^7.26.0",
+        "eslint": "^7.30.0",
         "prettier": "^2.1.2",
         "rollup": "^2.49.0",
         "rollup-plugin-terser": "^7.0.2",
