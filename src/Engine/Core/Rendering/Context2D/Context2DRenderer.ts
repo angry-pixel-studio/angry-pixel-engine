@@ -8,6 +8,7 @@ import { GeometricRenderData } from "../RenderData/GeometricRenderData";
 import { ImageRenderData } from "../RenderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../RenderData/RenderData";
 import { TextRenderData } from "../RenderData/TextRenderData";
+import { TilemapRenderData, TileRenderData } from "../RenderData/TilemapRenderData";
 
 export class Context2DRenderer implements IContextRenderer {
     private canvas: HTMLCanvasElement = null;
@@ -30,20 +31,22 @@ export class Context2DRenderer implements IContextRenderer {
     }
 
     public render(camera: CameraData, renderData: RenderData): void {
-        if (renderData.type === RenderDataType.Image) {
-            this.renderImage(renderData as ImageRenderData, camera.zoom);
-        }
-
-        if (renderData.type === RenderDataType.Text) {
-            this.renderText(renderData as TextRenderData);
-        }
-
-        if (renderData.type === RenderDataType.Geometric) {
-            this.renderGeometric(renderData as GeometricRenderData, camera.zoom);
-        }
-
-        if (renderData.type === RenderDataType.Collider) {
-            this.renderCollider(renderData as ColliderRenderData, camera.zoom);
+        switch (renderData.type) {
+            case RenderDataType.Image:
+                this.renderImage(renderData as ImageRenderData, camera.zoom);
+                break;
+            case RenderDataType.Tilemap:
+                this.renderTilemap(renderData as TilemapRenderData, camera.zoom);
+                break;
+            case RenderDataType.Text:
+                this.renderText(renderData as TextRenderData);
+                break;
+            case RenderDataType.Geometric:
+                this.renderGeometric(renderData as GeometricRenderData, camera.zoom);
+                break;
+            case RenderDataType.Collider:
+                this.renderCollider(renderData as ColliderRenderData, camera.zoom);
+                break;
         }
     }
 
@@ -53,16 +56,7 @@ export class Context2DRenderer implements IContextRenderer {
         this.imagePosition.set(0, 0);
         this.canvasContext.save();
 
-        if (renderData.ui !== true) {
-            this.canvasContext.setTransform(
-                zoom,
-                0,
-                0,
-                zoom,
-                (this.canvas.width * (1 - zoom)) / 2, // todo: use camera viewport
-                (this.canvas.height * (1 - zoom)) / 2
-            );
-        }
+        this.applyZoom(renderData, zoom);
 
         if (renderData.rotation !== 0) {
             this.canvasContext.translate(
@@ -79,6 +73,7 @@ export class Context2DRenderer implements IContextRenderer {
             );
         }
 
+        this.canvasContext.globalAlpha = renderData.alpha;
         this.canvasContext.imageSmoothingEnabled = renderData.smooth;
 
         this.canvasContext.scale(renderData.flipHorizontal ? -1 : 1, renderData.flipVertical ? -1 : 1);
@@ -106,6 +101,41 @@ export class Context2DRenderer implements IContextRenderer {
         }
 
         this.canvasContext.restore();
+    }
+
+    private renderTilemap(renderData: TilemapRenderData, zoom: number): void {
+        renderData.tilesToRender.forEach((data: TileRenderData) => {
+            this.canvasContext.save();
+            this.applyZoom(renderData, zoom);
+
+            this.imagePosition.set(0, 0);
+
+            this.canvasContext.translate(
+                this.canvas.width / 2 + data.positionInViewport.x - renderData.tileWidth / 2,
+                this.canvas.height / 2 - data.positionInViewport.y - renderData.tileHeight / 2
+            );
+            this.imagePosition.set(
+                data.flipHorizontal ? -data.tile.width : this.imagePosition.x,
+                data.flipVertical ? -data.tile.height : this.imagePosition.y
+            );
+
+            this.canvasContext.globalAlpha = renderData.alpha;
+            this.canvasContext.imageSmoothingEnabled = renderData.smooth;
+            this.canvasContext.scale(data.flipHorizontal ? -1 : 1, data.flipVertical ? -1 : 1);
+
+            this.canvasContext.drawImage(
+                renderData.image,
+                data.tile.x,
+                data.tile.y,
+                data.tile.width,
+                data.tile.height,
+                this.imagePosition.x,
+                this.imagePosition.y,
+                renderData.tileWidth,
+                renderData.tileHeight
+            );
+            this.canvasContext.restore();
+        });
     }
 
     private renderText(renderData: TextRenderData): void {
@@ -140,16 +170,7 @@ export class Context2DRenderer implements IContextRenderer {
     private renderGeometric(renderData: GeometricRenderData, zoom: number): void {
         this.canvasContext.save();
 
-        if (renderData.ui !== true) {
-            this.canvasContext.setTransform(
-                zoom,
-                0,
-                0,
-                zoom,
-                (this.canvas.width * (1 - zoom)) / 2, // todo: use camera viewport
-                (this.canvas.height * (1 - zoom)) / 2
-            );
-        }
+        this.applyZoom(renderData, zoom);
 
         this.updateRenderPosition(renderData);
 
@@ -169,7 +190,40 @@ export class Context2DRenderer implements IContextRenderer {
     private renderCollider(renderData: ColliderRenderData, zoom: number): void {
         this.canvasContext.save();
 
-        if (renderData.ui !== true) {
+        this.applyZoom(renderData, zoom);
+
+        this.updateRenderPosition(renderData);
+
+        this.canvasContext.beginPath();
+        this.canvasContext.strokeStyle = renderData.color;
+
+        if (renderData.shape.angle !== 0) {
+            this.canvasContext.translate(renderData.positionInViewport.x, renderData.positionInViewport.y);
+            this.canvasContext.rotate(-renderData.shape.angle);
+            this.imagePosition.set(-renderData.shape.width / 2, -renderData.shape.height / 2);
+        } else {
+            this.canvasContext.translate(
+                renderData.positionInViewport.x - renderData.shape.width / 2,
+                renderData.positionInViewport.y - renderData.shape.height / 2
+            );
+            this.imagePosition.set(0, 0);
+        }
+
+        switch (renderData.shape.type) {
+            case ShapeType.Rectangle:
+                this.canvasContext.strokeRect(
+                    this.imagePosition.x,
+                    this.imagePosition.y,
+                    renderData.shape.width,
+                    renderData.shape.height
+                );
+        }
+
+        this.canvasContext.restore();
+    }
+
+    private applyZoom(renderData: RenderData, zoom: number): void {
+        if (!renderData.ui) {
             this.canvasContext.setTransform(
                 zoom,
                 0,
@@ -179,29 +233,6 @@ export class Context2DRenderer implements IContextRenderer {
                 (this.canvas.height * (1 - zoom)) / 2
             );
         }
-
-        this.updateRenderPosition(renderData);
-
-        this.canvasContext.beginPath();
-        this.canvasContext.strokeStyle = renderData.color;
-
-        const shape = renderData.shape.clone();
-        shape.position = renderData.positionInViewport;
-        shape.update();
-
-        switch (shape.type) {
-            case ShapeType.Rectangle:
-                this.canvasContext.moveTo(shape.vertices[0].x, shape.vertices[0].y);
-                [1, 2, 3, 0].forEach((index: number) => {
-                    this.canvasContext.lineTo(shape.vertices[index].x, shape.vertices[index].y);
-                });
-        }
-
-        this.canvasContext.strokeStyle = renderData.color;
-        this.canvasContext.stroke();
-
-        this.canvasContext.closePath();
-        this.canvasContext.restore();
     }
 
     private updateRenderPosition(renderData: RenderData) {

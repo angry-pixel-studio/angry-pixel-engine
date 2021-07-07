@@ -5,7 +5,7 @@ import { CullingService } from "./CullingService";
 import { TilemapRenderData, TileRenderData } from "./RenderData/TilemapRenderData";
 
 export class RenderManager {
-    private gameRenderer: IContextRenderer;
+    private renderer: IContextRenderer;
     private cullingService: CullingService;
     private canvasColor: string;
     private debug: boolean = false;
@@ -19,14 +19,14 @@ export class RenderManager {
         canvasColor: string,
         debug: boolean = false
     ) {
-        this.gameRenderer = gameRenderer;
+        this.renderer = gameRenderer;
         this.cullingService = cullingService;
         this.canvasColor = canvasColor;
         this.debug = debug;
     }
 
     public clearCanvas(): void {
-        this.gameRenderer.clearCanvas(this.canvasColor);
+        this.renderer.clearCanvas(this.canvasColor);
     }
 
     public addRenderData(renderData: RenderData): void {
@@ -57,7 +57,7 @@ export class RenderManager {
 
         this.cullingService.applyCulling(camera, this.renderData).forEach((renderData: RenderData) => {
             this.updateFromCameraViewport(camera, renderData);
-            this.gameRenderer.render(camera, renderData);
+            this.renderer.render(camera, renderData);
         });
     }
 
