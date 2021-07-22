@@ -1,5 +1,5 @@
 {
-    "name": "mini-engine",
+    "name": "angry-pixel",
     "version": "1.0.0",
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
@@ -16,10 +16,11 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/mini-engine/mini-engine.git"
+        "url": "git+https://github.com/angry-pixel-engine/angry-pixel-engine.git"
     },
-    "homepage": "https://mini-engine.co",
+    "homepage": "https://github.com/angry-pixel-engine/angry-pixel-engine",
     "keywords": [
+        "angry pixel",
         "game engine",
         "video games",
         "engine",
