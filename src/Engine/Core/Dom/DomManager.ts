@@ -1,6 +1,6 @@
 import { GameEngineException } from "../Exception/GameEngineException";
 
-const CANVAS_ID: string = "miniEngineGameCanvas";
+const CANVAS_ID: string = "angryPixelGameCanvas";
 
 export class DomManager {
     private gameWidth: number;

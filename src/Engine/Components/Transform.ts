@@ -16,6 +16,7 @@ export class Transform extends TransformComponent {
 
     private cache: Vector2 = new Vector2();
     private lastParentRadians: number = 0;
+    private lastPosition: Vector2 = new Vector2();
 
     constructor() {
         super();
@@ -29,8 +30,6 @@ export class Transform extends TransformComponent {
     }
 
     public set position(position: Vector2) {
-        if (this._parent) this.updateInnerPosition(this._parent.position);
-
         this._position.copy(position);
     }
 
@@ -55,7 +54,6 @@ export class Transform extends TransformComponent {
     }
 
     public set innerPosition(innerPosition: Vector2) {
-        // if (!innerPosition.equals(this._innerPosition)) this.update();
         this._innerPosition.copy(innerPosition);
     }
 
@@ -64,18 +62,27 @@ export class Transform extends TransformComponent {
     }
 
     public set parent(parent: Transform | null) {
-        if (this._parent === null && parent !== null) {
-            this.updateInnerPosition(parent.position);
-        }
         this._parent = parent;
-    }
-
-    private updateInnerPosition(parentPosition: Vector2): void {
-        Vector2.subtract(this._innerPosition, this._position, parentPosition);
+        if (this._parent !== null) {
+            this.updateInnerPositionFromParent();
+        }
     }
 
     protected update(): void {
-        this._parent !== null ? this.setPositionFromParent() : this._innerPosition.copy(this._position);
+        if (this._parent !== null) {
+            if (this.lastPosition.equals(this._position) === false) {
+                this.updateInnerPositionFromParent();
+            }
+            this.setPositionFromParent();
+        } else {
+            this._innerPosition.copy(this._position);
+        }
+
+        this.lastPosition.copy(this._position);
+    }
+
+    private updateInnerPositionFromParent(): void {
+        Vector2.subtract(this._innerPosition, this._position, this._parent.position);
     }
 
     private setPositionFromParent(): void {
