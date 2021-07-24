@@ -1,7 +1,7 @@
 import { TimeManager } from "../Core/GameLoop/TimeManager";
 import { Component, PhysicsComponent } from "../Component";
 import { Collision } from "../Core/Collision/CollisionManager";
-import { MiniEngineException } from "../Core/Exception/MiniEngineException";
+import { GameEngineException } from "../Core/Exception/GameEngineException";
 import { container } from "../Game";
 import { Vector2 } from "../Math/Vector2";
 import { AbstractColliderComponent } from "./Colliders/AbstractColliderComponent";
@@ -86,7 +86,7 @@ export class RigidBody extends PhysicsComponent {
             );
 
         if (this._colliderComponents.length === 0) {
-            throw new MiniEngineException("RigidBody needs at least one Collider");
+            throw new GameEngineException("RigidBody needs at least one Collider");
         }
     }
 

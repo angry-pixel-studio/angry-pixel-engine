@@ -1,4 +1,4 @@
-import { MiniEngineException } from "../../Exception/MiniEngineException";
+import { GameEngineException } from "../../Exception/GameEngineException";
 
 export class ShaderLoader {
     load(gl: WebGLRenderingContext, type: number, source: string): WebGLShader {
@@ -13,7 +13,7 @@ export class ShaderLoader {
             const error: string = gl.getShaderInfoLog(shader);
             gl.deleteShader(shader);
 
-            throw new MiniEngineException(`Unable to initialize the shader program: ${error}`);
+            throw new GameEngineException(`Unable to initialize the shader program: ${error}`);
         }
 
         return shader;

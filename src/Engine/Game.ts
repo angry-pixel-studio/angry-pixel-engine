@@ -11,19 +11,19 @@ import { TimeManagerFacade } from "./Facades/TimeManagerFacade";
 import { GameObjectManagerFacade } from "./Facades/GameObjectManagerFacade";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "./Core/Collision/QuadTree";
 import { Rectangle } from "./Math/Rectangle";
-import { MiniEngineException } from "./Core/Exception/MiniEngineException";
+import { GameEngineException } from "./Core/Exception/GameEngineException";
 import { Vector2 } from "./Math/Vector2";
 import { IterationManager } from "./Core/GameLoop/IterationManager";
 
-export const EVENT_START: string = "mini-engine-start";
-export const EVENT_UPDATE: string = "mini-engine-update";
-export const EVENT_UPDATE_ENGINE: string = "mini-engine-update-engine";
-export const EVENT_UPDATE_COLLIDER: string = "mini-engine-update-collider";
-export const EVENT_UPDATE_PHYSICS: string = "mini-engine-update-physics";
-export const EVENT_UPDATE_TRANSFORM: string = "mini-engine-update-transform";
-export const EVENT_UPDATE_PRERENDER: string = "mini-engine-update-prerender";
-export const EVENT_UPDATE_CAMERA: string = "mini-engine-update-camera";
-export const EVENT_UPDATE_RENDER: string = "mini-engine-update-render";
+export const EVENT_START: string = "angry-pixel-start";
+export const EVENT_UPDATE: string = "angry-pixel-update";
+export const EVENT_UPDATE_ENGINE: string = "angry-pixel-update-engine";
+export const EVENT_UPDATE_COLLIDER: string = "angry-pixel-update-collider";
+export const EVENT_UPDATE_PHYSICS: string = "angry-pixel-update-physics";
+export const EVENT_UPDATE_TRANSFORM: string = "angry-pixel-update-transform";
+export const EVENT_UPDATE_PRERENDER: string = "angry-pixel-update-prerender";
+export const EVENT_UPDATE_CAMERA: string = "angry-pixel-update-camera";
+export const EVENT_UPDATE_RENDER: string = "angry-pixel-update-render";
 
 export const container: Container = new Container();
 
@@ -105,7 +105,7 @@ export class Game {
     }
 
     private errorEventHandler = (event: ErrorEvent): void => {
-        if (event.error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+        if (event.error.message.indexOf(GameEngineException.messagePrefix) !== -1) {
             this.stop();
 
             event.stopPropagation();

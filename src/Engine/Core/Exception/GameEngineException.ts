@@ -1,8 +1,8 @@
-export class MiniEngineException extends Error {
+export class GameEngineException extends Error {
     public static messagePrefix: string = "MiniEngine Exception";
 
     constructor(message: string) {
-        super(`${MiniEngineException.messagePrefix}: ${message}`);
+        super(`${GameEngineException.messagePrefix}: ${message}`);
 
         this.name = "MiniEngineException";
     }

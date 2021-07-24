@@ -1,4 +1,4 @@
-import { MiniEngineException } from "../../Exception/MiniEngineException";
+import { GameEngineException } from "../../Exception/GameEngineException";
 import { ShaderLoader } from "./ShaderLoader";
 
 export class ProgramFactory {
@@ -34,7 +34,7 @@ export class ProgramFactory {
         if (!gl.getProgramParameter(program, status)) {
             const error: string = gl.getProgramInfoLog(program);
             gl.deleteProgram(program);
-            throw new MiniEngineException(`Unable to initialize the Program: ${error}`);
+            throw new GameEngineException(`Unable to initialize the Program: ${error}`);
         }
     }
 }

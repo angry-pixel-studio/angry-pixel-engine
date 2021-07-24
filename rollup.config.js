@@ -5,7 +5,7 @@ import { terser } from "rollup-plugin-terser";
 
 const builder = (format, filename) => ({
     exports: "named",
-    name: "MiniEngine",
+    name: "AngryPixel",
     file: "lib/" + filename,
     format,
 });

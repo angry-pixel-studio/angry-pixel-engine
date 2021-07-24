@@ -1,4 +1,4 @@
-import { MiniEngineException } from "../Exception/MiniEngineException";
+import { GameEngineException } from "../Exception/GameEngineException";
 
 const CANVAS_ID: string = "miniEngineGameCanvas";
 
@@ -11,7 +11,7 @@ export class DomManager {
 
     constructor(containerNode: HTMLElement, gameWidth: number, gameHeight: number) {
         if (!containerNode) {
-            throw new MiniEngineException("containerNode cannot be empty or null.");
+            throw new GameEngineException("containerNode cannot be empty or null.");
         }
 
         this.containerNode = containerNode;

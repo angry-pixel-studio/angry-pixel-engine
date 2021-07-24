@@ -2,7 +2,7 @@ import { GameCamera } from "./GameObjects/GameCamera";
 import { Game, container, EVENT_UPDATE, EVENT_START } from "./Game";
 import { GameObject } from "./GameObject";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
-import { MiniEngineException } from "./Core/Exception/MiniEngineException";
+import { GameEngineException } from "./Core/Exception/GameEngineException";
 
 export const GAME_CAMERA_ID = "GameCamera";
 
@@ -30,10 +30,10 @@ export class Scene {
                 this.update();
             }
         } catch (error) {
-            if (error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+            if (error.message.indexOf(GameEngineException.messagePrefix) !== -1) {
                 throw error;
             } else {
-                throw new MiniEngineException(error.message);
+                throw new GameEngineException(error.message);
             }
         }
     };

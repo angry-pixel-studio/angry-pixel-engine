@@ -27,7 +27,7 @@ import { TouchController } from "../Input/TouchController";
 import { AABBResolver } from "../Collision/Resolver/AABBResolver";
 import { ICollisionResolver } from "../Collision/Resolver/ICollisionResolver";
 import { IContextRenderer } from "../Rendering/IContextRenderer";
-import { MiniEngineException } from "../Exception/MiniEngineException";
+import { GameEngineException } from "../Exception/GameEngineException";
 import { CullingService } from "../Rendering/CullingService";
 import { TilemapRenderer } from "../Rendering/WebGL/Renderer/TilemapRenderer";
 import { IterationManager } from "../GameLoop/IterationManager";
@@ -67,7 +67,7 @@ const collisionDependencies = (container: Container, game: Game): void => {
     } else if (game.config.collisions.method === CollisionMethodConfig.SAT) {
         container.add("CollisionResolver", () => new SatResolver());
     } else {
-        throw new MiniEngineException("Invalid collision method.");
+        throw new GameEngineException("Invalid collision method.");
     }
 
     container.add(
@@ -97,7 +97,7 @@ const renderingDependencies = (container: Container, game: Game, domManager: Dom
         webGLDependencies(webglContextVersion, container, domManager);
         if (game.config.debugEnabled) console.log(`Using WebGL rendering context (version: ${webglContextVersion})`);
     } else {
-        throw new MiniEngineException("WebGL is not supported, use context2d instead.");
+        throw new GameEngineException("WebGL is not supported, use context2d instead.");
     }
 
     container.add("FontAtlasFactory", () => new FontAtlasFactory());

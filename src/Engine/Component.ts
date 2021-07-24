@@ -1,4 +1,4 @@
-import { MiniEngineException } from "./Core/Exception/MiniEngineException";
+import { GameEngineException } from "./Core/Exception/GameEngineException";
 import { GameObjectFactory, GameObjectManager } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
 import {
@@ -65,10 +65,10 @@ export abstract class Component {
                 this.update();
             }
         } catch (error) {
-            if (error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+            if (error.message.indexOf(GameEngineException.messagePrefix) !== -1) {
                 throw error;
             } else {
-                throw new MiniEngineException(error.message);
+                throw new GameEngineException(error.message);
             }
         }
     };

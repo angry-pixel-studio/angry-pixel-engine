@@ -1,5 +1,5 @@
 import { RenderComponent } from "../../Component";
-import { MiniEngineException } from "../../Core/Exception/MiniEngineException";
+import { GameEngineException } from "../../Core/Exception/GameEngineException";
 import { Pivot, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
@@ -58,17 +58,17 @@ export class TextRenderer extends RenderComponent {
         this.bitmapOffset = config.bitmapOffset ?? this.bitmapOffset;
 
         if (this.charRanges.length % 2 !== 0) {
-            throw new MiniEngineException("TextRenderer.charRanges must be a 2 column matrix");
+            throw new GameEngineException("TextRenderer.charRanges must be a 2 column matrix");
         }
 
         if (this.lineSeparation % 2 !== 0) {
-            throw new MiniEngineException("TextRenderer.lineSeparation must be multiple of 2");
+            throw new GameEngineException("TextRenderer.lineSeparation must be multiple of 2");
         }
     }
 
     protected start(): void {
         if (this.gameObject.ui === false) {
-            throw new MiniEngineException("TextRenderer only can be used on UI GameObjects");
+            throw new GameEngineException("TextRenderer only can be used on UI GameObjects");
         }
 
         this.renderData.layer = this.gameObject.layer;
@@ -86,7 +86,7 @@ export class TextRenderer extends RenderComponent {
 
     protected update(): void {
         if (this.gameObject.ui === false) {
-            throw new MiniEngineException("TextRenderer only can be used on UI GameObjects");
+            throw new GameEngineException("TextRenderer only can be used on UI GameObjects");
         }
 
         this.renderData.text = this.text;

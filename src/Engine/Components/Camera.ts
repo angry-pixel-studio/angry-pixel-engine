@@ -1,6 +1,6 @@
 import { CameraComponent } from "../Component";
 import { DomManager } from "../Core/Dom/DomManager";
-import { MiniEngineException } from "../Core/Exception/MiniEngineException";
+import { GameEngineException } from "../Core/Exception/GameEngineException";
 import { CameraData } from "../Core/Rendering/CameraData";
 import { RenderManager } from "../Core/Rendering/RenderManager";
 import { container } from "../Game";
@@ -52,7 +52,7 @@ export class Camera extends CameraComponent {
 
     public set zoom(zoom: number) {
         if (this.zoom <= 0) {
-            throw new MiniEngineException("zoom must be greather than 0");
+            throw new GameEngineException("zoom must be greather than 0");
         }
 
         this._zoom = zoom;

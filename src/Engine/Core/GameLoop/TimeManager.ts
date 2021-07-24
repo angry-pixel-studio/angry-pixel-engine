@@ -1,4 +1,4 @@
-import { MiniEngineException } from "../Exception/MiniEngineException";
+import { GameEngineException } from "../Exception/GameEngineException";
 
 export const MIN_GAME_FRAMERATE = 15;
 export const DEFAULT_GAME_FRAMERATE = 60;
@@ -19,15 +19,15 @@ export class TimeManager {
 
     constructor(gameFramerate: number, physicsFramerate: number) {
         if (gameFramerate < MIN_GAME_FRAMERATE) {
-            throw new MiniEngineException(`Game framerate cannot be less than ${MIN_GAME_FRAMERATE}`);
+            throw new GameEngineException(`Game framerate cannot be less than ${MIN_GAME_FRAMERATE}`);
         }
 
         if (physicsFramerate < MIN_PHYSICS_FRAMERATE) {
-            throw new MiniEngineException(`Physics framerate cannot be less than ${MIN_PHYSICS_FRAMERATE}`);
+            throw new GameEngineException(`Physics framerate cannot be less than ${MIN_PHYSICS_FRAMERATE}`);
         }
 
         if (physicsFramerate < gameFramerate) {
-            throw new MiniEngineException(`Physics framerate cannot be less than game framerate`);
+            throw new GameEngineException(`Physics framerate cannot be less than game framerate`);
         }
 
         this.maxGameDeltatime = parseFloat((1 / gameFramerate).toFixed(6));

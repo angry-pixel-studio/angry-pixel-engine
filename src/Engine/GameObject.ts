@@ -1,6 +1,6 @@
 import { Component } from "./Component";
 import { Transform, TYPE_TRANSFORM } from "./Components/Transform";
-import { MiniEngineException } from "./Core/Exception/MiniEngineException";
+import { GameEngineException } from "./Core/Exception/GameEngineException";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
 import { container, EVENT_START, EVENT_UPDATE } from "./Game";
@@ -65,10 +65,10 @@ export class GameObject {
                 this.update();
             }
         } catch (error) {
-            if (error.message.indexOf(MiniEngineException.messagePrefix) !== -1) {
+            if (error.message.indexOf(GameEngineException.messagePrefix) !== -1) {
                 throw error;
             } else {
-                throw new MiniEngineException(error.message);
+                throw new GameEngineException(error.message);
             }
         }
     };
@@ -147,7 +147,7 @@ export class GameObject {
 
     private checkMultipleComponent(component: Component): void {
         if (component.allowMultiple === false && this.hasComponentOfType(component.type)) {
-            throw new MiniEngineException(`GameObject only allows one component of type ${component.type}`);
+            throw new GameEngineException(`GameObject only allows one component of type ${component.type}`);
         }
     }
 
