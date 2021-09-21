@@ -11,8 +11,8 @@
         "prepare": "npm run build",
         "lint": "eslint . --ext .ts",
         "lint-and-fix": "eslint . --ext .ts --fix",
-        "prettier-format": "prettier --write 'src/**/*.{ts,js,css,html}'",
-        "prettier-check": "prettier --check 'src/**/*.{ts,js,css,html}'"
+        "prettier-format": "prettier --write \"src/**/*.{ts,js,css,html}\"",
+        "prettier-check": "prettier --check \"src/**/*.{ts,js,css,html}\""
     },
     "repository": {
         "type": "git",

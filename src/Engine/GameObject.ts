@@ -64,11 +64,11 @@ export class GameObject {
             } else if (this.started === true && event.type === EVENT_UPDATE) {
                 this.update();
             }
-        } catch (error) {
-            if (error.message.indexOf(GameEngineException.messagePrefix) !== -1) {
+        } catch (error: unknown) {
+            if ((error as Error).message.indexOf(GameEngineException.messagePrefix) !== -1) {
                 throw error;
             } else {
-                throw new GameEngineException(error.message);
+                throw new GameEngineException((error as Error).message);
             }
         }
     };
