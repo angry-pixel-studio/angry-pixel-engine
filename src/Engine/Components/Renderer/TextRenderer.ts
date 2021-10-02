@@ -1,6 +1,6 @@
 import { RenderComponent } from "../../Component";
 import { GameEngineException } from "../../Core/Exception/GameEngineException";
-import { Pivot, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
+import { Pivot, TextBoxSize, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { Vector2 } from "../../Math/Vector2";
@@ -9,7 +9,8 @@ export interface TextRendererConfig {
     text: string;
     fontFamily: string;
     fontUrl?: string;
-    size?: number;
+    boxSize?: TextBoxSize;
+    fontSize?: number;
     color?: string;
     lineSeparation?: number;
     letterSpacing?: number;
@@ -23,10 +24,11 @@ export interface TextRendererConfig {
 export const TYPE_TEXT_RENDERER = "TextRenderer";
 
 export class TextRenderer extends RenderComponent {
-    public text: string = null;
+    public text: string;
     public fontFamily: string = "Sans";
     public fontUrl: string = null;
-    public size: number = 12;
+    public fontSize: number = 12;
+    public boxSize: TextBoxSize = { width: 100, height: 100 };
     public color: string = "#000000";
     public lineSeparation: number = 0;
     public letterSpacing: number = 0;
@@ -38,6 +40,7 @@ export class TextRenderer extends RenderComponent {
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
+    private lastFrameText: string = "";
 
     constructor(config: TextRendererConfig) {
         super();
@@ -47,7 +50,8 @@ export class TextRenderer extends RenderComponent {
         this.text = config.text;
         this.fontFamily = config.fontFamily;
         this.fontUrl = config.fontUrl ?? this.fontUrl;
-        this.size = config.size ?? this.size;
+        this.fontSize = config.fontSize ?? this.fontSize;
+        this.boxSize = config.boxSize ?? this.boxSize;
         this.color = config.color ?? this.color;
         this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
         this.letterSpacing = config.letterSpacing ?? this.letterSpacing;
@@ -89,11 +93,47 @@ export class TextRenderer extends RenderComponent {
             throw new GameEngineException("TextRenderer only can be used on UI GameObjects");
         }
 
-        this.renderData.text = this.text;
-        this.renderData.fontSize = this.size;
+        this.renderData.boxSize = this.boxSize;
+        this.renderData.text = this.text !== this.lastFrameText ? this.crop() : this.renderData.text;
+        this.renderData.fontSize = this.fontSize;
         this.renderData.color = this.color;
         this.renderData.position.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
 
         this.renderManager.addRenderData(this.renderData);
+
+        this.lastFrameText = this.text;
+    }
+
+    private crop(): string {
+        if (this.fontSize > this.boxSize.height) return "";
+
+        let width = 0;
+        let height = this.fontSize;
+        let line = [];
+
+        const text = [];
+        const words = this.text.replace(/\n/, " \n ").split(" ");
+
+        for (let word of words) {
+            const wordWidth = word !== "\n" ? word.length * (this.fontSize + this.letterSpacing) : 0;
+
+            if (word === "\n" || (width > 0 && width + wordWidth > this.boxSize.width)) {
+                text.push(line.join(" "));
+                height += this.fontSize + this.lineSeparation;
+
+                if (height > this.boxSize.height) return text.join("\n");
+
+                line = [];
+                width = 0;
+            }
+
+            if (wordWidth > 0) {
+                line.push(word);
+                width += wordWidth;
+            }
+        }
+
+        text.push(line.join(" "));
+        return text.join("\n");
     }
 }

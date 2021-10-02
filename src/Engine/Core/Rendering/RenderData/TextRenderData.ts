@@ -3,6 +3,8 @@ import { RenderData, RenderDataType } from "./RenderData";
 
 export type Pivot = "left" | "center" | "right";
 
+export type TextBoxSize = { width: number; height: number };
+
 export class TextRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Text;
     public color: string = null;
@@ -17,4 +19,5 @@ export class TextRenderData extends RenderData {
     public charRanges: number[] = null;
     public smooth: boolean = false;
     public bitmapOffset: Vector2 = null;
+    public boxSize: TextBoxSize = null;
 }
