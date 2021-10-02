@@ -32,6 +32,7 @@ export class ImageRenderer {
 
         this.posVertices = new Float32Array([-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
         this.texVertices = new Float32Array([0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0]);
+        console.log("caca: " + Date.now());
     }
 
     public render(
