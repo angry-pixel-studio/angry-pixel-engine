@@ -53,12 +53,7 @@ export class TextRenderer {
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
         mat4.translate(this.modelMatrix, this.modelMatrix, [
-            renderData.positionInViewport.x +
-                (renderData.pivot === "center"
-                    ? -this.posVerticesSize.x / 2
-                    : renderData.pivot === "right"
-                    ? -this.posVerticesSize.x
-                    : 0),
+            renderData.positionInViewport.x - this.posVerticesSize.x / 2,
             renderData.positionInViewport.y + this.posVerticesSize.y / 2,
             0,
         ]);

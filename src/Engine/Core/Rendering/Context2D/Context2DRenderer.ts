@@ -146,7 +146,6 @@ export class Context2DRenderer implements IContextRenderer {
         this.canvasContext.font = renderData.fontSize + "px " + renderData.fontFamily;
         this.canvasContext.fillStyle = renderData.color;
         this.canvasContext.textBaseline = "middle";
-        this.canvasContext.textAlign = renderData.pivot;
 
         if (renderData.text.split("\n").length > 1) {
             renderData.text.split("\n").forEach((text: string, index: number) => {

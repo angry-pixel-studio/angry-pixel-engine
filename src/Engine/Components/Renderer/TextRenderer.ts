@@ -1,6 +1,6 @@
 import { RenderComponent } from "../../Component";
 import { GameEngineException } from "../../Core/Exception/GameEngineException";
-import { Pivot, TextBoxSize, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
+import { TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { Vector2 } from "../../Math/Vector2";
@@ -9,12 +9,13 @@ export interface TextRendererConfig {
     text: string;
     fontFamily: string;
     fontUrl?: string;
-    boxSize?: TextBoxSize;
     fontSize?: number;
     color?: string;
     lineSeparation?: number;
     letterSpacing?: number;
-    pivot?: Pivot;
+    width?: number;
+    height?: number;
+    offset?: Vector2;
     smooth?: boolean;
     charRanges?: number[];
     bitmapSize?: number;
@@ -28,11 +29,12 @@ export class TextRenderer extends RenderComponent {
     public fontFamily: string = "Sans";
     public fontUrl: string = null;
     public fontSize: number = 12;
-    public boxSize: TextBoxSize = { width: 100, height: 100 };
+    public width: number = 100;
+    public height: number = 100;
+    public offset: Vector2 = new Vector2();
     public color: string = "#000000";
     public lineSeparation: number = 0;
     public letterSpacing: number = 0;
-    public pivot: Pivot = "left";
     public bitmapSize: number = 64;
     public charRanges: number[] = [32, 126, 161, 255];
     public smooth: boolean = false;
@@ -51,11 +53,12 @@ export class TextRenderer extends RenderComponent {
         this.fontFamily = config.fontFamily;
         this.fontUrl = config.fontUrl ?? this.fontUrl;
         this.fontSize = config.fontSize ?? this.fontSize;
-        this.boxSize = config.boxSize ?? this.boxSize;
+        this.width = config.width ?? this.width;
+        this.height = config.height ?? this.height;
+        this.offset = config.offset ?? this.offset;
         this.color = config.color ?? this.color;
         this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
         this.letterSpacing = config.letterSpacing ?? this.letterSpacing;
-        this.pivot = config.pivot ?? this.pivot;
         this.bitmapSize = config.bitmapSize ?? this.bitmapSize;
         this.charRanges = config.charRanges ?? this.charRanges;
         this.smooth = config.smooth ?? this.smooth;
@@ -71,17 +74,12 @@ export class TextRenderer extends RenderComponent {
     }
 
     protected start(): void {
-        if (this.gameObject.ui === false) {
-            throw new GameEngineException("TextRenderer only can be used on UI GameObjects");
-        }
-
         this.renderData.layer = this.gameObject.layer;
         this.renderData.ui = this.gameObject.ui;
         this.renderData.fontFamily = this.fontFamily;
         this.renderData.fontUrl = this.fontUrl;
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.letterSpacing = this.letterSpacing;
-        this.renderData.pivot = this.pivot;
         this.renderData.bitmapSize = this.bitmapSize;
         this.renderData.charRanges = this.charRanges;
         this.renderData.smooth = this.smooth;
@@ -89,15 +87,12 @@ export class TextRenderer extends RenderComponent {
     }
 
     protected update(): void {
-        if (this.gameObject.ui === false) {
-            throw new GameEngineException("TextRenderer only can be used on UI GameObjects");
-        }
-
-        this.renderData.boxSize = this.boxSize;
+        this.renderData.width = this.width;
+        this.renderData.height = this.height;
         this.renderData.text = this.text !== this.lastFrameText ? this.crop() : this.renderData.text;
         this.renderData.fontSize = this.fontSize;
         this.renderData.color = this.color;
-        this.renderData.position.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
+        Vector2.add(this.renderData.position, this.gameObject.transform.position, this.offset);
 
         this.renderManager.addRenderData(this.renderData);
 
@@ -105,7 +100,7 @@ export class TextRenderer extends RenderComponent {
     }
 
     private crop(): string {
-        if (this.fontSize > this.boxSize.height) return "";
+        if (this.fontSize > this.height) return "";
 
         let width = 0;
         let height = this.fontSize;
@@ -114,14 +109,14 @@ export class TextRenderer extends RenderComponent {
         const text = [];
         const words = this.text.replace(/\n/, " \n ").split(" ");
 
-        for (let word of words) {
+        for (const word of words) {
             const wordWidth = word !== "\n" ? word.length * (this.fontSize + this.letterSpacing) : 0;
 
-            if (word === "\n" || (width > 0 && width + wordWidth > this.boxSize.width)) {
+            if (word === "\n" || (width > 0 && width + wordWidth > this.width)) {
                 text.push(line.join(" "));
                 height += this.fontSize + this.lineSeparation;
 
-                if (height > this.boxSize.height) return text.join("\n");
+                if (height > this.height) return text.join("\n");
 
                 line = [];
                 width = 0;
