@@ -16,9 +16,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/angry-pixel-engine/angry-pixel-engine.git"
+        "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine.git"
     },
-    "homepage": "https://github.com/angry-pixel-engine/angry-pixel-engine",
+    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
     "keywords": [
         "angry pixel",
         "game engine",
