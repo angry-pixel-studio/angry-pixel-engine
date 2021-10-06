@@ -13,7 +13,7 @@ export class TiledTilemapRenderer extends TilemapRenderer {
     public readonly layerName: string;
 
     constructor(config: TiledTilemapConfig) {
-        config.renderOrder = config.tilemapData.renderorder as RenderOrder;
+        config.renderOrder = config.renderOrder ?? (config.tilemapData.renderorder as RenderOrder);
         super(config);
 
         this.type = TYPE_TILED_RENDERER;

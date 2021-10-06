@@ -18,6 +18,7 @@ export interface SpriteRendererConfig {
     tiled?: Vector2;
     maskColor?: string;
     maskColorMix?: number;
+    layer?: string;
 }
 
 export const TYPE_SPRITE_RENDERER: string = "SpriteRenderer";
@@ -35,12 +36,14 @@ export class SpriteRenderer extends RenderComponent {
     private _tiled: Vector2 = new Vector2(1, 1);
     public maskColor: string = "#ffffff";
     public maskColorMix: number = 0;
+    public layer: string;
 
     private renderData: ImageRenderData[] = [];
 
     private innerPosition: Vector2 = new Vector2();
     private cachePosition: Vector2 = new Vector2();
     private cacheRenderPosition: Vector2 = new Vector2();
+    private scaledOffset: Vector2 = new Vector2();
 
     constructor(config: SpriteRendererConfig = { sprite: null }) {
         super();
@@ -57,6 +60,7 @@ export class SpriteRenderer extends RenderComponent {
         this.tiled = config.tiled ?? this._tiled;
         this.maskColor = config.maskColor ?? this.maskColor;
         this.maskColorMix = config.maskColorMix ?? this.maskColorMix;
+        this.layer = config.layer ?? this.layer;
     }
 
     public get tiled(): Vector2 {
@@ -96,7 +100,7 @@ export class SpriteRenderer extends RenderComponent {
 
     private updateRenderData(index: number, tileX: number, tileY: number): void {
         this.renderData[index].ui = this.gameObject.ui;
-        this.renderData[index].layer = this.gameObject.layer;
+        this.renderData[index].layer = this.layer ?? this.gameObject.layer;
         this.renderData[index].image = this.sprite.image;
         this.renderData[index].width = this.sprite.width * Math.abs(this.gameObject.transform.scale.x);
         this.renderData[index].height = this.sprite.height * Math.abs(this.gameObject.transform.scale.y);
@@ -114,7 +118,11 @@ export class SpriteRenderer extends RenderComponent {
     }
 
     private calculateRenderPosition(index: number, tileX: number, tileY: number): void {
-        Vector2.add(this.cachePosition, this.gameObject.transform.position, this.offset);
+        this.scaledOffset.set(
+            this.offset.x * this.gameObject.transform.scale.x,
+            this.offset.y * this.gameObject.transform.scale.y
+        );
+        Vector2.add(this.cachePosition, this.gameObject.transform.position, this.scaledOffset);
 
         this.cacheRenderPosition.set(
             (this.renderData[index].width / 2) * (this.tiled.x - 1),

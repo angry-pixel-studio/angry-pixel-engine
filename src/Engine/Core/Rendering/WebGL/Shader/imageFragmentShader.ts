@@ -19,7 +19,7 @@ void main()
         if(texColor.a < 0.0001)
             discard;
         
-        fragColor = mix(vec4(texColor.rgb, u_alpha), u_color, clamp(u_colorMix, 0.0, 1.0));
+        fragColor = mix(vec4(texColor.rgb, u_alpha), vec4(u_color.rgb, u_alpha), clamp(u_colorMix, 0.0, 1.0));
     } else {
         fragColor = u_color;
     }
