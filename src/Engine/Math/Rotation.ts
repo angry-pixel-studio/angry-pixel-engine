@@ -5,6 +5,14 @@ export class Rotation {
     private _radians: number = 0;
     private _direction: Vector2 = new Vector2();
 
+    constructor(config?: { radians?: number; degrees?: number }) {
+        if (config && config.radians) {
+            this.radians = config.radians;
+        } else if (config && config.degrees) {
+            this.degrees = config.degrees;
+        }
+    }
+
     public set degrees(degrees: number) {
         this._degrees = degrees;
         this._radians = (degrees * Math.PI) / 180;
