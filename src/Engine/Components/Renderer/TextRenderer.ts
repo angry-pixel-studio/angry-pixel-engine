@@ -1,8 +1,9 @@
 import { RenderComponent } from "../../Component";
 import { GameEngineException } from "../../Core/Exception/GameEngineException";
-import { TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
+import { Orientation, TextRenderData } from "../../Core/Rendering/RenderData/TextRenderData";
 import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
+import { Rotation } from "../../Math/Rotation";
 import { Vector2 } from "../../Math/Vector2";
 
 export interface TextRendererConfig {
@@ -20,6 +21,9 @@ export interface TextRendererConfig {
     charRanges?: number[];
     bitmapSize?: number;
     bitmapOffset?: Vector2;
+    rotation?: Rotation;
+    opacity?: number;
+    orientation?: Orientation;
 }
 
 export const TYPE_TEXT_RENDERER = "TextRenderer";
@@ -39,6 +43,9 @@ export class TextRenderer extends RenderComponent {
     public charRanges: number[] = [32, 126, 161, 255];
     public smooth: boolean = false;
     public bitmapOffset: Vector2 = new Vector2();
+    public rotation: Rotation = new Rotation();
+    public opacity: number = 1;
+    public orientation: Orientation = "center";
 
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     private renderData: TextRenderData = new TextRenderData();
@@ -63,6 +70,9 @@ export class TextRenderer extends RenderComponent {
         this.charRanges = config.charRanges ?? this.charRanges;
         this.smooth = config.smooth ?? this.smooth;
         this.bitmapOffset = config.bitmapOffset ?? this.bitmapOffset;
+        this.rotation = config.rotation ?? this.rotation;
+        this.opacity = config.opacity ?? this.opacity;
+        this.orientation = config.orientation ?? this.orientation;
 
         if (this.charRanges.length % 2 !== 0) {
             throw new GameEngineException("TextRenderer.charRanges must be a 2 column matrix");
@@ -84,14 +94,19 @@ export class TextRenderer extends RenderComponent {
         this.renderData.charRanges = this.charRanges;
         this.renderData.smooth = this.smooth;
         this.renderData.bitmapOffset = this.bitmapOffset;
+        this.renderData.orientation = this.orientation;
     }
 
     protected update(): void {
+        if (!this.text) return;
+
         this.renderData.width = this.width;
         this.renderData.height = this.height;
         this.renderData.text = this.text !== this.lastFrameText ? this.crop() : this.renderData.text;
         this.renderData.fontSize = this.fontSize;
         this.renderData.color = this.color;
+        this.renderData.rotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
+        this.renderData.opacity = this.opacity;
         Vector2.add(this.renderData.position, this.gameObject.transform.position, this.offset);
 
         this.renderManager.addRenderData(this.renderData);

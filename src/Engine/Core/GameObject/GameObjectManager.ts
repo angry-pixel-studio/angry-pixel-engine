@@ -9,7 +9,7 @@ export class GameObjectManager {
     public addGameObject<T extends GameObject>(
         gameObjectFactory: GameObjectFactory,
         name: string,
-        parent: GameObject | null = null
+        parent: GameObject = null
     ): T {
         if (this.findGameObjectByName(name)) {
             throw new GameEngineException(`There is already a GameObject with the name ${name}`);
@@ -28,11 +28,11 @@ export class GameObjectManager {
         return this.gameObjects;
     }
 
-    public findGameObjectById(id: string): GameObject | null {
+    public findGameObjectById(id: string): GameObject {
         return this.gameObjects.reduce((prev, gameObject) => (gameObject.id === id ? gameObject : prev), null);
     }
 
-    public findGameObjectByName(name: string): GameObject | null {
+    public findGameObjectByName(name: string): GameObject {
         return this.gameObjects.reduce((prev, gameObject) => (gameObject.name === name ? gameObject : prev), null);
     }
 
@@ -40,7 +40,7 @@ export class GameObjectManager {
         return this.gameObjects.filter((gameObject) => gameObject.parent === parent);
     }
 
-    public findGameObjectByParentAndName(parent: GameObject, name: string): GameObject | null {
+    public findGameObjectByParentAndName(parent: GameObject, name: string): GameObject {
         return this.gameObjects.reduce(
             (prev, gameObject) => (gameObject.name === name && gameObject.parent === parent ? gameObject : prev),
             null
@@ -51,7 +51,7 @@ export class GameObjectManager {
         return this.gameObjects.filter((gameObject) => gameObject.tag === tag);
     }
 
-    public findGameObjectByTag(tag: string): GameObject | null {
+    public findGameObjectByTag(tag: string): GameObject {
         return this.findGameObjectsByTag(tag)[0] ?? null;
     }
 

@@ -12,7 +12,7 @@ export class GamepadController {
         window.addEventListener(EVENT_UPDATE, () => this.update());
     }
 
-    public getGamepad(index: number): GamepadData | null {
+    public getGamepad(index: number): GamepadData {
         return this.gamepads.get(index) ?? null;
     }
 
