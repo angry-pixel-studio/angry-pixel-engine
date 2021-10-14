@@ -20,4 +20,5 @@ export class ImageRenderData extends RenderData {
     public alpha: number;
     public maskColor: string;
     public maskColorMix: number;
+    public tintColor: string;
 }

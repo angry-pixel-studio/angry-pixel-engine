@@ -3,9 +3,9 @@ import { Vector2 } from "../../../../Math/Vector2";
 import { Rectangle } from "../../../../Math/Rectangle";
 import { LastRender, WebGLContextVersion } from "../WebGLRenderer";
 import { FontAtlas } from "../../FontAtlasFactory";
-import { hexToRgba, RGBA } from "../Utils";
+import { hexToRgba } from "../Utils";
 import { TextRenderData } from "../../RenderData/TextRenderData";
-import { colorTypes, ProgramManager } from "../ProgramManager";
+import { ProgramManager } from "../ProgramManager";
 
 const TEXTURE_CORRECTION = 1;
 
@@ -25,7 +25,6 @@ export class TextRenderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private maskColor: RGBA = null;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement, programManager: ProgramManager) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -83,20 +82,14 @@ export class TextRenderer {
             this.lastTexture = texture;
         }
 
+        this.gl.uniform1i(this.programManager.useTintColorUniform, 0);
         this.gl.uniform1i(this.programManager.renderTextureUniform, 1);
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.opacity);
 
-        this.gl.uniform1i(this.programManager.colorTypeUniform, colorTypes.maskColor);
-
-        this.maskColor = hexToRgba(renderData.color);
-        this.gl.uniform4f(
-            this.programManager.maskColorUniform,
-            this.maskColor.r,
-            this.maskColor.g,
-            this.maskColor.b,
-            this.maskColor.a
-        );
+        const { r, g, b, a } = hexToRgba(renderData.color);
+        this.gl.uniform4f(this.programManager.maskColorUniform, r, g, b, a);
         this.gl.uniform1f(this.programManager.maskColorMixUniform, 1);
+        this.gl.uniform1i(this.programManager.useMaskColorUniform, 1);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
     }
