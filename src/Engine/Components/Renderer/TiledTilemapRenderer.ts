@@ -25,25 +25,40 @@ export class TiledTilemapRenderer extends TilemapRenderer {
     protected processTilemap(): void {
         this.tiledTilemap.layers.forEach((layer: TiledLayer) => {
             if (layer.visible === true && (this.layerName === null || this.layerName === layer.name)) {
+                if (!this.renderData.has(layer.name)) {
+                    this.processLayer({
+                        layer: layer.name,
+                        alpha: layer.opacity,
+                        tintColor: layer.tintcolor ?? null,
+                    });
+                }
+
                 this.tiledTilemap.infinite === true
                     ? layer.chunks.forEach((chunk: TiledChunk) =>
-                          this.processChunk(chunk, layer.opacity, { x: layer.offsetx ?? 0, y: layer.offsety ?? 0 })
+                          this.processChunk(layer.name, chunk, { x: layer.offsetx ?? 0, y: layer.offsety ?? 0 })
                       )
-                    : this.processChunk(layer, layer.opacity, { x: layer.offsetx ?? 0, y: layer.offsety ?? 0 });
+                    : this.processChunk(layer.name, layer, { x: layer.offsetx ?? 0, y: layer.offsety ?? 0 });
             }
         });
 
         this.tilemapProcessed = true;
     }
 
-    private processChunk(chunk: TiledChunk | TiledLayer, alpha: number = 1, offset: Offset = { x: 0, y: 0 }): void {
+    private processChunk(layer: string, chunk: TiledChunk | TiledLayer, offset: Offset = { x: 0, y: 0 }): void {
         let dataIndex: number = 0;
 
         for (let row = 0; row < chunk.height; row++) {
             for (let col = 0; col < chunk.width; col++) {
                 const tile: Tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
 
-                this.processTile(tile, col + chunk.x, row + chunk.y, alpha, { h: false, v: false }, offset);
+                this.processTile({
+                    layer,
+                    tile,
+                    col: col + chunk.x,
+                    row: row + chunk.y,
+                    flip: { h: false, v: false },
+                    offset,
+                });
 
                 dataIndex++;
             }
@@ -82,4 +97,5 @@ export interface TiledLayer {
     starty?: number;
     offsetx?: number;
     offsety?: number;
+    tintcolor?: string;
 }

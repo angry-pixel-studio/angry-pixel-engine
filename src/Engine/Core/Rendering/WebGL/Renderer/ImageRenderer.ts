@@ -2,8 +2,8 @@ import { mat4 } from "gl-matrix";
 import { Rectangle } from "../../../../Math/Rectangle";
 import { ImageRenderData } from "../../RenderData/ImageRenderData";
 import { LastRender, WebGLContextVersion } from "../WebGLRenderer";
-import { hexToRgb, RGB } from "../Utils";
-import { ProgramManager } from "../ProgramManager";
+import { hexToRgba, RGBA } from "../Utils";
+import { colorTypes, ProgramManager } from "../ProgramManager";
 
 export class ImageRenderer {
     private gl: WebGLRenderingContext;
@@ -20,7 +20,7 @@ export class ImageRenderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private maskColor: RGB = null;
+    private maskColor: RGBA = null;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement, programManager: ProgramManager) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -62,7 +62,7 @@ export class ImageRenderer {
         ]);
 
         this.textureMatrix = mat4.identity(this.textureMatrix);
-        if (renderData.slice !== null) {
+        if (renderData.slice) {
             mat4.translate(this.textureMatrix, this.textureMatrix, [
                 renderData.slice.x / renderData.image.naturalWidth,
                 renderData.slice.y / renderData.image.naturalHeight,
@@ -97,10 +97,20 @@ export class ImageRenderer {
         this.gl.uniform1i(this.programManager.renderTextureUniform, 1);
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.alpha);
 
-        this.maskColor = renderData.maskColor !== null ? hexToRgb(renderData.maskColor) : { r: 1, g: 1, b: 1 };
-
-        this.gl.uniform4f(this.programManager.colorUniform, this.maskColor.r, this.maskColor.g, this.maskColor.b, 1);
-        this.gl.uniform1f(this.programManager.colorMixUniform, renderData.maskColorMix);
+        if (this.maskColor) {
+            this.gl.uniform1i(this.programManager.colorTypeUniform, colorTypes.maskColor);
+            this.maskColor = hexToRgba(renderData.maskColor);
+            this.gl.uniform4f(
+                this.programManager.maskColorUniform,
+                this.maskColor.r,
+                this.maskColor.g,
+                this.maskColor.b,
+                renderData.alpha
+            );
+            this.gl.uniform1f(this.programManager.maskColorMixUniform, renderData.maskColorMix ?? 0);
+        } else {
+            this.gl.uniform1i(this.programManager.colorTypeUniform, colorTypes.default);
+        }
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
     }

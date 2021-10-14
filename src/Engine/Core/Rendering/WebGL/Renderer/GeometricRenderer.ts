@@ -5,7 +5,7 @@ import { ColliderRenderData } from "../../RenderData/ColliderRenderData";
 import { ProgramManager } from "../ProgramManager";
 import { Vector2 } from "../../../../Math/Vector2";
 import { ShapeType } from "../../../Collision/Shape/Shape";
-import { hexToRgb, RGB } from "../Utils";
+import { hexToRgba, RGBA } from "../Utils";
 import { GeometricRenderData } from "../../RenderData/GeometricRenderData";
 
 const LINE_WEIGHT = 1;
@@ -30,7 +30,7 @@ export class GeometricRenderer {
     ]);
     private lastVertices: symbol = null;
     private lastRender: LastRender = null;
-    private rgbColor: RGB;
+    private rgbColor: RGBA;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement, programManager: ProgramManager) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -114,8 +114,14 @@ export class GeometricRenderer {
 
         this.gl.uniform1i(this.programManager.renderTextureUniform, 0);
 
-        this.rgbColor = hexToRgb(color);
-        this.gl.uniform4f(this.programManager.colorUniform, this.rgbColor.r, this.rgbColor.g, this.rgbColor.b, 1);
+        this.rgbColor = hexToRgba(color);
+        this.gl.uniform4f(
+            this.programManager.maskColorUniform,
+            this.rgbColor.r,
+            this.rgbColor.g,
+            this.rgbColor.b,
+            this.rgbColor.a
+        );
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, posVertices.length / 2);
     }

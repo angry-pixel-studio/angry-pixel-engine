@@ -20,4 +20,5 @@ export class TilemapRenderData extends RenderData {
     public tileWidth: number;
     public tileHeight: number;
     public textureCorrection: number;
+    public tintColor: string;
 }

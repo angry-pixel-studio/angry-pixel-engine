@@ -5,6 +5,12 @@ import { imageVertexShader } from "./Shader/imageVertexShader";
 import { imageFragmentShader as legacyImageFragmentRenderer } from "./Shader/Legacy/imageFragmentShader";
 import { imageVertexShader as legacyImageVertexRenderer } from "./Shader/Legacy/imageVertexShader";
 
+export const colorTypes = {
+    default: 1,
+    maskColor: 2,
+    tintColor: 3,
+};
+
 export class ProgramManager {
     private gl: WebGLRenderingContext;
     private contextVersion: WebGLContextVersion;
@@ -27,9 +33,11 @@ export class ProgramManager {
     // fragment uniforms
     public textureUniform: WebGLUniformLocation;
     public alphaUniform: WebGLUniformLocation;
-    public colorUniform: WebGLUniformLocation;
-    public colorMixUniform: WebGLUniformLocation;
+    public maskColorUniform: WebGLUniformLocation;
+    public maskColorMixUniform: WebGLUniformLocation;
+    public tintColorUniform: WebGLUniformLocation;
     public renderTextureUniform: WebGLUniformLocation;
+    public colorTypeUniform: WebGLUniformLocation;
 
     constructor(programFactory: ProgramFactory, contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -56,9 +64,11 @@ export class ProgramManager {
 
         this.textureUniform = this.gl.getUniformLocation(this.program, "u_texImage");
         this.alphaUniform = this.gl.getUniformLocation(this.program, "u_alpha");
-        this.colorUniform = this.gl.getUniformLocation(this.program, "u_color");
-        this.colorMixUniform = this.gl.getUniformLocation(this.program, "u_colorMix");
+        this.tintColorUniform = this.gl.getUniformLocation(this.program, "u_tintColor");
+        this.maskColorUniform = this.gl.getUniformLocation(this.program, "u_maskColor");
+        this.maskColorMixUniform = this.gl.getUniformLocation(this.program, "u_maskColorMix");
         this.renderTextureUniform = this.gl.getUniformLocation(this.program, "u_renderTexture");
+        this.colorTypeUniform = this.gl.getUniformLocation(this.program, "u_colorType");
 
         this.gl.useProgram(this.program);
 

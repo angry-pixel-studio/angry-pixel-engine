@@ -5,22 +5,31 @@ out vec4 fragColor;
 
 in vec2 texCoords;
 
-uniform int u_renderTexture;
 uniform sampler2D u_texImage;
+uniform int u_renderTexture;
+uniform int u_colorType;
+uniform vec4 u_tintColor;
+uniform vec4 u_maskColor;
+uniform float u_maskColorMix;
 uniform float u_alpha;
-uniform vec4 u_color;
-uniform float u_colorMix;
 
 void main()
 {
     if (u_renderTexture == 1) {
         vec4 texColor = texture(u_texImage, texCoords);
-    
-        if(texColor.a < 0.0001)
+
+        if(texColor.a < 0.0001) {
             discard;
+        }
         
-        fragColor = mix(vec4(texColor.rgb, u_alpha), vec4(u_color.rgb, u_alpha), clamp(u_colorMix, 0.0, 1.0));
+        if (u_colorType == 2) {
+            fragColor = mix(vec4(texColor.rgb, u_alpha), u_maskColor, clamp(u_maskColorMix, 0.0, 1.0));
+        } else if (u_colorType == 3) {
+            fragColor = u_tintColor * vec4(texColor.rgb, u_alpha);
+        } else {
+            fragColor = texColor;
+        }
     } else {
-        fragColor = u_color;
+        fragColor = u_maskColor;
     }
 }`;

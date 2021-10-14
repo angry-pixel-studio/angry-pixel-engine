@@ -7,7 +7,7 @@ import { TextureManager } from "./TextureManager";
 import { ImageRenderer } from "./Renderer/ImageRenderer";
 
 import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
-import { hexToRgb } from "./Utils";
+import { hexToRgba } from "./Utils";
 import { ColliderRenderData } from "../RenderData/ColliderRenderData";
 import { ProgramManager } from "./ProgramManager";
 import { TextRenderer } from "./Renderer/TextRenderer";
@@ -65,9 +65,9 @@ export class WebGLRenderer implements IContextRenderer {
     }
 
     public clearCanvas(color: string): void {
-        const rgb = hexToRgb(color);
+        const rgb = hexToRgba(color);
 
-        this.gl.clearColor(rgb.r, rgb.g, rgb.b, 1);
+        this.gl.clearColor(rgb.r, rgb.g, rgb.b, rgb.a);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     }
 
