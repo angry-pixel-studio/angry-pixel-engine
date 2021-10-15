@@ -107,7 +107,7 @@ export class GameObject {
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    protected findGameObjectByName<T extends GameObject>(name: string): T | null {
+    protected findGameObjectByName<T extends GameObject>(name: string): T {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
@@ -123,7 +123,7 @@ export class GameObject {
      * @param tag The tag of the game object to find
      * @returns The found game object
      */
-    protected findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+    protected findGameObjectByTag<T extends GameObject>(tag: string): T {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 
@@ -162,7 +162,7 @@ export class GameObject {
      * @param name The name of the component to find
      * @returns The found component
      */
-    public getComponentByName<T extends Component>(name: string): T | null {
+    public getComponentByName<T extends Component>(name: string): T {
         return this.components.reduce((prev, component) => (component.name === name ? component : prev), null) as T;
     }
 
@@ -170,7 +170,7 @@ export class GameObject {
      * @param type The type of the component to find
      * @returns The found component
      */
-    public getComponentByType<T extends Component>(type: string): T | null {
+    public getComponentByType<T extends Component>(type: string): T {
         return this.components.reduce((prev, component) => (component.type === type ? component : prev), null) as T;
     }
 

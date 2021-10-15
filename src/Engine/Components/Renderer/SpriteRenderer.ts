@@ -18,6 +18,7 @@ export interface SpriteRendererConfig {
     tiled?: Vector2;
     maskColor?: string;
     maskColorMix?: number;
+    tintColor?: string;
     layer?: string;
 }
 
@@ -34,8 +35,9 @@ export class SpriteRenderer extends RenderComponent {
     public smooth: boolean = false;
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
-    public maskColor: string = "#ffffff";
+    public maskColor: string = null;
     public maskColorMix: number = 0;
+    public tintColor: string = null;
     public layer: string;
 
     private renderData: ImageRenderData[] = [];
@@ -60,6 +62,7 @@ export class SpriteRenderer extends RenderComponent {
         this.tiled = config.tiled ?? this._tiled;
         this.maskColor = config.maskColor ?? this.maskColor;
         this.maskColorMix = config.maskColorMix ?? this.maskColorMix;
+        this.tintColor = config.tintColor ?? this.tintColor;
         this.layer = config.layer ?? this.layer;
     }
 
@@ -112,6 +115,7 @@ export class SpriteRenderer extends RenderComponent {
         this.renderData[index].alpha = this.opacity;
         this.renderData[index].maskColor = this.maskColor;
         this.renderData[index].maskColorMix = this.maskColorMix;
+        this.renderData[index].tintColor = this.tintColor;
 
         this.calculateRenderPosition(index, tileX, tileY);
         this.renderManager.addRenderData(this.renderData[index]);

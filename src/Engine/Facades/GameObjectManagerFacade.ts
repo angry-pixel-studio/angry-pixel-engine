@@ -18,7 +18,7 @@ export class GameObjectManagerFacade {
     public static addGameObject<T extends GameObject>(
         gameObjectFactory: GameObjectFactory,
         name: string,
-        parent: GameObject | null = null
+        parent: GameObject = null
     ): T {
         return this.manager.addGameObject<T>(gameObjectFactory, name, parent) as T;
     }
@@ -34,7 +34,7 @@ export class GameObjectManagerFacade {
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    public static findGameObjectByName<T extends GameObject>(name: string): T | null {
+    public static findGameObjectByName<T extends GameObject>(name: string): T {
         return this.manager.findGameObjectByName(name) as T;
     }
 
@@ -52,7 +52,7 @@ export class GameObjectManagerFacade {
      * @param name The name of the game object to find
      * @returns The found game objects
      */
-    public static findGameObjectByParentAndName<T extends GameObject>(parent: GameObject, name: string): T | null {
+    public static findGameObjectByParentAndName<T extends GameObject>(parent: GameObject, name: string): T {
         return this.manager.findGameObjectByParentAndName(parent, name) as T;
     }
 
@@ -68,7 +68,7 @@ export class GameObjectManagerFacade {
      * @param tag The tag of the game object to find
      * @returns The found game object
      */
-    public static findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+    public static findGameObjectByTag<T extends GameObject>(tag: string): T {
         return this.manager.findGameObjectByTag(tag) as T;
     }
 

@@ -76,7 +76,7 @@ export class Scene {
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    protected findGameObjectByName<T extends GameObject>(name: string): T | null {
+    protected findGameObjectByName<T extends GameObject>(name: string): T {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
@@ -92,7 +92,7 @@ export class Scene {
      * @param tag The tag of the game object to find
      * @returns The found game object
      */
-    protected findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+    protected findGameObjectByTag<T extends GameObject>(tag: string): T {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 

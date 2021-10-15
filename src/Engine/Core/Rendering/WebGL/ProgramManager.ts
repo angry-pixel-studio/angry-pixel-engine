@@ -25,11 +25,15 @@ export class ProgramManager {
     public textureMatrixUniform: WebGLUniformLocation;
 
     // fragment uniforms
-    public textureUniform: WebGLUniformLocation;
-    public alphaUniform: WebGLUniformLocation;
-    public colorUniform: WebGLUniformLocation;
-    public colorMixUniform: WebGLUniformLocation;
     public renderTextureUniform: WebGLUniformLocation;
+    public textureUniform: WebGLUniformLocation;
+    public solidColorUniform: WebGLUniformLocation;
+    public useTintColorUniform: WebGLUniformLocation;
+    public tintColorUniform: WebGLUniformLocation;
+    public useMaskColorUniform: WebGLUniformLocation;
+    public maskColorUniform: WebGLUniformLocation;
+    public maskColorMixUniform: WebGLUniformLocation;
+    public alphaUniform: WebGLUniformLocation;
 
     constructor(programFactory: ProgramFactory, contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -54,11 +58,15 @@ export class ProgramManager {
         this.projectionMatrixUniform = this.gl.getUniformLocation(this.program, "projectionMatrix");
         this.textureMatrixUniform = this.gl.getUniformLocation(this.program, "textureMatrix");
 
-        this.textureUniform = this.gl.getUniformLocation(this.program, "u_texImage");
-        this.alphaUniform = this.gl.getUniformLocation(this.program, "u_alpha");
-        this.colorUniform = this.gl.getUniformLocation(this.program, "u_color");
-        this.colorMixUniform = this.gl.getUniformLocation(this.program, "u_colorMix");
         this.renderTextureUniform = this.gl.getUniformLocation(this.program, "u_renderTexture");
+        this.textureUniform = this.gl.getUniformLocation(this.program, "u_texImage");
+        this.solidColorUniform = this.gl.getUniformLocation(this.program, "u_solidColor");
+        this.useTintColorUniform = this.gl.getUniformLocation(this.program, "u_useTintColor");
+        this.tintColorUniform = this.gl.getUniformLocation(this.program, "u_tintColor");
+        this.useMaskColorUniform = this.gl.getUniformLocation(this.program, "u_useMaskColor");
+        this.maskColorUniform = this.gl.getUniformLocation(this.program, "u_maskColor");
+        this.maskColorMixUniform = this.gl.getUniformLocation(this.program, "u_maskColorMix");
+        this.alphaUniform = this.gl.getUniformLocation(this.program, "u_alpha");
 
         this.gl.useProgram(this.program);
 

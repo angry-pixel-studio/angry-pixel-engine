@@ -101,7 +101,7 @@ export abstract class Component {
      * @param name The name of the component to find
      * @returns The found component
      */
-    protected getComponentByName<T extends Component>(name: string): T | null {
+    protected getComponentByName<T extends Component>(name: string): T {
         return this.gameObject.getComponentByName<T>(name);
     }
 
@@ -109,7 +109,7 @@ export abstract class Component {
      * @param type The type of the component to find
      * @returns The found component
      */
-    protected getComponentByType<T extends Component>(type: string): T | null {
+    protected getComponentByType<T extends Component>(type: string): T {
         return this.gameObject.getComponentByType<T>(type);
     }
 
@@ -125,7 +125,7 @@ export abstract class Component {
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    protected findGameObjectByName<T extends GameObject>(name: string): T | null {
+    protected findGameObjectByName<T extends GameObject>(name: string): T {
         return this.gameObjectManager.findGameObjectByName(name) as T;
     }
 
@@ -141,7 +141,7 @@ export abstract class Component {
      * @param tag The tag of the game object to find
      * @returns The found game object
      */
-    protected findGameObjectByTag<T extends GameObject>(tag: string): T | null {
+    protected findGameObjectByTag<T extends GameObject>(tag: string): T {
         return this.gameObjectManager.findGameObjectByTag(tag) as T;
     }
 

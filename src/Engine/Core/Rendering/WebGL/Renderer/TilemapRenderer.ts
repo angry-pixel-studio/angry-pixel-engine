@@ -1,7 +1,7 @@
 import { mat4 } from "gl-matrix";
 import { Rectangle } from "../../../../Math/Rectangle";
 import { LastRender, WebGLContextVersion } from "../WebGLRenderer";
-import { RGB } from "../Utils";
+import { hexToRgba } from "../Utils";
 import { ProgramManager } from "../ProgramManager";
 import { TilemapRenderData, TileRenderData } from "../../RenderData/TilemapRenderData";
 
@@ -22,7 +22,6 @@ export class TilemapRenderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private maskColor: RGB = null;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement, programManager: ProgramManager) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -75,13 +74,15 @@ export class TilemapRenderer {
             this.lastTexture = texture;
         }
 
+        this.gl.uniform1i(this.programManager.useMaskColorUniform, 0);
         this.gl.uniform1i(this.programManager.renderTextureUniform, 1);
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.alpha);
 
-        this.maskColor = { r: 1, g: 1, b: 1 };
-
-        this.gl.uniform4f(this.programManager.colorUniform, this.maskColor.r, this.maskColor.g, this.maskColor.b, 1);
-        this.gl.uniform1f(this.programManager.colorMixUniform, 0);
+        this.gl.uniform1i(this.programManager.useTintColorUniform, renderData.tintColor ? 1 : 0);
+        if (renderData.tintColor) {
+            const { r, g, b, a } = hexToRgba(renderData.tintColor);
+            this.gl.uniform4f(this.programManager.tintColorUniform, r, g, b, a);
+        }
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
     }

@@ -4,18 +4,21 @@ import { Flip, TilemapRenderer, TilemapRendererConfig } from "./TilemapRenderer"
 export interface CsvTilemapConfig extends TilemapRendererConfig {
     tilemapData: string;
     alpha?: number;
+    tintColor?: string;
 }
 
-const MAX_TILES: number = 999;
-const FLIP_H: number = 1; // flip horizontal
-const FLIP_V: number = 2; // flip vertical
-const FLIP_B: number = 3; // flip both horizontal and vertical
+const maxTiles = 999;
+const flipH = 1; // flip horizontal
+const flipV = 2; // flip vertical
+const flipB = 3; // flip both horizontal and vertical
+const layer = "csv";
 
 export const TYPE_TILEMAP_RENDERER: string = "TilemapRenderer";
 
 export class CsvTilemapRenderer extends TilemapRenderer {
     public readonly tilemapData: string;
     public readonly alpha: number = 1;
+    public readonly tintColor: string = null;
 
     constructor(config: CsvTilemapConfig) {
         super(config);
@@ -24,9 +27,16 @@ export class CsvTilemapRenderer extends TilemapRenderer {
 
         this.tilemapData = config.tilemapData;
         this.alpha = config.alpha ?? this.alpha;
+        this.tintColor = config.tintColor ?? this.tintColor;
     }
 
     protected processTilemap(): void {
+        this.processLayer({
+            layer,
+            alpha: this.alpha,
+            tintColor: this.tintColor,
+        });
+
         const rows = this.tilemapData.trim().split("\n");
 
         rows.forEach((rowData: string, row: number) => {
@@ -38,14 +48,21 @@ export class CsvTilemapRenderer extends TilemapRenderer {
                 const flip: Flip = { h: false, v: false };
 
                 if (isNaN(parsed) === false) {
-                    const id: number = parsed > MAX_TILES ? parsed % 1000 : parsed;
+                    const id: number = parsed > maxTiles ? parsed % 1000 : parsed;
                     const flipDigit: number = Math.round(parsed / 1000);
 
                     tile = this.tileset.getTile(id);
-                    flip.h = [FLIP_H, FLIP_B].includes(flipDigit);
-                    flip.v = [FLIP_V, FLIP_B].includes(flipDigit);
+                    flip.h = [flipH, flipB].includes(flipDigit);
+                    flip.v = [flipV, flipB].includes(flipDigit);
                 }
-                this.processTile(tile, col, row, this.alpha, flip);
+                this.processTile({
+                    layer,
+                    tile,
+                    col,
+                    row,
+                    flip,
+                    offset: { x: 0, y: 0 },
+                });
             });
         });
         this.tilemapProcessed = true;

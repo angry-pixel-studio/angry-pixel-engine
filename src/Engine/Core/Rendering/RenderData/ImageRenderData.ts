@@ -9,15 +9,16 @@ export interface Slice {
 
 export class ImageRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Image;
-    public image: HTMLImageElement = null;
-    public width: number = 0;
-    public height: number = 0;
-    public slice: Slice = null;
-    public flipHorizontal: boolean = false;
-    public flipVertical: boolean = false;
-    public rotation: number = 0;
-    public smooth: boolean = true;
-    public alpha: number = 1;
-    public maskColor: string = null;
-    public maskColorMix: number = null;
+    public image: HTMLImageElement;
+    public width: number;
+    public height: number;
+    public slice: Slice;
+    public flipHorizontal: boolean;
+    public flipVertical: boolean;
+    public rotation: number;
+    public smooth: boolean;
+    public alpha: number;
+    public maskColor: string;
+    public maskColorMix: number;
+    public tintColor: string;
 }

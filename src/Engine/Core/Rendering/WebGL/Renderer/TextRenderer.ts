@@ -1,9 +1,9 @@
-import { mat4 } from "gl-matrix";
+import { mat4, ReadonlyVec3 } from "gl-matrix";
 import { Vector2 } from "../../../../Math/Vector2";
 import { Rectangle } from "../../../../Math/Rectangle";
 import { LastRender, WebGLContextVersion } from "../WebGLRenderer";
 import { FontAtlas } from "../../FontAtlasFactory";
-import { hexToRgb, RGB } from "../Utils";
+import { hexToRgba } from "../Utils";
 import { TextRenderData } from "../../RenderData/TextRenderData";
 import { ProgramManager } from "../ProgramManager";
 
@@ -25,7 +25,6 @@ export class TextRenderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private maskColor: RGB = null;
 
     constructor(contextVersion: WebGLContextVersion, canvas: HTMLCanvasElement, programManager: ProgramManager) {
         this.gl = canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -43,6 +42,8 @@ export class TextRenderer {
         renderData: TextRenderData,
         lastRender: LastRender
     ): void {
+        if (!renderData.text) return;
+
         this.generateTextVertices(fontAtlas, renderData);
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
@@ -52,11 +53,8 @@ export class TextRenderer {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        mat4.translate(this.modelMatrix, this.modelMatrix, [
-            renderData.positionInViewport.x - this.posVerticesSize.x / 2,
-            renderData.positionInViewport.y + this.posVerticesSize.y / 2,
-            0,
-        ]);
+        mat4.translate(this.modelMatrix, this.modelMatrix, this.getTranslationForOrientation(renderData));
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation);
 
         this.textureMatrix = mat4.identity(this.textureMatrix);
         mat4.scale(this.textureMatrix, this.textureMatrix, [
@@ -72,7 +70,11 @@ export class TextRenderer {
         this.gl.uniformMatrix4fv(this.programManager.modelMatrixUniform, false, this.modelMatrix);
         this.gl.uniformMatrix4fv(this.programManager.textureMatrixUniform, false, this.textureMatrix);
 
-        this.gl.disable(this.gl.BLEND);
+        if (renderData.opacity < 1) {
+            this.gl.enable(this.gl.BLEND);
+        } else {
+            this.gl.disable(this.gl.BLEND);
+        }
 
         if (this.lastTexture !== texture || lastRender !== "text") {
             this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
@@ -80,12 +82,14 @@ export class TextRenderer {
             this.lastTexture = texture;
         }
 
+        this.gl.uniform1i(this.programManager.useTintColorUniform, 0);
         this.gl.uniform1i(this.programManager.renderTextureUniform, 1);
-        this.gl.uniform1f(this.programManager.alphaUniform, 1);
+        this.gl.uniform1f(this.programManager.alphaUniform, renderData.opacity);
 
-        this.maskColor = hexToRgb(renderData.color);
-        this.gl.uniform4f(this.programManager.colorUniform, this.maskColor.r, this.maskColor.g, this.maskColor.b, 1);
-        this.gl.uniform1f(this.programManager.colorMixUniform, 1);
+        const { r, g, b, a } = hexToRgba(renderData.color);
+        this.gl.uniform4f(this.programManager.maskColorUniform, r, g, b, a);
+        this.gl.uniform1f(this.programManager.maskColorMixUniform, 1);
+        this.gl.uniform1i(this.programManager.useMaskColorUniform, 1);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
     }
@@ -94,11 +98,9 @@ export class TextRenderer {
         this.posVertices = [];
         this.texVertices = [];
 
-        const p = { x1: 0, y1: -renderData.fontSize, x2: 0, y2: 0 };
+        const d = this.getDimensions(renderData);
+        const p = { x1: -d.width / 2, y1: d.height / 2 - renderData.fontSize, x2: 0, y2: d.height / 2 };
         const t = { x1: 0, y1: 0, x2: 0, y2: 0 };
-
-        let maxX: number = 0;
-        let lines: number = 1;
 
         for (let i = 0; i < renderData.text.length; i++) {
             const letter = renderData.text[i];
@@ -106,16 +108,12 @@ export class TextRenderer {
             if (letter === "\n") {
                 p.y1 -= renderData.fontSize + renderData.lineSeparation;
                 p.y2 = p.y1 + renderData.fontSize;
-                p.x1 = 0;
-
-                lines++;
-
+                p.x1 = -d.width / 2;
                 continue;
             }
 
             if (letter === " ") {
                 p.x1 += renderData.fontSize + renderData.letterSpacing;
-
                 continue;
             }
 
@@ -123,8 +121,6 @@ export class TextRenderer {
 
             if (glyphInfo) {
                 p.x2 = p.x1 + renderData.fontSize;
-
-                maxX = Math.max(p.x2, maxX);
 
                 t.x1 = glyphInfo.x + renderData.bitmapOffset.x;
                 t.y1 = glyphInfo.y + renderData.bitmapOffset.y;
@@ -155,6 +151,30 @@ export class TextRenderer {
             p.x1 += renderData.fontSize + renderData.letterSpacing;
         }
 
-        this.posVerticesSize.set(maxX, lines * renderData.fontSize + (lines - 1) * renderData.lineSeparation);
+        this.posVerticesSize.set(d.width, d.height);
+    }
+
+    private getTranslationForOrientation(renderData: TextRenderData): ReadonlyVec3 {
+        return [
+            renderData.positionInViewport.x + (renderData.orientation === "center" ? 0 : this.posVerticesSize.x / 2),
+            renderData.positionInViewport.y +
+                (renderData.orientation === "rightDown"
+                    ? -this.posVerticesSize.y / 2
+                    : renderData.orientation === "rightUp"
+                    ? this.posVerticesSize.y
+                    : 0),
+            0,
+        ];
+    }
+
+    private getDimensions(renderData: TextRenderData): { width: number; height: number } {
+        return renderData.text.split("\n").reduce(
+            (acc, str, idx) => {
+                acc.width = Math.max(acc.width, str.length * (renderData.fontSize + renderData.letterSpacing));
+                acc.height += renderData.fontSize + Math.min(idx, 1) * renderData.lineSeparation;
+                return acc;
+            },
+            { width: 0, height: 0 }
+        );
     }
 }

@@ -1,6 +1,8 @@
 import { Vector2 } from "../../../Math/Vector2";
 import { RenderData, RenderDataType } from "./RenderData";
 
+export type Orientation = "rightUp" | "rightDown" | "center";
+
 export class TextRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Text;
     public color: string;
@@ -16,4 +18,7 @@ export class TextRenderData extends RenderData {
     public bitmapOffset: Vector2;
     public width: number;
     public height: number;
+    public rotation: number;
+    public opacity: number;
+    public orientation: Orientation;
 }

@@ -11,6 +11,21 @@ export type Flip = { h: boolean; v: boolean };
 export type Offset = { x: number; y: number };
 export type RenderOrder = "center" | "right-down" | "right-up" | "left-down" | "left-right";
 
+export type LayerToProcess = {
+    layer: string;
+    alpha: number;
+    tintColor: string;
+};
+
+export type TileToProcess = {
+    layer: string;
+    tile: Tile;
+    col: number;
+    row: number;
+    flip: Flip;
+    offset: Offset;
+};
+
 export interface TilemapRendererConfig {
     tileset: Tileset;
     renderOrder?: RenderOrder;
@@ -33,7 +48,7 @@ export abstract class TilemapRenderer extends RenderComponent {
 
     protected renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
     protected tilemapProcessed: boolean = false;
-    protected renderData: Map<number, TilemapRenderData> = new Map<number, TilemapRenderData>();
+    protected renderData: Map<string, TilemapRenderData> = new Map<string, TilemapRenderData>();
 
     private cols: number[] = [];
     private rows: number[] = [];
@@ -77,58 +92,52 @@ export abstract class TilemapRenderer extends RenderComponent {
 
     protected abstract processTilemap(): void;
 
-    protected processTile(
-        tile: Tile,
-        col: number,
-        row: number,
-        alpha: number = 1,
-        flip: Flip = { h: false, v: false },
-        offset: Offset = { x: 0, y: 0 }
-    ): void {
-        if (tile !== null) {
-            this.addTileToRenderData(tile, col, row, alpha, flip, offset);
-        }
-
-        this.updateSizeInfo(col, row);
-    }
-
-    private addTileToRenderData(tile: Tile, col: number, row: number, alpha: number, flip: Flip, offset: Offset): void {
-        if (this.renderData.has(alpha) === false) {
-            this.renderData.set(alpha, this.createRenderDataForAlpha(alpha));
-        }
-
-        const tileRenderData: TileRenderData = new TileRenderData();
-
-        tileRenderData.tile = tile;
-        tileRenderData.position.set(
-            this.gameObject.transform.position.x +
-                col * this.tileWidth * this.orientation.x +
-                offset.x * Math.abs(this.gameObject.transform.scale.x) +
-                (this.tileWidth * this.orientation.x) / 2,
-            this.gameObject.transform.position.y -
-                row * this.tileHeight * this.orientation.y -
-                offset.y * Math.abs(this.gameObject.transform.scale.y) -
-                (this.tileHeight * this.orientation.y) / 2
-        );
-        tileRenderData.flipHorizontal = flip.h !== this.orientation.x < 0;
-        tileRenderData.flipVertical = flip.v !== this.orientation.y < 0;
-
-        this.renderData.get(alpha).tilesData.push(tileRenderData);
-    }
-
-    private createRenderDataForAlpha(alpha: number): TilemapRenderData {
+    protected processLayer(data: LayerToProcess): void {
         const renderData = new TilemapRenderData();
 
         renderData.ui = false;
-        renderData.alpha = alpha;
+        renderData.alpha = data.alpha;
         renderData.image = this.tileset.image;
         renderData.layer = this.gameObject.layer;
         renderData.smooth = this.smooth;
         renderData.tileWidth = this.tileWidth;
         renderData.tileHeight = this.tileHeight;
         renderData.textureCorrection = this.textureCorrection;
+        renderData.tintColor = data.tintColor;
 
-        return renderData;
+        this.renderData.set(data.layer, renderData);
+    }
+
+    protected processTile(data: TileToProcess): void {
+        if (data.tile !== null) {
+            this.addTileToRenderData(data);
+        }
+
+        this.updateSizeInfo(data.col, data.row);
+    }
+
+    private addTileToRenderData(data: TileToProcess): void {
+        if (!this.renderData.has(data.layer)) {
+            return;
+        }
+
+        const tileRenderData: TileRenderData = new TileRenderData();
+
+        tileRenderData.tile = data.tile;
+        tileRenderData.position.set(
+            this.gameObject.transform.position.x +
+                data.col * this.tileWidth * this.orientation.x +
+                data.offset.x * Math.abs(this.gameObject.transform.scale.x) +
+                (this.tileWidth * this.orientation.x) / 2,
+            this.gameObject.transform.position.y -
+                data.row * this.tileHeight * this.orientation.y -
+                data.offset.y * Math.abs(this.gameObject.transform.scale.y) -
+                (this.tileHeight * this.orientation.y) / 2
+        );
+        tileRenderData.flipHorizontal = data.flip.h !== this.orientation.x < 0;
+        tileRenderData.flipVertical = data.flip.v !== this.orientation.y < 0;
+
+        this.renderData.get(data.layer).tilesData.push(tileRenderData);
     }
 
     private updateSizeInfo(col: number, row: number): void {
