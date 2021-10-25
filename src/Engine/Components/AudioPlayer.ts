@@ -1,4 +1,5 @@
 import { EngineComponent } from "../Component";
+import { ComponentTypes } from "./ComponentTypes";
 
 export interface AudioPlayerConfig {
     audio?: HTMLAudioElement;
@@ -19,8 +20,6 @@ const userInputEventNames = [
     "keyup",
 ];
 
-export const TYPE_AUDIO_PLAYER: string = "AudioPlayer";
-
 export class AudioPlayer extends EngineComponent {
     public volume: number = 1;
     public loop: boolean = false;
@@ -34,7 +33,7 @@ export class AudioPlayer extends EngineComponent {
         super();
 
         this.allowMultiple = false;
-        this.type = TYPE_AUDIO_PLAYER;
+        this.type = ComponentTypes.AudioPlayer;
 
         this.audio = config.audio ?? this.audio;
         this.volume = config.volume ?? this.volume;

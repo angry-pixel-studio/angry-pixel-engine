@@ -6,6 +6,7 @@ import { container } from "../../Game";
 import { Rotation } from "../../Math/Rotation";
 import { Vector2 } from "../../Math/Vector2";
 import { Sprite } from "../../Sprite";
+import { ComponentTypes } from "../ComponentTypes";
 
 export interface SpriteRendererConfig {
     sprite?: Sprite;
@@ -21,8 +22,6 @@ export interface SpriteRendererConfig {
     tintColor?: string;
     layer?: string;
 }
-
-export const TYPE_SPRITE_RENDERER: string = "SpriteRenderer";
 
 export class SpriteRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
@@ -50,7 +49,7 @@ export class SpriteRenderer extends RenderComponent {
     constructor(config: SpriteRendererConfig = { sprite: null }) {
         super();
 
-        this.type = TYPE_SPRITE_RENDERER;
+        this.type = ComponentTypes.SpriteRenderer;
 
         this.sprite = config.sprite;
         this.offset = config.offset ?? this.offset;

@@ -7,10 +7,12 @@ import { GameEngineException } from "./Core/Exception/GameEngineException";
 export const GAME_CAMERA_ID = "GameCamera";
 
 export class Scene {
+    private readonly gameObjectManager: GameObjectManager =
+        container.getSingleton<GameObjectManager>("GameObjectManager");
+
     public game: Game = null;
     public name: string = null;
 
-    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private started: boolean = false;
 
     constructor() {
@@ -18,15 +20,14 @@ export class Scene {
         window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
 
         this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
-        this.gameLoopEventHandler.bind(this);
     }
 
     private gameLoopEventHandler = (event: Event): void => {
         try {
-            if (this.started === false && event.type === EVENT_START) {
+            if (!this.started && event.type === EVENT_START) {
                 this.start();
                 this.started = true;
-            } else if (this.started === true && event.type === EVENT_UPDATE) {
+            } else if (this.started && event.type === EVENT_UPDATE) {
                 this.update();
             }
         } catch (error: unknown) {
@@ -43,14 +44,22 @@ export class Scene {
     }
 
     /**
-     * This method is called on the first frame
+     * This method is only ever called once.
+     * Recommended for GameObject cration.
+     */
+    public init(): void {
+        return;
+    }
+
+    /**
+     * This method is only ever called once.
      */
     protected start(): void {
         return;
     }
 
     /**
-     * This method is called on every frame
+     * This method is called on every frame.
      */
     protected update(): void {
         return;

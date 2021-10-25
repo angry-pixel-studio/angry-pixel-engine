@@ -1,8 +1,7 @@
 import { TransformComponent } from "../Component";
 import { Rotation } from "../Math/Rotation";
 import { Vector2 } from "../Math/Vector2";
-
-export const TYPE_TRANSFORM: string = "Transform";
+import { ComponentTypes } from "./ComponentTypes";
 
 export class Transform extends TransformComponent {
     private _position: Vector2 = new Vector2();
@@ -22,7 +21,7 @@ export class Transform extends TransformComponent {
         super();
 
         this.allowMultiple = false;
-        this.type = TYPE_TRANSFORM;
+        this.type = ComponentTypes.Transform;
     }
 
     public get position(): Vector2 {

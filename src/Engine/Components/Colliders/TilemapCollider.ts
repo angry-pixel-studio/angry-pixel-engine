@@ -8,13 +8,12 @@ import { TileData } from "../../Core/Tilemap/TileData";
 import { ColliderRenderData } from "../../Core/Rendering/RenderData/ColliderRenderData";
 import { RenderComponent } from "../../Component";
 import { Vector2 } from "../../Math/Vector2";
+import { ComponentTypes } from "../ComponentTypes";
 
 export interface TilemapColliderConfig {
     tilemapRenderer: TilemapRenderer;
     debug?: boolean;
 }
-
-export const TYPE_TILEMAP_COLLIDER: string = "TilemapCollider";
 
 export class TilemapCollider extends AbstractColliderComponent {
     private tilemapRenderer: TilemapRenderer = null;
@@ -24,7 +23,7 @@ export class TilemapCollider extends AbstractColliderComponent {
     constructor(config: TilemapColliderConfig) {
         super();
 
-        this.type = TYPE_TILEMAP_COLLIDER;
+        this.type = ComponentTypes.TilemapCollider;
         this.tilemapRenderer = config.tilemapRenderer;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this._physics = true; // todo: fix this shit
@@ -70,11 +69,9 @@ export class TilemapCollider extends AbstractColliderComponent {
     };
 
     protected updatePosition(): void {
-        // Tilemap does not update cooliders coordinates;
+        // Tilemap does not update colliders coordinates;
     }
 }
-
-const TYPE_TILEMAP_COLLIDER_RENDERER: string = "TilemapColliderRenderer";
 
 class TilemapColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
@@ -85,7 +82,7 @@ class TilemapColliderRenderer extends RenderComponent {
     constructor(colliders: ICollider[]) {
         super();
 
-        this.type = TYPE_TILEMAP_COLLIDER_RENDERER;
+        this.type = "TilemapColliderRenderer";
         this.colliders = colliders;
 
         this.colliders.forEach((collider: ICollider, index: number) => {

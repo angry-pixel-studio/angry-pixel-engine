@@ -5,12 +5,11 @@ import { Animation } from "../Animation";
 import { TimeManager } from "../Core/GameLoop/TimeManager";
 import { container } from "../Game";
 import { GameEngineException } from "../Core/Exception/GameEngineException";
+import { ComponentTypes } from "./ComponentTypes";
 
 export interface AnimatorConfig {
     spriteRenderer: SpriteRenderer;
 }
-
-export const TYPE_ANIMATOR: string = "Animator";
 
 export class Animator extends EngineComponent {
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
@@ -22,7 +21,7 @@ export class Animator extends EngineComponent {
     constructor(config: AnimatorConfig) {
         super();
 
-        this.type = TYPE_ANIMATOR;
+        this.type = ComponentTypes.Animator;
         this.spriteRenderer = config.spriteRenderer;
     }
 
@@ -32,7 +31,6 @@ export class Animator extends EngineComponent {
 
     protected update(): void {
         if (this.currentAnimation === null) {
-            this.spriteRenderer.sprite = this.defaultSprite;
             return;
         }
 
@@ -70,6 +68,7 @@ export class Animator extends EngineComponent {
 
         if (this.currentAnimation !== null) {
             this.currentAnimation = null;
+            this.spriteRenderer.sprite = this.defaultSprite;
         }
     }
 

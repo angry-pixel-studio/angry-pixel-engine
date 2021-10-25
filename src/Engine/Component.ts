@@ -58,10 +58,10 @@ export abstract class Component {
         }
 
         try {
-            if (this.started === false && event.type === EVENT_START) {
+            if (!this.started && event.type === EVENT_START) {
                 this.start();
                 this.started = true;
-            } else if (this.started === true && event.type === this.updateEvent) {
+            } else if (this.started && event.type === this.updateEvent) {
                 this.update();
             }
         } catch (error: unknown) {
@@ -73,10 +73,24 @@ export abstract class Component {
         }
     };
 
+    /**
+     * This method is only ever called once.
+     * Recommended for GameObject cration.
+     */
+    public init(): void {
+        return;
+    }
+
+    /**
+     * This method is only ever called once
+     */
     protected start(): void {
         return;
     }
 
+    /**
+     * This method is called on every frame.
+     */
     protected update(): void {
         return;
     }

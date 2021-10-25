@@ -57,6 +57,7 @@ export class SceneManager {
         this.currentScene = this.scenes.get(name)();
         this.currentScene.name = name;
         this.currentScene.game = this.game;
+        this.currentScene.init();
     }
 
     public unloadCurrentScene(): void {

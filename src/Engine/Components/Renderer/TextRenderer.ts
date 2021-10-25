@@ -5,6 +5,7 @@ import { RenderManager } from "../../Core/Rendering/RenderManager";
 import { container } from "../../Game";
 import { Rotation } from "../../Math/Rotation";
 import { Vector2 } from "../../Math/Vector2";
+import { ComponentTypes } from "../ComponentTypes";
 
 export interface TextRendererConfig {
     text: string;
@@ -25,8 +26,6 @@ export interface TextRendererConfig {
     opacity?: number;
     orientation?: Orientation;
 }
-
-export const TYPE_TEXT_RENDERER = "TextRenderer";
 
 export class TextRenderer extends RenderComponent {
     public text: string;
@@ -54,7 +53,7 @@ export class TextRenderer extends RenderComponent {
     constructor(config: TextRendererConfig) {
         super();
 
-        this.type = TYPE_TEXT_RENDERER;
+        this.type = ComponentTypes.TextRenderer;
 
         this.text = config.text;
         this.fontFamily = config.fontFamily;
