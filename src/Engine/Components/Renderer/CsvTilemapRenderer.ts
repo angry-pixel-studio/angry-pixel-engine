@@ -1,4 +1,5 @@
 import { Tile } from "../../Core/Tilemap/Tile";
+import { ComponentTypes } from "../ComponentTypes";
 import { Flip, TilemapRenderer, TilemapRendererConfig } from "./TilemapRenderer";
 
 export interface CsvTilemapConfig extends TilemapRendererConfig {
@@ -13,8 +14,6 @@ const flipV = 2; // flip vertical
 const flipB = 3; // flip both horizontal and vertical
 const layer = "csv";
 
-export const TYPE_TILEMAP_RENDERER: string = "TilemapRenderer";
-
 export class CsvTilemapRenderer extends TilemapRenderer {
     public readonly tilemapData: string;
     public readonly alpha: number = 1;
@@ -23,7 +22,7 @@ export class CsvTilemapRenderer extends TilemapRenderer {
     constructor(config: CsvTilemapConfig) {
         super(config);
 
-        this.type = TYPE_TILEMAP_RENDERER;
+        this.type = ComponentTypes.CsvTilemapRenderer;
 
         this.tilemapData = config.tilemapData;
         this.alpha = config.alpha ?? this.alpha;

@@ -5,6 +5,7 @@ import { GameEngineException } from "../Core/Exception/GameEngineException";
 import { container } from "../Game";
 import { Vector2 } from "../Math/Vector2";
 import { AbstractColliderComponent } from "./Colliders/AbstractColliderComponent";
+import { ComponentTypes } from "./ComponentTypes";
 
 export enum RigidBodyType {
     Static,
@@ -18,8 +19,6 @@ export interface RigidBodyConfig {
 }
 
 type Axis = "x" | "y";
-
-export const TYPE_RIGIDBODY: string = "RigidBody";
 
 export class RigidBody extends PhysicsComponent {
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
@@ -48,7 +47,7 @@ export class RigidBody extends PhysicsComponent {
     constructor(config: RigidBodyConfig) {
         super();
 
-        this.type = TYPE_RIGIDBODY;
+        this.type = ComponentTypes.RigidBody;
         this.allowMultiple = false;
 
         this._rigidBodyType = config.rigidBodyType;
@@ -140,7 +139,7 @@ export class RigidBody extends PhysicsComponent {
         this.collisions.forEach((collision: Collision) => {
             if (
                 collision.remoteCollider.physics === true &&
-                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(TYPE_RIGIDBODY) !== null
+                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(ComponentTypes.RigidBody) !== null
             ) {
                 if (collision.collisionData.displacementDirection[axis] !== 0) {
                     this.setPenetrationPerDirectionPerAxis(axis, collision);

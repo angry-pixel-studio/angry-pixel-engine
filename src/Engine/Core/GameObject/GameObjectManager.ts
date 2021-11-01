@@ -18,6 +18,7 @@ export class GameObjectManager {
         const gameObject: GameObject = gameObjectFactory();
         gameObject.name = name;
         gameObject.parent = parent;
+        gameObject.init();
 
         this.gameObjects.push(gameObject);
 

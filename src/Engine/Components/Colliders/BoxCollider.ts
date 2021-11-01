@@ -7,6 +7,7 @@ import { Vector2 } from "../../Math/Vector2";
 import { RenderComponent } from "../../Component";
 import { ICollider } from "../../Core/Collision/Collider/ICollider";
 import { Rotation } from "../../Math/Rotation";
+import { ComponentTypes } from "../ComponentTypes";
 
 export interface BoxColliderConfig {
     width: number;
@@ -17,8 +18,6 @@ export interface BoxColliderConfig {
     physics?: boolean;
     debug?: boolean;
 }
-
-export const TYPE_BOX_COLLIDER: string = "BoxCollider";
 
 export class BoxCollider extends AbstractColliderComponent {
     public debug: boolean = false;
@@ -41,7 +40,7 @@ export class BoxCollider extends AbstractColliderComponent {
     constructor(config: BoxColliderConfig) {
         super();
 
-        this.type = TYPE_BOX_COLLIDER;
+        this.type = ComponentTypes.BoxCollider;
 
         this.width = config.width;
         this.height = config.height;
@@ -118,8 +117,6 @@ export class BoxCollider extends AbstractColliderComponent {
     }
 }
 
-const TYPE_BOX_COLLIDER_RENDERER: string = "BoxColliderRenderer";
-
 class BoxColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
@@ -129,7 +126,7 @@ class BoxColliderRenderer extends RenderComponent {
     constructor(collider: ICollider) {
         super();
 
-        this.type = TYPE_BOX_COLLIDER_RENDERER;
+        this.type = "BoxColliderRenderer";
 
         this.renderData = new ColliderRenderData();
         this.renderData.debug = true;

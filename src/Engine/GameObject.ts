@@ -1,5 +1,6 @@
 import { Component } from "./Component";
-import { Transform, TYPE_TRANSFORM } from "./Components/Transform";
+import { ComponentTypes } from "./Components/ComponentTypes";
+import { Transform } from "./Components/Transform";
 import { GameEngineException } from "./Core/Exception/GameEngineException";
 import { GameObjectManager, GameObjectFactory } from "./Core/GameObject/GameObjectManager";
 import { SceneManager } from "./Core/Scene/SceneManager";
@@ -19,8 +20,8 @@ export class GameObject {
     public ui: boolean = false;
 
     private _active: boolean = true;
-    private started: boolean = false;
     private _parent: GameObject | null = null;
+    private started: boolean = false;
 
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
@@ -36,7 +37,7 @@ export class GameObject {
     }
 
     public get transform(): Transform {
-        return this.getComponentByType<Transform>(TYPE_TRANSFORM);
+        return this.getComponentByType<Transform>(ComponentTypes.Transform);
     }
 
     public get active(): boolean {
@@ -58,10 +59,10 @@ export class GameObject {
         }
 
         try {
-            if (this.started === false && event.type === EVENT_START) {
+            if (!this.started && event.type === EVENT_START) {
                 this.start();
                 this.started = true;
-            } else if (this.started === true && event.type === EVENT_UPDATE) {
+            } else if (this.started && event.type === EVENT_UPDATE) {
                 this.update();
             }
         } catch (error: unknown) {
@@ -74,14 +75,22 @@ export class GameObject {
     };
 
     /**
-     * This method is called on the first frame
+     * This method is only ever called once.
+     * Recommended for GameObject cration.
+     */
+    public init(): void {
+        return;
+    }
+
+    /**
+     * This method is only ever called once.
      */
     protected start(): void {
         return;
     }
 
     /**
-     * This method is called on every frame
+     * This method is called on every frame.
      */
     protected update(): void {
         return;
@@ -140,6 +149,7 @@ export class GameObject {
 
         component.name = name;
         component.gameObject = this;
+        component.init();
         this.components.push(component);
 
         return component as T;

@@ -6,10 +6,9 @@ import { RenderManager } from "../Core/Rendering/RenderManager";
 import { container } from "../Game";
 import { LAYER_DEFAULT } from "../GameObject";
 import { Rectangle } from "../Math/Rectangle";
+import { ComponentTypes } from "./ComponentTypes";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
-
-export const TYPE_CAMERA: string = "Camera";
 
 export class Camera extends CameraComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
@@ -30,7 +29,7 @@ export class Camera extends CameraComponent {
         super();
 
         this.allowMultiple = false;
-        this.type = TYPE_CAMERA;
+        this.type = ComponentTypes.Camera;
         this.canvas = this.domManager.canvas;
     }
 
