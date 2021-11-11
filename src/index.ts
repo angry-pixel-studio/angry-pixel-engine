@@ -1,51 +1,51 @@
 // math
-export * from "./Engine/Math/Vector2";
-export * from "./Engine/Math/Rectangle";
-export * from "./Engine/Math/Utils";
-export * from "./Engine/Math/Rotation";
+export * from "./math/Vector2";
+export * from "./math/Rectangle";
+export * from "./math/Utils";
+export * from "./math/Rotation";
 
 // main
-export { Game, GameConfig, CollisionMethodConfig, Context2DConfig } from "./Engine/Game";
-export * from "./Engine/Scene";
-export * from "./Engine/GameObject";
-export { Component, PhysicsComponent, PreRenderComponent } from "./Engine/Component";
-export * from "./Engine/Sprite";
-export * from "./Engine/Animation";
-export * from "./Engine/Tileset";
+export { Game, GameConfig, CollisionMethodConfig, Context2DConfig } from "./core/Game";
+export * from "./core/Scene";
+export * from "./core/GameObject";
+export { Component, PhysicsComponent, PreRenderComponent } from "./core/Component";
+export * from "./component/Sprite";
+export * from "./component/Animation";
+export * from "./component/renderingComponent/tilemap/Tileset";
 
 // components
-export * from "./Engine/Components/ComponentTypes";
-export * from "./Engine/Components/Colliders/BoxCollider";
-export * from "./Engine/Components/Colliders/TilemapCollider";
-export * from "./Engine/Components/Renderer/SpriteRenderer";
-export * from "./Engine/Components/Renderer/TextRenderer";
-export * from "./Engine/Components/Renderer/TiledTilemapRenderer";
-export * from "./Engine/Components/Renderer/CsvTilemapRenderer";
-export * from "./Engine/Components/Animator";
-export * from "./Engine/Components/AudioPlayer";
-export * from "./Engine/Components/Camera";
-export * from "./Engine/Components/RigidBody";
-export * from "./Engine/Components/Transform";
+export * from "./component/ComponentTypes";
+export * from "./component/colliderComponent/BoxCollider";
+export * from "./component/colliderComponent/TilemapCollider";
+export * from "./component/renderingComponent/SpriteRenderer";
+export * from "./component/renderingComponent/TextRenderer";
+export * from "./component/renderingComponent/tilemap/TiledTilemapRenderer";
+export * from "./component/renderingComponent/tilemap/CsvTilemapRenderer";
+export * from "./component/Animator";
+export * from "./component/AudioPlayer";
+export * from "./component/Camera";
+export * from "./component/RigidBody";
+export * from "./component/Transform";
 
 // game objects
-export * from "./Engine/GameObjects/GameCamera";
-export * from "./Engine/GameObjects/SpacePointer";
+export * from "./gameObject/GameCamera";
+export * from "./gameObject/SpacePointer";
 
 // facades
-export { SceneManagerFacade as SceneManager } from "./Engine/Facades/SceneManagerFacade";
-export { InputManagerFacade as InputManager } from "./Engine/Facades/InputManagerFacade";
-export { AssetManagerFacade as AssetManager } from "./Engine/Facades/AssetManagerFacade";
-export { DomManagerFacade as DomManager } from "./Engine/Facades/DomManagerFacade";
-export { TimeManagerFacade as TimeManager } from "./Engine/Facades/TimeManagerFacade";
-export { GameObjectManagerFacade as GameObjectManager } from "./Engine/Facades/GameObjectManagerFacade";
+export { SceneManagerFacade as SceneManager } from "./core/facades/SceneManagerFacade";
+export { InputManagerFacade as InputManager } from "./core/facades/InputManagerFacade";
+export { AssetManagerFacade as AssetManager } from "./core/facades/AssetManagerFacade";
+export { DomManagerFacade as DomManager } from "./core/facades/DomManagerFacade";
+export { TimeManagerFacade as TimeManager } from "./core/facades/TimeManagerFacade";
+export { GameObjectManagerFacade as GameObjectManager } from "./core/facades/GameObjectManagerFacade";
 
 // input
-export * from "./Engine/Core/Input/KeyboardController";
-export * from "./Engine/Core/Input/MouseController";
-export * from "./Engine/Core/Input/GamepadController";
-export * from "./Engine/Core/Input/TouchController";
+export * from "./input/KeyboardController";
+export * from "./input/MouseController";
+export * from "./input/GamepadController";
+export * from "./input/TouchController";
 
 // Others
-export { Collision } from "./Engine/Core/Collision/CollisionManager";
-export { ICollider } from "./Engine/Core/Collision/Collider/ICollider";
-export { CollisionData } from "./Engine/Core/Collision/CollisionData";
+export { Collision } from "./physics/collision/CollisionManager";
+export { ICollider } from "./physics/collision/collider/ICollider";
+export { CollisionData } from "./physics/collision/CollisionData";
