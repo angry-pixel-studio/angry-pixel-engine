@@ -24,7 +24,6 @@ export interface GameConfig {
     collisions?: {
         method?: CollisionMethodConfig;
         quadTreeBounds?: Rectangle | null; // TODO: implement different bounds per scene
-        debugQuadTree?: boolean;
         quadMaxLevel?: number;
         collidersPerQuad?: number;
     };
@@ -54,7 +53,6 @@ const defaultConfig: GameConfig = {
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadTreeBounds: null,
-        debugQuadTree: false,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
         collidersPerQuad: DEFAULT_MAX_COLLIDERS,
     },
