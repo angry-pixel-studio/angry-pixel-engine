@@ -72,13 +72,6 @@ export class GameObjectManagerFacade {
     }
 
     /**
-     * Destroy all the added game objects
-     */
-    public static destroyAllGameObjects(): void {
-        this.manager.destroyAllGameObjects();
-    }
-
-    /**
      * Destroy the game objects
      * @param gameObject The game object to destory
      */

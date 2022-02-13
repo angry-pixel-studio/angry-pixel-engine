@@ -87,6 +87,7 @@ export class TextRenderer extends RenderComponent {
         this.renderData.ui = this.gameObject.ui;
         this.renderData.fontFamily = this.fontFamily;
         this.renderData.fontUrl = this.fontUrl;
+        this.renderData.fontSize = this.fontSize;
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.letterSpacing = this.letterSpacing;
         this.renderData.bitmapSize = this.bitmapSize;
@@ -94,15 +95,14 @@ export class TextRenderer extends RenderComponent {
         this.renderData.smooth = this.smooth;
         this.renderData.bitmapOffset = this.bitmapOffset;
         this.renderData.orientation = this.orientation;
+        this.renderData.width = this.width;
+        this.renderData.height = this.height;
     }
 
     protected update(): void {
         if (!this.text) return;
 
-        this.renderData.width = this.width;
-        this.renderData.height = this.height;
         this.renderData.text = this.text !== this.lastFrameText ? this.crop() : this.renderData.text;
-        this.renderData.fontSize = this.fontSize;
         this.renderData.color = this.color;
         this.renderData.rotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
         this.renderData.opacity = this.opacity;
@@ -116,33 +116,24 @@ export class TextRenderer extends RenderComponent {
     private crop(): string {
         if (this.fontSize > this.height) return "";
 
-        let width = 0;
-        let height = this.fontSize;
-        let line = [];
+        const text: string[] = [];
+        let height = 0;
 
-        const text = [];
-        const words = this.text.replace(/\n/, " \n ").split(" ");
+        const lines = this.text.split("\n");
 
-        for (const word of words) {
-            const wordWidth = word !== "\n" ? word.length * (this.fontSize + this.letterSpacing) : 0;
+        for (const line of lines) {
+            const newLines = line.match(
+                new RegExp(".{1," + Math.floor(this.width / (this.fontSize + this.letterSpacing)) + "}", "g")
+            ) ?? [""];
 
-            if (word === "\n" || (width > 0 && width + wordWidth > this.width)) {
-                text.push(line.join(" "));
+            for (const newLine of newLines) {
                 height += this.fontSize + this.lineSeparation;
-
                 if (height > this.height) return text.join("\n");
 
-                line = [];
-                width = 0;
-            }
-
-            if (wordWidth > 0) {
-                line.push(word);
-                width += wordWidth;
+                text.push(newLine);
             }
         }
 
-        text.push(line.join(" "));
         return text.join("\n");
     }
 }

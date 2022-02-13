@@ -7,6 +7,7 @@ export enum RenderDataType {
     Geometric,
     Collider,
     Tilemap,
+    Mask,
 }
 
 export abstract class RenderData {

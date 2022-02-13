@@ -1,13 +1,27 @@
 export class FontAtlasFactory {
     private bitmapSize: number = 64;
     private chars: string[];
+    private fontAtlas: Map<symbol, FontAtlas> = new Map<symbol, FontAtlas>();
+    private loading: Map<symbol, boolean> = new Map<symbol, boolean>();
 
-    public async create(
+    public hasFontAtlas(fontFamily: string): boolean {
+        return this.fontAtlas.has(Symbol.for(fontFamily));
+    }
+
+    public loadingFontAtlas(fontFamily: string): boolean {
+        return this.loading.get(Symbol.for(fontFamily)) ?? false;
+    }
+
+    public getFontAtlas(fontFamily: string): FontAtlas {
+        return this.fontAtlas.get(Symbol.for(fontFamily));
+    }
+
+    public asyncCreate(
         charRanges: number[],
         fontFamily: string,
         fontUrl: string = null,
         bitmapSize: number = null
-    ): Promise<FontAtlas> {
+    ): void {
         this.bitmapSize = bitmapSize ?? this.bitmapSize;
         const fontAtlas: FontAtlas = new FontAtlas(fontFamily);
 
@@ -22,20 +36,19 @@ export class FontAtlasFactory {
         fontAtlas.canvas.height = fontAtlas.canvas.width;
 
         fontUrl !== null
-            ? await this.loadFont(fontAtlas, fontFamily, fontUrl)
+            ? this.loadFont(fontFamily, fontUrl).then(() => this.renderAtlas(fontAtlas, fontFamily))
             : this.renderAtlas(fontAtlas, fontFamily);
-
-        return fontAtlas;
     }
 
-    private async loadFont(fontAtlas: FontAtlas, family: string, url: string): Promise<void> {
-        // @ts-ignore
-        const font: FontFace = new FontFace(family, `url(${url})`);
+    private async loadFont(family: string, url: string): Promise<void> {
+        this.loading.set(Symbol.for(family), true);
 
-        const loadedFontFace = await font.load();
+        const font: FontFace = new FontFace(family, `url(${url})`);
+        await font.load();
         // @ts-ignore
         document.fonts.add(font);
-        this.renderAtlas(fontAtlas, loadedFontFace.family);
+
+        this.loading.set(Symbol.for(family), false);
     }
 
     private renderAtlas(fontAtlas: FontAtlas, fontFamily: string): void {
@@ -64,6 +77,8 @@ export class FontAtlasFactory {
                 y += this.bitmapSize;
             }
         }
+
+        this.fontAtlas.set(Symbol.for(fontFamily), fontAtlas);
     }
 }
 

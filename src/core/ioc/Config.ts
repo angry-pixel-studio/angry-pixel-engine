@@ -37,6 +37,7 @@ import { InputManagerFacade } from "../facades/InputManagerFacade";
 import { SceneManagerFacade } from "../facades/SceneManagerFacade";
 import { TimeManagerFacade } from "../facades/TimeManagerFacade";
 import { GameObjectManagerFacade } from "../facades/GameObjectManagerFacade";
+import { MaskRenderer } from "../../rendering/webGL/renderer/MaskRenderer";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
@@ -189,6 +190,16 @@ const webGLDependencies = (
     );
 
     container.add(
+        "WebGLMaskRenderer",
+        () =>
+            new MaskRenderer(
+                webglContextVersion,
+                domManager.canvas,
+                container.getSingleton<ProgramManager>("ProgramManager")
+            )
+    );
+
+    container.add(
         "Renderer",
         () =>
             new WebGLRenderer(
@@ -200,7 +211,8 @@ const webGLDependencies = (
                 container.getSingleton<ImageRenderer>("WebGLImageRenderer"),
                 container.getSingleton<TilemapRenderer>("WebGLTilemapRenderer"),
                 container.getSingleton<TextRenderer>("WebGLTextRenderer"),
-                container.getSingleton<GeometricRenderer>("WebGLGeometricRenderer")
+                container.getSingleton<GeometricRenderer>("WebGLGeometricRenderer"),
+                container.getSingleton<MaskRenderer>("WebGLMaskRenderer")
             )
     );
 };

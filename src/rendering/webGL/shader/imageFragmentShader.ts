@@ -35,8 +35,8 @@ void main()
             texColor = mix(texColor, u_maskColor, clamp(u_maskColorMix, 0.0, 1.0));
         }
 
-        fragColor = vec4(texColor.rgb, u_alpha);        
+        fragColor = vec4(texColor.rgb, u_alpha * texColor.a);        
     } else {
-        fragColor = u_solidColor;
+        fragColor = vec4(u_solidColor.rgb, u_alpha);
     }
 }`;

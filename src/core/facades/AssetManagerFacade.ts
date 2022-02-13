@@ -18,16 +18,16 @@ export class AssetManagerFacade {
      * @param url The url of the image
      * @returns The created image element
      */
-    public static createImage(url: string): HTMLImageElement {
-        return this.assetManager.createImage(url);
+    public static loadImage(url: string): HTMLImageElement {
+        return this.assetManager.laadImage(url);
     }
 
     /**
      * @param url The url of the audio file
      * @returns The created audio element
      */
-    public static createAudio(url: string): HTMLAudioElement {
-        return this.assetManager.createAudio(url);
+    public static loadAudio(url: string): HTMLAudioElement {
+        return this.assetManager.loadAudio(url);
     }
 
     /**

@@ -18,7 +18,7 @@ export class AssetManager {
         return this.assets.reduce((prev: boolean, asset: Asset) => prev && asset.loaded, true);
     }
 
-    public createImage(url: string): HTMLImageElement {
+    public laadImage(url: string): HTMLImageElement {
         const asset = this.createAsset(url, AssetType.Image);
 
         asset.element = new Image();
@@ -33,7 +33,7 @@ export class AssetManager {
         return asset.element;
     }
 
-    public createAudio(url: string): HTMLAudioElement {
+    public loadAudio(url: string): HTMLAudioElement {
         const asset = this.createAsset(url, AssetType.Audio);
 
         asset.element = new Audio();
@@ -46,21 +46,6 @@ export class AssetManager {
         }
 
         return asset.element;
-    }
-
-    public createVideo(url: string): HTMLVideoElement {
-        const asset = this.createAsset(url, AssetType.Video);
-
-        asset.element = document.createElement("video");
-        asset.element.src = url;
-
-        if (asset.element.duration) {
-            asset.loaded = true;
-        } else {
-            asset.element.addEventListener("canplaythrough", () => (asset.loaded = true));
-        }
-
-        return asset.element as HTMLVideoElement;
     }
 
     public getImage(url: string): HTMLImageElement {

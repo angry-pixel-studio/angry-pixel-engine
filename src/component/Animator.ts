@@ -6,6 +6,7 @@ import { TimeManager } from "../core/managers/TimeManager";
 import { container } from "../core/Game";
 import { Exception } from "../utils/Exception";
 import { ComponentTypes } from "./ComponentTypes";
+import { defaultFramerate } from "..";
 
 export interface AnimatorConfig {
     spriteRenderer: SpriteRenderer;
@@ -16,17 +17,12 @@ export class Animator extends EngineComponent {
     private spriteRenderer: SpriteRenderer = null;
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
     private currentAnimation: AnimationPlayer = null;
-    private defaultSprite: Sprite = null;
 
     constructor(config: AnimatorConfig) {
         super();
 
         this.type = ComponentTypes.Animator;
         this.spriteRenderer = config.spriteRenderer;
-    }
-
-    protected start(): void {
-        this.defaultSprite = this.spriteRenderer.sprite;
     }
 
     protected update(): void {
@@ -43,7 +39,8 @@ export class Animator extends EngineComponent {
         }
     }
 
-    public addAnimation(name: string, animation: Animation): this {
+    public addAnimation(name: string, animation: Animation, framerate?: number): this {
+        framerate ? (animation.framerate = framerate) : null;
         this.animations.set(name, new AnimationPlayer(animation));
 
         return this;
@@ -68,7 +65,6 @@ export class Animator extends EngineComponent {
 
         if (this.currentAnimation !== null) {
             this.currentAnimation = null;
-            this.spriteRenderer.sprite = this.defaultSprite;
         }
     }
 
@@ -76,8 +72,6 @@ export class Animator extends EngineComponent {
         return this.animations.get(name) && this.animations.get(name) === this.currentAnimation;
     }
 }
-
-const FRAME_RATE: number = 24;
 
 class AnimationPlayer {
     private _animation: Animation;
@@ -109,7 +103,7 @@ class AnimationPlayer {
     public playFrame(deltaTime: number): void {
         this._restarted = false;
 
-        if (this.frameTime >= 1 / (FRAME_RATE * this._animation.speed)) {
+        if (this.frameTime >= 1 / this._animation.framerate) {
             this.frameTime = 0;
             this.currentFrame = this.currentFrame + 1 === this._animation.sprites.length ? 0 : this.currentFrame + 1;
             this._restarted = this.currentFrame === 0;

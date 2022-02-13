@@ -1,3 +1,5 @@
+import { Vector2 } from "..";
+
 export class GamepadController {
     private readonly gamepads: Map<number, GamepadData> = new Map<number, GamepadData>();
 
@@ -30,7 +32,7 @@ export class GamepadController {
     }
 
     public update(): void {
-        for (const gamepad of navigator.getGamepads()) {
+        for (const gamepad of this.getGamepads()) {
             if (gamepad === null) {
                 continue;
             }
@@ -42,6 +44,16 @@ export class GamepadController {
             this.gamepads.get(gamepad.index).updateFromGamepad(gamepad);
         }
     }
+
+    private getGamepads(): Gamepad[] {
+        return navigator.getGamepads
+            ? navigator.getGamepads()
+            : // @ts-ignore
+            navigator.webkitGetGamepads
+            ? // @ts-ignore
+              navigator.webkitGetGamepads
+            : [];
+    }
 }
 
 export class GamepadData {
@@ -50,11 +62,19 @@ export class GamepadData {
     private readonly buttons: Map<number, boolean> = new Map<number, boolean>();
     private readonly axes: Map<number, number> = new Map<number, number>();
 
+    private readonly _dpadAxes: Vector2 = new Vector2();
+    private readonly _leftStickAxes: Vector2 = new Vector2();
+    private readonly _rightStickAxes: Vector2 = new Vector2();
+
     public updateFromGamepad(gamepad: Gamepad): void {
         this._id = gamepad.id;
         this._connected = gamepad.connected;
         gamepad.buttons.forEach((button: GamepadButton, index: number) => this.buttons.set(index, button.pressed));
         gamepad.axes.forEach((axis: number, index: number) => this.axes.set(index, axis));
+    }
+
+    public get id(): string {
+        return this._id;
     }
 
     public getButtonPressed(index: number): boolean {
@@ -65,12 +85,23 @@ export class GamepadData {
         return this.axes.get(index);
     }
 
-    public get connected(): boolean {
-        return this._connected;
+    public get dpadAxes(): Vector2 {
+        this._dpadAxes.set(this.dpadRight ? 1 : this.dpadLeft ? -1 : 0, this.dpadUp ? 1 : this.dpadDown ? -1 : 0);
+        return this._dpadAxes;
     }
 
-    public get id(): string {
-        return this._id;
+    public get leftStickAxes(): Vector2 {
+        this._leftStickAxes.set(this.leftStickHorizontal, this.leftStickVertical);
+        return this._leftStickAxes;
+    }
+
+    public get rightStickAxes(): Vector2 {
+        this._rightStickAxes.set(this.rightStickHorizontal, this.rightStickVertical);
+        return this._rightStickAxes;
+    }
+
+    public get connected(): boolean {
+        return this._connected;
     }
 
     public get dpadUp(): boolean {

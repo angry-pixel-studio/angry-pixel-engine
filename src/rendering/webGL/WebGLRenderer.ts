@@ -15,29 +15,31 @@ import { GeometricRenderer } from "./renderer/GeometricRenderer";
 import { GeometricRenderData } from "../renderData/GeometricRenderData";
 import { TilemapRenderData } from "../renderData/TilemapRenderData";
 import { TilemapRenderer } from "./renderer/TilemapRenderer";
+import { MaskRenderer } from "./renderer/MaskRenderer";
+import { MaskRenderData } from "../renderData/MaskRenderData";
 
 export enum WebGLContextVersion {
     LegacyWebGL = "webgl",
     WebGL2 = "webgl2",
 }
 
-export type LastRender = "image" | "text" | "geometric" | "tilemap";
+export type LastRender = "image" | "text" | "geometric" | "tilemap" | "mask";
 
 export class WebGLRenderer implements ContextRenderer {
-    private canvas: HTMLCanvasElement;
-    private gl: WebGLRenderingContext;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly gl: WebGLRenderingContext;
 
-    private textureManager: TextureManager;
-    private fontAtlasFactory: FontAtlasFactory;
+    private readonly textureManager: TextureManager;
+    private readonly fontAtlasFactory: FontAtlasFactory;
 
-    private imageRenderer: ImageRenderer;
-    private textRenderer: TextRenderer;
-    private geometricRenderer: GeometricRenderer;
-    private tilemapRenderer: TilemapRenderer;
+    private readonly imageRenderer: ImageRenderer;
+    private readonly textRenderer: TextRenderer;
+    private readonly geometricRenderer: GeometricRenderer;
+    private readonly tilemapRenderer: TilemapRenderer;
+    private readonly maskRenderer: MaskRenderer;
 
     // cache
     private lastRender: LastRender;
-    private fontAtlas: Map<symbol, FontAtlas> = new Map<symbol, FontAtlas>();
 
     public constructor(
         contextVersion: WebGLContextVersion,
@@ -48,7 +50,8 @@ export class WebGLRenderer implements ContextRenderer {
         imageRenderer: ImageRenderer,
         tilemapRenderer: TilemapRenderer,
         textRenderer: TextRenderer,
-        geometricRenderer: GeometricRenderer
+        geometricRenderer: GeometricRenderer,
+        maskRenderer: MaskRenderer
     ) {
         this.canvas = canvas;
         this.gl = this.canvas.getContext(contextVersion) as WebGLRenderingContext;
@@ -60,6 +63,7 @@ export class WebGLRenderer implements ContextRenderer {
         this.tilemapRenderer = tilemapRenderer;
         this.textRenderer = textRenderer;
         this.geometricRenderer = geometricRenderer;
+        this.maskRenderer = maskRenderer;
 
         this.fontAtlasFactory = fontAtlasFactory;
     }
@@ -100,6 +104,10 @@ export class WebGLRenderer implements ContextRenderer {
             );
             this.lastRender = "geometric";
         }
+        if (renderData.type === RenderDataType.Mask) {
+            this.renderMask(camera, renderData as MaskRenderData);
+            this.lastRender = "mask";
+        }
     }
 
     private renderImage(camera: CameraData, renderData: ImageRenderData): void {
@@ -121,17 +129,26 @@ export class WebGLRenderer implements ContextRenderer {
     }
 
     private renderText(camera: CameraData, renderData: TextRenderData): void {
-        const symbol: symbol = Symbol.for(renderData.fontFamily);
-        if (this.fontAtlas.has(symbol) === false) {
-            this.fontAtlasFactory
-                .create(renderData.charRanges, renderData.fontFamily, renderData.fontUrl, renderData.bitmapSize)
-                .then((fontAtlas: FontAtlas) => {
-                    this.fontAtlas.set(symbol, fontAtlas);
-                    this.fontAtlasLoaded(fontAtlas, camera, renderData);
-                });
+        if (this.fontAtlasFactory.loadingFontAtlas(renderData.fontFamily)) return;
+
+        if (!this.fontAtlasFactory.hasFontAtlas(renderData.fontFamily)) {
+            this.fontAtlasFactory.asyncCreate(
+                renderData.charRanges,
+                renderData.fontFamily,
+                renderData.fontUrl,
+                renderData.bitmapSize
+            );
         } else {
-            this.fontAtlasLoaded(this.fontAtlas.get(symbol), camera, renderData);
+            this.fontAtlasLoaded(this.fontAtlasFactory.getFontAtlas(renderData.fontFamily), camera, renderData);
         }
+    }
+
+    private renderMask(camera: CameraData, renderData: MaskRenderData): void {
+        this.maskRenderer.render(
+            renderData.ui === true ? camera.originalViewportRect : camera.viewportRect,
+            renderData,
+            this.lastRender
+        );
     }
 
     private fontAtlasLoaded(fontAtlas: FontAtlas, camera: CameraData, renderData: TextRenderData): void {

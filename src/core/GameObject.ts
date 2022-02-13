@@ -19,6 +19,7 @@ export class GameObject {
     public tag: string = null;
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
+    public keep: boolean = false;
 
     private _active: boolean = true;
     private _parent: GameObject | null = null;

@@ -1,19 +1,21 @@
 import { Sprite } from "./Sprite";
 
+export const defaultFramerate: number = 10;
+
 export interface AnimationConfig {
     sprites: Sprite[];
-    speed: number;
     loop: boolean;
+    framerate: number;
 }
 
 export class Animation {
     public sprites: Sprite[] = [];
-    public speed: number = 1;
+    public framerate: number = defaultFramerate;
     public loop: boolean = false;
 
     constructor(config: AnimationConfig) {
         this.sprites = config.sprites;
-        this.speed = config.speed ?? this.speed;
+        this.framerate = config.framerate ?? this.framerate;
         this.loop = config.loop ?? this.loop;
     }
 }

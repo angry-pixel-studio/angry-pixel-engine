@@ -7,6 +7,9 @@ import { Vector2 } from "../math/Vector2";
 import { AbstractColliderComponent } from "./colliderComponent/AbstractColliderComponent";
 import { ComponentTypes } from "./ComponentTypes";
 
+const defaultGravity: number = 10;
+type Axis = "x" | "y";
+
 export enum RigidBodyType {
     Static,
     Dynamic,
@@ -18,18 +21,14 @@ export interface RigidBodyConfig {
     gravity?: number;
 }
 
-type Axis = "x" | "y";
-
 export class RigidBody extends PhysicsComponent {
     private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
-    private readonly gravityScale: number = 9.8;
-    private readonly velocityScale: number = 60;
 
     private _rigidBodyType: RigidBodyType;
     private _colliderComponents: AbstractColliderComponent[] = [];
     private _layersToCollide: string[] = [];
     private _velocity: Vector2 = new Vector2();
-    private _gravity: Vector2 = new Vector2(0, 1);
+    private _gravity: Vector2 = new Vector2(0, defaultGravity);
 
     private deltaGravity: Vector2 = new Vector2();
     private deltaVelocity: Vector2 = new Vector2();
@@ -42,7 +41,6 @@ export class RigidBody extends PhysicsComponent {
     };
     private updatePosition: boolean = false;
     private penetrationResolution: Vector2 = new Vector2();
-    private nextObjectPosition: Vector2 = new Vector2();
 
     constructor(config: RigidBodyConfig) {
         super();
@@ -68,7 +66,7 @@ export class RigidBody extends PhysicsComponent {
     }
 
     public set gravity(gravity: number) {
-        this._gravity.set(this._gravity.x, gravity);
+        this._gravity.set(this._gravity.x, Math.abs(gravity));
     }
 
     public get gravity(): number {
@@ -109,19 +107,15 @@ export class RigidBody extends PhysicsComponent {
         this._velocity = Vector2.add(
             this._velocity,
             this._velocity,
-            Vector2.scale(this.deltaGravity, this._gravity, -this.gravityScale * this.timeManager.physicsDeltaTime)
+            Vector2.scale(this.deltaGravity, this._gravity, -this.timeManager.physicsDeltaTime)
         );
     }
 
     private applyVelocity(axis: Axis): void {
-        this.deltaVelocity[axis] = this._velocity[axis] * this.velocityScale * this.timeManager.physicsDeltaTime;
+        this.deltaVelocity[axis] = this._velocity[axis] * this.timeManager.physicsDeltaTime;
 
         if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
-            this.gameObject.transform.position = Vector2.add(
-                this.nextObjectPosition,
-                this.gameObject.transform.position,
-                this.deltaVelocity
-            );
+            Vector2.add(this.gameObject.transform.position, this.gameObject.transform.position, this.deltaVelocity);
         }
     }
 

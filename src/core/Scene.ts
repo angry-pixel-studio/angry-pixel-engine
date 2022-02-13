@@ -107,13 +107,6 @@ export class Scene {
     }
 
     /**
-     * Desroy all the loaded game objects
-     */
-    protected destroyAllGameObjects(): void {
-        this.gameObjectManager.destroyAllGameObjects();
-    }
-
-    /**
      * Destroy one game objects by its name
      * @param name The name of the game object
      */
