@@ -1,7 +1,5 @@
 import { Sprite } from "./Sprite";
 
-export const defaultFramerate: number = 10;
-
 export interface AnimationConfig {
     sprites: Sprite[];
     loop: boolean;
@@ -10,7 +8,7 @@ export interface AnimationConfig {
 
 export class Animation {
     public sprites: Sprite[] = [];
-    public framerate: number = defaultFramerate;
+    public framerate: number = 10;
     public loop: boolean = false;
 
     constructor(config: AnimationConfig) {

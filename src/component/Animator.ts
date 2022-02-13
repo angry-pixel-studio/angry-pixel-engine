@@ -6,7 +6,6 @@ import { TimeManager } from "../core/managers/TimeManager";
 import { container } from "../core/Game";
 import { Exception } from "../utils/Exception";
 import { ComponentTypes } from "./ComponentTypes";
-import { defaultFramerate } from "..";
 
 export interface AnimatorConfig {
     spriteRenderer: SpriteRenderer;
