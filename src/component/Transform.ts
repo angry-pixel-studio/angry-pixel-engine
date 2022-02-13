@@ -16,6 +16,7 @@ export class Transform extends TransformComponent {
     private cache: Vector2 = new Vector2();
     private lastParentRadians: number = 0;
     private lastPosition: Vector2 = new Vector2();
+    private scaledInnerPosition: Vector2 = new Vector2();
 
     constructor() {
         super();
@@ -91,7 +92,8 @@ export class Transform extends TransformComponent {
                 this.lastParentRadians = this._parent.rotation.radians;
             }
 
-            Vector2.add(this._position, this._parent.position, this._innerPosition);
+            this.updateScaledInnerPosition();
+            Vector2.add(this._position, this._parent.position, this.scaledInnerPosition);
         } else {
             this._position.copy(this._parent.position);
         }
@@ -107,5 +109,12 @@ export class Transform extends TransformComponent {
         this.cache.set(Math.cos(translatedRadians), Math.sin(translatedRadians));
 
         Vector2.scale(this._innerPosition, this.cache, this._innerPosition.magnitude);
+    }
+
+    private updateScaledInnerPosition(): void {
+        this.scaledInnerPosition.set(
+            this._innerPosition.x * this._parent.scale.x,
+            this._innerPosition.y * this._parent.scale.y
+        );
     }
 }

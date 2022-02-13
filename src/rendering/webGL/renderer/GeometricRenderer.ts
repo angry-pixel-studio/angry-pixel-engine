@@ -115,6 +115,7 @@ export class GeometricRenderer {
 
         const { r, g, b, a } = hexToRgba(color);
         this.gl.uniform4f(this.programManager.solidColorUniform, r, g, b, a);
+        this.gl.uniform1f(this.programManager.alphaUniform, 1);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, posVertices.length / 2);
     }

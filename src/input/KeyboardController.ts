@@ -22,4 +22,28 @@ export class KeyboardController {
     public isPressed(keyCode: string): boolean {
         return this.keyPresses.get(keyCode) ?? false;
     }
+
+    public orPressed(keyCodes: string[]): boolean {
+        return keyCodes.reduce<boolean>((result, keyCode) => result || (this.keyPresses.get(keyCode) ?? false), false);
+    }
+
+    public andPressed(keyCodes: string[]): boolean {
+        return keyCodes.reduce<boolean>((result, keyCode) => result && (this.keyPresses.get(keyCode) ?? false), true);
+    }
+
+    public isPressedReturn<T>(keyCode: string, returnTrue: T, returnFalse: T): T {
+        return this.keyPresses.get(keyCode) ? returnTrue : returnFalse;
+    }
+
+    public orPressedReturn<T>(keyCodes: string[], returnTrue: T, returnFalse: T): T {
+        return keyCodes.reduce<boolean>((result, keyCode) => result || (this.keyPresses.get(keyCode) ?? false), false)
+            ? returnTrue
+            : returnFalse;
+    }
+
+    public andPressedReturn<T>(keyCodes: string[], returnTrue: T, returnFalse: T): T {
+        return keyCodes.reduce<boolean>((result, keyCode) => result && (this.keyPresses.get(keyCode) ?? false), true)
+            ? returnTrue
+            : returnFalse;
+    }
 }

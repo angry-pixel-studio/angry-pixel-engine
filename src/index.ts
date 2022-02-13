@@ -15,6 +15,7 @@ export * from "./component/colliderComponent/BoxCollider";
 export * from "./component/colliderComponent/TilemapCollider";
 export * from "./component/renderingComponent/SpriteRenderer";
 export * from "./component/renderingComponent/TextRenderer";
+export * from "./component/renderingComponent/MaskRenderer";
 export * from "./component/renderingComponent/tilemap/TiledTilemapRenderer";
 export * from "./component/renderingComponent/tilemap/CsvTilemapRenderer";
 export * from "./component/renderingComponent/tilemap/Tileset";

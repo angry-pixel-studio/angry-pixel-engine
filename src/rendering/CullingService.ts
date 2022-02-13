@@ -3,6 +3,7 @@ import { CameraData } from "./CameraData";
 import { ColliderRenderData } from "./renderData/ColliderRenderData";
 import { GeometricRenderData } from "./renderData/GeometricRenderData";
 import { ImageRenderData } from "./renderData/ImageRenderData";
+import { MaskRenderData } from "./renderData/MaskRenderData";
 import { RenderData, RenderDataType } from "./renderData/RenderData";
 import { TextRenderData } from "./renderData/TextRenderData";
 import { TilemapRenderData, TileRenderData } from "./renderData/TilemapRenderData";
@@ -26,11 +27,13 @@ export class CullingService {
                     return this.cullGeometric(viewportRect, renderData as GeometricRenderData);
                 case RenderDataType.Text:
                     return this.cullText(viewportRect, renderData as TextRenderData);
+                case RenderDataType.Mask:
+                    return this.cullSprite(viewportRect, renderData as MaskRenderData);
             }
         });
     }
 
-    private cullSprite(viewportRect: Rectangle, renderData: ImageRenderData): boolean {
+    private cullSprite(viewportRect: Rectangle, renderData: ImageRenderData | MaskRenderData): boolean {
         return this.isTargetVisible(viewportRect, {
             x: renderData.position.x - renderData.width / 2,
             x1: renderData.position.x + renderData.width / 2,

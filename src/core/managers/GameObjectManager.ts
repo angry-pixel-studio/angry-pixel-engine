@@ -11,16 +11,21 @@ export class GameObjectManager {
         name: string,
         parent: GameObject = null
     ): T {
-        if (this.findGameObjectByName(name)) {
+        const found = this.findGameObjectByName(name);
+        if (found && found.keep === false) {
             throw new Exception(`There is already a GameObject with the name ${name}`);
+        }
+        if (found && found.keep) {
+            return found as T;
         }
 
         const gameObject: GameObject = gameObjectFactory();
         gameObject.name = name;
         gameObject.parent = parent;
-        gameObject.init();
 
         this.gameObjects.push(gameObject);
+
+        gameObject.init();
 
         return gameObject as T;
     }
@@ -57,7 +62,9 @@ export class GameObjectManager {
     }
 
     public destroyAllGameObjects(): void {
-        this.gameObjects.forEach((gameObject: GameObject) => this._destroyGameObject(gameObject, false));
+        this.gameObjects.forEach((gameObject: GameObject) =>
+            gameObject.keep ? null : this._destroyGameObject(gameObject, false)
+        );
         this.gameObjects = [];
     }
 

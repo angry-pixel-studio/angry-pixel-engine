@@ -2,7 +2,7 @@ import { Exception } from "../../utils/Exception";
 import { ShaderLoader } from "./ShaderLoader";
 
 export class ProgramFactory {
-    shaderLoader: ShaderLoader;
+    private readonly shaderLoader: ShaderLoader;
 
     constructor(shaderLoader: ShaderLoader) {
         this.shaderLoader = shaderLoader;

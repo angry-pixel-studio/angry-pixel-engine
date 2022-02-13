@@ -34,3 +34,13 @@ export const range = (start: number, end: number, steps: number = 1): number[] =
     }
     return range;
 };
+
+/**
+ * @param value number to compare
+ * @param min min value
+ * @param max max value
+ * @returns true if the number is between the min and the max, false instead
+ */
+export const between = (value: number, min: number, max: number): boolean => {
+    return value >= min && value <= max;
+};

@@ -14,4 +14,5 @@ export const ComponentTypes = {
     SpriteRenderer: "SpriteRenderer",
     TextRenderer: "TextRenderer",
     TiledTilemapRenderer: "TiledTilemapRenderer",
+    MaskRenderer: "MaskRenderer",
 };

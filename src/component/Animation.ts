@@ -2,18 +2,18 @@ import { Sprite } from "./Sprite";
 
 export interface AnimationConfig {
     sprites: Sprite[];
-    speed: number;
     loop: boolean;
+    framerate: number;
 }
 
 export class Animation {
     public sprites: Sprite[] = [];
-    public speed: number = 1;
+    public framerate: number = 10;
     public loop: boolean = false;
 
     constructor(config: AnimationConfig) {
         this.sprites = config.sprites;
-        this.speed = config.speed ?? this.speed;
+        this.framerate = config.framerate ?? this.framerate;
         this.loop = config.loop ?? this.loop;
     }
 }

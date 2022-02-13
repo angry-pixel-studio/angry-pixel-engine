@@ -1,7 +1,7 @@
 import { Exception } from "../../utils/Exception";
 
 export class ShaderLoader {
-    load(gl: WebGLRenderingContext, type: number, source: string): WebGLShader {
+    public load(gl: WebGLRenderingContext, type: number, source: string): WebGLShader {
         const shader: WebGLShader = gl.createShader(type);
 
         gl.shaderSource(shader, source);

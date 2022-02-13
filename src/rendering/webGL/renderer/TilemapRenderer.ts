@@ -62,11 +62,7 @@ export class TilemapRenderer {
         this.gl.uniformMatrix4fv(this.programManager.modelMatrixUniform, false, this.modelMatrix);
         this.gl.uniformMatrix4fv(this.programManager.textureMatrixUniform, false, this.textureMatrix);
 
-        if (renderData.alpha < 1) {
-            this.gl.enable(this.gl.BLEND);
-        } else {
-            this.gl.disable(this.gl.BLEND);
-        }
+        this.gl.enable(this.gl.BLEND);
 
         if (this.lastTexture !== texture || lastRender !== "tilemap") {
             this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
