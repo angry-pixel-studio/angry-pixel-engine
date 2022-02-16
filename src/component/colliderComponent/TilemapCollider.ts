@@ -39,7 +39,9 @@ export class TilemapCollider extends AbstractColliderComponent {
                     tileData.width,
                     tileData.height,
                     this._physics,
-                    this.gameObject
+                    this.gameObject,
+                    0,
+                    false
                 )
             );
         });

@@ -7,6 +7,7 @@ export class RectangleCollider implements ICollider {
     public readonly gameObject: GameObject;
     public readonly shape: Rectangle;
     public readonly physics: boolean;
+    public readonly updateCollisions: boolean;
 
     private _position: Vector2 = new Vector2();
     private _width: number = 0;
@@ -23,7 +24,8 @@ export class RectangleCollider implements ICollider {
         height: number,
         physics: boolean,
         gameObject: GameObject,
-        angle: number = 0
+        angle: number = 0,
+        updateCollisions: boolean = true
     ) {
         this._position.set(position.x, position.y);
         this._quadVertices = [new Vector2(), new Vector2(), new Vector2(), new Vector2()];
@@ -32,6 +34,7 @@ export class RectangleCollider implements ICollider {
         this._angle = angle;
         this.gameObject = gameObject;
         this.physics = physics;
+        this.updateCollisions = updateCollisions;
 
         this.shape = new Rectangle(this._position, this._width, this._height);
 

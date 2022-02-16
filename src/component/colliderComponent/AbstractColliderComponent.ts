@@ -5,9 +5,10 @@ import { container } from "../../core/Game";
 
 export abstract class AbstractColliderComponent extends ColliderComponent {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
-    protected colliders: ICollider[] = [];
-    protected _physics: boolean = true;
     protected renderer: RenderComponent = null;
+
+    protected _physics: boolean = true;
+    public readonly colliders: ICollider[] = [];
 
     private collisionsCache: Collision[] = [];
 
@@ -31,10 +32,10 @@ export abstract class AbstractColliderComponent extends ColliderComponent {
     }
 
     public getCollisionWithLayer(layer: string): Collision | null {
-        this.updatePosition();
+        // this.updatePosition();
 
         for (const collider of this.colliders) {
-            const collisions = this.collisionManager.getCollisionsForCollider(collider);
+            const collisions = this.collisionManager.getFrameCollisionsForCollider(collider);
             for (const collision of collisions) {
                 if (collision.remoteCollider.gameObject.layer === layer) {
                     return collision;
@@ -46,12 +47,12 @@ export abstract class AbstractColliderComponent extends ColliderComponent {
     }
 
     public getCollisionsWithLayer(layer: string): Collision[] {
-        this.updatePosition();
+        // this.updatePosition();
 
         this.collisionsCache = [];
 
         for (const collider of this.colliders) {
-            const collisions = this.collisionManager.getCollisionsForCollider(collider);
+            const collisions = this.collisionManager.getFrameCollisionsForCollider(collider);
             for (const collision of collisions) {
                 if (collision.remoteCollider.gameObject.layer === layer) {
                     this.collisionsCache.push(collision);

@@ -11,4 +11,5 @@ export interface ICollider {
     readonly bottomRightQuadVertex: Vector2;
     readonly topLeftQuadVertex: Vector2;
     readonly topRightQuadVertex: Vector2;
+    readonly updateCollisions: boolean;
 }

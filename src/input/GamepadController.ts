@@ -1,4 +1,4 @@
-import { Vector2 } from "..";
+import { Vector2 } from "../math/Vector2";
 
 export class GamepadController {
     private readonly gamepads: Map<number, GamepadData> = new Map<number, GamepadData>();

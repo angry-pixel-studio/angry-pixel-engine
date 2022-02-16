@@ -4,6 +4,7 @@ import { ICollider } from "./collider/ICollider";
 import { QuadTree } from "./QuadTree";
 import { CollisionData } from "./CollisionData";
 import { ICollisionResolver } from "./resolver/ICollisionResolver";
+import { ComponentTypes } from "../..";
 
 export interface Collision {
     localCollider: ICollider;
@@ -17,6 +18,7 @@ export class CollisionManager {
     private bounds: Rectangle;
     private fixedQuadTree: boolean;
     private resolver: ICollisionResolver;
+    private collisions: Collision[] = [];
 
     // cache
     private minBounds: Vector2 = new Vector2();
@@ -54,10 +56,73 @@ export class CollisionManager {
         }
     }
 
-    public getCollisionsForCollider(collider: ICollider): Collision[] {
+    public getFrameCollisionsForCollider(collider: ICollider): Collision[] {
         if (this.colliders.indexOf(collider) === -1) return [];
 
-        return this.narrowPhase(collider, this.broadPhase(collider));
+        return this.collisions.filter((collision) => collision.localCollider === collider);
+    }
+
+    public refreshCollisionsForCollider(collider: ICollider): Collision[] {
+        if (this.colliders.indexOf(collider) === -1) return [];
+
+        const collisions = this.narrowPhase(collider, this.broadPhase(collider));
+
+        this.collisions = this.collisions.filter((collision) => collision.localCollider !== collider);
+        this.collisions.push(...collisions);
+
+        return collisions;
+    }
+
+    public update(): void {
+        this.collisions = [];
+
+        if (this.colliders.length === 0) {
+            return;
+        }
+
+        this.quadTree.clearColliders();
+        this.quadTree.clearQuadrants();
+
+        if (this.fixedQuadTree === false) {
+            this.updateNewBounds();
+            if (this.newBounds.equals(this.bounds) === false) {
+                this.bounds.updateFromRect(this.newBounds);
+                this.quadTree.updateBounds(this.bounds);
+            }
+        }
+
+        for (const collider of this.colliders) {
+            this.quadTree.addCollider(collider);
+        }
+
+        this.updateCollisions();
+    }
+
+    private updateNewBounds(): void {
+        this.colliders.forEach((collider: ICollider) => {
+            this.minBounds.set(
+                Math.min(collider.bottomLeftQuadVertex.x, this.minBounds.x),
+                Math.min(collider.bottomLeftQuadVertex.y, this.minBounds.y)
+            );
+
+            this.maxBounds.set(
+                Math.max(collider.topRightQuadVertex.x, this.maxBounds.x),
+                Math.max(collider.topRightQuadVertex.y, this.maxBounds.y)
+            );
+        });
+
+        this.newBounds.set(
+            this.minBounds.x,
+            this.minBounds.y,
+            this.maxBounds.x - this.minBounds.x,
+            this.maxBounds.y - this.minBounds.y
+        );
+    }
+
+    private updateCollisions(): void {
+        this.colliders
+            .filter((collider) => collider.updateCollisions)
+            .forEach((collider) => this.collisions.push(...this.narrowPhase(collider, this.broadPhase(collider))));
     }
 
     // broadPhase takes care of looking for possible collisions
@@ -82,47 +147,5 @@ export class CollisionManager {
             });
 
         return collisions;
-    }
-
-    public update(): void {
-        if (this.colliders.length === 0) {
-            return;
-        }
-
-        this.quadTree.clearColliders();
-        this.quadTree.clearQuadrants();
-
-        if (this.fixedQuadTree === false) {
-            this.updateNewBounds();
-            if (this.newBounds.equals(this.bounds) === false) {
-                this.bounds.updateFromRect(this.newBounds);
-                this.quadTree.updateBounds(this.bounds);
-            }
-        }
-
-        for (const collider of this.colliders) {
-            this.quadTree.addCollider(collider);
-        }
-    }
-
-    private updateNewBounds(): void {
-        this.colliders.forEach((collider: ICollider) => {
-            this.minBounds.set(
-                Math.min(collider.bottomLeftQuadVertex.x, this.minBounds.x),
-                Math.min(collider.bottomLeftQuadVertex.y, this.minBounds.y)
-            );
-
-            this.maxBounds.set(
-                Math.max(collider.topRightQuadVertex.x, this.maxBounds.x),
-                Math.max(collider.topRightQuadVertex.y, this.maxBounds.y)
-            );
-        });
-
-        this.newBounds.set(
-            this.minBounds.x,
-            this.minBounds.y,
-            this.maxBounds.x - this.minBounds.x,
-            this.maxBounds.y - this.minBounds.y
-        );
     }
 }

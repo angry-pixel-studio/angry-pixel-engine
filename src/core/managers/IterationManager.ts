@@ -1,5 +1,6 @@
 import { InputManager } from "../../input/InputManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
+import { PhysicsManager } from "../../physics/PhysicsManager";
 import { RenderManager } from "../../rendering/RenderManager";
 import { TimeManager } from "./TimeManager";
 
@@ -21,6 +22,7 @@ export class IterationManager {
     constructor(
         private readonly timeManager: TimeManager,
         private readonly collisionManager: CollisionManager,
+        private readonly physicsManager: PhysicsManager,
         private readonly renderManager: RenderManager,
         private readonly inputManager: InputManager
     ) {}
@@ -39,9 +41,11 @@ export class IterationManager {
         );
 
         this.timeManager.unscaledPhysicsDeltaTime = this.timeManager.maxPhysicsDeltaTime;
+        //this.timeManager.unscaledPhysicsDeltaTime = this.timeManager.unscaledGameDeltaTime;
 
         if (this.gameLoopAccumulator > this.timeManager.maxGameDeltatime) {
             this.mainIteration();
+            // this.physicsIteration();
             this.gameLoopAccumulator -= this.timeManager.maxGameDeltatime;
         }
 
@@ -63,16 +67,17 @@ export class IterationManager {
         this.dispatchFrameEvent(EVENT_UPDATE);
         // updates engine components
         this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
-
-        // pre-physics updates
+        // updates transform components
         this.dispatchFrameEvent(EVENT_UPDATE_TRANSFORM);
-        this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
-        this.collisionManager.update();
     }
 
     private physicsIteration(): void {
         this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+
         this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
+        this.collisionManager.update();
+
+        this.physicsManager.update();
     }
 
     private preRenderIteration(): void {

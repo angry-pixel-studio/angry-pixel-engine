@@ -38,6 +38,7 @@ import { SceneManagerFacade } from "../facades/SceneManagerFacade";
 import { TimeManagerFacade } from "../facades/TimeManagerFacade";
 import { GameObjectManagerFacade } from "../facades/GameObjectManagerFacade";
 import { MaskRenderer } from "../../rendering/webGL/renderer/MaskRenderer";
+import { PhysicsManager } from "../../physics/PhysicsManager";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
@@ -49,9 +50,11 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
 
     const domManager: DomManager = container.getSingleton<DomManager>("DomManager");
 
+    container.add("TimeManager", () => new TimeManager(gameConfig.gameFrameRate, gameConfig.physicsFramerate));
+
     renderingDependencies(container, gameConfig, domManager);
     inputDependencies(container, domManager);
-    collisionDependencies(container, gameConfig);
+    physicsDependencies(container, gameConfig);
 
     container.add(
         "SceneManager",
@@ -63,13 +66,13 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
     );
     container.add("GameObjectManager", () => new GameObjectManager());
     container.add("AssetManager", () => new AssetManager());
-    container.add("TimeManager", () => new TimeManager(gameConfig.gameFrameRate, gameConfig.physicsFramerate));
     container.add(
         "IterationManager",
         () =>
             new IterationManager(
                 container.getSingleton<TimeManager>("TimeManager"),
                 container.getSingleton<CollisionManager>("CollisionManager"),
+                container.getSingleton<PhysicsManager>("PhysicsManager"),
                 container.getSingleton<RenderManager>("RenderManager"),
                 container.getSingleton<InputManager>("InputManager")
             )
@@ -78,7 +81,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
     initializeFacades(container);
 };
 
-const collisionDependencies = (container: Container, gameConfig: GameConfig): void => {
+const physicsDependencies = (container: Container, gameConfig: GameConfig): void => {
     if (gameConfig.collisions.method === CollisionMethodConfig.AABB) {
         container.add("CollisionResolver", () => new AABBResolver());
     } else if (gameConfig.collisions.method === CollisionMethodConfig.SAT) {
@@ -95,6 +98,15 @@ const collisionDependencies = (container: Container, gameConfig: GameConfig): vo
                 gameConfig.collisions.quadTreeBounds,
                 gameConfig.collisions.quadMaxLevel,
                 gameConfig.collisions.collidersPerQuad
+            )
+    );
+
+    container.add(
+        "PhysicsManager",
+        () =>
+            new PhysicsManager(
+                container.getSingleton<TimeManager>("TimeManager"),
+                container.getSingleton<CollisionManager>("CollisionManager")
             )
     );
 };

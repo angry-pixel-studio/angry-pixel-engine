@@ -1,19 +1,15 @@
-import { TimeManager } from "../core/managers/TimeManager";
-import { Component, PhysicsComponent } from "../core/Component";
-import { Collision } from "../physics/collision/CollisionManager";
+import { Component, EngineComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
 import { container } from "../core/Game";
 import { Vector2 } from "../math/Vector2";
 import { AbstractColliderComponent } from "./colliderComponent/AbstractColliderComponent";
 import { ComponentTypes } from "./ComponentTypes";
+import { ICollider } from "..";
+import { PhysicsManager, RigidBodyData, RigidBodyType } from "../physics/PhysicsManager";
 
 const defaultGravity: number = 10;
-type Axis = "x" | "y";
 
-export enum RigidBodyType {
-    Static,
-    Dynamic,
-}
+export { RigidBodyType } from "../physics/PhysicsManager";
 
 export interface RigidBodyConfig {
     rigidBodyType: RigidBodyType;
@@ -21,26 +17,11 @@ export interface RigidBodyConfig {
     gravity?: number;
 }
 
-export class RigidBody extends PhysicsComponent {
-    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
+export class RigidBody extends EngineComponent {
+    private physicsManager: PhysicsManager = container.getSingleton<PhysicsManager>("PhysicsManager");
 
-    private _rigidBodyType: RigidBodyType;
-    private _colliderComponents: AbstractColliderComponent[] = [];
-    private _layersToCollide: string[] = [];
-    private _velocity: Vector2 = new Vector2();
-    private _gravity: Vector2 = new Vector2(0, defaultGravity);
-
-    private deltaGravity: Vector2 = new Vector2();
-    private deltaVelocity: Vector2 = new Vector2();
-
-    private collisions: Collision[] = [];
-
-    private penetrationPerDirection: { x: Map<number, number>; y: Map<number, number> } = {
-        x: new Map<number, number>(),
-        y: new Map<number, number>(),
-    };
-    private updatePosition: boolean = false;
-    private penetrationResolution: Vector2 = new Vector2();
+    public readonly rigidBodyType: RigidBodyType;
+    private data: RigidBodyData;
 
     constructor(config: RigidBodyConfig) {
         super();
@@ -48,137 +29,55 @@ export class RigidBody extends PhysicsComponent {
         this.type = ComponentTypes.RigidBody;
         this.allowMultiple = false;
 
-        this._rigidBodyType = config.rigidBodyType;
-        this._layersToCollide = config.layersToCollide ?? this._layersToCollide;
-        this._gravity.set(0, config.gravity ?? this._gravity.y);
-    }
+        this.rigidBodyType = config.rigidBodyType;
 
-    public get rigidBodyType(): RigidBodyType {
-        return this._rigidBodyType;
+        this.data = {
+            layersToCollider: config.layersToCollide ?? [],
+            gravity: new Vector2(0, config.gravity ?? defaultGravity),
+            velocity: new Vector2(),
+            colliders: [],
+            gameObject: null,
+        };
     }
 
     public set velocity(velocity: Vector2) {
-        this._velocity.set(velocity.x, velocity.y);
+        this.data.velocity.set(velocity.x, velocity.y);
     }
 
     public get velocity(): Vector2 {
-        return this._velocity;
+        return this.data.velocity;
     }
 
     public set gravity(gravity: number) {
-        this._gravity.set(this._gravity.x, Math.abs(gravity));
+        this.data.gravity.set(0, Math.abs(gravity));
     }
 
     public get gravity(): number {
-        return this._gravity.y;
+        return this.data.gravity.y;
     }
 
     protected start(): void {
-        this.gameObject
+        if (this.getColliders().length === 0) {
+            throw new Exception("RigidBody needs at least one Collider with physics");
+        }
+
+        this.data.gameObject = this.gameObject;
+        this.data.colliders = this.getColliders();
+
+        if (this.rigidBodyType === RigidBodyType.Dynamic) {
+            this.physicsManager.addRigidBodyData(this.data);
+        }
+    }
+
+    private getColliders(): ICollider[] {
+        return this.gameObject
             .getComponents()
-            .forEach((component: Component) =>
-                component instanceof AbstractColliderComponent && component.physics
-                    ? this._colliderComponents.push(component)
-                    : null
+            .reduce<ICollider[]>(
+                (colliders, component: Component) =>
+                    component instanceof AbstractColliderComponent && component.physics
+                        ? [...colliders, ...component.colliders]
+                        : colliders,
+                []
             );
-
-        if (this._colliderComponents.length === 0) {
-            throw new Exception("RigidBody needs at least one Collider");
-        }
-    }
-
-    protected update(): void {
-        if (this._rigidBodyType === RigidBodyType.Static) return;
-
-        this.applyGravity();
-
-        this.deltaVelocity.set(0, 0);
-        this.applyVelocity("x");
-        this.applyReposition("x");
-
-        this.deltaVelocity.set(0, 0);
-        this.applyVelocity("y");
-        this.applyReposition("y");
-    }
-
-    private applyGravity(): void {
-        if (this._gravity.y <= 0) return;
-
-        this._velocity = Vector2.add(
-            this._velocity,
-            this._velocity,
-            Vector2.scale(this.deltaGravity, this._gravity, -this.timeManager.physicsDeltaTime)
-        );
-    }
-
-    private applyVelocity(axis: Axis): void {
-        this.deltaVelocity[axis] = this._velocity[axis] * this.timeManager.physicsDeltaTime;
-
-        if (this.deltaVelocity.x !== 0 || this.deltaVelocity.y !== 0) {
-            Vector2.add(this.gameObject.transform.position, this.gameObject.transform.position, this.deltaVelocity);
-        }
-    }
-
-    private applyReposition(axis: Axis): void {
-        if (this._layersToCollide.length === 0) return;
-
-        this.updatePosition = false;
-        this.penetrationResolution.set(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
-        this.penetrationPerDirection[axis].clear();
-
-        this.updateCollisions();
-
-        if (this.collisions.length === 0) return;
-
-        this.collisions.forEach((collision: Collision) => {
-            if (
-                collision.remoteCollider.physics === true &&
-                collision.remoteCollider.gameObject.getComponentByType<RigidBody>(ComponentTypes.RigidBody) !== null
-            ) {
-                if (collision.collisionData.displacementDirection[axis] !== 0) {
-                    this.setPenetrationPerDirectionPerAxis(axis, collision);
-                }
-            }
-        });
-
-        this.setPenetrationResolution(axis);
-
-        if (this.updatePosition) {
-            this.gameObject.transform.position = this.penetrationResolution;
-        }
-    }
-
-    private setPenetrationPerDirectionPerAxis(axis: Axis, collision: Collision): void {
-        this.penetrationPerDirection[axis].set(
-            collision.collisionData.displacementDirection[axis],
-            Math.max(
-                this.penetrationPerDirection[axis].get(collision.collisionData.displacementDirection[axis]) ?? 0,
-                collision.collisionData.penetration
-            )
-        );
-    }
-
-    private setPenetrationResolution(axis: Axis): void {
-        this.penetrationPerDirection[axis].forEach((penetration: number, direction: number) => {
-            this.penetrationResolution[axis] += direction * penetration;
-
-            if (this._velocity[axis] !== 0 && Math.sign(this._velocity[axis]) !== Math.sign(direction)) {
-                this._velocity[axis] = 0;
-            }
-
-            this.updatePosition = true;
-        });
-    }
-
-    private updateCollisions(): void {
-        this.collisions = [];
-
-        this._colliderComponents.forEach((collider: AbstractColliderComponent) =>
-            this._layersToCollide.forEach((layer: string) =>
-                collider
-                    .getCollisionsWithLayer(layer)
-                    .forEach((collision: Collision) => this.collisions.push(collision))
-            )
-        );
     }
 }
