@@ -1,8 +1,6 @@
-import { CollisionManager, Collision } from "./collision/CollisionManager";
-import { GameObject } from "../core/GameObject";
-import { Vector2 } from "../math/Vector2";
-import { ICollider } from "./collision/collider/ICollider";
-import { TimeManager } from "../core/managers/TimeManager";
+import { CollisionManager, Collision } from "../collision/CollisionManager";
+import { Vector2 } from "../../math/Vector2";
+import { RigidBodyData } from "./RigidBodyData";
 
 type Axis = "x" | "y";
 
@@ -11,57 +9,44 @@ export enum RigidBodyType {
     Dynamic,
 }
 
-export interface RigidBodyData {
-    gameObject: GameObject;
-    gravity: Vector2;
-    velocity: Vector2;
-    layersToCollider: string[];
-    colliders: ICollider[];
-}
-
-export class PhysicsManager {
+export class RigidBodyManager {
     private rigidBodyData: RigidBodyData[] = [];
 
     private cachePosition: Vector2 = new Vector2();
     private cacheVelocity: Vector2 = new Vector2();
-    private cacheGravity: Vector2 = new Vector2();
     private cacheDisplacement: Vector2 = new Vector2();
     private cacheNewDisplacement: number = 0;
     private cacheCollisions: Collision[];
 
-    constructor(private readonly timeManager: TimeManager, private readonly collisionManager: CollisionManager) {}
+    constructor(private readonly collisionManager: CollisionManager) {}
 
     public addRigidBodyData(data: RigidBodyData): void {
         this.rigidBodyData.push(data);
     }
 
-    public update(): void {
+    public update(deltaTime: number): void {
         this.rigidBodyData.forEach((data) => {
-            this.applyGravity(data);
+            this.applyGravity(data, deltaTime);
 
-            this.applyVelocity(data, "x");
+            this.applyVelocity(data, deltaTime, "x");
             this.applyReposition(data, "x");
 
-            this.applyVelocity(data, "y");
+            this.applyVelocity(data, deltaTime, "y");
             this.applyReposition(data, "y");
         });
     }
 
-    private applyGravity(data: RigidBodyData): void {
-        if (data.gravity.y > 0) {
-            Vector2.subtract(
-                data.velocity,
-                data.velocity,
-                Vector2.scale(this.cacheGravity, data.gravity, this.timeManager.physicsDeltaTime)
-            );
+    private applyGravity(data: RigidBodyData, deltaTime: number): void {
+        if (data.gravity > 0) {
+            data.velocity.y -= data.gravity * deltaTime;
         }
     }
 
-    private applyVelocity(data: RigidBodyData, axis: Axis): void {
+    private applyVelocity(data: RigidBodyData, deltaTime: number, axis: Axis): void {
         this.cacheVelocity.set(0, 0);
 
-        this.cacheVelocity[axis] = data.velocity[axis] * this.timeManager.physicsDeltaTime;
-        Vector2.add(data.gameObject.transform.position, data.gameObject.transform.position, this.cacheVelocity);
+        this.cacheVelocity[axis] = data.velocity[axis] * deltaTime;
+        Vector2.add(data.position, data.position, this.cacheVelocity);
 
         data.colliders.forEach((collider) => {
             collider.position = Vector2.add(this.cachePosition, collider.position, this.cacheVelocity);
@@ -90,7 +75,7 @@ export class PhysicsManager {
             return;
         }
 
-        Vector2.add(data.gameObject.transform.position, data.gameObject.transform.position, this.cacheDisplacement);
+        Vector2.add(data.position, data.position, this.cacheDisplacement);
 
         data.colliders.forEach((collider) => {
             collider.position = Vector2.add(this.cachePosition, collider.position, this.cacheDisplacement);

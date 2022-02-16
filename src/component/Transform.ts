@@ -92,8 +92,12 @@ export class Transform extends TransformComponent {
                 this.lastParentRadians = this._parent.rotation.radians;
             }
 
-            this.updateScaledInnerPosition();
-            Vector2.add(this._position, this._parent.position, this.scaledInnerPosition);
+            if (this.parentScale) {
+                this.updateScaledInnerPosition();
+                Vector2.add(this._position, this._parent.position, this.scaledInnerPosition);
+            } else {
+                Vector2.add(this._position, this._parent.position, this._innerPosition);
+            }
         } else {
             this._position.copy(this._parent.position);
         }

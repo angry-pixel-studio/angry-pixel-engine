@@ -1,6 +1,6 @@
 import { InputManager } from "../../input/InputManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
-import { PhysicsManager } from "../../physics/PhysicsManager";
+import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
 import { RenderManager } from "../../rendering/RenderManager";
 import { TimeManager } from "./TimeManager";
 
@@ -22,7 +22,7 @@ export class IterationManager {
     constructor(
         private readonly timeManager: TimeManager,
         private readonly collisionManager: CollisionManager,
-        private readonly physicsManager: PhysicsManager,
+        private readonly physicsManager: RigidBodyManager,
         private readonly renderManager: RenderManager,
         private readonly inputManager: InputManager
     ) {}
@@ -77,7 +77,7 @@ export class IterationManager {
         this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
         this.collisionManager.update();
 
-        this.physicsManager.update();
+        this.physicsManager.update(this.timeManager.physicsDeltaTime);
     }
 
     private preRenderIteration(): void {

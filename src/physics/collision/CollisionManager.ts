@@ -4,7 +4,6 @@ import { ICollider } from "./collider/ICollider";
 import { QuadTree } from "./QuadTree";
 import { CollisionData } from "./CollisionData";
 import { ICollisionResolver } from "./resolver/ICollisionResolver";
-import { ComponentTypes } from "../..";
 
 export interface Collision {
     localCollider: ICollider;

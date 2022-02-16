@@ -38,7 +38,7 @@ import { SceneManagerFacade } from "../facades/SceneManagerFacade";
 import { TimeManagerFacade } from "../facades/TimeManagerFacade";
 import { GameObjectManagerFacade } from "../facades/GameObjectManagerFacade";
 import { MaskRenderer } from "../../rendering/webGL/renderer/MaskRenderer";
-import { PhysicsManager } from "../../physics/PhysicsManager";
+import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
@@ -72,7 +72,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
             new IterationManager(
                 container.getSingleton<TimeManager>("TimeManager"),
                 container.getSingleton<CollisionManager>("CollisionManager"),
-                container.getSingleton<PhysicsManager>("PhysicsManager"),
+                container.getSingleton<RigidBodyManager>("RigidBodyManager"),
                 container.getSingleton<RenderManager>("RenderManager"),
                 container.getSingleton<InputManager>("InputManager")
             )
@@ -102,12 +102,8 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
     );
 
     container.add(
-        "PhysicsManager",
-        () =>
-            new PhysicsManager(
-                container.getSingleton<TimeManager>("TimeManager"),
-                container.getSingleton<CollisionManager>("CollisionManager")
-            )
+        "RigidBodyManager",
+        () => new RigidBodyManager(container.getSingleton<CollisionManager>("CollisionManager"))
     );
 };
 

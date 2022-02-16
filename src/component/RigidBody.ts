@@ -4,12 +4,13 @@ import { container } from "../core/Game";
 import { Vector2 } from "../math/Vector2";
 import { AbstractColliderComponent } from "./colliderComponent/AbstractColliderComponent";
 import { ComponentTypes } from "./ComponentTypes";
-import { ICollider } from "..";
-import { PhysicsManager, RigidBodyData, RigidBodyType } from "../physics/PhysicsManager";
+import { ICollider } from "../physics/collision/collider/ICollider";
+import { RigidBodyManager, RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
+import { RigidBodyData } from "../physics/rigodBody/RigidBodyData";
 
 const defaultGravity: number = 10;
 
-export { RigidBodyType } from "../physics/PhysicsManager";
+export { RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
 
 export interface RigidBodyConfig {
     rigidBodyType: RigidBodyType;
@@ -18,7 +19,7 @@ export interface RigidBodyConfig {
 }
 
 export class RigidBody extends EngineComponent {
-    private physicsManager: PhysicsManager = container.getSingleton<PhysicsManager>("PhysicsManager");
+    private rigidBodyManager: RigidBodyManager = container.getSingleton<RigidBodyManager>("RigidBodyManager");
 
     public readonly rigidBodyType: RigidBodyType;
     private data: RigidBodyData;
@@ -32,11 +33,11 @@ export class RigidBody extends EngineComponent {
         this.rigidBodyType = config.rigidBodyType;
 
         this.data = {
-            layersToCollider: config.layersToCollide ?? [],
-            gravity: new Vector2(0, config.gravity ?? defaultGravity),
+            position: null,
+            gravity: Math.abs(config.gravity) ?? defaultGravity,
             velocity: new Vector2(),
+            layersToCollider: config.layersToCollide ?? [],
             colliders: [],
-            gameObject: null,
         };
     }
 
@@ -49,11 +50,11 @@ export class RigidBody extends EngineComponent {
     }
 
     public set gravity(gravity: number) {
-        this.data.gravity.set(0, Math.abs(gravity));
+        this.data.gravity = Math.abs(gravity);
     }
 
     public get gravity(): number {
-        return this.data.gravity.y;
+        return this.data.gravity;
     }
 
     protected start(): void {
@@ -61,12 +62,16 @@ export class RigidBody extends EngineComponent {
             throw new Exception("RigidBody needs at least one Collider with physics");
         }
 
-        this.data.gameObject = this.gameObject;
-        this.data.colliders = this.getColliders();
+        // setted by reference, so any change made by the RigidBodyManager will impact in the object position
+        this.data.position = this.gameObject.transform.position;
 
         if (this.rigidBodyType === RigidBodyType.Dynamic) {
-            this.physicsManager.addRigidBodyData(this.data);
+            this.rigidBodyManager.addRigidBodyData(this.data);
         }
+    }
+
+    protected update(): void {
+        this.data.colliders = this.getColliders();
     }
 
     private getColliders(): ICollider[] {
