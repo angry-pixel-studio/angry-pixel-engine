@@ -12,7 +12,6 @@ export enum RigidBodyType {
 export class RigidBodyManager {
     private rigidBodyData: RigidBodyData[] = [];
 
-    private cachePosition: Vector2 = new Vector2();
     private cacheVelocity: Vector2 = new Vector2();
     private cacheDisplacement: Vector2 = new Vector2();
     private cacheNewDisplacement: number = 0;
@@ -49,7 +48,8 @@ export class RigidBodyManager {
         Vector2.add(data.position, data.position, this.cacheVelocity);
 
         data.colliders.forEach((collider) => {
-            collider.position = Vector2.add(this.cachePosition, collider.position, this.cacheVelocity);
+            Vector2.add(collider.shape.position, collider.shape.position, this.cacheVelocity);
+            collider.shape.update();
             this.collisionManager.refreshCollisionsForCollider(collider);
         });
     }
@@ -63,7 +63,7 @@ export class RigidBodyManager {
 
         this.cacheCollisions.forEach((collision: Collision) => {
             this.cacheNewDisplacement =
-                collision.collisionData.displacementDirection[axis] * collision.collisionData.penetration;
+                collision.resolution.displacementDirection[axis] * collision.resolution.penetration;
 
             this.cacheDisplacement[axis] =
                 Math.abs(this.cacheDisplacement[axis]) > Math.abs(this.cacheNewDisplacement)
@@ -78,7 +78,8 @@ export class RigidBodyManager {
         Vector2.add(data.position, data.position, this.cacheDisplacement);
 
         data.colliders.forEach((collider) => {
-            collider.position = Vector2.add(this.cachePosition, collider.position, this.cacheDisplacement);
+            Vector2.add(collider.shape.position, collider.shape.position, this.cacheDisplacement);
+            collider.shape.update();
             this.collisionManager.refreshCollisionsForCollider(collider);
         });
 
@@ -98,8 +99,8 @@ export class RigidBodyManager {
                     .filter(
                         (collision) =>
                             collision.remoteCollider.physics &&
-                            collision.remoteCollider.gameObject.rigidBody &&
-                            data.layersToCollider.includes(collision.remoteCollider.gameObject.layer)
+                            collision.remoteCollider.rigidBody &&
+                            data.layersToCollider.includes(collision.remoteCollider.layer)
                     )
             );
             return collisions;

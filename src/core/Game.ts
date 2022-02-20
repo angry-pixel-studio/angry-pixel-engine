@@ -3,7 +3,7 @@ import { RenderManager } from "../rendering/RenderManager";
 import { loadDependencies } from "./ioc/Config";
 import { Container } from "../utils/Container";
 import { DEFAULT_GAME_FRAMERATE, DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
-import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "../physics/collision/QuadTree";
+import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/QuadTree";
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
 import { IterationManager } from "../core/managers/IterationManager";
@@ -54,7 +54,7 @@ const defaultConfig: GameConfig = {
         method: CollisionMethodConfig.AABB,
         quadTreeBounds: null,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
-        collidersPerQuad: DEFAULT_MAX_COLLIDERS,
+        collidersPerQuad: DEFAULT_MAX_ITEMS,
     },
 };
 
@@ -80,7 +80,7 @@ export class Game {
             ...config.collisions,
         };
 
-        window.addEventListener("error", this.errorEventHandler);
+        // window.addEventListener("error", this.errorEventHandler);
 
         container.addConstant("Game", this);
         this.setupManagers();

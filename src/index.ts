@@ -47,6 +47,5 @@ export * from "./input/MouseController";
 export * from "./input/TouchController";
 
 // others
-export { Collision } from "./physics/collision/CollisionManager";
-export { ICollider } from "./physics/collision/collider/ICollider";
-export { CollisionData } from "./physics/collision/CollisionData";
+export { CollisionResolution } from "./physics/collision/resolver/CollisionResolution";
+export { ColliderData } from "./physics/collision/ColliderData";

@@ -1,50 +1,58 @@
-import { Rectangle } from "../../../math/Rectangle";
 import { Vector2 } from "../../../math/Vector2";
-import { CollisionData } from "../CollisionData";
+import { CollisionResolution } from "./CollisionResolution";
 import { Shape } from "../shape/Shape";
-import { ICollisionResolver } from "./ICollisionResolver";
+import { CollisionResolver } from "./CollisionResolver";
 
-export class AABBResolver implements ICollisionResolver {
-    private shape1Rect: Rectangle = new Rectangle(0, 0, 0, 0);
-    private shape2Rect: Rectangle = new Rectangle(0, 0, 0, 0);
-
+export class AABBResolver implements CollisionResolver {
     private overlapX: number;
     private overlapY: number;
     private minOverlap: number;
-    private displaceDirection: Vector2 = new Vector2();
+    private direction: Vector2 = new Vector2();
+    private displacementDirection: Vector2 = new Vector2();
 
-    getCollisionData(shape1: Shape, shape2: Shape): CollisionData | null {
-        this.setShapeRect(shape1, this.shape1Rect);
-        this.setShapeRect(shape2, this.shape2Rect);
-
+    getCollisionData(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
         this.overlapX =
-            Math.min(this.shape1Rect.x1, this.shape2Rect.x1) - Math.max(this.shape1Rect.x, this.shape2Rect.x);
+            Math.min(shapeA.boundingBox.x1, shapeB.boundingBox.x1) -
+            Math.max(shapeA.boundingBox.x, shapeB.boundingBox.x);
         this.overlapY =
-            Math.min(this.shape1Rect.y1, this.shape2Rect.y1) - Math.max(this.shape1Rect.y, this.shape2Rect.y);
+            Math.min(shapeA.boundingBox.y1, shapeB.boundingBox.y1) -
+            Math.max(shapeA.boundingBox.y, shapeB.boundingBox.y);
 
         if (this.overlapX < 0 || this.overlapY < 0) {
             return null;
         }
 
+        this.direction.set(
+            Math.sign(shapeB.boundingBox.x1 - shapeA.boundingBox.x1),
+            Math.sign(shapeB.boundingBox.y1 - shapeA.boundingBox.y1)
+        );
+
         if (this.overlapY < this.overlapX) {
             this.minOverlap = this.overlapY;
-            this.displaceDirection.set(0, Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1));
+            this.displacementDirection.set(0, -this.direction.y);
 
-            this.preventContainment(this.shape1Rect.y, this.shape2Rect.y, this.shape1Rect.y1, this.shape2Rect.y1);
+            this.preventContainment(
+                shapeA.boundingBox.y,
+                shapeB.boundingBox.y,
+                shapeA.boundingBox.y1,
+                shapeB.boundingBox.y1
+            );
         } else {
             this.minOverlap = this.overlapX;
-            this.displaceDirection.set(
-                Math.sign(this.shape1Rect.x1 - this.shape2Rect.x1),
-                this.overlapY === this.overlapX ? Math.sign(this.shape1Rect.y1 - this.shape2Rect.y1) : 0
+            this.displacementDirection.set(-this.direction.x, this.overlapY === this.overlapX ? -this.direction.y : 0);
+            this.preventContainment(
+                shapeA.boundingBox.x,
+                shapeB.boundingBox.x,
+                shapeA.boundingBox.x1,
+                shapeB.boundingBox.x1
             );
-            this.preventContainment(this.shape1Rect.x, this.shape2Rect.x, this.shape1Rect.x1, this.shape2Rect.x1);
         }
 
-        return new CollisionData(this.minOverlap, this.displaceDirection);
-    }
-
-    private setShapeRect(shape: Shape, rect: Rectangle): void {
-        rect.set(shape.position.x - shape.width / 2, shape.position.y - shape.height / 2, shape.width, shape.height);
+        return {
+            penetration: this.minOverlap,
+            displacementDirection: this.displacementDirection.clone(),
+            direction: this.direction.clone(),
+        };
     }
 
     private preventContainment(min1: number, max1: number, min2: number, max2: number): void {
@@ -56,7 +64,7 @@ export class AABBResolver implements ICollisionResolver {
                 this.minOverlap += minSep;
             } else {
                 this.minOverlap += maxSep;
-                Vector2.scale(this.displaceDirection, this.displaceDirection, -1);
+                Vector2.scale(this.displacementDirection, this.displacementDirection, -1);
             }
         }
     }

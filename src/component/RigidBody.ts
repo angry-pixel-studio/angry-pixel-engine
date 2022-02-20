@@ -4,9 +4,9 @@ import { container } from "../core/Game";
 import { Vector2 } from "../math/Vector2";
 import { AbstractColliderComponent } from "./colliderComponent/AbstractColliderComponent";
 import { ComponentTypes } from "./ComponentTypes";
-import { ICollider } from "../physics/collision/collider/ICollider";
 import { RigidBodyManager, RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
 import { RigidBodyData } from "../physics/rigodBody/RigidBodyData";
+import { ColliderData } from "../physics/collision/ColliderData";
 
 const defaultGravity: number = 10;
 
@@ -74,10 +74,10 @@ export class RigidBody extends EngineComponent {
         this.data.colliders = this.getColliders();
     }
 
-    private getColliders(): ICollider[] {
+    private getColliders(): ColliderData[] {
         return this.gameObject
             .getComponents()
-            .reduce<ICollider[]>(
+            .reduce<ColliderData[]>(
                 (colliders, component: Component) =>
                     component instanceof AbstractColliderComponent && component.physics
                         ? [...colliders, ...component.colliders]

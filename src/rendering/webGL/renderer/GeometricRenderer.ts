@@ -7,6 +7,7 @@ import { Vector2 } from "../../../math/Vector2";
 import { ShapeType } from "../../../physics/collision/shape/Shape"; // TODO: resolve dependency
 import { hexToRgba } from "../Utils";
 import { GeometricRenderData } from "../../renderData/GeometricRenderData";
+import { Rectangle as RectangleCollider } from "../../../physics/collision/shape/Rectangle";
 
 const LINE_WEIGHT = 1;
 
@@ -48,8 +49,8 @@ export class GeometricRenderer {
                 viewportRect,
                 renderData.positionInViewport,
                 {
-                    width: renderData.shape.width,
-                    height: renderData.shape.height,
+                    width: (renderData.shape as RectangleCollider).width,
+                    height: (renderData.shape as RectangleCollider).height,
                 },
                 renderData.color,
                 renderData.shape.angle

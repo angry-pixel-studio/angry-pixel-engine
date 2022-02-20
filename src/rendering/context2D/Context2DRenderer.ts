@@ -187,6 +187,7 @@ export class Context2DRenderer implements ContextRenderer {
     }
 
     private renderCollider(renderData: ColliderRenderData, zoom: number): void {
+        /*
         this.canvasContext.save();
 
         this.applyZoom(renderData, zoom);
@@ -219,6 +220,7 @@ export class Context2DRenderer implements ContextRenderer {
         }
 
         this.canvasContext.restore();
+        */
     }
 
     private applyZoom(renderData: RenderData, zoom: number): void {

@@ -56,12 +56,8 @@ export class CullingService {
     }
 
     private cullCollider(viewportRect: Rectangle, renderData: ColliderRenderData): boolean {
-        return this.isTargetVisible(viewportRect, {
-            x: renderData.position.x - renderData.shape.width / 2,
-            x1: renderData.position.x + renderData.shape.width / 2,
-            y: renderData.position.y - renderData.shape.height / 2,
-            y1: renderData.position.y + renderData.shape.height / 2,
-        });
+        // return this.isTargetVisible(viewportRect, renderData.shape.boundingBox);
+        return true;
     }
 
     private cullGeometric(viewportRect: Rectangle, renderData: GeometricRenderData): boolean {

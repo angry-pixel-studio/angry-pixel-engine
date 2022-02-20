@@ -1,5 +1,3 @@
-import { ICollider } from "../../physics/collision/collider/ICollider";
-import { RectangleCollider } from "../../physics/collision/collider/RectangleCollider";
 import { RenderManager } from "../../rendering/RenderManager";
 import { container, GameConfig } from "../../core/Game";
 import { TilemapRenderer } from "../renderingComponent/tilemap/TilemapRenderer";
@@ -9,14 +7,17 @@ import { ColliderRenderData } from "../../rendering/renderData/ColliderRenderDat
 import { RenderComponent } from "../../core/Component";
 import { Vector2 } from "../../math/Vector2";
 import { ComponentTypes } from "../ComponentTypes";
+import { ColliderData } from "../../physics/collision/ColliderData";
+import { Rectangle } from "../../physics/collision/shape/Rectangle";
 
 export interface TilemapColliderConfig {
     tilemapRenderer: TilemapRenderer;
+    layer?: string;
     debug?: boolean;
 }
 
 export class TilemapCollider extends AbstractColliderComponent {
-    private tilemapRenderer: TilemapRenderer = null;
+    private tilemapRenderer: TilemapRenderer;
     private debug: boolean = false;
     private cacheVertex: Vector2[];
 
@@ -25,6 +26,7 @@ export class TilemapCollider extends AbstractColliderComponent {
 
         this.type = ComponentTypes.TilemapCollider;
         this.tilemapRenderer = config.tilemapRenderer;
+        this.layer = config.layer;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this._physics = true; // todo: fix this shit
 
@@ -32,19 +34,22 @@ export class TilemapCollider extends AbstractColliderComponent {
     }
 
     protected start(): void {
-        this.tilemapRenderer.tilesData.filter(this.needsCollider).forEach((tileData: TileData) => {
-            this.addCollider(
-                new RectangleCollider(
-                    tileData.position,
-                    tileData.width,
-                    tileData.height,
-                    this._physics,
-                    this.gameObject,
-                    0,
-                    false
+        this.layer = this.layer ?? this.gameObject.layer;
+
+        this.tilemapRenderer.tilesData
+            .filter(this.needsCollider)
+            .forEach((tileData: TileData) =>
+                this.addCollider(
+                    new ColliderData(
+                        new Rectangle(tileData.width, tileData.height, tileData.position),
+                        this.layer,
+                        this.gameObject.id,
+                        true,
+                        this._physics,
+                        this.hasComponentOfType(ComponentTypes.RigidBody)
+                    )
                 )
             );
-        });
 
         if (this.debug) {
             this.renderer = this.gameObject.addComponent(() => new TilemapColliderRenderer(this.colliders));
@@ -70,6 +75,10 @@ export class TilemapCollider extends AbstractColliderComponent {
         return false;
     };
 
+    protected update(): void {
+        this.colliders.forEach((collider) => (collider.layer = this.layer));
+    }
+
     protected updatePosition(): void {
         // Tilemap does not update colliders coordinates;
     }
@@ -79,15 +88,15 @@ class TilemapColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     private renderData: ColliderRenderData[] = [];
-    private colliders: ICollider[] = [];
+    private colliders: ColliderData[] = [];
 
-    constructor(colliders: ICollider[]) {
+    constructor(colliders: ColliderData[]) {
         super();
 
         this.type = "TilemapColliderRenderer";
         this.colliders = colliders;
 
-        this.colliders.forEach((collider: ICollider, index: number) => {
+        this.colliders.forEach((collider: ColliderData, index: number) => {
             this.renderData[index] = new ColliderRenderData();
             this.renderData[index].debug = true;
             this.renderData[index].color = "#00FF00";
@@ -95,9 +104,9 @@ class TilemapColliderRenderer extends RenderComponent {
     }
 
     protected update(): void {
-        this.colliders.forEach((collider: ICollider, index: number) => {
+        this.colliders.forEach((collider: ColliderData, index: number) => {
             this.renderData[index].layer = this.gameObject.layer;
-            this.renderData[index].position = collider.position;
+            this.renderData[index].position = collider.shape.position;
             this.renderData[index].shape = collider.shape;
             this.renderManager.addRenderData(this.renderData[index]);
         });

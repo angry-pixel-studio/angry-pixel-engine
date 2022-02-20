@@ -25,7 +25,7 @@ import { GeometricRenderer } from "../../rendering/webGL/renderer/GeometricRende
 import { SatResolver } from "../../physics/collision/resolver/SatResolver";
 import { TouchController } from "../../input/TouchController";
 import { AABBResolver } from "../../physics/collision/resolver/AABBResolver";
-import { ICollisionResolver } from "../../physics/collision/resolver/ICollisionResolver";
+import { CollisionResolver } from "../../physics/collision/resolver/CollisionResolver";
 import { ContextRenderer } from "../../rendering/ContextRenderer";
 import { Exception } from "../../utils/Exception";
 import { CullingService } from "../../rendering/CullingService";
@@ -94,7 +94,7 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
         "CollisionManager",
         () =>
             new CollisionManager(
-                container.getSingleton<ICollisionResolver>("CollisionResolver"),
+                container.getSingleton<CollisionResolver>("CollisionResolver"),
                 gameConfig.collisions.quadTreeBounds,
                 gameConfig.collisions.quadMaxLevel,
                 gameConfig.collisions.collidersPerQuad

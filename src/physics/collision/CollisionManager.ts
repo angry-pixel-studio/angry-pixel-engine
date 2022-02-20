@@ -1,22 +1,22 @@
 import { Rectangle } from "../../math/Rectangle";
 import { Vector2 } from "../../math/Vector2";
-import { ICollider } from "./collider/ICollider";
+import { ColliderData } from "./ColliderData";
 import { QuadTree } from "./QuadTree";
-import { CollisionData } from "./CollisionData";
-import { ICollisionResolver } from "./resolver/ICollisionResolver";
+import { CollisionResolution } from "./resolver/CollisionResolution";
+import { CollisionResolver } from "./resolver/CollisionResolver";
 
 export interface Collision {
-    localCollider: ICollider;
-    remoteCollider: ICollider;
-    collisionData: CollisionData;
+    localCollider: ColliderData;
+    remoteCollider: ColliderData;
+    resolution: CollisionResolution;
 }
 
 export class CollisionManager {
-    private colliders: ICollider[];
+    private colliders: ColliderData[];
     private quadTree: QuadTree;
     private bounds: Rectangle;
     private fixedQuadTree: boolean;
-    private resolver: ICollisionResolver;
+    private resolver: CollisionResolver;
     private collisions: Collision[] = [];
 
     // cache
@@ -25,7 +25,7 @@ export class CollisionManager {
     private newBounds: Rectangle = new Rectangle(0, 0, 0, 0);
 
     constructor(
-        resolver: ICollisionResolver,
+        resolver: CollisionResolver,
         quadTreeBounds: Rectangle | null = null,
         quadMaxLevel: number,
         collidersPerQuad: number
@@ -43,11 +43,11 @@ export class CollisionManager {
         this.quadTree = new QuadTree(0, this.bounds, quadMaxLevel, collidersPerQuad);
     }
 
-    public addCollider(collider: ICollider): void {
+    public addCollider(collider: ColliderData): void {
         this.colliders.push(collider);
     }
 
-    public removeCollider(collider: ICollider): void {
+    public removeCollider(collider: ColliderData): void {
         const index: number = this.colliders.indexOf(collider);
         if (index !== -1) {
             delete this.colliders[index];
@@ -55,13 +55,13 @@ export class CollisionManager {
         }
     }
 
-    public getFrameCollisionsForCollider(collider: ICollider): Collision[] {
+    public getFrameCollisionsForCollider(collider: ColliderData): Collision[] {
         if (this.colliders.indexOf(collider) === -1) return [];
 
         return this.collisions.filter((collision) => collision.localCollider === collider);
     }
 
-    public refreshCollisionsForCollider(collider: ICollider): Collision[] {
+    public refreshCollisionsForCollider(collider: ColliderData): Collision[] {
         if (this.colliders.indexOf(collider) === -1) return [];
 
         const collisions = this.narrowPhase(collider, this.broadPhase(collider));
@@ -79,7 +79,7 @@ export class CollisionManager {
             return;
         }
 
-        this.quadTree.clearColliders();
+        this.quadTree.clearItems();
         this.quadTree.clearQuadrants();
 
         if (this.fixedQuadTree === false) {
@@ -91,23 +91,17 @@ export class CollisionManager {
         }
 
         for (const collider of this.colliders) {
-            this.quadTree.addCollider(collider);
+            this.quadTree.addItem(collider);
         }
 
         this.updateCollisions();
     }
 
     private updateNewBounds(): void {
-        this.colliders.forEach((collider: ICollider) => {
-            this.minBounds.set(
-                Math.min(collider.bottomLeftQuadVertex.x, this.minBounds.x),
-                Math.min(collider.bottomLeftQuadVertex.y, this.minBounds.y)
-            );
+        this.colliders.forEach((collider: ColliderData) => {
+            this.minBounds.set(Math.min(collider.x, this.minBounds.x), Math.min(collider.y, this.minBounds.y));
 
-            this.maxBounds.set(
-                Math.max(collider.topRightQuadVertex.x, this.maxBounds.x),
-                Math.max(collider.topRightQuadVertex.y, this.maxBounds.y)
-            );
+            this.maxBounds.set(Math.max(collider.x1, this.maxBounds.x), Math.max(collider.y1, this.maxBounds.y));
         });
 
         this.newBounds.set(
@@ -125,22 +119,22 @@ export class CollisionManager {
     }
 
     // broadPhase takes care of looking for possible collisions
-    private broadPhase(collider: ICollider): ICollider[] {
-        return this.quadTree.retrieve(collider);
+    private broadPhase(collider: ColliderData): ColliderData[] {
+        return this.quadTree.retrieve<ColliderData>(collider);
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(collider: ICollider, colliders: Array<ICollider>): Array<Collision> {
+    private narrowPhase(collider: ColliderData, colliders: Array<ColliderData>): Array<Collision> {
         const collisions: Array<Collision> = [];
         colliders
-            .filter((remoteCollider: ICollider) => remoteCollider.gameObject !== collider.gameObject)
-            .forEach((remoteCollider: ICollider) => {
+            .filter((remoteCollider: ColliderData) => remoteCollider.id !== collider.id)
+            .forEach((remoteCollider: ColliderData) => {
                 const collisionData = this.resolver.getCollisionData(collider.shape, remoteCollider.shape);
                 if (collisionData !== null) {
                     collisions.push({
                         localCollider: collider,
                         remoteCollider: remoteCollider,
-                        collisionData: collisionData,
+                        resolution: collisionData,
                     });
                 }
             });
