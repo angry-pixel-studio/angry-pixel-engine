@@ -4,7 +4,6 @@ import { Vector2 } from "../../math/Vector2";
 export enum RenderDataType {
     Image,
     Text,
-    Geometric,
     Collider,
     Tilemap,
     Mask,

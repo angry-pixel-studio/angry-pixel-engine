@@ -1,5 +1,6 @@
 import { InputManager } from "../../input/InputManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
+import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
 import { RenderManager } from "../../rendering/RenderManager";
 import { TimeManager } from "./TimeManager";
 
@@ -16,11 +17,11 @@ export const EVENT_UPDATE_RENDER: string = "angry-pixel-update-render";
 export class IterationManager {
     private gameLoopAccumulator: number = 0;
     private physicsLoopAccumulator: number = 0;
-    private deltaAux: number = 0;
 
     constructor(
         private readonly timeManager: TimeManager,
         private readonly collisionManager: CollisionManager,
+        private readonly physicsManager: RigidBodyManager,
         private readonly renderManager: RenderManager,
         private readonly inputManager: InputManager
     ) {}
@@ -28,26 +29,28 @@ export class IterationManager {
     public update(time: number): void {
         this.timeManager.update(time);
 
-        this.deltaAux = Math.min(this.timeManager.browserDeltaTime, this.timeManager.maxGameDeltatime);
+        this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
 
-        this.gameLoopAccumulator += this.deltaAux;
-        this.physicsLoopAccumulator += this.timeManager.browserDeltaTime;
-
-        this.timeManager.unscaledGameDeltaTime = Math.max(
-            this.timeManager.maxGameDeltatime,
-            this.timeManager.browserDeltaTime
-        );
-
-        this.timeManager.unscaledPhysicsDeltaTime = this.timeManager.maxPhysicsDeltaTime;
-
-        if (this.gameLoopAccumulator > this.timeManager.maxGameDeltatime) {
+        if (this.gameLoopAccumulator >= this.timeManager.minGameDeltatime) {
             this.mainIteration();
-            this.gameLoopAccumulator -= this.timeManager.maxGameDeltatime;
+
+            // physics fixed at the game frame rate
+            if (this.timeManager.gameFramerate === this.timeManager.physicsFramerate) {
+                this.physicsIteration();
+            }
+
+            this.gameLoopAccumulator -= this.timeManager.minGameDeltatime;
         }
 
-        while (this.physicsLoopAccumulator > this.timeManager.maxPhysicsDeltaTime) {
-            if (this.timeManager.timeScale > 0) this.physicsIteration();
-            this.physicsLoopAccumulator -= this.timeManager.maxPhysicsDeltaTime;
+        // physics fixed at its own frame rate
+        if (this.timeManager.gameFramerate !== this.timeManager.physicsFramerate) {
+            this.physicsLoopAccumulator += this.timeManager.browserDeltaTime;
+
+            while (this.physicsLoopAccumulator >= this.timeManager.minPhysicsDeltaTime) {
+                this.physicsLoopAccumulator -= this.timeManager.minPhysicsDeltaTime;
+
+                if (this.timeManager.timeScale > 0) this.physicsIteration();
+            }
         }
 
         this.preRenderIteration();
@@ -63,16 +66,17 @@ export class IterationManager {
         this.dispatchFrameEvent(EVENT_UPDATE);
         // updates engine components
         this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
-
-        // pre-physics updates
+        // updates transform components
         this.dispatchFrameEvent(EVENT_UPDATE_TRANSFORM);
-        this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
-        this.collisionManager.update();
     }
 
     private physicsIteration(): void {
         this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+
         this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
+        this.collisionManager.update();
+
+        this.physicsManager.update(this.timeManager.physicsDeltaTime);
     }
 
     private preRenderIteration(): void {

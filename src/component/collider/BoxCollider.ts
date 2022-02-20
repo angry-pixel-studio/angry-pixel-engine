@@ -1,13 +1,13 @@
 import { RenderManager } from "../../rendering/RenderManager";
 import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
-import { RectangleCollider } from "../../physics/collision/collider/RectangleCollider";
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
+import { Collider } from "./Collider";
 import { ColliderRenderData } from "../../rendering/renderData/ColliderRenderData";
 import { Vector2 } from "../../math/Vector2";
 import { RenderComponent } from "../../core/Component";
-import { ICollider } from "../../physics/collision/collider/ICollider";
 import { Rotation } from "../../math/Rotation";
 import { ComponentTypes } from "../ComponentTypes";
+import { ColliderData } from "../../physics/collision/ColliderData";
+import { Rectangle } from "../../physics/collision/shape/Rectangle";
 
 export interface BoxColliderConfig {
     width: number;
@@ -15,11 +15,12 @@ export interface BoxColliderConfig {
     offsetX?: number;
     offsetY?: number;
     rotation?: Rotation;
+    layer?: string;
     physics?: boolean;
     debug?: boolean;
 }
 
-export class BoxCollider extends AbstractColliderComponent {
+export class BoxCollider extends Collider {
     public debug: boolean = false;
     public width: number;
     public height: number;
@@ -49,50 +50,32 @@ export class BoxCollider extends AbstractColliderComponent {
         this._physics = config.physics ?? this._physics;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.rotation = config.rotation ?? new Rotation();
+        this.layer = config.layer;
     }
 
     protected start(): void {
-        this.updateRealSize();
-
         this.addCollider(
-            new RectangleCollider(
-                this.gameObject.transform.position,
-                this.realWidth,
-                this.realHeight,
+            new ColliderData(
+                new Rectangle(this.realWidth, this.realHeight, this.realPosition),
+                this.layer ?? this.gameObject.layer,
+                this.gameObject.id,
+                true,
                 this._physics,
-                this.gameObject,
-                this.realRotation
+                this.hasComponentOfType(ComponentTypes.RigidBody)
             )
         );
 
         if (this.debug) {
             this.renderer = this.gameObject.addComponent(() => new BoxColliderRenderer(this.colliders[0]));
         }
+
+        this.update();
     }
 
     protected update(): void {
-        this.updatePosition();
-    }
-
-    protected updatePosition(): void {
         this.updateRealSize();
-
-        (this.colliders[0] as RectangleCollider).width = this.realWidth;
-        (this.colliders[0] as RectangleCollider).height = this.realHeight;
-
-        this.colliders[0].position = Vector2.add(
-            this.realPosition,
-            this.gameObject.transform.position,
-            this.realOffset
-        );
-
-        if (this.realRotation !== 0 && this.applyRotation) {
-            (this.colliders[0] as RectangleCollider).angle = this.realRotation;
-        }
-
-        if (this.gameObject.transform.rotation.radians !== 0) {
-            this.translate();
-        }
+        this.updatePosition();
+        this.updateShape();
     }
 
     private updateRealSize(): void {
@@ -102,18 +85,35 @@ export class BoxCollider extends AbstractColliderComponent {
         this.realOffset.x = this.offsetX * this.gameObject.transform.scale.x;
         this.realOffset.y = this.offsetY * this.gameObject.transform.scale.y;
 
-        this.realRotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
+        this.realRotation = this.applyRotation ? this.gameObject.transform.rotation.radians + this.rotation.radians : 0;
+    }
+
+    protected updatePosition(): void {
+        Vector2.add(this.realPosition, this.gameObject.transform.position, this.realOffset);
+
+        if (this.gameObject.transform.rotation.radians !== 0) {
+            this.translate();
+        }
     }
 
     private translate(): void {
-        Vector2.subtract(this.innerPosition, this.colliders[0].position, this.gameObject.transform.position);
+        Vector2.subtract(this.innerPosition, this.realPosition, this.gameObject.transform.position);
         const translatedAngle: number =
             Math.atan2(this.innerPosition.y, this.innerPosition.x) + this.gameObject.transform.rotation.radians;
+
         this.realPosition.set(
             this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
             this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
         );
-        this.colliders[0].position = this.realPosition;
+    }
+
+    private updateShape(): void {
+        this.colliders[0].layer = this.layer ?? this.gameObject.layer;
+        this.colliders[0].shape.position = this.realPosition;
+        this.colliders[0].shape.angle = this.realRotation;
+        (this.colliders[0].shape as Rectangle).updateSize(this.realWidth, this.realHeight);
+
+        this.colliders[0].shape.update();
     }
 }
 
@@ -121,9 +121,9 @@ class BoxColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     private renderData: ColliderRenderData;
-    private collider: ICollider;
+    private collider: ColliderData;
 
-    constructor(collider: ICollider) {
+    constructor(collider: ColliderData) {
         super();
 
         this.type = "BoxColliderRenderer";
@@ -137,7 +137,7 @@ class BoxColliderRenderer extends RenderComponent {
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
-        this.renderData.position = this.collider.position;
+        this.renderData.position = this.collider.shape.position;
         this.renderData.shape = this.collider.shape;
         this.renderManager.addRenderData(this.renderData);
     }

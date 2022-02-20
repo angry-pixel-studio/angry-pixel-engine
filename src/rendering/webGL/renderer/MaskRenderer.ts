@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { Rectangle } from "../../..";
+import { Rectangle } from "../../../math/Rectangle";
 import { MaskRenderData } from "../../renderData/MaskRenderData";
 import { ProgramManager } from "../ProgramManager";
 import { hexToRgba } from "../Utils";

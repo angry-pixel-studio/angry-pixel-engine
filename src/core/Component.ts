@@ -19,7 +19,7 @@ import {
 
 export abstract class Component {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
-    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
+    protected gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 
     public readonly id: string = uuid();
     public allowMultiple: boolean = true;

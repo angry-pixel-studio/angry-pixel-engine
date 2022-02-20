@@ -2,8 +2,8 @@ import { SceneManager, SceneConstructor as SceneFactory } from "../core/managers
 import { RenderManager } from "../rendering/RenderManager";
 import { loadDependencies } from "./ioc/Config";
 import { Container } from "../utils/Container";
-import { DEFAULT_GAME_FRAMERATE, DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
-import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_COLLIDERS } from "../physics/collision/QuadTree";
+import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
+import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/QuadTree";
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
 import { IterationManager } from "../core/managers/IterationManager";
@@ -18,7 +18,6 @@ export interface GameConfig {
     debugEnabled?: boolean;
     canvasColor?: string;
     context2d?: Context2DConfig;
-    gameFrameRate?: number;
     physicsFramerate?: number;
     spriteDefaultScale?: Vector2 | null;
     collisions?: {
@@ -48,13 +47,12 @@ const defaultConfig: GameConfig = {
     canvasColor: "#000000",
     context2d: Context2DConfig.Fallback,
     spriteDefaultScale: null,
-    gameFrameRate: DEFAULT_GAME_FRAMERATE,
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadTreeBounds: null,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
-        collidersPerQuad: DEFAULT_MAX_COLLIDERS,
+        collidersPerQuad: DEFAULT_MAX_ITEMS,
     },
 };
 

@@ -1,6 +1,7 @@
 import { Component } from "./Component";
 import { ComponentTypes } from "../component/ComponentTypes";
 import { Transform } from "../component/Transform";
+import { RigidBody } from "../component/RigidBody";
 import { Exception, exceptionName } from "../utils/Exception";
 import { GameObjectManager, GameObjectFactory } from "../core/managers/GameObjectManager";
 import { SceneManager } from "../core/managers/SceneManager";
@@ -40,6 +41,10 @@ export class GameObject {
 
     public get transform(): Transform {
         return this.getComponentByType<Transform>(ComponentTypes.Transform);
+    }
+
+    public get rigidBody(): RigidBody {
+        return this.getComponentByType(ComponentTypes.RigidBody);
     }
 
     public get active(): boolean {

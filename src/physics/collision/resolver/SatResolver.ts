@@ -1,33 +1,33 @@
 import { Vector2 } from "../../../math/Vector2";
 import { Shape } from "../shape/Shape";
-import { CollisionData } from "../CollisionData";
-import { ICollisionResolver } from "./ICollisionResolver";
+import { CollisionResolution } from "./CollisionResolution";
+import { CollisionResolver } from "./CollisionResolver";
 
 type AxisProjection = {
     min: number;
     max: number;
 };
 
-export class SatResolver implements ICollisionResolver {
+export class SatResolver implements CollisionResolver {
     private axes: Vector2[];
-    private proj1: AxisProjection = { min: 0, max: 0 };
-    private proj2: AxisProjection = { min: 0, max: 0 };
+    private projA: AxisProjection = { min: 0, max: 0 };
+    private projB: AxisProjection = { min: 0, max: 0 };
     private currentOverlap: number;
     private minOverlap: number;
-    private displaceDirection: Vector2;
+    private displaceDirection: Vector2 = new Vector2();
+    private direction: Vector2 = new Vector2();
 
-    public getCollisionData(shape1: Shape, shape2: Shape): CollisionData | null {
+    public getCollisionResolution(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
         this.currentOverlap = null;
         this.minOverlap = null;
-        this.displaceDirection = null;
 
-        this.axes = [...shape1.getAxes(), ...shape2.getAxes()];
+        this.axes = [...shapeA.projectionAxes, ...shapeB.projectionAxes];
 
         for (let i = 0; i < this.axes.length; i++) {
-            this.projectShapeOntoAxis(this.proj1, this.axes[i], shape1);
-            this.projectShapeOntoAxis(this.proj2, this.axes[i], shape2);
+            this.projectShapeOntoAxis(this.projA, shapeA, this.axes[i]);
+            this.projectShapeOntoAxis(this.projB, shapeB, this.axes[i]);
 
-            this.currentOverlap = Math.min(this.proj1.max, this.proj2.max) - Math.max(this.proj1.min, this.proj2.min);
+            this.currentOverlap = Math.min(this.projA.max, this.projB.max) - Math.max(this.projA.min, this.projB.min);
             if (this.currentOverlap < 0) {
                 return null;
             }
@@ -37,19 +37,25 @@ export class SatResolver implements ICollisionResolver {
 
             if (this.currentOverlap < this.minOverlap || this.minOverlap === null) {
                 this.minOverlap = this.currentOverlap;
-                this.displaceDirection = this.axes[i];
+                this.displaceDirection.copy(this.axes[i]);
 
                 // negate the axis in order to use as displacment direction
-                if (this.proj1.max < this.proj2.max) {
+                if (this.projA.max < this.projB.max) {
                     Vector2.scale(this.displaceDirection, this.displaceDirection, -1);
                 }
             }
         }
 
-        return new CollisionData(this.minOverlap, this.displaceDirection);
+        Vector2.scale(this.direction, this.displaceDirection, -1);
+
+        return {
+            penetration: this.minOverlap,
+            displacementDirection: this.displaceDirection.clone(),
+            direction: this.direction.clone(),
+        };
     }
 
-    private projectShapeOntoAxis(projection: AxisProjection, axis: Vector2, shape: Shape): AxisProjection {
+    private projectShapeOntoAxis(projection: AxisProjection, shape: Shape, axis: Vector2): AxisProjection {
         projection.min = Vector2.dot(axis, shape.vertices[0]);
         projection.max = projection.min;
 
@@ -63,11 +69,11 @@ export class SatResolver implements ICollisionResolver {
 
     private preventContainment(axisIndex: number): void {
         if (
-            (this.proj1.max > this.proj2.max && this.proj1.min < this.proj2.min) ||
-            (this.proj1.max < this.proj2.max && this.proj1.min > this.proj2.min)
+            (this.projA.max > this.projB.max && this.projA.min < this.projB.min) ||
+            (this.projA.max < this.projB.max && this.projA.min > this.projB.min)
         ) {
-            const mins = Math.abs(this.proj1.min - this.proj2.min);
-            const maxs = Math.abs(this.proj1.max - this.proj2.max);
+            const mins = Math.abs(this.projA.min - this.projB.min);
+            const maxs = Math.abs(this.projA.max - this.projB.max);
             if (mins < maxs) {
                 this.currentOverlap += mins;
             } else {

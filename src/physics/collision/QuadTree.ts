@@ -1,19 +1,25 @@
 import { Rectangle } from "../../math/Rectangle";
 import { Vector2 } from "../../math/Vector2";
-import { ICollider } from "./collider/ICollider";
 import { Exception } from "../../utils/Exception";
 
-export const DEFAULT_MAX_COLLIDERS: number = 15;
+export const DEFAULT_MAX_ITEMS: number = 15;
 export const DEFAULT_MAX_LEVELS: number = 6;
+
+export interface QuadItem {
+    x: number;
+    y: number;
+    x1: number;
+    y1: number;
+}
 
 export class QuadTree {
     private _bounds: Rectangle = new Rectangle(0, 0, 0, 0);
+    private _items: QuadItem[] = [];
     private _quadrants: QuadTree[] = [];
 
     private readonly maxLevels: number;
-    private readonly maxColliders: number;
+    private readonly maxItems: number;
     private readonly level: number;
-    private colliders: ICollider[] = [];
 
     // Quads cardinal positions
     private readonly sw: number = 0;
@@ -25,19 +31,19 @@ export class QuadTree {
     private center: Vector2 = new Vector2();
     private childrenWidth: number = 0;
     private childrenHeight: number = 0;
-    private quadrantsForCollider: QuadTree[] = [];
+    private quadsForItem: QuadTree[] = [];
 
     constructor(
         level: number,
         bounds: Rectangle,
         maxLevels: number = DEFAULT_MAX_LEVELS,
-        maxColliders: number = DEFAULT_MAX_COLLIDERS
+        maxItems: number = DEFAULT_MAX_ITEMS
     ) {
         this.level = level;
         this._bounds.updateFromRect(bounds);
 
         this.maxLevels = maxLevels;
-        this.maxColliders = maxColliders;
+        this.maxItems = maxItems;
 
         this.updateCache();
     }
@@ -55,9 +61,9 @@ export class QuadTree {
         this.updateCache();
     }
 
-    public clearColliders(): void {
-        this.colliders = [];
-        this._quadrants.forEach((quad: QuadTree) => quad.clearColliders());
+    public clearItems(): void {
+        this._items = [];
+        this._quadrants.forEach((quad: QuadTree) => quad.clearItems());
     }
 
     public clearQuadrants(): void {
@@ -65,36 +71,36 @@ export class QuadTree {
         this._quadrants = [];
     }
 
-    public addCollider(collider: ICollider): void {
+    public addItem(item: QuadItem): void {
         if (this._quadrants.length > 0) {
-            this.insertColliderIntoChildrenQuads(collider);
+            this.insertItemIntoChildrenQuads(item);
             return;
         }
 
-        this.colliders.push(collider);
+        this._items.push(item);
 
-        if (this.colliders.length > this.maxColliders && this.level < this.maxLevels) {
+        if (this._items.length > this.maxItems && this.level < this.maxLevels) {
             this.splitQuad();
         }
     }
 
-    public retrieve(collider: ICollider): ICollider[] {
-        const colliders: ICollider[] = [];
+    public retrieve<T extends QuadItem>(item: QuadItem): T[] {
+        const items: QuadItem[] = [];
 
         if (this._quadrants.length > 0) {
-            this.getChildrenQuadrantForCollider(collider).forEach((quadrant: QuadTree) =>
-                colliders.push(...quadrant.retrieve(collider))
+            this.getChildrenQuadrantForItem(item).forEach((quadrant: QuadTree) =>
+                items.push(...quadrant.retrieve(item))
             );
         }
 
-        colliders.push(...this.colliders);
+        items.push(...this._items);
 
-        const selfIndex: number = colliders.indexOf(collider);
+        const selfIndex: number = items.indexOf(item);
         if (selfIndex !== -1) {
-            colliders.splice(selfIndex, 1);
+            items.splice(selfIndex, 1);
         }
 
-        return colliders;
+        return items as T[];
     }
 
     private splitQuad(): void {
@@ -109,48 +115,48 @@ export class QuadTree {
             new Rectangle(this.center.x - this.childrenWidth, this.center.y, this.childrenWidth, this.childrenHeight),
             new Rectangle(this.center.x, this.center.y, this.childrenWidth, this.childrenHeight),
         ].map<QuadTree>(
-            (rectangle: Rectangle) => new QuadTree(this.level + 1, rectangle, this.maxLevels, this.maxColliders)
+            (rectangle: Rectangle) => new QuadTree(this.level + 1, rectangle, this.maxLevels, this.maxItems)
         );
 
-        for (const collider of this.colliders) {
-            this.insertColliderIntoChildrenQuads(collider);
+        for (const rect of this._items) {
+            this.insertItemIntoChildrenQuads(rect);
         }
 
-        this.colliders = [];
+        this._items = [];
     }
 
-    private getChildrenQuadrantForCollider(collider: ICollider): Array<QuadTree> {
+    private getChildrenQuadrantForItem(item: QuadItem): Array<QuadTree> {
         if (this._quadrants.length === 0) {
             throw new Exception("Current quadrant does not have quadrant children.");
         }
 
-        this.quadrantsForCollider = [];
+        this.quadsForItem = [];
 
-        if (collider.bottomLeftQuadVertex.x <= this.center.x && collider.bottomLeftQuadVertex.y <= this.center.y) {
-            this.quadrantsForCollider.push(this._quadrants[this.sw]);
+        if (item.x <= this.center.x && item.y <= this.center.y) {
+            this.quadsForItem.push(this._quadrants[this.sw]);
         }
 
-        if (collider.bottomRightQuadVertex.x >= this.center.x && collider.bottomRightQuadVertex.y <= this.center.y) {
-            this.quadrantsForCollider.push(this._quadrants[this.se]);
+        if (item.x1 >= this.center.x && item.y <= this.center.y) {
+            this.quadsForItem.push(this._quadrants[this.se]);
         }
 
-        if (collider.topLeftQuadVertex.x <= this.center.x && collider.topLeftQuadVertex.y >= this.center.y) {
-            this.quadrantsForCollider.push(this._quadrants[this.nw]);
+        if (item.x <= this.center.x && item.y1 >= this.center.y) {
+            this.quadsForItem.push(this._quadrants[this.nw]);
         }
 
-        if (collider.topRightQuadVertex.x >= this.center.x && collider.topRightQuadVertex.y >= this.center.y) {
-            this.quadrantsForCollider.push(this._quadrants[this.ne]);
+        if (item.x1 >= this.center.x && item.y1 >= this.center.y) {
+            this.quadsForItem.push(this._quadrants[this.ne]);
         }
 
-        if (this.quadrantsForCollider.length === 0) {
-            throw new Exception("Children does not fit in any children quadrant");
+        if (this.quadsForItem.length === 0) {
+            throw new Exception("Item does not fit in any children quadrant");
         }
 
-        return this.quadrantsForCollider;
+        return this.quadsForItem;
     }
 
-    private insertColliderIntoChildrenQuads(collider: ICollider): void {
-        this.getChildrenQuadrantForCollider(collider).forEach((quadrant: QuadTree) => quadrant.addCollider(collider));
+    private insertItemIntoChildrenQuads(item: QuadItem): void {
+        this.getChildrenQuadrantForItem(item).forEach((quadrant: QuadTree) => quadrant.addItem(item));
     }
 
     private updateCache(): void {

@@ -8,6 +8,7 @@ export const ComponentTypes = {
     // colliders
     BoxCollider: "BoxCollider",
     TilemapCollider: "TilemapCollider",
+    PolygonCollider: "PolygonCollider",
 
     // renderers
     CsvTilemapRenderer: "CsvTilemapRenderer",
