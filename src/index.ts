@@ -11,15 +11,15 @@ export * from "./core/GameObject";
 export * from "./core/Scene";
 
 // components
-export * from "./component/colliderComponent/BoxCollider";
-export * from "./component/colliderComponent/TilemapCollider";
-export * from "./component/colliderComponent/PolygonCollider";
-export * from "./component/renderingComponent/SpriteRenderer";
-export * from "./component/renderingComponent/TextRenderer";
-export * from "./component/renderingComponent/MaskRenderer";
-export * from "./component/renderingComponent/tilemap/TiledTilemapRenderer";
-export * from "./component/renderingComponent/tilemap/CsvTilemapRenderer";
-export * from "./component/renderingComponent/tilemap/Tileset";
+export * from "./component/collider/BoxCollider";
+export * from "./component/collider/TilemapCollider";
+export * from "./component/collider/PolygonCollider";
+export * from "./component/rendering/SpriteRenderer";
+export * from "./component/rendering/TextRenderer";
+export * from "./component/rendering/MaskRenderer";
+export * from "./component/rendering/tilemap/TiledTilemapRenderer";
+export * from "./component/rendering/tilemap/CsvTilemapRenderer";
+export * from "./component/rendering/tilemap/Tileset";
 export * from "./component/Animation";
 export * from "./component/Animator";
 export * from "./component/AudioPlayer";

@@ -1,5 +1,5 @@
 import { Vector2 } from "../../math/Vector2";
-import { Tile } from "../../component/renderingComponent/tilemap/Tile"; // TODO: resolve dependency
+import { Tile } from "../../component/rendering/tilemap/Tile"; // TODO: resolve dependency
 import { RenderData, RenderDataType } from "./RenderData";
 
 export class TileRenderData {

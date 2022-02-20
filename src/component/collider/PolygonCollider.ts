@@ -1,5 +1,5 @@
 import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
+import { Collider } from "./Collider";
 import { Vector2 } from "../../math/Vector2";
 import { Rotation } from "../../math/Rotation";
 import { ComponentTypes } from "../ComponentTypes";
@@ -19,7 +19,7 @@ export interface PolygonColliderConfig {
     debug?: boolean;
 }
 
-export class PolygonCollider extends AbstractColliderComponent {
+export class PolygonCollider extends Collider {
     public readonly debug: boolean = false;
     public readonly vertexModel: Vector2[];
     public offsetX: number = 0;

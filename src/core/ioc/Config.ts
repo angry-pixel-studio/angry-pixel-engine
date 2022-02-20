@@ -50,7 +50,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
 
     const domManager: DomManager = container.getSingleton<DomManager>("DomManager");
 
-    container.add("TimeManager", () => new TimeManager(gameConfig.gameFrameRate, gameConfig.physicsFramerate));
+    container.add("TimeManager", () => new TimeManager(gameConfig.physicsFramerate));
 
     renderingDependencies(container, gameConfig, domManager);
     inputDependencies(container, domManager);

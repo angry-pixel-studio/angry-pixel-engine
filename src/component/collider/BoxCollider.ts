@@ -1,6 +1,6 @@
 import { RenderManager } from "../../rendering/RenderManager";
 import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
+import { Collider } from "./Collider";
 import { ColliderRenderData } from "../../rendering/renderData/ColliderRenderData";
 import { Vector2 } from "../../math/Vector2";
 import { RenderComponent } from "../../core/Component";
@@ -20,7 +20,7 @@ export interface BoxColliderConfig {
     debug?: boolean;
 }
 
-export class BoxCollider extends AbstractColliderComponent {
+export class BoxCollider extends Collider {
     public debug: boolean = false;
     public width: number;
     public height: number;

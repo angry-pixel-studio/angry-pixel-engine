@@ -11,7 +11,7 @@ export interface CollisionData {
     gameObject: GameObject;
 }
 
-export abstract class AbstractColliderComponent extends ColliderComponent {
+export abstract class Collider extends ColliderComponent {
     protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
     protected renderer: RenderComponent = null;
 

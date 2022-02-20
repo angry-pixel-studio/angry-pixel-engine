@@ -1,5 +1,5 @@
 import { EngineComponent } from "../core/Component";
-import { SpriteRenderer } from "./renderingComponent/SpriteRenderer";
+import { SpriteRenderer } from "./rendering/SpriteRenderer";
 import { Sprite } from "./Sprite";
 import { Animation } from "./Animation";
 import { TimeManager } from "../core/managers/TimeManager";

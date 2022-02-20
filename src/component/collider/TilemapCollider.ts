@@ -1,8 +1,8 @@
 import { RenderManager } from "../../rendering/RenderManager";
 import { container, GameConfig } from "../../core/Game";
-import { TilemapRenderer } from "../renderingComponent/tilemap/TilemapRenderer";
-import { AbstractColliderComponent } from "./AbstractColliderComponent";
-import { TileData } from "../renderingComponent/tilemap/TileData";
+import { TilemapRenderer } from "../rendering/tilemap/TilemapRenderer";
+import { Collider } from "./Collider";
+import { TileData } from "../rendering/tilemap/TileData";
 import { ColliderRenderData } from "../../rendering/renderData/ColliderRenderData";
 import { RenderComponent } from "../../core/Component";
 import { Vector2 } from "../../math/Vector2";
@@ -16,7 +16,7 @@ export interface TilemapColliderConfig {
     debug?: boolean;
 }
 
-export class TilemapCollider extends AbstractColliderComponent {
+export class TilemapCollider extends Collider {
     private tilemapRenderer: TilemapRenderer;
     private debug: boolean = false;
     private cacheVertex: Vector2[];
