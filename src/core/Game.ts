@@ -17,7 +17,6 @@ export interface GameConfig {
     gameHeight?: number;
     debugEnabled?: boolean;
     canvasColor?: string;
-    context2d?: Context2DConfig;
     physicsFramerate?: number;
     spriteDefaultScale?: Vector2 | null;
     collisions?: {
@@ -26,12 +25,6 @@ export interface GameConfig {
         quadMaxLevel?: number;
         collidersPerQuad?: number;
     };
-}
-
-export enum Context2DConfig {
-    Default = "default",
-    Disabled = "disabled",
-    Fallback = "fallback",
 }
 
 export enum CollisionMethodConfig {
@@ -45,7 +38,6 @@ const defaultConfig: GameConfig = {
     gameHeight: 180,
     debugEnabled: false,
     canvasColor: "#000000",
-    context2d: Context2DConfig.Fallback,
     spriteDefaultScale: null,
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
     collisions: {

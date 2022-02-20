@@ -1,4 +1,4 @@
-import { CollisionMethodConfig, Context2DConfig, Game, GameConfig } from "../Game";
+import { CollisionMethodConfig, Game, GameConfig } from "../Game";
 import { AssetManager } from "../managers/AssetManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
 import { DomManager } from "../managers/DomManager";
@@ -7,7 +7,6 @@ import { GamepadController } from "../../input/GamepadController";
 import { InputManager } from "../../input/InputManager";
 import { KeyboardController } from "../../input/KeyboardController";
 import { MouseController } from "../../input/MouseController";
-import { Context2DRenderer } from "../../rendering/context2D/Context2DRenderer";
 import { RenderManager } from "../../rendering/RenderManager";
 import { ImageRenderer } from "../../rendering/webGL/renderer/ImageRenderer";
 import { ProgramFactory } from "../../rendering/webGL/ProgramFactory";
@@ -110,17 +109,11 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
 const renderingDependencies = (container: Container, gameConfig: GameConfig, domManager: DomManager): void => {
     const webglContextVersion: WebGLContextVersion = getWebGLContextVersion();
 
-    if (
-        gameConfig.context2d === Context2DConfig.Default ||
-        (gameConfig.context2d === Context2DConfig.Fallback && webglContextVersion === null)
-    ) {
-        container.add("Renderer", () => new Context2DRenderer(domManager.canvas));
-        if (gameConfig.debugEnabled) console.log("Using 2d rendering context");
-    } else if (webglContextVersion !== null) {
+    if (webglContextVersion !== null) {
         webGLDependencies(webglContextVersion, container, domManager);
         if (gameConfig.debugEnabled) console.log(`Using WebGL rendering context (version: ${webglContextVersion})`);
     } else {
-        throw new Exception("WebGL is not supported, use context2d instead.");
+        throw new Exception("WebGL not suported in your browser.");
     }
 
     container.add("FontAtlasFactory", () => new FontAtlasFactory());
