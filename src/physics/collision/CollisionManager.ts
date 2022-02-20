@@ -129,12 +129,12 @@ export class CollisionManager {
         colliders
             .filter((remoteCollider: ColliderData) => remoteCollider.id !== collider.id)
             .forEach((remoteCollider: ColliderData) => {
-                const collisionData = this.resolver.getCollisionData(collider.shape, remoteCollider.shape);
-                if (collisionData !== null) {
+                const resolution = this.resolver.getCollisionResolution(collider.shape, remoteCollider.shape);
+                if (resolution !== null) {
                     collisions.push({
                         localCollider: collider,
                         remoteCollider: remoteCollider,
-                        resolution: collisionData,
+                        resolution: resolution,
                     });
                 }
             });

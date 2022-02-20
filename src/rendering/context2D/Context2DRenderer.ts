@@ -4,7 +4,6 @@ import { ShapeType } from "../../physics/collision/shape/Shape"; // TODO: resolv
 import { CameraData } from "../CameraData";
 import { ContextRenderer } from "../ContextRenderer";
 import { ColliderRenderData } from "../renderData/ColliderRenderData";
-import { GeometricRenderData } from "../renderData/GeometricRenderData";
 import { ImageRenderData } from "../renderData/ImageRenderData";
 import { RenderData, RenderDataType } from "../renderData/RenderData";
 import { TextRenderData } from "../renderData/TextRenderData";
@@ -40,9 +39,6 @@ export class Context2DRenderer implements ContextRenderer {
                 break;
             case RenderDataType.Text:
                 this.renderText(renderData as TextRenderData);
-                break;
-            case RenderDataType.Geometric:
-                this.renderGeometric(renderData as GeometricRenderData, camera.zoom);
                 break;
             case RenderDataType.Collider:
                 this.renderCollider(renderData as ColliderRenderData, camera.zoom);
@@ -160,26 +156,6 @@ export class Context2DRenderer implements ContextRenderer {
                 renderData.text,
                 renderData.positionInViewport.x,
                 renderData.positionInViewport.y
-            );
-        }
-
-        this.canvasContext.restore();
-    }
-
-    private renderGeometric(renderData: GeometricRenderData, zoom: number): void {
-        this.canvasContext.save();
-
-        this.applyZoom(renderData, zoom);
-
-        this.updateRenderPosition(renderData);
-
-        if (renderData.geometricType === "Rectangle") {
-            this.canvasContext.strokeStyle = renderData.color;
-            this.canvasContext.strokeRect(
-                renderData.positionInViewport.x - renderData.getGeometric<Rectangle>().width / 2,
-                renderData.positionInViewport.y - renderData.getGeometric<Rectangle>().height / 2,
-                renderData.getGeometric<Rectangle>().width,
-                renderData.getGeometric<Rectangle>().height
             );
         }
 

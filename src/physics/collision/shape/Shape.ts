@@ -2,7 +2,6 @@ import { Rectangle } from "../../../math/Rectangle";
 import { Vector2 } from "../../../math/Vector2";
 
 export enum ShapeType {
-    Rectangle,
     Polygon,
     Circle,
     Line,

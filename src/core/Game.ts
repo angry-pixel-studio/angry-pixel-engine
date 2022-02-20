@@ -80,7 +80,7 @@ export class Game {
             ...config.collisions,
         };
 
-        // window.addEventListener("error", this.errorEventHandler);
+        window.addEventListener("error", this.errorEventHandler);
 
         container.addConstant("Game", this);
         this.setupManagers();

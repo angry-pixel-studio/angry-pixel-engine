@@ -13,6 +13,7 @@ export * from "./core/Scene";
 // components
 export * from "./component/colliderComponent/BoxCollider";
 export * from "./component/colliderComponent/TilemapCollider";
+export * from "./component/colliderComponent/PolygonCollider";
 export * from "./component/renderingComponent/SpriteRenderer";
 export * from "./component/renderingComponent/TextRenderer";
 export * from "./component/renderingComponent/MaskRenderer";

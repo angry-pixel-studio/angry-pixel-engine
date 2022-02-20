@@ -10,7 +10,7 @@ export class AABBResolver implements CollisionResolver {
     private direction: Vector2 = new Vector2();
     private displacementDirection: Vector2 = new Vector2();
 
-    getCollisionData(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
+    getCollisionResolution(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
         this.overlapX =
             Math.min(shapeA.boundingBox.x1, shapeB.boundingBox.x1) -
             Math.max(shapeA.boundingBox.x, shapeB.boundingBox.x);

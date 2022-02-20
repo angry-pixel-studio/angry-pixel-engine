@@ -17,7 +17,7 @@ export class SatResolver implements CollisionResolver {
     private displaceDirection: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();
 
-    public getCollisionData(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
+    public getCollisionResolution(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
         this.currentOverlap = null;
         this.minOverlap = null;
 

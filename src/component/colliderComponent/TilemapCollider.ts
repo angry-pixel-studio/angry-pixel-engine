@@ -44,7 +44,7 @@ export class TilemapCollider extends AbstractColliderComponent {
                         new Rectangle(tileData.width, tileData.height, tileData.position),
                         this.layer,
                         this.gameObject.id,
-                        true,
+                        false,
                         this._physics,
                         this.hasComponentOfType(ComponentTypes.RigidBody)
                     )

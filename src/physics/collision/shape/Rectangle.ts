@@ -11,7 +11,6 @@ export class Rectangle extends Polygon {
             new Vector2(width / 2, -height / 2),
         ]);
 
-        this._type = ShapeType.Rectangle;
         this._position.copy(position);
         this._projectionAxes = [new Vector2(), new Vector2()];
 

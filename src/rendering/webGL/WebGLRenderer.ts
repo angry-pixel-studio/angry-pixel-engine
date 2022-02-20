@@ -12,7 +12,6 @@ import { ColliderRenderData } from "../renderData/ColliderRenderData";
 import { ProgramManager } from "./ProgramManager";
 import { TextRenderer } from "./renderer/TextRenderer";
 import { GeometricRenderer } from "./renderer/GeometricRenderer";
-import { GeometricRenderData } from "../renderData/GeometricRenderData";
 import { TilemapRenderData } from "../renderData/TilemapRenderData";
 import { TilemapRenderer } from "./renderer/TilemapRenderer";
 import { MaskRenderer } from "./renderer/MaskRenderer";
@@ -92,14 +91,6 @@ export class WebGLRenderer implements ContextRenderer {
             this.geometricRenderer.renderCollider(
                 camera.viewportRect,
                 renderData as ColliderRenderData,
-                this.lastRender
-            );
-            this.lastRender = "geometric";
-        }
-        if (renderData.type === RenderDataType.Geometric) {
-            this.geometricRenderer.renderGeometric(
-                camera.viewportRect,
-                renderData as GeometricRenderData,
                 this.lastRender
             );
             this.lastRender = "geometric";

@@ -6,10 +6,6 @@ import { ProgramManager } from "../ProgramManager";
 import { Vector2 } from "../../../math/Vector2";
 import { ShapeType } from "../../../physics/collision/shape/Shape"; // TODO: resolve dependency
 import { hexToRgba } from "../Utils";
-import { GeometricRenderData } from "../../renderData/GeometricRenderData";
-import { Rectangle as RectangleCollider } from "../../../physics/collision/shape/Rectangle";
-
-const LINE_WEIGHT = 1;
 
 export class GeometricRenderer {
     private gl: WebGLRenderingContext;
@@ -22,13 +18,7 @@ export class GeometricRenderer {
 
     // cache
     private readonly vertices: Map<symbol, Float32Array> = new Map<symbol, Float32Array>();
-    // prettier-ignore
-    private readonly texVertices: Float32Array = new Float32Array([
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    ]);
+    private readonly texVertices: Float32Array = new Float32Array([]);
     private lastVertices: symbol = null;
     private lastRender: LastRender = null;
 
@@ -44,49 +34,28 @@ export class GeometricRenderer {
     public renderCollider(viewportRect: Rectangle, renderData: ColliderRenderData, lastRender: LastRender): void {
         this.lastRender = lastRender;
 
-        if (renderData.shape.type === ShapeType.Rectangle) {
-            this.renderRectangle(
+        if (renderData.shape.type === ShapeType.Polygon) {
+            this.renderPolygon(
                 viewportRect,
                 renderData.positionInViewport,
-                {
-                    width: (renderData.shape as RectangleCollider).width,
-                    height: (renderData.shape as RectangleCollider).height,
-                },
+                renderData.shape.vertexModel,
                 renderData.color,
                 renderData.shape.angle
             );
         }
     }
 
-    public renderGeometric(viewportRect: Rectangle, renderData: GeometricRenderData, lastRender: LastRender): void {
-        this.lastRender = lastRender;
-
-        if (renderData.geometricType === "Rectangle") {
-            this.renderRectangle(
-                viewportRect,
-                renderData.positionInViewport,
-                {
-                    width: renderData.getGeometric<Rectangle>().width,
-                    height: renderData.getGeometric<Rectangle>().height,
-                },
-                renderData.color
-            );
-        }
-    }
-
-    private renderRectangle(
+    private renderPolygon(
         viewportRect: Rectangle,
         positionInViewport: Vector2,
-        size: { width: number; height: number },
+        vertices: Vector2[],
         color: string,
         angleInRadians: number = 0
     ): void {
-        const verticesKey: symbol = Symbol.for(`RW${size.width}H${size.height}`);
+        const verticesKey: symbol = this.generateVerticesKey(vertices);
+
         if (this.vertices.has(verticesKey) === false) {
-            this.vertices.set(
-                verticesKey,
-                new Float32Array(this.generateRectangleVertices(size.width, size.height, LINE_WEIGHT))
-            );
+            this.vertices.set(verticesKey, new Float32Array(this.generatePolygonVertices(vertices)));
         }
         const posVertices: Float32Array = this.vertices.get(verticesKey);
 
@@ -118,30 +87,19 @@ export class GeometricRenderer {
         this.gl.uniform4f(this.programManager.solidColorUniform, r, g, b, a);
         this.gl.uniform1f(this.programManager.alphaUniform, 1);
 
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, posVertices.length / 2);
+        this.gl.drawArrays(this.gl.LINE_LOOP, 0, posVertices.length / 2);
     }
 
-    private generateRectangleVertices(width: number, height: number, lineHeight: number): number[] {
-        const halfHeight = height / 2;
-        const halfWidth = width / 2;
-
-        return [
-            ...this.generateLineVertices(-halfWidth, -halfHeight, halfWidth, -halfHeight + lineHeight),
-            ...this.generateLineVertices(halfWidth - lineHeight, -halfHeight, halfWidth, halfHeight),
-            ...this.generateLineVertices(-halfWidth, halfHeight - lineHeight, halfWidth, halfHeight),
-            ...this.generateLineVertices(-halfWidth, -halfHeight, -halfWidth + lineHeight, halfHeight),
-        ];
+    private generateVerticesKey(vertices: Vector2[]): symbol {
+        return Symbol.for(vertices.reduce((s, v) => `${s}${v.x}${v.y}`, vertices.length.toString()));
     }
 
-    private generateLineVertices(x1: number, y1: number, x2: number, y2: number): number[] {
-        // prettier-ignore
-        return [
-            x1, y1,
-            x2, y1,
-            x1, y2,
-            x1, y2,
-            x2, y1,
-            x2, y2
-        ]
+    private generatePolygonVertices(vertices: Vector2[]): number[] {
+        const result: number[] = [];
+        for (let i = 0; i < vertices.length; i++) {
+            result.push(vertices[i].x, vertices[i].y);
+        }
+
+        return result;
     }
 }
