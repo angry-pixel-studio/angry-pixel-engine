@@ -125,18 +125,13 @@ export class AudioPlayer extends EngineComponent {
         this.audio.play();
     };
 
-    public setActive(active: boolean): void {
-        if (active === false) {
+    protected activeStateChange(): void {
+        if (this.active === false) {
             this.stop();
         }
-        super.setActive(active);
     }
 
-    /**
-     * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
-     */
-    public destroy(): void {
+    protected destroy(): void {
         this.stop();
-        super.destroy();
     }
 }

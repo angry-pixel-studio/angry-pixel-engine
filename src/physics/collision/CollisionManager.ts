@@ -56,8 +56,6 @@ export class CollisionManager {
     }
 
     public getFrameCollisionsForCollider(collider: ColliderData): Collision[] {
-        if (this.colliders.indexOf(collider) === -1) return [];
-
         return this.collisions.filter((collision) => collision.localCollider === collider);
     }
 
@@ -70,6 +68,10 @@ export class CollisionManager {
         this.collisions.push(...collisions);
 
         return collisions;
+    }
+
+    public clear(): void {
+        this.colliders = [];
     }
 
     public update(): void {

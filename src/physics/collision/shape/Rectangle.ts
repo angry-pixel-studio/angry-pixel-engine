@@ -1,6 +1,5 @@
 import { Vector2 } from "../../../math/Vector2";
 import { Polygon } from "./Polygon";
-import { ShapeType } from "./Shape";
 
 export class Rectangle extends Polygon {
     constructor(public width: number, public height: number, position: Vector2) {

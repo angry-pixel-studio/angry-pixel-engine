@@ -1,35 +1,52 @@
+import { GameObjectManager } from "./GameObjectManager";
+import { SceneManager } from "./SceneManager";
 import { InputManager } from "../../input/InputManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
 import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
 import { RenderManager } from "../../rendering/RenderManager";
 import { TimeManager } from "./TimeManager";
+import { GameObject } from "../GameObject";
+import { Component } from "../Component";
+import { Scene } from "../Scene";
 
-export const EVENT_START: string = "angry-pixel-start";
-export const EVENT_UPDATE: string = "angry-pixel-update";
-export const EVENT_UPDATE_ENGINE: string = "angry-pixel-update-engine";
-export const EVENT_UPDATE_COLLIDER: string = "angry-pixel-update-collider";
-export const EVENT_UPDATE_PHYSICS: string = "angry-pixel-update-physics";
-export const EVENT_UPDATE_TRANSFORM: string = "angry-pixel-update-transform";
-export const EVENT_UPDATE_PRERENDER: string = "angry-pixel-update-prerender";
-export const EVENT_UPDATE_CAMERA: string = "angry-pixel-update-camera";
-export const EVENT_UPDATE_RENDER: string = "angry-pixel-update-render";
+export enum FrameEvent {
+    Init,
+    Start,
+    Update,
+    UpdateEngine,
+    UpdateCollider,
+    UpdatePhysics,
+    UpdateTransform,
+    UpdatePreRender,
+    UpdateCamera,
+    UpdateRender,
+    Destroy,
+}
 
 export class IterationManager {
     private gameLoopAccumulator: number = 0;
     private physicsLoopAccumulator: number = 0;
+
+    private currentScene: Scene;
+    private gameObjects: GameObject[] = [];
+    private components: Component[] = [];
 
     constructor(
         private readonly timeManager: TimeManager,
         private readonly collisionManager: CollisionManager,
         private readonly physicsManager: RigidBodyManager,
         private readonly renderManager: RenderManager,
-        private readonly inputManager: InputManager
+        private readonly inputManager: InputManager,
+        private readonly gameObjectManager: GameObjectManager,
+        private readonly sceneManager: SceneManager
     ) {}
 
     public update(time: number): void {
         this.timeManager.update(time);
 
         this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
+
+        this.load();
 
         if (this.gameLoopAccumulator >= this.timeManager.minGameDeltatime) {
             this.mainIteration();
@@ -55,44 +72,66 @@ export class IterationManager {
 
         this.preRenderIteration();
         this.renderIteration();
+
+        this.sceneManager.update();
+    }
+
+    private load(): void {
+        this.currentScene = this.sceneManager.getCurrentScene();
+        this.gameObjects = this.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.active);
+        this.components = this.gameObjects.reduce(
+            (components, gameObject) => [
+                ...components,
+                ...gameObject.getComponents().filter((component) => component.active),
+            ],
+            []
+        );
     }
 
     private mainIteration(): void {
         // starts all game objects and components
-        this.dispatchFrameEvent(EVENT_START);
+        this.dispatchFrameEvent(FrameEvent.Start);
         // updates input controllers
         this.inputManager.update();
         // updates all game objects and custom components
-        this.dispatchFrameEvent(EVENT_UPDATE);
+        this.dispatchFrameEvent(FrameEvent.Update);
         // updates engine components
-        this.dispatchFrameEvent(EVENT_UPDATE_ENGINE);
+        this.dispatchFrameEvent(FrameEvent.UpdateEngine);
         // updates transform components
-        this.dispatchFrameEvent(EVENT_UPDATE_TRANSFORM);
+        this.dispatchFrameEvent(FrameEvent.UpdateTransform);
     }
 
     private physicsIteration(): void {
-        this.dispatchFrameEvent(EVENT_UPDATE_PHYSICS);
+        this.dispatchFrameEvent(FrameEvent.UpdatePhysics);
+        this.dispatchFrameEvent(FrameEvent.UpdateCollider);
 
-        this.dispatchFrameEvent(EVENT_UPDATE_COLLIDER);
         this.collisionManager.update();
-
         this.physicsManager.update(this.timeManager.physicsDeltaTime);
+
+        this.collisionManager.clear();
     }
 
     private preRenderIteration(): void {
-        this.dispatchFrameEvent(EVENT_UPDATE_TRANSFORM);
-        this.dispatchFrameEvent(EVENT_UPDATE_PRERENDER);
-        this.dispatchFrameEvent(EVENT_UPDATE_CAMERA);
+        this.physicsManager.clear();
+
+        this.dispatchFrameEvent(FrameEvent.UpdateTransform);
+        this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
+        this.dispatchFrameEvent(FrameEvent.UpdateCamera);
     }
 
     private renderIteration(): void {
-        this.dispatchFrameEvent(EVENT_UPDATE_RENDER);
+        this.dispatchFrameEvent(FrameEvent.UpdateRender);
 
         this.renderManager.clearCanvas();
         this.renderManager.render();
     }
 
-    private dispatchFrameEvent(event: string): void {
-        window.dispatchEvent(new CustomEvent(event));
+    private dispatchFrameEvent(event: FrameEvent): void {
+        if (event === FrameEvent.Start || event === FrameEvent.Update) {
+            this.currentScene.dispatch(event);
+            this.gameObjects.forEach((gameObject) => gameObject.dispatch(event));
+        }
+
+        this.components.forEach((component) => component.dispatch(event));
     }
 }

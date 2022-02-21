@@ -73,7 +73,9 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
                 container.getSingleton<CollisionManager>("CollisionManager"),
                 container.getSingleton<RigidBodyManager>("RigidBodyManager"),
                 container.getSingleton<RenderManager>("RenderManager"),
-                container.getSingleton<InputManager>("InputManager")
+                container.getSingleton<InputManager>("InputManager"),
+                container.getSingleton<GameObjectManager>("GameObjectManager"),
+                container.getSingleton<SceneManager>("SceneManager")
             )
     );
 

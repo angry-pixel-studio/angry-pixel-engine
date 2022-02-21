@@ -4,85 +4,60 @@ import { container } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
-import { Exception, exceptionName } from "../utils/Exception";
-import {
-    EVENT_START,
-    EVENT_UPDATE,
-    EVENT_UPDATE_CAMERA,
-    EVENT_UPDATE_COLLIDER,
-    EVENT_UPDATE_ENGINE,
-    EVENT_UPDATE_PHYSICS,
-    EVENT_UPDATE_PRERENDER,
-    EVENT_UPDATE_RENDER,
-    EVENT_UPDATE_TRANSFORM,
-} from "./managers/IterationManager";
+import { FrameEvent } from "./managers/IterationManager";
 
 export abstract class Component {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     protected gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
 
     public readonly id: string = uuid();
+    public type: string;
+    public name: string;
+    public gameObject: GameObject;
     public allowMultiple: boolean = true;
-    public type: string = null;
-    public name: string = null;
-    public gameObject: GameObject = null;
 
     private _active: boolean = true;
     private started: boolean = false;
 
-    constructor() {
-        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
-        window.addEventListener(this.updateEvent, this.gameLoopEventHandler);
-    }
-
-    protected get updateEvent(): string {
-        return EVENT_UPDATE;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.Update;
     }
 
     public get active(): boolean {
         return this._active;
     }
 
-    /**
-     * If the component become inactive, will stop its execution
-     *
-     * @param active TRUE or FALSE
-     */
     public setActive(active: boolean): void {
         this._active = active;
+        this.activeStateChange();
     }
 
-    protected gameLoopEventHandler = (event: Event): void => {
-        if (this._active === false) {
-            return;
-        }
+    public dispatch(event: FrameEvent): void {
+        if (this._active === false || this.gameObject.active === false) return;
 
-        try {
-            if (!this.started && event.type === EVENT_START) {
-                this.start();
-                this.started = true;
-            } else if (this.started && event.type === this.updateEvent) {
-                this.update();
-            }
-        } catch (error: unknown) {
-            if ((error as Error).name === exceptionName) {
-                throw error;
-            } else {
-                throw new Exception((error as Error).message);
-            }
+        if (event === FrameEvent.Init) {
+            this.init();
+        } else if (event === FrameEvent.Start && this.started === false) {
+            this.start();
+            this.started = true;
+        } else if (event === this.updateEvent && this.started === true) {
+            this.update();
+        } else if (event === FrameEvent.Destroy) {
+            this.destroy();
+            this._destroy();
         }
-    };
+    }
 
     /**
-     * This method is only ever called once.
+     * This method is called only once.
      * Recommended for GameObject cration.
      */
-    public init(): void {
+    protected init(): void {
         return;
     }
 
     /**
-     * This method is only ever called once
+     * This method is called only once.
      */
     protected start(): void {
         return;
@@ -92,6 +67,20 @@ export abstract class Component {
      * This method is called on every frame.
      */
     protected update(): void {
+        return;
+    }
+
+    /**
+     * This method is called before the component is destroyed.
+     */
+    protected destroy(): void {
+        return;
+    }
+
+    /**
+     * This method is called when the active state changes.
+     */
+    protected activeStateChange(): void {
         return;
     }
 
@@ -205,56 +194,50 @@ export abstract class Component {
         this.gameObject.removeComponentByType(type);
     }
 
-    /**
-     * @description NOTE: Do not call this method. Use GameObject.setComponentActive instead.
-     */
-    public destroy(): void {
-        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
-        window.removeEventListener(this.updateEvent, this.gameLoopEventHandler);
-
+    private _destroy(): void {
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
     }
 }
 
 export abstract class EngineComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_ENGINE;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdateEngine;
     }
 }
 
 export abstract class ColliderComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_COLLIDER;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdateCollider;
     }
 }
 
 export abstract class PhysicsComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_PHYSICS;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdatePhysics;
     }
 }
 
 export abstract class TransformComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_TRANSFORM;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdateTransform;
     }
 }
 
 export abstract class PreRenderComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_PRERENDER;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdatePreRender;
     }
 }
 
 export abstract class CameraComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_CAMERA;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdateCamera;
     }
 }
 
 export abstract class RenderComponent extends Component {
-    protected get updateEvent(): string {
-        return EVENT_UPDATE_RENDER;
+    protected get updateEvent(): FrameEvent {
+        return FrameEvent.UpdateRender;
     }
 }

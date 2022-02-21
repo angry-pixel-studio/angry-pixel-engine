@@ -23,6 +23,14 @@ export class RigidBodyManager {
         this.rigidBodyData.push(data);
     }
 
+    public removeRigidBodyData(data: RigidBodyData): void {
+        const index: number = this.rigidBodyData.indexOf(data);
+        if (index !== -1) {
+            delete this.rigidBodyData[index];
+            this.rigidBodyData.splice(index, 1);
+        }
+    }
+
     public update(deltaTime: number): void {
         this.rigidBodyData.forEach((data) => {
             this.applyGravity(data, deltaTime);

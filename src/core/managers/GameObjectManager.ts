@@ -1,5 +1,6 @@
 import { GameObject } from "../GameObject";
 import { Exception } from "../../utils/Exception";
+import { FrameEvent } from "./IterationManager";
 
 export type GameObjectFactory = () => GameObject;
 
@@ -20,12 +21,11 @@ export class GameObjectManager {
         }
 
         const gameObject: GameObject = gameObjectFactory();
-        gameObject.name = name;
-        gameObject.parent = parent;
-
         this.gameObjects.push(gameObject);
 
-        gameObject.init();
+        gameObject.name = name;
+        gameObject.parent = parent;
+        gameObject.dispatch(FrameEvent.Init);
 
         return gameObject as T;
     }
@@ -62,22 +62,22 @@ export class GameObjectManager {
     }
 
     public destroyAllGameObjects(): void {
-        this.gameObjects.forEach((gameObject: GameObject) =>
-            gameObject.keep ? null : this._destroyGameObject(gameObject, false)
-        );
-        this.gameObjects = [];
+        this.gameObjects
+            .filter((gameObject) => !gameObject.keep)
+            .forEach((gameObject) => this.destroy(gameObject, false));
     }
 
     public destroyGameObject(gameObject: GameObject): void {
-        this._destroyGameObject(gameObject, true);
+        this.destroy(gameObject, true);
     }
 
-    private _destroyGameObject(gameObject: GameObject, destroyChildren: boolean): void {
+    private destroy(gameObject: GameObject, destroyChildren: boolean): void {
         const index: number = this.gameObjects.indexOf(gameObject);
+
         if (index !== -1) {
+            const gameObject = this.gameObjects.splice(index, 1)[0];
             destroyChildren ? this.destroyChildren(gameObject) : null;
-            gameObject.destroy();
-            delete this.gameObjects[index];
+            gameObject.dispatch(FrameEvent.Destroy);
         }
     }
 

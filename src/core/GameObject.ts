@@ -2,13 +2,13 @@ import { Component } from "./Component";
 import { ComponentTypes } from "../component/ComponentTypes";
 import { Transform } from "../component/Transform";
 import { RigidBody } from "../component/RigidBody";
-import { Exception, exceptionName } from "../utils/Exception";
+import { Exception } from "../utils/Exception";
 import { GameObjectManager, GameObjectFactory } from "../core/managers/GameObjectManager";
 import { SceneManager } from "../core/managers/SceneManager";
 import { container } from "./Game";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
-import { EVENT_START, EVENT_UPDATE } from "./managers/IterationManager";
+import { FrameEvent } from "./managers/IterationManager";
 
 export const LAYER_DEFAULT = "Default";
 
@@ -16,8 +16,8 @@ export type ComponentFactory = () => Component;
 
 export class GameObject {
     public readonly id: string = uuid();
-    public name: string = null;
-    public tag: string = null;
+    public name: string;
+    public tag: string;
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
     public keep: boolean = false;
@@ -29,14 +29,17 @@ export class GameObject {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private components: Component[] = [];
-    private inactiveComponents: string[] = [];
-    private inactiveChildren: string[] = [];
 
     constructor() {
         this.addComponent(() => new Transform());
+    }
 
-        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
-        window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+    public get active(): boolean {
+        return this._active;
+    }
+
+    public setActive(active: boolean): void {
+        this._active = active;
     }
 
     public get transform(): Transform {
@@ -47,11 +50,7 @@ export class GameObject {
         return this.getComponentByType(ComponentTypes.RigidBody);
     }
 
-    public get active(): boolean {
-        return this._active;
-    }
-
-    public get parent(): GameObject {
+    public get parent(): GameObject | null {
         return this._parent;
     }
 
@@ -60,37 +59,32 @@ export class GameObject {
         this.transform.parent = parent ? parent.transform : null;
     }
 
-    private gameLoopEventHandler = (event: Event): void => {
-        if (this._active === false) {
-            return;
-        }
+    public dispatch(event: FrameEvent): void {
+        if (this.active === false || (this.parent && this.parent.active === false)) return;
 
-        try {
-            if (!this.started && event.type === EVENT_START) {
-                this.start();
-                this.started = true;
-            } else if (this.started && event.type === EVENT_UPDATE) {
-                this.update();
-            }
-        } catch (error: unknown) {
-            if ((error as Error).name === exceptionName) {
-                throw error;
-            } else {
-                throw new Exception((error as Error).message);
-            }
+        if (event === FrameEvent.Init) {
+            this.init();
+        } else if (event === FrameEvent.Start && this.started === false) {
+            this.start();
+            this.started = true;
+        } else if (event === FrameEvent.Update && this.started) {
+            this.update();
+        } else if (event === FrameEvent.Destroy) {
+            this.destroy();
+            this._destroy();
         }
-    };
+    }
 
     /**
-     * This method is only ever called once.
+     * This method is called only once.
      * Recommended for GameObject cration.
      */
-    public init(): void {
+    protected init(): void {
         return;
     }
 
     /**
-     * This method is only ever called once.
+     * This method is called only once.
      */
     protected start(): void {
         return;
@@ -100,6 +94,13 @@ export class GameObject {
      * This method is called on every frame.
      */
     protected update(): void {
+        return;
+    }
+
+    /**
+     * This method is called before the object is destroyed.
+     */
+    protected destroy(): void {
         return;
     }
 
@@ -156,7 +157,7 @@ export class GameObject {
 
         component.name = name;
         component.gameObject = this;
-        component.init();
+        component.dispatch(FrameEvent.Init);
         this.components.push(component);
 
         return component as T;
@@ -221,7 +222,7 @@ export class GameObject {
     public removeComponentByName(name: string): void {
         this.components.every((component: Component, index: number) => {
             if (component.name === name) {
-                component.destroy();
+                component.dispatch(FrameEvent.Destroy);
                 delete this.components[index];
 
                 return false;
@@ -235,24 +236,12 @@ export class GameObject {
     public removeComponentByType(type: string): void {
         this.components.every((component: Component, index: number) => {
             if (component.type === type) {
-                component.destroy();
+                component.dispatch(FrameEvent.Destroy);
                 delete this.components[index];
 
                 return false;
             }
         });
-    }
-
-    /**
-     * Remove all added components
-     */
-    public removeComponents(): void {
-        this.components.every((component: Component, index: number) => {
-            component.destroy();
-            return delete this.components[index];
-        });
-
-        this.components = [];
     }
 
     /**
@@ -291,41 +280,6 @@ export class GameObject {
     }
 
     /**
-     * If the object become inactive, every component and child game object will stop their execution.
-     *
-     * @param active TRUE or FALE
-     */
-    public setActive(active: boolean): void {
-        if (active === false) {
-            this.updateInactiveCache();
-        }
-
-        this.components
-            .filter((component: Component) => this.inactiveComponents.indexOf(component.id) === -1)
-            .forEach((component: Component) => component.setActive(active));
-
-        this.getChildren()
-            .filter((gameObject: GameObject) => this.inactiveChildren.indexOf(gameObject.id) === -1)
-            .forEach((gameObject: GameObject) => gameObject.setActive(active));
-
-        // this.transform.forceUpdate();
-        this._active = active;
-    }
-
-    private updateInactiveCache(): void {
-        this.inactiveComponents = [];
-        this.inactiveChildren = [];
-
-        this.components
-            .filter((component: Component) => component.active === false)
-            .forEach((component: Component) => this.inactiveComponents.push(component.id));
-
-        this.getChildren()
-            .filter((gameObject: GameObject) => gameObject.active === false)
-            .forEach((gameObject: GameObject) => this.inactiveChildren.push(gameObject.id));
-    }
-
-    /**
      * Destroy one game objects by its name
      * @param name The name of the game object
      */
@@ -341,16 +295,19 @@ export class GameObject {
         this.gameObjectManager.destroyGameObject(gameObject);
     }
 
-    /**
-     * @description NOTE: do not use this method. Use GameObject.destroyGameObject or Scene.destroyGameObject instead.
-     */
-    public destroy(): void {
-        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
-        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-
-        this.removeComponents();
+    private _destroy(): void {
+        this.destroyComponents();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
+    }
+
+    private destroyComponents(): void {
+        for (let i = 0; i < this.components.length; i++) {
+            this.components[i].dispatch(FrameEvent.Destroy);
+            delete this.components[i];
+        }
+
+        this.components = [];
     }
 }
