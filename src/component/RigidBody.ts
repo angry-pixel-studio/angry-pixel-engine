@@ -64,14 +64,14 @@ export class RigidBody extends EngineComponent {
 
         // setted by reference, so any change made by the RigidBodyManager will impact in the object position
         this.data.position = this.gameObject.transform.position;
-
-        if (this.rigidBodyType === RigidBodyType.Dynamic) {
-            this.rigidBodyManager.addRigidBodyData(this.data);
-        }
     }
 
     protected update(): void {
         this.data.colliders = this.getColliders();
+
+        if (this.rigidBodyType === RigidBodyType.Dynamic) {
+            this.rigidBodyManager.addRigidBodyData(this.data);
+        }
     }
 
     private getColliders(): ColliderData[] {

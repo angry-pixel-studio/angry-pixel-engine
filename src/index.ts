@@ -6,7 +6,7 @@ export * from "./math/Rotation";
 
 // main
 export { Component, PhysicsComponent, PreRenderComponent } from "./core/Component";
-export { Game, GameConfig, CollisionMethodConfig, Context2DConfig } from "./core/Game";
+export { Game, GameConfig, CollisionMethodConfig } from "./core/Game";
 export * from "./core/GameObject";
 export * from "./core/Scene";
 

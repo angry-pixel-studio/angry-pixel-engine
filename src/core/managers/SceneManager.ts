@@ -2,6 +2,7 @@ import { Game } from "../Game";
 import { Scene } from "../Scene";
 import { Exception } from "../../utils/Exception";
 import { RenderManager } from "../../rendering/RenderManager";
+import { FrameEvent } from "./IterationManager";
 
 export type SceneConstructor = () => Scene;
 
@@ -12,6 +13,7 @@ export class SceneManager {
     private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
     private currentScene: Scene = null;
     private openingSceneName: string = null;
+    private sceneToLoad: string | null = null;
 
     public currentSceneName: string;
 
@@ -41,7 +43,7 @@ export class SceneManager {
             throw new Exception(`There is no opening scene`);
         }
 
-        this.loadScene(this.openingSceneName);
+        this._loadScene(this.openingSceneName);
     }
 
     public loadScene(name: string): void {
@@ -53,16 +55,27 @@ export class SceneManager {
             throw new Exception(`Scene with name ${name} does not exists`);
         }
 
+        this.sceneToLoad = name;
+    }
+
+    public update(): void {
+        if (this.sceneToLoad !== null) {
+            this._loadScene(this.sceneToLoad);
+            this.sceneToLoad = null;
+        }
+    }
+
+    private _loadScene(name: string) {
         this.unloadCurrentScene();
         this.currentScene = this.scenes.get(name)();
         this.currentScene.name = name;
         this.currentScene.game = this.game;
-        this.currentScene.init();
+        this.currentScene.dispatch(FrameEvent.Init);
     }
 
     public unloadCurrentScene(): void {
         if (this.currentScene !== null) {
-            this.currentScene.destroy();
+            this.currentScene.dispatch(FrameEvent.Destroy);
             this.currentScene = null;
             this.currentSceneName = null;
 

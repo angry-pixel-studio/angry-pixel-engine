@@ -44,7 +44,7 @@ export class PolygonCollider extends Collider {
         this.vertexModel = config.vertexModel;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
-        this._physics = config.physics ?? this._physics;
+        this.physics = config.physics ?? this.physics;
         this.rotation = config.rotation ?? new Rotation();
         this.layer = config.layer;
 
@@ -54,18 +54,16 @@ export class PolygonCollider extends Collider {
     }
 
     protected start(): void {
-        this.addCollider(
+        this.colliders.push(
             new ColliderData(
                 new Polygon(this.scaledVertexModel),
                 this.layer ?? this.gameObject.layer,
                 this.gameObject.id,
                 true,
-                this._physics,
+                this.physics,
                 this.hasComponentOfType(ComponentTypes.RigidBody)
             )
         );
-
-        this.update();
 
         if (this.debug) {
             this.renderer = this.gameObject.addComponent(() => new PolygonColliderRenderer(this.colliders[0]));
@@ -76,6 +74,8 @@ export class PolygonCollider extends Collider {
         this.updateSize();
         this.updatePosition();
         this.updateShape();
+
+        super.update();
     }
 
     private updateSize(): void {

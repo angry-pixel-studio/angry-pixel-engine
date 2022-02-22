@@ -5,11 +5,11 @@ export class Rotation {
     private _radians: number = 0;
     private _direction: Vector2 = new Vector2();
 
-    constructor(config?: { radians?: number; degrees?: number }) {
-        if (config && config.radians) {
-            this.radians = config.radians;
-        } else if (config && config.degrees) {
-            this.degrees = config.degrees;
+    constructor(radians: number | null = null, degrees: number | null = null) {
+        if (radians) {
+            this.radians = radians;
+        } else if (degrees) {
+            this.degrees = degrees;
         }
     }
 

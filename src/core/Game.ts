@@ -7,7 +7,6 @@ import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/Quad
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
 import { IterationManager } from "../core/managers/IterationManager";
-import { exceptionName } from "../utils/Exception";
 
 export const container: Container = new Container();
 
@@ -17,7 +16,6 @@ export interface GameConfig {
     gameHeight?: number;
     debugEnabled?: boolean;
     canvasColor?: string;
-    context2d?: Context2DConfig;
     physicsFramerate?: number;
     spriteDefaultScale?: Vector2 | null;
     collisions?: {
@@ -26,12 +24,6 @@ export interface GameConfig {
         quadMaxLevel?: number;
         collidersPerQuad?: number;
     };
-}
-
-export enum Context2DConfig {
-    Default = "default",
-    Disabled = "disabled",
-    Fallback = "fallback",
 }
 
 export enum CollisionMethodConfig {
@@ -45,7 +37,6 @@ const defaultConfig: GameConfig = {
     gameHeight: 180,
     debugEnabled: false,
     canvasColor: "#000000",
-    context2d: Context2DConfig.Fallback,
     spriteDefaultScale: null,
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
     collisions: {
@@ -78,22 +69,9 @@ export class Game {
             ...config.collisions,
         };
 
-        window.addEventListener("error", this.errorEventHandler);
-
         container.addConstant("Game", this);
         this.setupManagers();
     }
-
-    private errorEventHandler = (event: ErrorEvent): void => {
-        if (event.error.name === exceptionName) {
-            this.stop();
-
-            event.stopPropagation();
-            event.preventDefault();
-
-            console.error(`${event.error.message}\n${event.filename}:${event.lineno}`);
-        }
-    };
 
     private setupManagers(): void {
         loadDependencies(container, this._config);

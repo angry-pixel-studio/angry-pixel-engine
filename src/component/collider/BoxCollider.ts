@@ -47,20 +47,20 @@ export class BoxCollider extends Collider {
         this.height = config.height;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
-        this._physics = config.physics ?? this._physics;
+        this.physics = config.physics ?? this.physics;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.rotation = config.rotation ?? new Rotation();
         this.layer = config.layer;
     }
 
     protected start(): void {
-        this.addCollider(
+        this.colliders.push(
             new ColliderData(
                 new Rectangle(this.realWidth, this.realHeight, this.realPosition),
                 this.layer ?? this.gameObject.layer,
                 this.gameObject.id,
                 true,
-                this._physics,
+                this.physics,
                 this.hasComponentOfType(ComponentTypes.RigidBody)
             )
         );
@@ -68,14 +68,14 @@ export class BoxCollider extends Collider {
         if (this.debug) {
             this.renderer = this.gameObject.addComponent(() => new BoxColliderRenderer(this.colliders[0]));
         }
-
-        this.update();
     }
 
     protected update(): void {
         this.updateRealSize();
         this.updatePosition();
         this.updateShape();
+
+        super.update();
     }
 
     private updateRealSize(): void {

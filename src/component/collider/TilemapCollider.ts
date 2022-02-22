@@ -28,7 +28,7 @@ export class TilemapCollider extends Collider {
         this.tilemapRenderer = config.tilemapRenderer;
         this.layer = config.layer;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
-        this._physics = true; // todo: fix this shit
+        this.physics = true; // todo: fix this shit
 
         this.cacheVertex = [new Vector2(), new Vector2(), new Vector2(), new Vector2()];
     }
@@ -39,13 +39,13 @@ export class TilemapCollider extends Collider {
         this.tilemapRenderer.tilesData
             .filter(this.needsCollider)
             .forEach((tileData: TileData) =>
-                this.addCollider(
+                this.colliders.push(
                     new ColliderData(
                         new Rectangle(tileData.width, tileData.height, tileData.position),
                         this.layer,
                         this.gameObject.id,
                         false,
-                        this._physics,
+                        this.physics,
                         this.hasComponentOfType(ComponentTypes.RigidBody)
                     )
                 )
@@ -77,10 +77,7 @@ export class TilemapCollider extends Collider {
 
     protected update(): void {
         this.colliders.forEach((collider) => (collider.layer = this.layer));
-    }
-
-    protected updatePosition(): void {
-        // Tilemap does not update colliders coordinates;
+        super.update();
     }
 }
 

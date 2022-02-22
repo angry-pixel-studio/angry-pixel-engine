@@ -2,8 +2,7 @@ import { GameCamera } from "../gameObject/GameCamera";
 import { Game, container } from "./Game";
 import { GameObject } from "./GameObject";
 import { GameObjectManager, GameObjectFactory } from "../core/managers/GameObjectManager";
-import { Exception, exceptionName } from "../utils/Exception";
-import { EVENT_START, EVENT_UPDATE } from "./managers/IterationManager";
+import { FrameEvent } from "./managers/IterationManager";
 
 export const GAME_CAMERA_ID = "GameCamera";
 
@@ -17,43 +16,37 @@ export class Scene {
     private started: boolean = false;
 
     constructor() {
-        window.addEventListener(EVENT_START, this.gameLoopEventHandler);
-        window.addEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
-
         this.addGameObject(() => new GameCamera(), GAME_CAMERA_ID);
     }
-
-    private gameLoopEventHandler = (event: Event): void => {
-        try {
-            if (!this.started && event.type === EVENT_START) {
-                this.start();
-                this.started = true;
-            } else if (this.started && event.type === EVENT_UPDATE) {
-                this.update();
-            }
-        } catch (error: unknown) {
-            if ((error as Error).name === exceptionName) {
-                throw error;
-            } else {
-                throw new Exception((error as Error).message);
-            }
-        }
-    };
 
     public get gameCamera(): GameCamera {
         return this.findGameObjectByName<GameCamera>(GAME_CAMERA_ID);
     }
 
+    public dispatch(event: FrameEvent): void {
+        if (event === FrameEvent.Init) {
+            this.init();
+        } else if (event === FrameEvent.Start && !this.started) {
+            this.start();
+            this.started = true;
+        } else if (event === FrameEvent.Update && this.started) {
+            this.update();
+        } else if (event === FrameEvent.Destroy) {
+            this.destroy();
+            this._destroy();
+        }
+    }
+
     /**
-     * This method is only ever called once.
+     * This method is called only once.
      * Recommended for GameObject cration.
      */
-    public init(): void {
+    protected init(): void {
         return;
     }
 
     /**
-     * This method is only ever called once.
+     * This method is called only once.
      */
     protected start(): void {
         return;
@@ -63,6 +56,13 @@ export class Scene {
      * This method is called on every frame.
      */
     protected update(): void {
+        return;
+    }
+
+    /**
+     * This method is called before the scene is destroyed.
+     */
+    protected destroy(): void {
         return;
     }
 
@@ -123,12 +123,7 @@ export class Scene {
         this.gameObjectManager.destroyGameObject(gameObject);
     }
 
-    /**
-     * @description NOTE: do not use this method. Use SceneManager.unloadCurrentScene instead.
-     */
-    public destroy(): void {
-        window.removeEventListener(EVENT_START, this.gameLoopEventHandler);
-        window.removeEventListener(EVENT_UPDATE, this.gameLoopEventHandler);
+    private _destroy(): void {
         this.gameObjectManager.destroyAllGameObjects();
 
         // @ts-ignore
