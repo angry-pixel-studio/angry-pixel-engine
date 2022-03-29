@@ -7,7 +7,8 @@ import { ColliderData } from "../../physics/collision/ColliderData";
 import { Polygon } from "../../physics/collision/shape/Polygon";
 import { RenderComponent } from "../../core/Component";
 import { RenderManager } from "../../rendering/RenderManager";
-import { ColliderRenderData } from "../../rendering/renderData/ColliderRenderData";
+import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
+import { Exception } from "../../utils/Exception";
 
 export interface PolygonColliderConfig {
     vertexModel: Vector2[];
@@ -30,13 +31,14 @@ export class PolygonCollider extends Collider {
     private scaledOffset: Vector2 = new Vector2();
     private scaledPosition: Vector2 = new Vector2();
     private finalRotation: number = 0;
-
-    private applyRotation: boolean =
-        container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
     private innerPosition: Vector2 = new Vector2();
 
     constructor(config: PolygonColliderConfig) {
         super();
+
+        if (container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
+            throw new Exception("Polygon Colliders need SAT collision method.");
+        }
 
         this.type = ComponentTypes.PolygonCollider;
 
@@ -88,10 +90,7 @@ export class PolygonCollider extends Collider {
 
         this.scaledOffset.x = this.offsetX * this.gameObject.transform.scale.x;
         this.scaledOffset.y = this.offsetY * this.gameObject.transform.scale.y;
-
-        this.finalRotation = this.applyRotation
-            ? this.gameObject.transform.rotation.radians + this.rotation.radians
-            : 0;
+        this.finalRotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
     }
 
     protected updatePosition(): void {
@@ -126,7 +125,7 @@ export class PolygonCollider extends Collider {
 class PolygonColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
-    private renderData: ColliderRenderData;
+    private renderData: GeometricRenderData;
     private collider: ColliderData;
 
     constructor(collider: ColliderData) {
@@ -134,7 +133,7 @@ class PolygonColliderRenderer extends RenderComponent {
 
         this.type = "PolygonColliderRenderer";
 
-        this.renderData = new ColliderRenderData();
+        this.renderData = new GeometricRenderData();
         this.renderData.debug = true;
         this.renderData.color = "#00FF00";
 
@@ -143,8 +142,12 @@ class PolygonColliderRenderer extends RenderComponent {
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
+        this.renderData.shape = GeometricShape.Polygon;
         this.renderData.position = this.collider.shape.position;
-        this.renderData.shape = this.collider.shape;
+        this.renderData.angle = this.collider.shape.angle;
+        this.renderData.boundingBox = this.collider.shape.boundingBox;
+        this.renderData.vertexModel = this.collider.shape.vertexModel;
+
         this.renderManager.addRenderData(this.renderData);
     }
 }

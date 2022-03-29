@@ -1,14 +1,14 @@
 import { Vector2 } from "../../../math/Vector2";
-import { Shape } from "../shape/Shape";
-import { CollisionResolution } from "./CollisionResolution";
-import { CollisionResolver } from "./CollisionResolver";
+import { Circumference } from "../shape/Circumference";
+import { Polygon } from "../shape/Polygon";
+import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
 type AxisProjection = {
     min: number;
     max: number;
 };
 
-export class SatResolver implements CollisionResolver {
+export class CircumferencePolygonResolver implements CollisionResolver {
     private axes: Vector2[];
     private projA: AxisProjection = { min: 0, max: 0 };
     private projB: AxisProjection = { min: 0, max: 0 };
@@ -17,13 +17,22 @@ export class SatResolver implements CollisionResolver {
     private displaceDirection: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();
 
-    public getCollisionResolution(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
+    private closestVertex: Vector2 = new Vector2();
+    private distance: Vector2 = new Vector2(Infinity, Infinity);
+    private newDistance: Vector2 = new Vector2();
+    private cache: Vector2 = new Vector2();
+
+    // TODO: implement with polygons
+    public resolve(shapeA: Circumference, shapeB: Polygon, invert: boolean = false): CollisionResolution {
         this.currentOverlap = null;
         this.minOverlap = null;
 
-        this.axes = [...shapeA.projectionAxes, ...shapeB.projectionAxes];
+        this.findClosestVertex(shapeA, shapeB);
+
+        this.axes = [this.distance, ...shapeB.projectionAxes];
 
         for (let i = 0; i < this.axes.length; i++) {
+            this.setCircumferenceVertices(shapeA, this.axes[i]);
             this.projectShapeOntoAxis(this.projA, shapeA, this.axes[i]);
             this.projectShapeOntoAxis(this.projB, shapeB, this.axes[i]);
 
@@ -50,12 +59,32 @@ export class SatResolver implements CollisionResolver {
 
         return {
             penetration: this.minOverlap,
-            displacementDirection: this.displaceDirection.clone(),
-            direction: this.direction.clone(),
+            direction: invert ? Vector2.scale(new Vector2(), this.direction, -1) : this.direction.clone(),
+            displacementDirection: invert ? this.direction.clone() : Vector2.scale(new Vector2(), this.direction, -1),
         };
     }
 
-    private projectShapeOntoAxis(projection: AxisProjection, shape: Shape, axis: Vector2): AxisProjection {
+    private findClosestVertex(c: Circumference, p: Polygon): void {
+        p.vertices.forEach((vertex) => {
+            Vector2.subtract(this.newDistance, vertex, c.position);
+
+            if (this.newDistance.magnitude < this.distance.magnitude) {
+                this.distance.copy(this.newDistance);
+                this.closestVertex.copy(vertex);
+            }
+        });
+    }
+
+    private setCircumferenceVertices(c: Circumference, axis: Vector2): void {
+        Vector2.add(c.vertices[0], c.position, Vector2.scale(this.cache, Vector2.unit(this.cache, axis), -c.radius));
+        Vector2.add(c.vertices[1], c.position, Vector2.scale(this.cache, Vector2.unit(this.cache, axis), c.radius));
+    }
+
+    private projectShapeOntoAxis(
+        projection: AxisProjection,
+        shape: Polygon | Circumference,
+        axis: Vector2
+    ): AxisProjection {
         projection.min = Vector2.dot(axis, shape.vertices[0]);
         projection.max = projection.min;
 

@@ -3,7 +3,7 @@ import { container, GameConfig } from "../../core/Game";
 import { TilemapRenderer } from "../rendering/tilemap/TilemapRenderer";
 import { Collider } from "./Collider";
 import { TileData } from "../rendering/tilemap/TileData";
-import { ColliderRenderData } from "../../rendering/renderData/ColliderRenderData";
+import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { RenderComponent } from "../../core/Component";
 import { Vector2 } from "../../math/Vector2";
 import { ComponentTypes } from "../ComponentTypes";
@@ -84,7 +84,7 @@ export class TilemapCollider extends Collider {
 class TilemapColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
-    private renderData: ColliderRenderData[] = [];
+    private renderData: GeometricRenderData[] = [];
     private colliders: ColliderData[] = [];
 
     constructor(colliders: ColliderData[]) {
@@ -94,7 +94,7 @@ class TilemapColliderRenderer extends RenderComponent {
         this.colliders = colliders;
 
         this.colliders.forEach((collider: ColliderData, index: number) => {
-            this.renderData[index] = new ColliderRenderData();
+            this.renderData[index] = new GeometricRenderData();
             this.renderData[index].debug = true;
             this.renderData[index].color = "#00FF00";
         });
@@ -103,8 +103,12 @@ class TilemapColliderRenderer extends RenderComponent {
     protected update(): void {
         this.colliders.forEach((collider: ColliderData, index: number) => {
             this.renderData[index].layer = this.gameObject.layer;
+            this.renderData[index].shape = GeometricShape.Polygon;
             this.renderData[index].position = collider.shape.position;
-            this.renderData[index].shape = collider.shape;
+            this.renderData[index].angle = collider.shape.angle;
+            this.renderData[index].boundingBox = collider.shape.boundingBox;
+            this.renderData[index].vertexModel = collider.shape.vertexModel;
+
             this.renderManager.addRenderData(this.renderData[index]);
         });
     }

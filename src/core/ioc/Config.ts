@@ -21,10 +21,9 @@ import { ProgramManager } from "../../rendering/webGL/ProgramManager";
 import { FontAtlasFactory } from "../../rendering/FontAtlasFactory";
 import { TextRenderer } from "../../rendering/webGL/renderer/TextRenderer";
 import { GeometricRenderer } from "../../rendering/webGL/renderer/GeometricRenderer";
-import { SatResolver } from "../../physics/collision/resolver/SatResolver";
+import { SatMethod } from "../../physics/collision/method/SatMethod";
 import { TouchController } from "../../input/TouchController";
-import { AABBResolver } from "../../physics/collision/resolver/AABBResolver";
-import { CollisionResolver } from "../../physics/collision/resolver/CollisionResolver";
+import { AABBMethod } from "../../physics/collision/method/AABBMethod";
 import { ContextRenderer } from "../../rendering/ContextRenderer";
 import { Exception } from "../../utils/Exception";
 import { CullingService } from "../../rendering/CullingService";
@@ -38,6 +37,12 @@ import { TimeManagerFacade } from "../facades/TimeManagerFacade";
 import { GameObjectManagerFacade } from "../facades/GameObjectManagerFacade";
 import { MaskRenderer } from "../../rendering/webGL/renderer/MaskRenderer";
 import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
+import { CollisionMethod } from "../../physics/collision/method/CollisionMethod";
+import { RectangleRectangleResolver } from "../../physics/collision/resolver/RectangleRectangleResolver";
+import { CircumferenceRectangleResolver } from "../../physics/collision/resolver/CircumferenceRectangleResolver";
+import { CircumferenceCircumferenceResolver } from "../../physics/collision/resolver/CircumferenceCircumferenceResolver";
+import { PolygonPolygonResolver } from "../../physics/collision/resolver/PolygonPolygonResolver";
+import { CircumferencePolygonResolver } from "../../physics/collision/resolver/CircumferencePolygonResolver";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
@@ -84,9 +89,25 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
 
 const physicsDependencies = (container: Container, gameConfig: GameConfig): void => {
     if (gameConfig.collisions.method === CollisionMethodConfig.AABB) {
-        container.add("CollisionResolver", () => new AABBResolver());
+        container.add(
+            "CollisionMethod",
+            () =>
+                new AABBMethod(
+                    new RectangleRectangleResolver(),
+                    new CircumferenceRectangleResolver(),
+                    new CircumferenceCircumferenceResolver()
+                )
+        );
     } else if (gameConfig.collisions.method === CollisionMethodConfig.SAT) {
-        container.add("CollisionResolver", () => new SatResolver());
+        container.add(
+            "CollisionMethod",
+            () =>
+                new SatMethod(
+                    new PolygonPolygonResolver(),
+                    new CircumferencePolygonResolver(),
+                    new CircumferenceCircumferenceResolver()
+                )
+        );
     } else {
         throw new Exception("Invalid collision method.");
     }
@@ -95,7 +116,7 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
         "CollisionManager",
         () =>
             new CollisionManager(
-                container.getSingleton<CollisionResolver>("CollisionResolver"),
+                container.getSingleton<CollisionMethod>("CollisionMethod"),
                 gameConfig.collisions.quadTreeBounds,
                 gameConfig.collisions.quadMaxLevel,
                 gameConfig.collisions.collidersPerQuad
@@ -221,18 +242,14 @@ const webGLDependencies = (
 };
 
 const inputDependencies = (container: Container, domManager: DomManager): void => {
-    container.add("Mouse", () => new MouseController(domManager.canvas));
-    container.add("Keyboard", () => new KeyboardController(domManager.canvas));
-    container.add("Gamepad", () => new GamepadController());
-    container.add("Touch", () => new TouchController(domManager.canvas));
     container.add(
         "InputManager",
         () =>
             new InputManager(
-                container.getSingleton<MouseController>("Mouse"),
-                container.getSingleton<KeyboardController>("Keyboard"),
-                container.getSingleton<GamepadController>("Gamepad"),
-                container.getSingleton<TouchController>("Touch")
+                new MouseController(domManager.canvas),
+                new KeyboardController(domManager.canvas),
+                new GamepadController(),
+                new TouchController(domManager.canvas)
             )
     );
 };

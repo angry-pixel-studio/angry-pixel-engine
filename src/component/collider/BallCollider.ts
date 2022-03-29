@@ -1,62 +1,51 @@
 import { RenderManager } from "../../rendering/RenderManager";
-import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
+import { container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
 import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { Vector2 } from "../../math/Vector2";
 import { RenderComponent } from "../../core/Component";
-import { Rotation } from "../../math/Rotation";
 import { ComponentTypes } from "../ComponentTypes";
 import { ColliderData } from "../../physics/collision/ColliderData";
-import { Rectangle } from "../../physics/collision/shape/Rectangle";
+import { Circumference } from "../../physics/collision/shape/Circumference";
 
-export interface BoxColliderConfig {
-    width: number;
-    height: number;
+export interface BallColliderConfig {
+    radius: number;
     offsetX?: number;
     offsetY?: number;
-    rotation?: Rotation;
     layer?: string;
     physics?: boolean;
     debug?: boolean;
 }
 
-export class BoxCollider extends Collider {
+export class BallCollider extends Collider {
     public debug: boolean = false;
-    public width: number;
-    public height: number;
+    public radius: number;
     public offsetX: number = 0;
     public offsetY: number = 0;
-    public rotation: Rotation;
 
-    private realWidth: number = 0;
-    private realHeight: number = 0;
+    private realRadius: number = 0;
     private realOffset: Vector2 = new Vector2();
     private realPosition: Vector2 = new Vector2();
-    private realRotation: number = 0;
 
-    private applyRotation: boolean =
-        container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(config: BoxColliderConfig) {
+    constructor(config: BallColliderConfig) {
         super();
 
-        this.type = ComponentTypes.BoxCollider;
+        this.type = ComponentTypes.BallCollider;
 
-        this.width = config.width;
-        this.height = config.height;
+        this.radius = config.radius;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this.physics = config.physics ?? this.physics;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
-        this.rotation = config.rotation ?? new Rotation();
         this.layer = config.layer;
     }
 
     protected start(): void {
         this.colliders.push(
             new ColliderData(
-                new Rectangle(this.realWidth, this.realHeight, this.realPosition),
+                new Circumference(this.radius),
                 this.layer ?? this.gameObject.layer,
                 this.gameObject.id,
                 true,
@@ -66,7 +55,7 @@ export class BoxCollider extends Collider {
         );
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(() => new BoxColliderRenderer(this.colliders[0]));
+            this.renderer = this.gameObject.addComponent(() => new BallColliderRenderer(this.colliders[0]));
         }
     }
 
@@ -79,13 +68,12 @@ export class BoxCollider extends Collider {
     }
 
     private updateRealSize(): void {
-        this.realWidth = this.width * Math.abs(this.gameObject.transform.scale.x);
-        this.realHeight = this.height * Math.abs(this.gameObject.transform.scale.y);
+        this.realRadius =
+            this.radius *
+            Math.max(Math.abs(this.gameObject.transform.scale.x), Math.abs(this.gameObject.transform.scale.y));
 
         this.realOffset.x = this.offsetX * this.gameObject.transform.scale.x;
         this.realOffset.y = this.offsetY * this.gameObject.transform.scale.y;
-
-        this.realRotation = this.applyRotation ? this.gameObject.transform.rotation.radians + this.rotation.radians : 0;
     }
 
     protected updatePosition(): void {
@@ -110,14 +98,13 @@ export class BoxCollider extends Collider {
     private updateShape(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
         this.colliders[0].shape.position = this.realPosition;
-        this.colliders[0].shape.angle = this.realRotation;
-        (this.colliders[0].shape as Rectangle).updateSize(this.realWidth, this.realHeight);
+        (this.colliders[0].shape as Circumference).radius = this.realRadius;
 
         this.colliders[0].shape.update();
     }
 }
 
-class BoxColliderRenderer extends RenderComponent {
+class BallColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
     private renderData: GeometricRenderData;
@@ -126,7 +113,7 @@ class BoxColliderRenderer extends RenderComponent {
     constructor(collider: ColliderData) {
         super();
 
-        this.type = "BoxColliderRenderer";
+        this.type = "BallColliderRenderer";
 
         this.renderData = new GeometricRenderData();
         this.renderData.debug = true;
@@ -137,11 +124,10 @@ class BoxColliderRenderer extends RenderComponent {
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
-        this.renderData.shape = GeometricShape.Polygon;
+        this.renderData.shape = GeometricShape.Circumference;
         this.renderData.position = this.collider.shape.position;
-        this.renderData.angle = this.collider.shape.angle;
         this.renderData.boundingBox = this.collider.shape.boundingBox;
-        this.renderData.vertexModel = this.collider.shape.vertexModel;
+        this.renderData.radius = (this.collider.shape as Circumference).radius;
 
         this.renderManager.addRenderData(this.renderData);
     }

@@ -1,11 +1,11 @@
 import { mat4 } from "gl-matrix";
 import { Rectangle } from "../../../math/Rectangle";
 import { LastRender, WebGLContextVersion } from "../WebGLRenderer";
-import { ColliderRenderData } from "../../renderData/ColliderRenderData";
 import { ProgramManager } from "../ProgramManager";
 import { Vector2 } from "../../../math/Vector2";
-import { ShapeType } from "../../../physics/collision/shape/Shape"; // TODO: resolve dependency
 import { hexToRgba } from "../Utils";
+import { range } from "../../../math/Utils";
+import { GeometricShape, GeometricRenderData } from "../../renderData/GeometricRenderData";
 
 export class GeometricRenderer {
     private gl: WebGLRenderingContext;
@@ -18,7 +18,7 @@ export class GeometricRenderer {
 
     // cache
     private readonly vertices: Map<symbol, Float32Array> = new Map<symbol, Float32Array>();
-    private readonly texVertices: Float32Array = new Float32Array([]);
+    private readonly circumferenceVertices: Float32Array;
     private lastVertices: symbol = null;
     private lastRender: LastRender = null;
 
@@ -29,33 +29,34 @@ export class GeometricRenderer {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
+
+        const a = (2 * Math.PI) / 60;
+        this.circumferenceVertices = new Float32Array(
+            range(1, 60, 1).reduce((v, i) => [...v, Math.cos(i * a), Math.sin(i * a)], [])
+        );
     }
 
-    public renderCollider(viewportRect: Rectangle, renderData: ColliderRenderData, lastRender: LastRender): void {
+    public render(viewportRect: Rectangle, renderData: GeometricRenderData, lastRender: LastRender): void {
         this.lastRender = lastRender;
 
-        if (renderData.shape.type === ShapeType.Polygon) {
-            this.renderPolygon(
-                viewportRect,
-                renderData.positionInViewport,
-                renderData.shape.vertexModel,
-                renderData.color,
-                renderData.shape.angle
-            );
+        switch (renderData.shape) {
+            case GeometricShape.Polygon:
+                this.renderPolygon(viewportRect, renderData);
+                break;
+            case GeometricShape.Circumference:
+                this.renderCircumference(viewportRect, renderData);
+                break;
         }
     }
 
     private renderPolygon(
         viewportRect: Rectangle,
-        positionInViewport: Vector2,
-        vertices: Vector2[],
-        color: string,
-        angleInRadians: number = 0
+        { vertexModel, positionInViewport, angle, color }: GeometricRenderData
     ): void {
-        const verticesKey: symbol = this.generateVerticesKey(vertices);
+        const verticesKey: symbol = this.generateVerticesKey(vertexModel);
 
         if (this.vertices.has(verticesKey) === false) {
-            this.vertices.set(verticesKey, new Float32Array(this.generatePolygonVertices(vertices)));
+            this.vertices.set(verticesKey, new Float32Array(this.generatePolygonVertices(vertexModel)));
         }
         const posVertices: Float32Array = this.vertices.get(verticesKey);
 
@@ -65,14 +66,12 @@ export class GeometricRenderer {
         }
         this.lastVertices = verticesKey;
 
-        if (this.lastRender !== "geometric") {
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.texVertices, this.gl.DYNAMIC_DRAW);
-        }
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, posVertices, this.gl.DYNAMIC_DRAW);
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
         mat4.translate(this.modelMatrix, this.modelMatrix, [positionInViewport.x, positionInViewport.y, 0]);
-        mat4.rotateZ(this.modelMatrix, this.modelMatrix, angleInRadians);
+        mat4.rotateZ(this.modelMatrix, this.modelMatrix, angle);
 
         this.projectionMatrix = mat4.identity(this.projectionMatrix);
         mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
@@ -101,5 +100,37 @@ export class GeometricRenderer {
         }
 
         return result;
+    }
+
+    private renderCircumference(
+        viewportRect: Rectangle,
+        { radius, positionInViewport, color }: GeometricRenderData
+    ): void {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.circumferenceVertices, this.gl.DYNAMIC_DRAW);
+
+        this.lastVertices = null;
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.circumferenceVertices, this.gl.DYNAMIC_DRAW);
+
+        this.modelMatrix = mat4.identity(this.modelMatrix);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [positionInViewport.x, positionInViewport.y, 0]);
+        mat4.scale(this.modelMatrix, this.modelMatrix, [radius, radius, 1]);
+
+        this.projectionMatrix = mat4.identity(this.projectionMatrix);
+        mat4.ortho(this.projectionMatrix, viewportRect.x, viewportRect.x1, viewportRect.y, viewportRect.y1, -1, 1);
+
+        this.gl.uniformMatrix4fv(this.programManager.projectionMatrixUniform, false, this.projectionMatrix);
+        this.gl.uniformMatrix4fv(this.programManager.modelMatrixUniform, false, this.modelMatrix);
+        this.gl.uniformMatrix4fv(this.programManager.textureMatrixUniform, false, this.textureMatrix);
+
+        this.gl.uniform1i(this.programManager.renderTextureUniform, 0);
+
+        const { r, g, b, a } = hexToRgba(color);
+        this.gl.uniform4f(this.programManager.solidColorUniform, r, g, b, a);
+        this.gl.uniform1f(this.programManager.alphaUniform, 1);
+
+        this.gl.drawArrays(this.gl.LINE_LOOP, 0, this.circumferenceVertices.length / 2);
     }
 }

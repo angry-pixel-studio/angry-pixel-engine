@@ -12,6 +12,7 @@ export * from "./core/Scene";
 
 // components
 export * from "./component/collider/BoxCollider";
+export * from "./component/collider/BallCollider";
 export * from "./component/collider/TilemapCollider";
 export * from "./component/collider/PolygonCollider";
 export * from "./component/rendering/SpriteRenderer";
@@ -48,5 +49,5 @@ export * from "./input/MouseController";
 export * from "./input/TouchController";
 
 // others
-export { CollisionResolution } from "./physics/collision/resolver/CollisionResolution";
+export { CollisionResolution } from "./physics/collision/resolver/CollisionResolver";
 export { ColliderData } from "./physics/collision/ColliderData";

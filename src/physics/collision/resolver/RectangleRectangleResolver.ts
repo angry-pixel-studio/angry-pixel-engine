@@ -1,16 +1,15 @@
 import { Vector2 } from "../../../math/Vector2";
-import { CollisionResolution } from "./CollisionResolution";
-import { Shape } from "../shape/Shape";
-import { CollisionResolver } from "./CollisionResolver";
+import { Rectangle } from "../shape/Rectangle";
+import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
-export class AABBResolver implements CollisionResolver {
+export class RectangleRectangleResolver implements CollisionResolver {
     private overlapX: number;
     private overlapY: number;
     private minOverlap: number;
     private direction: Vector2 = new Vector2();
     private displacementDirection: Vector2 = new Vector2();
 
-    getCollisionResolution(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
+    public resolve(shapeA: Rectangle, shapeB: Rectangle): CollisionResolution | null {
         this.overlapX =
             Math.min(shapeA.boundingBox.x1, shapeB.boundingBox.x1) -
             Math.max(shapeA.boundingBox.x, shapeB.boundingBox.x);

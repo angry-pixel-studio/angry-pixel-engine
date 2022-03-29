@@ -2,8 +2,8 @@ import { container } from "../../core/Game";
 import { ColliderComponent, RenderComponent } from "../../core/Component";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
 import { ColliderData } from "../../physics/collision/ColliderData";
-import { CollisionResolution } from "../../physics/collision/resolver/CollisionResolution";
 import { GameObject } from "../../core/GameObject";
+import { CollisionResolution } from "../../physics/collision/resolver/CollisionResolver";
 
 export interface CollisionData {
     resolution: CollisionResolution;

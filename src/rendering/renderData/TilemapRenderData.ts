@@ -1,6 +1,12 @@
 import { Vector2 } from "../../math/Vector2";
-import { Tile } from "../../component/rendering/tilemap/Tile"; // TODO: resolve dependency
 import { RenderData, RenderDataType } from "./RenderData";
+
+interface Tile {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 
 export class TileRenderData {
     public tile: Tile;
