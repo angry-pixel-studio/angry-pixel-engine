@@ -63,17 +63,10 @@ export class IterationManager {
         if (this.timeManager.gameFramerate !== this.timeManager.physicsFramerate) {
             this.physicsLoopAccumulator += this.timeManager.browserDeltaTime;
 
-            console.log(this.physicsLoopAccumulator, this.timeManager.physicsDeltaTime);
-
             while (this.physicsLoopAccumulator >= this.timeManager.minPhysicsDeltaTime) {
                 this.physicsLoopAccumulator -= this.timeManager.minPhysicsDeltaTime;
-
                 if (this.timeManager.timeScale > 0) this.physicsIteration();
-
-                console.log(this.physicsLoopAccumulator);
             }
-
-            console.log("----------");
         }
 
         this.preRenderIteration();
@@ -95,6 +88,7 @@ export class IterationManager {
     }
 
     private mainIteration(): void {
+        this.physicsManager.clear();
         // starts all game objects and components
         this.dispatchFrameEvent(FrameEvent.Start);
         // updates input controllers
@@ -118,8 +112,6 @@ export class IterationManager {
     }
 
     private preRenderIteration(): void {
-        this.physicsManager.clear();
-
         this.dispatchFrameEvent(FrameEvent.UpdateTransform);
         this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
         this.dispatchFrameEvent(FrameEvent.UpdateCamera);

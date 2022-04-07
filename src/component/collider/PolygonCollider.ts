@@ -40,6 +40,10 @@ export class PolygonCollider extends Collider {
             throw new Exception("Polygon Colliders need SAT collision method.");
         }
 
+        if (config.vertexModel.length < 3) {
+            throw new Exception("Polygon Collider needs at least 3 vertices.");
+        }
+
         this.type = ComponentTypes.PolygonCollider;
 
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
@@ -116,7 +120,7 @@ export class PolygonCollider extends Collider {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
         this.colliders[0].shape.position = this.scaledPosition;
         this.colliders[0].shape.angle = this.finalRotation;
-        this.colliders[0].shape.vertexModel = this.vertexModel;
+        this.colliders[0].shape.vertexModel = this.scaledVertexModel;
 
         this.colliders[0].shape.update();
     }

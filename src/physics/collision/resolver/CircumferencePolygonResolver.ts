@@ -20,16 +20,17 @@ export class CircumferencePolygonResolver implements CollisionResolver {
     private closestVertex: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2(Infinity, Infinity);
     private newDistance: Vector2 = new Vector2();
+    private circumferenceAxis: Vector2 = new Vector2();
     private cache: Vector2 = new Vector2();
 
-    // TODO: implement with polygons
     public resolve(shapeA: Circumference, shapeB: Polygon, invert: boolean = false): CollisionResolution {
+        this.distance.set(Infinity, Infinity);
         this.currentOverlap = null;
         this.minOverlap = null;
 
         this.findClosestVertex(shapeA, shapeB);
 
-        this.axes = [this.distance, ...shapeB.projectionAxes];
+        this.axes = [Vector2.unit(this.circumferenceAxis, this.distance), ...shapeB.projectionAxes];
 
         for (let i = 0; i < this.axes.length; i++) {
             this.setCircumferenceVertices(shapeA, this.axes[i]);
