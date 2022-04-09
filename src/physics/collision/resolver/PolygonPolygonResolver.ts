@@ -1,4 +1,5 @@
 import { Vector2 } from "../../../math/Vector2";
+import { Line } from "../shape/Line";
 import { Polygon } from "../shape/Polygon";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
@@ -16,7 +17,7 @@ export class PolygonPolygonResolver implements CollisionResolver {
     private displaceDirection: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();
 
-    public resolve(shapeA: Polygon, shapeB: Polygon): CollisionResolution | null {
+    public resolve(shapeA: Polygon | Line, shapeB: Polygon | Line): CollisionResolution | null {
         this.currentOverlap = null;
         this.minOverlap = null;
 
@@ -54,7 +55,7 @@ export class PolygonPolygonResolver implements CollisionResolver {
         };
     }
 
-    private projectShapeOntoAxis(projection: AxisProjection, shape: Polygon, axis: Vector2): AxisProjection {
+    private projectShapeOntoAxis(projection: AxisProjection, shape: Polygon | Line, axis: Vector2): AxisProjection {
         projection.min = Vector2.dot(axis, shape.vertices[0]);
         projection.max = projection.min;
 

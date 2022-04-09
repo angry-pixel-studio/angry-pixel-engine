@@ -5,6 +5,7 @@ import { RenderData, RenderDataType } from "./RenderData";
 export enum GeometricShape {
     Polygon,
     Circumference,
+    Line,
 }
 
 export class GeometricRenderData extends RenderData {

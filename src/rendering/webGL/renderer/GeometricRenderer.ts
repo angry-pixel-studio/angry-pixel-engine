@@ -41,7 +41,10 @@ export class GeometricRenderer {
 
         switch (renderData.shape) {
             case GeometricShape.Polygon:
-                this.renderPolygon(viewportRect, renderData);
+                this.renderLines(viewportRect, renderData, this.gl.LINE_LOOP);
+                break;
+            case GeometricShape.Line:
+                this.renderLines(viewportRect, renderData, this.gl.LINE_LOOP);
                 break;
             case GeometricShape.Circumference:
                 this.renderCircumference(viewportRect, renderData);
@@ -49,9 +52,10 @@ export class GeometricRenderer {
         }
     }
 
-    private renderPolygon(
+    private renderLines(
         viewportRect: Rectangle,
-        { vertexModel, positionInViewport, angle, color }: GeometricRenderData
+        { vertexModel, positionInViewport, angle, color }: GeometricRenderData,
+        mode: number
     ): void {
         const verticesKey: symbol = this.generateVerticesKey(vertexModel);
 
@@ -86,7 +90,7 @@ export class GeometricRenderer {
         this.gl.uniform4f(this.programManager.solidColorUniform, r, g, b, a);
         this.gl.uniform1f(this.programManager.alphaUniform, 1);
 
-        this.gl.drawArrays(this.gl.LINE_LOOP, 0, posVertices.length / 2);
+        this.gl.drawArrays(mode, 0, posVertices.length / 2);
     }
 
     private generateVerticesKey(vertices: Vector2[]): symbol {

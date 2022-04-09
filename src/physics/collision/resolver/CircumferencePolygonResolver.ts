@@ -1,5 +1,6 @@
 import { Vector2 } from "../../../math/Vector2";
 import { Circumference } from "../shape/Circumference";
+import { Line } from "../shape/Line";
 import { Polygon } from "../shape/Polygon";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
@@ -23,7 +24,7 @@ export class CircumferencePolygonResolver implements CollisionResolver {
     private circumferenceAxis: Vector2 = new Vector2();
     private cache: Vector2 = new Vector2();
 
-    public resolve(shapeA: Circumference, shapeB: Polygon, invert: boolean = false): CollisionResolution {
+    public resolve(shapeA: Circumference, shapeB: Polygon | Line, invert: boolean = false): CollisionResolution {
         this.distance.set(Infinity, Infinity);
         this.currentOverlap = null;
         this.minOverlap = null;
@@ -65,7 +66,7 @@ export class CircumferencePolygonResolver implements CollisionResolver {
         };
     }
 
-    private findClosestVertex(c: Circumference, p: Polygon): void {
+    private findClosestVertex(c: Circumference, p: Polygon | Line): void {
         p.vertices.forEach((vertex) => {
             Vector2.subtract(this.newDistance, vertex, c.position);
 
@@ -83,7 +84,7 @@ export class CircumferencePolygonResolver implements CollisionResolver {
 
     private projectShapeOntoAxis(
         projection: AxisProjection,
-        shape: Polygon | Circumference,
+        shape: Polygon | Line | Circumference,
         axis: Vector2
     ): AxisProjection {
         projection.min = Vector2.dot(axis, shape.vertices[0]);

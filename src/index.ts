@@ -15,6 +15,7 @@ export * from "./component/collider/BoxCollider";
 export * from "./component/collider/BallCollider";
 export * from "./component/collider/TilemapCollider";
 export * from "./component/collider/PolygonCollider";
+export * from "./component/collider/EdgeCollider";
 export { CollisionData } from "./component/collider/Collider";
 export * from "./component/rendering/SpriteRenderer";
 export * from "./component/rendering/TextRenderer";
