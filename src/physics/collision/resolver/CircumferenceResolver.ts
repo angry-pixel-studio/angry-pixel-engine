@@ -3,7 +3,7 @@ import { Circumference } from "../shape/Circumference";
 
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
-export class CircumferenceCircumferenceResolver implements CollisionResolver {
+export class CircumferenceResolver implements CollisionResolver {
     private distance: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();
 

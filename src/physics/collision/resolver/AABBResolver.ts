@@ -2,7 +2,7 @@ import { Vector2 } from "../../../math/Vector2";
 import { Rectangle } from "../shape/Rectangle";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
-export class RectangleRectangleResolver implements CollisionResolver {
+export class AABBResolver implements CollisionResolver {
     private overlapX: number;
     private overlapY: number;
     private minOverlap: number;

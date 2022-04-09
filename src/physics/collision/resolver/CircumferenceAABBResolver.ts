@@ -4,7 +4,7 @@ import { Circumference } from "../shape/Circumference";
 import { Rectangle } from "../shape/Rectangle";
 import { CollisionResolver, CollisionResolution } from "./CollisionResolver";
 
-export class CircumferenceRectangleResolver implements CollisionResolver {
+export class CircumferenceAABBResolver implements CollisionResolver {
     private closestPoint: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();

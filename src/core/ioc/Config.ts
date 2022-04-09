@@ -38,11 +38,10 @@ import { GameObjectManagerFacade } from "../facades/GameObjectManagerFacade";
 import { MaskRenderer } from "../../rendering/webGL/renderer/MaskRenderer";
 import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
 import { CollisionMethod } from "../../physics/collision/method/CollisionMethod";
-import { RectangleRectangleResolver } from "../../physics/collision/resolver/RectangleRectangleResolver";
-import { CircumferenceRectangleResolver } from "../../physics/collision/resolver/CircumferenceRectangleResolver";
-import { CircumferenceCircumferenceResolver } from "../../physics/collision/resolver/CircumferenceCircumferenceResolver";
-import { PolygonPolygonResolver } from "../../physics/collision/resolver/PolygonPolygonResolver";
-import { CircumferencePolygonResolver } from "../../physics/collision/resolver/CircumferencePolygonResolver";
+import { AABBResolver } from "../../physics/collision/resolver/AABBResolver";
+import { CircumferenceAABBResolver } from "../../physics/collision/resolver/CircumferenceAABBResolver";
+import { CircumferenceResolver } from "../../physics/collision/resolver/CircumferenceResolver";
+import { SatResolver } from "../../physics/collision/resolver/SatResolver";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
@@ -91,23 +90,10 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
     if (gameConfig.collisions.method === CollisionMethodConfig.AABB) {
         container.add(
             "CollisionMethod",
-            () =>
-                new AABBMethod(
-                    new RectangleRectangleResolver(),
-                    new CircumferenceRectangleResolver(),
-                    new CircumferenceCircumferenceResolver()
-                )
+            () => new AABBMethod(new AABBResolver(), new CircumferenceAABBResolver(), new CircumferenceResolver())
         );
     } else if (gameConfig.collisions.method === CollisionMethodConfig.SAT) {
-        container.add(
-            "CollisionMethod",
-            () =>
-                new SatMethod(
-                    new PolygonPolygonResolver(),
-                    new CircumferencePolygonResolver(),
-                    new CircumferenceCircumferenceResolver()
-                )
-        );
+        container.add("CollisionMethod", () => new SatMethod(new CircumferenceResolver(), new SatResolver()));
     } else {
         throw new Exception("Invalid collision method.");
     }

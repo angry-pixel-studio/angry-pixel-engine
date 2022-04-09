@@ -7,4 +7,5 @@ export interface RigidBodyData {
     velocity: Vector2;
     layersToCollider: string[];
     colliders: ColliderData[];
+    cacheVelocity?: Vector2;
 }

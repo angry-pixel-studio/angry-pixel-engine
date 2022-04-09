@@ -1,6 +1,6 @@
 import { Vector2 } from "../../../math/Vector2";
-import { Line } from "../shape/Line";
-import { Polygon } from "../shape/Polygon";
+import { Circumference } from "../shape/Circumference";
+import { Shape, ShapeType } from "../shape/Shape";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
 type AxisProjection = {
@@ -8,7 +8,7 @@ type AxisProjection = {
     max: number;
 };
 
-export class PolygonPolygonResolver implements CollisionResolver {
+export class SatResolver implements CollisionResolver {
     private axes: Vector2[];
     private projA: AxisProjection = { min: 0, max: 0 };
     private projB: AxisProjection = { min: 0, max: 0 };
@@ -17,13 +17,28 @@ export class PolygonPolygonResolver implements CollisionResolver {
     private displaceDirection: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();
 
-    public resolve(shapeA: Polygon | Line, shapeB: Polygon | Line): CollisionResolution | null {
+    private distance: Vector2 = new Vector2(Infinity, Infinity);
+    private cache: Vector2 = new Vector2();
+
+    public resolve(shapeA: Shape, shapeB: Shape): CollisionResolution | null {
         this.currentOverlap = null;
         this.minOverlap = null;
+
+        if (shapeA.type === ShapeType.Circumference) {
+            this.setCircumferenceAxis(shapeA as Circumference, shapeB);
+        } else if (shapeB.type === ShapeType.Circumference) {
+            this.setCircumferenceAxis(shapeB as Circumference, shapeA);
+        }
 
         this.axes = [...shapeA.projectionAxes, ...shapeB.projectionAxes];
 
         for (let i = 0; i < this.axes.length; i++) {
+            if (shapeA.type === ShapeType.Circumference) {
+                this.setCircumferenceVertices(shapeA as Circumference, this.axes[i]);
+            } else if (shapeB.type === ShapeType.Circumference) {
+                this.setCircumferenceVertices(shapeB as Circumference, this.axes[i]);
+            }
+
             this.projectShapeOntoAxis(this.projA, shapeA, this.axes[i]);
             this.projectShapeOntoAxis(this.projB, shapeB, this.axes[i]);
 
@@ -55,7 +70,7 @@ export class PolygonPolygonResolver implements CollisionResolver {
         };
     }
 
-    private projectShapeOntoAxis(projection: AxisProjection, shape: Polygon | Line, axis: Vector2): AxisProjection {
+    private projectShapeOntoAxis(projection: AxisProjection, shape: Shape, axis: Vector2): AxisProjection {
         projection.min = Vector2.dot(axis, shape.vertices[0]);
         projection.max = projection.min;
 
@@ -81,5 +96,24 @@ export class PolygonPolygonResolver implements CollisionResolver {
                 Vector2.scale(this.axes[axisIndex], this.axes[axisIndex], -1);
             }
         }
+    }
+
+    private setCircumferenceAxis(c: Circumference, s: Shape): void {
+        this.distance.set(Infinity, Infinity);
+
+        s.vertices.forEach((vertex) => {
+            Vector2.subtract(this.cache, vertex, c.position);
+
+            if (this.cache.magnitude < this.distance.magnitude) {
+                this.distance.copy(this.cache);
+            }
+        });
+
+        Vector2.unit(c.projectionAxes[0], this.distance);
+    }
+
+    private setCircumferenceVertices(c: Circumference, axis: Vector2): void {
+        Vector2.add(c.vertices[0], c.position, Vector2.scale(this.cache, Vector2.unit(this.cache, axis), -c.radius));
+        Vector2.add(c.vertices[1], c.position, Vector2.scale(this.cache, Vector2.unit(this.cache, axis), c.radius));
     }
 }
