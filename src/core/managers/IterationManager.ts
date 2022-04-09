@@ -65,7 +65,6 @@ export class IterationManager {
 
             while (this.physicsLoopAccumulator >= this.timeManager.minPhysicsDeltaTime) {
                 this.physicsLoopAccumulator -= this.timeManager.minPhysicsDeltaTime;
-
                 if (this.timeManager.timeScale > 0) this.physicsIteration();
             }
         }
@@ -89,6 +88,7 @@ export class IterationManager {
     }
 
     private mainIteration(): void {
+        this.physicsManager.clear();
         // starts all game objects and components
         this.dispatchFrameEvent(FrameEvent.Start);
         // updates input controllers
@@ -112,8 +112,6 @@ export class IterationManager {
     }
 
     private preRenderIteration(): void {
-        this.physicsManager.clear();
-
         this.dispatchFrameEvent(FrameEvent.UpdateTransform);
         this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
         this.dispatchFrameEvent(FrameEvent.UpdateCamera);

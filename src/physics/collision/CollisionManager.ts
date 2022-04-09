@@ -1,9 +1,9 @@
 import { Rectangle } from "../../math/Rectangle";
 import { Vector2 } from "../../math/Vector2";
 import { ColliderData } from "./ColliderData";
+import { CollisionMethod } from "./method/CollisionMethod";
 import { QuadTree } from "./QuadTree";
-import { CollisionResolution } from "./resolver/CollisionResolution";
-import { CollisionResolver } from "./resolver/CollisionResolver";
+import { CollisionResolution } from "./resolver/CollisionResolver";
 
 export interface Collision {
     localCollider: ColliderData;
@@ -16,7 +16,7 @@ export class CollisionManager {
     private quadTree: QuadTree;
     private bounds: Rectangle;
     private fixedQuadTree: boolean;
-    private resolver: CollisionResolver;
+    private method: CollisionMethod;
     private collisions: Collision[] = [];
 
     // cache
@@ -25,13 +25,13 @@ export class CollisionManager {
     private newBounds: Rectangle = new Rectangle(0, 0, 0, 0);
 
     constructor(
-        resolver: CollisionResolver,
+        method: CollisionMethod,
         quadTreeBounds: Rectangle | null = null,
         quadMaxLevel: number,
         collidersPerQuad: number
     ) {
         this.fixedQuadTree = quadTreeBounds !== null;
-        this.resolver = resolver;
+        this.method = method;
         this.colliders = [];
 
         if (this.fixedQuadTree) {
@@ -131,7 +131,7 @@ export class CollisionManager {
         colliders
             .filter((remoteCollider: ColliderData) => remoteCollider.id !== collider.id)
             .forEach((remoteCollider: ColliderData) => {
-                const resolution = this.resolver.getCollisionResolution(collider.shape, remoteCollider.shape);
+                const resolution = this.method.getCollisionResolution(collider.shape, remoteCollider.shape);
                 if (resolution !== null) {
                     collisions.push({
                         localCollider: collider,

@@ -8,7 +8,6 @@ import { ImageRenderer } from "./renderer/ImageRenderer";
 
 import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
 import { hexToRgba } from "./Utils";
-import { ColliderRenderData } from "../renderData/ColliderRenderData";
 import { ProgramManager } from "./ProgramManager";
 import { TextRenderer } from "./renderer/TextRenderer";
 import { GeometricRenderer } from "./renderer/GeometricRenderer";
@@ -16,6 +15,7 @@ import { TilemapRenderData } from "../renderData/TilemapRenderData";
 import { TilemapRenderer } from "./renderer/TilemapRenderer";
 import { MaskRenderer } from "./renderer/MaskRenderer";
 import { MaskRenderData } from "../renderData/MaskRenderData";
+import { GeometricRenderData } from "../renderData/GeometricRenderData";
 
 export enum WebGLContextVersion {
     LegacyWebGL = "webgl",
@@ -87,12 +87,8 @@ export class WebGLRenderer implements ContextRenderer {
             this.renderText(camera, renderData as TextRenderData);
             this.lastRender = "text";
         }
-        if (renderData.type === RenderDataType.Collider) {
-            this.geometricRenderer.renderCollider(
-                camera.viewportRect,
-                renderData as ColliderRenderData,
-                this.lastRender
-            );
+        if (renderData.type === RenderDataType.Geometric) {
+            this.geometricRenderer.render(camera.viewportRect, renderData as GeometricRenderData, this.lastRender);
             this.lastRender = "geometric";
         }
         if (renderData.type === RenderDataType.Mask) {

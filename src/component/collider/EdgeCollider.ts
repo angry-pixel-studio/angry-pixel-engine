@@ -4,13 +4,13 @@ import { Vector2 } from "../../math/Vector2";
 import { Rotation } from "../../math/Rotation";
 import { ComponentTypes } from "../ComponentTypes";
 import { ColliderData } from "../../physics/collision/ColliderData";
-import { Polygon } from "../../physics/collision/shape/Polygon";
 import { RenderComponent } from "../../core/Component";
 import { RenderManager } from "../../rendering/RenderManager";
 import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { Exception } from "../../utils/Exception";
+import { Line } from "../../physics/collision/shape/Line";
 
-export interface PolygonColliderConfig {
+export interface EdgeColliderConfig {
     vertexModel: Vector2[];
     offsetX?: number;
     offsetY?: number;
@@ -20,7 +20,7 @@ export interface PolygonColliderConfig {
     debug?: boolean;
 }
 
-export class PolygonCollider extends Collider {
+export class EdgeCollider extends Collider {
     public readonly debug: boolean = false;
     public readonly vertexModel: Vector2[];
     public offsetX: number = 0;
@@ -33,18 +33,18 @@ export class PolygonCollider extends Collider {
     private finalRotation: number = 0;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(config: PolygonColliderConfig) {
+    constructor(config: EdgeColliderConfig) {
         super();
 
         if (container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
-            throw new Exception("Polygon Colliders need SAT collision method.");
+            throw new Exception("Edge Colliders need SAT collision method.");
         }
 
-        if (config.vertexModel.length < 3) {
-            throw new Exception("Polygon Collider needs at least 3 vertices.");
+        if (config.vertexModel.length < 2) {
+            throw new Exception("Edge Collider needs at least 2 vertices.");
         }
 
-        this.type = ComponentTypes.PolygonCollider;
+        this.type = ComponentTypes.EdgeCollider;
 
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.vertexModel = config.vertexModel;
@@ -60,26 +60,28 @@ export class PolygonCollider extends Collider {
     }
 
     protected start(): void {
-        this.colliders.push(
-            new ColliderData(
-                new Polygon(this.scaledVertexModel),
-                this.layer ?? this.gameObject.layer,
-                this.gameObject.id,
-                true,
-                this.physics,
-                this.hasComponentOfType(ComponentTypes.RigidBody)
-            )
-        );
+        for (let i = 0; i < this.scaledVertexModel.length - 1; i++) {
+            this.colliders.push(
+                new ColliderData(
+                    new Line([this.scaledVertexModel[i], this.scaledVertexModel[i + 1]]),
+                    this.layer ?? this.gameObject.layer,
+                    this.gameObject.id,
+                    true,
+                    this.physics,
+                    this.hasComponentOfType(ComponentTypes.RigidBody)
+                )
+            );
+        }
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(() => new PolygonColliderRenderer(this.colliders[0]));
+            this.renderer = this.gameObject.addComponent(() => new EdgeColliderRenderer(this.colliders));
         }
     }
 
     protected update(): void {
         this.updateSize();
         this.updatePosition();
-        this.updateShape();
+        this.updateColliders();
 
         super.update();
     }
@@ -116,42 +118,47 @@ export class PolygonCollider extends Collider {
         );
     }
 
-    private updateShape(): void {
-        this.colliders[0].layer = this.layer ?? this.gameObject.layer;
-        this.colliders[0].shape.position = this.scaledPosition;
-        this.colliders[0].shape.angle = this.finalRotation;
-        this.colliders[0].shape.vertexModel = this.scaledVertexModel;
-
-        this.colliders[0].shape.update();
+    private updateColliders(): void {
+        for (let i = 0; i < this.scaledVertexModel.length - 1; i++) {
+            this.colliders[i].layer = this.layer ?? this.gameObject.layer;
+            this.colliders[i].shape.position = this.scaledPosition;
+            this.colliders[i].shape.angle = this.finalRotation;
+            this.colliders[i].shape.vertexModel = [this.scaledVertexModel[i], this.scaledVertexModel[i + 1]];
+            this.colliders[i].shape.update();
+        }
     }
 }
 
-class PolygonColliderRenderer extends RenderComponent {
+class EdgeColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
-    private renderData: GeometricRenderData;
-    private collider: ColliderData;
+    private renderData: GeometricRenderData[] = [];
+    private colliders: ColliderData[] = [];
 
-    constructor(collider: ColliderData) {
+    constructor(colliders: ColliderData[]) {
         super();
 
-        this.type = "PolygonColliderRenderer";
+        this.type = "EdgeColliderRenderer";
 
-        this.renderData = new GeometricRenderData();
-        this.renderData.debug = true;
-        this.renderData.color = "#00FF00";
+        this.colliders = colliders;
 
-        this.collider = collider;
+        this.colliders.forEach((collider: ColliderData, index: number) => {
+            this.renderData[index] = new GeometricRenderData();
+            this.renderData[index].debug = true;
+            this.renderData[index].color = "#00FF00";
+            this.renderData[index].shape = GeometricShape.Line;
+        });
     }
 
     protected update(): void {
-        this.renderData.layer = this.gameObject.layer;
-        this.renderData.shape = GeometricShape.Polygon;
-        this.renderData.position = this.collider.shape.position;
-        this.renderData.angle = this.collider.shape.angle;
-        this.renderData.boundingBox = this.collider.shape.boundingBox;
-        this.renderData.vertexModel = this.collider.shape.vertexModel;
+        this.colliders.forEach((collider: ColliderData, index: number) => {
+            this.renderData[index].layer = this.gameObject.layer;
+            this.renderData[index].position = collider.shape.position;
+            this.renderData[index].angle = collider.shape.angle;
+            this.renderData[index].boundingBox = collider.shape.boundingBox;
+            this.renderData[index].vertexModel = collider.shape.vertexModel;
 
-        this.renderManager.addRenderData(this.renderData);
+            this.renderManager.addRenderData(this.renderData[index]);
+        });
     }
 }

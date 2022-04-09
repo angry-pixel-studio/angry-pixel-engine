@@ -1,6 +1,12 @@
-import { CollisionResolution } from "./CollisionResolution";
 import { Shape } from "../shape/Shape";
+import { Vector2 } from "../../../math/Vector2";
+
+export interface CollisionResolution {
+    penetration: number;
+    direction: Vector2;
+    displacementDirection: Vector2;
+}
 
 export interface CollisionResolver {
-    getCollisionResolution(shapeA: Shape, shapeB: Shape): CollisionResolution | null;
+    resolve(shapeA: Shape, shapeB: Shape): CollisionResolution | null;
 }

@@ -20,6 +20,7 @@ export class RigidBodyManager {
     constructor(private readonly collisionManager: CollisionManager) {}
 
     public addRigidBodyData(data: RigidBodyData): void {
+        data.cacheVelocity ? data.cacheVelocity.set(0, 0) : (data.cacheVelocity = new Vector2());
         this.rigidBodyData.push(data);
     }
 
@@ -52,7 +53,8 @@ export class RigidBodyManager {
     private applyVelocity(data: RigidBodyData, deltaTime: number, axis: Axis): void {
         this.cacheVelocity.set(0, 0);
 
-        this.cacheVelocity[axis] = data.velocity[axis] * deltaTime;
+        this.cacheVelocity[axis] =
+            (data.cacheVelocity[axis] !== 0 ? data.cacheVelocity[axis] : data.velocity[axis]) * deltaTime;
         Vector2.add(data.position, data.position, this.cacheVelocity);
 
         data.colliders.forEach((collider) => {
@@ -95,6 +97,7 @@ export class RigidBodyManager {
             this.cacheDisplacement[axis] !== 0 &&
             Math.sign(this.cacheDisplacement[axis]) !== Math.sign(data.velocity[axis])
         ) {
+            data.cacheVelocity[axis] = data.velocity[axis];
             data.velocity[axis] = 0;
         }
     }
