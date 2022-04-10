@@ -33,18 +33,20 @@ export abstract class Component {
     }
 
     public dispatch(event: FrameEvent): void {
-        if (this._active === false || this.gameObject.active === false) return;
-
         if (event === FrameEvent.Init) {
             this.init();
-        } else if (event === FrameEvent.Start && this.started === false) {
+        } else if (event === FrameEvent.Destroy) {
+            this.destroy();
+            this._destroy();
+        }
+
+        if (this._active === false || this.gameObject.active === false) return;
+
+        if (event === FrameEvent.Start && this.started === false) {
             this.start();
             this.started = true;
         } else if (event === this.updateEvent && this.started === true) {
             this.update();
-        } else if (event === FrameEvent.Destroy) {
-            this.destroy();
-            this._destroy();
         }
     }
 
