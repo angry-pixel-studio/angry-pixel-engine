@@ -35,9 +35,11 @@ export abstract class Component {
     public dispatch(event: FrameEvent): void {
         if (event === FrameEvent.Init) {
             this.init();
+            return;
         } else if (event === FrameEvent.Destroy) {
             this.destroy();
             this._destroy();
+            return;
         }
 
         if (this._active === false || this.gameObject.active === false) return;

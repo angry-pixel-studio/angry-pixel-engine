@@ -62,9 +62,11 @@ export class GameObject {
     public dispatch(event: FrameEvent): void {
         if (event === FrameEvent.Init) {
             this.init();
+            return;
         } else if (event === FrameEvent.Destroy) {
             this.destroy();
             this._destroy();
+            return;
         }
 
         if (this.active === false || (this.parent && this.parent.active === false)) return;
