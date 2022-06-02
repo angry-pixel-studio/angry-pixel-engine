@@ -11,6 +11,8 @@ export interface Collision {
     resolution: CollisionResolution;
 }
 
+export type CollisionMatrix = [string, string][];
+
 export class CollisionManager {
     private colliders: ColliderData[];
     private quadTree: QuadTree;
@@ -18,6 +20,7 @@ export class CollisionManager {
     private fixedQuadTree: boolean;
     private method: CollisionMethod;
     private collisions: Collision[] = [];
+    private collisionMatrix: CollisionMatrix;
 
     // cache
     private minBounds: Vector2 = new Vector2();
@@ -26,18 +29,24 @@ export class CollisionManager {
 
     constructor(
         method: CollisionMethod,
-        quadTreeBounds: Rectangle | null = null,
         quadMaxLevel: number,
-        collidersPerQuad: number
+        collidersPerQuad: number,
+        quadTreeBounds?: Rectangle,
+        collisionMatrix?: CollisionMatrix | null
     ) {
-        this.fixedQuadTree = quadTreeBounds !== null;
         this.method = method;
         this.colliders = [];
+        this.collisionMatrix = collisionMatrix;
+        this.setupQuadTree(quadMaxLevel, collidersPerQuad, quadTreeBounds);
+    }
 
-        if (this.fixedQuadTree) {
+    private setupQuadTree(quadMaxLevel: number, collidersPerQuad: number, quadTreeBounds?: Rectangle): void {
+        if (quadTreeBounds) {
             this.bounds = quadTreeBounds;
+            this.fixedQuadTree = true;
         } else {
             this.bounds = new Rectangle(0, 0, 0, 0);
+            this.fixedQuadTree = false;
         }
 
         this.quadTree = new QuadTree(0, this.bounds, quadMaxLevel, collidersPerQuad);
@@ -55,19 +64,18 @@ export class CollisionManager {
         }
     }
 
-    public getFrameCollisionsForCollider(collider: ColliderData): Collision[] {
+    public getCollisionsForCollider(collider: ColliderData): Collision[] {
         return this.collisions.filter((collision) => collision.localCollider === collider);
     }
 
-    public refreshCollisionsForCollider(collider: ColliderData): Collision[] {
-        if (this.colliders.indexOf(collider) === -1) return [];
+    public refreshCollisionsForCollider(collider: ColliderData): void {
+        if (this.colliders.indexOf(collider) === -1) return;
 
-        const collisions = this.narrowPhase(collider, this.broadPhase(collider));
+        this.collisions = this.collisions.filter(
+            (collision) => collision.localCollider !== collider && collision.remoteCollider !== collider
+        );
 
-        this.collisions = this.collisions.filter((collision) => collision.localCollider !== collider);
-        this.collisions.push(...collisions);
-
-        return collisions;
+        this.narrowPhase(collider, this.broadPhase(collider));
     }
 
     public clear(): void {
@@ -117,30 +125,61 @@ export class CollisionManager {
     private updateCollisions(): void {
         this.colliders
             .filter((collider) => collider.updateCollisions)
-            .forEach((collider) => this.collisions.push(...this.narrowPhase(collider, this.broadPhase(collider))));
+            .forEach((collider) => this.narrowPhase(collider, this.broadPhase(collider)));
     }
 
     // broadPhase takes care of looking for possible collisions
     private broadPhase(collider: ColliderData): ColliderData[] {
+        if (this.collisionMatrix) {
+            return this.quadTree
+                .retrieve<ColliderData>(collider)
+                .filter((remoteCollider) =>
+                    this.collisionMatrix.some(
+                        (row) =>
+                            (row[0] === collider.layer && row[1] === remoteCollider.layer) ||
+                            (row[1] === collider.layer && row[0] === remoteCollider.layer)
+                    )
+                );
+        }
         return this.quadTree.retrieve<ColliderData>(collider);
     }
 
     // narrowPhase takes care of checking for actual collision
-    private narrowPhase(collider: ColliderData, colliders: Array<ColliderData>): Array<Collision> {
-        const collisions: Array<Collision> = [];
+    private narrowPhase(collider: ColliderData, colliders: Array<ColliderData>): void {
         colliders
             .filter((remoteCollider: ColliderData) => remoteCollider.id !== collider.id)
             .forEach((remoteCollider: ColliderData) => {
+                if (this.isResolved(collider, remoteCollider)) return;
+
                 const resolution = this.method.getCollisionResolution(collider.shape, remoteCollider.shape);
                 if (resolution !== null) {
-                    collisions.push({
-                        localCollider: collider,
-                        remoteCollider: remoteCollider,
-                        resolution: resolution,
-                    });
+                    this.collisions.push(
+                        {
+                            localCollider: collider,
+                            remoteCollider: remoteCollider,
+                            resolution: resolution,
+                        },
+                        {
+                            localCollider: remoteCollider,
+                            remoteCollider: collider,
+                            resolution: {
+                                direction: resolution.displacementDirection,
+                                displacementDirection: resolution.direction,
+                                penetration: resolution.penetration,
+                            },
+                        }
+                    );
                 }
             });
+    }
 
-        return collisions;
+    private isResolved(localCollider: ColliderData, remoteCollider: ColliderData): boolean {
+        for (const collision of this.collisions) {
+            if (collision.localCollider === localCollider && collision.remoteCollider === remoteCollider) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 import { Vector2 } from "../../math/Vector2";
 import { RenderData, RenderDataType } from "./RenderData";
 
-export type Orientation = "rightUp" | "rightDown" | "center";
+export type Orientation = "rightUp" | "rightDown" | "center" | "rightCenter";
 
 export class TextRenderData extends RenderData {
     public type: RenderDataType = RenderDataType.Text;

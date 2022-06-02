@@ -14,8 +14,7 @@ export class SatResolver implements CollisionResolver {
     private projB: AxisProjection = { min: 0, max: 0 };
     private currentOverlap: number;
     private minOverlap: number;
-    private displaceDirection: Vector2 = new Vector2();
-    private direction: Vector2 = new Vector2();
+    private displacementDirection: Vector2 = new Vector2();
 
     private distance: Vector2 = new Vector2(Infinity, Infinity);
     private cache: Vector2 = new Vector2();
@@ -52,21 +51,19 @@ export class SatResolver implements CollisionResolver {
 
             if (this.currentOverlap < this.minOverlap || this.minOverlap === null) {
                 this.minOverlap = this.currentOverlap;
-                this.displaceDirection.copy(this.axes[i]);
+                this.displacementDirection.copy(this.axes[i]);
 
                 // negate the axis in order to use as displacment direction
                 if (this.projA.max < this.projB.max) {
-                    Vector2.scale(this.displaceDirection, this.displaceDirection, -1);
+                    Vector2.scale(this.displacementDirection, this.displacementDirection, -1);
                 }
             }
         }
 
-        Vector2.scale(this.direction, this.displaceDirection, -1);
-
         return {
             penetration: this.minOverlap,
-            displacementDirection: this.displaceDirection.clone(),
-            direction: this.direction.clone(),
+            displacementDirection: this.displacementDirection.clone(),
+            direction: Vector2.scale(new Vector2(), this.displacementDirection, -1),
         };
     }
 

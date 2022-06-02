@@ -29,6 +29,7 @@ export class GameObject {
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private components: Component[] = [];
+    private activeComponentsCache: Component[] = [];
 
     constructor() {
         this.addComponent(() => new Transform());
@@ -38,8 +39,17 @@ export class GameObject {
         return this._active;
     }
 
-    public setActive(active: boolean): void {
+    public set active(active: boolean) {
         this._active = active;
+
+        this.onActiveChange();
+        this.updateComponentsActiveStatus();
+    }
+
+    private updateComponentsActiveStatus(): void {
+        if (this.active === false) this.activeComponentsCache = this.components.filter((component) => component.active);
+        this.activeComponentsCache.forEach((component) => (component.active = this.active));
+        if (this.active === true) this.activeComponentsCache = [];
     }
 
     public get transform(): Transform {
@@ -105,6 +115,13 @@ export class GameObject {
      * This method is called before the object is destroyed.
      */
     protected destroy(): void {
+        return;
+    }
+
+    /**
+     * This method is called when the active state changes.
+     */
+    protected onActiveChange(): void {
         return;
     }
 

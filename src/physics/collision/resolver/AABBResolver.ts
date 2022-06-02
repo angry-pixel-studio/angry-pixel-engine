@@ -1,5 +1,5 @@
 import { Vector2 } from "../../../math/Vector2";
-import { Rectangle } from "../shape/Rectangle";
+import { Shape } from "../shape/Shape";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 
 export class AABBResolver implements CollisionResolver {
@@ -9,48 +9,32 @@ export class AABBResolver implements CollisionResolver {
     private direction: Vector2 = new Vector2();
     private displacementDirection: Vector2 = new Vector2();
 
-    public resolve(shapeA: Rectangle, shapeB: Rectangle): CollisionResolution | null {
-        this.overlapX =
-            Math.min(shapeA.boundingBox.x1, shapeB.boundingBox.x1) -
-            Math.max(shapeA.boundingBox.x, shapeB.boundingBox.x);
-        this.overlapY =
-            Math.min(shapeA.boundingBox.y1, shapeB.boundingBox.y1) -
-            Math.max(shapeA.boundingBox.y, shapeB.boundingBox.y);
+    public resolve({ boundingBox: boxA }: Shape, { boundingBox: boxB }: Shape): CollisionResolution | null {
+        this.overlapX = Math.min(boxA.x1, boxB.x1) - Math.max(boxA.x, boxB.x);
+        this.overlapY = Math.min(boxA.y1, boxB.y1) - Math.max(boxA.y, boxB.y);
 
         if (this.overlapX < 0 || this.overlapY < 0) {
             return null;
         }
 
-        this.direction.set(
-            Math.sign(shapeB.boundingBox.x1 - shapeA.boundingBox.x1),
-            Math.sign(shapeB.boundingBox.y1 - shapeA.boundingBox.y1)
-        );
+        this.direction.set(Math.sign(boxB.x1 - boxA.x1), Math.sign(boxB.y1 - boxA.y1));
 
         if (this.overlapY < this.overlapX) {
             this.minOverlap = this.overlapY;
             this.displacementDirection.set(0, -this.direction.y);
-
-            this.preventContainment(
-                shapeA.boundingBox.y,
-                shapeB.boundingBox.y,
-                shapeA.boundingBox.y1,
-                shapeB.boundingBox.y1
-            );
+            this.preventContainment(boxA.y, boxA.y1, boxB.y, boxB.y1);
         } else {
             this.minOverlap = this.overlapX;
             this.displacementDirection.set(-this.direction.x, this.overlapY === this.overlapX ? -this.direction.y : 0);
-            this.preventContainment(
-                shapeA.boundingBox.x,
-                shapeB.boundingBox.x,
-                shapeA.boundingBox.x1,
-                shapeB.boundingBox.x1
-            );
+            this.preventContainment(boxA.x, boxA.x1, boxB.x, boxB.x1);
         }
+
+        Vector2.unit(this.displacementDirection, this.displacementDirection);
 
         return {
             penetration: this.minOverlap,
             displacementDirection: this.displacementDirection.clone(),
-            direction: this.direction.clone(),
+            direction: Vector2.scale(new Vector2(), this.displacementDirection, -1),
         };
     }
 

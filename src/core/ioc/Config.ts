@@ -103,9 +103,10 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
         () =>
             new CollisionManager(
                 container.getSingleton<CollisionMethod>("CollisionMethod"),
-                gameConfig.collisions.quadTreeBounds,
                 gameConfig.collisions.quadMaxLevel,
-                gameConfig.collisions.collidersPerQuad
+                gameConfig.collisions.collidersPerQuad,
+                gameConfig.collisions.quadTreeBounds,
+                gameConfig.collisions.collisionMatrix
             )
     );
 

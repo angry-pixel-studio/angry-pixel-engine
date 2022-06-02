@@ -14,7 +14,6 @@ export { RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
 
 export interface RigidBodyConfig {
     rigidBodyType: RigidBodyType;
-    layersToCollide?: string[];
     gravity?: number;
 }
 
@@ -33,10 +32,10 @@ export class RigidBody extends EngineComponent {
         this.rigidBodyType = config.rigidBodyType;
 
         this.data = {
+            type: config.rigidBodyType,
             position: null,
             gravity: Math.abs(config.gravity) ?? defaultGravity,
             velocity: new Vector2(),
-            layersToCollider: config.layersToCollide ?? [],
             colliders: [],
         };
     }
@@ -69,7 +68,7 @@ export class RigidBody extends EngineComponent {
     protected update(): void {
         this.data.colliders = this.getColliders();
 
-        if (this.rigidBodyType === RigidBodyType.Dynamic) {
+        if (this.rigidBodyType !== RigidBodyType.Static) {
             this.rigidBodyManager.addRigidBodyData(this.data);
         }
     }

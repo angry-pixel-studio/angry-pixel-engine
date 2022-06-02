@@ -9,9 +9,17 @@ export const clamp = (value: number, min: number, max: number): number => Math.m
 /**
  * @param min min value
  * @param max max value
- * @returns the random value
+ * @returns the random int value
  */
-export const random = (min: number, max: number): number => Math.floor(Math.random() * (max - min)) + min;
+export const randomInt = (min: number, max: number): number => Math.round(Math.random() * (max - min)) + min;
+
+/**
+ * @param min min value
+ * @param max max value
+ * @returns the random float value
+ */
+export const randomFloat = (min: number, max: number, decimals: number = 2): number =>
+    fixedRound(Math.random() * (max - min) + min, decimals);
 
 /**
  * @param value the value to round
@@ -19,7 +27,7 @@ export const random = (min: number, max: number): number => Math.floor(Math.rand
  * @returns the rounded value
  */
 export const fixedRound = (value: number, decimals: number): number =>
-    Math.round(value * (10 ^ decimals)) / (10 ^ decimals);
+    Math.round(value * 10 ** decimals) / 10 ** decimals;
 
 /**
  * @param start the starting value

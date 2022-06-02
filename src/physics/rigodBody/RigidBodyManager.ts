@@ -7,6 +7,7 @@ type Axis = "x" | "y";
 export enum RigidBodyType {
     Static,
     Dynamic,
+    Kinematic,
 }
 
 export class RigidBodyManager {
@@ -34,14 +35,26 @@ export class RigidBodyManager {
 
     public update(deltaTime: number): void {
         this.rigidBodyData.forEach((data) => {
-            this.applyGravity(data, deltaTime);
-
-            this.applyVelocity(data, deltaTime, "x");
-            this.applyReposition(data, "x");
-
-            this.applyVelocity(data, deltaTime, "y");
-            this.applyReposition(data, "y");
+            if (data.type === RigidBodyType.Dynamic) {
+                this.dynamicUpdate(data, deltaTime);
+            } else if (data.type === RigidBodyType.Kinematic) {
+                this.kinematicUpdate(data, deltaTime);
+            }
         });
+    }
+
+    private dynamicUpdate(data: RigidBodyData, deltaTime: number) {
+        this.applyGravity(data, deltaTime);
+
+        this.applyVelocity(data, deltaTime, "x");
+        this.applyReposition(data, "x", true);
+
+        this.applyVelocity(data, deltaTime, "y");
+        this.applyReposition(data, "y", true);
+    }
+
+    private kinematicUpdate(data: RigidBodyData, deltaTime: number) {
+        Vector2.add(data.position, data.position, Vector2.scale(this.cacheVelocity, data.velocity, deltaTime));
     }
 
     private applyGravity(data: RigidBodyData, deltaTime: number): void {
@@ -64,7 +77,7 @@ export class RigidBodyManager {
         });
     }
 
-    private applyReposition(data: RigidBodyData, axis: Axis): void {
+    private applyReposition(data: RigidBodyData, axis: Axis, resetVelocity: boolean): void {
         this.cacheCollisions = this.getCollisions(data);
 
         if (this.cacheCollisions.length === 0) return;
@@ -94,6 +107,7 @@ export class RigidBodyManager {
         });
 
         if (
+            resetVelocity &&
             this.cacheDisplacement[axis] !== 0 &&
             Math.sign(this.cacheDisplacement[axis]) !== Math.sign(data.velocity[axis])
         ) {
@@ -106,13 +120,8 @@ export class RigidBodyManager {
         return data.colliders.reduce<Collision[]>((collisions, collider) => {
             collisions.push(
                 ...this.collisionManager
-                    .getFrameCollisionsForCollider(collider)
-                    .filter(
-                        (collision) =>
-                            collision.remoteCollider.physics &&
-                            collision.remoteCollider.rigidBody &&
-                            data.layersToCollider.includes(collision.remoteCollider.layer)
-                    )
+                    .getCollisionsForCollider(collider)
+                    .filter((collision) => collision.remoteCollider.physics && collision.remoteCollider.rigidBody)
             );
             return collisions;
         }, []);

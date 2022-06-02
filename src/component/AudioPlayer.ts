@@ -125,7 +125,7 @@ export class AudioPlayer extends EngineComponent {
         this.audio.play();
     };
 
-    protected activeStateChange(): void {
+    protected onActiveChange(): void {
         if (this.active === false) {
             this.stop();
         }

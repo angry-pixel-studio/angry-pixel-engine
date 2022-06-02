@@ -56,9 +56,18 @@ export class GamepadController {
     }
 }
 
+interface GamepadWithVibratorActuator extends Gamepad {
+    vibrationActuator?: {
+        type: string;
+        playEffect: (
+            type: string,
+            config: { duration: number; startDelay: number; weakMagnitude: number; strongMagnitude: number }
+        ) => Promise<string>;
+    };
+}
+
 export class GamepadData {
-    private _connected: boolean = false;
-    private _id: string = null;
+    private _gamepad: GamepadWithVibratorActuator;
     private readonly buttons: Map<number, boolean> = new Map<number, boolean>();
     private readonly axes: Map<number, number> = new Map<number, number>();
 
@@ -66,15 +75,18 @@ export class GamepadData {
     private readonly _leftStickAxes: Vector2 = new Vector2();
     private readonly _rightStickAxes: Vector2 = new Vector2();
 
-    public updateFromGamepad(gamepad: Gamepad): void {
-        this._id = gamepad.id;
-        this._connected = gamepad.connected;
+    public updateFromGamepad(gamepad: GamepadWithVibratorActuator): void {
+        this._gamepad = gamepad;
         gamepad.buttons.forEach((button: GamepadButton, index: number) => this.buttons.set(index, button.pressed));
         gamepad.axes.forEach((axis: number, index: number) => this.axes.set(index, axis));
     }
 
     public get id(): string {
-        return this._id;
+        return this._gamepad.id;
+    }
+
+    public get connected(): boolean {
+        return this._gamepad.connected;
     }
 
     public getButtonPressed(index: number): boolean {
@@ -98,10 +110,6 @@ export class GamepadData {
     public get rightStickAxes(): Vector2 {
         this._rightStickAxes.set(this.rightStickHorizontal, this.rightStickVertical);
         return this._rightStickAxes;
-    }
-
-    public get connected(): boolean {
-        return this._connected;
     }
 
     public get dpadUp(): boolean {
@@ -182,5 +190,21 @@ export class GamepadData {
 
     public get rightStickVertical(): number {
         return -this.axes.get(3) ?? 0;
+    }
+
+    public vibrate(
+        duration: number = 200,
+        weakMagnitude: number = 0.2,
+        strongMagnitude: number = 0.2,
+        startDelay: number = 0
+    ): void {
+        this._gamepad.vibrationActuator
+            ? this._gamepad.vibrationActuator.playEffect(this._gamepad.vibrationActuator.type, {
+                  duration,
+                  weakMagnitude,
+                  strongMagnitude,
+                  startDelay,
+              })
+            : null;
     }
 }

@@ -27,9 +27,9 @@ export abstract class Component {
         return this._active;
     }
 
-    public setActive(active: boolean): void {
+    public set active(active: boolean) {
         this._active = active;
-        this.activeStateChange();
+        this.onActiveChange();
     }
 
     public dispatch(event: FrameEvent): void {
@@ -84,7 +84,7 @@ export abstract class Component {
     /**
      * This method is called when the active state changes.
      */
-    protected activeStateChange(): void {
+    protected onActiveChange(): void {
         return;
     }
 
@@ -93,6 +93,13 @@ export abstract class Component {
      */
     protected getCurrentScene<T extends Scene>(): T {
         return this.sceneManager.getCurrentScene<T>();
+    }
+
+    /**
+     * @returns The GameObject to which this component belongs
+     */
+    protected getGameObject<T extends GameObject>(): T {
+        return this.gameObject as T;
     }
 
     /**

@@ -7,6 +7,7 @@ import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/Quad
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
 import { IterationManager } from "../core/managers/IterationManager";
+import { CollisionMatrix } from "../physics/collision/CollisionManager";
 
 export const container: Container = new Container();
 
@@ -23,6 +24,7 @@ export interface GameConfig {
         quadTreeBounds?: Rectangle | null; // TODO: implement different bounds per scene
         quadMaxLevel?: number;
         collidersPerQuad?: number;
+        collisionMatrix?: CollisionMatrix;
     };
 }
 
@@ -41,7 +43,6 @@ const defaultConfig: GameConfig = {
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
     collisions: {
         method: CollisionMethodConfig.AABB,
-        quadTreeBounds: null,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
         collidersPerQuad: DEFAULT_MAX_ITEMS,
     },
