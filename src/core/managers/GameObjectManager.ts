@@ -1,64 +1,58 @@
-import { GameObject } from "../GameObject";
-import { Exception } from "../../utils/Exception";
+import { GameObject, GameObjectClass } from "../GameObject";
 import { FrameEvent } from "./IterationManager";
-
-export type GameObjectFactory = () => GameObject;
+import { InitOptions } from "../GameActor";
 
 export class GameObjectManager {
     private gameObjects: GameObject[] = [];
 
     public addGameObject<T extends GameObject>(
-        gameObjectFactory: GameObjectFactory,
-        name: string,
-        parent: GameObject = null
+        gameObjectClass: GameObjectClass<T>,
+        options?: InitOptions,
+        parent?: GameObject,
+        name?: string
     ): T {
-        const found = this.findGameObjectByName(name);
-        if (found && found.keep === false) {
-            throw new Exception(`There is already a GameObject with the name ${name}`);
-        }
-        if (found && found.keep) {
-            return found as T;
-        }
+        const gameObject = new gameObjectClass(name, parent);
+        gameObject.dispatch(FrameEvent.Init, options);
 
-        const gameObject: GameObject = gameObjectFactory();
         this.gameObjects.push(gameObject);
 
-        gameObject.name = name;
-        gameObject.parent = parent;
-        gameObject.dispatch(FrameEvent.Init);
-
-        return gameObject as T;
+        return gameObject;
     }
 
-    public getGameObjects(): GameObject[] {
-        return this.gameObjects;
+    public findGameObjects(): GameObject[] {
+        return [...this.gameObjects];
     }
 
-    public findGameObjectById(id: string): GameObject {
-        return this.gameObjects.reduce((prev, gameObject) => (gameObject.id === id ? gameObject : prev), null);
+    public findGameObjectById<T extends GameObject>(id: string): T {
+        return this.gameObjects.find((gameObject) => gameObject.id === id) as T;
     }
 
-    public findGameObjectByName(name: string): GameObject {
-        return this.gameObjects.reduce((prev, gameObject) => (gameObject.name === name ? gameObject : prev), null);
+    public findGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
+    public findGameObject<T extends GameObject>(name: string): T;
+    public findGameObject<T extends GameObject>(filter: GameObjectClass<T> | string): T {
+        return (
+            typeof filter === "string"
+                ? this.gameObjects.find((gameObject) => gameObject.name === filter)
+                : this.gameObjects.find((gameObject) => gameObject instanceof filter)
+        ) as T;
     }
 
-    public findGameObjectsByParent(parent: GameObject): GameObject[] {
-        return this.gameObjects.filter((gameObject) => gameObject.parent === parent);
+    public findGameObjectsByParent<T extends GameObject>(parent: GameObject): T[] {
+        return this.gameObjects.filter((gameObject) => gameObject.parent === parent) as T[];
     }
 
-    public findGameObjectByParentAndName(parent: GameObject, name: string): GameObject {
-        return this.gameObjects.reduce(
-            (prev, gameObject) => (gameObject.name === name && gameObject.parent === parent ? gameObject : prev),
-            null
-        );
+    public findGameObjectByParent<T extends GameObject>(parent: GameObject, gameObjectClass: GameObjectClass<T>): T;
+    public findGameObjectByParent<T extends GameObject>(parent: GameObject, name: string): T;
+    public findGameObjectByParent<T extends GameObject>(parent: GameObject, filter: GameObjectClass<T> | string): T {
+        return (
+            typeof filter === "string"
+                ? this.gameObjects.find((gameObject) => gameObject.name === filter && gameObject.parent === parent)
+                : this.gameObjects.find((gameObject) => gameObject instanceof filter && gameObject.parent === parent)
+        ) as T;
     }
 
-    public findGameObjectsByTag(tag: string): GameObject[] {
-        return this.gameObjects.filter((gameObject) => gameObject.tag === tag);
-    }
-
-    public findGameObjectByTag(tag: string): GameObject {
-        return this.findGameObjectsByTag(tag)[0] ?? null;
+    public findGameObjectsByTag<T extends GameObject>(tag: string): T[] {
+        return this.gameObjects.filter((gameObject) => gameObject.tag === tag) as T[];
     }
 
     public destroyAllGameObjects(): void {
@@ -76,15 +70,12 @@ export class GameObjectManager {
 
         if (index !== -1) {
             const gameObject = this.gameObjects.splice(index, 1)[0];
-            destroyChildren ? this.destroyChildren(gameObject) : null;
+            if (destroyChildren) this.destroyChildren(gameObject);
             gameObject.dispatch(FrameEvent.Destroy);
         }
     }
 
     private destroyChildren(parent: GameObject): void {
-        this.findGameObjectsByParent(parent).forEach((gameObject) => {
-            this.destroyChildren(gameObject);
-            this.destroyGameObject(gameObject);
-        });
+        this.findGameObjectsByParent(parent).forEach((gameObject) => this.destroyGameObject(gameObject));
     }
 }

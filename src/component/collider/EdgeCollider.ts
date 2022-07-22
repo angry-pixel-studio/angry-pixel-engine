@@ -2,15 +2,17 @@ import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
 import { Vector2 } from "../../math/Vector2";
 import { Rotation } from "../../math/Rotation";
-import { ComponentTypes } from "../ComponentTypes";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { RenderComponent } from "../../core/Component";
 import { RenderManager } from "../../rendering/RenderManager";
 import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { Exception } from "../../utils/Exception";
 import { Line } from "../../physics/collision/shape/Line";
+import { GameObject } from "../../core/GameObject";
+import { InitOptions } from "../../core/GameActor";
+import { RigidBody } from "../RigidBody";
 
-export interface EdgeColliderConfig {
+export interface EdgeColliderOptions extends InitOptions {
     vertexModel: Vector2[];
     offsetX?: number;
     offsetY?: number;
@@ -21,8 +23,8 @@ export interface EdgeColliderConfig {
 }
 
 export class EdgeCollider extends Collider {
-    public readonly debug: boolean = false;
-    public readonly vertexModel: Vector2[];
+    public debug: boolean = false;
+    public vertexModel: Vector2[];
     public offsetX: number = 0;
     public offsetY: number = 0;
     public rotation: Rotation;
@@ -33,18 +35,18 @@ export class EdgeCollider extends Collider {
     private finalRotation: number = 0;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(config: EdgeColliderConfig) {
-        super();
+    constructor(gameObject: GameObject, name?: string) {
+        super(gameObject, name);
 
         if (container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
             throw new Exception("Edge Colliders need SAT collision method.");
         }
+    }
 
+    protected config(config: EdgeColliderOptions): void {
         if (config.vertexModel.length < 2) {
             throw new Exception("Edge Collider needs at least 2 vertices.");
         }
-
-        this.type = ComponentTypes.EdgeCollider;
 
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.vertexModel = config.vertexModel;
@@ -68,13 +70,13 @@ export class EdgeCollider extends Collider {
                     this.gameObject.id,
                     true,
                     this.physics,
-                    this.hasComponentOfType(ComponentTypes.RigidBody)
+                    this.hasComponent(RigidBody)
                 )
             );
         }
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(() => new EdgeColliderRenderer(this.colliders));
+            this.renderer = this.gameObject.addComponent(EdgeColliderRenderer, { colliders: this.colliders });
         }
     }
 
@@ -131,15 +133,10 @@ export class EdgeCollider extends Collider {
 
 class EdgeColliderRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-
     private renderData: GeometricRenderData[] = [];
     private colliders: ColliderData[] = [];
 
-    constructor(colliders: ColliderData[]) {
-        super();
-
-        this.type = "EdgeColliderRenderer";
-
+    protected config({ colliders }: { colliders: ColliderData[] }): void {
         this.colliders = colliders;
 
         this.colliders.forEach((collider: ColliderData, index: number) => {

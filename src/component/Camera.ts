@@ -6,13 +6,13 @@ import { RenderManager } from "../rendering/RenderManager";
 import { container } from "../core/Game";
 import { LAYER_DEFAULT } from "../core/GameObject";
 import { Rectangle } from "../math/Rectangle";
-import { ComponentTypes } from "./ComponentTypes";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
 export class Camera extends CameraComponent {
+    public readonly allowMultiple: boolean = false;
+
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-    private domManager: DomManager = container.getSingleton<DomManager>("DomManager");
 
     private _layers: string[] = DEFAULT_LAYERS;
     private _depth: number = 0;
@@ -22,16 +22,8 @@ export class Camera extends CameraComponent {
     private _viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
     private _worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
-    private canvas: HTMLCanvasElement;
+    private canvas: HTMLCanvasElement = container.getSingleton<DomManager>("DomManager").canvas;
     private cameraData: CameraData = new CameraData();
-
-    constructor() {
-        super();
-
-        this.allowMultiple = false;
-        this.type = ComponentTypes.Camera;
-        this.canvas = this.domManager.canvas;
-    }
 
     public set layers(layers: string[]) {
         this._layers = [...DEFAULT_LAYERS, ...layers];

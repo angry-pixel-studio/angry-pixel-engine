@@ -1,5 +1,4 @@
-import { SceneManager, SceneConstructor as SceneFactory } from "../core/managers/SceneManager";
-import { RenderManager } from "../rendering/RenderManager";
+import { SceneManager, SceneClass } from "../core/managers/SceneManager";
 import { loadDependencies } from "./ioc/Config";
 import { Container } from "../utils/Container";
 import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
@@ -51,14 +50,10 @@ const defaultConfig: GameConfig = {
 export class Game {
     // managers
     private sceneManager: SceneManager;
-    private renderManager: RenderManager;
     private iterationManager: IterationManager;
 
     // state
     private _config: GameConfig;
-    private _running: boolean = false;
-    private _stop: boolean = false;
-    private frameRequestId: number | null = null;
 
     constructor(config: GameConfig) {
         this._config = {
@@ -77,7 +72,6 @@ export class Game {
     private setupManagers(): void {
         loadDependencies(container, this._config);
 
-        this.renderManager = container.getSingleton<RenderManager>("RenderManager");
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
         this.iterationManager = container.getSingleton<IterationManager>("IterationManager");
     }
@@ -93,69 +87,45 @@ export class Game {
      * @returns running
      */
     public get running(): boolean {
-        return this._running;
+        return this.iterationManager.running;
     }
 
     /**
      * Add a scene to the game
      *
+     * @param sceneClass the class of the scene
      * @param name The name of the scene
-     * @param sceneFactory The factory funciton for the escene
-     * @param openingScene If this is the opening scene, set TRUE, FALSE instead
+     * @param openingScene [default FALSE] If this is the opening scene, set TRUE, FALSE instead
      */
-    public addScene(name: string, sceneFactory: SceneFactory, openingScene: boolean = false): void {
-        this.sceneManager.addScene(name, sceneFactory, openingScene);
+    public addScene(sceneClass: SceneClass, name: string, openingScene: boolean = false): void {
+        this.sceneManager.addScene(sceneClass, name, openingScene);
     }
 
     /**
      * Run the game
      */
     public run(): void {
-        this.sceneManager.loadOpeningScene();
-        this.requestAnimationFrame();
+        this.iterationManager.start();
     }
 
     /**
      * Stop the game
      */
     public stop(): void {
-        this.pauseLoop();
-        this.sceneManager.unloadCurrentScene();
-        this.renderManager.clearCanvas();
-    }
-
-    private gameLoop(time: number): void {
-        if (this._stop === true) return;
-
-        this._running = true;
-        this.iterationManager.update(time);
-        this.requestAnimationFrame();
+        this.iterationManager.stop();
     }
 
     /**
-     * Pauses the game loop
+     * Pauses the game
      */
-    public pauseLoop(): void {
-        this._stop = true;
-        this._running = false;
-
-        if (this.frameRequestId !== null) {
-            window.cancelAnimationFrame(this.frameRequestId);
-            this.frameRequestId = null;
-        }
+    public pause(): void {
+        this.iterationManager.pause();
     }
 
     /**
-     * Resumes the paused game loop
+     * Resumes the paused game
      */
-    public resumeLoop(): void {
-        if (this._running == false && this.frameRequestId === null) {
-            this._stop = false;
-            this.requestAnimationFrame();
-        }
-    }
-
-    private requestAnimationFrame(): void {
-        this.frameRequestId = window.requestAnimationFrame((time) => this.gameLoop(time));
+    public resume(): void {
+        this.iterationManager.resume();
     }
 }

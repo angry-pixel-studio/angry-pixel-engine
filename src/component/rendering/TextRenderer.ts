@@ -5,9 +5,9 @@ import { RenderManager } from "../../rendering/RenderManager";
 import { container } from "../../core/Game";
 import { Rotation } from "../../math/Rotation";
 import { Vector2 } from "../../math/Vector2";
-import { ComponentTypes } from "../ComponentTypes";
+import { InitOptions } from "../../core/GameActor";
 
-export interface TextRendererConfig {
+export interface TextRendererOptions extends InitOptions {
     text: string;
     fontFamily: string;
     fontUrl?: string;
@@ -50,11 +50,7 @@ export class TextRenderer extends RenderComponent {
     private renderData: TextRenderData = new TextRenderData();
     private lastFrameText: string = "";
 
-    constructor(config: TextRendererConfig) {
-        super();
-
-        this.type = ComponentTypes.TextRenderer;
-
+    protected init(config: TextRendererOptions): void {
         this.text = config.text;
         this.fontFamily = config.fontFamily;
         this.fontUrl = config.fontUrl ?? this.fontUrl;

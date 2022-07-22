@@ -5,9 +5,9 @@ import { Animation } from "./Animation";
 import { TimeManager } from "../core/managers/TimeManager";
 import { container } from "../core/Game";
 import { Exception } from "../utils/Exception";
-import { ComponentTypes } from "./ComponentTypes";
+import { InitOptions } from "../core/GameActor";
 
-export interface AnimatorConfig {
+export interface AnimatorOptions extends InitOptions {
     spriteRenderer: SpriteRenderer;
 }
 
@@ -17,11 +17,8 @@ export class Animator extends EngineComponent {
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
     private currentAnimation: AnimationPlayer = null;
 
-    constructor(config: AnimatorConfig) {
-        super();
-
-        this.type = ComponentTypes.Animator;
-        this.spriteRenderer = config.spriteRenderer;
+    protected init({ spriteRenderer }: AnimatorOptions): void {
+        this.spriteRenderer = spriteRenderer;
     }
 
     protected update(): void {

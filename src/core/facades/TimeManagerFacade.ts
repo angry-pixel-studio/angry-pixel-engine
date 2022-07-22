@@ -26,4 +26,8 @@ export class TimeManagerFacade {
     public static get physicsDeltaTime(): number {
         return this.timeManager.physicsDeltaTime;
     }
+
+    public static get browserDeltaTime(): number {
+        return this.timeManager.browserDeltaTime;
+    }
 }

@@ -5,11 +5,12 @@ import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/
 import { Vector2 } from "../../math/Vector2";
 import { RenderComponent } from "../../core/Component";
 import { Rotation } from "../../math/Rotation";
-import { ComponentTypes } from "../ComponentTypes";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Rectangle } from "../../physics/collision/shape/Rectangle";
+import { InitOptions } from "../../core/GameActor";
+import { RigidBody } from "../RigidBody";
 
-export interface BoxColliderConfig {
+export interface BoxColliderOptions extends InitOptions {
     width: number;
     height: number;
     offsetX?: number;
@@ -38,11 +39,7 @@ export class BoxCollider extends Collider {
         container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(config: BoxColliderConfig) {
-        super();
-
-        this.type = ComponentTypes.BoxCollider;
-
+    protected init(config: BoxColliderOptions): void {
         this.width = config.width;
         this.height = config.height;
         this.offsetX = config.offsetX ?? this.offsetX;
@@ -61,12 +58,12 @@ export class BoxCollider extends Collider {
                 this.gameObject.id,
                 true,
                 this.physics,
-                this.hasComponentOfType(ComponentTypes.RigidBody)
+                this.hasComponent(RigidBody)
             )
         );
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(() => new BoxColliderRenderer(this.colliders[0]));
+            this.renderer = this.gameObject.addComponent(BoxColliderRenderer, { collider: this.colliders[0] });
         }
     }
 
@@ -123,11 +120,7 @@ class BoxColliderRenderer extends RenderComponent {
     private renderData: GeometricRenderData;
     private collider: ColliderData;
 
-    constructor(collider: ColliderData) {
-        super();
-
-        this.type = "BoxColliderRenderer";
-
+    protected config({ collider }: { collider: ColliderData }): void {
         this.renderData = new GeometricRenderData();
         this.renderData.debug = true;
         this.renderData.color = "#00FF00";

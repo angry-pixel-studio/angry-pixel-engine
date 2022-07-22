@@ -1,24 +1,20 @@
-import { Offset, RenderOrder, TilemapRenderer, TilemapRendererConfig } from "./TilemapRenderer";
+import { Offset, RenderOrder, TilemapRenderer, TilemapRendererOptions } from "./TilemapRenderer";
 import { Tile } from "./Tile";
-import { ComponentTypes } from "../../ComponentTypes";
-import { Tileset } from "./Tileset";
 
-export interface TiledTilemapConfig extends TilemapRendererConfig {
+export interface TiledTilemapOptions extends TilemapRendererOptions {
     tilemapData: TiledTilemap;
     layerName?: string;
 }
 
 export class TiledTilemapRenderer extends TilemapRenderer {
-    public readonly tiledTilemap: TiledTilemap;
-    public readonly layerName: string;
+    public tiledTilemap: TiledTilemap;
+    public layerName: string;
 
     private tilesetTileIds: number[];
 
-    constructor(config: TiledTilemapConfig) {
+    protected init(config: TiledTilemapOptions): void {
         config.renderOrder = config.renderOrder ?? (config.tilemapData.renderorder as RenderOrder);
-        super(config);
-
-        this.type = ComponentTypes.TiledTilemapRenderer;
+        super.init(config);
 
         this.tiledTilemap = config.tilemapData;
         this.layerName = config.layerName ?? null;
