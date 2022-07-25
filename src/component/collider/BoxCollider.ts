@@ -120,7 +120,7 @@ class BoxColliderRenderer extends RenderComponent {
     private renderData: GeometricRenderData;
     private collider: ColliderData;
 
-    protected config({ collider }: { collider: ColliderData }): void {
+    protected init({ collider }: { collider: ColliderData }): void {
         this.renderData = new GeometricRenderData();
         this.renderData.debug = true;
         this.renderData.color = "#00FF00";

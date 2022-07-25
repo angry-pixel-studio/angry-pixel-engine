@@ -85,7 +85,7 @@ class TilemapColliderRenderer extends RenderComponent {
     private renderData: GeometricRenderData[] = [];
     private colliders: ColliderData[] = [];
 
-    protected config({ colliders }: { colliders: ColliderData[] }): void {
+    protected init({ colliders }: { colliders: ColliderData[] }): void {
         this.colliders = colliders;
 
         this.colliders.forEach((collider: ColliderData, index: number) => {

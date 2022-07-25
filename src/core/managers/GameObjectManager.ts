@@ -12,9 +12,9 @@ export class GameObjectManager {
         name?: string
     ): T {
         const gameObject = new gameObjectClass(name, parent);
-        gameObject.dispatch(FrameEvent.Init, options);
-
         this.gameObjects.push(gameObject);
+
+        gameObject.dispatch(FrameEvent.Init, options);
 
         return gameObject;
     }
