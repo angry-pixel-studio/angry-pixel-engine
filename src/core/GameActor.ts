@@ -23,7 +23,7 @@ export abstract class GameActor {
         } else if (event === this.updateEvent && this.started && this.update) {
             this.update();
         } else if (event === FrameEvent.Destroy) {
-            if (this.destroy) this.destroy();
+            if (this.onDestroy) this.onDestroy();
             this._destroy();
         }
     }
@@ -46,7 +46,7 @@ export abstract class GameActor {
     /**
      * This method is called before destruction.
      */
-    protected destroy?(): void;
+    protected onDestroy?(): void;
 
     /**
      * Adds a new game object to the scene.

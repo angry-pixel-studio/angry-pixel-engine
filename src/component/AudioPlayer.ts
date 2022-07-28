@@ -128,7 +128,7 @@ export class AudioPlayer extends EngineComponent {
         }
     }
 
-    protected destroy(): void {
+    protected onDestroy(): void {
         this.stop();
     }
 }
