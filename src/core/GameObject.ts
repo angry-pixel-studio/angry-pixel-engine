@@ -1,106 +1,80 @@
-import { Component } from "./Component";
-import { ComponentTypes } from "../component/ComponentTypes";
+import { Component, ComponentClass } from "./Component";
 import { Transform } from "../component/Transform";
 import { RigidBody } from "../component/RigidBody";
 import { Exception } from "../utils/Exception";
-import { GameObjectManager, GameObjectFactory } from "../core/managers/GameObjectManager";
 import { SceneManager } from "../core/managers/SceneManager";
 import { container } from "./Game";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
+import { GameActor, InitOptions } from "./GameActor";
 
 export const LAYER_DEFAULT = "Default";
 
-export type ComponentFactory = () => Component;
+export type GameObjectClass<T extends GameObject = GameObject> = new (name?: string, parent?: GameObject) => T;
 
-export class GameObject {
+export class GameObject extends GameActor {
     public readonly id: string = uuid();
-    public name: string;
+    public readonly name: string;
+
     public tag: string;
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
     public keep: boolean = false;
+    public parent: GameObject | null = null;
 
     private _active: boolean = true;
-    private _parent: GameObject | null = null;
-    private started: boolean = false;
 
     private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
-    private gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
     private components: Component[] = [];
+    private activeComponentsCache: Component[] = [];
+    private activeChildrenCache: GameObject[] = [];
 
-    constructor() {
-        this.addComponent(() => new Transform());
+    constructor(name: string = "", parent?: GameObject) {
+        super();
+
+        this.name = name;
+        this.parent = parent ?? null;
+
+        this.addComponent(Transform);
     }
 
     public get active(): boolean {
         return this._active;
     }
 
-    public setActive(active: boolean): void {
+    public set active(active: boolean) {
         this._active = active;
+
+        this.onActiveChange();
+        this.updateComponentsActiveStatus();
+        this.updateChildrenActiveStatus();
+    }
+
+    private updateComponentsActiveStatus(): void {
+        if (this.active === false) this.activeComponentsCache = this.components.filter((component) => component.active);
+        this.activeComponentsCache.forEach((component) => (component.active = this.active));
+        if (this.active === true) this.activeComponentsCache = [];
+    }
+
+    private updateChildrenActiveStatus(): void {
+        if (this.active === false) this.activeChildrenCache = this.getChildren().filter((children) => children.active);
+        this.activeChildrenCache.forEach((children) => (children.active = this.active));
+        if (this.active === true) this.activeChildrenCache = [];
     }
 
     public get transform(): Transform {
-        return this.getComponentByType<Transform>(ComponentTypes.Transform);
+        return this.getComponent<Transform>(Transform);
     }
 
     public get rigidBody(): RigidBody {
-        return this.getComponentByType(ComponentTypes.RigidBody);
-    }
-
-    public get parent(): GameObject | null {
-        return this._parent;
-    }
-
-    public set parent(parent: GameObject | null) {
-        this._parent = parent;
-        this.transform.parent = parent ? parent.transform : null;
-    }
-
-    public dispatch(event: FrameEvent): void {
-        if (this.active === false || (this.parent && this.parent.active === false)) return;
-
-        if (event === FrameEvent.Init) {
-            this.init();
-        } else if (event === FrameEvent.Start && this.started === false) {
-            this.start();
-            this.started = true;
-        } else if (event === FrameEvent.Update && this.started) {
-            this.update();
-        } else if (event === FrameEvent.Destroy) {
-            this.destroy();
-            this._destroy();
-        }
+        return this.getComponent<RigidBody>(RigidBody);
     }
 
     /**
-     * This method is called only once.
-     * Recommended for GameObject cration.
+     * This method is called when the active state changes.
      */
-    protected init(): void {
-        return;
-    }
-
-    /**
-     * This method is called only once.
-     */
-    protected start(): void {
-        return;
-    }
-
-    /**
-     * This method is called on every frame.
-     */
-    protected update(): void {
-        return;
-    }
-
-    /**
-     * This method is called before the object is destroyed.
-     */
-    protected destroy(): void {
+    protected onActiveChange(): void {
         return;
     }
 
@@ -112,162 +86,137 @@ export class GameObject {
     }
 
     /**
-     * @param gameObjectFactory The factory function for the game object
-     * @param name The name of the game object, this must not be used by another game object
-     * @returns The added game object
-     */
-    protected addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
-        return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
-    }
-
-    /**
-     * @param name The name of the game object to find
-     * @returns The found game object
-     */
-    protected findGameObjectByName<T extends GameObject>(name: string): T {
-        return this.gameObjectManager.findGameObjectByName(name) as T;
-    }
-
-    /**
-     * @param tag The tag of the game objects to find
-     * @returns The found game objects
-     */
-    protected findGameObjectsByTag(tag: string): GameObject[] {
-        return this.gameObjectManager.findGameObjectsByTag(tag);
-    }
-
-    /**
-     * @param tag The tag of the game object to find
-     * @returns The found game object
-     */
-    protected findGameObjectByTag<T extends GameObject>(tag: string): T {
-        return this.gameObjectManager.findGameObjectByTag(tag) as T;
-    }
-
-    /**
-     * Add a components to the game obejct
-     *
-     * @param componentFactory The factory function for the component
-     * @param name (optional) The name of the component, this must not be used by another component
+     * Add a component to the game obejct
+     * @param componentClass The class of the component
+     * @param options [optional] The options passed to the init method of the component
+     * @param name [optional] The name of the component
      * @returns The added component
      */
-    public addComponent<T extends Component>(componentFactory: ComponentFactory, name: string | null = null): T {
-        const component = componentFactory();
-        this.checkMultipleComponent(component);
+    public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
+        componentClass: ComponentClass<ComponentType>,
+        options?: OptionsType,
+        name?: string
+    ): ComponentType {
+        const component = new componentClass(this, name);
+        this.checkMultipleComponent(component, componentClass);
 
-        component.name = name;
-        component.gameObject = this;
-        component.dispatch(FrameEvent.Init);
         this.components.push(component);
+        component.dispatch(FrameEvent.Init, options);
 
-        return component as T;
+        return component;
     }
 
-    private checkMultipleComponent(component: Component): void {
-        if (component.allowMultiple === false && this.hasComponentOfType(component.type)) {
-            throw new Exception(`GameObject only allows one component of type ${component.type}`);
+    private checkMultipleComponent(component: Component, componentClass: ComponentClass): void {
+        if (component.allowMultiple === false && this.hasComponent(componentClass)) {
+            throw new Exception(`GameObject only allows one component of type ${componentClass.name}`);
         }
     }
 
     /**
-     * @returns All the added components
-     */
-    public getComponents(): Component[] {
-        return this.components;
-    }
-
-    /**
-     * @param name The name of the component to find
-     * @returns The found component
-     */
-    public getComponentByName<T extends Component>(name: string): T {
-        return this.components.reduce((prev, component) => (component.name === name ? component : prev), null) as T;
-    }
-
-    /**
-     * @param type The type of the component to find
-     * @returns The found component
-     */
-    public getComponentByType<T extends Component>(type: string): T {
-        return this.components.reduce((prev, component) => (component.type === type ? component : prev), null) as T;
-    }
-
-    /**
-     * @param type The type of the components to find
+     * Returns all the components in the game object.
      * @returns The found components
      */
-    public getComponentsByType<T extends Component>(type: string): T[] {
-        return this.components.filter<T>((component: Component): component is T => component.type === type);
+    public getComponents(): Component[];
+    /**
+     * Returns all the components for the given class in the game object.
+     * @param componentClass The class of the components
+     * @returns The found components
+     */
+    public getComponents<T extends Component>(componentClass: ComponentClass<T>): T[];
+    public getComponents<T extends Component>(componentClass?: ComponentClass<T>): T[] {
+        return (
+            componentClass
+                ? this.components.filter<T>(
+                      (component: Component): component is T => component instanceof componentClass
+                  )
+                : this.components
+        ) as T[];
     }
 
+    /**
+     * Returns the first component found for the given class, or undefined otherwise.
+     * @param componentClass The class of the component
+     * @returns The found component
+     */
+    public getComponent<T extends Component>(componentClass: ComponentClass<T>): T;
+    /**
+     * Returns the first component found for the given name, or undefined otherwise.
+     * @param name The name of the component
+     * @returns The found component
+     */
+    public getComponent<T extends Component>(name: string): T;
+    public getComponent<T extends Component>(filter: ComponentClass<T> | string): T {
+        return (
+            typeof filter === "string"
+                ? this.components.find((component) => component.name === filter)
+                : this.components.find((component) => component instanceof filter)
+        ) as T;
+    }
+
+    /**
+     * Returns TRUE if the game object has a component for the given class, or FALSE otherwise
+     * @param componentClass The class of the component to find
+     * @returns boolean
+     */
+    public hasComponent<T extends Component>(componentClass: ComponentClass<T>): boolean;
     /**
      * @param name The name of the component to find
-     * @returns TRUE or FALSE
+     * @returns boolean
      */
-    public hasComponentOfName(name: string): boolean {
-        return this.getComponentByName(name) !== null;
+    public hasComponent(name: string): boolean;
+    public hasComponent<T extends Component>(filter: ComponentClass<T> | string): boolean {
+        return typeof filter === "string"
+            ? this.components.some((component) => component.name === filter)
+            : this.components.some((component) => component instanceof filter);
     }
 
-    /**
-     * @param type The type of the component to find
-     * @returns TRUE or FALSE
-     */
-    public hasComponentOfType(type: string): boolean {
-        return this.getComponentByType(type) !== null;
-    }
+    public removeComponent(component: Component): void {
+        const index: number = this.components.indexOf(component);
 
-    /**
-     * @param name The name of the component to remove
-     */
-    public removeComponentByName(name: string): void {
-        this.components.every((component: Component, index: number) => {
-            if (component.name === name) {
-                component.dispatch(FrameEvent.Destroy);
-                delete this.components[index];
-
-                return false;
-            }
-        });
-    }
-
-    /**
-     * @param type The tyepe of the component to remove
-     */
-    public removeComponentByType(type: string): void {
-        this.components.every((component: Component, index: number) => {
-            if (component.type === type) {
-                component.dispatch(FrameEvent.Destroy);
-                delete this.components[index];
-
-                return false;
-            }
-        });
+        if (index !== -1) {
+            const component = this.components.splice(index, 1)[0];
+            component.dispatch(FrameEvent.Destroy);
+        }
     }
 
     /**
      * Add a child game object.
-     *
-     * @param gameObjectFactory The factory of the child game object
-     * @param name The name of the child game object, this must not be used by another game object
+     * @param gameObjectClass The class of the child game object
+     * @param options [optional] This options will be passed to the init method
+     * @param name [optional] The name of the game object
      * @returns The added child game object
      */
-    public addChild<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
-        return this.gameObjectManager.addGameObject(gameObjectFactory, name, this) as T;
+    public addChild<T extends GameObject>(
+        gameObjectClass: GameObjectClass<T>,
+        options?: InitOptions,
+        name?: string
+    ): T {
+        return this.gameObjectManager.addGameObject(gameObjectClass, options, this, name) as T;
     }
 
     /**
      * @returns The children game objects
      */
-    public getChildren(): GameObject[] {
-        return this.gameObjectManager.findGameObjectsByParent(this);
+    public getChildren<T extends GameObject>(): T[] {
+        return this.gameObjectManager.findGameObjectsByParent<T>(this);
     }
 
     /**
+     * Returns the first child found for the given class, or undefined otherwise.
+     * @param gameObjectClass The class of the child game object to find
+     * @returns The found child game object
+     */
+    public getChild<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
+    /**
+     * Returns the first child found for the given name, or undefined otherwise.
      * @param name The name of the child game object to find
      * @returns The found child game object
      */
-    public getChild<T extends GameObject>(name: string): T {
-        return this.gameObjectManager.findGameObjectByParentAndName(this, name) as T;
+    public getChild<T extends GameObject>(name: string): T;
+    public getChild<T extends GameObject>(filter: GameObjectClass<T> | string): T {
+        return typeof filter === "string"
+            ? this.gameObjectManager.findGameObjectByParent(this, filter as string)
+            : this.gameObjectManager.findGameObjectByParent(this, filter as GameObjectClass<T>);
     }
 
     /**
@@ -279,23 +228,7 @@ export class GameObject {
             .forEach((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
-    /**
-     * Destroy one game objects by its name
-     * @param name The name of the game object
-     */
-    public destroyGameObjectByName(name: string): void {
-        this.destroyGameObject(this.findGameObjectByName(name));
-    }
-
-    /**
-     * Destroy the game objects
-     * @param gameObject The game object to destory
-     */
-    public destroyGameObject(gameObject: GameObject): void {
-        this.gameObjectManager.destroyGameObject(gameObject);
-    }
-
-    private _destroy(): void {
+    protected _destroy(): void {
         this.destroyComponents();
 
         // @ts-ignore

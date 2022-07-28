@@ -44,7 +44,7 @@ export class GeometricRenderer {
                 this.renderLines(viewportRect, renderData, this.gl.LINE_LOOP);
                 break;
             case GeometricShape.Line:
-                this.renderLines(viewportRect, renderData, this.gl.LINE_LOOP);
+                this.renderLines(viewportRect, renderData, this.gl.LINES);
                 break;
             case GeometricShape.Circumference:
                 this.renderCircumference(viewportRect, renderData);
@@ -67,11 +67,11 @@ export class GeometricRenderer {
         if (this.lastVertices !== verticesKey || this.lastRender !== "geometric") {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, posVertices, this.gl.DYNAMIC_DRAW);
+
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, posVertices, this.gl.DYNAMIC_DRAW);
         }
         this.lastVertices = verticesKey;
-
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, posVertices, this.gl.DYNAMIC_DRAW);
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
         mat4.translate(this.modelMatrix, this.modelMatrix, [positionInViewport.x, positionInViewport.y, 0]);
@@ -110,10 +110,10 @@ export class GeometricRenderer {
         viewportRect: Rectangle,
         { radius, positionInViewport, color }: GeometricRenderData
     ): void {
+        this.lastVertices = null;
+
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.circumferenceVertices, this.gl.DYNAMIC_DRAW);
-
-        this.lastVertices = null;
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.circumferenceVertices, this.gl.DYNAMIC_DRAW);

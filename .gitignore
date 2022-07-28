@@ -3,3 +3,4 @@
 .vs
 angry-pixel-*.tgz
 /lib
+yarn-error.log

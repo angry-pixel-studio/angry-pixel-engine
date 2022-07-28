@@ -22,6 +22,7 @@ export class AssetManager {
         const asset = this.createAsset(url, AssetType.Image);
 
         asset.element = new Image();
+        asset.element.crossOrigin = "";
         asset.element.src = url;
 
         if (asset.element.naturalWidth) {

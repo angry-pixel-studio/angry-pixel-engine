@@ -1,7 +1,7 @@
 import { EngineComponent } from "../core/Component";
-import { ComponentTypes } from "./ComponentTypes";
+import { InitOptions } from "../core/GameActor";
 
-export interface AudioPlayerConfig {
+export interface AudioPlayerOptions extends InitOptions {
     audio?: HTMLAudioElement;
     volume?: number;
     loop?: boolean;
@@ -21,6 +21,8 @@ const userInputEventNames = [
 ];
 
 export class AudioPlayer extends EngineComponent {
+    public readonly allowMultiple: boolean = false;
+
     public volume: number = 1;
     public loop: boolean = false;
     public audio: HTMLAudioElement = null;
@@ -29,15 +31,10 @@ export class AudioPlayer extends EngineComponent {
     private _playing: boolean = false;
     private _paused: boolean = false;
 
-    constructor(config: AudioPlayerConfig = { audio: null, volume: 1, loop: false }) {
-        super();
-
-        this.allowMultiple = false;
-        this.type = ComponentTypes.AudioPlayer;
-
-        this.audio = config.audio ?? this.audio;
-        this.volume = config.volume ?? this.volume;
-        this.loop = config.loop ?? this.loop;
+    protected init(options: AudioPlayerOptions = {}): void {
+        this.audio = options.audio ?? this.audio;
+        this.volume = options.volume ?? this.volume;
+        this.loop = options.loop ?? this.loop;
     }
 
     public playAudio(audio: HTMLAudioElement, volume: number | null = null): void {
@@ -125,13 +122,13 @@ export class AudioPlayer extends EngineComponent {
         this.audio.play();
     };
 
-    protected activeStateChange(): void {
+    protected onActiveChange(): void {
         if (this.active === false) {
             this.stop();
         }
     }
 
-    protected destroy(): void {
+    protected onDestroy(): void {
         this.stop();
     }
 }

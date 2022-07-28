@@ -1,9 +1,10 @@
 import { Exception } from "../../utils/Exception";
 
-export const MIN_BROWSER_FRAMERATE = 15;
+export const MIN_GAME_FRAMERATE = 15;
 export const DEFAULT_GAME_FRAMERATE = 60;
-export const MIN_PHYSICS_FRAMERATE = 60;
-export const DEFAULT_PHYSICS_FRAMERATE = 240;
+export const DEFAULT_PHYSICS_FRAMERATE = 180;
+
+const allowedPhysicsFramerates = [60, 120, 180, 240];
 
 export class TimeManager {
     public readonly minGameDeltatime: number = 0;
@@ -14,19 +15,18 @@ export class TimeManager {
 
     public timeScale: number = 1;
     public browserDeltaTime: number = 0;
+    public gameDeltaTime: number = 0;
     public unscaledGameDeltaTime: number = 0;
     public unscaledPhysicsDeltaTime: number = 0;
 
-    private readonly max: number = 1 / MIN_BROWSER_FRAMERATE;
-    private then: number = 0;
+    private readonly maxDeltaTime: number = 1 / MIN_GAME_FRAMERATE;
+    private thenForGame: number = 0;
+    private thenForPhysics: number = 0;
+    private thenForBrowser: number = 0;
 
     constructor(physicsFramerate: number) {
-        if (physicsFramerate < MIN_PHYSICS_FRAMERATE) {
-            throw new Exception(`Physics framerate cannot be less than ${MIN_PHYSICS_FRAMERATE}`);
-        }
-
-        if (physicsFramerate % MIN_PHYSICS_FRAMERATE !== 0) {
-            throw new Exception(`Physics framerate must be multiple of ${MIN_PHYSICS_FRAMERATE}`);
+        if (!allowedPhysicsFramerates.includes(physicsFramerate)) {
+            throw new Exception(`Invalid Physics frame rate. Allowed: [${allowedPhysicsFramerates.join(", ")}]`);
         }
 
         this.physicsFramerate = physicsFramerate;
@@ -34,16 +34,25 @@ export class TimeManager {
         this.minPhysicsDeltaTime = parseFloat((1 / this.physicsFramerate).toFixed(6));
     }
 
-    public update(time: number): void {
-        const now: number = time * 0.001;
+    public updateForGame(time: number): void {
+        this.unscaledGameDeltaTime = Math.min(
+            Math.max(this.minGameDeltatime, time - this.thenForGame),
+            this.maxDeltaTime
+        );
 
-        this.browserDeltaTime = Math.min(Math.max(0, now - this.then), this.max);
-        this.unscaledGameDeltaTime = Math.max(this.minGameDeltatime, this.browserDeltaTime);
+        this.thenForGame = time;
+    }
 
-        this.unscaledPhysicsDeltaTime =
-            this.gameFramerate === this.physicsFramerate ? this.unscaledGameDeltaTime : this.minPhysicsDeltaTime;
+    public updateForBrowser(time: number): void {
+        this.browserDeltaTime = Math.min(Math.max(0, time - this.thenForBrowser), this.maxDeltaTime);
 
-        this.then = now;
+        this.thenForBrowser = time;
+    }
+
+    public updateForPhysics(time: number): void {
+        this.unscaledPhysicsDeltaTime = Math.min(Math.max(0, time - this.thenForPhysics), this.maxDeltaTime);
+
+        this.thenForPhysics = time;
     }
 
     public get deltaTime(): number {

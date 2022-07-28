@@ -6,11 +6,12 @@ import { TileData } from "../rendering/tilemap/TileData";
 import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { RenderComponent } from "../../core/Component";
 import { Vector2 } from "../../math/Vector2";
-import { ComponentTypes } from "../ComponentTypes";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Rectangle } from "../../physics/collision/shape/Rectangle";
+import { InitOptions } from "../../core/GameActor";
+import { RigidBody } from "../RigidBody";
 
-export interface TilemapColliderConfig {
+export interface TilemapColliderOptions extends InitOptions {
     tilemapRenderer: TilemapRenderer;
     layer?: string;
     debug?: boolean;
@@ -21,10 +22,7 @@ export class TilemapCollider extends Collider {
     private debug: boolean = false;
     private cacheVertex: Vector2[];
 
-    constructor(config: TilemapColliderConfig) {
-        super();
-
-        this.type = ComponentTypes.TilemapCollider;
+    protected init(config: TilemapColliderOptions): void {
         this.tilemapRenderer = config.tilemapRenderer;
         this.layer = config.layer;
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
@@ -46,13 +44,13 @@ export class TilemapCollider extends Collider {
                         this.gameObject.id,
                         false,
                         this.physics,
-                        this.hasComponentOfType(ComponentTypes.RigidBody)
+                        this.hasComponent(RigidBody)
                     )
                 )
             );
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(() => new TilemapColliderRenderer(this.colliders));
+            this.renderer = this.gameObject.addComponent(TilemapColliderRenderer, { colliders: this.colliders });
         }
     }
 
@@ -87,10 +85,7 @@ class TilemapColliderRenderer extends RenderComponent {
     private renderData: GeometricRenderData[] = [];
     private colliders: ColliderData[] = [];
 
-    constructor(colliders: ColliderData[]) {
-        super();
-
-        this.type = "TilemapColliderRenderer";
+    protected init({ colliders }: { colliders: ColliderData[] }): void {
         this.colliders = colliders;
 
         this.colliders.forEach((collider: ColliderData, index: number) => {

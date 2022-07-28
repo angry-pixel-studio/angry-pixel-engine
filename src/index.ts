@@ -9,6 +9,7 @@ export { Component, PhysicsComponent, PreRenderComponent } from "./core/Componen
 export { Game, GameConfig, CollisionMethodConfig } from "./core/Game";
 export * from "./core/GameObject";
 export * from "./core/Scene";
+export { InitOptions } from "./core/GameActor";
 
 // components
 export * from "./component/collider/BoxCollider";
@@ -27,7 +28,6 @@ export * from "./component/Animation";
 export * from "./component/Animator";
 export * from "./component/AudioPlayer";
 export * from "./component/Camera";
-export * from "./component/ComponentTypes";
 export * from "./component/RigidBody";
 export * from "./component/Sprite";
 export * from "./component/Transform";

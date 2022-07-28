@@ -6,9 +6,9 @@ import { container } from "../../core/Game";
 import { Rotation } from "../../math/Rotation";
 import { Vector2 } from "../../math/Vector2";
 import { Sprite } from "../Sprite";
-import { ComponentTypes } from "../ComponentTypes";
+import { InitOptions } from "../../core/GameActor";
 
-export interface SpriteRendererConfig {
+export interface SpriteRendererOptions extends InitOptions {
     sprite?: Sprite;
     offset?: Vector2;
     smooth?: boolean;
@@ -26,7 +26,7 @@ export interface SpriteRendererConfig {
 export class SpriteRenderer extends RenderComponent {
     private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
 
-    public sprite: Sprite = null;
+    public sprite: Sprite | null = null;
     public offset: Vector2 = new Vector2();
     public flipHorizontal: boolean = false;
     public flipVertical: boolean = false;
@@ -34,9 +34,9 @@ export class SpriteRenderer extends RenderComponent {
     public smooth: boolean = false;
     public opacity: number = 1;
     private _tiled: Vector2 = new Vector2(1, 1);
-    public maskColor: string = null;
+    public maskColor: string | null = null;
     public maskColorMix: number = 0;
-    public tintColor: string = null;
+    public tintColor: string | null = null;
     public layer: string;
 
     private renderData: ImageRenderData[] = [];
@@ -46,12 +46,8 @@ export class SpriteRenderer extends RenderComponent {
     private cacheRenderPosition: Vector2 = new Vector2();
     private scaledOffset: Vector2 = new Vector2();
 
-    constructor(config: SpriteRendererConfig = { sprite: null }) {
-        super();
-
-        this.type = ComponentTypes.SpriteRenderer;
-
-        this.sprite = config.sprite;
+    protected init(config: SpriteRendererOptions = {}): void {
+        this.sprite = config.sprite ?? this.sprite;
         this.offset = config.offset ?? this.offset;
         this.smooth = config.smooth ?? this.smooth;
         this.rotation = config.rotation ?? this.rotation;
