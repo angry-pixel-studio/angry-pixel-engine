@@ -102,7 +102,10 @@ export class Transform extends TransformComponent {
             this._position.copy(this._parent.position);
         }
 
-        this._rotation.radians = this.parentRotation ? this._parent.rotation.radians : this.rotation.radians;
+        this._rotation.radians = this.parentRotation
+            ? this._parent.rotation.radians + this._rotation.radians
+            : this._rotation.radians;
+
         this.parentScale ? this._scale.copy(this._parent.scale) : null;
     }
 
