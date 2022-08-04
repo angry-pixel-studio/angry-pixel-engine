@@ -3,14 +3,11 @@ import { Camera } from "../component/Camera";
 import { Rectangle } from "../math/Rectangle";
 
 export class GameCamera extends GameObject {
-    public readonly camera: Camera;
+    public camera: Camera;
 
-    constructor() {
-        super();
-
+    protected init(): void {
         this.transform.position.set(0, 0);
-
-        this.camera = this.addComponent(() => new Camera());
+        this.camera = this.addComponent<Camera>(Camera);
     }
 
     public set layers(layers: string[]) {

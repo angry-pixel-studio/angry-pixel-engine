@@ -3,10 +3,10 @@ import { RenderManager } from "../../rendering/RenderManager";
 import { container } from "../../core/Game";
 import { Rotation } from "../../math/Rotation";
 import { Vector2 } from "../../math/Vector2";
-import { ComponentTypes } from "../ComponentTypes";
 import { MaskRenderData } from "../../rendering/renderData/MaskRenderData";
+import { InitOptions } from "../../core/GameActor";
 
-export interface MaskRendererConfig {
+export interface MaskRendererOptions extends InitOptions {
     width: number;
     height: number;
     color: string;
@@ -32,11 +32,7 @@ export class MaskRenderer extends RenderComponent {
     private innerPosition: Vector2 = new Vector2();
     private scaledOffset: Vector2 = new Vector2();
 
-    constructor(config: MaskRendererConfig) {
-        super();
-
-        this.type = ComponentTypes.MaskRenderer;
-
+    protected init(config: MaskRendererOptions): void {
         this.width = config.width;
         this.height = config.height;
         this.color = config.color;

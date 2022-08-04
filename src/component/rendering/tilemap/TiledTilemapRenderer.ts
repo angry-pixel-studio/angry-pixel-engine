@@ -1,24 +1,24 @@
-import { Offset, RenderOrder, TilemapRenderer, TilemapRendererConfig } from "./TilemapRenderer";
+import { Offset, RenderOrder, TilemapRenderer, TilemapRendererOptions } from "./TilemapRenderer";
 import { Tile } from "./Tile";
-import { ComponentTypes } from "../../ComponentTypes";
 
-export interface TiledTilemapConfig extends TilemapRendererConfig {
+export interface TiledTilemapOptions extends TilemapRendererOptions {
     tilemapData: TiledTilemap;
     layerName?: string;
 }
 
 export class TiledTilemapRenderer extends TilemapRenderer {
-    public readonly tiledTilemap: TiledTilemap;
-    public readonly layerName: string;
+    public tiledTilemap: TiledTilemap;
+    public layerName: string;
 
-    constructor(config: TiledTilemapConfig) {
+    private tilesetTileIds: number[];
+
+    protected init(config: TiledTilemapOptions): void {
         config.renderOrder = config.renderOrder ?? (config.tilemapData.renderorder as RenderOrder);
-        super(config);
-
-        this.type = ComponentTypes.TiledTilemapRenderer;
+        super.init(config);
 
         this.tiledTilemap = config.tilemapData;
         this.layerName = config.layerName ?? null;
+        this.tilesetTileIds = [];
     }
 
     protected processTilemap(): void {
@@ -40,6 +40,7 @@ export class TiledTilemapRenderer extends TilemapRenderer {
             }
         });
 
+        this.tilesetTileIds = []; // free memory
         this.tilemapProcessed = true;
     }
 
@@ -48,7 +49,7 @@ export class TiledTilemapRenderer extends TilemapRenderer {
 
         for (let row = 0; row < chunk.height; row++) {
             for (let col = 0; col < chunk.width; col++) {
-                const tile: Tile = this.tileset.getTile(chunk.data[dataIndex] - 1);
+                const tile: Tile = this.tileset.getTile(this.getTilesetTileId(chunk.data[dataIndex]));
 
                 this.processTile({
                     layer,
@@ -63,6 +64,17 @@ export class TiledTilemapRenderer extends TilemapRenderer {
             }
         }
     }
+
+    private getTilesetTileId(tileId: number): number {
+        if (!this.tilesetTileIds[tileId]) {
+            this.tilesetTileIds[tileId] = this.tiledTilemap.tilesets.reduce(
+                (id, tileset) => (tileId >= tileset.firstgid ? tileId - tileset.firstgid : id),
+                -1
+            );
+        }
+
+        return this.tilesetTileIds[tileId];
+    }
 }
 
 export interface TiledTilemap {
@@ -71,6 +83,7 @@ export interface TiledTilemap {
     infinite: boolean;
     layers: TiledLayer[];
     renderorder: string;
+    tilesets: { firstgid: number }[];
 }
 
 export interface TiledChunk {

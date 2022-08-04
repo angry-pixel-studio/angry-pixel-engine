@@ -1,6 +1,6 @@
 import { container } from "../../core/Game";
 import { ColliderComponent, RenderComponent } from "../../core/Component";
-import { CollisionManager } from "../../physics/collision/CollisionManager";
+import { Collision, CollisionManager } from "../../physics/collision/CollisionManager";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { GameObject } from "../../core/GameObject";
 import { CollisionResolution } from "../../physics/collision/resolver/CollisionResolver";
@@ -9,6 +9,10 @@ export interface CollisionData {
     resolution: CollisionResolution;
     collider: ColliderData;
     gameObject: GameObject;
+    /**
+     * @return The GameObject to which this component belongs
+     */
+    getGameObject: <T extends GameObject>() => T;
 }
 
 export abstract class Collider extends ColliderComponent {
@@ -29,14 +33,10 @@ export abstract class Collider extends ColliderComponent {
 
     public getCollisionWithLayer(layer: string): CollisionData | null {
         for (const collider of this.colliders) {
-            const collisions = this.collisionManager.getFrameCollisionsForCollider(collider);
+            const collisions = this.collisionManager.getCollisionsForCollider(collider);
             for (const collision of collisions) {
                 if (collision.remoteCollider.layer === layer) {
-                    return {
-                        gameObject: this.gameObjectManager.findGameObjectById(collision.remoteCollider.id),
-                        collider: collision.remoteCollider,
-                        resolution: collision.resolution,
-                    };
+                    return this.createCollisionData(collision);
                 }
             }
         }
@@ -48,14 +48,10 @@ export abstract class Collider extends ColliderComponent {
         const result: CollisionData[] = [];
 
         for (const collider of this.colliders) {
-            const collisions = this.collisionManager.getFrameCollisionsForCollider(collider);
+            const collisions = this.collisionManager.getCollisionsForCollider(collider);
             for (const collision of collisions) {
                 if (collision.remoteCollider.layer === layer) {
-                    result.push({
-                        gameObject: this.gameObjectManager.findGameObjectById(collision.remoteCollider.id),
-                        collider: collision.remoteCollider,
-                        resolution: collision.resolution,
-                    });
+                    result.push(this.createCollisionData(collision));
                 }
             }
         }
@@ -63,7 +59,18 @@ export abstract class Collider extends ColliderComponent {
         return result;
     }
 
-    protected activeStateChange(): void {
-        if (this.renderer) this.renderer.setActive(this.active);
+    private createCollisionData(collision: Collision): CollisionData {
+        return {
+            gameObject: this.gameObjectManager.findGameObjectById(collision.remoteCollider.id),
+            collider: collision.remoteCollider,
+            resolution: collision.resolution,
+            getGameObject: function <T extends GameObject>(): T {
+                return this.gameObject as T;
+            },
+        };
+    }
+
+    protected onActiveChange(): void {
+        if (this.renderer) this.renderer.active = this.active;
     }
 }

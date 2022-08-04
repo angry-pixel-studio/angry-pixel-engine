@@ -24,9 +24,9 @@ export enum FrameEvent {
 }
 
 export class IterationManager {
-    private gameLoopAccumulator: number = 0;
-    private physicsLoopAccumulator: number = 0;
+    public running: boolean = false;
 
+    private gameLoopAccumulator: number = 0;
     private currentScene: Scene;
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
@@ -41,53 +41,66 @@ export class IterationManager {
         private readonly sceneManager: SceneManager
     ) {}
 
-    public update(time: number): void {
-        this.timeManager.update(time);
+    public start(): void {
+        this.startLoop(true);
+    }
 
-        this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
+    public pause(): void {
+        this.running = false;
+    }
 
-        this.load();
+    public resume(): void {
+        this.startLoop(false);
+    }
 
-        if (this.gameLoopAccumulator >= this.timeManager.minGameDeltatime) {
-            this.mainIteration();
+    public stop(): void {
+        this.running = false;
 
-            // physics fixed at the game frame rate
-            if (this.timeManager.gameFramerate === this.timeManager.physicsFramerate) {
-                this.physicsIteration();
-            }
+        this.sceneManager.unloadCurrentScene();
+        this.renderManager.clearCanvas();
+    }
 
-            this.gameLoopAccumulator -= this.timeManager.minGameDeltatime;
+    private startLoop(loadOpeningScene: boolean): void {
+        if (this.running) {
+            return;
         }
+
+        this.running = true;
+
+        if (loadOpeningScene) {
+            this.sceneManager.loadOpeningScene();
+        }
+
+        // this.gameLogicIteration();
+        this.requestAnimationLoop(window.performance.now());
 
         // physics fixed at its own frame rate
         if (this.timeManager.gameFramerate !== this.timeManager.physicsFramerate) {
-            this.physicsLoopAccumulator += this.timeManager.browserDeltaTime;
+            this.asyncPhysicsLoop();
+        }
+    }
 
-            while (this.physicsLoopAccumulator >= this.timeManager.minPhysicsDeltaTime) {
-                this.physicsLoopAccumulator -= this.timeManager.minPhysicsDeltaTime;
-                if (this.timeManager.timeScale > 0) this.physicsIteration();
-            }
+    private requestAnimationLoop(time: number): void {
+        if (!this.running) return;
+
+        this.timeManager.updateForBrowser(time * 0.001);
+
+        this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
+
+        if (this.gameLoopAccumulator >= this.timeManager.minGameDeltatime) {
+            this.gameLogicIteration(time * 0.001);
+            this.gameLoopAccumulator -= this.timeManager.minGameDeltatime;
         }
 
-        this.preRenderIteration();
         this.renderIteration();
 
-        this.sceneManager.update();
+        window.requestAnimationFrame((time: number) => this.requestAnimationLoop(time));
     }
 
-    private load(): void {
-        this.currentScene = this.sceneManager.getCurrentScene();
-        this.gameObjects = this.gameObjectManager.getGameObjects().filter((gameObject) => gameObject.active);
-        this.components = this.gameObjects.reduce(
-            (components, gameObject) => [
-                ...components,
-                ...gameObject.getComponents().filter((component) => component.active),
-            ],
-            []
-        );
-    }
+    private gameLogicIteration(time: number): void {
+        this.timeManager.updateForGame(time);
+        this.load();
 
-    private mainIteration(): void {
         this.physicsManager.clear();
         // starts all game objects and components
         this.dispatchFrameEvent(FrameEvent.Start);
@@ -99,11 +112,32 @@ export class IterationManager {
         this.dispatchFrameEvent(FrameEvent.UpdateEngine);
         // updates transform components
         this.dispatchFrameEvent(FrameEvent.UpdateTransform);
+
+        // physics fixed at game frame rate
+        if (this.timeManager.gameFramerate === this.timeManager.physicsFramerate) {
+            this.physicsIteration(time);
+        }
+
+        this.sceneManager.update();
     }
 
-    private physicsIteration(): void {
+    private renderIteration(): void {
+        this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
+        this.dispatchFrameEvent(FrameEvent.UpdateCamera);
+        this.dispatchFrameEvent(FrameEvent.UpdateRender);
+
+        this.renderManager.clearCanvas();
+        this.renderManager.render();
+    }
+
+    private physicsIteration(time: number): void {
+        if (this.timeManager.timeScale <= 0) return;
+
+        this.timeManager.updateForPhysics(time);
+
         this.dispatchFrameEvent(FrameEvent.UpdatePhysics);
         this.dispatchFrameEvent(FrameEvent.UpdateCollider);
+        this.dispatchFrameEvent(FrameEvent.UpdateTransform);
 
         this.collisionManager.update();
         this.physicsManager.update(this.timeManager.physicsDeltaTime);
@@ -111,17 +145,27 @@ export class IterationManager {
         this.collisionManager.clear();
     }
 
-    private preRenderIteration(): void {
-        this.dispatchFrameEvent(FrameEvent.UpdateTransform);
-        this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
-        this.dispatchFrameEvent(FrameEvent.UpdateCamera);
+    private asyncPhysicsLoop(): void {
+        if (!this.running) return;
+
+        const time: number = window.performance.now() * 0.001;
+
+        if (!document.hidden) this.physicsIteration(time);
+
+        const timeDiff = 1 / this.timeManager.physicsFramerate - (window.performance.now() * 0.001 - time);
+        window.setTimeout(() => this.asyncPhysicsLoop(), Math.max(0.0001, timeDiff) * 1000);
     }
 
-    private renderIteration(): void {
-        this.dispatchFrameEvent(FrameEvent.UpdateRender);
-
-        this.renderManager.clearCanvas();
-        this.renderManager.render();
+    private load(): void {
+        this.currentScene = this.sceneManager.getCurrentScene();
+        this.gameObjects = this.gameObjectManager.findGameObjects().filter((gameObject) => gameObject.active);
+        this.components = this.gameObjects.reduce(
+            (components, gameObject) => [
+                ...components,
+                ...gameObject.getComponents().filter((component) => component.active),
+            ],
+            []
+        );
     }
 
     private dispatchFrameEvent(event: FrameEvent): void {

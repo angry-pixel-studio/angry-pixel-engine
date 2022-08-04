@@ -2,15 +2,17 @@ import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
 import { Vector2 } from "../../math/Vector2";
 import { Rotation } from "../../math/Rotation";
-import { ComponentTypes } from "../ComponentTypes";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Polygon } from "../../physics/collision/shape/Polygon";
 import { RenderComponent } from "../../core/Component";
 import { RenderManager } from "../../rendering/RenderManager";
 import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { Exception } from "../../utils/Exception";
+import { InitOptions } from "../../core/GameActor";
+import { GameObject } from "../../core/GameObject";
+import { RigidBody } from "../RigidBody";
 
-export interface PolygonColliderConfig {
+export interface PolygonColliderOptions extends InitOptions {
     vertexModel: Vector2[];
     offsetX?: number;
     offsetY?: number;
@@ -21,8 +23,8 @@ export interface PolygonColliderConfig {
 }
 
 export class PolygonCollider extends Collider {
-    public readonly debug: boolean = false;
-    public readonly vertexModel: Vector2[];
+    public debug: boolean = false;
+    public vertexModel: Vector2[];
     public offsetX: number = 0;
     public offsetY: number = 0;
     public rotation: Rotation;
@@ -33,18 +35,18 @@ export class PolygonCollider extends Collider {
     private finalRotation: number = 0;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(config: PolygonColliderConfig) {
-        super();
+    constructor(gameObject: GameObject, name?: string) {
+        super(gameObject, name);
 
         if (container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
             throw new Exception("Polygon Colliders need SAT collision method.");
         }
+    }
 
+    protected init(config: PolygonColliderOptions): void {
         if (config.vertexModel.length < 3) {
             throw new Exception("Polygon Collider needs at least 3 vertices.");
         }
-
-        this.type = ComponentTypes.PolygonCollider;
 
         this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.vertexModel = config.vertexModel;
@@ -67,12 +69,14 @@ export class PolygonCollider extends Collider {
                 this.gameObject.id,
                 true,
                 this.physics,
-                this.hasComponentOfType(ComponentTypes.RigidBody)
+                this.hasComponent(RigidBody)
             )
         );
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(() => new PolygonColliderRenderer(this.colliders[0]));
+            this.renderer = this.gameObject.addComponent(PolygonColliderRenderer, {
+                collider: this.colliders[0],
+            });
         }
     }
 
@@ -132,11 +136,7 @@ class PolygonColliderRenderer extends RenderComponent {
     private renderData: GeometricRenderData;
     private collider: ColliderData;
 
-    constructor(collider: ColliderData) {
-        super();
-
-        this.type = "PolygonColliderRenderer";
-
+    protected init({ collider }: { collider: ColliderData }): void {
         this.renderData = new GeometricRenderData();
         this.renderData.debug = true;
         this.renderData.color = "#00FF00";

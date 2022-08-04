@@ -1,5 +1,6 @@
-import { GameObjectManager, GameObjectFactory } from "../managers/GameObjectManager";
-import { GameObject } from "../GameObject";
+import { GameObjectManager } from "../managers/GameObjectManager";
+import { GameObject, GameObjectClass } from "../GameObject";
+import { InitOptions } from "../GameActor";
 
 export class GameObjectManagerFacade {
     private static manager: GameObjectManager;
@@ -9,66 +10,90 @@ export class GameObjectManagerFacade {
     }
 
     /**
-     * @param gameObjectFactory The factory function for the game object
-     * @param name The name of the game object, this must not be used by another game object
-     * @param parent (optional) The parent game object
+     * Adds a new game object to the scene.
+     * @param gameObjectClass The class of the game object
+     * @param options [optional] This options will be passed to the init method
+     * @param parent [optional] The parent game object
+     * @param name [optional] The name of the game object
      * @returns the added game object
      */
     public static addGameObject<T extends GameObject>(
-        gameObjectFactory: GameObjectFactory,
-        name: string,
-        parent: GameObject = null
+        gameObjectClass: GameObjectClass<T>,
+        options?: InitOptions,
+        parent?: GameObject,
+        name?: string
     ): T {
-        return this.manager.addGameObject<T>(gameObjectFactory, name, parent) as T;
+        return this.manager.addGameObject<T>(gameObjectClass, options, parent, name);
     }
 
     /**
-     * @returns All the added game objects
+     * Returns all the game objects in the scene.
+     * @returns The found game objects
      */
-    public static getGameObjects(): GameObject[] {
-        return this.manager.getGameObjects();
+    public static findGameObjects(): GameObject[] {
+        return this.manager.findGameObjects();
     }
 
     /**
+     * Returns the first game object found for the given class, or undefined otherwise.
+     * @param gameObjectClass The game object class to find
+     * @returns The found game object
+     */
+    public static findGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
+    /**
+     * Returns the first game object found for the given name, or undefined otherwise.
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    public static findGameObjectByName<T extends GameObject>(name: string): T {
-        return this.manager.findGameObjectByName(name) as T;
+    public static findGameObject<T extends GameObject>(name: string): T;
+    public static findGameObject<T extends GameObject>(filter: GameObjectClass<T> | string): T {
+        return typeof filter === "string"
+            ? this.manager.findGameObject<T>(filter as string)
+            : this.manager.findGameObject<T>(filter as GameObjectClass<T>);
     }
 
     /**
+     * Returns a collection of game objects found for the given parent
      * @param parent The parent game object
      * @returns The found game objects
      */
-    public static findGameObjectsByParent(parent: GameObject): GameObject[] {
-        return this.manager.findGameObjectsByParent(parent);
+    public static findGameObjectsByParent<T extends GameObject>(parent: GameObject): T[] {
+        return this.manager.findGameObjectsByParent<T>(parent);
     }
 
     /**
-     *
+     * Returns the first child found for the given parent and class, or undefined otherwise.
      * @param parent The parent game object
-     * @param name The name of the game object to find
-     * @returns The found game objects
+     * @param gameObjectClass The class of the child game object to find
+     * @returns The found child game object
      */
-    public static findGameObjectByParentAndName<T extends GameObject>(parent: GameObject, name: string): T {
-        return this.manager.findGameObjectByParentAndName(parent, name) as T;
+    public static findGameObjectByParent<T extends GameObject>(
+        parent: GameObject,
+        gameObjectClass: GameObjectClass<T>
+    ): T;
+    /**
+     * Returns the first child found for the given parent and name, or undefined otherwise.
+     * @param parent The parent game object
+     * @param name The name of the child game object to find
+     * @returns The found child game object
+     */
+    public static findGameObjectByParent<T extends GameObject>(parent: GameObject, name: string): T;
+    public static findGameObjectByParent<T extends GameObject>(
+        parent: GameObject,
+        filter: GameObjectClass<T> | string
+    ): T {
+        return typeof filter === "string"
+            ? this.manager.findGameObjectByParent(parent, filter as string)
+            : this.manager.findGameObjectByParent(parent, filter as GameObjectClass<T>);
     }
 
     /**
+     * Returns a collection of game objects found for the given tag
      * @param tag The tag of the game objects to find
      * @returns The found game objects
      */
-    public static findGameObjectsByTag(tag: string): GameObject[] {
-        return this.manager.findGameObjectsByTag(tag);
-    }
-
-    /**
-     * @param tag The tag of the game object to find
-     * @returns The found game object
-     */
-    public static findGameObjectByTag<T extends GameObject>(tag: string): T {
-        return this.manager.findGameObjectByTag(tag) as T;
+    public static findGameObjectsByTag<T extends GameObject>(tag: string): T[] {
+        return this.manager.findGameObjectsByTag<T>(tag);
     }
 
     /**
@@ -77,13 +102,5 @@ export class GameObjectManagerFacade {
      */
     public static destroyGameObject(gameObject: GameObject): void {
         this.manager.destroyGameObject(gameObject);
-    }
-
-    /**
-     * Destroy one game objects by its name
-     * @param name The name of the game object
-     */
-    public static destroyGameObjectByName(name: string): void {
-        this.destroyGameObject(this.findGameObjectByName(name));
     }
 }

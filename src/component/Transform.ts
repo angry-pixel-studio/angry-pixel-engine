@@ -1,29 +1,23 @@
 import { TransformComponent } from "../core/Component";
 import { Rotation } from "../math/Rotation";
 import { Vector2 } from "../math/Vector2";
-import { ComponentTypes } from "./ComponentTypes";
 
 export class Transform extends TransformComponent {
+    public readonly allowMultiple: boolean = false;
+
+    public parentScale: boolean = true;
+    public parentRotation: boolean = true;
+
     private _position: Vector2 = new Vector2();
     private _scale: Vector2 = new Vector2(1, 1);
     private _rotation: Rotation = new Rotation();
     private _innerPosition: Vector2 = new Vector2();
     private _parent: Transform | null = null;
 
-    public parentScale: boolean = true;
-    public parentRotation: boolean = true;
-
     private cache: Vector2 = new Vector2();
     private lastParentRadians: number = 0;
     private lastPosition: Vector2 = new Vector2();
     private scaledInnerPosition: Vector2 = new Vector2();
-
-    constructor() {
-        super();
-
-        this.allowMultiple = false;
-        this.type = ComponentTypes.Transform;
-    }
 
     public get position(): Vector2 {
         return this._position;
@@ -61,28 +55,23 @@ export class Transform extends TransformComponent {
         return this._parent;
     }
 
-    public set parent(parent: Transform | null) {
-        this._parent = parent;
-        if (this._parent !== null) {
-            this.updateInnerPositionFromParent();
-        }
-    }
-
     protected update(): void {
+        this.setParent();
+
         if (this._parent !== null) {
-            if (this.lastPosition.equals(this._position) === false) {
-                this.updateInnerPositionFromParent();
-            }
             this.setPositionFromParent();
-        } else {
-            this._innerPosition.copy(this._position);
         }
 
         this.lastPosition.copy(this._position);
     }
 
-    private updateInnerPositionFromParent(): void {
-        Vector2.subtract(this._innerPosition, this._position, this._parent.position);
+    private setParent(): void {
+        if (this.gameObject.parent !== null && this._parent !== this.gameObject.parent.transform) {
+            this._parent = this.gameObject.parent.transform;
+            Vector2.subtract(this._innerPosition, this._position, this._parent.position);
+        } else if (this.gameObject.parent === null) {
+            this._parent = null;
+        }
     }
 
     private setPositionFromParent(): void {

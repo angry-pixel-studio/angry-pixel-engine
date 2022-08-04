@@ -6,6 +6,7 @@ import { Tileset } from "./Tileset";
 import { TileData } from "./TileData";
 import { Tile } from "./Tile";
 import { TilemapRenderData, TileRenderData } from "../../../rendering/renderData/TilemapRenderData";
+import { InitOptions } from "../../../core/GameActor";
 
 export type Flip = { h: boolean; v: boolean };
 export type Offset = { x: number; y: number };
@@ -26,7 +27,7 @@ export type TileToProcess = {
     offset: Offset;
 };
 
-export interface TilemapRendererConfig {
+export interface TilemapRendererOptions extends InitOptions {
     tileset: Tileset;
     renderOrder?: RenderOrder;
     smooth?: boolean;
@@ -35,12 +36,12 @@ export interface TilemapRendererConfig {
 }
 
 export abstract class TilemapRenderer extends RenderComponent {
-    public readonly tileset: Tileset;
-    public readonly renderOrder: RenderOrder = "center";
-    public readonly smooth: boolean = false;
-    public readonly textureCorrection: number = null;
-    public readonly tileScale: Vector2 =
-        container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
+    public readonly allowMultiple: boolean = false;
+    public tileset: Tileset;
+    public renderOrder: RenderOrder = "center";
+    public smooth: boolean = false;
+    public textureCorrection: number = null;
+    public tileScale: Vector2 = container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
 
     protected tileWidth: number = 0;
     protected tileHeight: number = 0;
@@ -62,11 +63,7 @@ export abstract class TilemapRenderer extends RenderComponent {
 
     private cacheV2: Vector2 = new Vector2();
 
-    constructor(config: TilemapRendererConfig) {
-        super();
-
-        this.allowMultiple = false;
-
+    protected init(config: TilemapRendererOptions): void {
         this.tileset = config.tileset;
         this.tileScale = config.tileScale ?? this.tileScale;
         this.smooth = config.smooth ?? this.smooth;

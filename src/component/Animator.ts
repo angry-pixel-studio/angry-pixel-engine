@@ -5,9 +5,9 @@ import { Animation } from "./Animation";
 import { TimeManager } from "../core/managers/TimeManager";
 import { container } from "../core/Game";
 import { Exception } from "../utils/Exception";
-import { ComponentTypes } from "./ComponentTypes";
+import { InitOptions } from "../core/GameActor";
 
-export interface AnimatorConfig {
+export interface AnimatorOptions extends InitOptions {
     spriteRenderer: SpriteRenderer;
 }
 
@@ -17,11 +17,8 @@ export class Animator extends EngineComponent {
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
     private currentAnimation: AnimationPlayer = null;
 
-    constructor(config: AnimatorConfig) {
-        super();
-
-        this.type = ComponentTypes.Animator;
-        this.spriteRenderer = config.spriteRenderer;
+    protected init({ spriteRenderer }: AnimatorOptions): void {
+        this.spriteRenderer = spriteRenderer;
     }
 
     protected update(): void {
@@ -32,7 +29,7 @@ export class Animator extends EngineComponent {
         this.currentAnimation.playFrame(this.timeManager.deltaTime);
 
         if (this.currentAnimation.restarted === true && this.currentAnimation.loop === false) {
-            this.stopAnimation();
+            this.currentAnimation = null;
         } else {
             this.spriteRenderer.sprite = this.currentAnimation.sprite;
         }
@@ -54,15 +51,13 @@ export class Animator extends EngineComponent {
             throw new Exception(`Animation with name ${name} does not exist.`);
         }
 
+        this.stopAnimation();
         this.currentAnimation = this.animations.get(name);
     }
 
     public stopAnimation(): void {
-        if (this.active === false) {
-            return;
-        }
-
         if (this.currentAnimation !== null) {
+            this.currentAnimation.reset();
             this.currentAnimation = null;
         }
     }
@@ -97,6 +92,12 @@ class AnimationPlayer {
 
     public get animation(): Animation {
         return this._animation;
+    }
+
+    public reset(): void {
+        this.currentFrame = 0;
+        this.frameTime = 0;
+        this._restarted = true;
     }
 
     public playFrame(deltaTime: number): void {

@@ -1,86 +1,43 @@
-import { GameObjectFactory, GameObjectManager } from "./managers/GameObjectManager";
 import { SceneManager } from "./managers/SceneManager";
 import { container } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
+import { GameActor } from "./GameActor";
 
-export abstract class Component {
-    private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
-    protected gameObjectManager: GameObjectManager = container.getSingleton<GameObjectManager>("GameObjectManager");
+export type ComponentClass<T extends Component = Component> = new (gameObject: GameObject, name?: string) => T;
+
+export abstract class Component extends GameActor {
+    private readonly sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
 
     public readonly id: string = uuid();
-    public type: string;
-    public name: string;
-    public gameObject: GameObject;
-    public allowMultiple: boolean = true;
+    public readonly name: string;
+    public readonly gameObject: GameObject;
+    public readonly allowMultiple: boolean = true;
 
     private _active: boolean = true;
-    private started: boolean = false;
 
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.Update;
+    constructor(gameObject: GameObject, name: string = "") {
+        super();
+
+        this.gameObject = gameObject;
+        this.name = name;
     }
 
     public get active(): boolean {
         return this._active;
     }
 
-    public setActive(active: boolean): void {
+    public set active(active: boolean) {
         this._active = active;
-        this.activeStateChange();
-    }
-
-    public dispatch(event: FrameEvent): void {
-        if (this._active === false || this.gameObject.active === false) return;
-
-        if (event === FrameEvent.Init) {
-            this.init();
-        } else if (event === FrameEvent.Start && this.started === false) {
-            this.start();
-            this.started = true;
-        } else if (event === this.updateEvent && this.started === true) {
-            this.update();
-        } else if (event === FrameEvent.Destroy) {
-            this.destroy();
-            this._destroy();
-        }
-    }
-
-    /**
-     * This method is called only once.
-     * Recommended for GameObject cration.
-     */
-    protected init(): void {
-        return;
-    }
-
-    /**
-     * This method is called only once.
-     */
-    protected start(): void {
-        return;
-    }
-
-    /**
-     * This method is called on every frame.
-     */
-    protected update(): void {
-        return;
-    }
-
-    /**
-     * This method is called before the component is destroyed.
-     */
-    protected destroy(): void {
-        return;
+        this.onActiveChange();
     }
 
     /**
      * This method is called when the active state changes.
      */
-    protected activeStateChange(): void {
+    protected onActiveChange(): void {
         return;
     }
 
@@ -92,152 +49,100 @@ export abstract class Component {
     }
 
     /**
-     * @param gameObjectFactory The factory function for the game object
-     * @param name The name of the game object, this must not be used by another game object
-     * @returns The added game object
+     * @returns The GameObject to which this component is attached
      */
-    protected addGameObject<T extends GameObject>(gameObjectFactory: GameObjectFactory, name: string): T {
-        return this.gameObjectManager.addGameObject(gameObjectFactory, name) as T;
+    protected getGameObject<T extends GameObject>(): T {
+        return this.gameObject as T;
     }
 
     /**
-     * @param name The name of the component to find
-     * @returns The found component
-     */
-    protected getComponentByName<T extends Component>(name: string): T {
-        return this.gameObject.getComponentByName<T>(name);
-    }
-
-    /**
-     * @param type The type of the component to find
-     * @returns The found component
-     */
-    protected getComponentByType<T extends Component>(type: string): T {
-        return this.gameObject.getComponentByType<T>(type);
-    }
-
-    /**
-     * @param type The type of the components to find
+     * Returns all the components in the game object.
      * @returns The found components
      */
-    protected getComponentsByType<T extends Component>(type: string): T[] {
-        return this.gameObject.getComponentsByType<T>(type);
+    public getComponents(): Component[];
+    /**
+     * Returns all the components for the given class in the game object.
+     * @param componentClass The class of the components
+     * @returns The found components
+     */
+    public getComponents<T extends Component>(componentClass: ComponentClass<T>): T[];
+    public getComponents<T extends Component>(componentClass?: ComponentClass<T>): T[] {
+        return (
+            componentClass ? this.gameObject.getComponents(componentClass) : this.gameObject.getComponents()
+        ) as T[];
     }
 
     /**
-     * @param name The name of the game object to find
-     * @returns The found game object
+     * Returns the first component found for the given class, or undefined otherwise.
+     * @param componentClass The class of the component
+     * @returns The found component
      */
-    protected findGameObjectByName<T extends GameObject>(name: string): T {
-        return this.gameObjectManager.findGameObjectByName(name) as T;
+    public getComponent<T extends Component>(componentClass: ComponentClass<T>): T;
+    /**
+     * Returns the first component found for the given name, or undefined otherwise.
+     * @param name The name of the component
+     * @returns The found component
+     */
+    public getComponent<T extends Component>(name: string): T;
+    public getComponent<T extends Component>(filter: ComponentClass<T> | string): T {
+        return (
+            typeof filter === "string"
+                ? this.gameObject.getComponent(filter as string)
+                : this.gameObject.getComponent(filter as ComponentClass<T>)
+        ) as T;
     }
 
     /**
-     * @param tag The tag of the game objects to find
-     * @returns The found game objects
+     * Returns TRUE if the game object has a component for the given class, or FALSE otherwise
+     * @param componentClass The class of the component to find
+     * @returns boolean
      */
-    protected findGameObjectsByTag(tag: string): GameObject[] {
-        return this.gameObjectManager.findGameObjectsByTag(tag);
-    }
-
-    /**
-     * @param tag The tag of the game object to find
-     * @returns The found game object
-     */
-    protected findGameObjectByTag<T extends GameObject>(tag: string): T {
-        return this.gameObjectManager.findGameObjectByTag(tag) as T;
-    }
-
-    /**
-     * Destroy one game objects by its name
-     * @param name The name of the game object
-     */
-    protected destroyGameObjectByName(name: string): void {
-        this.destroyGameObject(this.findGameObjectByName(name));
-    }
-
-    /**
-     * Destroy the game objects
-     * @param gameObject The game object to destory
-     */
-    protected destroyGameObject(gameObject: GameObject): void {
-        this.gameObjectManager.destroyGameObject(gameObject);
-    }
-
+    public hasComponent<T extends Component>(componentClass: ComponentClass<T>): boolean;
     /**
      * @param name The name of the component to find
-     * @returns TRUE or FALSE
+     * @returns boolean
      */
-    public hasComponentOfName(name: string): boolean {
-        return this.getComponentByName(name) !== null;
+    public hasComponent(name: string): boolean;
+    public hasComponent<T extends Component>(filter: ComponentClass<T> | string): boolean {
+        return typeof filter === "string"
+            ? this.gameObject.hasComponent(filter as string)
+            : this.gameObject.hasComponent(filter as ComponentClass<T>);
     }
 
-    /**
-     * @param type The type of the component to find
-     * @returns TRUE or FALSE
-     */
-    public hasComponentOfType(type: string): boolean {
-        return this.getComponentByType(type) !== null;
+    public removeComponent(component: Component): void {
+        this.gameObject.removeComponent(component);
     }
 
-    /**
-     * @param name The name of the component to remove
-     */
-    public removeComponentByName(name: string): void {
-        this.gameObject.removeComponentByName(name);
-    }
-
-    /**
-     * @param type The tyepe of the component to remove
-     */
-    public removeComponentByType(type: string): void {
-        this.gameObject.removeComponentByType(type);
-    }
-
-    private _destroy(): void {
+    protected _destroy(): void {
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
     }
 }
 
 export abstract class EngineComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdateEngine;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdateEngine;
 }
 
 export abstract class ColliderComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdateCollider;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdateCollider;
 }
 
 export abstract class PhysicsComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdatePhysics;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdatePhysics;
 }
 
 export abstract class TransformComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdateTransform;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdateTransform;
 }
 
 export abstract class PreRenderComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdatePreRender;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdatePreRender;
 }
 
 export abstract class CameraComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdateCamera;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdateCamera;
 }
 
 export abstract class RenderComponent extends Component {
-    protected get updateEvent(): FrameEvent {
-        return FrameEvent.UpdateRender;
-    }
+    protected readonly updateEvent: FrameEvent = FrameEvent.UpdateRender;
 }

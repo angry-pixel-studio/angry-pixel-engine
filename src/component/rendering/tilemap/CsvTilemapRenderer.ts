@@ -1,8 +1,7 @@
 import { Tile } from "./Tile";
-import { ComponentTypes } from "../../ComponentTypes";
-import { Flip, TilemapRenderer, TilemapRendererConfig } from "./TilemapRenderer";
+import { Flip, TilemapRenderer, TilemapRendererOptions } from "./TilemapRenderer";
 
-export interface CsvTilemapConfig extends TilemapRendererConfig {
+export interface CsvTilemapOptions extends TilemapRendererOptions {
     tilemapData: string;
     alpha?: number;
     tintColor?: string;
@@ -15,14 +14,12 @@ const flipB = 3; // flip both horizontal and vertical
 const layer = "csv";
 
 export class CsvTilemapRenderer extends TilemapRenderer {
-    public readonly tilemapData: string;
-    public readonly alpha: number = 1;
-    public readonly tintColor: string = null;
+    public tilemapData: string;
+    public alpha: number = 1;
+    public tintColor: string = null;
 
-    constructor(config: CsvTilemapConfig) {
-        super(config);
-
-        this.type = ComponentTypes.CsvTilemapRenderer;
+    protected init(config: CsvTilemapOptions): void {
+        super.init(config);
 
         this.tilemapData = config.tilemapData;
         this.alpha = config.alpha ?? this.alpha;
