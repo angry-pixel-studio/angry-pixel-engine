@@ -19,7 +19,7 @@ export class AssetManagerFacade {
      * @returns The created image element
      */
     public static loadImage(url: string): HTMLImageElement {
-        return this.assetManager.laadImage(url);
+        return this.assetManager.loadImage(url);
     }
 
     /**

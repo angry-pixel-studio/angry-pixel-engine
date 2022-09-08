@@ -18,6 +18,7 @@ export interface GameConfig {
     canvasColor?: string;
     physicsFramerate?: number;
     spriteDefaultScale?: Vector2 | null;
+    headless?: boolean;
     collisions?: {
         method?: CollisionMethodConfig;
         quadTreeBounds?: Rectangle | null; // TODO: implement different bounds per scene
@@ -40,6 +41,7 @@ const defaultConfig: GameConfig = {
     canvasColor: "#000000",
     spriteDefaultScale: null,
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
+    headless: false,
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadMaxLevel: DEFAULT_MAX_LEVELS,

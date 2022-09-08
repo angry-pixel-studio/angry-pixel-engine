@@ -171,9 +171,11 @@ export class IterationManager {
     private dispatchFrameEvent(event: FrameEvent): void {
         if (event === FrameEvent.Start || event === FrameEvent.Update) {
             this.currentScene.dispatch(event);
-            this.gameObjects.forEach((gameObject) => gameObject.dispatch(event));
+            this.gameObjects
+                .filter((gameObject) => gameObject.active)
+                .forEach((gameObject) => gameObject.dispatch(event));
         }
 
-        this.components.forEach((component) => component.dispatch(event));
+        this.components.filter((component) => component.active).forEach((component) => component.dispatch(event));
     }
 }

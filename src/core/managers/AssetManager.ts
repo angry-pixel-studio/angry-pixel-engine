@@ -18,7 +18,7 @@ export class AssetManager {
         return this.assets.reduce((prev: boolean, asset: Asset) => prev && asset.loaded, true);
     }
 
-    public laadImage(url: string): HTMLImageElement {
+    public loadImage(url: string): HTMLImageElement {
         const asset = this.createAsset(url, AssetType.Image);
 
         asset.element = new Image();
@@ -51,10 +51,6 @@ export class AssetManager {
 
     public getImage(url: string): HTMLImageElement {
         return this.getAsset<HTMLImageElement>(url, AssetType.Image);
-    }
-
-    public getVideo(url: string): HTMLVideoElement {
-        return this.getAsset<HTMLVideoElement>(url, AssetType.Video);
     }
 
     public getAudio(url: string): HTMLAudioElement {
