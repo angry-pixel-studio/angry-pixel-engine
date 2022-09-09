@@ -6,7 +6,7 @@ import { SceneManager } from "../core/managers/SceneManager";
 import { container } from "./Game";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
-import { FrameEvent } from "./managers/IterationManager";
+import { FrameEvent } from "./managers/iteration/FrameEvent";
 import { GameActor, InitOptions } from "./GameActor";
 
 export const LAYER_DEFAULT = "Default";

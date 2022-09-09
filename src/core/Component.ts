@@ -3,7 +3,7 @@ import { container } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
-import { FrameEvent } from "./managers/IterationManager";
+import { FrameEvent } from "./managers/iteration/FrameEvent";
 import { GameActor } from "./GameActor";
 
 export type ComponentClass<T extends Component = Component> = new (gameObject: GameObject, name?: string) => T;

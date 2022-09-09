@@ -5,8 +5,8 @@ import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/QuadTree";
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
-import { IterationManager } from "../core/managers/IterationManager";
 import { CollisionMatrix } from "../physics/collision/CollisionManager";
+import { IIterationManager } from "./managers/iteration/IIterationManager";
 
 export const container: Container = new Container();
 
@@ -52,7 +52,7 @@ const defaultConfig: GameConfig = {
 export class Game {
     // managers
     private sceneManager: SceneManager;
-    private iterationManager: IterationManager;
+    private iterationManager: IIterationManager;
 
     // state
     private _config: GameConfig;
@@ -75,7 +75,7 @@ export class Game {
         loadDependencies(container, this._config);
 
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
-        this.iterationManager = container.getSingleton<IterationManager>("IterationManager");
+        this.iterationManager = container.getSingleton<IIterationManager>("IterationManager");
     }
 
     /**

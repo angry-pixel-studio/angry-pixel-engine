@@ -28,7 +28,7 @@ import { ContextRenderer } from "../../rendering/ContextRenderer";
 import { Exception } from "../../utils/Exception";
 import { CullingService } from "../../rendering/CullingService";
 import { TilemapRenderer } from "../../rendering/webGL/renderer/TilemapRenderer";
-import { IterationManager } from "../managers/IterationManager";
+import { BrowserIterationManager } from "../managers/iteration/BrowserIterationManager";
 import { AssetManagerFacade } from "../facades/AssetManagerFacade";
 import { DomManagerFacade } from "../facades/DomManagerFacade";
 import { InputManagerFacade } from "../facades/InputManagerFacade";
@@ -42,48 +42,55 @@ import { AABBResolver } from "../../physics/collision/resolver/AABBResolver";
 import { CircumferenceAABBResolver } from "../../physics/collision/resolver/CircumferenceAABBResolver";
 import { CircumferenceResolver } from "../../physics/collision/resolver/CircumferenceResolver";
 import { SatResolver } from "../../physics/collision/resolver/SatResolver";
+import { HeadlessIterationManager } from "../managers/iteration/HeadlessIterationManager";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
 
-    container.add(
-        "DomManager",
-        () => new DomManager(gameConfig.containerNode, gameConfig.gameWidth, gameConfig.gameHeight)
-    );
-
-    const domManager: DomManager = container.getSingleton<DomManager>("DomManager");
-
     container.add("TimeManager", () => new TimeManager(gameConfig.physicsFramerate));
+    container.add("SceneManager", () => new SceneManager(container.getConstant<Game>("Game")));
+    container.add("GameObjectManager", () => new GameObjectManager());
 
-    renderingDependencies(container, gameConfig, domManager);
-    inputDependencies(container, domManager);
     physicsDependencies(container, gameConfig);
 
-    container.add(
-        "SceneManager",
-        () =>
-            new SceneManager(
-                container.getConstant<Game>("Game"),
-                container.getSingleton<RenderManager>("RenderManager")
-            )
-    );
-    container.add("GameObjectManager", () => new GameObjectManager());
-    container.add("AssetManager", () => new AssetManager());
-    container.add(
-        "IterationManager",
-        () =>
-            new IterationManager(
-                container.getSingleton<TimeManager>("TimeManager"),
-                container.getSingleton<CollisionManager>("CollisionManager"),
-                container.getSingleton<RigidBodyManager>("RigidBodyManager"),
-                container.getSingleton<RenderManager>("RenderManager"),
-                container.getSingleton<InputManager>("InputManager"),
-                container.getSingleton<GameObjectManager>("GameObjectManager"),
-                container.getSingleton<SceneManager>("SceneManager")
-            )
-    );
+    if (!gameConfig.headless) {
+        container.add(
+            "DomManager",
+            () => new DomManager(gameConfig.containerNode, gameConfig.gameWidth, gameConfig.gameHeight)
+        );
 
-    initializeFacades(container);
+        renderingDependencies(container, gameConfig);
+        inputDependencies(container);
+        container.add("AssetManager", () => new AssetManager());
+
+        container.add(
+            "IterationManager",
+            () =>
+                new BrowserIterationManager(
+                    container.getSingleton<TimeManager>("TimeManager"),
+                    container.getSingleton<CollisionManager>("CollisionManager"),
+                    container.getSingleton<RigidBodyManager>("RigidBodyManager"),
+                    container.getSingleton<RenderManager>("RenderManager"),
+                    container.getSingleton<InputManager>("InputManager"),
+                    container.getSingleton<GameObjectManager>("GameObjectManager"),
+                    container.getSingleton<SceneManager>("SceneManager")
+                )
+        );
+    } else {
+        container.add(
+            "IterationManager",
+            () =>
+                new HeadlessIterationManager(
+                    container.getSingleton<TimeManager>("TimeManager"),
+                    container.getSingleton<CollisionManager>("CollisionManager"),
+                    container.getSingleton<RigidBodyManager>("RigidBodyManager"),
+                    container.getSingleton<GameObjectManager>("GameObjectManager"),
+                    container.getSingleton<SceneManager>("SceneManager")
+                )
+        );
+    }
+
+    initializeFacades(container, gameConfig);
 };
 
 const physicsDependencies = (container: Container, gameConfig: GameConfig): void => {
@@ -116,7 +123,8 @@ const physicsDependencies = (container: Container, gameConfig: GameConfig): void
     );
 };
 
-const renderingDependencies = (container: Container, gameConfig: GameConfig, domManager: DomManager): void => {
+const renderingDependencies = (container: Container, gameConfig: GameConfig): void => {
+    const domManager = container.getSingleton<DomManager>("DomManager");
     const webglContextVersion: WebGLContextVersion = getWebGLContextVersion();
 
     if (webglContextVersion !== null) {
@@ -228,7 +236,9 @@ const webGLDependencies = (
     );
 };
 
-const inputDependencies = (container: Container, domManager: DomManager): void => {
+const inputDependencies = (container: Container): void => {
+    const domManager = container.getSingleton<DomManager>("DomManager");
+
     container.add(
         "InputManager",
         () =>
@@ -249,10 +259,13 @@ const getWebGLContextVersion = (): WebGLContextVersion | null => {
         : null;
 };
 
-const initializeFacades = (container: Container): void => {
-    AssetManagerFacade.initialize(container.getSingleton<AssetManager>("AssetManager"));
-    DomManagerFacade.initialize(container.getSingleton<DomManager>("DomManager"));
-    InputManagerFacade.initialize(container.getSingleton<InputManager>("InputManager"));
+const initializeFacades = (container: Container, gameConfig: GameConfig): void => {
+    if (!gameConfig.headless) {
+        AssetManagerFacade.initialize(container.getSingleton<AssetManager>("AssetManager"));
+        DomManagerFacade.initialize(container.getSingleton<DomManager>("DomManager"));
+        InputManagerFacade.initialize(container.getSingleton<InputManager>("InputManager"));
+    }
+
     SceneManagerFacade.initialize(container.getSingleton<SceneManager>("SceneManager"));
     TimeManagerFacade.initialize(container.getSingleton<TimeManager>("TimeManager"));
     GameObjectManagerFacade.initialize(container.getSingleton<GameObjectManager>("GameObjectManager"));

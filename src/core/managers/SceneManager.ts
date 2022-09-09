@@ -1,16 +1,12 @@
 import { Game } from "../Game";
 import { Scene } from "../Scene";
 import { Exception } from "../../utils/Exception";
-import { RenderManager } from "../../rendering/RenderManager";
-import { FrameEvent } from "./IterationManager";
+import { FrameEvent } from "./iteration/FrameEvent";
 
 export type SceneClass = new (name: string, game: Game) => Scene;
 type SceneConstructor = () => Scene;
 
 export class SceneManager {
-    private game: Game = null;
-    private renderManager: RenderManager;
-
     private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
     private currentScene: Scene = null;
     private openingSceneName: string = null;
@@ -18,10 +14,7 @@ export class SceneManager {
 
     public currentSceneName: string;
 
-    constructor(game: Game, renderManager: RenderManager) {
-        this.game = game;
-        this.renderManager = renderManager;
-    }
+    constructor(private game: Game) {}
 
     public getCurrentScene<T extends Scene>(): T {
         return this.currentScene as T;
@@ -77,8 +70,6 @@ export class SceneManager {
             this.currentScene.dispatch(FrameEvent.Destroy);
             this.currentScene = null;
             this.currentSceneName = null;
-
-            this.renderManager.clearData();
         }
     }
 }

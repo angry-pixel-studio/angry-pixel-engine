@@ -1,7 +1,7 @@
 import { container } from "./Game";
 import { GameObject, GameObjectClass } from "./GameObject";
 import { GameObjectManager } from "./managers/GameObjectManager";
-import { FrameEvent } from "./managers/IterationManager";
+import { FrameEvent } from "./managers/iteration/FrameEvent";
 
 export interface InitOptions {
     [key: string]: unknown;

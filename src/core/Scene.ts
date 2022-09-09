@@ -1,5 +1,6 @@
 import { GameCamera } from "../gameObject/GameCamera";
-import { Game } from "./Game";
+import { RenderManager } from "../rendering/RenderManager";
+import { container, Game } from "./Game";
 import { GameActor } from "./GameActor";
 
 export class Scene extends GameActor {
@@ -15,6 +16,10 @@ export class Scene extends GameActor {
 
     protected _destroy(): void {
         this.gameObjectManager.destroyAllGameObjects();
+
+        if (!this.game.config.headless) {
+            container.getSingleton<RenderManager>("RenderManager").clearData();
+        }
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
