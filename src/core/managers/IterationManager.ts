@@ -1,17 +1,40 @@
-import { GameObjectManager } from "../GameObjectManager";
-import { SceneManager } from "../SceneManager";
-import { CollisionManager } from "../../../physics/collision/CollisionManager";
-import { RigidBodyManager } from "../../../physics/rigodBody/RigidBodyManager";
-import { TimeManager } from "../TimeManager";
-import { GameObject } from "../../GameObject";
-import { Component } from "../../Component";
-import { Scene } from "../../Scene";
-import { IIterationManager } from "./IIterationManager";
-import { FrameEvent } from "./FrameEvent";
+import { GameObjectManager } from "./GameObjectManager";
+import { SceneManager } from "./SceneManager";
+import { InputManager } from "../../input/InputManager";
+import { CollisionManager } from "../../physics/collision/CollisionManager";
+import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
+import { RenderManager } from "../../rendering/RenderManager";
+import { TimeManager } from "./TimeManager";
+import { GameObject } from "../GameObject";
+import { Component } from "../Component";
+import { Scene } from "../Scene";
 
-export class HeadlessIterationManager implements IIterationManager {
+export enum FrameEvent {
+    Init,
+    Start,
+    Update,
+    UpdateEngine,
+    UpdateCollider,
+    UpdatePhysics,
+    UpdateTransform,
+    UpdatePreRender,
+    UpdateCamera,
+    UpdateRender,
+    Destroy,
+}
+
+export interface IIterationManager {
+    running: boolean;
+    start(): void;
+    pause(): void;
+    resume(): void;
+    stop(): void;
+}
+
+export class IterationManager implements IIterationManager {
     public running: boolean = false;
 
+    private gameLoopAccumulator: number = 0;
     private currentScene: Scene;
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
@@ -20,6 +43,8 @@ export class HeadlessIterationManager implements IIterationManager {
         private readonly timeManager: TimeManager,
         private readonly collisionManager: CollisionManager,
         private readonly physicsManager: RigidBodyManager,
+        private readonly renderManager: RenderManager,
+        private readonly inputManager: InputManager,
         private readonly gameObjectManager: GameObjectManager,
         private readonly sceneManager: SceneManager
     ) {}
@@ -38,7 +63,9 @@ export class HeadlessIterationManager implements IIterationManager {
 
     public stop(): void {
         this.running = false;
+
         this.sceneManager.unloadCurrentScene();
+        this.renderManager.clearCanvas();
     }
 
     private startLoop(loadOpeningScene: boolean): void {
@@ -52,12 +79,30 @@ export class HeadlessIterationManager implements IIterationManager {
             this.sceneManager.loadOpeningScene();
         }
 
-        this.asyncGameLoop();
+        // this.gameLogicIteration();
+        this.requestAnimationLoop(window.performance.now());
 
         // physics fixed at its own frame rate
         if (this.timeManager.gameFramerate !== this.timeManager.physicsFramerate) {
             this.asyncPhysicsLoop();
         }
+    }
+
+    private requestAnimationLoop(time: number): void {
+        if (!this.running) return;
+
+        this.timeManager.updateForBrowser(time * 0.001);
+
+        this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
+
+        if (this.gameLoopAccumulator >= this.timeManager.minGameDeltatime) {
+            this.gameLogicIteration(time * 0.001);
+            this.gameLoopAccumulator -= this.timeManager.minGameDeltatime;
+        }
+
+        this.renderIteration();
+
+        window.requestAnimationFrame((time: number) => this.requestAnimationLoop(time));
     }
 
     private gameLogicIteration(time: number): void {
@@ -67,6 +112,8 @@ export class HeadlessIterationManager implements IIterationManager {
         this.physicsManager.clear();
         // starts all game objects and components
         this.dispatchFrameEvent(FrameEvent.Start);
+        // updates input controllers
+        this.inputManager.update();
         // updates all game objects and custom components
         this.dispatchFrameEvent(FrameEvent.Update);
         // updates engine components
@@ -80,6 +127,15 @@ export class HeadlessIterationManager implements IIterationManager {
         }
 
         this.sceneManager.update();
+    }
+
+    private renderIteration(): void {
+        this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
+        this.dispatchFrameEvent(FrameEvent.UpdateCamera);
+        this.dispatchFrameEvent(FrameEvent.UpdateRender);
+
+        this.renderManager.clearCanvas();
+        this.renderManager.render();
     }
 
     private physicsIteration(time: number): void {
@@ -97,26 +153,15 @@ export class HeadlessIterationManager implements IIterationManager {
         this.collisionManager.clear();
     }
 
-    private asyncGameLoop(): void {
-        if (!this.running) return;
-
-        const time: number = process.uptime();
-
-        if (!document.hidden) this.gameLogicIteration(time);
-
-        const timeDiff = 1 / this.timeManager.gameFramerate - (process.uptime() - time);
-        setTimeout(() => this.asyncGameLoop(), Math.max(0.0001, timeDiff) * 1000);
-    }
-
     private asyncPhysicsLoop(): void {
         if (!this.running) return;
 
-        const time: number = process.uptime();
+        const time: number = window.performance.now() * 0.001;
 
         if (!document.hidden) this.physicsIteration(time);
 
-        const timeDiff = 1 / this.timeManager.physicsFramerate - (process.uptime() - time);
-        setTimeout(() => this.asyncPhysicsLoop(), Math.max(0.0001, timeDiff) * 1000);
+        const timeDiff = 1 / this.timeManager.physicsFramerate - (window.performance.now() * 0.001 - time);
+        window.setTimeout(() => this.asyncPhysicsLoop(), Math.max(0.0001, timeDiff) * 1000);
     }
 
     private load(): void {

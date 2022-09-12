@@ -7,7 +7,9 @@ export class Scene extends GameActor {
     constructor(public readonly name: string, public readonly game: Game) {
         super();
 
-        this.addGameObject(GameCamera);
+        if (!this.game.config.headless) {
+            this.addGameObject(GameCamera);
+        }
     }
 
     public get gameCamera(): GameCamera {
@@ -17,9 +19,7 @@ export class Scene extends GameActor {
     protected _destroy(): void {
         this.gameObjectManager.destroyAllGameObjects();
 
-        if (!this.game.config.headless) {
-            container.getSingleton<RenderManager>("RenderManager").clearData();
-        }
+        container.getSingleton<RenderManager>("RenderManager").clearData();
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);

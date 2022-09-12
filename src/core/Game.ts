@@ -6,12 +6,12 @@ import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/Quad
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
 import { CollisionMatrix } from "../physics/collision/CollisionManager";
-import { IIterationManager } from "./managers/iteration/IIterationManager";
+import { IIterationManager } from "./managers/IterationManager";
 
 export const container: Container = new Container();
 
 export interface GameConfig {
-    containerNode: HTMLElement | null;
+    containerNode?: HTMLElement | null;
     gameWidth?: number;
     gameHeight?: number;
     debugEnabled?: boolean;

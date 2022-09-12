@@ -11,6 +11,11 @@ class Asset {
     public element: HTMLImageElement | HTMLVideoElement | HTMLAudioElement = null;
 }
 
+export interface IAssetManager {
+    getAssetsLoaded(): boolean;
+    loadImage(url: string): HTMLImageElement;
+}
+
 export class AssetManager {
     private assets: Asset[] = [];
 

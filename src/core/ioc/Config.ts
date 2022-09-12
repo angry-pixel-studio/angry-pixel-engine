@@ -28,7 +28,7 @@ import { ContextRenderer } from "../../rendering/ContextRenderer";
 import { Exception } from "../../utils/Exception";
 import { CullingService } from "../../rendering/CullingService";
 import { TilemapRenderer } from "../../rendering/webGL/renderer/TilemapRenderer";
-import { BrowserIterationManager } from "../managers/iteration/BrowserIterationManager";
+import { IterationManager } from "../managers/IterationManager";
 import { AssetManagerFacade } from "../facades/AssetManagerFacade";
 import { DomManagerFacade } from "../facades/DomManagerFacade";
 import { InputManagerFacade } from "../facades/InputManagerFacade";
@@ -42,13 +42,12 @@ import { AABBResolver } from "../../physics/collision/resolver/AABBResolver";
 import { CircumferenceAABBResolver } from "../../physics/collision/resolver/CircumferenceAABBResolver";
 import { CircumferenceResolver } from "../../physics/collision/resolver/CircumferenceResolver";
 import { SatResolver } from "../../physics/collision/resolver/SatResolver";
-import { HeadlessIterationManager } from "../managers/iteration/HeadlessIterationManager";
+import { HeadlessIterationManager } from "../managers/HeadlessIterationManager";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
 
     container.add("TimeManager", () => new TimeManager(gameConfig.physicsFramerate));
-    container.add("SceneManager", () => new SceneManager(container.getConstant<Game>("Game")));
     container.add("GameObjectManager", () => new GameObjectManager());
 
     physicsDependencies(container, gameConfig);
@@ -66,7 +65,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
         container.add(
             "IterationManager",
             () =>
-                new BrowserIterationManager(
+                new IterationManager(
                     container.getSingleton<TimeManager>("TimeManager"),
                     container.getSingleton<CollisionManager>("CollisionManager"),
                     container.getSingleton<RigidBodyManager>("RigidBodyManager"),
@@ -89,6 +88,15 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
                 )
         );
     }
+
+    container.add(
+        "SceneManager",
+        () =>
+            new SceneManager(
+                container.getConstant<Game>("Game"),
+                !gameConfig.headless ? container.getSingleton<RenderManager>("RenderManager") : undefined
+            )
+    );
 
     initializeFacades(container, gameConfig);
 };

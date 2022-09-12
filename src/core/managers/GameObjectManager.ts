@@ -1,5 +1,5 @@
 import { GameObject, GameObjectClass } from "../GameObject";
-import { FrameEvent } from "./iteration/FrameEvent";
+import { FrameEvent } from "./IterationManager";
 import { InitOptions } from "../GameActor";
 
 export class GameObjectManager {
