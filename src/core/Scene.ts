@@ -19,8 +19,6 @@ export class Scene extends GameActor {
     protected _destroy(): void {
         this.gameObjectManager.destroyAllGameObjects();
 
-        container.getSingleton<RenderManager>("RenderManager").clearData();
-
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
     }
