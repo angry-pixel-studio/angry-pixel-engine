@@ -73,8 +73,8 @@ export class Sprite {
     }
 
     private onLoad(): void {
-        this._width = (this._width ?? this._image.naturalWidth) * this._scale.x;
-        this._height = (this._height ?? this._image.naturalHeight) * this._scale.y;
+        this._width = (this._width ?? this._image.naturalWidth) * Math.abs(this._scale.x);
+        this._height = (this._height ?? this._image.naturalHeight) * Math.abs(this._scale.y);
 
         this._loaded = true;
     }

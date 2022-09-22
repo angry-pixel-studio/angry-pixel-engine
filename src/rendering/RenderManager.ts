@@ -4,7 +4,15 @@ import { CameraData } from "./CameraData";
 import { CullingService } from "./CullingService";
 import { TilemapRenderData, TileRenderData } from "./renderData/TilemapRenderData";
 
-export class RenderManager {
+export interface IRenderManager {
+    clearCanvas(): void;
+    addRenderData(renderData: RenderData): void;
+    addCameraData(cameraData: CameraData): void;
+    render(): void;
+    clearData(): void;
+}
+
+export class RenderManager implements IRenderManager {
     private renderer: ContextRenderer;
     private cullingService: CullingService;
     private canvasColor: string;

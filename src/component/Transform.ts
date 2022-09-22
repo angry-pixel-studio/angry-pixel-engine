@@ -55,8 +55,16 @@ export class Transform extends TransformComponent {
         return this._parent;
     }
 
+    public set parent(parent: Transform | null) {
+        this._parent = parent;
+
+        if (this._parent !== null) {
+            Vector2.subtract(this._innerPosition, this._position, this._parent.position);
+        }
+    }
+
     protected update(): void {
-        this.setParent();
+        // this.setParent();
 
         if (this._parent !== null) {
             this.setPositionFromParent();

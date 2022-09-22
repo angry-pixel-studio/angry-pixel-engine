@@ -30,8 +30,17 @@ export class GameObjectManagerFacade {
      * Returns all the game objects in the scene.
      * @returns The found game objects
      */
-    public static findGameObjects(): GameObject[] {
-        return this.manager.findGameObjects();
+    public static findAllGameObjects(): GameObject[] {
+        return this.manager.findGameObjects<GameObject>();
+    }
+
+    /**
+     * Returns a collection of game objects found for the given class
+     * @param gameObjectClass The game object class to find
+     * @returns The found game objects
+     */
+    public static findGameObjects<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T[] {
+        return this.manager.findGameObjects<T>(gameObjectClass);
     }
 
     /**
