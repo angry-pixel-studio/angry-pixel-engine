@@ -21,7 +21,7 @@ export class GameObject extends GameActor {
     public layer: string = LAYER_DEFAULT;
     public ui: boolean = false;
     public keep: boolean = false;
-    public parent: GameObject | null = null;
+    private _parent: GameObject | null = null;
 
     private _active: boolean = true;
 
@@ -34,9 +34,9 @@ export class GameObject extends GameActor {
         super();
 
         this.name = name;
-        this.parent = parent ?? null;
-
         this.addComponent(Transform);
+
+        this.parent = parent ?? null; // using the setter instead of the private attribute
     }
 
     public get active(): boolean {
@@ -44,11 +44,22 @@ export class GameObject extends GameActor {
     }
 
     public set active(active: boolean) {
+        if (this._active === active) return;
+
         this._active = active;
 
         this.onActiveChange();
         this.updateComponentsActiveStatus();
         this.updateChildrenActiveStatus();
+    }
+
+    public get parent(): GameObject | null {
+        return this._parent;
+    }
+
+    public set parent(parent: GameObject | null) {
+        this._parent = parent;
+        this.transform.parent = parent !== null ? parent.transform : null;
     }
 
     private updateComponentsActiveStatus(): void {
@@ -191,7 +202,12 @@ export class GameObject extends GameActor {
         options?: InitOptions,
         name?: string
     ): T {
-        return this.gameObjectManager.addGameObject(gameObjectClass, options, this, name) as T;
+        const child = this.gameObjectManager.addGameObject<T>(gameObjectClass, options, this, name);
+
+        child.transform.innerPosition.set(0, 0);
+        child.transform.position.copy(this.transform.position);
+
+        return child;
     }
 
     /**

@@ -68,8 +68,17 @@ export abstract class GameActor {
      * Returns all the game objects in the scene.
      * @returns The found game objects
      */
-    protected findGameObjects(): GameObject[] {
-        return this.gameObjectManager.findGameObjects();
+    protected findAllGameObjects(): GameObject[] {
+        return this.gameObjectManager.findGameObjects<GameObject>();
+    }
+
+    /**
+     * Returns a collection of game objects found for the given class
+     * @param gameObjectClass The game object class to find
+     * @returns The found game objects
+     */
+    protected findGameObjects<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T[] {
+        return this.gameObjectManager.findGameObjects<T>(gameObjectClass);
     }
 
     /**
@@ -77,14 +86,14 @@ export abstract class GameActor {
      * @param gameObjectClass The game object class to find
      * @returns The found game object
      */
-    public findGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
+    protected findGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
     /**
      * Returns the first game object found for the given name, or undefined otherwise.
      * @param name The name of the game object to find
      * @returns The found game object
      */
-    public findGameObject<T extends GameObject>(name: string): T;
-    public findGameObject<T extends GameObject>(filter: GameObjectClass<T> | string): T {
+    protected findGameObject<T extends GameObject>(name: string): T;
+    protected findGameObject<T extends GameObject>(filter: GameObjectClass<T> | string): T {
         return typeof filter === "string"
             ? this.gameObjectManager.findGameObject<T>(filter as string)
             : this.gameObjectManager.findGameObject<T>(filter as GameObjectClass<T>);

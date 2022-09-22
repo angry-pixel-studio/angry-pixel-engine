@@ -1,6 +1,5 @@
 import { GameCamera } from "../gameObject/GameCamera";
-import { RenderManager } from "../rendering/RenderManager";
-import { container, Game } from "./Game";
+import { Game } from "./Game";
 import { GameActor } from "./GameActor";
 
 export class Scene extends GameActor {

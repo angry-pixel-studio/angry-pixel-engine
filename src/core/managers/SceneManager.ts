@@ -3,6 +3,7 @@ import { Scene } from "../Scene";
 import { Exception } from "../../utils/Exception";
 import { FrameEvent } from "./IterationManager";
 import { RenderManager } from "../../rendering/RenderManager";
+import { InitOptions } from "../GameActor";
 
 export type SceneClass = new (name: string, game: Game) => Scene;
 type SceneConstructor = () => Scene;
@@ -21,12 +22,19 @@ export class SceneManager {
         return this.currentScene as T;
     }
 
-    public addScene(sceneClass: SceneClass, name: string, openingScene: boolean = false): void {
+    public addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene: boolean = false): void {
         if (this.scenes.has(name)) {
             throw new Exception(`There is already a scene with the name '${name}'`);
         }
 
-        this.scenes.set(name, () => new sceneClass(name, this.game));
+        this.scenes.set(name, () => {
+            const scene = new sceneClass(name, this.game);
+
+            this.currentScene = scene;
+            scene.dispatch(FrameEvent.Init, options);
+
+            return scene;
+        });
 
         if (openingScene === true || this.openingSceneName === null) {
             this.openingSceneName = name;
@@ -62,8 +70,7 @@ export class SceneManager {
 
     private _loadScene(name: string) {
         this.unloadCurrentScene();
-        this.currentScene = this.scenes.get(name)();
-        this.currentScene.dispatch(FrameEvent.Init);
+        this.scenes.get(name)();
     }
 
     public unloadCurrentScene(): void {

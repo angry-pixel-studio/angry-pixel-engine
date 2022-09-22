@@ -7,6 +7,7 @@ import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
 import { CollisionMatrix } from "../physics/collision/CollisionManager";
 import { IIterationManager } from "./managers/IterationManager";
+import { InitOptions } from "./GameActor";
 
 export const container: Container = new Container();
 
@@ -97,10 +98,11 @@ export class Game {
      *
      * @param sceneClass the class of the scene
      * @param name The name of the scene
+     * @param options [optional] This options will be passed to the init method
      * @param openingScene [default FALSE] If this is the opening scene, set TRUE, FALSE instead
      */
-    public addScene(sceneClass: SceneClass, name: string, openingScene: boolean = false): void {
-        this.sceneManager.addScene(sceneClass, name, openingScene);
+    public addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene: boolean = false): void {
+        this.sceneManager.addScene(sceneClass, name, options, openingScene);
     }
 
     /**

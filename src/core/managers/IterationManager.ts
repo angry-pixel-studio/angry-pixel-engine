@@ -126,6 +126,8 @@ export class IterationManager implements IIterationManager {
             this.physicsIteration(time);
         }
 
+        this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
+
         this.sceneManager.update();
     }
 
