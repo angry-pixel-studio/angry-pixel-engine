@@ -99,15 +99,51 @@ export class GameObject extends GameActor {
     /**
      * Add a component to the game obejct
      * @param componentClass The class of the component
-     * @param options [optional] The options passed to the init method of the component
-     * @param name [optional] The name of the component
+     * @returns The added component
+     */
+    public addComponent<ComponentType extends Component = Component>(
+        componentClass: ComponentClass<ComponentType>
+    ): ComponentType;
+    /**
+     * Add a component to the game obejct
+     * @param componentClass The class of the component
+     * @param options The options passed to the init method of the component
      * @returns The added component
      */
     public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
         componentClass: ComponentClass<ComponentType>,
-        options?: OptionsType,
-        name?: string
+        options: OptionsType
+    ): ComponentType;
+    /**
+     * Add a component to the game obejct
+     * @param componentClass The class of the component
+     * @param name The name of the component
+     * @returns The added component
+     */
+    public addComponent<ComponentType extends Component = Component>(
+        componentClass: ComponentClass<ComponentType>,
+        name: string
+    ): ComponentType;
+    /**
+     * Add a component to the game obejct
+     * @param componentClass The class of the component
+     * @param options The options passed to the init method of the component
+     * @param name The name of the component
+     * @returns The added component
+     */
+    public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
+        componentClass: ComponentClass<ComponentType>,
+        options: OptionsType,
+        name: string
+    ): ComponentType;
+    public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
+        componentClass: ComponentClass<ComponentType>,
+        arg2?: OptionsType | string,
+        arg3?: string
     ): ComponentType {
+        const options = typeof arg2 === "string" ? undefined : arg2;
+        const name = typeof arg2 === "string" ? arg2 : arg3;
+
         const component = new componentClass(this, name);
         this.checkMultipleComponent(component, componentClass);
 

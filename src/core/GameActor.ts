@@ -4,7 +4,7 @@ import { GameObjectManager } from "./managers/GameObjectManager";
 import { FrameEvent } from "./managers/IterationManager";
 
 export interface InitOptions {
-    [key: string]: unknown;
+    [key: string]: any; // eslint-disable-line
 }
 
 export abstract class GameActor {
@@ -51,6 +51,29 @@ export abstract class GameActor {
     /**
      * Adds a new game object to the scene.
      * @param gameObjectClass The game object class
+     * @returns The added game object
+     * @returns
+     */
+    protected addGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
+    /**
+     * Adds a new game object to the scene.
+     * @param gameObjectClass The game object class
+     * @param name The name of the game object
+     * @returns The added game object
+     * @returns
+     */
+    protected addGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>, name: string): T;
+    /**
+     * Adds a new game object to the scene.
+     * @param gameObjectClass The game object class
+     * @param options This options will be passed to the init method
+     * @returns The added game object
+     * @returns
+     */
+    protected addGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>, options: InitOptions): T;
+    /**
+     * Adds a new game object to the scene.
+     * @param gameObjectClass The game object class
      * @param options [optional] This options will be passed to the init method
      * @param name [optional] The name of the game object
      * @returns The added game object
@@ -58,27 +81,39 @@ export abstract class GameActor {
      */
     protected addGameObject<T extends GameObject>(
         gameObjectClass: GameObjectClass<T>,
-        options?: InitOptions,
+        options?: InitOptions | string,
         name?: string
+    ): T;
+    protected addGameObject<T extends GameObject>(
+        gameObjectClass: GameObjectClass<T>,
+        arg2?: InitOptions | string,
+        arg3?: string
     ): T {
-        return this.gameObjectManager.addGameObject<T>(gameObjectClass, options, undefined, name);
+        if (typeof arg2 === "string") {
+            arg3 = arg2;
+            arg2 = {};
+        }
+
+        return this.gameObjectManager.addGameObject<T>(gameObjectClass, arg2, undefined, arg3);
     }
 
     /**
      * Returns all the game objects in the scene.
      * @returns The found game objects
      */
-    protected findAllGameObjects(): GameObject[] {
-        return this.gameObjectManager.findGameObjects<GameObject>();
-    }
-
+    protected findGameObjects(): GameObject[];
     /**
-     * Returns a collection of game objects found for the given class
+     * Returns a collection of found game objects for the given class
      * @param gameObjectClass The game object class to find
      * @returns The found game objects
      */
-    protected findGameObjects<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T[] {
-        return this.gameObjectManager.findGameObjects<T>(gameObjectClass);
+    protected findGameObjects<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T[];
+    protected findGameObjects<T extends GameObject>(gameObjectClass?: GameObjectClass<T>): T[] {
+        return (
+            gameObjectClass
+                ? this.gameObjectManager.findGameObjects<T>(gameObjectClass)
+                : this.gameObjectManager.findGameObjects<GameObject>()
+        ) as T[];
     }
 
     /**
