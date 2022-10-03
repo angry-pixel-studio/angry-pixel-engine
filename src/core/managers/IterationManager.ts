@@ -3,7 +3,7 @@ import { SceneManager } from "./SceneManager";
 import { InputManager } from "../../input/InputManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
 import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
-import { RenderManager } from "../../rendering/RenderManager";
+import { IRenderManager } from "angry-pixel-2d-renderer";
 import { TimeManager } from "./TimeManager";
 import { GameObject } from "../GameObject";
 import { Component } from "../Component";
@@ -43,7 +43,7 @@ export class IterationManager implements IIterationManager {
         private readonly timeManager: TimeManager,
         private readonly collisionManager: CollisionManager,
         private readonly physicsManager: RigidBodyManager,
-        private readonly renderManager: RenderManager,
+        private readonly renderManager: IRenderManager,
         private readonly inputManager: InputManager,
         private readonly gameObjectManager: GameObjectManager,
         private readonly sceneManager: SceneManager
@@ -65,7 +65,7 @@ export class IterationManager implements IIterationManager {
         this.running = false;
 
         this.sceneManager.unloadCurrentScene();
-        this.renderManager.clearCanvas();
+        this.renderManager.clearScreen("#000000");
     }
 
     private startLoop(loadOpeningScene: boolean): void {
@@ -136,7 +136,7 @@ export class IterationManager implements IIterationManager {
         this.dispatchFrameEvent(FrameEvent.UpdateCamera);
         this.dispatchFrameEvent(FrameEvent.UpdateRender);
 
-        this.renderManager.clearCanvas();
+        this.renderManager.clearScreen("#000000");
         this.renderManager.render();
     }
 

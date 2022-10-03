@@ -1,13 +1,18 @@
-import { RenderManager } from "../../rendering/RenderManager";
 import { container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
-import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
-import { Vector2 } from "../../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
 import { RenderComponent } from "../../core/Component";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Circumference } from "../../physics/collision/shape/Circumference";
 import { InitOptions } from "../../core/GameActor";
 import { RigidBody } from "../RigidBody";
+import {
+    GeometricShape,
+    IGeometricRenderData,
+    IRenderManager,
+    RenderDataType,
+    RenderLocation,
+} from "angry-pixel-2d-renderer";
 
 export interface BallColliderOptions extends InitOptions {
     radius: number;
@@ -102,14 +107,20 @@ export class BallCollider extends Collider {
 }
 
 class BallColliderRenderer extends RenderComponent {
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
 
-    private renderData: GeometricRenderData;
+    private renderData: IGeometricRenderData;
     private collider: ColliderData;
 
     protected init({ collider }: { collider: ColliderData }): void {
-        this.renderData = new GeometricRenderData();
-        this.renderData.debug = true;
+        this.renderData = {
+            type: RenderDataType.Geometric,
+            location: RenderLocation.WorldSpace,
+            layer: this.gameObject.layer,
+            position: new Vector2(),
+            shape: GeometricShape.Circumference,
+            color: "#00FF00",
+        };
         this.renderData.color = "#00FF00";
 
         this.collider = collider;
@@ -118,8 +129,7 @@ class BallColliderRenderer extends RenderComponent {
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
         this.renderData.shape = GeometricShape.Circumference;
-        this.renderData.position = this.collider.shape.position;
-        this.renderData.boundingBox = this.collider.shape.boundingBox;
+        this.renderData.position.copy(this.collider.shape.position);
         this.renderData.radius = (this.collider.shape as Circumference).radius;
 
         this.renderManager.addRenderData(this.renderData);

@@ -52,6 +52,7 @@
         "typescript": "^4.0.2"
     },
     "dependencies": {
+        "angry-pixel-2d-renderer": "file:../angry-pixel-2d-renderer",
         "gl-matrix": "^3.3.0"
     }
 }
