@@ -31,6 +31,7 @@ export * from "./component/Camera";
 export * from "./component/RigidBody";
 export * from "./component/Sprite";
 export * from "./component/Transform";
+export * from "./component/Button";
 
 // game objects
 export * from "./gameObject/GameCamera";
@@ -53,3 +54,4 @@ export * from "./input/TouchController";
 // others
 export { CollisionResolution } from "./physics/collision/resolver/CollisionResolver";
 export { ColliderData } from "./physics/collision/ColliderData";
+export { CollisionMatrix } from "./physics/collision/CollisionManager";

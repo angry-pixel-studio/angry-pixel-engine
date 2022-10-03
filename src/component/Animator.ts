@@ -7,6 +7,8 @@ import { container } from "../core/Game";
 import { Exception } from "../utils/Exception";
 import { InitOptions } from "../core/GameActor";
 
+const defaultAnimationName = "default";
+
 export interface AnimatorOptions extends InitOptions {
     spriteRenderer: SpriteRenderer;
 }
@@ -16,13 +18,14 @@ export class Animator extends EngineComponent {
     private spriteRenderer: SpriteRenderer = null;
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
     private currentAnimation: AnimationPlayer = null;
+    private paused: boolean = false;
 
     protected init({ spriteRenderer }: AnimatorOptions): void {
         this.spriteRenderer = spriteRenderer;
     }
 
     protected update(): void {
-        if (this.currentAnimation === null) {
+        if (this.currentAnimation === null || this.paused) {
             return;
         }
 
@@ -35,14 +38,14 @@ export class Animator extends EngineComponent {
         }
     }
 
-    public addAnimation(name: string, animation: Animation, framerate?: number): this {
-        framerate ? (animation.framerate = framerate) : null;
+    public addAnimation(animation: Animation, name: string = defaultAnimationName, framerate?: number): this {
+        animation.framerate = framerate ?? animation.framerate;
         this.animations.set(name, new AnimationPlayer(animation));
 
         return this;
     }
 
-    public playAnimation(name: string): void {
+    public playAnimation(name: string = defaultAnimationName): void {
         if (this.active === false) {
             return;
         }
@@ -53,6 +56,14 @@ export class Animator extends EngineComponent {
 
         this.stopAnimation();
         this.currentAnimation = this.animations.get(name);
+    }
+
+    public pause(): void {
+        this.paused = true;
+    }
+
+    public resume(): void {
+        this.paused = false;
     }
 
     public stopAnimation(): void {

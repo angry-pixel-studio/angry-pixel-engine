@@ -1,6 +1,6 @@
 export const uuid = (): string => {
     let d = new Date().getTime(),
-        d2 = (performance && performance.now && performance.now() * 1000) || 0;
+        d2 = (typeof performance !== "undefined" && performance.now && performance.now() * 1000) || 0;
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
         let r = Math.random() * 16;
         if (d > 0) {

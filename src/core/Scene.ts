@@ -6,7 +6,9 @@ export class Scene extends GameActor {
     constructor(public readonly name: string, public readonly game: Game) {
         super();
 
-        this.addGameObject(GameCamera);
+        if (!this.game.config.headless) {
+            this.addGameObject(GameCamera);
+        }
     }
 
     public get gameCamera(): GameCamera {

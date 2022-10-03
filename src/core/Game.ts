@@ -5,19 +5,21 @@ import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/QuadTree";
 import { Rectangle } from "../math/Rectangle";
 import { Vector2 } from "../math/Vector2";
-import { IterationManager } from "../core/managers/IterationManager";
 import { CollisionMatrix } from "../physics/collision/CollisionManager";
+import { IIterationManager } from "./managers/IterationManager";
+import { InitOptions } from "./GameActor";
 
 export const container: Container = new Container();
 
 export interface GameConfig {
-    containerNode: HTMLElement | null;
+    containerNode?: HTMLElement | null;
     gameWidth?: number;
     gameHeight?: number;
     debugEnabled?: boolean;
     canvasColor?: string;
     physicsFramerate?: number;
     spriteDefaultScale?: Vector2 | null;
+    headless?: boolean;
     collisions?: {
         method?: CollisionMethodConfig;
         quadTreeBounds?: Rectangle | null; // TODO: implement different bounds per scene
@@ -40,6 +42,7 @@ const defaultConfig: GameConfig = {
     canvasColor: "#000000",
     spriteDefaultScale: null,
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
+    headless: false,
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
@@ -50,7 +53,7 @@ const defaultConfig: GameConfig = {
 export class Game {
     // managers
     private sceneManager: SceneManager;
-    private iterationManager: IterationManager;
+    private iterationManager: IIterationManager;
 
     // state
     private _config: GameConfig;
@@ -73,7 +76,7 @@ export class Game {
         loadDependencies(container, this._config);
 
         this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
-        this.iterationManager = container.getSingleton<IterationManager>("IterationManager");
+        this.iterationManager = container.getSingleton<IIterationManager>("IterationManager");
     }
 
     /**
@@ -95,10 +98,11 @@ export class Game {
      *
      * @param sceneClass the class of the scene
      * @param name The name of the scene
+     * @param options [optional] This options will be passed to the init method
      * @param openingScene [default FALSE] If this is the opening scene, set TRUE, FALSE instead
      */
-    public addScene(sceneClass: SceneClass, name: string, openingScene: boolean = false): void {
-        this.sceneManager.addScene(sceneClass, name, openingScene);
+    public addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene: boolean = false): void {
+        this.sceneManager.addScene(sceneClass, name, options, openingScene);
     }
 
     /**

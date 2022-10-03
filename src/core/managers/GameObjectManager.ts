@@ -19,8 +19,12 @@ export class GameObjectManager {
         return gameObject;
     }
 
-    public findGameObjects(): GameObject[] {
-        return [...this.gameObjects];
+    public findGameObjects<T extends GameObject>(gameObjectClass?: GameObjectClass<T>): T[] {
+        return (
+            gameObjectClass
+                ? this.gameObjects.filter((gameObject) => gameObject instanceof gameObjectClass)
+                : [...this.gameObjects]
+        ) as T[];
     }
 
     public findGameObjectById<T extends GameObject>(id: string): T {

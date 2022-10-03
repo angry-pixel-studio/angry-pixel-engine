@@ -1,3 +1,4 @@
+import { between } from "./Utils";
 import { Vector2 } from "./Vector2";
 
 export class Rectangle {
@@ -101,12 +102,22 @@ export class Rectangle {
     }
 
     /**
-     * Check if the rectangle is overlapping another rectangle
+     * Check if the target rectangle is overlapping
      *
      * @param rect The rectangle to compare
      * @returns TRUE or FALSE
      */
-    public overlappingRectangle(rect: Rectangle): boolean {
+    public overlapRectangle(rect: Rectangle): boolean {
         return this.x1 >= rect.x && this.x <= rect.x1 && this.y1 >= rect.y && this.y <= rect.y1;
+    }
+
+    /**
+     * Check if the target vector is overlapping
+     *
+     * @param vector The target vector
+     * @returns TRUE or FALSE
+     */
+    public overlapVector(vector: Vector2): boolean {
+        return between(vector.x, this.x, this.x1) && between(vector.y, this.y, this.y1);
     }
 }
