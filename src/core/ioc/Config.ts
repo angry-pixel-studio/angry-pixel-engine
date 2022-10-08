@@ -62,7 +62,8 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
                     container.getSingleton<IRenderManager>("RenderManager"),
                     container.getSingleton<InputManager>("InputManager"),
                     container.getSingleton<GameObjectManager>("GameObjectManager"),
-                    container.getSingleton<SceneManager>("SceneManager")
+                    container.getSingleton<SceneManager>("SceneManager"),
+                    gameConfig.canvasColor
                 )
         );
     } else {

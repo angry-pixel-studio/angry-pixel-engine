@@ -1,5 +1,5 @@
-import { Rectangle } from "../../../math/Rectangle";
-import { Vector2 } from "../../../math/Vector2";
+import { Rectangle } from "angry-pixel-math";
+import { Vector2 } from "angry-pixel-math";
 import { Shape, ShapeType } from "./Shape";
 
 export class Polygon implements Shape {

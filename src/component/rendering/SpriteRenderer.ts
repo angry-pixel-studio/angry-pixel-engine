@@ -1,17 +1,13 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
-import { ImageRenderData } from "../../rendering/renderData/ImageRenderData";
-import { RenderManager } from "../../rendering/RenderManager";
 import { container } from "../../core/Game";
-import { Rotation } from "../../math/Rotation";
-import { Vector2 } from "../../math/Vector2";
 import { Sprite } from "../Sprite";
-import { InitOptions } from "../../core/GameActor";
+import { Rotation, Vector2 } from "angry-pixel-math";
+import { IRenderManager, ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 
-export interface SpriteRendererOptions extends InitOptions {
+export interface SpriteRendererOptions {
     sprite?: Sprite;
     offset?: Vector2;
-    smooth?: boolean;
     rotation?: Rotation;
     flipHorizontal?: boolean;
     flipVertical?: boolean;
@@ -24,22 +20,21 @@ export interface SpriteRendererOptions extends InitOptions {
 }
 
 export class SpriteRenderer extends RenderComponent {
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
 
-    public sprite: Sprite | null = null;
-    public offset: Vector2 = new Vector2();
-    public flipHorizontal: boolean = false;
-    public flipVertical: boolean = false;
-    public rotation: Rotation = new Rotation();
-    public smooth: boolean = false;
-    public opacity: number = 1;
-    private _tiled: Vector2 = new Vector2(1, 1);
-    public maskColor: string | null = null;
-    public maskColorMix: number = 0;
-    public tintColor: string | null = null;
+    public sprite: Sprite;
+    public offset: Vector2;
+    public flipHorizontal: boolean;
+    public flipVertical: boolean;
+    public rotation: Rotation;
+    public opacity: number;
+    private _tiled: Vector2;
+    public maskColor: string;
+    public maskColorMix: number;
+    public tintColor: string;
     public layer: string;
 
-    private renderData: ImageRenderData[] = [];
+    private renderData: ISpriteRenderData[] = [];
 
     private innerPosition: Vector2 = new Vector2();
     private cachePosition: Vector2 = new Vector2();
@@ -47,18 +42,17 @@ export class SpriteRenderer extends RenderComponent {
     private scaledOffset: Vector2 = new Vector2();
 
     protected init(config: SpriteRendererOptions = {}): void {
-        this.sprite = config.sprite ?? this.sprite;
-        this.offset = config.offset ?? this.offset;
-        this.smooth = config.smooth ?? this.smooth;
-        this.rotation = config.rotation ?? this.rotation;
-        this.flipHorizontal = config.flipHorizontal ?? this.flipHorizontal;
-        this.flipVertical = config.flipVertical ?? this.flipVertical;
-        this.opacity = config.opacity ?? this.opacity;
-        this.tiled = config.tiled ?? this._tiled;
-        this.maskColor = config.maskColor ?? this.maskColor;
-        this.maskColorMix = config.maskColorMix ?? this.maskColorMix;
-        this.tintColor = config.tintColor ?? this.tintColor;
-        this.layer = config.layer ?? this.layer;
+        this.sprite = config.sprite;
+        this.offset = config.offset ?? new Vector2();
+        this.rotation = config.rotation ?? new Rotation();
+        this.flipHorizontal = config.flipHorizontal ?? false;
+        this.flipVertical = config.flipVertical ?? false;
+        this.opacity = config.opacity ?? 1;
+        this._tiled = config.tiled ?? new Vector2(1, 1);
+        this.maskColor = config.maskColor;
+        this.maskColorMix = config.maskColorMix ?? 0;
+        this.tintColor = config.tintColor;
+        this.layer = config.layer;
     }
 
     public get tiled(): Vector2 {
@@ -90,14 +84,22 @@ export class SpriteRenderer extends RenderComponent {
     private updateRenderDataArray(): void {
         if (this.renderData.length !== this._tiled.x * this._tiled.y) {
             this.renderData = [];
-            for (let i = 0; i <= this._tiled.x * this._tiled.y; i++) {
-                this.renderData[i] = new ImageRenderData();
+            for (let i = 0; i < this._tiled.x * this._tiled.y; i++) {
+                this.renderData[i] = {
+                    type: RenderDataType.Sprite,
+                    location: RenderLocation.WorldSpace,
+                    layer: "",
+                    position: new Vector2(),
+                    image: this.sprite.image,
+                    width: 0,
+                    height: 0,
+                };
             }
         }
     }
 
     private updateRenderData(index: number, tileX: number, tileY: number): void {
-        this.renderData[index].ui = this.gameObject.ui;
+        this.renderData[index].location = this.gameObject.ui ? RenderLocation.ViewPort : RenderLocation.WorldSpace;
         this.renderData[index].layer = this.layer ?? this.gameObject.layer;
         this.renderData[index].image = this.sprite.image;
         this.renderData[index].width = this.sprite.width * Math.abs(this.gameObject.transform.scale.x);
@@ -124,15 +126,13 @@ export class SpriteRenderer extends RenderComponent {
         Vector2.add(this.cachePosition, this.gameObject.transform.position, this.scaledOffset);
 
         this.cacheRenderPosition.set(
-            (this.renderData[index].width / 2) * (this.tiled.x - 1),
-            (this.renderData[index].height / 2) * (this.tiled.y - 1)
+            (this.renderData[index].width / 2) * (this._tiled.x - 1),
+            (this.renderData[index].height / 2) * (this._tiled.y - 1)
         );
         Vector2.subtract(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
 
         this.cacheRenderPosition.set(tileX * this.renderData[index].width, tileY * this.renderData[index].height);
-        Vector2.add(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
-
-        this.renderData[index].position = this.cachePosition;
+        Vector2.add(this.renderData[index].position, this.cachePosition, this.cacheRenderPosition);
 
         if (this.gameObject.transform.rotation.radians !== 0) {
             this.translateRenderPosition(index);

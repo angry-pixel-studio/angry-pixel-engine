@@ -1,6 +1,5 @@
 import { TransformComponent } from "../core/Component";
-import { Rotation } from "../math/Rotation";
-import { Vector2 } from "../math/Vector2";
+import { Rotation, Vector2 } from "angry-pixel-math";
 
 export class Transform extends TransformComponent {
     public readonly allowMultiple: boolean = false;
@@ -64,22 +63,11 @@ export class Transform extends TransformComponent {
     }
 
     protected update(): void {
-        // this.setParent();
-
         if (this._parent !== null) {
             this.setPositionFromParent();
         }
 
         this.lastPosition.copy(this._position);
-    }
-
-    private setParent(): void {
-        if (this.gameObject.parent !== null && this._parent !== this.gameObject.parent.transform) {
-            this._parent = this.gameObject.parent.transform;
-            Vector2.subtract(this._innerPosition, this._position, this._parent.position);
-        } else if (this.gameObject.parent === null) {
-            this._parent = null;
-        }
     }
 
     private setPositionFromParent(): void {

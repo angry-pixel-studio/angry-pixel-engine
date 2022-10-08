@@ -1,5 +1,5 @@
 import { CollisionManager, Collision } from "../collision/CollisionManager";
-import { Vector2 } from "../../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
 import { RigidBodyData } from "./RigidBodyData";
 
 type Axis = "x" | "y";

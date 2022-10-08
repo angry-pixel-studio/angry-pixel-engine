@@ -1,16 +1,20 @@
 import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
-import { Vector2 } from "../../math/Vector2";
-import { Rotation } from "../../math/Rotation";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Polygon } from "../../physics/collision/shape/Polygon";
 import { RenderComponent } from "../../core/Component";
-import { RenderManager } from "../../rendering/RenderManager";
-import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
 import { GameObject } from "../../core/GameObject";
 import { RigidBody } from "../RigidBody";
+import {
+    GeometricShape,
+    IGeometricRenderData,
+    IRenderManager,
+    RenderDataType,
+    RenderLocation,
+} from "angry-pixel-2d-renderer";
+import { Vector2, Rotation } from "angry-pixel-math";
 
 export interface PolygonColliderOptions extends InitOptions {
     vertexModel: Vector2[];
@@ -130,26 +134,28 @@ export class PolygonCollider extends Collider {
     }
 }
 
-class PolygonColliderRenderer extends RenderComponent {
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-
-    private renderData: GeometricRenderData;
+export class PolygonColliderRenderer extends RenderComponent {
+    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderData: IGeometricRenderData;
     private collider: ColliderData;
 
     protected init({ collider }: { collider: ColliderData }): void {
-        this.renderData = new GeometricRenderData();
-        this.renderData.debug = true;
-        this.renderData.color = "#00FF00";
+        this.renderData = {
+            type: RenderDataType.Geometric,
+            layer: this.gameObject.layer,
+            location: RenderLocation.WorldSpace,
+            position: new Vector2(),
+            shape: GeometricShape.Polygon,
+            color: "#00FF00",
+        };
 
         this.collider = collider;
     }
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
-        this.renderData.shape = GeometricShape.Polygon;
-        this.renderData.position = this.collider.shape.position;
-        this.renderData.angle = this.collider.shape.angle;
-        this.renderData.boundingBox = this.collider.shape.boundingBox;
+        this.renderData.position.copy(this.collider.shape.position);
+        this.renderData.rotation = this.collider.shape.angle;
         this.renderData.vertexModel = this.collider.shape.vertexModel;
 
         this.renderManager.addRenderData(this.renderData);

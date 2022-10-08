@@ -1,5 +1,5 @@
-import { Rectangle } from "../../math/Rectangle";
-import { Vector2 } from "../../math/Vector2";
+import { Rectangle } from "angry-pixel-math";
+import { Vector2 } from "angry-pixel-math";
 import { ColliderData } from "./ColliderData";
 import { CollisionMethod } from "./method/CollisionMethod";
 import { QuadTree } from "./QuadTree";
@@ -95,7 +95,7 @@ export class CollisionManager {
         if (this.fixedQuadTree === false) {
             this.updateNewBounds();
             if (this.newBounds.equals(this.bounds) === false) {
-                this.bounds.updateFromRect(this.newBounds);
+                this.bounds.copy(this.newBounds);
                 this.quadTree.updateBounds(this.bounds);
             }
         }

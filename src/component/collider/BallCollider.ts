@@ -1,11 +1,11 @@
 import { container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
-import { Vector2 } from "angry-pixel-math";
 import { RenderComponent } from "../../core/Component";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Circumference } from "../../physics/collision/shape/Circumference";
 import { InitOptions } from "../../core/GameActor";
 import { RigidBody } from "../RigidBody";
+import { Vector2 } from "angry-pixel-math";
 import {
     GeometricShape,
     IGeometricRenderData,

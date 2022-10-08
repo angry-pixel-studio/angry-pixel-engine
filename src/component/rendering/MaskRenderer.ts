@@ -1,12 +1,9 @@
 import { RenderComponent } from "../../core/Component";
-import { RenderManager } from "../../rendering/RenderManager";
+import { IRenderManager, IMaskRenderData, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
 import { container } from "../../core/Game";
-import { Rotation } from "../../math/Rotation";
-import { Vector2 } from "../../math/Vector2";
-import { MaskRenderData } from "../../rendering/renderData/MaskRenderData";
-import { InitOptions } from "../../core/GameActor";
+import { Vector2, Rotation } from "angry-pixel-math";
 
-export interface MaskRendererOptions extends InitOptions {
+export interface MaskRendererOptions {
     width: number;
     height: number;
     color: string;
@@ -17,7 +14,7 @@ export interface MaskRendererOptions extends InitOptions {
 }
 
 export class MaskRenderer extends RenderComponent {
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
+    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
 
     public width: number;
     public height: number;
@@ -27,7 +24,7 @@ export class MaskRenderer extends RenderComponent {
     public opacity: number = 1;
     public layer: string;
 
-    private renderData: MaskRenderData = new MaskRenderData();
+    private renderData: IMaskRenderData;
 
     private innerPosition: Vector2 = new Vector2();
     private scaledOffset: Vector2 = new Vector2();
@@ -39,11 +36,21 @@ export class MaskRenderer extends RenderComponent {
         this.offset = config.offset ?? this.offset;
         this.rotation = config.rotation ?? this.rotation;
         this.opacity = config.opacity ?? this.opacity;
-        this.layer = config.layer ?? this.layer;
+        this.layer = config.layer;
+
+        this.renderData = {
+            type: RenderDataType.Mask,
+            layer: this.layer ?? this.gameObject.layer,
+            location: this.gameObject.ui ? RenderLocation.ViewPort : RenderLocation.WorldSpace,
+            position: new Vector2(),
+            width: 0,
+            height: 0,
+            color: "",
+        };
     }
 
     protected update(): void {
-        this.renderData.ui = this.gameObject.ui;
+        this.renderData.location = this.gameObject.ui ? RenderLocation.ViewPort : RenderLocation.WorldSpace;
         this.renderData.layer = this.layer ?? this.gameObject.layer;
         this.renderData.width = this.width * Math.abs(this.gameObject.transform.scale.x);
         this.renderData.height = this.height * Math.abs(this.gameObject.transform.scale.y);

@@ -1,16 +1,20 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
-import { Orientation, TextRenderData } from "../../rendering/renderData/TextRenderData";
-import { RenderManager } from "../../rendering/RenderManager";
 import { container } from "../../core/Game";
-import { Rotation } from "../../math/Rotation";
-import { Vector2 } from "../../math/Vector2";
-import { InitOptions } from "../../core/GameActor";
+import { Rotation, Vector2 } from "angry-pixel-math";
+import {
+    IRenderManager,
+    ITextRenderData,
+    RenderDataType,
+    RenderLocation,
+    TextOrientation,
+} from "angry-pixel-2d-renderer";
 
-export interface TextRendererOptions extends InitOptions {
+export { TextOrientation };
+
+export interface TextRendererOptions {
     text: string;
-    fontFamily: string;
-    fontUrl?: string;
+    font: FontFace | string;
     fontSize?: number;
     color?: string;
     lineSeparation?: number;
@@ -18,56 +22,54 @@ export interface TextRendererOptions extends InitOptions {
     width?: number;
     height?: number;
     offset?: Vector2;
-    smooth?: boolean;
     charRanges?: number[];
-    bitmapSize?: number;
-    bitmapOffset?: Vector2;
+    smooth?: boolean;
     rotation?: Rotation;
     opacity?: number;
-    orientation?: Orientation;
+    orientation?: TextOrientation;
+    bitmapMargin?: Vector2;
+    bitmapSpacing?: Vector2;
 }
 
 export class TextRenderer extends RenderComponent {
     public text: string;
-    public fontFamily: string = "Sans";
-    public fontUrl: string = null;
-    public fontSize: number = 12;
-    public width: number = 100;
-    public height: number = 100;
-    public offset: Vector2 = new Vector2();
-    public color: string = "#000000";
-    public lineSeparation: number = 0;
-    public letterSpacing: number = 0;
-    public bitmapSize: number = 64;
-    public charRanges: number[] = [32, 126, 161, 255];
-    public smooth: boolean = false;
-    public bitmapOffset: Vector2 = new Vector2();
-    public rotation: Rotation = new Rotation();
-    public opacity: number = 1;
-    public orientation: Orientation = "center";
+    public font: FontFace | string;
+    public fontSize: number;
+    public width: number;
+    public height: number;
+    public offset: Vector2;
+    public color: string;
+    public lineSeparation: number;
+    public letterSpacing: number;
+    public charRanges: number[];
+    public smooth: boolean;
+    public rotation: Rotation;
+    public opacity: number;
+    public orientation: TextOrientation;
+    public bitmapMargin: Vector2;
+    public bitmapSpacing: Vector2;
 
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-    private renderData: TextRenderData = new TextRenderData();
+    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderData: ITextRenderData;
     private lastFrameText: string = "";
 
     protected init(config: TextRendererOptions): void {
         this.text = config.text;
-        this.fontFamily = config.fontFamily;
-        this.fontUrl = config.fontUrl ?? this.fontUrl;
-        this.fontSize = config.fontSize ?? this.fontSize;
-        this.width = config.width ?? this.width;
-        this.height = config.height ?? this.height;
-        this.offset = config.offset ?? this.offset;
-        this.color = config.color ?? this.color;
-        this.lineSeparation = config.lineSeparation ?? this.lineSeparation;
-        this.letterSpacing = config.letterSpacing ?? this.letterSpacing;
-        this.bitmapSize = config.bitmapSize ?? this.bitmapSize;
-        this.charRanges = config.charRanges ?? this.charRanges;
-        this.smooth = config.smooth ?? this.smooth;
-        this.bitmapOffset = config.bitmapOffset ?? this.bitmapOffset;
-        this.rotation = config.rotation ?? this.rotation;
-        this.opacity = config.opacity ?? this.opacity;
-        this.orientation = config.orientation ?? this.orientation;
+        this.font = config.font ?? "Sans";
+        this.fontSize = config.fontSize ?? 12;
+        this.width = config.width ?? 100;
+        this.height = config.height ?? 100;
+        this.offset = config.offset ?? new Vector2();
+        this.color = config.color ?? "#000000";
+        this.charRanges = config.charRanges ?? [32, 126, 161, 255];
+        this.lineSeparation = config.lineSeparation ?? 0;
+        this.letterSpacing = config.letterSpacing ?? 0;
+        this.smooth = config.smooth;
+        this.rotation = config.rotation ?? new Rotation();
+        this.opacity = config.opacity;
+        this.orientation = config.orientation;
+        this.bitmapMargin = config.bitmapMargin;
+        this.bitmapSpacing = config.bitmapSpacing;
 
         if (this.charRanges.length % 2 !== 0) {
             throw new Exception("TextRenderer.charRanges must be a 2 column matrix");
@@ -79,29 +81,37 @@ export class TextRenderer extends RenderComponent {
     }
 
     protected start(): void {
-        this.renderData.layer = this.gameObject.layer;
-        this.renderData.ui = this.gameObject.ui;
-        this.renderData.fontFamily = this.fontFamily;
-        this.renderData.fontUrl = this.fontUrl;
-        this.renderData.fontSize = this.fontSize;
-        this.renderData.lineSeparation = this.lineSeparation;
-        this.renderData.letterSpacing = this.letterSpacing;
-        this.renderData.bitmapSize = this.bitmapSize;
-        this.renderData.charRanges = this.charRanges;
-        this.renderData.smooth = this.smooth;
-        this.renderData.bitmapOffset = this.bitmapOffset;
-        this.renderData.orientation = this.orientation;
-        this.renderData.width = this.width;
-        this.renderData.height = this.height;
+        this.renderData = {
+            type: RenderDataType.Text,
+            location: RenderLocation.WorldSpace,
+            position: new Vector2(),
+            layer: this.gameObject.layer,
+            text: "",
+            font: this.font,
+            fontSize: this.fontSize,
+            bitmap: {
+                charRanges: this.charRanges,
+                margin: this.bitmapMargin,
+                spacing: this.bitmapSpacing,
+            },
+            smooth: this.smooth,
+        };
     }
 
     protected update(): void {
         if (!this.text) return;
 
+        this.renderData.layer = this.gameObject.layer;
+        this.renderData.location = this.gameObject.ui ? RenderLocation.ViewPort : RenderLocation.WorldSpace;
         this.renderData.text = this.text !== this.lastFrameText ? this.crop() : this.renderData.text;
+        this.renderData.fontSize = this.fontSize;
         this.renderData.color = this.color;
-        this.renderData.rotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
+        this.renderData.orientation = this.orientation;
+        this.renderData.lineSeparation = this.lineSeparation;
+        this.renderData.letterSpacing = this.letterSpacing;
+        this.renderData.rotation = this.gameObject.transform.rotation.radians + this.rotation?.radians ?? 0;
         this.renderData.opacity = this.opacity;
+
         Vector2.add(this.renderData.position, this.gameObject.transform.position, this.offset);
 
         this.renderManager.addRenderData(this.renderData);

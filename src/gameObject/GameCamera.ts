@@ -1,6 +1,6 @@
 import { GameObject } from "../core/GameObject";
 import { Camera } from "../component/Camera";
-import { Rectangle } from "../math/Rectangle";
+import { Rectangle } from "angry-pixel-math";
 
 export class GameCamera extends GameObject {
     public camera: Camera;
@@ -32,10 +32,6 @@ export class GameCamera extends GameObject {
 
     public get zoom(): number {
         return this.camera.zoom;
-    }
-
-    public get originalViewporRect(): Rectangle {
-        return this.camera.originalViewportRect;
     }
 
     public get worldSpaceRect(): Rectangle {

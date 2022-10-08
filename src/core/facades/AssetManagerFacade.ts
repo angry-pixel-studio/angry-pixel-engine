@@ -31,6 +31,15 @@ export class AssetManagerFacade {
     }
 
     /**
+     * @param family The family name of the font
+     * @param url The url of the font
+     * @returns The created fontFace element
+     */
+    public static loadFont(family: string, url: string): FontFace {
+        return this.assetManager.loadFont(family, url);
+    }
+
+    /**
      * @param url The url of the image element to find
      * @returns the found image element
      */
@@ -44,5 +53,13 @@ export class AssetManagerFacade {
      */
     public static getAudio(url: string): HTMLAudioElement {
         return this.assetManager.getAudio(url);
+    }
+
+    /**
+     * @param family The family of the font
+     * @returns The found audio element
+     */
+    public static getFont(family: string): FontFace {
+        return this.assetManager.getFont(family);
     }
 }
