@@ -4,8 +4,7 @@ import { InitOptions } from "../core/GameActor";
 import { InputManager } from "../input/InputManager";
 import { MouseController } from "../input/MouseController";
 import { TouchController } from "../input/TouchController";
-import { between } from "angry-pixel-math";
-import { Vector2 } from "angry-pixel-math";
+import { between, Vector2 } from "angry-pixel-math";
 
 export enum ButtonType {
     Rectangle,

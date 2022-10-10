@@ -1,5 +1,4 @@
-import { clamp } from "angry-pixel-math";
-import { Vector2 } from "angry-pixel-math";
+import { clamp, Vector2 } from "angry-pixel-math";
 import { Circumference } from "../shape/Circumference";
 import { Rectangle } from "../shape/Rectangle";
 import { CollisionResolver, CollisionResolution } from "./CollisionResolver";

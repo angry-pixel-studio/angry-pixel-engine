@@ -1,5 +1,4 @@
-import { Rectangle } from "angry-pixel-math";
-import { Vector2 } from "angry-pixel-math";
+import { Rectangle, Vector2 } from "angry-pixel-math";
 import { ColliderData } from "./ColliderData";
 import { CollisionMethod } from "./method/CollisionMethod";
 import { QuadTree } from "./QuadTree";
