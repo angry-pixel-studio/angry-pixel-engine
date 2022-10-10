@@ -30,6 +30,7 @@ export interface TilemapRendererOptions {
     orientation?: TilemapOrientation;
     alpha?: number;
     tintColor?: string;
+    smooth?: boolean;
 }
 
 export interface ITilemapRenderer {
@@ -39,6 +40,8 @@ export interface ITilemapRenderer {
     tileWidth: number;
     tileHeight: number;
     orientation: TilemapOrientation;
+    realWidth: number;
+    realHeight: number;
 }
 
 export class TilemapRenderer extends RenderComponent implements ITilemapRenderer {
@@ -60,6 +63,9 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
     private scaledTileWidth: number = 0;
     private scaledTileHeight: number = 0;
 
+    public realWidth: number;
+    public realHeight: number;
+
     protected init({
         tiles,
         tileset,
@@ -70,6 +76,7 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
         orientation,
         alpha,
         tintColor,
+        smooth,
     }: TilemapRendererOptions): void {
         tiles.split("\n").forEach((row) => {
             row.split(",").forEach((tile) => (tile.trim().length > 0 ? this.tiles.push(Number(tile)) : null));
@@ -97,6 +104,7 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
             },
             tiles: this.tiles,
             orientation: this.orientation,
+            smooth,
         } as ITilemapRenderData;
 
         this.updateRenderData();
@@ -111,6 +119,9 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
     private updateRenderData(): void {
         this.scaledTileWidth = this.tileWidth * this.gameObject.transform.scale.x;
         this.scaledTileHeight = this.tileHeight * this.gameObject.transform.scale.y;
+
+        this.realWidth = this.width * this.scaledTileWidth;
+        this.realHeight = this.height * this.scaledTileHeight;
 
         this.renderData.layer = this.layer ?? this.gameObject.layer;
         this.renderData.position.copy(this.gameObject.transform.position);

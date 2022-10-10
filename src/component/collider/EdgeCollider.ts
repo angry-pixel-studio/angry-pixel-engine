@@ -47,7 +47,7 @@ export class EdgeCollider extends Collider {
         }
     }
 
-    protected config(config: EdgeColliderOptions): void {
+    protected init(config: EdgeColliderOptions): void {
         if (config.vertexModel.length < 2) {
             throw new Exception("Edge Collider needs at least 2 vertices.");
         }

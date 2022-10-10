@@ -194,6 +194,7 @@ export class TilemapCollider extends Collider {
             this.hasComponent(RigidBody)
         );
         collider.shape.position = this.position;
+        collider.shape.update();
 
         this.colliders.push(collider);
     }

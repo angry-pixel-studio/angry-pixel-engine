@@ -248,16 +248,18 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-"angry-pixel-2d-renderer@file:../angry-pixel-2d-renderer":
+angry-pixel-2d-renderer@^1.0.0:
   version "1.0.0"
+  resolved "https://registry.yarnpkg.com/angry-pixel-2d-renderer/-/angry-pixel-2d-renderer-1.0.0.tgz#a45f7cd8bd731e98102c054da8f6b75b2951ea69"
+  integrity sha512-AhUN2S+0YQrwXTAl7yCLFih2p/DRvz4E8IyzA9gukf5jZs8mu+qCX8R3N1oLP3RJGByD/ciS28/ZNdjAopNQew==
   dependencies:
-    angry-pixel-math "^1.0.0"
+    angry-pixel-math "^1.0.1"
     gl-matrix "^3.4.3"
 
-angry-pixel-math@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/angry-pixel-math/-/angry-pixel-math-1.0.0.tgz#ca71d6785d4cdf2f398459f776467df96bbc18d8"
-  integrity sha512-rALJ8fYh00hp2m+N3ly1G1wqCScSrVLdADWgTMcE8hCDQ7hoaEN5C8eJPE7/zuMl7ewf9TDuwAlJSez89jOWog==
+angry-pixel-math@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/angry-pixel-math/-/angry-pixel-math-1.0.1.tgz#9cba480b307bbf911163b6121c3a0661b71b291f"
+  integrity sha512-g6pVwiqtazIuW/v+41vBH3Bo16MqtIXl7AaLA0cgDi6MqJbSdzWFLcZSn9OXPZaJv2416HfIgUo/p13Ax/E6fA==
 
 ansi-colors@^4.1.1:
   version "4.1.1"
@@ -689,11 +691,6 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
-
-gl-matrix@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
-  integrity sha512-COb7LDz+SXaHtl/h4LeaFcNdJdAQSDeVqjiIihSXNrkWObZLhDI4hIkZC11Aeqp7bcE72clzB0BnDXr2SmslRA==
 
 gl-matrix@^3.4.3:
   version "3.4.3"

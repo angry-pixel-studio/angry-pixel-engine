@@ -12,6 +12,7 @@ export interface TiledTilemapRendererOptions {
     tileHeight: number;
     layer?: string;
     orientation?: TilemapOrientation;
+    smooth?: boolean;
 }
 
 export class TiledTilemapRenderer extends RenderComponent implements ITilemapRenderer {
@@ -30,12 +31,16 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     private tilemapLayer: string;
     private tileset: Tileset;
     private layer: string;
+    private smooth?: boolean;
 
     private tilesetTileIds: number[] = [];
     // private offset: Vector2 = new Vector2();
     private chunks: TiledChunk[] = [];
     private scaledTileWidth: number = 0;
     private scaledTileHeight: number = 0;
+
+    public realWidth: number;
+    public realHeight: number;
 
     private renderData: ITilemapRenderData[] = [];
 
@@ -47,6 +52,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         tileHeight,
         layer,
         orientation,
+        smooth,
     }: TiledTilemapRendererOptions): void {
         this.tiledData = tiledData;
         this.tilemapLayer = tilemapLayer;
@@ -54,6 +60,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
         this.layer = layer;
+        this.smooth = smooth ?? false;
 
         this.width = this.tiledData.width;
         this.height = this.tiledData.height;
@@ -101,6 +108,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
             },
             tiles: chunk.data.map((tile) => this.getTilesetTileId(tile)),
             orientation: this.orientation,
+            smooth: this.smooth,
         };
 
         if ((chunk as TiledLayer).type && (chunk as TiledLayer).type === "tilelayer") {
@@ -131,6 +139,9 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     private updateRenderData(): void {
         this.scaledTileWidth = this.tileWidth * this.gameObject.transform.scale.x;
         this.scaledTileHeight = this.tileHeight * this.gameObject.transform.scale.y;
+
+        this.realWidth = this.tiledData.width * this.scaledTileWidth;
+        this.realHeight = this.tiledData.height * this.scaledTileHeight;
 
         this.renderData.forEach((renderData, index) => {
             renderData.layer = this.layer ?? this.gameObject.layer;
