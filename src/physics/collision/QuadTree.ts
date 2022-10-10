@@ -1,5 +1,4 @@
-import { Rectangle } from "../../math/Rectangle";
-import { Vector2 } from "../../math/Vector2";
+import { Rectangle, Vector2 } from "angry-pixel-math";
 import { Exception } from "../../utils/Exception";
 
 export const DEFAULT_MAX_ITEMS: number = 15;
@@ -40,7 +39,7 @@ export class QuadTree {
         maxItems: number = DEFAULT_MAX_ITEMS
     ) {
         this.level = level;
-        this._bounds.updateFromRect(bounds);
+        this._bounds.copy(bounds);
 
         this.maxLevels = maxLevels;
         this.maxItems = maxItems;
@@ -57,7 +56,7 @@ export class QuadTree {
     }
 
     public updateBounds(bounds: Rectangle): void {
-        this._bounds.updateFromRect(bounds);
+        this._bounds.copy(bounds);
         this.updateCache();
     }
 

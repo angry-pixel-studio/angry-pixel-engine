@@ -1,67 +1,50 @@
 import { container, GameConfig } from "../core/Game";
-import { Vector2 } from "../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
+import { Slice } from "angry-pixel-2d-renderer";
+
+export { Slice };
 
 export interface SpriteConfig {
     image: HTMLImageElement;
     scale?: Vector2;
-    slice?: Slice | null;
+    slice?: Slice;
     smooth?: boolean;
 }
 
-export interface Slice {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-}
-
 export class Sprite {
-    private _image: HTMLImageElement = null;
-    private _slice: Slice = null;
-    private _scale: Vector2 = container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
-    private _smooth: boolean = false;
+    public readonly image: HTMLImageElement;
+    public readonly slice: Slice;
+    public readonly scale: Vector2;
+    public readonly smooth: boolean;
+
     private _width: number = null;
     private _height: number = null;
     private _loaded: boolean = false;
 
     constructor(config: SpriteConfig) {
-        this._image = config.image;
+        this.image = config.image;
+        this.smooth = config.smooth ?? false;
+        this.scale =
+            config.scale ?? container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
 
-        this._slice = config.slice ?? this._slice;
-        if (this._slice !== null) {
-            this._width = this._slice.width;
-            this._height = this._slice.height;
+        this.slice = config.slice;
+        if (this.slice) {
+            this._width = this.slice.width;
+            this._height = this.slice.height;
         }
 
-        this._scale = config.scale ?? this._scale;
+        const load = (): void => {
+            this._width = (this._width ?? this.image.naturalWidth) * Math.abs(this.scale.x);
+            this._height = (this._height ?? this.image.naturalHeight) * Math.abs(this.scale.y);
 
-        this._smooth = config.smooth ?? this._smooth;
+            this._loaded = true;
+        };
 
-        if (this._image.naturalWidth) {
-            this.onLoad();
+        if (this.image.naturalWidth) {
+            load();
         } else {
-            this._image.addEventListener("load", () => this.onLoad());
+            this.image.addEventListener("load", () => load());
         }
-    }
-
-    public get loaded(): boolean {
-        return this._loaded;
-    }
-
-    public get image(): HTMLImageElement {
-        return this._image;
-    }
-
-    public get slice(): Slice {
-        return this._slice;
-    }
-
-    public get scale(): Vector2 {
-        return this._scale;
-    }
-
-    public get smooth(): boolean {
-        return this._smooth;
     }
 
     public get width(): number {
@@ -72,10 +55,7 @@ export class Sprite {
         return this._height;
     }
 
-    private onLoad(): void {
-        this._width = (this._width ?? this._image.naturalWidth) * Math.abs(this._scale.x);
-        this._height = (this._height ?? this._image.naturalHeight) * Math.abs(this._scale.y);
-
-        this._loaded = true;
+    public get loaded(): boolean {
+        return this._loaded;
     }
 }

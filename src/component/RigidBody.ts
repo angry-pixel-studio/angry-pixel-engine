@@ -1,7 +1,7 @@
 import { Component, EngineComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
 import { container } from "../core/Game";
-import { Vector2 } from "../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
 import { Collider } from "./collider/Collider";
 import { RigidBodyManager, RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
 import { RigidBodyData } from "../physics/rigodBody/RigidBodyData";

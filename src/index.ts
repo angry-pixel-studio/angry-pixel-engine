@@ -1,8 +1,5 @@
 // math
-export * from "./math/Vector2";
-export * from "./math/Rectangle";
-export * from "./math/Utils";
-export * from "./math/Rotation";
+export * from "angry-pixel-math";
 
 // main
 export { Component, PhysicsComponent, PreRenderComponent } from "./core/Component";
@@ -21,9 +18,8 @@ export { CollisionData } from "./component/collider/Collider";
 export * from "./component/rendering/SpriteRenderer";
 export * from "./component/rendering/TextRenderer";
 export * from "./component/rendering/MaskRenderer";
-export * from "./component/rendering/tilemap/TiledTilemapRenderer";
-export * from "./component/rendering/tilemap/CsvTilemapRenderer";
-export * from "./component/rendering/tilemap/Tileset";
+export * from "./component/rendering/TiledTilemapRenderer";
+export * from "./component/rendering/TilemapRenderer";
 export * from "./component/Animation";
 export * from "./component/Animator";
 export * from "./component/AudioPlayer";

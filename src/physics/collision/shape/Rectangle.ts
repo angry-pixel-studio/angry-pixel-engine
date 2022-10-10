@@ -1,4 +1,4 @@
-import { Vector2 } from "../../../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
 import { Polygon } from "./Polygon";
 
 export class Rectangle extends Polygon {

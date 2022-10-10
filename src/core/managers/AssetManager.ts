@@ -1,14 +1,17 @@
 export enum AssetType {
     Image = "Image",
     Audio = "Audio",
-    Video = "Video",
+    Font = "Font",
 }
 
-class Asset {
-    public type: AssetType = null;
-    public url: string = null;
-    public loaded: boolean = false;
-    public element: HTMLImageElement | HTMLVideoElement | HTMLAudioElement = null;
+type AssetElement = HTMLImageElement | HTMLAudioElement | FontFace;
+
+interface Asset {
+    type: AssetType;
+    url: string;
+    loaded: boolean;
+    element: AssetElement;
+    family?: string;
 }
 
 export interface IAssetManager {
@@ -24,61 +27,67 @@ export class AssetManager {
     }
 
     public loadImage(url: string): HTMLImageElement {
-        const asset = this.createAsset(url, AssetType.Image);
+        const image = new Image();
+        image.crossOrigin = "";
+        image.src = url;
 
-        asset.element = new Image();
-        asset.element.crossOrigin = "";
-        asset.element.src = url;
+        const asset = this.createAsset(url, AssetType.Image, image);
 
-        if (asset.element.naturalWidth) {
+        if (image.naturalWidth) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("load", () => (asset.loaded = true));
+            image.addEventListener("load", () => (asset.loaded = true));
         }
 
-        return asset.element;
+        return image;
     }
 
     public loadAudio(url: string): HTMLAudioElement {
-        const asset = this.createAsset(url, AssetType.Audio);
+        const audio = new Audio();
+        audio.src = url;
 
-        asset.element = new Audio();
-        asset.element.src = url;
+        const asset = this.createAsset(url, AssetType.Audio, audio);
 
-        if (asset.element.duration) {
+        if (audio.duration) {
             asset.loaded = true;
         } else {
-            asset.element.addEventListener("canplaythrough", () => (asset.loaded = true));
+            audio.addEventListener("canplaythrough", () => (asset.loaded = true));
         }
 
-        return asset.element;
+        return audio;
+    }
+
+    public loadFont(family: string, url: string): FontFace {
+        const font: FontFace = new FontFace(family, `url(${url})`);
+        const asset = this.createAsset(url, AssetType.Font, font);
+        asset.family = family;
+
+        font.load().then((font) => {
+            // @ts-ignore
+            document.fonts.add(font);
+            asset.loaded = true;
+        });
+
+        return font;
     }
 
     public getImage(url: string): HTMLImageElement {
-        return this.getAsset<HTMLImageElement>(url, AssetType.Image);
+        return this.assets.find((asset) => asset.type === AssetType.Image && asset.url === url)
+            ?.element as HTMLImageElement;
     }
 
     public getAudio(url: string): HTMLAudioElement {
-        return this.getAsset<HTMLAudioElement>(url, AssetType.Audio);
+        return this.assets.find((asset) => asset.type === AssetType.Audio && asset.url === url)
+            ?.element as HTMLAudioElement;
     }
 
-    public getAsset<EType extends HTMLImageElement | HTMLVideoElement | HTMLAudioElement>(
-        url: string,
-        type: AssetType | null = null
-    ): EType {
-        return this.assets.reduce(
-            (prev: Asset | null, asset: Asset) =>
-                asset.url === url && (type === null || type === asset.type) ? asset : prev,
-            null
-        ).element as EType;
+    public getFont(family: string): FontFace {
+        return this.assets.find((asset) => asset.type === AssetType.Font && asset.family === family)
+            ?.element as FontFace;
     }
 
-    private createAsset(url: string, type: AssetType): Asset {
-        const asset = new Asset();
-
-        asset.type = type;
-        asset.url = url;
-
+    private createAsset(url: string, type: AssetType, element: AssetElement): Asset {
+        const asset: Asset = { type, url, element, loaded: false };
         this.assets.push(asset);
 
         return asset;

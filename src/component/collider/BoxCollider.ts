@@ -1,14 +1,11 @@
-import { RenderManager } from "../../rendering/RenderManager";
 import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
-import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
-import { Vector2 } from "../../math/Vector2";
-import { RenderComponent } from "../../core/Component";
-import { Rotation } from "../../math/Rotation";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Rectangle } from "../../physics/collision/shape/Rectangle";
 import { InitOptions } from "../../core/GameActor";
 import { RigidBody } from "../RigidBody";
+import { Rotation, Vector2 } from "angry-pixel-math";
+import { PolygonColliderRenderer } from "./PolygonCollider";
 
 export interface BoxColliderOptions extends InitOptions {
     width: number;
@@ -63,7 +60,7 @@ export class BoxCollider extends Collider {
         );
 
         if (this.debug) {
-            this.renderer = this.gameObject.addComponent(BoxColliderRenderer, { collider: this.colliders[0] });
+            this.renderer = this.gameObject.addComponent(PolygonColliderRenderer, { collider: this.colliders[0] });
         }
     }
 
@@ -111,31 +108,5 @@ export class BoxCollider extends Collider {
         (this.colliders[0].shape as Rectangle).updateSize(this.realWidth, this.realHeight);
 
         this.colliders[0].shape.update();
-    }
-}
-
-class BoxColliderRenderer extends RenderComponent {
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-
-    private renderData: GeometricRenderData;
-    private collider: ColliderData;
-
-    protected init({ collider }: { collider: ColliderData }): void {
-        this.renderData = new GeometricRenderData();
-        this.renderData.debug = true;
-        this.renderData.color = "#00FF00";
-
-        this.collider = collider;
-    }
-
-    protected update(): void {
-        this.renderData.layer = this.gameObject.layer;
-        this.renderData.shape = GeometricShape.Polygon;
-        this.renderData.position = this.collider.shape.position;
-        this.renderData.angle = this.collider.shape.angle;
-        this.renderData.boundingBox = this.collider.shape.boundingBox;
-        this.renderData.vertexModel = this.collider.shape.vertexModel;
-
-        this.renderManager.addRenderData(this.renderData);
     }
 }

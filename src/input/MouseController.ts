@@ -1,4 +1,4 @@
-import { Vector2 } from "../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
 
 export class MouseController {
     private _leftButtonPressed: boolean = false;

@@ -1,4 +1,4 @@
-import { Vector2 } from "../../../math/Vector2";
+import { Vector2 } from "angry-pixel-math";
 import { Circumference } from "../shape/Circumference";
 
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";

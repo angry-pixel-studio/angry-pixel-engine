@@ -1,5 +1,4 @@
-import { Rectangle } from "../../../math/Rectangle";
-import { Vector2 } from "../../../math/Vector2";
+import { Rectangle, Vector2 } from "angry-pixel-math";
 
 export enum ShapeType {
     Polygon,

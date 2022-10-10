@@ -2,7 +2,7 @@ import { Game } from "../Game";
 import { Scene } from "../Scene";
 import { Exception } from "../../utils/Exception";
 import { FrameEvent } from "./IterationManager";
-import { RenderManager } from "../../rendering/RenderManager";
+import { IRenderManager } from "angry-pixel-2d-renderer";
 import { InitOptions } from "../GameActor";
 
 export type SceneClass = new (name: string, game: Game) => Scene;
@@ -16,7 +16,7 @@ export class SceneManager {
 
     public currentSceneName: string;
 
-    constructor(private game: Game, private renderManager?: RenderManager) {}
+    constructor(private game: Game, private renderManager?: IRenderManager) {}
 
     public getCurrentScene<T extends Scene>(): T {
         return this.currentScene as T;

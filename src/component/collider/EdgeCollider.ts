@@ -1,16 +1,20 @@
 import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
-import { Vector2 } from "../../math/Vector2";
-import { Rotation } from "../../math/Rotation";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { RenderComponent } from "../../core/Component";
-import { RenderManager } from "../../rendering/RenderManager";
-import { GeometricRenderData, GeometricShape } from "../../rendering/renderData/GeometricRenderData";
 import { Exception } from "../../utils/Exception";
 import { Line } from "../../physics/collision/shape/Line";
 import { GameObject } from "../../core/GameObject";
 import { InitOptions } from "../../core/GameActor";
 import { RigidBody } from "../RigidBody";
+import {
+    IRenderManager,
+    IGeometricRenderData,
+    GeometricShape,
+    RenderLocation,
+    RenderDataType,
+} from "angry-pixel-2d-renderer";
+import { Vector2, Rotation } from "angry-pixel-math";
 
 export interface EdgeColliderOptions extends InitOptions {
     vertexModel: Vector2[];
@@ -43,7 +47,7 @@ export class EdgeCollider extends Collider {
         }
     }
 
-    protected config(config: EdgeColliderOptions): void {
+    protected init(config: EdgeColliderOptions): void {
         if (config.vertexModel.length < 2) {
             throw new Exception("Edge Collider needs at least 2 vertices.");
         }
@@ -132,18 +136,22 @@ export class EdgeCollider extends Collider {
 }
 
 class EdgeColliderRenderer extends RenderComponent {
-    private renderManager: RenderManager = container.getSingleton<RenderManager>("RenderManager");
-    private renderData: GeometricRenderData[] = [];
+    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderData: IGeometricRenderData[] = [];
     private colliders: ColliderData[] = [];
 
     protected init({ colliders }: { colliders: ColliderData[] }): void {
         this.colliders = colliders;
 
         this.colliders.forEach((collider: ColliderData, index: number) => {
-            this.renderData[index] = new GeometricRenderData();
-            this.renderData[index].debug = true;
-            this.renderData[index].color = "#00FF00";
-            this.renderData[index].shape = GeometricShape.Line;
+            this.renderData[index] = {
+                type: RenderDataType.Geometric,
+                layer: this.gameObject.layer,
+                location: RenderLocation.WorldSpace,
+                position: new Vector2(),
+                shape: GeometricShape.Line,
+                color: "#00FF00",
+            };
         });
     }
 
@@ -151,8 +159,7 @@ class EdgeColliderRenderer extends RenderComponent {
         this.colliders.forEach((collider: ColliderData, index: number) => {
             this.renderData[index].layer = this.gameObject.layer;
             this.renderData[index].position = collider.shape.position;
-            this.renderData[index].angle = collider.shape.angle;
-            this.renderData[index].boundingBox = collider.shape.boundingBox;
+            this.renderData[index].rotation = collider.shape.angle;
             this.renderData[index].vertexModel = collider.shape.vertexModel;
 
             this.renderManager.addRenderData(this.renderData[index]);
