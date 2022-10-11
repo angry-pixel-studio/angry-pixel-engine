@@ -110,7 +110,7 @@ export class TextRenderer extends RenderComponent {
         this.renderData.lineSeparation = this.lineSeparation;
         this.renderData.letterSpacing = this.letterSpacing;
         this.renderData.rotation = this.gameObject.transform.rotation.radians + this.rotation?.radians ?? 0;
-        this.renderData.opacity = this.opacity;
+        this.renderData.alpha = this.opacity;
 
         Vector2.add(this.renderData.position, this.gameObject.transform.position, this.offset);
 

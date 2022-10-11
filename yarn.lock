@@ -248,10 +248,10 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-angry-pixel-2d-renderer@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/angry-pixel-2d-renderer/-/angry-pixel-2d-renderer-1.0.0.tgz#a45f7cd8bd731e98102c054da8f6b75b2951ea69"
-  integrity sha512-AhUN2S+0YQrwXTAl7yCLFih2p/DRvz4E8IyzA9gukf5jZs8mu+qCX8R3N1oLP3RJGByD/ciS28/ZNdjAopNQew==
+angry-pixel-2d-renderer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/angry-pixel-2d-renderer/-/angry-pixel-2d-renderer-1.0.1.tgz#ab11f22740ae499091286eb56b3d8eadd3b1c7eb"
+  integrity sha512-Li23cu9r2Qe9OwfQfoK7t0161zXTSPWgS3PMbgGd5/q0n6XNr1Gyc1uamJocxl3BB/of2peiGExphly608P3uQ==
   dependencies:
     angry-pixel-math "^1.0.1"
     gl-matrix "^3.4.3"
