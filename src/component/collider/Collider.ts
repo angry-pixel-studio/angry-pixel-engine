@@ -1,4 +1,3 @@
-import { container } from "../../core/Game";
 import { ColliderComponent, RenderComponent } from "../../core/Component";
 import { Collision, CollisionManager } from "../../physics/collision/CollisionManager";
 import { ColliderData } from "../../physics/collision/ColliderData";
@@ -16,7 +15,7 @@ export interface CollisionData {
 }
 
 export abstract class Collider extends ColliderComponent {
-    protected collisionManager: CollisionManager = container.getSingleton<CollisionManager>("CollisionManager");
+    protected collisionManager: CollisionManager = this.container.getSingleton<CollisionManager>("CollisionManager");
     protected renderer: RenderComponent = null;
 
     public readonly colliders: ColliderData[] = [];

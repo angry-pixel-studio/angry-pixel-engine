@@ -1,16 +1,18 @@
 import { SceneManager } from "./managers/SceneManager";
-import { container } from "./Game";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
 import { GameActor } from "./GameActor";
+import { Container } from "../utils/Container";
 
-export type ComponentClass<T extends Component = Component> = new (gameObject: GameObject, name?: string) => T;
+export type ComponentClass<T extends Component = Component> = new (
+    container: Container,
+    gameObject: GameObject,
+    name?: string
+) => T;
 
 export abstract class Component extends GameActor {
-    private readonly sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
-
     public readonly id: string = uuid();
     public readonly name: string;
     public readonly gameObject: GameObject;
@@ -18,8 +20,8 @@ export abstract class Component extends GameActor {
 
     private _active: boolean = true;
 
-    constructor(gameObject: GameObject, name: string = "") {
-        super();
+    constructor(container: Container, gameObject: GameObject, name: string = "") {
+        super(container);
 
         this.gameObject = gameObject;
         this.name = name;
@@ -45,7 +47,7 @@ export abstract class Component extends GameActor {
      * @returns The current loaded scene
      */
     protected getCurrentScene<T extends Scene>(): T {
-        return this.sceneManager.getCurrentScene<T>();
+        return this.container.getSingleton<SceneManager>("SceneManager").getCurrentScene<T>();
     }
 
     /**

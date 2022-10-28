@@ -1,5 +1,4 @@
 import { Component } from "../core/Component";
-import { container } from "../core/Game";
 import { InitOptions } from "../core/GameActor";
 import { InputManager } from "../input/InputManager";
 import { MouseController } from "../input/MouseController";
@@ -32,8 +31,8 @@ export class Button extends Component {
 
     public pressed: boolean = false;
 
-    private mouse: MouseController = container.getSingleton<InputManager>("InputManager").mouse;
-    private touch: TouchController = container.getSingleton<InputManager>("InputManager").touch;
+    private mouse: MouseController = this.container.getSingleton<InputManager>("InputManager").mouse;
+    private touch: TouchController = this.container.getSingleton<InputManager>("InputManager").touch;
     private position: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();
     private pressedLastFrame: boolean = false;

@@ -1,10 +1,9 @@
-import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
+import { CollisionMethodConfig, GameConfig } from "../../core/GameConfig";
 import { Collider } from "./Collider";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { Line } from "../../physics/collision/shape/Line";
-import { GameObject } from "../../core/GameObject";
 import { InitOptions } from "../../core/GameActor";
 import { RigidBody } from "../RigidBody";
 import {
@@ -39,20 +38,16 @@ export class EdgeCollider extends Collider {
     private finalRotation: number = 0;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(gameObject: GameObject, name?: string) {
-        super(gameObject, name);
-
-        if (container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
+    protected init(config: EdgeColliderOptions): void {
+        if (this.container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
             throw new Exception("Edge Colliders need SAT collision method.");
         }
-    }
 
-    protected init(config: EdgeColliderOptions): void {
         if (config.vertexModel.length < 2) {
             throw new Exception("Edge Collider needs at least 2 vertices.");
         }
 
-        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.vertexModel = config.vertexModel;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
@@ -136,7 +131,7 @@ export class EdgeCollider extends Collider {
 }
 
 class EdgeColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData[] = [];
     private colliders: ColliderData[] = [];
 

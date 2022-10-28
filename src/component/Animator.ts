@@ -3,7 +3,6 @@ import { SpriteRenderer } from "./rendering/SpriteRenderer";
 import { Sprite } from "./Sprite";
 import { Animation } from "./Animation";
 import { TimeManager } from "../core/managers/TimeManager";
-import { container } from "../core/Game";
 import { Exception } from "../utils/Exception";
 import { InitOptions } from "../core/GameActor";
 
@@ -14,7 +13,7 @@ export interface AnimatorOptions extends InitOptions {
 }
 
 export class Animator extends EngineComponent {
-    private timeManager: TimeManager = container.getSingleton<TimeManager>("TimeManager");
+    private timeManager: TimeManager = this.container.getSingleton<TimeManager>("TimeManager");
     private spriteRenderer: SpriteRenderer = null;
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
     private currentAnimation: AnimationPlayer = null;

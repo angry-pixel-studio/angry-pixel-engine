@@ -1,11 +1,10 @@
-import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
+import { CollisionMethodConfig, GameConfig } from "../../core/GameConfig";
 import { Collider } from "./Collider";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Polygon } from "../../physics/collision/shape/Polygon";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
-import { GameObject } from "../../core/GameObject";
 import { RigidBody } from "../RigidBody";
 import {
     GeometricShape,
@@ -39,20 +38,16 @@ export class PolygonCollider extends Collider {
     private finalRotation: number = 0;
     private innerPosition: Vector2 = new Vector2();
 
-    constructor(gameObject: GameObject, name?: string) {
-        super(gameObject, name);
-
-        if (container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
+    protected init(config: PolygonColliderOptions): void {
+        if (this.container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
             throw new Exception("Polygon Colliders need SAT collision method.");
         }
-    }
 
-    protected init(config: PolygonColliderOptions): void {
         if (config.vertexModel.length < 3) {
             throw new Exception("Polygon Collider needs at least 3 vertices.");
         }
 
-        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.vertexModel = config.vertexModel;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
@@ -135,15 +130,15 @@ export class PolygonCollider extends Collider {
 }
 
 export class PolygonColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData;
     private collider: ColliderData;
 
     protected init({ collider }: { collider: ColliderData }): void {
         this.renderData = {
             type: RenderDataType.Geometric,
-            layer: this.gameObject.layer,
             location: RenderLocation.WorldSpace,
+            layer: this.gameObject.layer,
             position: new Vector2(),
             shape: GeometricShape.Polygon,
             color: "#00FF00",

@@ -1,2 +1,9 @@
 /node_modules
-src/**/*
+/src
+.eslintignore
+.eslintrc
+.prettierrc
+rollup.config.js
+tsconfig.json
+.gitignore
+yarn-error.log

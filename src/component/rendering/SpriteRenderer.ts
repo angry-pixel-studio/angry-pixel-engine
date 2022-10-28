@@ -1,9 +1,9 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
-import { container } from "../../core/Game";
 import { Sprite } from "../Sprite";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { IRenderManager, ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
+import { GameConfig } from "../../core/GameConfig";
 
 export interface SpriteRendererOptions {
     sprite?: Sprite;
@@ -20,7 +20,9 @@ export interface SpriteRendererOptions {
 }
 
 export class SpriteRenderer extends RenderComponent {
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private readonly renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
+    private readonly spriteDefaultScale: Vector2 =
+        this.container.getConstant<GameConfig>("GameConfig").spriteDefaultScale;
 
     public sprite: Sprite;
     public offset: Vector2;
@@ -43,6 +45,7 @@ export class SpriteRenderer extends RenderComponent {
 
     protected init(config: SpriteRendererOptions = {}): void {
         this.sprite = config.sprite;
+
         this.offset = config.offset ?? new Vector2();
         this.rotation = config.rotation ?? new Rotation();
         this.flipHorizontal = config.flipHorizontal ?? false;
@@ -69,6 +72,8 @@ export class SpriteRenderer extends RenderComponent {
 
     protected update(): void {
         if (this.sprite && this.sprite.loaded === true) {
+            this.sprite.scale = this.sprite.scale ?? this.spriteDefaultScale;
+
             this.updateRenderDataArray();
 
             let index = 0;

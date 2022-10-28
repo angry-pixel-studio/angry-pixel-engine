@@ -3,7 +3,8 @@ export * from "angry-pixel-math";
 
 // main
 export { Component, PhysicsComponent, PreRenderComponent } from "./core/Component";
-export { Game, GameConfig, CollisionMethodConfig } from "./core/Game";
+export { Game } from "./core/Game";
+export { GameConfig, CollisionMethodConfig } from "./core/GameConfig";
 export * from "./core/GameObject";
 export * from "./core/Scene";
 export { InitOptions } from "./core/GameActor";

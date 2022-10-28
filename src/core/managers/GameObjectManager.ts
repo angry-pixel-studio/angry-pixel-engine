@@ -1,9 +1,12 @@
 import { GameObject, GameObjectClass } from "../GameObject";
 import { FrameEvent } from "./IterationManager";
 import { InitOptions } from "../GameActor";
+import { Container } from "../../utils/Container";
 
 export class GameObjectManager {
     private gameObjects: GameObject[] = [];
+
+    constructor(private readonly container: Container) {}
 
     public addGameObject<T extends GameObject>(
         gameObjectClass: GameObjectClass<T>,
@@ -11,7 +14,7 @@ export class GameObjectManager {
         parent?: GameObject,
         name?: string
     ): T {
-        const gameObject = new gameObjectClass(name, parent);
+        const gameObject = new gameObjectClass(this.container, name, parent);
         this.gameObjects.push(gameObject);
 
         gameObject.dispatch(FrameEvent.Init, options);

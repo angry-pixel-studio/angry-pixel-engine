@@ -7,7 +7,6 @@ import {
 } from "angry-pixel-2d-renderer";
 import { Vector2 } from "angry-pixel-math";
 import { RenderComponent } from "../../core/Component";
-import { container } from "../../core/Game";
 
 export { TilemapOrientation };
 
@@ -45,9 +44,9 @@ export interface ITilemapRenderer {
 }
 
 export class TilemapRenderer extends RenderComponent implements ITilemapRenderer {
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
 
-    public tiles: number[];
+    public tiles: number[] = [];
     public width: number;
     public height: number;
     public tileWidth: number;

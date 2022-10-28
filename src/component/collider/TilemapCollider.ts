@@ -1,4 +1,4 @@
-import { container, GameConfig } from "../../core/Game";
+import { GameConfig } from "../../core/GameConfig";
 import { ITilemapRenderer } from "../rendering/TilemapRenderer";
 import { Collider } from "./Collider";
 import { RigidBody } from "../RigidBody";
@@ -39,7 +39,7 @@ export class TilemapCollider extends Collider {
     protected init(config: TilemapColliderOptions): void {
         this.tilemapRenderer = config.tilemapRenderer;
         this.layer = config.layer;
-        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.physics = true; // todo: fix this shit
         this.composite = config.composite ?? false;
     }
@@ -228,7 +228,7 @@ export class TilemapCollider extends Collider {
 }
 
 class TilemapColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
 
     private renderData: IGeometricRenderData[] = [];
     private colliders: ColliderData[] = [];

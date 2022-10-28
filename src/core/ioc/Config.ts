@@ -1,4 +1,4 @@
-import { CollisionMethodConfig, Game, GameConfig } from "../Game";
+import { Game } from "../Game";
 import { AssetManager } from "../managers/AssetManager";
 import { CollisionManager } from "../../physics/collision/CollisionManager";
 import { DomManager } from "../managers/DomManager";
@@ -29,12 +29,13 @@ import { CircumferenceResolver } from "../../physics/collision/resolver/Circumfe
 import { SatResolver } from "../../physics/collision/resolver/SatResolver";
 import { HeadlessIterationManager } from "../managers/HeadlessIterationManager";
 import { IRenderManager, renderManagerFactory } from "angry-pixel-2d-renderer";
+import { CollisionMethodConfig, GameConfig } from "../GameConfig";
 
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
 
     container.add("TimeManager", () => new TimeManager(gameConfig.physicsFramerate));
-    container.add("GameObjectManager", () => new GameObjectManager());
+    container.add("GameObjectManager", () => new GameObjectManager(container));
 
     physicsDependencies(container, gameConfig);
 
@@ -84,6 +85,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
         "SceneManager",
         () =>
             new SceneManager(
+                container,
                 container.getConstant<Game>("Game"),
                 !gameConfig.headless ? container.getSingleton<IRenderManager>("RenderManager") : undefined
             )

@@ -1,11 +1,11 @@
 import { Game } from "../Game";
-import { Scene } from "../Scene";
+import { Scene, SceneClass } from "../Scene";
 import { Exception } from "../../utils/Exception";
 import { FrameEvent } from "./IterationManager";
 import { IRenderManager } from "angry-pixel-2d-renderer";
 import { InitOptions } from "../GameActor";
+import { Container } from "../../utils/Container";
 
-export type SceneClass = new (name: string, game: Game) => Scene;
 type SceneConstructor = () => Scene;
 
 export class SceneManager {
@@ -16,7 +16,7 @@ export class SceneManager {
 
     public currentSceneName: string;
 
-    constructor(private game: Game, private renderManager?: IRenderManager) {}
+    constructor(private readonly container: Container, private game: Game, private renderManager?: IRenderManager) {}
 
     public getCurrentScene<T extends Scene>(): T {
         return this.currentScene as T;
@@ -28,7 +28,7 @@ export class SceneManager {
         }
 
         this.scenes.set(name, () => {
-            const scene = new sceneClass(name, this.game);
+            const scene = new sceneClass(this.container, name, this.game);
 
             this.currentScene = scene;
             scene.dispatch(FrameEvent.Init, options);

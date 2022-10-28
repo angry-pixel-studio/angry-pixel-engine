@@ -1,7 +1,6 @@
 import { CameraComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
 import { ICameraData, IRenderManager } from "angry-pixel-2d-renderer";
-import { container } from "../core/Game";
 import { LAYER_DEFAULT } from "../core/GameObject";
 import { Rectangle, Vector2 } from "angry-pixel-math";
 import { DomManager } from "../core/managers/DomManager";
@@ -11,8 +10,8 @@ const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 export class Camera extends CameraComponent {
     public readonly allowMultiple: boolean = false;
 
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
-    private canvas: HTMLCanvasElement = container.getSingleton<DomManager>("DomManager").canvas;
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
+    private canvas: HTMLCanvasElement = this.container.getSingleton<DomManager>("DomManager").canvas;
 
     public readonly viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
     public readonly worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);

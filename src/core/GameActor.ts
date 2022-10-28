@@ -1,4 +1,4 @@
-import { container } from "./Game";
+import { Container } from "../utils/Container";
 import { GameObject, GameObjectClass } from "./GameObject";
 import { GameObjectManager } from "./managers/GameObjectManager";
 import { FrameEvent } from "./managers/IterationManager";
@@ -8,11 +8,16 @@ export interface InitOptions {
 }
 
 export abstract class GameActor {
-    protected readonly gameObjectManager: GameObjectManager =
-        container.getSingleton<GameObjectManager>("GameObjectManager");
+    protected readonly gameObjectManager: GameObjectManager;
     protected readonly updateEvent: FrameEvent = FrameEvent.Update;
+    protected readonly container: Container;
 
     private started: boolean = false;
+
+    constructor(container: Container) {
+        this.container = container;
+        this.gameObjectManager = this.container.getSingleton<GameObjectManager>("GameObjectManager");
+    }
 
     public dispatch(event: FrameEvent, options?: InitOptions): void {
         if (event === FrameEvent.Init && this.init) {

@@ -1,4 +1,3 @@
-import { container, GameConfig } from "../core/Game";
 import { Vector2 } from "angry-pixel-math";
 import { Slice } from "angry-pixel-2d-renderer";
 
@@ -14,8 +13,9 @@ export interface SpriteConfig {
 export class Sprite {
     public readonly image: HTMLImageElement;
     public readonly slice: Slice;
-    public readonly scale: Vector2;
     public readonly smooth: boolean;
+
+    public scale?: Vector2;
 
     private _width: number = null;
     private _height: number = null;
@@ -24,18 +24,18 @@ export class Sprite {
     constructor(config: SpriteConfig) {
         this.image = config.image;
         this.smooth = config.smooth ?? false;
-        this.scale =
-            config.scale ?? container.getConstant<GameConfig>("GameConfig").spriteDefaultScale ?? new Vector2(1, 1);
-
         this.slice = config.slice;
+
+        this.scale = config.scale;
+
         if (this.slice) {
             this._width = this.slice.width;
             this._height = this.slice.height;
         }
 
         const load = (): void => {
-            this._width = (this._width ?? this.image.naturalWidth) * Math.abs(this.scale.x);
-            this._height = (this._height ?? this.image.naturalHeight) * Math.abs(this.scale.y);
+            this._width = this._width ?? this.image.naturalWidth;
+            this._height = this._height ?? this.image.naturalHeight;
 
             this._loaded = true;
         };
@@ -48,11 +48,11 @@ export class Sprite {
     }
 
     public get width(): number {
-        return this._width;
+        return this._width * this.scale?.x ?? 1;
     }
 
     public get height(): number {
-        return this._height;
+        return this._height * this.scale?.y ?? 1;
     }
 
     public get loaded(): boolean {

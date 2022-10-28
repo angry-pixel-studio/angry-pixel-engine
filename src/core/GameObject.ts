@@ -3,15 +3,19 @@ import { Transform } from "../component/Transform";
 import { RigidBody } from "../component/RigidBody";
 import { Exception } from "../utils/Exception";
 import { SceneManager } from "../core/managers/SceneManager";
-import { container } from "./Game";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
 import { GameActor, InitOptions } from "./GameActor";
+import { Container } from "../utils/Container";
 
 export const LAYER_DEFAULT = "Default";
 
-export type GameObjectClass<T extends GameObject = GameObject> = new (name?: string, parent?: GameObject) => T;
+export type GameObjectClass<T extends GameObject = GameObject> = new (
+    container: Container,
+    name?: string,
+    parent?: GameObject
+) => T;
 
 export class GameObject extends GameActor {
     public readonly id: string = uuid();
@@ -25,13 +29,12 @@ export class GameObject extends GameActor {
 
     private _active: boolean = true;
 
-    private sceneManager: SceneManager = container.getSingleton<SceneManager>("SceneManager");
     private components: Component[] = [];
     private activeComponentsCache: Component[] = [];
     private activeChildrenCache: GameObject[] = [];
 
-    constructor(name: string = "", parent?: GameObject) {
-        super();
+    constructor(container: Container, name: string = "", parent?: GameObject) {
+        super(container);
 
         this.name = name;
         this.addComponent(Transform);
@@ -93,7 +96,7 @@ export class GameObject extends GameActor {
      * @returns The current loaded scene
      */
     protected getCurrentScene<T extends Scene>(): T {
-        return this.sceneManager.getCurrentScene<T>();
+        return this.container.getSingleton<SceneManager>("SceneManager").getCurrentScene<T>();
     }
 
     /**
@@ -144,7 +147,7 @@ export class GameObject extends GameActor {
         const options = typeof arg2 === "string" ? undefined : arg2;
         const name = typeof arg2 === "string" ? arg2 : arg3;
 
-        const component = new componentClass(this, name);
+        const component = new componentClass(this.container, this, name);
         this.checkMultipleComponent(component, componentClass);
 
         this.components.push(component);

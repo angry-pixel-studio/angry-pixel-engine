@@ -1,37 +1,13 @@
-import { SceneManager, SceneClass } from "../core/managers/SceneManager";
+import { SceneManager } from "../core/managers/SceneManager";
 import { loadDependencies } from "./ioc/Config";
 import { Container } from "../utils/Container";
 import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
 import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/QuadTree";
-import { Rectangle, Vector2 } from "angry-pixel-math";
-import { CollisionMatrix } from "../physics/collision/CollisionManager";
 import { IIterationManager } from "./managers/IterationManager";
 import { InitOptions } from "./GameActor";
-
-export const container: Container = new Container();
-
-export interface GameConfig {
-    containerNode?: HTMLElement | null;
-    gameWidth?: number;
-    gameHeight?: number;
-    debugEnabled?: boolean;
-    canvasColor?: string;
-    physicsFramerate?: number;
-    spriteDefaultScale?: Vector2 | null;
-    headless?: boolean;
-    collisions?: {
-        method?: CollisionMethodConfig;
-        quadTreeBounds?: Rectangle | null; // TODO: implement different bounds per scene
-        quadMaxLevel?: number;
-        collidersPerQuad?: number;
-        collisionMatrix?: CollisionMatrix;
-    };
-}
-
-export enum CollisionMethodConfig {
-    AABB = "aabb",
-    SAT = "sat",
-}
+import { CollisionMethodConfig, GameConfig } from "./GameConfig";
+import { SceneClass } from "./Scene";
+import { Vector2 } from "angry-pixel-math";
 
 const defaultConfig: GameConfig = {
     containerNode: null,
@@ -39,9 +15,9 @@ const defaultConfig: GameConfig = {
     gameHeight: 180,
     debugEnabled: false,
     canvasColor: "#000000",
-    spriteDefaultScale: null,
     physicsFramerate: DEFAULT_PHYSICS_FRAMERATE,
     headless: false,
+    spriteDefaultScale: new Vector2(1, 1),
     collisions: {
         method: CollisionMethodConfig.AABB,
         quadMaxLevel: DEFAULT_MAX_LEVELS,
@@ -50,11 +26,10 @@ const defaultConfig: GameConfig = {
 };
 
 export class Game {
-    // managers
+    private readonly container: Container;
     private sceneManager: SceneManager;
     private iterationManager: IIterationManager;
 
-    // state
     private _config: GameConfig;
 
     constructor(config: GameConfig) {
@@ -67,15 +42,17 @@ export class Game {
             ...config.collisions,
         };
 
-        container.addConstant("Game", this);
+        this.container = new Container();
+
+        this.container.addConstant("Game", this);
         this.setupManagers();
     }
 
     private setupManagers(): void {
-        loadDependencies(container, this._config);
+        loadDependencies(this.container, this._config);
 
-        this.sceneManager = container.getSingleton<SceneManager>("SceneManager");
-        this.iterationManager = container.getSingleton<IIterationManager>("IterationManager");
+        this.sceneManager = this.container.getSingleton<SceneManager>("SceneManager");
+        this.iterationManager = this.container.getSingleton<IIterationManager>("IterationManager");
     }
 
     /**

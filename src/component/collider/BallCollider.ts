@@ -1,4 +1,4 @@
-import { container, GameConfig } from "../../core/Game";
+import { GameConfig } from "../../core/GameConfig";
 import { Collider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { ColliderData } from "../../physics/collision/ColliderData";
@@ -40,7 +40,7 @@ export class BallCollider extends Collider {
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this.physics = config.physics ?? this.physics;
-        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.layer = config.layer;
     }
 
@@ -107,8 +107,7 @@ export class BallCollider extends Collider {
 }
 
 class BallColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
-
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData;
     private collider: ColliderData;
 
@@ -121,14 +120,12 @@ class BallColliderRenderer extends RenderComponent {
             shape: GeometricShape.Circumference,
             color: "#00FF00",
         };
-        this.renderData.color = "#00FF00";
 
         this.collider = collider;
     }
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
-        this.renderData.shape = GeometricShape.Circumference;
         this.renderData.position.copy(this.collider.shape.position);
         this.renderData.radius = (this.collider.shape as Circumference).radius;
 

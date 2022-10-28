@@ -1,6 +1,5 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
-import { container } from "../../core/Game";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import {
     IRenderManager,
@@ -49,7 +48,7 @@ export class TextRenderer extends RenderComponent {
     public bitmapMargin: Vector2;
     public bitmapSpacing: Vector2;
 
-    private renderManager: IRenderManager = container.getSingleton<IRenderManager>("RenderManager");
+    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: ITextRenderData;
     private lastFrameText: string = "";
 

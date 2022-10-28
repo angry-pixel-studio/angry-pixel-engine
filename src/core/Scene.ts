@@ -1,10 +1,13 @@
 import { GameCamera } from "../gameObject/GameCamera";
+import { Container } from "../utils/Container";
 import { Game } from "./Game";
 import { GameActor } from "./GameActor";
 
+export type SceneClass = new (container: Container, name: string, game: Game) => Scene;
+
 export class Scene extends GameActor {
-    constructor(public readonly name: string, public readonly game: Game) {
-        super();
+    constructor(container: Container, public readonly name: string, public readonly game: Game) {
+        super(container);
 
         if (!this.game.config.headless) {
             this.addGameObject(GameCamera);

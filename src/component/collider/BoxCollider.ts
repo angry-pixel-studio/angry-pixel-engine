@@ -1,4 +1,3 @@
-import { CollisionMethodConfig, container, GameConfig } from "../../core/Game";
 import { Collider } from "./Collider";
 import { ColliderData } from "../../physics/collision/ColliderData";
 import { Rectangle } from "../../physics/collision/shape/Rectangle";
@@ -6,6 +5,7 @@ import { InitOptions } from "../../core/GameActor";
 import { RigidBody } from "../RigidBody";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { PolygonColliderRenderer } from "./PolygonCollider";
+import { CollisionMethodConfig, GameConfig } from "../../core/GameConfig";
 
 export interface BoxColliderOptions extends InitOptions {
     width: number;
@@ -33,7 +33,7 @@ export class BoxCollider extends Collider {
     private realRotation: number = 0;
 
     private applyRotation: boolean =
-        container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
+        this.container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
     private innerPosition: Vector2 = new Vector2();
 
     protected init(config: BoxColliderOptions): void {
@@ -42,7 +42,7 @@ export class BoxCollider extends Collider {
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this.physics = config.physics ?? this.physics;
-        this.debug = (config.debug ?? this.debug) && container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.rotation = config.rotation ?? new Rotation();
         this.layer = config.layer;
     }

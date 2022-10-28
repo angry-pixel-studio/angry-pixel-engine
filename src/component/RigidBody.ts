@@ -1,6 +1,5 @@
 import { Component, EngineComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
-import { container } from "../core/Game";
 import { Vector2 } from "angry-pixel-math";
 import { Collider } from "./collider/Collider";
 import { RigidBodyManager, RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
@@ -20,7 +19,7 @@ export interface RigidBodyOptions extends InitOptions {
 export class RigidBody extends EngineComponent {
     public readonly allowMultiple: boolean = false;
 
-    private rigidBodyManager: RigidBodyManager = container.getSingleton<RigidBodyManager>("RigidBodyManager");
+    private rigidBodyManager: RigidBodyManager = this.container.getSingleton<RigidBodyManager>("RigidBodyManager");
 
     private data: RigidBodyData;
 
