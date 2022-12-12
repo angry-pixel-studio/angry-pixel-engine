@@ -1,13 +1,12 @@
 import { GameObjectManager } from "./GameObjectManager";
 import { SceneManager } from "./SceneManager";
 import { InputManager } from "../../input/InputManager";
-import { CollisionManager } from "../../physics/collision/CollisionManager";
-import { RigidBodyManager } from "../../physics/rigodBody/RigidBodyManager";
 import { IRenderManager } from "angry-pixel-2d-renderer";
 import { TimeManager } from "./TimeManager";
 import { GameObject } from "../GameObject";
 import { Component } from "../Component";
 import { Scene } from "../Scene";
+import { IPhysicsManager } from "angry-pixel-2d-physics";
 
 export enum FrameEvent {
     Init,
@@ -41,8 +40,7 @@ export class IterationManager implements IIterationManager {
 
     constructor(
         private readonly timeManager: TimeManager,
-        private readonly collisionManager: CollisionManager,
-        private readonly physicsManager: RigidBodyManager,
+        private readonly physicsManager: IPhysicsManager,
         private readonly renderManager: IRenderManager,
         private readonly inputManager: InputManager,
         private readonly gameObjectManager: GameObjectManager,
@@ -66,6 +64,7 @@ export class IterationManager implements IIterationManager {
         this.running = false;
 
         this.sceneManager.unloadCurrentScene();
+        this.physicsManager.clear();
         this.renderManager.clearScreen(this.canvasColor);
     }
 
@@ -110,7 +109,6 @@ export class IterationManager implements IIterationManager {
         this.timeManager.updateForGame(time);
         this.load();
 
-        this.physicsManager.clear();
         // starts all game objects and components
         this.dispatchFrameEvent(FrameEvent.Start);
         // updates input controllers
@@ -151,10 +149,7 @@ export class IterationManager implements IIterationManager {
         this.dispatchFrameEvent(FrameEvent.UpdateCollider);
         this.dispatchFrameEvent(FrameEvent.UpdateTransform);
 
-        this.collisionManager.update();
-        this.physicsManager.update(this.timeManager.physicsDeltaTime);
-
-        this.collisionManager.clear();
+        this.physicsManager.resolve(this.timeManager.physicsDeltaTime);
     }
 
     private asyncPhysicsLoop(): void {

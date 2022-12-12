@@ -1,15 +1,11 @@
-import { Component, EngineComponent } from "../core/Component";
+import { EngineComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
 import { Vector2 } from "angry-pixel-math";
 import { Collider } from "./collider/Collider";
-import { RigidBodyManager, RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
-import { RigidBodyData } from "../physics/rigodBody/RigidBodyData";
-import { ColliderData } from "../physics/collision/ColliderData";
 import { InitOptions } from "../core/GameActor";
+import { IPhysicsManager, IRigidBody, RigidBodyType } from "angry-pixel-2d-physics";
 
-const defaultGravity: number = 10;
-
-export { RigidBodyType } from "../physics/rigodBody/RigidBodyManager";
+export { RigidBodyType } from "angry-pixel-2d-physics";
 
 export interface RigidBodyOptions extends InitOptions {
     rigidBodyType: RigidBodyType;
@@ -19,68 +15,63 @@ export interface RigidBodyOptions extends InitOptions {
 export class RigidBody extends EngineComponent {
     public readonly allowMultiple: boolean = false;
 
-    private rigidBodyManager: RigidBodyManager = this.container.getSingleton<RigidBodyManager>("RigidBodyManager");
-
-    private data: RigidBodyData;
-
-    public set velocity(velocity: Vector2) {
-        this.data.velocity.set(velocity.x, velocity.y);
-    }
+    private physicsManager: IPhysicsManager = this.container.getSingleton<IPhysicsManager>("PhysicsManager");
+    private rigidBody: IRigidBody;
 
     public get velocity(): Vector2 {
-        return this.data.velocity;
+        return this.rigidBody.velocity;
     }
 
-    public set gravity(gravity: number) {
-        this.data.gravity = Math.abs(gravity);
+    public set velocity(velocity: Vector2) {
+        this.rigidBody.velocity.copy(velocity);
     }
 
     public get gravity(): number {
-        return this.data.gravity;
+        return this.rigidBody.gravity;
     }
 
-    public get rigidBodyType(): RigidBodyType {
-        return this.data.type;
+    public set gravity(gravity: number) {
+        this.rigidBody.gravity = Math.abs(gravity);
     }
 
     protected init({ rigidBodyType, gravity }: RigidBodyOptions): void {
-        this.data = {
-            type: rigidBodyType,
-            position: null,
-            gravity: Math.abs(gravity) ?? defaultGravity,
-            velocity: new Vector2(),
-            colliders: [],
-        };
-    }
-
-    protected start(): void {
-        if (this.getColliders().length === 0) {
+        if (this.getColliderIds().length === 0) {
             throw new Exception("RigidBody needs at least one Collider with physics");
         }
+
+        this.rigidBody = this.physicsManager.addRigidBody({
+            type: rigidBodyType,
+            colliderIds: this.getColliderIds(),
+            gravity: Math.abs(gravity) ?? 0,
+            velocity: new Vector2(),
+            position: new Vector2(),
+        });
     }
 
     protected update(): void {
-        if (this.data.type !== RigidBodyType.Static) {
-            // setted by reference, so any change made by the RigidBodyManager will impact in the object position
-            this.data.position = this.gameObject.transform.parent
-                ? this.gameObject.transform.innerPosition
-                : this.gameObject.transform.position;
-
-            this.data.colliders = this.getColliders();
-
-            this.rigidBodyManager.addRigidBodyData(this.data);
+        if (this.getColliderIds().length === 0) {
+            throw new Exception("RigidBody needs at least one Collider with physics");
         }
+
+        this.rigidBody.colliderIds = this.getColliderIds();
+        // setted by reference, so any change made by the RigidBodyManager will impact in the object position
+        this.rigidBody.position = this.gameObject.transform.parent
+            ? this.gameObject.transform.innerPosition
+            : this.gameObject.transform.position;
     }
 
-    private getColliders(): ColliderData[] {
+    private getColliderIds(): number[] {
         return this.gameObject
             .getComponents()
-            .reduce<ColliderData[]>(
-                (colliders, component: Component) =>
-                    component instanceof Collider && component.physics
-                        ? [...colliders, ...component.colliders]
-                        : colliders,
-                []
-            );
+            .filter((component) => component instanceof Collider && component.physics)
+            .reduce((ids, component) => [...ids, ...(component as Collider).colliders.map((c) => c.id)], []);
+    }
+
+    protected onActiveChange(): void {
+        this.rigidBody.active = this.active;
+    }
+
+    protected onDestroy(): void {
+        this.physicsManager.removeRigidBody(this.rigidBody);
     }
 }

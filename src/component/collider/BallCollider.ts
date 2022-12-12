@@ -1,10 +1,7 @@
 import { GameConfig } from "../../core/GameConfig";
 import { Collider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
-import { ColliderData } from "../../physics/collision/ColliderData";
-import { Circumference } from "../../physics/collision/shape/Circumference";
 import { InitOptions } from "../../core/GameActor";
-import { RigidBody } from "../RigidBody";
 import { Vector2 } from "angry-pixel-math";
 import {
     GeometricShape,
@@ -13,6 +10,7 @@ import {
     RenderDataType,
     RenderLocation,
 } from "angry-pixel-2d-renderer";
+import { Circumference, ICollider } from "angry-pixel-2d-physics";
 
 export interface BallColliderOptions extends InitOptions {
     radius: number;
@@ -42,18 +40,16 @@ export class BallCollider extends Collider {
         this.physics = config.physics ?? this.physics;
         this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.layer = config.layer;
-    }
 
-    protected start(): void {
         this.colliders.push(
-            new ColliderData(
-                new Circumference(this.radius),
-                this.layer ?? this.gameObject.layer,
-                this.gameObject.id,
-                true,
-                this.physics,
-                this.hasComponent(RigidBody)
-            )
+            this.physicsManager.addCollider({
+                layer: this.layer ?? this.gameObject.layer,
+                position: new Vector2(),
+                shape: new Circumference(this.radius),
+                updateCollisions: true,
+                physics: this.physics,
+                group: this.gameObject.id,
+            })
         );
 
         if (this.debug) {
@@ -64,9 +60,7 @@ export class BallCollider extends Collider {
     protected update(): void {
         this.updateRealSize();
         this.updatePosition();
-        this.updateShape();
-
-        super.update();
+        this.updateCollider();
     }
 
     private updateRealSize(): void {
@@ -97,21 +91,19 @@ export class BallCollider extends Collider {
         );
     }
 
-    private updateShape(): void {
+    private updateCollider(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
-        this.colliders[0].shape.position = this.realPosition;
+        this.colliders[0].position = this.realPosition;
         (this.colliders[0].shape as Circumference).radius = this.realRadius;
-
-        this.colliders[0].shape.update();
     }
 }
 
 class BallColliderRenderer extends RenderComponent {
     private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData;
-    private collider: ColliderData;
+    private collider: ICollider;
 
-    protected init({ collider }: { collider: ColliderData }): void {
+    protected init({ collider }: { collider: ICollider }): void {
         this.renderData = {
             type: RenderDataType.Geometric,
             location: RenderLocation.WorldSpace,
@@ -126,7 +118,7 @@ class BallColliderRenderer extends RenderComponent {
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
-        this.renderData.position.copy(this.collider.shape.position);
+        this.renderData.position.copy(this.collider.position);
         this.renderData.radius = (this.collider.shape as Circumference).radius;
 
         this.renderManager.addRenderData(this.renderData);
