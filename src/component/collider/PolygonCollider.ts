@@ -1,11 +1,7 @@
-import { CollisionMethodConfig, GameConfig } from "../../core/GameConfig";
 import { Collider } from "./Collider";
-import { ColliderData } from "../../physics/collision/ColliderData";
-import { Polygon } from "../../physics/collision/shape/Polygon";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
-import { RigidBody } from "../RigidBody";
 import {
     GeometricShape,
     IGeometricRenderData,
@@ -14,6 +10,8 @@ import {
     RenderLocation,
 } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
+import { GameConfig } from "../../core/GameConfig";
+import { CollisionMethods, ICollider, Polygon } from "angry-pixel-2d-physics";
 
 export interface PolygonColliderOptions extends InitOptions {
     vertexModel: Vector2[];
@@ -39,7 +37,7 @@ export class PolygonCollider extends Collider {
     private innerPosition: Vector2 = new Vector2();
 
     protected init(config: PolygonColliderOptions): void {
-        if (this.container.getConstant<GameConfig>("GameConfig").collisions.method !== CollisionMethodConfig.SAT) {
+        if (this.container.getConstant<GameConfig>("GameConfig").collisions.collisionMethod !== CollisionMethods.SAT) {
             throw new Exception("Polygon Colliders need SAT collision method.");
         }
 
@@ -58,18 +56,17 @@ export class PolygonCollider extends Collider {
         for (let i = 0; i < this.vertexModel.length; i++) {
             this.scaledVertexModel.push(new Vector2());
         }
-    }
 
-    protected start(): void {
         this.colliders.push(
-            new ColliderData(
-                new Polygon(this.scaledVertexModel),
-                this.layer ?? this.gameObject.layer,
-                this.gameObject.id,
-                true,
-                this.physics,
-                this.hasComponent(RigidBody)
-            )
+            this.physicsManager.addCollider({
+                layer: this.layer ?? this.gameObject.layer,
+                position: this.gameObject.transform.position.clone(),
+                rotation: this.rotation.radians,
+                shape: new Polygon(this.scaledVertexModel),
+                updateCollisions: true,
+                physics: this.physics,
+                group: this.gameObject.id,
+            })
         );
 
         if (this.debug) {
@@ -82,9 +79,7 @@ export class PolygonCollider extends Collider {
     protected update(): void {
         this.updateSize();
         this.updatePosition();
-        this.updateShape();
-
-        super.update();
+        this.updateCollider();
     }
 
     private updateSize(): void {
@@ -119,22 +114,20 @@ export class PolygonCollider extends Collider {
         );
     }
 
-    private updateShape(): void {
+    private updateCollider(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
         this.colliders[0].shape.position = this.scaledPosition;
-        this.colliders[0].shape.angle = this.finalRotation;
-        this.colliders[0].shape.vertexModel = this.scaledVertexModel;
-
-        this.colliders[0].shape.update();
+        this.colliders[0].rotation = this.finalRotation;
+        (this.colliders[0].shape as Polygon).vertexModel = this.scaledVertexModel;
     }
 }
 
 export class PolygonColliderRenderer extends RenderComponent {
     private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData;
-    private collider: ColliderData;
+    private collider: ICollider;
 
-    protected init({ collider }: { collider: ColliderData }): void {
+    protected init({ collider }: { collider: ICollider }): void {
         this.renderData = {
             type: RenderDataType.Geometric,
             location: RenderLocation.WorldSpace,
@@ -149,9 +142,9 @@ export class PolygonColliderRenderer extends RenderComponent {
 
     protected update(): void {
         this.renderData.layer = this.gameObject.layer;
-        this.renderData.position.copy(this.collider.shape.position);
-        this.renderData.rotation = this.collider.shape.angle;
-        this.renderData.vertexModel = this.collider.shape.vertexModel;
+        this.renderData.position.copy(this.collider.position);
+        this.renderData.rotation = this.collider.shape.rotation;
+        this.renderData.vertexModel = (this.collider.shape as Polygon).vertexModel;
 
         this.renderManager.addRenderData(this.renderData);
     }

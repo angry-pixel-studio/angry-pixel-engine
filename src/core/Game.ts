@@ -2,12 +2,12 @@ import { SceneManager } from "../core/managers/SceneManager";
 import { loadDependencies } from "./ioc/Config";
 import { Container } from "../utils/Container";
 import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
-import { DEFAULT_MAX_LEVELS, DEFAULT_MAX_ITEMS } from "../physics/collision/QuadTree";
 import { IIterationManager } from "./managers/IterationManager";
 import { InitOptions } from "./GameActor";
-import { CollisionMethodConfig, GameConfig } from "./GameConfig";
+import { GameConfig } from "./GameConfig";
 import { SceneClass } from "./Scene";
 import { Vector2 } from "angry-pixel-math";
+import { BroadPhaseMethods, CollisionMethods } from "angry-pixel-2d-physics";
 
 const defaultConfig: GameConfig = {
     containerNode: null,
@@ -19,9 +19,8 @@ const defaultConfig: GameConfig = {
     headless: false,
     spriteDefaultScale: new Vector2(1, 1),
     collisions: {
-        method: CollisionMethodConfig.AABB,
-        quadMaxLevel: DEFAULT_MAX_LEVELS,
-        collidersPerQuad: DEFAULT_MAX_ITEMS,
+        collisionMethod: CollisionMethods.SAT,
+        collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
     },
 };
 

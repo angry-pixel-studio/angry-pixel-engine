@@ -1,11 +1,9 @@
 import { Collider } from "./Collider";
-import { ColliderData } from "../../physics/collision/ColliderData";
-import { Rectangle } from "../../physics/collision/shape/Rectangle";
 import { InitOptions } from "../../core/GameActor";
-import { RigidBody } from "../RigidBody";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { PolygonColliderRenderer } from "./PolygonCollider";
-import { CollisionMethodConfig, GameConfig } from "../../core/GameConfig";
+import { GameConfig } from "../../core/GameConfig";
+import { CollisionMethods, Rectangle } from "angry-pixel-2d-physics";
 
 export interface BoxColliderOptions extends InitOptions {
     width: number;
@@ -33,7 +31,7 @@ export class BoxCollider extends Collider {
     private realRotation: number = 0;
 
     private applyRotation: boolean =
-        this.container.getConstant<GameConfig>("GameConfig").collisions.method === CollisionMethodConfig.SAT;
+        this.container.getConstant<GameConfig>("GameConfig").collisions.collisionMethod === CollisionMethods.SAT;
     private innerPosition: Vector2 = new Vector2();
 
     protected init(config: BoxColliderOptions): void {
@@ -45,18 +43,17 @@ export class BoxCollider extends Collider {
         this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.rotation = config.rotation ?? new Rotation();
         this.layer = config.layer;
-    }
 
-    protected start(): void {
         this.colliders.push(
-            new ColliderData(
-                new Rectangle(this.realWidth, this.realHeight, this.realPosition),
-                this.layer ?? this.gameObject.layer,
-                this.gameObject.id,
-                true,
-                this.physics,
-                this.hasComponent(RigidBody)
-            )
+            this.physicsManager.addCollider({
+                layer: this.layer ?? this.gameObject.layer,
+                position: this.gameObject.transform.position.clone(),
+                rotation: this.rotation.radians,
+                shape: new Rectangle(this.realWidth, this.realHeight),
+                updateCollisions: true,
+                physics: this.physics,
+                group: this.gameObject.id,
+            })
         );
 
         if (this.debug) {
@@ -67,9 +64,7 @@ export class BoxCollider extends Collider {
     protected update(): void {
         this.updateRealSize();
         this.updatePosition();
-        this.updateShape();
-
-        super.update();
+        this.updateCollider();
     }
 
     private updateRealSize(): void {
@@ -101,12 +96,10 @@ export class BoxCollider extends Collider {
         );
     }
 
-    private updateShape(): void {
+    private updateCollider(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
-        this.colliders[0].shape.position = this.realPosition;
-        this.colliders[0].shape.angle = this.realRotation;
+        this.colliders[0].position = this.realPosition;
+        this.colliders[0].rotation = this.realRotation;
         (this.colliders[0].shape as Rectangle).updateSize(this.realWidth, this.realHeight);
-
-        this.colliders[0].shape.update();
     }
 }

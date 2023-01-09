@@ -1,10 +1,7 @@
 import { GameConfig } from "../../core/GameConfig";
 import { ITilemapRenderer } from "../rendering/TilemapRenderer";
 import { Collider } from "./Collider";
-import { RigidBody } from "../RigidBody";
 import { RenderComponent } from "../../core/Component";
-import { ColliderData } from "../../physics/collision/ColliderData";
-import { Rectangle } from "../../physics/collision/shape/Rectangle";
 import { InitOptions } from "../../core/GameActor";
 import {
     IRenderManager,
@@ -15,7 +12,7 @@ import {
     TilemapOrientation,
 } from "angry-pixel-2d-renderer";
 import { Vector2 } from "angry-pixel-math";
-import { Line } from "../../physics/collision/shape/Line";
+import { ICollider, Line, Polygon, Rectangle } from "angry-pixel-2d-physics";
 
 export interface TilemapColliderOptions extends InitOptions {
     tilemapRenderer: ITilemapRenderer;
@@ -42,10 +39,6 @@ export class TilemapCollider extends Collider {
         this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
         this.physics = true; // todo: fix this shit
         this.composite = config.composite ?? false;
-    }
-
-    protected start(): void {
-        this.layer = this.layer ?? this.gameObject.layer;
 
         this.scaledTileWidth = this.tilemapRenderer.tileWidth * this.gameObject.transform.scale.x;
         this.scaledTileHeight = this.tilemapRenderer.tileHeight * this.gameObject.transform.scale.y;
@@ -75,22 +68,17 @@ export class TilemapCollider extends Collider {
             if (!this.needsCollider(tile, index)) return;
 
             this.colliders.push(
-                new ColliderData(
-                    new Rectangle(
-                        this.scaledTileWidth,
-                        this.scaledTileHeight,
-                        new Vector2(
-                            this.position.x + ((index % this.tilemapRenderer.width) + 0.5) * this.scaledTileWidth,
-                            this.position.y -
-                                (Math.floor(index / this.tilemapRenderer.width) + 0.5) * this.scaledTileHeight
-                        )
+                this.physicsManager.addCollider({
+                    layer: this.layer ?? this.gameObject.layer,
+                    position: new Vector2(
+                        this.position.x + ((index % this.tilemapRenderer.width) + 0.5) * this.scaledTileWidth,
+                        this.position.y - (Math.floor(index / this.tilemapRenderer.width) + 0.5) * this.scaledTileHeight
                     ),
-                    this.layer,
-                    this.gameObject.id,
-                    false,
-                    this.physics,
-                    this.hasComponent(RigidBody)
-                )
+                    shape: new Rectangle(this.scaledTileWidth, this.scaledTileHeight),
+                    updateCollisions: false,
+                    physics: this.physics,
+                    group: this.gameObject.id,
+                })
             );
         });
     }
@@ -185,16 +173,14 @@ export class TilemapCollider extends Collider {
     }
 
     private addLineCollider(start: Vector2, end: Vector2): void {
-        const collider = new ColliderData(
-            new Line([start.clone(), end.clone()]),
-            this.layer,
-            this.gameObject.id,
-            false,
-            this.physics,
-            this.hasComponent(RigidBody)
-        );
-        collider.shape.position = this.position;
-        collider.shape.update();
+        const collider = this.physicsManager.addCollider({
+            layer: this.layer ?? this.gameObject.layer,
+            position: this.position.clone(),
+            shape: new Line([start.clone(), end.clone()]),
+            updateCollisions: true,
+            physics: this.physics,
+            group: this.gameObject.id,
+        });
 
         this.colliders.push(collider);
     }
@@ -222,8 +208,7 @@ export class TilemapCollider extends Collider {
     }
 
     protected update(): void {
-        this.colliders.forEach((collider) => (collider.layer = this.layer));
-        super.update();
+        this.colliders.forEach((collider) => (collider.layer = this.layer ?? this.gameObject.layer));
     }
 }
 
@@ -231,12 +216,12 @@ class TilemapColliderRenderer extends RenderComponent {
     private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
 
     private renderData: IGeometricRenderData[] = [];
-    private colliders: ColliderData[] = [];
+    private colliders: ICollider[] = [];
 
-    protected init({ colliders }: { colliders: ColliderData[] }): void {
+    protected init({ colliders }: { colliders: ICollider[] }): void {
         this.colliders = colliders;
 
-        this.colliders.forEach((collider: ColliderData, index: number) => {
+        this.colliders.forEach((collider: ICollider, index: number) => {
             this.renderData[index] = {
                 type: RenderDataType.Geometric,
                 layer: this.gameObject.layer,
@@ -249,11 +234,11 @@ class TilemapColliderRenderer extends RenderComponent {
     }
 
     protected update(): void {
-        this.colliders.forEach((collider: ColliderData, index: number) => {
+        this.colliders.forEach((collider: ICollider, index: number) => {
             this.renderData[index].layer = this.gameObject.layer;
             this.renderData[index].position.copy(collider.shape.position);
-            this.renderData[index].rotation = collider.shape.angle;
-            this.renderData[index].vertexModel = collider.shape.vertexModel;
+            this.renderData[index].rotation = collider.rotation;
+            this.renderData[index].vertexModel = (collider.shape as Polygon).vertexModel;
 
             this.renderManager.addRenderData(this.renderData[index]);
         });

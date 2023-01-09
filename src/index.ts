@@ -4,7 +4,7 @@ export * from "angry-pixel-math";
 // main
 export { Component, PhysicsComponent, PreRenderComponent } from "./core/Component";
 export { Game } from "./core/Game";
-export { GameConfig, CollisionMethodConfig } from "./core/GameConfig";
+export { GameConfig } from "./core/GameConfig";
 export * from "./core/GameObject";
 export * from "./core/Scene";
 export { InitOptions } from "./core/GameActor";
@@ -48,7 +48,12 @@ export * from "./input/KeyboardController";
 export * from "./input/MouseController";
 export * from "./input/TouchController";
 
-// others
-export { CollisionResolution } from "./physics/collision/resolver/CollisionResolver";
-export { ColliderData } from "./physics/collision/ColliderData";
-export { CollisionMatrix } from "./physics/collision/CollisionManager";
+// collision
+export {
+    ICollisionResolution,
+    ICollision,
+    CollisionMatrix,
+    CollisionMethods,
+    ICollider,
+    BroadPhaseMethods,
+} from "angry-pixel-2d-physics";
