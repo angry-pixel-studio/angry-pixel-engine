@@ -7,7 +7,7 @@ import { InitOptions } from "./GameActor";
 import { GameConfig } from "./GameConfig";
 import { SceneClass } from "./Scene";
 import { Vector2 } from "angry-pixel-math";
-import { CollisionMethods } from "angry-pixel-2d-physics";
+import { BroadPhaseMethods, CollisionMethods } from "angry-pixel-2d-physics";
 
 const defaultConfig: GameConfig = {
     containerNode: null,
@@ -20,6 +20,7 @@ const defaultConfig: GameConfig = {
     spriteDefaultScale: new Vector2(1, 1),
     collisions: {
         collisionMethod: CollisionMethods.SAT,
+        collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
     },
 };
 

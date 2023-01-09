@@ -47,12 +47,11 @@
         "prettier": "^2.1.2",
         "rollup": "^2.49.0",
         "rollup-plugin-terser": "^7.0.2",
-        "rollup-plugin-typescript2": "^0.30.0",
-        "tslib": "^2.3.1",
+        "rollup-plugin-typescript2": "0.34.0",
         "typescript": "^4.0.2"
     },
     "dependencies": {
-        "angry-pixel-2d-physics": "^1.0.0",
+        "angry-pixel-2d-physics": "^1.0.1",
         "angry-pixel-2d-renderer": "^1.0.3",
         "angry-pixel-math": "^1.0.2"
     }

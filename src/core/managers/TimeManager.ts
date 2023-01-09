@@ -1,6 +1,6 @@
 import { Exception } from "../../utils/Exception";
 
-export const MIN_GAME_FRAMERATE = 15;
+export const MIN_GAME_FRAMERATE = 30;
 export const DEFAULT_GAME_FRAMERATE = 60;
 export const DEFAULT_PHYSICS_FRAMERATE = 180;
 

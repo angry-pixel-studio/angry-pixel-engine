@@ -49,4 +49,11 @@ export * from "./input/MouseController";
 export * from "./input/TouchController";
 
 // collision
-export { ICollisionResolution, ICollision, CollisionMatrix, CollisionMethods, ICollider } from "angry-pixel-2d-physics";
+export {
+    ICollisionResolution,
+    ICollision,
+    CollisionMatrix,
+    CollisionMethods,
+    ICollider,
+    BroadPhaseMethods,
+} from "angry-pixel-2d-physics";

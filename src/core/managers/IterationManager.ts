@@ -30,6 +30,8 @@ export interface IIterationManager {
     stop(): void;
 }
 
+export const now = (): number => window.performance.now() * 0.001;
+
 export class IterationManager implements IIterationManager {
     public running: boolean = false;
 
@@ -37,6 +39,7 @@ export class IterationManager implements IIterationManager {
     private currentScene: Scene;
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
+    private physicsIntervalId: number;
 
     constructor(
         private readonly timeManager: TimeManager,
@@ -122,7 +125,8 @@ export class IterationManager implements IIterationManager {
 
         // physics fixed at game frame rate
         if (this.timeManager.gameFramerate === this.timeManager.physicsFramerate) {
-            this.physicsIteration(time);
+            this.timeManager.updateForPhysics(time);
+            this.physicsIteration();
         }
 
         this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
@@ -140,10 +144,8 @@ export class IterationManager implements IIterationManager {
         this.renderManager.clearData();
     }
 
-    private physicsIteration(time: number): void {
+    private physicsIteration(): void {
         if (this.timeManager.timeScale <= 0) return;
-
-        this.timeManager.updateForPhysics(time);
 
         this.dispatchFrameEvent(FrameEvent.UpdatePhysics);
         this.dispatchFrameEvent(FrameEvent.UpdateCollider);
@@ -153,14 +155,11 @@ export class IterationManager implements IIterationManager {
     }
 
     private asyncPhysicsLoop(): void {
-        if (!this.running) return;
-
-        const time: number = window.performance.now() * 0.001;
-
-        if (!document.hidden) this.physicsIteration(time);
-
-        const timeDiff = 1 / this.timeManager.physicsFramerate - (window.performance.now() * 0.001 - time);
-        window.setTimeout(() => this.asyncPhysicsLoop(), Math.max(0.0001, timeDiff) * 1000);
+        this.physicsIntervalId = window.setInterval(() => {
+            if (!this.running) return window.clearInterval(this.physicsIntervalId);
+            this.timeManager.updateForPhysics(now());
+            if (!document.hidden) this.physicsIteration();
+        }, 1000 / this.timeManager.physicsFramerate);
     }
 
     private load(): void {

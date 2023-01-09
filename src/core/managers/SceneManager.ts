@@ -13,10 +13,9 @@ export class SceneManager {
     private currentScene: Scene = null;
     private openingSceneName: string = null;
     private sceneToLoad: string | null = null;
-
     public currentSceneName: string;
 
-    constructor(private readonly container: Container, private game: Game, private renderManager?: IRenderManager) {}
+    constructor(private readonly container: Container, private renderManager?: IRenderManager) {}
 
     public getCurrentScene<T extends Scene>(): T {
         return this.currentScene as T;
@@ -28,7 +27,7 @@ export class SceneManager {
         }
 
         this.scenes.set(name, () => {
-            const scene = new sceneClass(this.container, name, this.game);
+            const scene = new sceneClass(this.container, name, this.container.getConstant<Game>("Game"));
 
             this.currentScene = scene;
             scene.dispatch(FrameEvent.Init, options);
@@ -50,10 +49,6 @@ export class SceneManager {
     }
 
     public loadScene(name: string): void {
-        if (this.game === null) {
-            throw new Exception("Game not initialized.");
-        }
-
         if (this.scenes.has(name) === false) {
             throw new Exception(`Scene with name ${name} does not exists`);
         }

@@ -1,4 +1,4 @@
-import { CollisionMatrix, CollisionMethods } from "angry-pixel-2d-physics";
+import { BroadPhaseMethods, CollisionMatrix, CollisionMethods } from "angry-pixel-2d-physics";
 import { Rectangle, Vector2 } from "angry-pixel-math";
 
 export interface GameConfig {
@@ -14,5 +14,6 @@ export interface GameConfig {
         collisionMethod?: CollisionMethods;
         collisionArea?: Rectangle; // TODO: implement different bounds per scene
         collisionMatrix?: CollisionMatrix;
+        collisionBroadPhaseMethod?: BroadPhaseMethods;
     };
 }

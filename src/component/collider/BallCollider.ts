@@ -44,7 +44,7 @@ export class BallCollider extends Collider {
         this.colliders.push(
             this.physicsManager.addCollider({
                 layer: this.layer ?? this.gameObject.layer,
-                position: new Vector2(),
+                position: this.gameObject.transform.position.clone(),
                 shape: new Circumference(this.radius),
                 updateCollisions: true,
                 physics: this.physics,

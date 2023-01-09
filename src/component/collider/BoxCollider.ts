@@ -47,7 +47,7 @@ export class BoxCollider extends Collider {
         this.colliders.push(
             this.physicsManager.addCollider({
                 layer: this.layer ?? this.gameObject.layer,
-                position: new Vector2(),
+                position: this.gameObject.transform.position.clone(),
                 rotation: this.rotation.radians,
                 shape: new Rectangle(this.realWidth, this.realHeight),
                 updateCollisions: true,

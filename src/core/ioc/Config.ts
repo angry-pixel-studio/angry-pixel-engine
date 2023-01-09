@@ -1,4 +1,3 @@
-import { Game } from "../Game";
 import { AssetManager } from "../managers/AssetManager";
 import { DomManager } from "../managers/DomManager";
 import { GameObjectManager } from "../managers/GameObjectManager";
@@ -75,7 +74,6 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
         () =>
             new SceneManager(
                 container,
-                container.getConstant<Game>("Game"),
                 !gameConfig.headless ? container.getSingleton<IRenderManager>("RenderManager") : undefined
             )
     );

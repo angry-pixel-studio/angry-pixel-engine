@@ -16,6 +16,9 @@ export class HeadlessIterationManager implements IIterationManager {
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
 
+    private gameInterval: NodeJS.Timer;
+    private physicsInterval: NodeJS.Timer;
+
     constructor(
         private readonly timeManager: TimeManager,
         private readonly physicsManager: IPhysicsManager,
@@ -75,16 +78,15 @@ export class HeadlessIterationManager implements IIterationManager {
 
         // physics fixed at game frame rate
         if (this.timeManager.gameFramerate === this.timeManager.physicsFramerate) {
-            this.physicsIteration(time);
+            this.timeManager.updateForPhysics(time);
+            this.physicsIteration();
         }
 
         this.sceneManager.update();
     }
 
-    private physicsIteration(time: number): void {
+    private physicsIteration(): void {
         if (this.timeManager.timeScale <= 0) return;
-
-        this.timeManager.updateForPhysics(time);
 
         this.dispatchFrameEvent(FrameEvent.UpdatePhysics);
         this.dispatchFrameEvent(FrameEvent.UpdateCollider);
@@ -94,25 +96,18 @@ export class HeadlessIterationManager implements IIterationManager {
     }
 
     private asyncGameLoop(): void {
-        if (!this.running) return;
-
-        const time: number = process.uptime();
-
-        this.gameLogicIteration(time);
-
-        const timeDiff = 1 / this.timeManager.gameFramerate - (process.uptime() - time);
-        setTimeout(() => this.asyncGameLoop(), Math.max(0.0001, timeDiff) * 1000);
+        this.gameInterval = setInterval(() => {
+            if (!this.running) return clearInterval(this.gameInterval);
+            this.gameLogicIteration(process.uptime());
+        }, 1000 / this.timeManager.gameFramerate);
     }
 
     private asyncPhysicsLoop(): void {
-        if (!this.running) return;
-
-        const time: number = process.uptime();
-
-        this.physicsIteration(time);
-
-        const timeDiff = 1 / this.timeManager.physicsFramerate - (process.uptime() - time);
-        setTimeout(() => this.asyncPhysicsLoop(), Math.max(0.0001, timeDiff) * 1000);
+        this.physicsInterval = setInterval(() => {
+            if (!this.running) return clearInterval(this.physicsInterval);
+            this.timeManager.updateForPhysics(process.uptime());
+            this.physicsIteration();
+        }, 1000 / this.timeManager.physicsFramerate);
     }
 
     private load(): void {
