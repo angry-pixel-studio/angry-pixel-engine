@@ -16,10 +16,11 @@ export class AssetManagerFacade {
 
     /**
      * @param url The url of the image
+     * @param preloadTexture [optional] preload the texture for this image
      * @returns The created image element
      */
-    public static loadImage(url: string): HTMLImageElement {
-        return this.assetManager.loadImage(url);
+    public static loadImage(url: string, preloadTexture?: boolean): HTMLImageElement {
+        return this.assetManager.loadImage(url, preloadTexture);
     }
 
     /**

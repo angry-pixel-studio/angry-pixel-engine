@@ -46,6 +46,7 @@ export class Button extends Component {
 
     public onClick: () => void;
     public onPressed: () => void;
+    public onHover: () => void;
 
     public get offset(): Vector2 {
         return this._offset;
@@ -95,7 +96,9 @@ export class Button extends Component {
         this.scaled.height = this.width * this.gameObject.transform.scale.y;
         this.scaled.offset.x = this._offset.x * this.gameObject.transform.scale.x;
         this.scaled.offset.y = this._offset.y * this.gameObject.transform.scale.y;
-        this.scaled.radius = this.radius * this.gameObject.transform.scale.magnitude;
+        this.scaled.radius =
+            this.radius *
+            Math.max(Math.abs(this.gameObject.transform.scale.x), Math.abs(this.gameObject.transform.scale.y));
     }
 
     protected resolveMouseAndRectangle(): void {

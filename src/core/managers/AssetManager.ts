@@ -1,3 +1,5 @@
+import { IRenderManager } from "angry-pixel-2d-renderer";
+
 export enum AssetType {
     Image = "Image",
     Audio = "Audio",
@@ -16,27 +18,39 @@ interface Asset {
 
 export interface IAssetManager {
     getAssetsLoaded(): boolean;
-    loadImage(url: string): HTMLImageElement;
+    loadImage(url: string, preloadTexture?: boolean): HTMLImageElement;
+    loadAudio(url: string): HTMLAudioElement;
+    loadFont(family: string, url: string): FontFace;
+    getImage(url: string): HTMLImageElement;
+    getAudio(url: string): HTMLAudioElement;
+    getFont(family: string): FontFace;
 }
 
-export class AssetManager {
-    private assets: Asset[] = [];
+export class AssetManager implements IAssetManager {
+    private readonly assets: Asset[] = [];
+
+    constructor(private readonly renderManager: IRenderManager) {}
 
     public getAssetsLoaded(): boolean {
         return this.assets.reduce((prev: boolean, asset: Asset) => prev && asset.loaded, true);
     }
 
-    public loadImage(url: string): HTMLImageElement {
+    public loadImage(url: string, preloadTexture: boolean = false): HTMLImageElement {
         const image = new Image();
         image.crossOrigin = "";
         image.src = url;
 
         const asset = this.createAsset(url, AssetType.Image, image);
 
-        if (image.naturalWidth) {
+        const loaded = () => {
+            if (preloadTexture) this.renderManager.preloadTexture(image);
             asset.loaded = true;
+        };
+
+        if (image.naturalWidth) {
+            loaded();
         } else {
-            image.addEventListener("load", () => (asset.loaded = true));
+            image.addEventListener("load", loaded);
         }
 
         return image;

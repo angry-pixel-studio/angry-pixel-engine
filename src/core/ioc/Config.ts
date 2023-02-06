@@ -41,7 +41,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
 
         inputDependencies(container);
 
-        container.add("AssetManager", () => new AssetManager());
+        container.add("AssetManager", () => new AssetManager(container.getSingleton<IRenderManager>("RenderManager")));
 
         container.add(
             "IterationManager",
