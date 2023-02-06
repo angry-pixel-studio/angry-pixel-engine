@@ -61,13 +61,7 @@ export class BoxCollider extends Collider {
         }
     }
 
-    protected update(): void {
-        this.updateRealSize();
-        this.updatePosition();
-        this.updateCollider();
-    }
-
-    private updateRealSize(): void {
+    protected updateRealSize(): void {
         this.realWidth = this.width * Math.abs(this.gameObject.transform.scale.x);
         this.realHeight = this.height * Math.abs(this.gameObject.transform.scale.y);
 
@@ -96,9 +90,9 @@ export class BoxCollider extends Collider {
         );
     }
 
-    private updateCollider(): void {
+    protected updateColliders(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
-        this.colliders[0].position = this.realPosition;
+        this.colliders[0].position.copy(this.realPosition);
         this.colliders[0].rotation = this.realRotation;
         (this.colliders[0].shape as Rectangle).updateSize(this.realWidth, this.realHeight);
     }

@@ -20,6 +20,23 @@ export abstract class Collider extends ColliderComponent {
     public layer: string;
     public physics: boolean = true;
 
+    private activateColliders: boolean = false;
+
+    protected abstract updateRealSize(): void;
+    protected abstract updatePosition(): void;
+    protected abstract updateColliders(): void;
+
+    protected update(): void {
+        if (this.activateColliders) {
+            this.colliders.forEach((c) => (c.active = true));
+            this.activateColliders = false;
+        }
+
+        this.updateRealSize();
+        this.updatePosition();
+        this.updateColliders();
+    }
+
     public collidesWithLayer(layer: string): boolean {
         return this.getCollisionWithLayer(layer) !== null;
     }
@@ -65,7 +82,7 @@ export abstract class Collider extends ColliderComponent {
 
     protected onActiveChange(): void {
         if (this.renderer) this.renderer.active = this.active;
-        this.colliders.forEach((c) => (c.active = this.active));
+        this.active ? (this.activateColliders = true) : this.colliders.forEach((c) => (c.active = this.active));
     }
 
     protected onDestroy(): void {

@@ -91,7 +91,7 @@ export class Transform extends TransformComponent {
             ? this._parent.rotation.radians + this._rotation.radians
             : this._rotation.radians;
 
-        this.parentScale ? this._scale.copy(this._parent.scale) : null;
+        if (this.parentScale) this._scale.copy(this.parent._scale);
     }
 
     private translateInnerPosition(): void {

@@ -207,7 +207,15 @@ export class TilemapCollider extends Collider {
         ];
     }
 
-    protected update(): void {
+    protected updateRealSize(): void {
+        // do nothing
+    }
+
+    protected updatePosition(): void {
+        // do nothing
+    }
+
+    protected updateColliders(): void {
         this.colliders.forEach((collider) => (collider.layer = this.layer ?? this.gameObject.layer));
     }
 }

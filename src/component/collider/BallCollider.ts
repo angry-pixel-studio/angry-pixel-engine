@@ -57,13 +57,7 @@ export class BallCollider extends Collider {
         }
     }
 
-    protected update(): void {
-        this.updateRealSize();
-        this.updatePosition();
-        this.updateCollider();
-    }
-
-    private updateRealSize(): void {
+    protected updateRealSize(): void {
         this.realRadius =
             this.radius *
             Math.max(Math.abs(this.gameObject.transform.scale.x), Math.abs(this.gameObject.transform.scale.y));
@@ -91,9 +85,9 @@ export class BallCollider extends Collider {
         );
     }
 
-    private updateCollider(): void {
+    protected updateColliders(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
-        this.colliders[0].position = this.realPosition;
+        this.colliders[0].position.copy(this.realPosition);
         (this.colliders[0].shape as Circumference).radius = this.realRadius;
     }
 }

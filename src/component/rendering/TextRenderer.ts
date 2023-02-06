@@ -63,9 +63,9 @@ export class TextRenderer extends RenderComponent {
         this.charRanges = config.charRanges ?? [32, 126, 161, 255];
         this.lineSeparation = config.lineSeparation ?? 0;
         this.letterSpacing = config.letterSpacing ?? 0;
-        this.smooth = config.smooth;
+        this.smooth = config.smooth ?? false;
         this.rotation = config.rotation ?? new Rotation();
-        this.opacity = config.opacity;
+        this.opacity = config.opacity ?? 1;
         this.orientation = config.orientation;
         this.bitmapMargin = config.bitmapMargin;
         this.bitmapSpacing = config.bitmapSpacing;

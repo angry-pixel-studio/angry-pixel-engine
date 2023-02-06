@@ -2,9 +2,10 @@ import { EngineComponent } from "../core/Component";
 import { InitOptions } from "../core/GameActor";
 
 export interface AudioPlayerOptions extends InitOptions {
-    audio?: HTMLAudioElement;
+    audioSource?: HTMLAudioElement;
     volume?: number;
     loop?: boolean;
+    playOnStart?: boolean;
 }
 
 const userInputEventNames = [
@@ -23,40 +24,71 @@ const userInputEventNames = [
 export class AudioPlayer extends EngineComponent {
     public readonly allowMultiple: boolean = false;
 
-    public volume: number = 1;
-    public loop: boolean = false;
-    public audio: HTMLAudioElement = null;
+    private audioContext: AudioContext;
+    private tracks: MediaElementAudioSourceNode[] = [];
 
-    private clones: Map<symbol, HTMLAudioElement> = new Map<symbol, HTMLAudioElement>();
+    private _audioSource: HTMLAudioElement;
+    private _volume: number;
+    private _loop: boolean;
+    private playOnStart: boolean;
+
     private _playing: boolean = false;
     private _paused: boolean = false;
 
-    protected init(options: AudioPlayerOptions = {}): void {
-        this.audio = options.audio ?? this.audio;
-        this.volume = options.volume ?? this.volume;
-        this.loop = options.loop ?? this.loop;
+    protected init({ audioSource, loop, volume, playOnStart }: AudioPlayerOptions = {}): void {
+        this.audioContext = new AudioContext();
+
+        if (audioSource) this.audioSource = audioSource;
+
+        this._volume = volume ?? 1;
+        this._loop = loop ?? false;
+        this.playOnStart = playOnStart ?? false;
     }
 
-    public playAudio(audio: HTMLAudioElement, volume: number | null = null): void {
-        if (this.clones.has(Symbol.for(audio.src)) === false) this.cloneAudio(audio);
-
-        const clone = this.clones.get(Symbol.for(audio.src));
-
-        if (clone.currentTime > 0) clone.currentTime = 0;
-
-        clone.volume = volume ?? this.volume;
-        clone.play();
+    protected start(): void {
+        if (this.playOnStart) this.play();
     }
 
-    private cloneAudio(audio: HTMLAudioElement): void {
-        const clone = audio.cloneNode() as HTMLAudioElement;
-        this.clones.set(Symbol.for(audio.src), clone);
+    public set audioSource(audioSource: HTMLAudioElement) {
+        this._audioSource = audioSource.cloneNode() as HTMLAudioElement;
+
+        if (!this.tracks.find((t) => t.mediaElement.src === audioSource.src)) {
+            const track = this.audioContext.createMediaElementSource(this._audioSource);
+            track.connect(this.audioContext.destination);
+            this.tracks.push(track);
+        }
+    }
+
+    public get audioSource(): HTMLAudioElement {
+        return this._audioSource;
+    }
+
+    public set volume(volume: number) {
+        this._volume = volume;
+        if (this.audioSource) this._audioSource.volume = volume;
+    }
+
+    public get volume(): number {
+        return this._volume;
+    }
+
+    public set loop(loop: boolean) {
+        this._loop = loop;
+        if (this.audioSource) this._audioSource.loop = loop;
+    }
+
+    public get loop(): boolean {
+        return this._loop;
+    }
+
+    public playClip(audioSource: HTMLAudioElement, volume?: number): void {
+        if (audioSource.currentTime > 0) audioSource.currentTime = 0;
+        audioSource.volume = volume ?? this._volume;
+        audioSource.play();
     }
 
     public play(): void {
-        if (this.audio === null) {
-            return;
-        }
+        if (!this._audioSource) return;
 
         if (this._playing && this._paused === false) {
             return;
@@ -64,35 +96,32 @@ export class AudioPlayer extends EngineComponent {
 
         if (this._paused) {
             this._paused = false;
-            this.audio.play();
+            this._audioSource.play();
             return;
         }
 
-        this.audio.volume = this.volume;
-        this.audio.loop = this.loop;
+        this._audioSource.volume = this._volume;
+        this._audioSource.loop = this._loop;
 
-        this.audio.addEventListener("ended", this.audioEventHandler);
+        this._audioSource.addEventListener("ended", this.audioEventHandler);
 
         this._playing = true;
-        const promise: Promise<void> = this.audio.play();
 
-        // see https://developers.google.com/web/updates/2018/11/web-audio-autoplay
-        promise
-            .then(() => {
-                // do nothing
-            })
-            .catch(() =>
+        // see https://developer.chrome.com/blog/web-audio-autoplay/
+        this._audioSource.play().catch(() => {
+            if (this.audioContext.state !== "running") {
                 userInputEventNames.forEach((eventName) =>
-                    window.addEventListener(eventName, this.userinputEventHandler)
-                )
-            );
+                    window.addEventListener(eventName, this.userInputEventHandler)
+                );
+            }
+        });
     }
 
     public stop(): void {
         if (this._playing) {
-            this.audio.pause();
-            this.audio.currentTime = 0;
-            this.audio.removeEventListener("ended", this.audioEventHandler);
+            this._audioSource.pause();
+            this._audioSource.currentTime = 0;
+            this._audioSource.removeEventListener("ended", this.audioEventHandler);
 
             this._playing = false;
             this._paused = false;
@@ -101,7 +130,7 @@ export class AudioPlayer extends EngineComponent {
 
     public pause(): void {
         if (this._playing && this._paused === false) {
-            this.audio.pause();
+            this._audioSource.pause();
             this._paused = true;
         }
     }
@@ -109,17 +138,18 @@ export class AudioPlayer extends EngineComponent {
     private audioEventHandler = (e: Event): void => {
         if (e.type === "ended") {
             this._playing = false;
-            this.audio.removeEventListener("ended", this.audioEventHandler);
+            this._audioSource.removeEventListener("ended", this.audioEventHandler);
         }
     };
 
-    // see https://developers.google.com/web/updates/2018/11/web-audio-autoplay
-    private userinputEventHandler = (): void => {
+    // see https://developer.chrome.com/blog/web-audio-autoplay/
+    private userInputEventHandler = (): void => {
         userInputEventNames.forEach((eventName) => {
-            window.removeEventListener(eventName, this.userinputEventHandler);
+            window.removeEventListener(eventName, this.userInputEventHandler);
         });
 
-        this.audio.play();
+        this.audioContext.resume();
+        this._audioSource.play();
     };
 
     protected onActiveChange(): void {
@@ -130,5 +160,6 @@ export class AudioPlayer extends EngineComponent {
 
     protected onDestroy(): void {
         this.stop();
+        this.audioContext.close();
     }
 }

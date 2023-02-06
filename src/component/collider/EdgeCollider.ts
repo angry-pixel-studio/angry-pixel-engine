@@ -3,7 +3,6 @@ import { Collider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
-import { RigidBody } from "../RigidBody";
 import {
     IRenderManager,
     IGeometricRenderData,
@@ -77,13 +76,7 @@ export class EdgeCollider extends Collider {
         }
     }
 
-    protected update(): void {
-        this.updateSize();
-        this.updatePosition();
-        this.updateColliders();
-    }
-
-    private updateSize(): void {
+    protected updateRealSize(): void {
         this.vertexModel.forEach((vertex, index) =>
             this.scaledVertexModel[index].set(
                 vertex.x * this.gameObject.transform.scale.x,
@@ -115,10 +108,10 @@ export class EdgeCollider extends Collider {
         );
     }
 
-    private updateColliders(): void {
+    protected updateColliders(): void {
         for (let i = 0; i < this.scaledVertexModel.length - 1; i++) {
             this.colliders[i].layer = this.layer ?? this.gameObject.layer;
-            this.colliders[i].position = this.scaledPosition;
+            this.colliders[i].position.copy(this.scaledPosition);
             this.colliders[i].rotation = this.finalRotation;
             (this.colliders[i].shape as Line).vertexModel = [this.scaledVertexModel[i], this.scaledVertexModel[i + 1]];
         }

@@ -33,7 +33,6 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     private smooth?: boolean;
 
     private tilesetTileIds: number[] = [];
-    // private offset: Vector2 = new Vector2();
     private chunks: TiledChunk[] = [];
     private scaledTileWidth: number = 0;
     private scaledTileHeight: number = 0;
@@ -81,8 +80,8 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
                 this.tintColor = layer.tintcolor;
 
                 this.tiledData.infinite === true
-                    ? layer.chunks.forEach((chunk) => this.processChunk(chunk, layer))
-                    : this.processChunk(layer, layer);
+                    ? layer.chunks.forEach((chunk) => this.processChunk(chunk))
+                    : this.processChunk(layer);
             }
         });
 
@@ -91,9 +90,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.tilesetTileIds = []; // free memory
     }
 
-    private processChunk(chunk: TiledChunk | TiledLayer, layer: TiledLayer): void {
-        // this.offset.set(layer.offsetx ?? 0, layer.offsety ?? 0);
-
+    private processChunk(chunk: TiledChunk | TiledLayer): void {
         const renderData: ITilemapRenderData = {
             type: RenderDataType.Tilemap,
             layer: this.layer ?? this.gameObject.layer,
@@ -144,11 +141,6 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
 
         this.renderData.forEach((renderData, index) => {
             renderData.layer = this.layer ?? this.gameObject.layer;
-
-            /*renderData.position.set(
-                this.gameObject.transform.position.x + (this.offset.x + this.chunks[index].x * this.scaledTileWidth),
-                this.gameObject.transform.position.y + (this.offset.y + this.chunks[index].y * this.scaledTileHeight)
-            );*/
 
             renderData.position.set(
                 this.gameObject.transform.position.x + this.chunks[index].x * this.scaledTileWidth,

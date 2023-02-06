@@ -76,13 +76,7 @@ export class PolygonCollider extends Collider {
         }
     }
 
-    protected update(): void {
-        this.updateSize();
-        this.updatePosition();
-        this.updateCollider();
-    }
-
-    private updateSize(): void {
+    protected updateRealSize(): void {
         this.vertexModel.forEach((vertex, index) =>
             this.scaledVertexModel[index].set(
                 vertex.x * this.gameObject.transform.scale.x,
@@ -114,9 +108,9 @@ export class PolygonCollider extends Collider {
         );
     }
 
-    private updateCollider(): void {
+    protected updateColliders(): void {
         this.colliders[0].layer = this.layer ?? this.gameObject.layer;
-        this.colliders[0].shape.position = this.scaledPosition;
+        this.colliders[0].position.copy(this.scaledPosition);
         this.colliders[0].rotation = this.finalRotation;
         (this.colliders[0].shape as Polygon).vertexModel = this.scaledVertexModel;
     }
