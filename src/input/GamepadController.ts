@@ -192,6 +192,10 @@ export class GamepadData {
         return -this.axes.get(3) ?? 0;
     }
 
+    public get anyButtonPressed(): boolean {
+        return Array.from(this.buttons.values()).find((b) => b);
+    }
+
     public vibrate(
         duration: number = 200,
         weakMagnitude: number = 0.2,

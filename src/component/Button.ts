@@ -46,7 +46,6 @@ export class Button extends Component {
 
     public onClick: () => void;
     public onPressed: () => void;
-    public onHover: () => void;
 
     public get offset(): Vector2 {
         return this._offset;

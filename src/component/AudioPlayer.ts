@@ -35,20 +35,6 @@ export class AudioPlayer extends EngineComponent {
     private _playing: boolean = false;
     private _paused: boolean = false;
 
-    protected init({ audioSource, loop, volume, playOnStart }: AudioPlayerOptions = {}): void {
-        this.audioContext = new AudioContext();
-
-        if (audioSource) this.audioSource = audioSource;
-
-        this._volume = volume ?? 1;
-        this._loop = loop ?? false;
-        this.playOnStart = playOnStart ?? false;
-    }
-
-    protected start(): void {
-        if (this.playOnStart) this.play();
-    }
-
     public set audioSource(audioSource: HTMLAudioElement) {
         this._audioSource = audioSource.cloneNode() as HTMLAudioElement;
 
@@ -65,7 +51,7 @@ export class AudioPlayer extends EngineComponent {
 
     public set volume(volume: number) {
         this._volume = volume;
-        if (this.audioSource) this._audioSource.volume = volume;
+        if (this._audioSource) this._audioSource.volume = volume;
     }
 
     public get volume(): number {
@@ -74,11 +60,33 @@ export class AudioPlayer extends EngineComponent {
 
     public set loop(loop: boolean) {
         this._loop = loop;
-        if (this.audioSource) this._audioSource.loop = loop;
+        if (this._audioSource) this._audioSource.loop = loop;
     }
 
     public get loop(): boolean {
         return this._loop;
+    }
+
+    public get playing(): boolean {
+        return this._playing;
+    }
+
+    public get paused(): boolean {
+        return this._paused;
+    }
+
+    protected init({ audioSource, loop, volume, playOnStart }: AudioPlayerOptions = {}): void {
+        this.audioContext = new AudioContext();
+
+        if (audioSource) this.audioSource = audioSource;
+
+        this._volume = volume ?? 1;
+        this._loop = loop ?? false;
+        this.playOnStart = playOnStart ?? false;
+    }
+
+    protected start(): void {
+        if (this.playOnStart) this.play();
     }
 
     public playClip(audioSource: HTMLAudioElement, volume?: number): void {
