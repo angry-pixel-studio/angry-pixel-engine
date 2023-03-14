@@ -79,4 +79,16 @@ export class SceneManager {
             }
         }
     }
+
+    public stopGame(): void {
+        if (this.currentScene !== null) {
+            this.currentScene.dispatch(FrameEvent.StopGame);
+            this.currentScene = null;
+            this.currentSceneName = null;
+
+            if (this.renderManager) {
+                this.renderManager.clearData();
+            }
+        }
+    }
 }

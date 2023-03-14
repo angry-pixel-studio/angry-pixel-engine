@@ -2,10 +2,8 @@ import { EngineComponent } from "../core/Component";
 import { InitOptions } from "../core/GameActor";
 
 export interface AudioPlayerOptions extends InitOptions {
-    audioSource?: HTMLAudioElement;
     volume?: number;
     loop?: boolean;
-    playOnStart?: boolean;
 }
 
 const userInputEventNames = [
@@ -21,29 +19,21 @@ const userInputEventNames = [
     "keyup",
 ];
 
+const defaultAudioSourceName = "default";
+
 export class AudioPlayer extends EngineComponent {
     public readonly allowMultiple: boolean = false;
 
     private audioContext: AudioContext;
     private tracks: MediaElementAudioSourceNode[] = [];
+    private audioSourceCache: Map<string, HTMLAudioElement> = new Map();
 
     private _audioSource: HTMLAudioElement;
     private _volume: number;
     private _loop: boolean;
-    private playOnStart: boolean;
 
     private _playing: boolean = false;
     private _paused: boolean = false;
-
-    public set audioSource(audioSource: HTMLAudioElement) {
-        this._audioSource = audioSource.cloneNode() as HTMLAudioElement;
-
-        if (!this.tracks.find((t) => t.mediaElement.src === audioSource.src)) {
-            const track = this.audioContext.createMediaElementSource(this._audioSource);
-            track.connect(this.audioContext.destination);
-            this.tracks.push(track);
-        }
-    }
 
     public get audioSource(): HTMLAudioElement {
         return this._audioSource;
@@ -75,26 +65,54 @@ export class AudioPlayer extends EngineComponent {
         return this._paused;
     }
 
-    protected init({ audioSource, loop, volume, playOnStart }: AudioPlayerOptions = {}): void {
+    protected init({ loop, volume }: AudioPlayerOptions = {}): void {
         this.audioContext = new AudioContext();
-
-        if (audioSource) this.audioSource = audioSource;
 
         this._volume = volume ?? 1;
         this._loop = loop ?? false;
-        this.playOnStart = playOnStart ?? false;
     }
 
-    protected start(): void {
-        if (this.playOnStart) this.play();
-    }
-
+    /**
+     * Play once the given audio source
+     * @param audioSource
+     * @param volume optional
+     */
     public playClip(audioSource: HTMLAudioElement, volume?: number): void {
         if (audioSource.currentTime > 0) audioSource.currentTime = 0;
         audioSource.volume = volume ?? this._volume;
         audioSource.play();
     }
 
+    /**
+     * Add a new audio source
+     * @param audioSource
+     */
+    public addAudioSource(audioSource: HTMLAudioElement, name: string = defaultAudioSourceName): void {
+        const newAudioSource = audioSource.cloneNode() as HTMLAudioElement;
+        this.audioSourceCache.set(name, newAudioSource);
+
+        const track = this.audioContext.createMediaElementSource(newAudioSource);
+        track.connect(this.audioContext.destination);
+        this.tracks.push(track);
+    }
+
+    /**
+     * Load the given audio source (if there is other audio source playing, it will stop)
+     * @param audioSourceName
+     * @param loop optional
+     * @param volume optional
+     */
+    public loadAudioSource(audioSourceName: string, loop?: boolean, volume?: number): void {
+        this.stop();
+
+        this._audioSource = this.audioSourceCache.get(audioSourceName);
+        this._loop = loop ?? this._loop;
+        this._volume = volume ?? this._volume;
+    }
+
+    /**
+     * Play the loaded audio source
+     */
     public play(): void {
         if (!this._audioSource) return;
 
@@ -125,6 +143,9 @@ export class AudioPlayer extends EngineComponent {
         });
     }
 
+    /**
+     * Stop playing the current audio source
+     */
     public stop(): void {
         if (this._playing) {
             this._audioSource.pause();
@@ -136,6 +157,9 @@ export class AudioPlayer extends EngineComponent {
         }
     }
 
+    /**
+     * Plause the current audio source
+     */
     public pause(): void {
         if (this._playing && this._paused === false) {
             this._audioSource.pause();

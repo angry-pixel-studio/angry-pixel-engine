@@ -20,6 +20,7 @@ export enum FrameEvent {
     UpdateCamera,
     UpdateRender,
     Destroy,
+    StopGame,
 }
 
 export interface IIterationManager {
@@ -66,7 +67,7 @@ export class IterationManager implements IIterationManager {
     public stop(): void {
         this.running = false;
 
-        this.sceneManager.unloadCurrentScene();
+        this.sceneManager.stopGame();
         this.physicsManager.clear();
         this.renderManager.clearScreen(this.canvasColor);
     }

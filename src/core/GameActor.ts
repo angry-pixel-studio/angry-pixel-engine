@@ -2,6 +2,7 @@ import { Container } from "../utils/Container";
 import { GameObject, GameObjectClass } from "./GameObject";
 import { GameObjectManager } from "./managers/GameObjectManager";
 import { FrameEvent } from "./managers/IterationManager";
+import { Scene } from "./Scene";
 
 export interface InitOptions {
     [key: string]: any; // eslint-disable-line
@@ -30,6 +31,9 @@ export abstract class GameActor {
         } else if (event === FrameEvent.Destroy) {
             if (this.onDestroy) this.onDestroy();
             this._destroy();
+        } else if (event === FrameEvent.StopGame) {
+            if (this.onDestroy) this.onDestroy();
+            this._stopGame();
         }
     }
 
@@ -157,4 +161,6 @@ export abstract class GameActor {
     }
 
     protected abstract _destroy(): void;
+
+    protected abstract _stopGame(): void;
 }

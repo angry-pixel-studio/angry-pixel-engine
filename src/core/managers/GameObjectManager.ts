@@ -62,9 +62,9 @@ export class GameObjectManager {
         return this.gameObjects.filter((gameObject) => gameObject.tag === tag) as T[];
     }
 
-    public destroyAllGameObjects(): void {
+    public destroyAllGameObjects(ignoreKeep: boolean = false): void {
         this.gameObjects
-            .filter((gameObject) => !gameObject.keep)
+            .filter((gameObject) => ignoreKeep || !gameObject.keep)
             .forEach((gameObject) => this.destroy(gameObject, false));
     }
 

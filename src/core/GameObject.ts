@@ -298,4 +298,8 @@ export class GameObject extends GameActor {
 
         this.components = [];
     }
+
+    protected _stopGame(): void {
+        // do nothing
+    }
 }

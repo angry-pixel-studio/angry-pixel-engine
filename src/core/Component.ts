@@ -119,6 +119,10 @@ export abstract class Component extends GameActor {
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
     }
+
+    protected _stopGame(): void {
+        // do nothing
+    }
 }
 
 export abstract class EngineComponent extends Component {
