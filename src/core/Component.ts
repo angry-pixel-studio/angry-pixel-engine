@@ -32,7 +32,10 @@ export abstract class Component extends GameActor {
     }
 
     public set active(active: boolean) {
+        if (this._active === active) return;
+
         this._active = active;
+
         this.onActiveChange();
     }
 

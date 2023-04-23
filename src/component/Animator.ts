@@ -1,10 +1,27 @@
 import { EngineComponent } from "../core/Component";
 import { SpriteRenderer } from "./rendering/SpriteRenderer";
 import { Sprite } from "./Sprite";
-import { Animation } from "./Animation";
 import { TimeManager } from "../core/managers/TimeManager";
 import { Exception } from "../utils/Exception";
 import { InitOptions } from "../core/GameActor";
+
+export interface AnimationConfig {
+    sprites: Sprite[];
+    loop: boolean;
+    framerate: number;
+}
+
+export class Animation {
+    public sprites: Sprite[] = [];
+    public framerate: number = 10;
+    public loop: boolean = false;
+
+    constructor(config: AnimationConfig) {
+        this.sprites = config.sprites;
+        this.framerate = config.framerate ?? this.framerate;
+        this.loop = config.loop ?? this.loop;
+    }
+}
 
 const defaultAnimationName = "default";
 
