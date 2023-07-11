@@ -75,6 +75,8 @@ export class GamepadData {
     private readonly _leftStickAxes: Vector2 = new Vector2();
     private readonly _rightStickAxes: Vector2 = new Vector2();
 
+    private _vibrating: boolean = false;
+
     public updateFromGamepad(gamepad: GamepadWithVibratorActuator): void {
         this._gamepad = gamepad;
         gamepad.buttons.forEach((button: GamepadButton, index: number) => this.buttons.set(index, button.pressed));
@@ -196,19 +198,27 @@ export class GamepadData {
         return Array.from(this.buttons.values()).find((b) => b);
     }
 
+    public get vibrating(): boolean {
+        return this._vibrating;
+    }
+
     public vibrate(
         duration: number = 200,
         weakMagnitude: number = 0.2,
         strongMagnitude: number = 0.2,
         startDelay: number = 0
     ): void {
-        this._gamepad.vibrationActuator
-            ? this._gamepad.vibrationActuator.playEffect(this._gamepad.vibrationActuator.type, {
-                  duration,
-                  weakMagnitude,
-                  strongMagnitude,
-                  startDelay,
-              })
-            : null;
+        if (this._gamepad.vibrationActuator) {
+            this._vibrating = true;
+            this._gamepad.vibrationActuator
+                .playEffect(this._gamepad.vibrationActuator.type, {
+                    duration,
+                    weakMagnitude,
+                    strongMagnitude,
+                    startDelay,
+                })
+                .catch(() => (this._vibrating = false))
+                .finally(() => (this._vibrating = false));
+        }
     }
 }

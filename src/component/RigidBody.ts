@@ -1,7 +1,7 @@
 import { EngineComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
 import { Vector2 } from "angry-pixel-math";
-import { Collider } from "./collider/Collider";
+import { BaseCollider } from "./collider/Collider";
 import { InitOptions } from "../core/GameActor";
 import { IPhysicsManager, IRigidBody, RigidBodyType } from "angry-pixel-2d-physics";
 
@@ -63,8 +63,8 @@ export class RigidBody extends EngineComponent {
     private getColliderIds(): number[] {
         return this.gameObject
             .getComponents()
-            .filter((component) => component instanceof Collider && component.physics)
-            .reduce((ids, component) => [...ids, ...(component as Collider).colliders.map((c) => c.id)], []);
+            .filter((component) => component instanceof BaseCollider && component.physics)
+            .reduce((ids, component) => [...ids, ...(component as BaseCollider).colliders.map((c) => c.id)], []);
     }
 
     protected onActiveChange(): void {

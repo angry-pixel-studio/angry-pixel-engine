@@ -1,6 +1,6 @@
 import { GameConfig } from "../../core/GameConfig";
 import { ITilemapRenderer } from "../rendering/TilemapRenderer";
-import { Collider } from "./Collider";
+import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
 import {
@@ -21,7 +21,7 @@ export interface TilemapColliderOptions extends InitOptions {
     debug?: boolean;
 }
 
-export class TilemapCollider extends Collider {
+export class TilemapCollider extends BaseCollider {
     private tilemapRenderer: ITilemapRenderer;
     private debug: boolean = false;
     private composite: boolean;

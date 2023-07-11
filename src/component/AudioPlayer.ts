@@ -68,6 +68,11 @@ export class AudioPlayer extends EngineComponent {
     protected init({ loop, volume }: AudioPlayerOptions = {}): void {
         this.audioContext = new AudioContext();
 
+        // see https://developer.chrome.com/blog/autoplay/#webaudio
+        if (this.audioContext.state !== "running") {
+            userInputEventNames.forEach((eventName) => window.addEventListener(eventName, this.userInputEventHandler));
+        }
+
         this._volume = volume ?? 1;
         this._loop = loop ?? false;
     }
@@ -133,14 +138,7 @@ export class AudioPlayer extends EngineComponent {
 
         this._playing = true;
 
-        // see https://developer.chrome.com/blog/web-audio-autoplay/
-        this._audioSource.play().catch(() => {
-            if (this.audioContext.state !== "running") {
-                userInputEventNames.forEach((eventName) =>
-                    window.addEventListener(eventName, this.userInputEventHandler)
-                );
-            }
-        });
+        if (this.audioContext.state === "running") this._audioSource.play();
     }
 
     /**
@@ -174,14 +172,14 @@ export class AudioPlayer extends EngineComponent {
         }
     };
 
-    // see https://developer.chrome.com/blog/web-audio-autoplay/
+    // see https://developer.chrome.com/blog/autoplay/#webaudio
     private userInputEventHandler = (): void => {
         userInputEventNames.forEach((eventName) => {
             window.removeEventListener(eventName, this.userInputEventHandler);
         });
 
         this.audioContext.resume();
-        this._audioSource.play();
+        if (this._audioSource && this._playing) this._audioSource.play();
     };
 
     protected onActiveChange(): void {

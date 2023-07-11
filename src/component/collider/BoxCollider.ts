@@ -1,4 +1,4 @@
-import { Collider } from "./Collider";
+import { BaseCollider } from "./Collider";
 import { InitOptions } from "../../core/GameActor";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { PolygonColliderRenderer } from "./PolygonCollider";
@@ -16,7 +16,7 @@ export interface BoxColliderOptions extends InitOptions {
     debug?: boolean;
 }
 
-export class BoxCollider extends Collider {
+export class BoxCollider extends BaseCollider {
     public debug: boolean = false;
     public width: number;
     public height: number;
