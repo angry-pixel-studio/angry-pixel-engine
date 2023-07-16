@@ -263,10 +263,10 @@ angry-pixel-2d-physics@^1.0.1:
   dependencies:
     angry-pixel-math "^1.0.2"
 
-angry-pixel-2d-renderer@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/angry-pixel-2d-renderer/-/angry-pixel-2d-renderer-1.0.4.tgz#28080352fa0bca15543eb6c94591a7fe2cee3d15"
-  integrity sha512-PwwVHsCMLS1u+d7pH46LfI6e41/S6552kMUmNsjYyo2S1st6wZ5Gtm98Jneq5gJhQu3vpMEiuh9W53PbRkAQUQ==
+angry-pixel-2d-renderer@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/angry-pixel-2d-renderer/-/angry-pixel-2d-renderer-1.0.5.tgz#a5b823f16454480085f9da4f723618fd7677293c"
+  integrity sha512-G8HVIkUcJDkfQfr8Xpj2NpuY89/S5Cm/Bpd0WBcmWnpE/MJSv+QJ0owCR5+J0+wUyEJaa+qXF8670+uoKVMRdA==
   dependencies:
     angry-pixel-math "^1.0.2"
     gl-matrix "^3.4.3"

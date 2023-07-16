@@ -83,6 +83,16 @@ export class TilemapCollider extends BaseCollider {
         });
     }
 
+    private needsCollider(tile: number, index: number): boolean {
+        return (
+            tile !== 0 &&
+            this.getNeighbors(index).some(
+                (neighbor) =>
+                    !neighbor || !this.tilemapRenderer.tiles[neighbor] || this.tilemapRenderer.tiles[neighbor] === 0
+            )
+        );
+    }
+
     private useLineColliders(): void {
         const hVertices: boolean[][] = [];
         const vVertices: boolean[][] = [];
@@ -99,25 +109,21 @@ export class TilemapCollider extends BaseCollider {
             if (!vVertices[y + 1]) vVertices[y + 1] = [];
 
             const neighbors = this.getNeighbors(index);
-
+            // up
             if (!this.hasTile(neighbors[0])) {
                 hVertices[y][x] = true;
-                hVertices[y][x + 1] = true;
             }
-
+            // down
             if (!this.hasTile(neighbors[2])) {
                 hVertices[y + 1][x] = true;
-                hVertices[y + 1][x + 1] = true;
             }
-
+            // left
             if (!this.hasTile(neighbors[1])) {
                 vVertices[y][x] = true;
-                vVertices[y + 1][x] = true;
             }
-
+            // right
             if (!this.hasTile(neighbors[3])) {
                 vVertices[y][x + 1] = true;
-                vVertices[y + 1][x + 1] = true;
             }
         });
 
@@ -125,47 +131,45 @@ export class TilemapCollider extends BaseCollider {
         let end: Vector2;
 
         for (let y = 0; y < hVertices.length; y++) {
+            if (!hVertices[y]) continue;
+
             for (let x = 0; x < hVertices[y].length; x++) {
-                if (start && end && (y * -this.scaledTileHeight !== end.y || !hVertices[y][x])) {
+                if (start && end && (y !== end.y || !hVertices[y][x])) {
                     this.addLineCollider(start, end);
                     start = undefined;
                     end = undefined;
                 }
 
                 if (hVertices[y][x]) {
-                    !start
-                        ? (start = new Vector2(x * this.scaledTileWidth, y * -this.scaledTileHeight))
-                        : (end = new Vector2(x * this.scaledTileWidth, y * -this.scaledTileHeight));
+                    if (!start) start = new Vector2(x, y);
+                    end = new Vector2(x + 1, y);
                 }
             }
         }
 
-        if (start && end) {
-            this.addLineCollider(start, end);
-        }
+        if (start && end) this.addLineCollider(start, end);
 
         start = undefined;
         end = undefined;
 
         for (let x = 0; x <= this.tilemapRenderer.width; x++) {
             for (let y = 0; y < vVertices.length; y++) {
-                if (start && end && (x * this.scaledTileWidth !== end.x || !vVertices[y][x])) {
+                if (!vVertices[y]) continue;
+
+                if (start && end && (x !== end.x || !vVertices[y][x])) {
                     this.addLineCollider(start, end);
                     start = undefined;
                     end = undefined;
                 }
 
                 if (vVertices[y][x]) {
-                    !start
-                        ? (start = new Vector2(x * this.scaledTileWidth, y * -this.scaledTileHeight))
-                        : (end = new Vector2(x * this.scaledTileWidth, y * -this.scaledTileHeight));
+                    if (!start) start = new Vector2(x, y);
+                    end = new Vector2(x, y + 1);
                 }
             }
         }
 
-        if (start && end) {
-            this.addLineCollider(start, end);
-        }
+        if (start && end) this.addLineCollider(start, end);
     }
 
     private hasTile(index: number): boolean {
@@ -176,23 +180,16 @@ export class TilemapCollider extends BaseCollider {
         const collider = this.physicsManager.addCollider({
             layer: this.layer ?? this.gameObject.layer,
             position: this.position.clone(),
-            shape: new Line([start.clone(), end.clone()]),
-            updateCollisions: true,
+            shape: new Line([
+                new Vector2(start.x * this.scaledTileWidth, start.y * -this.scaledTileHeight),
+                new Vector2(end.x * this.scaledTileWidth, end.y * -this.scaledTileHeight),
+            ]),
+            updateCollisions: false,
             physics: this.physics,
             group: this.gameObject.id,
         });
 
         this.colliders.push(collider);
-    }
-
-    private needsCollider(tile: number, index: number): boolean {
-        return (
-            tile !== 0 &&
-            this.getNeighbors(index).some(
-                (neighbor) =>
-                    !neighbor || !this.tilemapRenderer.tiles[neighbor] || this.tilemapRenderer.tiles[neighbor] === 0
-            )
-        );
     }
 
     private getNeighbors(index: number): number[] {
