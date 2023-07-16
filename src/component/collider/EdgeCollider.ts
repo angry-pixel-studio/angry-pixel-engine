@@ -1,5 +1,5 @@
 import { GameConfig } from "../../core/GameConfig";
-import { Collider } from "./Collider";
+import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
@@ -23,7 +23,7 @@ export interface EdgeColliderOptions extends InitOptions {
     debug?: boolean;
 }
 
-export class EdgeCollider extends Collider {
+export class EdgeCollider extends BaseCollider {
     public debug: boolean = false;
     public vertexModel: Vector2[];
     public offsetX: number = 0;

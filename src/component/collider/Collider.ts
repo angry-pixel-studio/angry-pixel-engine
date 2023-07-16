@@ -12,7 +12,13 @@ export interface CollisionData {
     getGameObject: <T extends GameObject>() => T;
 }
 
-export abstract class Collider extends ColliderComponent {
+export interface Collider {
+    collidesWithLayer(layer: string): boolean;
+    getCollisionWithLayer(layer: string): CollisionData | null;
+    getCollisionsWithLayer(layer: string): CollisionData[];
+}
+
+export abstract class BaseCollider extends ColliderComponent implements Collider {
     protected physicsManager: IPhysicsManager = this.container.getSingleton<IPhysicsManager>("PhysicsManager");
     protected renderer: RenderComponent = null;
 

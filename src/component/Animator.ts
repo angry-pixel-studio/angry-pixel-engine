@@ -89,8 +89,10 @@ export class Animator extends EngineComponent {
         }
     }
 
-    public isPlayingAnimation(name: string): boolean {
-        return this.animations.get(name) && this.animations.get(name) === this.currentAnimation;
+    public isPlayingAnimation(name: string = defaultAnimationName): boolean {
+        return (
+            this.currentAnimation && this.animations.get(name) && this.animations.get(name) === this.currentAnimation
+        );
     }
 }
 

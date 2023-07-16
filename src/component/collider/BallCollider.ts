@@ -1,5 +1,5 @@
 import { GameConfig } from "../../core/GameConfig";
-import { Collider } from "./Collider";
+import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
 import { Vector2 } from "angry-pixel-math";
@@ -21,7 +21,7 @@ export interface BallColliderOptions extends InitOptions {
     debug?: boolean;
 }
 
-export class BallCollider extends Collider {
+export class BallCollider extends BaseCollider {
     public debug: boolean = false;
     public radius: number;
     public offsetX: number = 0;

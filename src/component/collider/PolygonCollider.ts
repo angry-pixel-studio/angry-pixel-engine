@@ -1,4 +1,4 @@
-import { Collider } from "./Collider";
+import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
@@ -23,7 +23,7 @@ export interface PolygonColliderOptions extends InitOptions {
     debug?: boolean;
 }
 
-export class PolygonCollider extends Collider {
+export class PolygonCollider extends BaseCollider {
     public debug: boolean = false;
     public vertexModel: Vector2[];
     public offsetX: number = 0;

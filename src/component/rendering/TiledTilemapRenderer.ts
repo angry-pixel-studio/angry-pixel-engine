@@ -107,7 +107,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
             smooth: this.smooth,
         };
 
-        if ((chunk as TiledLayer).type && (chunk as TiledLayer).type === "tilelayer") {
+        if (chunk.type && chunk.type === "tilelayer") {
             this.tiles = renderData.tiles;
         } else {
             renderData.tiles.forEach((tile, index) => {
@@ -172,6 +172,7 @@ export interface TiledChunk {
     y: number;
     width: number;
     height: number;
+    type?: string;
 }
 
 export interface TiledLayer {
