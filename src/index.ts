@@ -33,14 +33,6 @@ export * from "./component/Button";
 export * from "./gameObject/GameCamera";
 export * from "./gameObject/SpacePointer";
 
-// facades
-export { AssetManagerFacade as AssetManager } from "./core/facades/AssetManagerFacade";
-export { DomManagerFacade as DomManager } from "./core/facades/DomManagerFacade";
-export { GameObjectManagerFacade as GameObjectManager } from "./core/facades/GameObjectManagerFacade";
-export { InputManagerFacade as InputManager } from "./core/facades/InputManagerFacade";
-export { SceneManagerFacade as SceneManager } from "./core/facades/SceneManagerFacade";
-export { TimeManagerFacade as TimeManager } from "./core/facades/TimeManagerFacade";
-
 // input
 export * from "./input/GamepadController";
 export * from "./input/KeyboardController";
