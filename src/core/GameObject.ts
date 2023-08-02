@@ -51,9 +51,9 @@ export class GameObject extends GameActor {
 
         this._active = active;
 
-        this.onActiveChange();
         this.updateComponentsActiveStatus();
         this.updateChildrenActiveStatus();
+        this.onActiveChange();
     }
 
     public get parent(): GameObject | null {

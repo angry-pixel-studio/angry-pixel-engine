@@ -56,18 +56,8 @@ export class GamepadController {
     }
 }
 
-interface GamepadWithVibratorActuator extends Gamepad {
-    vibrationActuator?: {
-        type: string;
-        playEffect: (
-            type: string,
-            config: { duration: number; startDelay: number; weakMagnitude: number; strongMagnitude: number }
-        ) => Promise<string>;
-    };
-}
-
 export class GamepadData {
-    private _gamepad: GamepadWithVibratorActuator;
+    private _gamepad: Gamepad;
     private readonly buttons: Map<number, boolean> = new Map<number, boolean>();
     private readonly axes: Map<number, number> = new Map<number, number>();
 
@@ -77,7 +67,7 @@ export class GamepadData {
 
     private _vibrating: boolean = false;
 
-    public updateFromGamepad(gamepad: GamepadWithVibratorActuator): void {
+    public updateFromGamepad(gamepad: Gamepad): void {
         this._gamepad = gamepad;
         gamepad.buttons.forEach((button: GamepadButton, index: number) => this.buttons.set(index, button.pressed));
         gamepad.axes.forEach((axis: number, index: number) => this.axes.set(index, axis));
@@ -195,7 +185,7 @@ export class GamepadData {
     }
 
     public get anyButtonPressed(): boolean {
-        return Array.from(this.buttons.values()).find((b) => b);
+        return Array.from(this.buttons.values()).find((b) => b) ?? false;
     }
 
     public get vibrating(): boolean {
@@ -211,6 +201,7 @@ export class GamepadData {
         if (this._gamepad.vibrationActuator) {
             this._vibrating = true;
             this._gamepad.vibrationActuator
+                // @ts-ignore
                 .playEffect(this._gamepad.vibrationActuator.type, {
                     duration,
                     weakMagnitude,
