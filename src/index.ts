@@ -9,6 +9,16 @@ export * from "./core/GameObject";
 export * from "./core/Scene";
 export { InitOptions } from "./core/GameActor";
 
+// managers
+export { IAssetManager } from "./core/managers/AssetManager";
+export { IDomManager } from "./core/managers/DomManager";
+export { IGameObjectManager } from "./core/managers/GameObjectManager";
+export { IInputManager } from "./input/InputManager";
+export { ISceneManager } from "./core/managers/SceneManager";
+export { ITimeManager } from "./core/managers/TimeManager";
+export { IPhysicsManager } from "angry-pixel-2d-physics";
+export { IRenderManager } from "angry-pixel-2d-renderer";
+
 // components
 export * from "./component/collider/BoxCollider";
 export * from "./component/collider/BallCollider";

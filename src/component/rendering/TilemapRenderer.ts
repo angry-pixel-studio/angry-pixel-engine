@@ -44,8 +44,6 @@ export interface ITilemapRenderer {
 }
 
 export class TilemapRenderer extends RenderComponent implements ITilemapRenderer {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-
     public tiles: number[] = [];
     public width: number;
     public height: number;

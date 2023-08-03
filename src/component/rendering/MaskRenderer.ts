@@ -13,8 +13,6 @@ export interface MaskRendererOptions {
 }
 
 export class MaskRenderer extends RenderComponent {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-
     public width: number;
     public height: number;
     public color: string;

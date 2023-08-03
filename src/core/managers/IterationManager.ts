@@ -1,8 +1,8 @@
-import { GameObjectManager } from "./GameObjectManager";
-import { SceneManager } from "./SceneManager";
-import { InputManager } from "../../input/InputManager";
+import { IGameObjectManager } from "./GameObjectManager";
+import { ISceneManager } from "./SceneManager";
+import { IInputManager } from "../../input/InputManager";
 import { IRenderManager } from "angry-pixel-2d-renderer";
-import { TimeManager } from "./TimeManager";
+import { ITimeManager } from "./TimeManager";
 import { GameObject } from "../GameObject";
 import { Component } from "../Component";
 import { Scene } from "../Scene";
@@ -43,12 +43,12 @@ export class IterationManager implements IIterationManager {
     private physicsIntervalId: number;
 
     constructor(
-        private readonly timeManager: TimeManager,
+        private readonly timeManager: ITimeManager,
         private readonly physicsManager: IPhysicsManager,
         private readonly renderManager: IRenderManager,
-        private readonly inputManager: InputManager,
-        private readonly gameObjectManager: GameObjectManager,
-        private readonly sceneManager: SceneManager,
+        private readonly inputManager: IInputManager,
+        private readonly gameObjectManager: IGameObjectManager,
+        private readonly sceneManager: ISceneManager,
         private readonly canvasColor: string
     ) {}
 

@@ -31,8 +31,8 @@ export class Button extends Component {
 
     public pressed: boolean = false;
 
-    private mouse: MouseController = this.container.getSingleton<InputManager>("InputManager").mouse;
-    private touch: TouchController = this.container.getSingleton<InputManager>("InputManager").touch;
+    private mouse: MouseController = this.inputManager.mouse;
+    private touch: TouchController = this.inputManager.touch;
     private position: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();
     private pressedLastFrame: boolean = false;

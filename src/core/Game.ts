@@ -1,4 +1,4 @@
-import { SceneManager } from "../core/managers/SceneManager";
+import { ISceneManager } from "../core/managers/SceneManager";
 import { loadDependencies } from "./ioc/Config";
 import { Container } from "../utils/Container";
 import { DEFAULT_PHYSICS_FRAMERATE } from "../core/managers/TimeManager";
@@ -26,7 +26,7 @@ const defaultConfig: GameConfig = {
 
 export class Game {
     private readonly container: Container;
-    private sceneManager: SceneManager;
+    private sceneManager: ISceneManager;
     private iterationManager: IIterationManager;
 
     private _config: GameConfig;
@@ -50,7 +50,7 @@ export class Game {
     private setupManagers(): void {
         loadDependencies(this.container, this._config);
 
-        this.sceneManager = this.container.getSingleton<SceneManager>("SceneManager");
+        this.sceneManager = this.container.getSingleton<ISceneManager>("SceneManager");
         this.iterationManager = this.container.getSingleton<IIterationManager>("IterationManager");
     }
 

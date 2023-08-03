@@ -19,7 +19,6 @@ export interface Collider {
 }
 
 export abstract class BaseCollider extends ColliderComponent implements Collider {
-    protected physicsManager: IPhysicsManager = this.container.getSingleton<IPhysicsManager>("PhysicsManager");
     protected renderer: RenderComponent = null;
 
     public readonly colliders: ICollider[] = [];

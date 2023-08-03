@@ -19,7 +19,7 @@ export class Scene extends GameActor {
     }
 
     protected _destroy(): void {
-        this.gameObjectManager.destroyAllGameObjects();
+        this.gameObjectManager.destroyAllGameObjects(false);
 
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);

@@ -20,9 +20,7 @@ export interface SpriteRendererOptions {
 }
 
 export class SpriteRenderer extends RenderComponent {
-    private readonly renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-    private readonly spriteDefaultScale: Vector2 =
-        this.container.getConstant<GameConfig>("GameConfig").spriteDefaultScale;
+    private readonly spriteDefaultScale: Vector2 = this.gameConfig.spriteDefaultScale;
 
     public sprite: Sprite;
     public offset: Vector2;

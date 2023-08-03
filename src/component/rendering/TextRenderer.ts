@@ -48,7 +48,6 @@ export class TextRenderer extends RenderComponent {
     public bitmapMargin: Vector2;
     public bitmapSpacing: Vector2;
 
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: ITextRenderData;
     private lastFrameText: string = "";
 

@@ -2,7 +2,11 @@ import { Exception } from "../../utils/Exception";
 
 const CANVAS_ID: string = "angryPixelGameCanvas";
 
-export class DomManager {
+export interface IDomManager {
+    canvas: HTMLCanvasElement;
+}
+
+export class DomManager implements IDomManager {
     private gameWidth: number;
     private gameHeight: number;
     private containerNode: HTMLElement;

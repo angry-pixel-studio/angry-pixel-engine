@@ -3,7 +3,28 @@ import { FrameEvent } from "./IterationManager";
 import { InitOptions } from "../GameActor";
 import { Container } from "../../utils/Container";
 
-export class GameObjectManager {
+export interface IGameObjectManager {
+    addGameObject<T extends GameObject>(
+        gameObjectClass: GameObjectClass<T>,
+        options?: InitOptions,
+        parent?: GameObject,
+        name?: string
+    ): T;
+    findGameObjects<T extends GameObject>(gameObjectClass?: GameObjectClass<T>): T[];
+    findGameObjectById<T extends GameObject>(id: string): T;
+    findGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
+    findGameObject<T extends GameObject>(name: string): T;
+    findGameObject<T extends GameObject>(filter: GameObjectClass<T> | string): T;
+    findGameObjectsByParent<T extends GameObject>(parent: GameObject): T[];
+    findGameObjectByParent<T extends GameObject>(parent: GameObject, gameObjectClass: GameObjectClass<T>): T;
+    findGameObjectByParent<T extends GameObject>(parent: GameObject, name: string): T;
+    findGameObjectByParent<T extends GameObject>(parent: GameObject, filter: GameObjectClass<T> | string): T;
+    findGameObjectsByTag<T extends GameObject>(tag: string): T[];
+    destroyAllGameObjects(ignoreKeep?: boolean): void;
+    destroyGameObject(gameObject: GameObject): void;
+}
+
+export class GameObjectManager implements IGameObjectManager {
     private gameObjects: GameObject[] = [];
 
     constructor(private readonly container: Container) {}

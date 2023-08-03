@@ -2,7 +2,6 @@ import { Component, ComponentClass } from "./Component";
 import { Transform } from "../component/Transform";
 import { RigidBody } from "../component/RigidBody";
 import { Exception } from "../utils/Exception";
-import { SceneManager } from "../core/managers/SceneManager";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
@@ -96,7 +95,7 @@ export class GameObject extends GameActor {
      * @returns The current loaded scene
      */
     protected getCurrentScene<T extends Scene>(): T {
-        return this.container.getSingleton<SceneManager>("SceneManager").getCurrentScene<T>();
+        return this.sceneManager.getCurrentScene<T>();
     }
 
     /**

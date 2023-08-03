@@ -8,7 +8,17 @@ import { Container } from "../../utils/Container";
 
 type SceneConstructor = () => Scene;
 
-export class SceneManager {
+export interface ISceneManager {
+    getCurrentScene<T extends Scene>(): T;
+    addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene?: boolean): void;
+    loadOpeningScene(): void;
+    loadScene(name: string): void;
+    update(): void;
+    unloadCurrentScene(): void;
+    stopGame(): void;
+}
+
+export class SceneManager implements ISceneManager {
     private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
     private currentScene: Scene = null;
     private openingSceneName: string = null;

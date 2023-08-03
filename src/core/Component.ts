@@ -1,4 +1,3 @@
-import { SceneManager } from "./managers/SceneManager";
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
 import { uuid } from "../utils/UUID";
@@ -50,7 +49,7 @@ export abstract class Component extends GameActor {
      * @returns The current loaded scene
      */
     protected getCurrentScene<T extends Scene>(): T {
-        return this.container.getSingleton<SceneManager>("SceneManager").getCurrentScene<T>();
+        return this.sceneManager.getCurrentScene<T>();
     }
 
     /**

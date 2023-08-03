@@ -30,8 +30,7 @@ export class BoxCollider extends BaseCollider {
     private realPosition: Vector2 = new Vector2();
     private realRotation: number = 0;
 
-    private applyRotation: boolean =
-        this.container.getConstant<GameConfig>("GameConfig").collisions.collisionMethod === CollisionMethods.SAT;
+    private applyRotation: boolean = this.gameConfig.collisions.collisionMethod === CollisionMethods.SAT;
     private innerPosition: Vector2 = new Vector2();
 
     protected init(config: BoxColliderOptions): void {
@@ -40,7 +39,7 @@ export class BoxCollider extends BaseCollider {
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this.physics = config.physics ?? this.physics;
-        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.gameConfig.debugEnabled;
         this.rotation = config.rotation ?? new Rotation();
         this.layer = config.layer;
 

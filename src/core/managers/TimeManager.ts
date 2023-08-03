@@ -6,7 +6,24 @@ export const DEFAULT_PHYSICS_FRAMERATE = 180;
 
 const allowedPhysicsFramerates = [60, 120, 180, 240];
 
-export class TimeManager {
+export interface ITimeManager {
+    minGameDeltatime: number;
+    minPhysicsDeltaTime: number;
+    gameFramerate: number;
+    physicsFramerate: number;
+    timeScale: number;
+    browserDeltaTime: number;
+    gameDeltaTime: number;
+    unscaledGameDeltaTime: number;
+    unscaledPhysicsDeltaTime: number;
+    updateForGame(time: number): void;
+    updateForBrowser(time: number): void;
+    updateForPhysics(time: number): void;
+    deltaTime: number;
+    physicsDeltaTime: number;
+}
+
+export class TimeManager implements ITimeManager {
     public readonly minGameDeltatime: number = 0;
     public readonly minPhysicsDeltaTime: number = 0;
 

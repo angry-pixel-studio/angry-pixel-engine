@@ -15,8 +15,6 @@ export interface TiledTilemapRendererOptions {
 }
 
 export class TiledTilemapRenderer extends RenderComponent implements ITilemapRenderer {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-
     public tiles: number[] = [];
     public tileWidth: number;
     public tileHeight: number;
