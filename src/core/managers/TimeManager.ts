@@ -12,34 +12,39 @@ export interface ITimeManager {
     gameFramerate: number;
     physicsFramerate: number;
     timeScale: number;
-    browserDeltaTime: number;
-    gameDeltaTime: number;
-    unscaledGameDeltaTime: number;
+    unscaledDeltaTime: number;
     unscaledPhysicsDeltaTime: number;
+    deltaTime: number;
+    physicsDeltaTime: number;
+    browserDeltaTime: number;
     updateForGame(time: number): void;
     updateForBrowser(time: number): void;
     updateForPhysics(time: number): void;
-    deltaTime: number;
-    physicsDeltaTime: number;
 }
 
 export class TimeManager implements ITimeManager {
     public readonly minGameDeltatime: number = 0;
     public readonly minPhysicsDeltaTime: number = 0;
-
     public readonly gameFramerate: number = DEFAULT_GAME_FRAMERATE;
     public readonly physicsFramerate: number = DEFAULT_PHYSICS_FRAMERATE;
 
     public timeScale: number = 1;
     public browserDeltaTime: number = 0;
-    public gameDeltaTime: number = 0;
-    public unscaledGameDeltaTime: number = 0;
+    public unscaledDeltaTime: number = 0;
     public unscaledPhysicsDeltaTime: number = 0;
 
     private readonly maxDeltaTime: number = 1 / MIN_GAME_FRAMERATE;
     private thenForGame: number = 0;
     private thenForPhysics: number = 0;
     private thenForBrowser: number = 0;
+
+    public get deltaTime(): number {
+        return this.unscaledDeltaTime * this.timeScale;
+    }
+
+    public get physicsDeltaTime(): number {
+        return this.unscaledPhysicsDeltaTime * this.timeScale;
+    }
 
     constructor(physicsFramerate: number) {
         if (!allowedPhysicsFramerates.includes(physicsFramerate)) {
@@ -52,10 +57,7 @@ export class TimeManager implements ITimeManager {
     }
 
     public updateForGame(time: number): void {
-        this.unscaledGameDeltaTime = Math.min(
-            Math.max(this.minGameDeltatime, time - this.thenForGame),
-            this.maxDeltaTime
-        );
+        this.unscaledDeltaTime = Math.min(Math.max(this.minGameDeltatime, time - this.thenForGame), this.maxDeltaTime);
 
         this.thenForGame = time;
     }
@@ -70,13 +72,5 @@ export class TimeManager implements ITimeManager {
         this.unscaledPhysicsDeltaTime = Math.min(Math.max(0, time - this.thenForPhysics), this.maxDeltaTime);
 
         this.thenForPhysics = time;
-    }
-
-    public get deltaTime(): number {
-        return this.unscaledGameDeltaTime * this.timeScale;
-    }
-
-    public get physicsDeltaTime(): number {
-        return this.unscaledPhysicsDeltaTime * this.timeScale;
     }
 }
