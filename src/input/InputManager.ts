@@ -3,7 +3,15 @@ import { KeyboardController } from "./KeyboardController";
 import { GamepadController } from "./GamepadController";
 import { TouchController } from "./TouchController";
 
-export class InputManager {
+export interface IInputManager {
+    mouse: MouseController;
+    keyboard: KeyboardController;
+    gamepad: GamepadController;
+    touch: TouchController;
+    update(): void;
+}
+
+export class InputManager implements IInputManager {
     public mouse: MouseController;
     public keyboard: KeyboardController;
     public gamepad: GamepadController;

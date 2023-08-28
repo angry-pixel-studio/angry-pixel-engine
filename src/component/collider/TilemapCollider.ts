@@ -1,10 +1,8 @@
-import { GameConfig } from "../../core/GameConfig";
 import { ITilemapRenderer } from "../rendering/TilemapRenderer";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
 import {
-    IRenderManager,
     IGeometricRenderData,
     GeometricShape,
     RenderDataType,
@@ -36,7 +34,7 @@ export class TilemapCollider extends BaseCollider {
     protected init(config: TilemapColliderOptions): void {
         this.tilemapRenderer = config.tilemapRenderer;
         this.layer = config.layer;
-        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.gameConfig.debugEnabled;
         this.physics = true; // todo: fix this shit
         this.composite = config.composite ?? false;
 
@@ -218,8 +216,6 @@ export class TilemapCollider extends BaseCollider {
 }
 
 class TilemapColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-
     private renderData: IGeometricRenderData[] = [];
     private colliders: ICollider[] = [];
 

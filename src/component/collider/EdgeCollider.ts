@@ -1,15 +1,8 @@
-import { GameConfig } from "../../core/GameConfig";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
-import {
-    IRenderManager,
-    IGeometricRenderData,
-    GeometricShape,
-    RenderLocation,
-    RenderDataType,
-} from "angry-pixel-2d-renderer";
+import { IGeometricRenderData, GeometricShape, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
 import { CollisionMethods, ICollider, Line } from "angry-pixel-2d-physics";
 
@@ -37,7 +30,7 @@ export class EdgeCollider extends BaseCollider {
     private innerPosition: Vector2 = new Vector2();
 
     protected init(config: EdgeColliderOptions): void {
-        if (this.container.getConstant<GameConfig>("GameConfig").collisions.collisionMethod !== CollisionMethods.SAT) {
+        if (this.gameConfig.collisions.collisionMethod !== CollisionMethods.SAT) {
             throw new Exception("Edge Colliders need SAT collision method.");
         }
 
@@ -45,7 +38,7 @@ export class EdgeCollider extends BaseCollider {
             throw new Exception("Edge Collider needs at least 2 vertices.");
         }
 
-        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.gameConfig.debugEnabled;
         this.vertexModel = config.vertexModel;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
@@ -119,7 +112,6 @@ export class EdgeCollider extends BaseCollider {
 }
 
 class EdgeColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData[] = [];
     private colliders: ICollider[] = [];
 

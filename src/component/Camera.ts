@@ -1,18 +1,13 @@
 import { CameraComponent } from "../core/Component";
 import { Exception } from "../utils/Exception";
-import { ICameraData, IRenderManager } from "angry-pixel-2d-renderer";
+import { ICameraData } from "angry-pixel-2d-renderer";
 import { LAYER_DEFAULT } from "../core/GameObject";
 import { Rectangle, Vector2 } from "angry-pixel-math";
-import { DomManager } from "../core/managers/DomManager";
 
 const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 
 export class Camera extends CameraComponent {
     public readonly allowMultiple: boolean = false;
-
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-    private canvas: HTMLCanvasElement = this.container.getSingleton<DomManager>("DomManager").canvas;
-
     public readonly viewportRect: Rectangle = new Rectangle(0, 0, 0, 0);
     public readonly worldSpaceRect: Rectangle = new Rectangle(0, 0, 0, 0);
 
@@ -21,6 +16,7 @@ export class Camera extends CameraComponent {
     private _zoom: number = 1;
 
     private cameraData: ICameraData;
+    private canvas: HTMLCanvasElement;
 
     public set zoom(zoom: number) {
         if (this.zoom <= 0) {
@@ -39,11 +35,8 @@ export class Camera extends CameraComponent {
     }
 
     protected init(): void {
-        this.cameraData = {
-            position: new Vector2(),
-            layers: [],
-            depth: 1,
-        };
+        this.canvas = this.domManager.canvas;
+        this.cameraData = { position: new Vector2(), layers: [], depth: 1 };
     }
 
     protected update(): void {

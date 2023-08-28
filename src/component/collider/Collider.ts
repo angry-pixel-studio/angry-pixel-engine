@@ -1,6 +1,6 @@
 import { ColliderComponent, RenderComponent } from "../../core/Component";
 import { GameObject } from "../../core/GameObject";
-import { ICollisionResolution, ICollider, ICollision, IPhysicsManager } from "angry-pixel-2d-physics";
+import { ICollisionResolution, ICollider, ICollision } from "angry-pixel-2d-physics";
 
 export interface CollisionData {
     resolution: ICollisionResolution;
@@ -12,14 +12,13 @@ export interface CollisionData {
     getGameObject: <T extends GameObject>() => T;
 }
 
-export interface Collider {
+export interface IColliderComponent {
     collidesWithLayer(layer: string): boolean;
     getCollisionWithLayer(layer: string): CollisionData | null;
     getCollisionsWithLayer(layer: string): CollisionData[];
 }
 
-export abstract class BaseCollider extends ColliderComponent implements Collider {
-    protected physicsManager: IPhysicsManager = this.container.getSingleton<IPhysicsManager>("PhysicsManager");
+export abstract class BaseCollider extends ColliderComponent implements IColliderComponent {
     protected renderer: RenderComponent = null;
 
     public readonly colliders: ICollider[] = [];

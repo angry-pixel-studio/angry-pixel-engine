@@ -1,5 +1,5 @@
 import { RenderComponent } from "../../core/Component";
-import { IRenderManager, IMaskRenderData, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
+import { IMaskRenderData, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
 
 export interface MaskRendererOptions {
@@ -13,8 +13,6 @@ export interface MaskRendererOptions {
 }
 
 export class MaskRenderer extends RenderComponent {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-
     public width: number;
     public height: number;
     public color: string;

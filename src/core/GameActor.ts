@@ -1,23 +1,52 @@
+import { IPhysicsManager } from "angry-pixel-2d-physics";
+import { IInputManager } from "../input/InputManager";
 import { Container } from "../utils/Container";
+import { GameConfig } from "./GameConfig";
 import { GameObject, GameObjectClass } from "./GameObject";
-import { GameObjectManager } from "./managers/GameObjectManager";
+import { IAssetManager } from "./managers/AssetManager";
+import { IDomManager } from "./managers/DomManager";
+import { IGameObjectManager } from "./managers/GameObjectManager";
 import { FrameEvent } from "./managers/IterationManager";
-import { Scene } from "./Scene";
+import { ISceneManager } from "./managers/SceneManager";
+import { ITimeManager } from "./managers/TimeManager";
+import { IRenderManager } from "angry-pixel-2d-renderer";
 
 export interface InitOptions {
     [key: string]: any; // eslint-disable-line
 }
 
 export abstract class GameActor {
-    protected readonly gameObjectManager: GameObjectManager;
     protected readonly updateEvent: FrameEvent = FrameEvent.Update;
     protected readonly container: Container;
+
+    protected readonly assetManager: IAssetManager;
+    protected readonly domManager: IDomManager;
+    protected readonly inputManager: IInputManager;
+    protected readonly gameObjectManager: IGameObjectManager;
+    protected readonly physicsManager: IPhysicsManager;
+    protected readonly renderManager: IRenderManager;
+    protected readonly sceneManager: ISceneManager;
+    protected readonly timeManager: ITimeManager;
+    protected readonly gameConfig: GameConfig;
 
     private started: boolean = false;
 
     constructor(container: Container) {
         this.container = container;
-        this.gameObjectManager = this.container.getSingleton<GameObjectManager>("GameObjectManager");
+
+        this.gameConfig = this.container.getConstant<GameConfig>("GameConfig");
+
+        if (!this.gameConfig.headless) {
+            this.assetManager = this.container.getSingleton<IAssetManager>("AssetManager");
+            this.domManager = this.container.getSingleton<IDomManager>("DomManager");
+            this.inputManager = this.container.getSingleton<IInputManager>("InputManager");
+            this.renderManager = this.container.getSingleton<IRenderManager>("RenderManager");
+        }
+
+        this.gameObjectManager = this.container.getSingleton<IGameObjectManager>("GameObjectManager");
+        this.physicsManager = this.container.getSingleton<IPhysicsManager>("PhysicsManager");
+        this.sceneManager = this.container.getSingleton<ISceneManager>("SceneManager");
+        this.timeManager = this.container.getSingleton<ITimeManager>("TimeManager");
     }
 
     public dispatch(event: FrameEvent, options?: InitOptions): void {

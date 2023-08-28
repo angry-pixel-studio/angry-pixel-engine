@@ -2,15 +2,8 @@ import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
-import {
-    GeometricShape,
-    IGeometricRenderData,
-    IRenderManager,
-    RenderDataType,
-    RenderLocation,
-} from "angry-pixel-2d-renderer";
+import { GeometricShape, IGeometricRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
-import { GameConfig } from "../../core/GameConfig";
 import { CollisionMethods, ICollider, Polygon } from "angry-pixel-2d-physics";
 
 export interface PolygonColliderOptions extends InitOptions {
@@ -37,7 +30,7 @@ export class PolygonCollider extends BaseCollider {
     private innerPosition: Vector2 = new Vector2();
 
     protected init(config: PolygonColliderOptions): void {
-        if (this.container.getConstant<GameConfig>("GameConfig").collisions.collisionMethod !== CollisionMethods.SAT) {
+        if (this.gameConfig.collisions.collisionMethod !== CollisionMethods.SAT) {
             throw new Exception("Polygon Colliders need SAT collision method.");
         }
 
@@ -45,7 +38,7 @@ export class PolygonCollider extends BaseCollider {
             throw new Exception("Polygon Collider needs at least 3 vertices.");
         }
 
-        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.gameConfig.debugEnabled;
         this.vertexModel = config.vertexModel;
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
@@ -117,7 +110,6 @@ export class PolygonCollider extends BaseCollider {
 }
 
 export class PolygonColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData;
     private collider: ICollider;
 

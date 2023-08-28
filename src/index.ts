@@ -9,13 +9,23 @@ export * from "./core/GameObject";
 export * from "./core/Scene";
 export { InitOptions } from "./core/GameActor";
 
+// managers
+export { IAssetManager } from "./core/managers/AssetManager";
+export { IDomManager } from "./core/managers/DomManager";
+export { IGameObjectManager } from "./core/managers/GameObjectManager";
+export { IInputManager } from "./input/InputManager";
+export { ISceneManager } from "./core/managers/SceneManager";
+export { ITimeManager } from "./core/managers/TimeManager";
+export { IPhysicsManager } from "angry-pixel-2d-physics";
+export { IRenderManager } from "angry-pixel-2d-renderer";
+
 // components
 export * from "./component/collider/BoxCollider";
 export * from "./component/collider/BallCollider";
 export * from "./component/collider/TilemapCollider";
 export * from "./component/collider/PolygonCollider";
 export * from "./component/collider/EdgeCollider";
-export { Collider, CollisionData } from "./component/collider/Collider";
+export { IColliderComponent as ColliderComponent, CollisionData } from "./component/collider/Collider";
 export * from "./component/rendering/SpriteRenderer";
 export * from "./component/rendering/TextRenderer";
 export * from "./component/rendering/MaskRenderer";
@@ -32,14 +42,6 @@ export * from "./component/Button";
 // game objects
 export * from "./gameObject/GameCamera";
 export * from "./gameObject/SpacePointer";
-
-// facades
-export { AssetManagerFacade as AssetManager } from "./core/facades/AssetManagerFacade";
-export { DomManagerFacade as DomManager } from "./core/facades/DomManagerFacade";
-export { GameObjectManagerFacade as GameObjectManager } from "./core/facades/GameObjectManagerFacade";
-export { InputManagerFacade as InputManager } from "./core/facades/InputManagerFacade";
-export { SceneManagerFacade as SceneManager } from "./core/facades/SceneManagerFacade";
-export { TimeManagerFacade as TimeManager } from "./core/facades/TimeManagerFacade";
 
 // input
 export * from "./input/GamepadController";

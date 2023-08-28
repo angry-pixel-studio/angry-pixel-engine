@@ -1,7 +1,6 @@
 import { EngineComponent } from "../core/Component";
 import { SpriteRenderer } from "./rendering/SpriteRenderer";
 import { Sprite } from "./Sprite";
-import { TimeManager } from "../core/managers/TimeManager";
 import { Exception } from "../utils/Exception";
 import { InitOptions } from "../core/GameActor";
 
@@ -30,7 +29,6 @@ export interface AnimatorOptions extends InitOptions {
 }
 
 export class Animator extends EngineComponent {
-    private timeManager: TimeManager = this.container.getSingleton<TimeManager>("TimeManager");
     private spriteRenderer: SpriteRenderer = null;
     private animations: Map<string, AnimationPlayer> = new Map<string, AnimationPlayer>();
     private currentAnimation: AnimationPlayer = null;
@@ -95,6 +93,10 @@ export class Animator extends EngineComponent {
             this.animations.get(name) &&
             this.animations.get(name) === this.currentAnimation
         );
+    }
+
+    public isPaused(): boolean {
+        return this.paused;
     }
 }
 

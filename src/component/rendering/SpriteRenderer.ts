@@ -2,8 +2,7 @@ import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { Sprite } from "../Sprite";
 import { Rotation, Vector2 } from "angry-pixel-math";
-import { IRenderManager, ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
-import { GameConfig } from "../../core/GameConfig";
+import { ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 
 export interface SpriteRendererOptions {
     sprite?: Sprite;
@@ -20,9 +19,7 @@ export interface SpriteRendererOptions {
 }
 
 export class SpriteRenderer extends RenderComponent {
-    private readonly renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
-    private readonly spriteDefaultScale: Vector2 =
-        this.container.getConstant<GameConfig>("GameConfig").spriteDefaultScale;
+    private readonly spriteDefaultScale: Vector2 = this.gameConfig.spriteDefaultScale;
 
     public sprite: Sprite;
     public offset: Vector2;

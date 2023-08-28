@@ -1,6 +1,6 @@
-import { GameObjectManager } from "./GameObjectManager";
-import { SceneManager } from "./SceneManager";
-import { TimeManager } from "./TimeManager";
+import { IGameObjectManager } from "./GameObjectManager";
+import { ISceneManager } from "./SceneManager";
+import { ITimeManager } from "./TimeManager";
 import { GameObject } from "../GameObject";
 import { Component } from "../Component";
 import { Scene } from "../Scene";
@@ -20,10 +20,10 @@ export class HeadlessIterationManager implements IIterationManager {
     private physicsInterval: NodeJS.Timer;
 
     constructor(
-        private readonly timeManager: TimeManager,
+        private readonly timeManager: ITimeManager,
         private readonly physicsManager: IPhysicsManager,
-        private readonly gameObjectManager: GameObjectManager,
-        private readonly sceneManager: SceneManager
+        private readonly gameObjectManager: IGameObjectManager,
+        private readonly sceneManager: ISceneManager
     ) {}
 
     public start(): void {

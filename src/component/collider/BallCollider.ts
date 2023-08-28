@@ -1,15 +1,8 @@
-import { GameConfig } from "../../core/GameConfig";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
 import { Vector2 } from "angry-pixel-math";
-import {
-    GeometricShape,
-    IGeometricRenderData,
-    IRenderManager,
-    RenderDataType,
-    RenderLocation,
-} from "angry-pixel-2d-renderer";
+import { GeometricShape, IGeometricRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 import { Circumference, ICollider } from "angry-pixel-2d-physics";
 
 export interface BallColliderOptions extends InitOptions {
@@ -38,7 +31,7 @@ export class BallCollider extends BaseCollider {
         this.offsetX = config.offsetX ?? this.offsetX;
         this.offsetY = config.offsetY ?? this.offsetY;
         this.physics = config.physics ?? this.physics;
-        this.debug = (config.debug ?? this.debug) && this.container.getConstant<GameConfig>("GameConfig").debugEnabled;
+        this.debug = (config.debug ?? this.debug) && this.gameConfig.debugEnabled;
         this.layer = config.layer;
 
         this.colliders.push(
@@ -93,7 +86,6 @@ export class BallCollider extends BaseCollider {
 }
 
 class BallColliderRenderer extends RenderComponent {
-    private renderManager: IRenderManager = this.container.getSingleton<IRenderManager>("RenderManager");
     private renderData: IGeometricRenderData;
     private collider: ICollider;
 
