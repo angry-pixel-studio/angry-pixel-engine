@@ -3,7 +3,7 @@ import { Exception } from "../utils/Exception";
 import { Vector2 } from "angry-pixel-math";
 import { BaseCollider } from "./collider/Collider";
 import { InitOptions } from "../core/GameActor";
-import { IPhysicsManager, IRigidBody, RigidBodyType } from "angry-pixel-2d-physics";
+import { IRigidBody, RigidBodyType } from "angry-pixel-2d-physics";
 
 export { RigidBodyType } from "angry-pixel-2d-physics";
 

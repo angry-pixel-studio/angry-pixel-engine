@@ -1,10 +1,8 @@
-import { GameConfig } from "../../core/GameConfig";
 import { ITilemapRenderer } from "../rendering/TilemapRenderer";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
 import {
-    IRenderManager,
     IGeometricRenderData,
     GeometricShape,
     RenderDataType,

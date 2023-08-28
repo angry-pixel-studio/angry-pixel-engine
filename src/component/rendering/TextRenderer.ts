@@ -1,13 +1,7 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { Rotation, Vector2 } from "angry-pixel-math";
-import {
-    IRenderManager,
-    ITextRenderData,
-    RenderDataType,
-    RenderLocation,
-    TextOrientation,
-} from "angry-pixel-2d-renderer";
+import { ITextRenderData, RenderDataType, RenderLocation, TextOrientation } from "angry-pixel-2d-renderer";
 
 export { TextOrientation };
 

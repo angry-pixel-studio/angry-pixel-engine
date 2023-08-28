@@ -1,6 +1,5 @@
 import { Component } from "../core/Component";
 import { InitOptions } from "../core/GameActor";
-import { InputManager } from "../input/InputManager";
 import { MouseController } from "../input/MouseController";
 import { TouchController } from "../input/TouchController";
 import { between, Vector2 } from "angry-pixel-math";

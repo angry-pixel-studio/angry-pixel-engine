@@ -1,15 +1,8 @@
-import { GameConfig } from "../../core/GameConfig";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { InitOptions } from "../../core/GameActor";
-import {
-    IRenderManager,
-    IGeometricRenderData,
-    GeometricShape,
-    RenderLocation,
-    RenderDataType,
-} from "angry-pixel-2d-renderer";
+import { IGeometricRenderData, GeometricShape, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
 import { CollisionMethods, ICollider, Line } from "angry-pixel-2d-physics";
 

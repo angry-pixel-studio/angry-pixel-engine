@@ -1,10 +1,4 @@
-import {
-    IRenderManager,
-    ITilemapRenderData,
-    RenderDataType,
-    RenderLocation,
-    TilemapOrientation,
-} from "angry-pixel-2d-renderer";
+import { ITilemapRenderData, RenderDataType, RenderLocation, TilemapOrientation } from "angry-pixel-2d-renderer";
 import { Vector2 } from "angry-pixel-math";
 import { RenderComponent } from "../../core/Component";
 

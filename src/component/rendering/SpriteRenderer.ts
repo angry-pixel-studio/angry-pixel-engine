@@ -2,8 +2,7 @@ import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
 import { Sprite } from "../Sprite";
 import { Rotation, Vector2 } from "angry-pixel-math";
-import { IRenderManager, ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
-import { GameConfig } from "../../core/GameConfig";
+import { ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 
 export interface SpriteRendererOptions {
     sprite?: Sprite;

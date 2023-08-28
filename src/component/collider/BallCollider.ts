@@ -1,15 +1,8 @@
-import { GameConfig } from "../../core/GameConfig";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
 import { Vector2 } from "angry-pixel-math";
-import {
-    GeometricShape,
-    IGeometricRenderData,
-    IRenderManager,
-    RenderDataType,
-    RenderLocation,
-} from "angry-pixel-2d-renderer";
+import { GeometricShape, IGeometricRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 import { Circumference, ICollider } from "angry-pixel-2d-physics";
 
 export interface BallColliderOptions extends InitOptions {

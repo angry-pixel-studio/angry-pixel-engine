@@ -1,5 +1,5 @@
 import { RenderComponent } from "../../core/Component";
-import { IRenderManager, IMaskRenderData, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
+import { IMaskRenderData, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
 
 export interface MaskRendererOptions {

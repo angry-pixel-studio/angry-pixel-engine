@@ -2,7 +2,6 @@ import { BaseCollider } from "./Collider";
 import { InitOptions } from "../../core/GameActor";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { PolygonColliderRenderer } from "./PolygonCollider";
-import { GameConfig } from "../../core/GameConfig";
 import { CollisionMethods, Rectangle } from "angry-pixel-2d-physics";
 
 export interface BoxColliderOptions extends InitOptions {

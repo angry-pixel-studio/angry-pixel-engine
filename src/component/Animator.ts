@@ -94,6 +94,10 @@ export class Animator extends EngineComponent {
             this.animations.get(name) === this.currentAnimation
         );
     }
+
+    public isPaused(): boolean {
+        return this.paused;
+    }
 }
 
 class AnimationPlayer {

@@ -34,15 +34,19 @@ export abstract class GameActor {
     constructor(container: Container) {
         this.container = container;
 
-        this.assetManager = this.container.getSingleton<IAssetManager>("AssetManager");
-        this.domManager = this.container.getSingleton<IDomManager>("DomManager");
-        this.inputManager = this.container.getSingleton<IInputManager>("InputManager");
+        this.gameConfig = this.container.getConstant<GameConfig>("GameConfig");
+
+        if (!this.gameConfig.headless) {
+            this.assetManager = this.container.getSingleton<IAssetManager>("AssetManager");
+            this.domManager = this.container.getSingleton<IDomManager>("DomManager");
+            this.inputManager = this.container.getSingleton<IInputManager>("InputManager");
+            this.renderManager = this.container.getSingleton<IRenderManager>("RenderManager");
+        }
+
         this.gameObjectManager = this.container.getSingleton<IGameObjectManager>("GameObjectManager");
         this.physicsManager = this.container.getSingleton<IPhysicsManager>("PhysicsManager");
-        this.renderManager = this.container.getSingleton<IRenderManager>("RenderManager");
         this.sceneManager = this.container.getSingleton<ISceneManager>("SceneManager");
         this.timeManager = this.container.getSingleton<ITimeManager>("TimeManager");
-        this.gameConfig = this.container.getConstant<GameConfig>("GameConfig");
     }
 
     public dispatch(event: FrameEvent, options?: InitOptions): void {
