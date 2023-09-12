@@ -91,7 +91,7 @@ export class AssetManager implements IAssetManager {
     public loadVideo(url: string): HTMLVideoElement {
         const video = document.createElement("video");
         video.playsInline = true;
-        video.src = "image/video.mp4";
+        video.src = url;
 
         const asset = this.createAsset(url, AssetType.Video, video);
 
