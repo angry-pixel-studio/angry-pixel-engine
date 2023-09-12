@@ -29,6 +29,7 @@ export { IColliderComponent as ColliderComponent, CollisionData } from "./compon
 export * from "./component/rendering/SpriteRenderer";
 export * from "./component/rendering/TextRenderer";
 export * from "./component/rendering/MaskRenderer";
+export * from "./component/rendering/VideoRenderer";
 export * from "./component/rendering/TiledTilemapRenderer";
 export * from "./component/rendering/TilemapRenderer";
 export * from "./component/Animator";
