@@ -4,6 +4,7 @@ export enum AssetType {
     Image = "Image",
     Audio = "Audio",
     Font = "Font",
+    Video = "Video",
 }
 
 type AssetElement = HTMLImageElement | HTMLAudioElement | FontFace;
@@ -21,9 +22,11 @@ export interface IAssetManager {
     loadImage(url: string, preloadTexture?: boolean): HTMLImageElement;
     loadAudio(url: string): HTMLAudioElement;
     loadFont(family: string, url: string): FontFace;
+    loadVideo(url: string): HTMLVideoElement;
     getImage(url: string): HTMLImageElement;
     getAudio(url: string): HTMLAudioElement;
     getFont(family: string): FontFace;
+    getVideo(url: string): HTMLVideoElement;
 }
 
 export class AssetManager implements IAssetManager {
@@ -85,6 +88,22 @@ export class AssetManager implements IAssetManager {
         return font;
     }
 
+    public loadVideo(url: string): HTMLVideoElement {
+        const video = document.createElement("video");
+        video.playsInline = true;
+        video.src = url;
+
+        const asset = this.createAsset(url, AssetType.Video, video);
+
+        if (video.duration) {
+            asset.loaded = true;
+        } else {
+            video.addEventListener("canplaythrough", () => (asset.loaded = true));
+        }
+
+        return video;
+    }
+
     public getImage(url: string): HTMLImageElement {
         return this.assets.find((asset) => asset.type === AssetType.Image && asset.url === url)
             ?.element as HTMLImageElement;
@@ -98,6 +117,11 @@ export class AssetManager implements IAssetManager {
     public getFont(family: string): FontFace {
         return this.assets.find((asset) => asset.type === AssetType.Font && asset.family === family)
             ?.element as FontFace;
+    }
+
+    public getVideo(url: string): HTMLVideoElement {
+        return this.assets.find((asset) => asset.type === AssetType.Video && asset.url === url)
+            ?.element as HTMLVideoElement;
     }
 
     private createAsset(url: string, type: AssetType, element: AssetElement): Asset {
