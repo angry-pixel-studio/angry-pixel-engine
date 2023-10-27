@@ -50,7 +50,7 @@ export class BoxCollider extends BaseCollider {
                 shape: new Rectangle(this.realWidth, this.realHeight),
                 updateCollisions: true,
                 physics: this.physics,
-                group: this.gameObject.id,
+                group: this.gameObject.id.toString(),
             })
         );
 

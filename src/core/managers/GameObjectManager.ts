@@ -11,7 +11,7 @@ export interface IGameObjectManager {
         name?: string
     ): T;
     findGameObjects<T extends GameObject>(gameObjectClass?: GameObjectClass<T>): T[];
-    findGameObjectById<T extends GameObject>(id: string): T;
+    findGameObjectById<T extends GameObject>(id: number): T;
     findGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
     findGameObject<T extends GameObject>(name: string): T;
     findGameObject<T extends GameObject>(filter: GameObjectClass<T> | string): T;
@@ -35,7 +35,7 @@ export class GameObjectManager implements IGameObjectManager {
         parent?: GameObject,
         name?: string
     ): T {
-        const gameObject = new gameObjectClass(this.container, name, parent);
+        const gameObject = new gameObjectClass(this.container, this.gameObjects.length + 1, name, parent);
         this.gameObjects.push(gameObject);
 
         gameObject.dispatch(FrameEvent.Init, options);
@@ -51,7 +51,7 @@ export class GameObjectManager implements IGameObjectManager {
         ) as T[];
     }
 
-    public findGameObjectById<T extends GameObject>(id: string): T {
+    public findGameObjectById<T extends GameObject>(id: number): T {
         return this.gameObjects.find((gameObject) => gameObject.id === id) as T;
     }
 

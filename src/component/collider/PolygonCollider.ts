@@ -58,7 +58,7 @@ export class PolygonCollider extends BaseCollider {
                 shape: new Polygon(this.scaledVertexModel),
                 updateCollisions: true,
                 physics: this.physics,
-                group: this.gameObject.id,
+                group: this.gameObject.id.toString(),
             })
         );
 

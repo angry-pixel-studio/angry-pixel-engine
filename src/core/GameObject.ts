@@ -3,7 +3,6 @@ import { Transform } from "../component/Transform";
 import { RigidBody } from "../component/RigidBody";
 import { Exception } from "../utils/Exception";
 import { Scene } from "./Scene";
-import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
 import { GameActor, InitOptions } from "./GameActor";
 import { Container } from "../utils/Container";
@@ -12,12 +11,13 @@ export const LAYER_DEFAULT = "Default";
 
 export type GameObjectClass<T extends GameObject = GameObject> = new (
     container: Container,
+    id: number,
     name?: string,
     parent?: GameObject
 ) => T;
 
 export class GameObject extends GameActor {
-    public readonly id: string = uuid();
+    public readonly id: number;
     public readonly name: string;
 
     public tag: string;
@@ -32,13 +32,14 @@ export class GameObject extends GameActor {
     private activeComponentsCache: Component[] = [];
     private activeChildrenCache: GameObject[] = [];
 
-    constructor(container: Container, name: string = "", parent?: GameObject) {
+    constructor(container: Container, id: number, name: string = "", parent: GameObject = null) {
         super(container);
 
+        this.id = id;
         this.name = name;
         this.addComponent(Transform);
 
-        this.parent = parent ?? null; // using the setter instead of the private attribute
+        this.parent = parent; // using the setter instead of the private attribute
     }
 
     public get active(): boolean {

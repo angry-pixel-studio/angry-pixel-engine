@@ -59,7 +59,7 @@ export class EdgeCollider extends BaseCollider {
                     shape: new Line([this.scaledVertexModel[i], this.scaledVertexModel[i + 1]]),
                     updateCollisions: true,
                     physics: this.physics,
-                    group: this.gameObject.id,
+                    group: this.gameObject.id.toString(),
                 })
             );
         }

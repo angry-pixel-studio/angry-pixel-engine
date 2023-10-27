@@ -76,7 +76,7 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
 
     private createCollisionData(collision: ICollision): CollisionData {
         return {
-            gameObject: this.gameObjectManager.findGameObjectById(collision.remoteCollider.group),
+            gameObject: this.gameObjectManager.findGameObjectById(Number(collision.remoteCollider.group)),
             collider: collision.remoteCollider,
             resolution: collision.resolution,
             getGameObject: function <T extends GameObject>(): T {

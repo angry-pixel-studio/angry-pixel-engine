@@ -75,7 +75,7 @@ export class TilemapCollider extends BaseCollider {
                     shape: new Rectangle(this.scaledTileWidth, this.scaledTileHeight),
                     updateCollisions: false,
                     physics: this.physics,
-                    group: this.gameObject.id,
+                    group: this.gameObject.id.toString(),
                 })
             );
         });
@@ -184,7 +184,7 @@ export class TilemapCollider extends BaseCollider {
             ]),
             updateCollisions: false,
             physics: this.physics,
-            group: this.gameObject.id,
+            group: this.gameObject.id.toString(),
         });
 
         this.colliders.push(collider);

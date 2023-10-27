@@ -41,7 +41,7 @@ export class BallCollider extends BaseCollider {
                 shape: new Circumference(this.radius),
                 updateCollisions: true,
                 physics: this.physics,
-                group: this.gameObject.id,
+                group: this.gameObject.id.toString(),
             })
         );
 

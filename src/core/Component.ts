@@ -1,6 +1,5 @@
 import { GameObject } from "./GameObject";
 import { Scene } from "./Scene";
-import { uuid } from "../utils/UUID";
 import { FrameEvent } from "./managers/IterationManager";
 import { GameActor } from "./GameActor";
 import { Container } from "../utils/Container";
@@ -12,7 +11,6 @@ export type ComponentClass<T extends Component = Component> = new (
 ) => T;
 
 export abstract class Component extends GameActor {
-    public readonly id: string = uuid();
     public readonly name: string;
     public readonly gameObject: GameObject;
     public readonly allowMultiple: boolean = true;
