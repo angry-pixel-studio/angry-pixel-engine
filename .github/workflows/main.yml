@@ -1,13 +1,15 @@
-name: CI
+name: Continuous Integration App
+
 on: push
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/setup-node@v1
-              with:
-                  node-version: 12.x
-            - uses: actions/checkout@v2
-            - run: npm install
-            - run: npm run lint
-            - run: npm run prettier-check
+    Setup:
+        uses: ./.github/workflows/setupNode.yml
+
+    Analyze:
+        needs: Setup
+        uses: ./.github/workflows/analyzeCode.yml
+
+    Build:
+        needs: [Setup, Analyze]
+        uses: ./.github/workflows/buildCode.yml
