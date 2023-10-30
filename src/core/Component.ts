@@ -10,9 +10,44 @@ export type ComponentClass<T extends Component = Component> = new (
     name?: string
 ) => T;
 
+/**
+ * Base class for all components to be added to game objects.
+ * @public
+ * @example
+ * ```js
+ * class MovementsController extends Component {
+ *   init(options) {
+ *     // executed after instantiation
+ *   }
+ *   start() {
+ *     // executed in the first available frame
+ *   }
+ *   update() {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class MovementsController extends Component {
+ *   protected init(options?: InitOptions): void {
+ *     // executed after instantiation
+ *   }
+ *   protected start(): void {
+ *     // executed in the first available frame
+ *   }
+ *   protected update(): void {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ */
 export abstract class Component extends GameActor {
+    /** Name given manually at the time of instantiation. */
     public readonly name: string;
+    /** Object to which it belongs. */
     public readonly gameObject: GameObject;
+    /** TRUE if several instances of this component are allowed in the same object. */
     public readonly allowMultiple: boolean = true;
 
     private _active: boolean = true;
@@ -24,10 +59,12 @@ export abstract class Component extends GameActor {
         this.name = name;
     }
 
+    /** TRUE for enabled object, FALSE for disabled object. */
     public get active(): boolean {
         return this._active;
     }
 
+    /** TRUE for enabled object, FALSE for disabled object. */
     public set active(active: boolean) {
         if (this._active === active) return;
 
@@ -111,6 +148,10 @@ export abstract class Component extends GameActor {
             : this.gameObject.hasComponent(filter as ComponentClass<T>);
     }
 
+    /**
+     * Removes the given component in the GameObject
+     * @param component The class of the component to remnove
+     */
     public removeComponent(component: Component): void {
         this.gameObject.removeComponent(component);
     }

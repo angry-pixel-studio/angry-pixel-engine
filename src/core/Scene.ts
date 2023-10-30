@@ -5,6 +5,30 @@ import { GameActor } from "./GameActor";
 
 export type SceneClass = new (container: Container, name: string, game: Game) => Scene;
 
+/**
+ * Base class for all game scenes
+ * @public
+ * @example
+ * ```js
+ * class GameScene extends Scene {
+ *   init(options) {
+ *     this.addGameObject(Player);
+ *   }
+ *   start() {}
+ *   update() {}
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class GameScene extends Scene {
+ *   protected init(options?: InitOptions): void {
+ *     this.addGameObject(Player);
+ *   }
+ *   protected start(): void {}
+ *   protected update(): void {}
+ * }
+ * ```
+ */
 export class Scene extends GameActor {
     constructor(container: Container, public readonly name: string, public readonly game: Game) {
         super(container);
@@ -14,6 +38,9 @@ export class Scene extends GameActor {
         }
     }
 
+    /**
+     * THe main active camera
+     */
     public get gameCamera(): GameCamera {
         return this.findGameObject(GameCamera);
     }

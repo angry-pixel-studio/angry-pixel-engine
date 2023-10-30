@@ -24,6 +24,44 @@ const defaultConfig: GameConfig = {
     },
 };
 
+/**
+ * Game is the main class that contains all the managers, scenes, objects and components. It allows to start and stop the execution of the game.
+ * @public
+ * @example
+ * ```js
+ * const game = new Game({
+ *   containerNode: document.getElementById("app"),
+ *   gameWidth: 1920,
+ *   gameHeight: 1080,
+ * });
+ * game.addScene(GameScene, "GameScene");
+ * game.run();
+ * ```
+ * @example
+ * ```js
+ * const game = new Game({
+ *   containerNode: document.getElementById("app"),
+ *   gameWidth: 1920,
+ *   gameHeight: 1080,
+ *   debugEnabled: false,
+ *   canvasColor: "#000000",
+ *   physicsFramerate: 180,
+ *   headless: false,
+ *   spriteDefaultScale: new Vector2(1, 1),
+ *   collisions: {
+ *     collisionMatrix: [
+ *       ["layer1", "layer2"],
+ *       ["layer1", "layer3"],
+ *     ],
+ *     collisionMethod: CollisionMethods.SAT,
+ *     collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+ *     collisionArea: new Rectangle(-960, -540, 1920, 1080),
+ *   }
+ * });
+ * game.addScene(GameScene, "GameScene");
+ * game.run();
+ * ```
+ */
 export class Game {
     private readonly container: Container;
     private sceneManager: ISceneManager;
@@ -55,14 +93,14 @@ export class Game {
     }
 
     /**
-     * @returns GameConfig
+     * The game configuration
      */
     public get config(): GameConfig {
         return this._config;
     }
 
     /**
-     * @returns running
+     * TRUE if the game is running
      */
     public get running(): boolean {
         return this.iterationManager.running;

@@ -16,16 +16,55 @@ export type GameObjectClass<T extends GameObject = GameObject> = new (
     parent?: GameObject
 ) => T;
 
+/**
+ * Base class for all objects in the scene.
+ * @public
+ * @example
+ * ```js
+ * class Player extends GameObject {
+ *   init(options) {
+ *     this.tag = "Tag";
+ *     this.layer = "Default";
+ *   }
+ *   start() {
+ *     // executed in the first available frame
+ *   }
+ *   update() {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class Player extends GameObject {
+ *   protected init(options?: InitOptions): void {
+ *     this.tag = "Tag";
+ *     this.layer = "Default";
+ *   }
+ *   protected start(): void {
+ *     // executed in the first available frame
+ *   }
+ *   protected update(): void {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ */
 export class GameObject extends GameActor {
+    /** Id automatically assigned at the time of instantiation. */
     public readonly id: number;
+    /** Name given manually at the time of instantiation. */
     public readonly name: string;
-
+    /** Tag used to group objects and optimize their retrieval. */
     public tag: string;
+    /** Layer used for rendering and physics. Default value is "Default". */
     public layer: string = LAYER_DEFAULT;
+    /** TRUE for UI objects. Default value is FALSE. Renders the object outside the game world coordinates. */
     public ui: boolean = false;
+    /** TRUE to prevent the object from being automatically destroyed when changing the scene. Default value is FALSE. */
     public keep: boolean = false;
-    private _parent: GameObject | null = null;
 
+    private _parent: GameObject | null = null;
     private _active: boolean = true;
 
     private components: Component[] = [];
@@ -42,10 +81,12 @@ export class GameObject extends GameActor {
         this.parent = parent; // using the setter instead of the private attribute
     }
 
+    /** TRUE for enabled object, FALSE for disabled object. */
     public get active(): boolean {
         return this._active;
     }
 
+    /** TRUE for enabled object, FALSE for disabled object. */
     public set active(active: boolean) {
         if (this._active === active) return;
 
@@ -56,10 +97,12 @@ export class GameObject extends GameActor {
         this.onActiveChange();
     }
 
+    /** Parent game object. A child object depends on the parent's Transform. */
     public get parent(): GameObject | null {
         return this._parent;
     }
 
+    /** Parent game object. A child object depends on the parent's Transform. */
     public set parent(parent: GameObject | null) {
         this._parent = parent;
         this.transform.parent = parent !== null ? parent.transform : null;
@@ -77,10 +120,14 @@ export class GameObject extends GameActor {
         if (this.active === true) this.activeChildrenCache = [];
     }
 
+    /**
+     * Transform component added natively in the object
+     */
     public get transform(): Transform {
         return this.getComponent<Transform>(Transform);
     }
 
+    /** RigidBody Component (if any) */
     public get rigidBody(): RigidBody {
         return this.getComponent<RigidBody>(RigidBody);
     }

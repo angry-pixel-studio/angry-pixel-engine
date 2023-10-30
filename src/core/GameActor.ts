@@ -15,6 +15,10 @@ export interface InitOptions {
     [key: string]: any; // eslint-disable-line
 }
 
+/**
+ * Base class from which Scene, GameObjects and Component are extended.
+ * @private
+ */
 export abstract class GameActor {
     protected readonly updateEvent: FrameEvent = FrameEvent.Update;
     protected readonly container: Container;
@@ -98,7 +102,6 @@ export abstract class GameActor {
      * @param gameObjectClass The game object class
      * @param name The name of the game object
      * @returns The added game object
-     * @returns
      */
     protected addGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>, name: string): T;
     /**
@@ -106,7 +109,6 @@ export abstract class GameActor {
      * @param gameObjectClass The game object class
      * @param options This options will be passed to the init method
      * @returns The added game object
-     * @returns
      */
     protected addGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>, options: InitOptions): T;
     /**
@@ -115,7 +117,6 @@ export abstract class GameActor {
      * @param options [optional] This options will be passed to the init method
      * @param name [optional] The name of the game object
      * @returns The added game object
-     * @returns
      */
     protected addGameObject<T extends GameObject>(
         gameObjectClass: GameObjectClass<T>,
