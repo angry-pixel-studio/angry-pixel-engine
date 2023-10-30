@@ -10,7 +10,7 @@ import { Vector2 } from "angry-pixel-math";
 import { BroadPhaseMethods, CollisionMethods } from "angry-pixel-2d-physics";
 
 const defaultConfig: GameConfig = {
-    containerNode: null,
+    containerNode: undefined,
     gameWidth: 320,
     gameHeight: 180,
     debugEnabled: false,
