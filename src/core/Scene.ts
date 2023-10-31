@@ -30,6 +30,7 @@ export type SceneClass = new (container: Container, name: string, game: Game) =>
  * ```
  */
 export class Scene extends GameActor {
+    /** @private */
     constructor(container: Container, public readonly name: string, public readonly game: Game) {
         super(container);
 
@@ -39,12 +40,13 @@ export class Scene extends GameActor {
     }
 
     /**
-     * THe main active camera
+     * The main active camera
      */
     public get gameCamera(): GameCamera {
         return this.findGameObject(GameCamera);
     }
 
+    /** @private */
     protected _destroy(): void {
         this.gameObjectManager.destroyAllGameObjects(false);
 
@@ -52,6 +54,7 @@ export class Scene extends GameActor {
         Object.keys(this).forEach((key) => delete this[key]);
     }
 
+    /** @private */
     protected _stopGame(): void {
         this.gameObjectManager.destroyAllGameObjects(true);
 

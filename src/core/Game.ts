@@ -63,12 +63,16 @@ const defaultConfig: GameConfig = {
  * ```
  */
 export class Game {
+    /** @private */
     private readonly container: Container;
+    /** @private */
     private sceneManager: ISceneManager;
+    /** @private */
     private iterationManager: IIterationManager;
-
+    /** @private */
     private _config: GameConfig;
 
+    /** @private */
     constructor(config: GameConfig) {
         this._config = {
             ...defaultConfig,
@@ -85,6 +89,7 @@ export class Game {
         this.setupManagers();
     }
 
+    /** @private */
     private setupManagers(): void {
         loadDependencies(this.container, this._config);
 

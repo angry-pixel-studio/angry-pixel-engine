@@ -8,6 +8,7 @@ import { Component } from "../Component";
 import { Scene } from "../Scene";
 import { IPhysicsManager } from "angry-pixel-2d-physics";
 
+/** @private */
 export enum FrameEvent {
     Init,
     Start,
@@ -23,6 +24,7 @@ export enum FrameEvent {
     StopGame,
 }
 
+/** @private */
 export interface IIterationManager {
     running: boolean;
     start(): void;
@@ -31,8 +33,10 @@ export interface IIterationManager {
     stop(): void;
 }
 
+/** @private */
 export const now = (): number => window.performance.now() * 0.001;
 
+/** @private */
 export class IterationManager implements IIterationManager {
     public running: boolean = false;
 

@@ -3,14 +3,24 @@ import { KeyboardController } from "./KeyboardController";
 import { GamepadController } from "./GamepadController";
 import { TouchController } from "./TouchController";
 
+/**
+ * Manages the input sources: Keyboard, Mouse, Gamepad, Touch.
+ * @public
+ */
 export interface IInputManager {
+    /** Manages mouse information. */
     mouse: MouseController;
+    /** Manages keyboard information. */
     keyboard: KeyboardController;
+    /** Manages gamepads information. */
     gamepad: GamepadController;
+    /** Manages toush information. */
     touch: TouchController;
+    /** @private */
     update(): void;
 }
 
+/** @private */
 export class InputManager implements IInputManager {
     public mouse: MouseController;
     public keyboard: KeyboardController;

@@ -20,17 +20,28 @@ export interface InitOptions {
  * @private
  */
 export abstract class GameActor {
+    /** @private */
     protected readonly updateEvent: FrameEvent = FrameEvent.Update;
+    /** @private */
     protected readonly container: Container;
 
+    /** Used to load and retrieve assets. */
     protected readonly assetManager: IAssetManager;
+    /** Used to access the canvas element. */
     protected readonly domManager: IDomManager;
+    /** Used to obtain information about the input. */
     protected readonly inputManager: IInputManager;
+    /** Used to create, retrieve and destroy GameObject instances. */
     protected readonly gameObjectManager: IGameObjectManager;
+    /** Used to manage colliders and rigidBodies. */
     protected readonly physicsManager: IPhysicsManager;
+    /** Used to manage the render and camera data. */
     protected readonly renderManager: IRenderManager;
+    /** Used to load scenes. */
     protected readonly sceneManager: ISceneManager;
+    /** Used to manage and obtain information about the time in the game. */
     protected readonly timeManager: ITimeManager;
+    /** Object containing the game configuration. */
     protected readonly gameConfig: GameConfig;
 
     private started: boolean = false;
@@ -53,6 +64,7 @@ export abstract class GameActor {
         this.timeManager = this.container.getSingleton<ITimeManager>("TimeManager");
     }
 
+    /** @private */
     public dispatch(event: FrameEvent, options?: InitOptions): void {
         if (event === FrameEvent.Init && this.init) {
             this.init(options);
@@ -94,7 +106,6 @@ export abstract class GameActor {
      * Adds a new game object to the scene.
      * @param gameObjectClass The game object class
      * @returns The added game object
-     * @returns
      */
     protected addGameObject<T extends GameObject>(gameObjectClass: GameObjectClass<T>): T;
     /**
@@ -190,7 +201,9 @@ export abstract class GameActor {
         this.gameObjectManager.destroyGameObject(gameObject);
     }
 
+    /** @private */
     protected abstract _destroy(): void;
 
+    /** @private */
     protected abstract _stopGame(): void;
 }

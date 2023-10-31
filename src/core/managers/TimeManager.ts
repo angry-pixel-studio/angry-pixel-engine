@@ -6,22 +6,45 @@ export const DEFAULT_PHYSICS_FRAMERATE = 180;
 
 const allowedPhysicsFramerates = [60, 120, 180, 240];
 
+/**
+ * Manages the properties associated with time.
+ * @public
+ */
 export interface ITimeManager {
+    /** @private */
     minGameDeltatime: number;
+    /** @private */
     minPhysicsDeltaTime: number;
+    /** @private */
     gameFramerate: number;
+    /** @private */
     physicsFramerate: number;
-    timeScale: number;
-    unscaledDeltaTime: number;
-    unscaledPhysicsDeltaTime: number;
+    /** The time difference, in seconds, between the last frame and the current frame. */
     deltaTime: number;
+    /** The time difference, in seconds, between the last physics frame and the current one. */
     physicsDeltaTime: number;
+    /**
+     * The scale on which time passes. The default value is 1.
+     * For example, if set to 2, the time will run at twice the speed.
+     * If set to 0.5, it will run at half the speed.\
+     * If set to 0, everything associated with the time will stop.
+     */
+    timeScale: number;
+    /** The time difference, in seconds, between the last frame and the current frame, unaffected by the scale. */
+    unscaledDeltaTime: number;
+    /** The time difference, in seconds, between the last physics frame and the current one, unaffected by the scale. */
+    unscaledPhysicsDeltaTime: number;
+    /** The time difference, in seconds, between the last frame of and the current frame recorded by the browser. */
     browserDeltaTime: number;
+    /** @private */
     updateForGame(time: number): void;
+    /** @private */
     updateForBrowser(time: number): void;
+    /** @private */
     updateForPhysics(time: number): void;
 }
 
+/** @private */
 export class TimeManager implements ITimeManager {
     public readonly minGameDeltatime: number = 0;
     public readonly minPhysicsDeltaTime: number = 0;

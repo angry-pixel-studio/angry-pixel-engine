@@ -1,6 +1,6 @@
 import { IRenderManager } from "angry-pixel-2d-renderer";
 
-export enum AssetType {
+enum AssetType {
     Image = "Image",
     Audio = "Audio",
     Font = "Font",
@@ -17,18 +17,69 @@ interface Asset {
     family?: string;
 }
 
+/**
+ * Manages the asset loading (images, fonts, audios, videos).
+ * @public
+ */
 export interface IAssetManager {
+    /**
+     * Returns TRUE if the assets are loaded
+     * @returns TRUE or FALSE
+     */
     getAssetsLoaded(): boolean;
+    /**
+     * Loads an image asset
+     * @param url The asset URL
+     * @param preloadTexture Creates the texture to be rendered at load time [optional]
+     * @returns The HTML Image element created
+     */
     loadImage(url: string, preloadTexture?: boolean): HTMLImageElement;
+    /**
+     * Loads an audio asset
+     * @param url The asset URL
+     * @returns The HTML Audio element created
+     */
     loadAudio(url: string): HTMLAudioElement;
+    /**
+     * Loads a font asset
+     * @param family The font family name
+     * @param url The asset URL
+     * @returns The FontFace object created
+     */
     loadFont(family: string, url: string): FontFace;
+    /**
+     * Loads an video asset
+     * @param url The asset URL
+     * @returns The HTML Video element created
+     */
     loadVideo(url: string): HTMLVideoElement;
+    /**
+     * Retrieves an image asset
+     * @param url The asset URL
+     * @returns The HTML Image element
+     */
     getImage(url: string): HTMLImageElement;
+    /**
+     * Retrieves an audio asset
+     * @param url The asset URL
+     * @returns The HTML Audio element
+     */
     getAudio(url: string): HTMLAudioElement;
+    /**
+     * Retrieves a font asset
+     * @param url The asset URL
+     * @returns The Font element
+     */
     getFont(family: string): FontFace;
+    /**
+     * Retrieves a video asset
+     * @param url The asset URL
+     * @returns The HTML Video element
+     */
     getVideo(url: string): HTMLVideoElement;
 }
 
+/** @private */
 export class AssetManager implements IAssetManager {
     private readonly assets: Asset[] = [];
 

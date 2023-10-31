@@ -1,4 +1,4 @@
-import { Component } from "../core/Component";
+import { EngineComponent } from "../core/Component";
 import { InitOptions } from "../core/GameActor";
 import { MouseController } from "../input/MouseController";
 import { TouchController } from "../input/TouchController";
@@ -18,7 +18,7 @@ export interface ButtonOptions extends InitOptions {
     offset?: Vector2;
 }
 
-export class Button extends Component {
+export class Button extends EngineComponent {
     public readonly allowMultiple: boolean = false;
 
     public type: ButtonType;

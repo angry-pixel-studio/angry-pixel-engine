@@ -9,6 +9,7 @@ import { Container } from "../utils/Container";
 
 export const LAYER_DEFAULT = "Default";
 
+/** @private */
 export type GameObjectClass<T extends GameObject = GameObject> = new (
     container: Container,
     id: number,
@@ -64,13 +65,19 @@ export class GameObject extends GameActor {
     /** TRUE to prevent the object from being automatically destroyed when changing the scene. Default value is FALSE. */
     public keep: boolean = false;
 
+    /** @private */
     private _parent: GameObject | null = null;
+    /** @private */
     private _active: boolean = true;
 
+    /** @private */
     private components: Component[] = [];
+    /** @private */
     private activeComponentsCache: Component[] = [];
+    /** @private */
     private activeChildrenCache: GameObject[] = [];
 
+    /** @private */
     constructor(container: Container, id: number, name: string = "", parent: GameObject = null) {
         super(container);
 
@@ -108,12 +115,14 @@ export class GameObject extends GameActor {
         this.transform.parent = parent !== null ? parent.transform : null;
     }
 
+    /** @private */
     private updateComponentsActiveStatus(): void {
         if (this.active === false) this.activeComponentsCache = this.components.filter((component) => component.active);
         this.activeComponentsCache.forEach((component) => (component.active = this.active));
         if (this.active === true) this.activeComponentsCache = [];
     }
 
+    /** @private */
     private updateChildrenActiveStatus(): void {
         if (this.active === false) this.activeChildrenCache = this.getChildren().filter((children) => children.active);
         this.activeChildrenCache.forEach((children) => (children.active = this.active));
@@ -203,6 +212,7 @@ export class GameObject extends GameActor {
         return component;
     }
 
+    /** @private */
     private checkMultipleComponent(component: Component, componentClass: ComponentClass): void {
         if (component.allowMultiple === false && this.hasComponent(componentClass)) {
             throw new Exception(`GameObject only allows one component of type ${componentClass.name}`);
@@ -330,6 +340,7 @@ export class GameObject extends GameActor {
             .forEach((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
+    /** @private */
     protected _destroy(): void {
         this.destroyComponents();
 
@@ -337,6 +348,7 @@ export class GameObject extends GameActor {
         Object.keys(this).forEach((key) => delete this[key]);
     }
 
+    /** @private */
     private destroyComponents(): void {
         for (let i = 0; i < this.components.length; i++) {
             this.components[i].dispatch(FrameEvent.Destroy);
@@ -346,6 +358,7 @@ export class GameObject extends GameActor {
         this.components = [];
     }
 
+    /** @private */
     protected _stopGame(): void {
         // do nothing
     }
