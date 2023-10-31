@@ -6,21 +6,58 @@ import { IGeometricRenderData, GeometricShape, RenderLocation, RenderDataType } 
 import { Vector2, Rotation } from "angry-pixel-math";
 import { CollisionMethods, ICollider, Line } from "angry-pixel-2d-physics";
 
+/**
+ * EdgeCollider configuration options
+ * @public
+ */
 export interface EdgeColliderOptions extends InitOptions {
+    /** Collection of 2d vectors representing the vertices of the collider */
     vertexModel: Vector2[];
+    /** x-axis offset */
     offsetX?: number;
+    /** y-axis offset */
     offsetY?: number;
+    /** Edges rotation (degrees or radians) */
     rotation?: Rotation;
+    /** Collision layer, if it's not setted, it uses the game object layer */
     layer?: string;
+    /** TRUE if this collider interact with rigid bodies */
     physics?: boolean;
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     debug?: boolean;
 }
 
+/**
+ * Collider composed of lines defined by its vertices, for 2d collisions.
+ * @public
+ * @example
+ * ```js
+ * this.addComponent(EdgeCollider, {
+ *   vertexModel: [new Vector2(0,0), new Vector2(32, 32)],
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(EdgeCollider, {
+ *   vertexModel: [new Vector2(0,0), new Vector2(32, 32)],
+ *   rotation: new Rotation(0),
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "Hills",
+ *   debug: false,
+ *   physics: true,
+ * });
+ */
 export class EdgeCollider extends BaseCollider {
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     public debug: boolean = false;
+    /** Collection of 2d vectors representing the vertices of the collider */
     public vertexModel: Vector2[];
+    /** x-axis offset */
     public offsetX: number = 0;
+    /** y-axis offset */
     public offsetY: number = 0;
+    /** Rectangle rotation (degrees or radians) */
     public rotation: Rotation;
 
     private scaledVertexModel: Vector2[] = [];
@@ -111,6 +148,9 @@ export class EdgeCollider extends BaseCollider {
     }
 }
 
+/**
+ * @private
+ */
 class EdgeColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData[] = [];
     private colliders: ICollider[] = [];

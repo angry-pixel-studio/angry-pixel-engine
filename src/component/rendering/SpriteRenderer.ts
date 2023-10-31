@@ -45,14 +45,14 @@ export interface SpriteRendererOptions {
  * @public
  * @example
  * ```js
- * this.addComponent({
+ * this.addComponent(SpriteRenderer, {
  *   sprite: new Sprite({image: this.assetManager.getImage("image.png")})
  * });
  * ```
  *
  * @example
  * ```js
- * this.addComponent({
+ * this.addComponent(SpriteRenderer, {
  *   sprite: new Sprite({image: this.assetManager.getImage("image.png")}),
  *   offset: new Vector2(0, 0),
  *   flipHorizontal:  false,

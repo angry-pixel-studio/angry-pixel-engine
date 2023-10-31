@@ -4,23 +4,65 @@ import { Rotation, Vector2 } from "angry-pixel-math";
 import { PolygonColliderRenderer } from "./PolygonCollider";
 import { CollisionMethods, Rectangle } from "angry-pixel-2d-physics";
 
+/**
+ * BoxCollider configuration options
+ * @public
+ */
 export interface BoxColliderOptions extends InitOptions {
+    /** Width of the rectangle in pixels */
     width: number;
+    /** Height of the rectangle in pixels */
     height: number;
+    /** x-axis offset */
     offsetX?: number;
+    /** y-axis offset */
     offsetY?: number;
+    /** Rectangle rotation (degrees or radians) */
     rotation?: Rotation;
+    /** Collision layer, if it's not setted, it uses the game object layer */
     layer?: string;
+    /** TRUE if this collider interact with rigid bodies */
     physics?: boolean;
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     debug?: boolean;
 }
 
+/**
+ * Rectangle shaped collider for 2d collisions.
+ * @public
+ * @example
+ * ```js
+ * this.addComponent(BoxCollider, {
+ *   width: 32,
+ *   height: 32,
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(BoxCollider, {
+ *   width: 32,
+ *   height: 32,
+ *   rotation: new Rotation(0),
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "PlayerHitbox",
+ *   debug: false,
+ *   physics: true,
+ * });
+ * ```
+ */
 export class BoxCollider extends BaseCollider {
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     public debug: boolean = false;
+    /** Width of the rectangle in pixels */
     public width: number;
+    /** Height of the rectangle in pixels */
     public height: number;
+    /** x-axis offset */
     public offsetX: number = 0;
+    /** y-axis offset */
     public offsetY: number = 0;
+    /** Rectangle rotation (degrees or radians) */
     public rotation: Rotation;
 
     private realWidth: number = 0;

@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L8)
+[src/component/rendering/MaskRenderer.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L8)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:7](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L7)
+[src/component/rendering/MaskRenderer.ts:7](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L7)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L12)
+[src/component/rendering/MaskRenderer.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L12)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L9)
+[src/component/rendering/MaskRenderer.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L9)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L11)
+[src/component/rendering/MaskRenderer.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L11)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L10)
+[src/component/rendering/MaskRenderer.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L10)
 
 ___
 
@@ -82,4 +82,4 @@ ___
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/MaskRenderer.ts#L6)
+[src/component/rendering/MaskRenderer.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/MaskRenderer.ts#L6)

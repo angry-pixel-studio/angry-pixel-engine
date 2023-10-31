@@ -5,19 +5,54 @@ import { Vector2 } from "angry-pixel-math";
 import { GeometricShape, IGeometricRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 import { Circumference, ICollider } from "angry-pixel-2d-physics";
 
+/**
+ * BallCollider configuration options
+ * @public
+ */
 export interface BallColliderOptions extends InitOptions {
+    /** Radius in pixels */
     radius: number;
+    /** x-axis offset */
     offsetX?: number;
+    /** y-axis offset */
     offsetY?: number;
+    /** Collision layer, if it's not setted, it uses the game object layer */
     layer?: string;
+    /** TRUE if this collider interact with rigid bodies */
     physics?: boolean;
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     debug?: boolean;
 }
 
+/**
+ * Circumference shaped collider for 2d collisions.
+ * @public
+ * @example
+ * ```js
+ * this.addComponent(BallCollider, {
+ *   radius: 32
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(BallCollider, {
+ *   radius: 32,
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "PlayerHitbox",
+ *   debug: false,
+ *   physics: true,
+ * });
+ * ```
+ */
 export class BallCollider extends BaseCollider {
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     public debug: boolean = false;
+    /** Radius in pixels */
     public radius: number;
+    /** x-axis offset */
     public offsetX: number = 0;
+    /** y-axis offset */
     public offsetY: number = 0;
 
     private realRadius: number = 0;
@@ -85,6 +120,7 @@ export class BallCollider extends BaseCollider {
     }
 }
 
+/** @private */
 class BallColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData;
     private collider: ICollider;

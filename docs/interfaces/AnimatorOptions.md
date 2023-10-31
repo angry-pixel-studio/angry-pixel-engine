@@ -22,4 +22,4 @@
 
 #### Defined in
 
-[src/component/Animator.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Animator.ts#L28)
+[src/component/Animator.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L28)

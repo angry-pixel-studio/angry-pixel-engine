@@ -2,6 +2,8 @@
 
 # Interface: BoxColliderOptions
 
+BoxCollider configuration options
+
 ## Hierarchy
 
 - [`InitOptions`](InitOptions.md)
@@ -27,9 +29,11 @@
 
 • `Optional` **debug**: `boolean`
 
+If debug mode is enabled, the collider shape is rendered using the object's render layer
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L15)
+[src/component/collider/BoxCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L27)
 
 ___
 
@@ -37,9 +41,11 @@ ___
 
 • **height**: `number`
 
+Height of the rectangle in pixels
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L9)
+[src/component/collider/BoxCollider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L15)
 
 ___
 
@@ -47,9 +53,11 @@ ___
 
 • `Optional` **layer**: `string`
 
+Collision layer, if it's not setted, it uses the game object layer
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L13)
+[src/component/collider/BoxCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L23)
 
 ___
 
@@ -57,9 +65,11 @@ ___
 
 • `Optional` **offsetX**: `number`
 
+x-axis offset
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L10)
+[src/component/collider/BoxCollider.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L17)
 
 ___
 
@@ -67,9 +77,11 @@ ___
 
 • `Optional` **offsetY**: `number`
 
+y-axis offset
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L11)
+[src/component/collider/BoxCollider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L19)
 
 ___
 
@@ -77,9 +89,11 @@ ___
 
 • `Optional` **physics**: `boolean`
 
+TRUE if this collider interact with rigid bodies
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L14)
+[src/component/collider/BoxCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L25)
 
 ___
 
@@ -87,9 +101,11 @@ ___
 
 • `Optional` **rotation**: [`Rotation`](../classes/Rotation.md)
 
+Rectangle rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L12)
+[src/component/collider/BoxCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L21)
 
 ___
 
@@ -97,6 +113,8 @@ ___
 
 • **width**: `number`
 
+Width of the rectangle in pixels
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L8)
+[src/component/collider/BoxCollider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L13)

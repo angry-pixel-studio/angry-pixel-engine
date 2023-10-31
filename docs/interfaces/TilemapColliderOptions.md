@@ -2,6 +2,8 @@
 
 # Interface: TilemapColliderOptions
 
+TilemapCollider configuration options
+
 ## Hierarchy
 
 - [`InitOptions`](InitOptions.md)
@@ -23,9 +25,11 @@
 
 • `Optional` **composite**: `boolean`
 
+Generate colliders that represent the outer lines of the tile map
+
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/TilemapCollider.ts#L17)
+[src/component/collider/TilemapCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/TilemapCollider.ts#L23)
 
 ___
 
@@ -33,9 +37,11 @@ ___
 
 • `Optional` **debug**: `boolean`
 
+If debug mode is enabled, the collider shape is rendered using the object's render layer
+
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/TilemapCollider.ts#L19)
+[src/component/collider/TilemapCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/TilemapCollider.ts#L27)
 
 ___
 
@@ -43,9 +49,11 @@ ___
 
 • `Optional` **layer**: `string`
 
+Collision layer, if it's not setted, it uses the game object layer
+
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/TilemapCollider.ts#L18)
+[src/component/collider/TilemapCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/TilemapCollider.ts#L25)
 
 ___
 
@@ -53,6 +61,8 @@ ___
 
 • **tilemapRenderer**: [`ITilemapRenderer`](ITilemapRenderer.md)
 
+TilemapRenderer from which the tiles information will be obtained to generate the colliders
+
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/TilemapCollider.ts#L16)
+[src/component/collider/TilemapCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/TilemapCollider.ts#L21)

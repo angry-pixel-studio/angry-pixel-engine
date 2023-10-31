@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/component/RigidBody.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/RigidBody.ts#L12)
+[src/component/RigidBody.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/RigidBody.ts#L12)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[src/component/RigidBody.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/RigidBody.ts#L11)
+[src/component/RigidBody.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/RigidBody.ts#L11)

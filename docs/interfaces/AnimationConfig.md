@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[src/component/Animator.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Animator.ts#L10)
+[src/component/Animator.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L10)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[src/component/Animator.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Animator.ts#L9)
+[src/component/Animator.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L9)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/component/Animator.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Animator.ts#L8)
+[src/component/Animator.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L8)

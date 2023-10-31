@@ -22,7 +22,7 @@ The image element to render
 
 #### Defined in
 
-[src/component/Sprite.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Sprite.ts#L11)
+[src/component/Sprite.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Sprite.ts#L11)
 
 ___
 
@@ -34,7 +34,7 @@ Cut the image based on straight coordinates starting from the top left downward
 
 #### Defined in
 
-[src/component/Sprite.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Sprite.ts#L13)
+[src/component/Sprite.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Sprite.ts#L13)
 
 ___
 
@@ -46,4 +46,4 @@ Smoothing pixels (not recommended for pixel art)
 
 #### Defined in
 
-[src/component/Sprite.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Sprite.ts#L15)
+[src/component/Sprite.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Sprite.ts#L15)

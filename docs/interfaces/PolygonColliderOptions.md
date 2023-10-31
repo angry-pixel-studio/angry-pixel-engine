@@ -2,6 +2,8 @@
 
 # Interface: PolygonColliderOptions
 
+PolygonCollider configuration options
+
 ## Hierarchy
 
 - [`InitOptions`](InitOptions.md)
@@ -26,9 +28,11 @@
 
 • `Optional` **debug**: `boolean`
 
+If debug mode is enabled, the collider shape is rendered using the object's render layer
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L16)
+[src/component/collider/PolygonCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L27)
 
 ___
 
@@ -36,9 +40,11 @@ ___
 
 • `Optional` **layer**: `string`
 
+Collision layer, if it's not setted, it uses the game object layer
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L14)
+[src/component/collider/PolygonCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L23)
 
 ___
 
@@ -46,9 +52,11 @@ ___
 
 • `Optional` **offsetX**: `number`
 
+x-axis offset
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L11)
+[src/component/collider/PolygonCollider.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L17)
 
 ___
 
@@ -56,9 +64,11 @@ ___
 
 • `Optional` **offsetY**: `number`
 
+y-axis offset
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L12)
+[src/component/collider/PolygonCollider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L19)
 
 ___
 
@@ -66,9 +76,11 @@ ___
 
 • `Optional` **physics**: `boolean`
 
+TRUE if this collider interact with rigid bodies
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L15)
+[src/component/collider/PolygonCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L25)
 
 ___
 
@@ -76,9 +88,11 @@ ___
 
 • `Optional` **rotation**: [`Rotation`](../classes/Rotation.md)
 
+Edges rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L13)
+[src/component/collider/PolygonCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L21)
 
 ___
 
@@ -86,6 +100,8 @@ ___
 
 • **vertexModel**: [`Vector2`](../classes/Vector2.md)[]
 
+Collection of 2d vectors representing the vertices of the collider
+
 #### Defined in
 
-[src/component/collider/PolygonCollider.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/PolygonCollider.ts#L10)
+[src/component/collider/PolygonCollider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/PolygonCollider.ts#L15)

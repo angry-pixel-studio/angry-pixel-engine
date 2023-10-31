@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/component/AudioPlayer.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/AudioPlayer.ts#L6)
+[src/component/AudioPlayer.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/AudioPlayer.ts#L6)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[src/component/AudioPlayer.ts:5](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/AudioPlayer.ts#L5)
+[src/component/AudioPlayer.ts:5](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/AudioPlayer.ts#L5)

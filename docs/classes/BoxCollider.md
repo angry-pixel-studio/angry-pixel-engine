@@ -2,6 +2,32 @@
 
 # Class: BoxCollider
 
+Rectangle shaped collider for 2d collisions.
+
+**`Example`**
+
+```js
+this.addComponent(BoxCollider, {
+  width: 32,
+  height: 32,
+});
+```
+
+**`Example`**
+
+```js
+this.addComponent(BoxCollider, {
+  width: 32,
+  height: 32,
+  rotation: new Rotation(0),
+  offsetX: 0,
+  offsetY: 0,
+  layer: "PlayerHitbox",
+  debug: false,
+  physics: true,
+});
+```
+
 ## Hierarchy
 
 - `BaseCollider`
@@ -79,7 +105,7 @@ BaseCollider.allowMultiple
 
 #### Defined in
 
-[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L52)
+[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L52)
 
 ___
 
@@ -95,7 +121,7 @@ BaseCollider.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L29)
 
 ___
 
@@ -109,7 +135,7 @@ BaseCollider.colliders
 
 #### Defined in
 
-[src/component/collider/Collider.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L24)
+[src/component/collider/Collider.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L51)
 
 ___
 
@@ -117,9 +143,11 @@ ___
 
 • **debug**: `boolean` = `false`
 
+If debug mode is enabled, the collider shape is rendered using the object's render layer
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L19)
+[src/component/collider/BoxCollider.ts:56](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L56)
 
 ___
 
@@ -135,7 +163,7 @@ BaseCollider.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L31)
 
 ___
 
@@ -151,7 +179,7 @@ BaseCollider.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L45)
 
 ___
 
@@ -167,7 +195,7 @@ BaseCollider.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L50)
 
 ___
 
@@ -183,7 +211,7 @@ BaseCollider.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L35)
 
 ___
 
@@ -191,9 +219,11 @@ ___
 
 • **height**: `number`
 
+Height of the rectangle in pixels
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L21)
+[src/component/collider/BoxCollider.ts:60](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L60)
 
 ___
 
@@ -209,7 +239,7 @@ BaseCollider.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L33)
 
 ___
 
@@ -217,13 +247,15 @@ ___
 
 • **layer**: `string`
 
+If debug mode is enabled, the collider shape is rendered using the object's render layer
+
 #### Inherited from
 
 BaseCollider.layer
 
 #### Defined in
 
-[src/component/collider/Collider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L25)
+[src/component/collider/Collider.ts:53](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L53)
 
 ___
 
@@ -239,7 +271,7 @@ BaseCollider.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L48)
 
 ___
 
@@ -247,9 +279,11 @@ ___
 
 • **offsetX**: `number` = `0`
 
+x-axis offset
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L22)
+[src/component/collider/BoxCollider.ts:62](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L62)
 
 ___
 
@@ -257,9 +291,11 @@ ___
 
 • **offsetY**: `number` = `0`
 
+y-axis offset
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L23)
+[src/component/collider/BoxCollider.ts:64](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L64)
 
 ___
 
@@ -267,13 +303,15 @@ ___
 
 • **physics**: `boolean` = `true`
 
+TRUE if this collider interact with rigid bodies
+
 #### Inherited from
 
 BaseCollider.physics
 
 #### Defined in
 
-[src/component/collider/Collider.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L26)
+[src/component/collider/Collider.ts:55](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L55)
 
 ___
 
@@ -289,7 +327,7 @@ BaseCollider.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L37)
 
 ___
 
@@ -305,7 +343,7 @@ BaseCollider.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L39)
 
 ___
 
@@ -319,7 +357,7 @@ BaseCollider.renderer
 
 #### Defined in
 
-[src/component/collider/Collider.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L22)
+[src/component/collider/Collider.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L49)
 
 ___
 
@@ -327,9 +365,11 @@ ___
 
 • **rotation**: [`Rotation`](Rotation.md)
 
+Rectangle rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L24)
+[src/component/collider/BoxCollider.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L66)
 
 ___
 
@@ -345,7 +385,7 @@ BaseCollider.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L41)
 
 ___
 
@@ -361,7 +401,7 @@ BaseCollider.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L43)
 
 ___
 
@@ -375,7 +415,7 @@ BaseCollider.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:181](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L181)
+[src/core/Component.ts:181](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L181)
 
 ___
 
@@ -383,9 +423,11 @@ ___
 
 • **width**: `number`
 
+Width of the rectangle in pixels
+
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L20)
+[src/component/collider/BoxCollider.ts:58](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L58)
 
 ## Accessors
 
@@ -405,7 +447,7 @@ BaseCollider.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -427,7 +469,7 @@ BaseCollider.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L71)
 
 ## Methods
 
@@ -461,7 +503,7 @@ BaseCollider.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -492,7 +534,7 @@ BaseCollider.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -523,7 +565,7 @@ BaseCollider.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -555,7 +597,7 @@ BaseCollider.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L132)
 
 ___
 
@@ -563,15 +605,19 @@ ___
 
 ▸ **collidesWithLayer**(`layer`): `boolean`
 
+Check if the collider is in contact with any collider of the given layer.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `layer` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `layer` | `string` | The layer to check |
 
 #### Returns
 
 `boolean`
+
+TRUE if is colliding, FALSE instead
 
 #### Inherited from
 
@@ -579,7 +625,7 @@ BaseCollider.collidesWithLayer
 
 #### Defined in
 
-[src/component/collider/Collider.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L45)
+[src/component/collider/Collider.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L79)
 
 ___
 
@@ -605,7 +651,7 @@ BaseCollider.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L200)
 
 ___
 
@@ -639,7 +685,7 @@ BaseCollider.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -669,7 +715,7 @@ BaseCollider.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L180)
 
 ___
 
@@ -691,7 +737,7 @@ BaseCollider.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -721,7 +767,7 @@ BaseCollider.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L160)
 
 ___
 
@@ -755,7 +801,7 @@ BaseCollider.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L192)
 
 ___
 
@@ -763,15 +809,19 @@ ___
 
 ▸ **getCollisionWithLayer**(`layer`): [`CollisionData`](../interfaces/CollisionData.md)
 
+If there is a collision with the given layer, it returns information about it, or null if there is none.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `layer` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `layer` | `string` | The layer to check |
 
 #### Returns
 
 [`CollisionData`](../interfaces/CollisionData.md)
+
+The collision data object, or NULL instead
 
 #### Inherited from
 
@@ -779,7 +829,7 @@ BaseCollider.getCollisionWithLayer
 
 #### Defined in
 
-[src/component/collider/Collider.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L49)
+[src/component/collider/Collider.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L88)
 
 ___
 
@@ -787,15 +837,19 @@ ___
 
 ▸ **getCollisionsWithLayer**(`layer`): [`CollisionData`](../interfaces/CollisionData.md)[]
 
+If there are collisions with the given layer, it returns information about every collision.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `layer` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `layer` | `string` | The layer to check |
 
 #### Returns
 
 [`CollisionData`](../interfaces/CollisionData.md)[]
+
+The collection of collision data
 
 #### Inherited from
 
@@ -803,7 +857,7 @@ BaseCollider.getCollisionsWithLayer
 
 #### Defined in
 
-[src/component/collider/Collider.ts:62](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L62)
+[src/component/collider/Collider.ts:106](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L106)
 
 ___
 
@@ -837,7 +891,7 @@ BaseCollider.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -867,7 +921,7 @@ BaseCollider.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L128)
 
 ___
 
@@ -889,7 +943,7 @@ BaseCollider.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -919,7 +973,7 @@ BaseCollider.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L110)
 
 ___
 
@@ -945,7 +999,7 @@ BaseCollider.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L89)
 
 ___
 
@@ -971,7 +1025,7 @@ BaseCollider.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L96)
 
 ___
 
@@ -1005,7 +1059,7 @@ BaseCollider.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -1027,7 +1081,7 @@ BaseCollider.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L147)
 
 ___
 
@@ -1051,7 +1105,7 @@ BaseCollider.init
 
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L35)
+[src/component/collider/BoxCollider.ts:77](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L77)
 
 ___
 
@@ -1069,7 +1123,7 @@ BaseCollider.onActiveChange
 
 #### Defined in
 
-[src/component/collider/Collider.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L88)
+[src/component/collider/Collider.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L132)
 
 ___
 
@@ -1087,7 +1141,7 @@ BaseCollider.onDestroy
 
 #### Defined in
 
-[src/component/collider/Collider.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L93)
+[src/component/collider/Collider.ts:137](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L137)
 
 ___
 
@@ -1113,7 +1167,7 @@ BaseCollider.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L158)
 
 ___
 
@@ -1133,7 +1187,7 @@ BaseCollider.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1151,7 +1205,7 @@ BaseCollider.update
 
 #### Defined in
 
-[src/component/collider/Collider.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L34)
+[src/component/collider/Collider.ts:63](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L63)
 
 ___
 
@@ -1169,7 +1223,7 @@ BaseCollider.updateColliders
 
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:91](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L91)
+[src/component/collider/BoxCollider.ts:133](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L133)
 
 ___
 
@@ -1187,7 +1241,7 @@ BaseCollider.updatePosition
 
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:72](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L72)
+[src/component/collider/BoxCollider.ts:114](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L114)
 
 ___
 
@@ -1205,4 +1259,4 @@ BaseCollider.updateRealSize
 
 #### Defined in
 
-[src/component/collider/BoxCollider.ts:62](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BoxCollider.ts#L62)
+[src/component/collider/BoxCollider.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BoxCollider.ts#L104)

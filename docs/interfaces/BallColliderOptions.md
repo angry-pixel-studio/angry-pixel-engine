@@ -2,6 +2,8 @@
 
 # Interface: BallColliderOptions
 
+BallCollider configuration options
+
 ## Hierarchy
 
 - [`InitOptions`](InitOptions.md)
@@ -25,9 +27,11 @@
 
 • `Optional` **debug**: `boolean`
 
+If debug mode is enabled, the collider shape is rendered using the object's render layer
+
 #### Defined in
 
-[src/component/collider/BallCollider.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BallCollider.ts#L14)
+[src/component/collider/BallCollider.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L24)
 
 ___
 
@@ -35,9 +39,11 @@ ___
 
 • `Optional` **layer**: `string`
 
+Collision layer, if it's not setted, it uses the game object layer
+
 #### Defined in
 
-[src/component/collider/BallCollider.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BallCollider.ts#L12)
+[src/component/collider/BallCollider.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L20)
 
 ___
 
@@ -45,9 +51,11 @@ ___
 
 • `Optional` **offsetX**: `number`
 
+x-axis offset
+
 #### Defined in
 
-[src/component/collider/BallCollider.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BallCollider.ts#L10)
+[src/component/collider/BallCollider.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L16)
 
 ___
 
@@ -55,9 +63,11 @@ ___
 
 • `Optional` **offsetY**: `number`
 
+y-axis offset
+
 #### Defined in
 
-[src/component/collider/BallCollider.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BallCollider.ts#L11)
+[src/component/collider/BallCollider.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L18)
 
 ___
 
@@ -65,9 +75,11 @@ ___
 
 • `Optional` **physics**: `boolean`
 
+TRUE if this collider interact with rigid bodies
+
 #### Defined in
 
-[src/component/collider/BallCollider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BallCollider.ts#L13)
+[src/component/collider/BallCollider.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L22)
 
 ___
 
@@ -75,6 +87,8 @@ ___
 
 • **radius**: `number`
 
+Radius in pixels
+
 #### Defined in
 
-[src/component/collider/BallCollider.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/BallCollider.ts#L9)
+[src/component/collider/BallCollider.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L14)

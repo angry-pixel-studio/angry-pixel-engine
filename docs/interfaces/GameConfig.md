@@ -28,7 +28,7 @@ Background color of canvas
 
 #### Defined in
 
-[src/core/GameConfig.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L18)
+[src/core/GameConfig.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L18)
 
 ___
 
@@ -49,7 +49,7 @@ Collision configuration options
 
 #### Defined in
 
-[src/core/GameConfig.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L29)
+[src/core/GameConfig.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L29)
 
 ___
 
@@ -61,7 +61,7 @@ HTML element where the game will be created
 
 #### Defined in
 
-[src/core/GameConfig.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L10)
+[src/core/GameConfig.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L10)
 
 ___
 
@@ -73,7 +73,7 @@ Enables the debug mode
 
 #### Defined in
 
-[src/core/GameConfig.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L16)
+[src/core/GameConfig.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L16)
 
 ___
 
@@ -85,7 +85,7 @@ Game height
 
 #### Defined in
 
-[src/core/GameConfig.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L14)
+[src/core/GameConfig.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L14)
 
 ___
 
@@ -97,7 +97,7 @@ Game width
 
 #### Defined in
 
-[src/core/GameConfig.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L12)
+[src/core/GameConfig.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L12)
 
 ___
 
@@ -109,7 +109,7 @@ Enable Headless mode. The input and rendering functions are turned off. Ideal fo
 
 #### Defined in
 
-[src/core/GameConfig.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L27)
+[src/core/GameConfig.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L27)
 
 ___
 
@@ -123,7 +123,7 @@ Default value is 180.
 
 #### Defined in
 
-[src/core/GameConfig.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L23)
+[src/core/GameConfig.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L23)
 
 ___
 
@@ -135,4 +135,4 @@ Define a general scaling for all sprites. It can be overwritten individually on 
 
 #### Defined in
 
-[src/core/GameConfig.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameConfig.ts#L25)
+[src/core/GameConfig.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameConfig.ts#L25)

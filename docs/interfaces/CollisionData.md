@@ -2,6 +2,8 @@
 
 # Interface: CollisionData
 
+Information about the collision
+
 ## Table of contents
 
 ### Properties
@@ -17,9 +19,11 @@
 
 • **collider**: [`ICollider`](ICollider.md)
 
+The collider on the other side of the collision.
+
 #### Defined in
 
-[src/component/collider/Collider.ts:7](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L7)
+[src/component/collider/Collider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L13)
 
 ___
 
@@ -27,9 +31,11 @@ ___
 
 • **gameObject**: [`GameObject`](../classes/GameObject.md)
 
+The object on the other side of the collision.
+
 #### Defined in
 
-[src/component/collider/Collider.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L8)
+[src/component/collider/Collider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L15)
 
 ___
 
@@ -51,11 +57,11 @@ ___
 
 `T`
 
-The GameObject to which this component belongs
+The object on the other side of the collision.
 
 #### Defined in
 
-[src/component/collider/Collider.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L12)
+[src/component/collider/Collider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L19)
 
 ___
 
@@ -63,6 +69,8 @@ ___
 
 • **resolution**: [`ICollisionResolution`](ICollisionResolution.md)
 
+Contains information about the penetration and direction of the collision.
+
 #### Defined in
 
-[src/component/collider/Collider.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/collider/Collider.ts#L6)
+[src/component/collider/Collider.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L11)

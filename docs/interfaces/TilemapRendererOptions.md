@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L24)
+[src/component/rendering/TilemapRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L24)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L22)
+[src/component/rendering/TilemapRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L22)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L23)
+[src/component/rendering/TilemapRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L23)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L26)
+[src/component/rendering/TilemapRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L26)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L21)
+[src/component/rendering/TilemapRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L21)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L20)
+[src/component/rendering/TilemapRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L20)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L17)
+[src/component/rendering/TilemapRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L17)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L18)
+[src/component/rendering/TilemapRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L18)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L25)
+[src/component/rendering/TilemapRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L25)
 
 ___
 
@@ -115,4 +115,4 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/TilemapRenderer.ts#L19)
+[src/component/rendering/TilemapRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L19)

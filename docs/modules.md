@@ -34,7 +34,6 @@
 - [MouseController](classes/MouseController.md)
 - [PhysicsComponent](classes/PhysicsComponent.md)
 - [PolygonCollider](classes/PolygonCollider.md)
-- [PolygonColliderRenderer](classes/PolygonColliderRenderer.md)
 - [PreRenderComponent](classes/PreRenderComponent.md)
 - [Rectangle](classes/Rectangle.md)
 - [RigidBody](classes/RigidBody.md)
@@ -145,7 +144,7 @@ ___
 
 #### Defined in
 
-[src/core/Scene.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/Scene.ts#L6)
+[src/core/Scene.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Scene.ts#L6)
 
 ## Variables
 
@@ -155,7 +154,7 @@ ___
 
 #### Defined in
 
-[src/core/GameObject.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/core/GameObject.ts#L10)
+[src/core/GameObject.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameObject.ts#L10)
 
 ## Functions
 

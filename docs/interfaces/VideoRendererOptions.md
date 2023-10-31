@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L24)
+[src/component/rendering/VideoRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L24)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L25)
+[src/component/rendering/VideoRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L25)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L21)
+[src/component/rendering/VideoRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L21)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L30)
+[src/component/rendering/VideoRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L30)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L33)
+[src/component/rendering/VideoRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L33)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L27)
+[src/component/rendering/VideoRenderer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L27)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L28)
+[src/component/rendering/VideoRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L28)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L22)
+[src/component/rendering/VideoRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L22)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L26)
+[src/component/rendering/VideoRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L26)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L23)
+[src/component/rendering/VideoRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L23)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L31)
+[src/component/rendering/VideoRenderer.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L31)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L29)
+[src/component/rendering/VideoRenderer.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L29)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L19)
+[src/component/rendering/VideoRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L19)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L32)
+[src/component/rendering/VideoRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L32)
 
 ___
 
@@ -170,4 +170,4 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/rendering/VideoRenderer.ts#L20)
+[src/component/rendering/VideoRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L20)

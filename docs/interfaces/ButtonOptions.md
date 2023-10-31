@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[src/component/Button.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Button.ts#L15)
+[src/component/Button.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Button.ts#L15)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Button.ts#L18)
+[src/component/Button.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Button.ts#L18)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Button.ts#L16)
+[src/component/Button.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Button.ts#L16)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Button.ts#L17)
+[src/component/Button.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Button.ts#L17)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Button.ts#L13)
+[src/component/Button.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Button.ts#L13)
 
 ___
 
@@ -77,4 +77,4 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/6176278/src/component/Button.ts#L14)
+[src/component/Button.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Button.ts#L14)
