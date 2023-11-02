@@ -15,37 +15,98 @@ const userInputEventNames = [
     "keyup",
 ];
 
+/**
+ * VideoRenderer configuration options.
+ * @public
+ */
 export interface VideoRendererOptions {
+    /**The video element to render */
     video: HTMLVideoElement;
+    /** Overwrite the original video width */
     width?: number;
+    /** Overwrite the original video height */
     height?: number;
+    /** X-axis and Y-axis offset */
     offset?: Vector2;
+    /** Video rotation (degrees or radians) */
     rotation?: Rotation;
+    /** Flip the video horizontally */
     flipHorizontal?: boolean;
+    /** Flip the video vertically */
     flipVertical?: boolean;
+    /** Change the opacity between 1 and 0 */
     opacity?: number;
+    /** Define a mask color for the video */
     maskColor?: string;
+    /** Define the opacity of the mask color between 1 and 0 */
     maskColorMix?: number;
+    /** Define a color for tinting the video */
     tintColor?: string;
+    /** The render layer */
     layer?: string;
+    /** Cut the video based on straight coordinates starting from the top left downward */
     slice?: Slice;
+    /** The volume of the video. Values between 1 and 0 */
     volume?: number;
+    /** TRUE if the video will play in loop */
     loop?: boolean;
 }
 
+/**
+ * The VideoRenderer component plays and renders a video element, and allows configuring options such as its dimensions, coloring, etc.
+ * @public
+ * ```js
+ * this.addComponent(VideoRenderer, {
+ *   video: this.assetManager.getVideo("video.mp4"),
+ * });
+ * ```
+ * @public
+ * ```js
+ * this.addComponent(VideoRenderer, {
+ *   video: this.assetManager.getVideo("video.mp4"),
+ *   width: 1920,
+ *   height: 1080,
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontal:  false,
+ *   flipVertical: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Video",
+ *   slice: {x: 0, y:0, width: 1920, height: 1080},
+ *   volume: 1,
+ *   loop: false,
+ * });
+ * ```
+ */
 export class VideoRenderer extends RenderComponent {
+    /**The video element to render */
     public video: HTMLVideoElement;
+    /** Overwrite the original video width */
     public width: number;
+    /** Overwrite the original video height */
     public height: number;
+    /** X-axis and Y-axis offset */
     public offset: Vector2;
-    public flipHorizontal: boolean;
-    public flipVertical: boolean;
+    /** Video rotation (degrees or radians) */
     public rotation: Rotation;
+    /** Flip the video horizontally */
+    public flipHorizontal: boolean;
+    /** Flip the video vertically */
+    public flipVertical: boolean;
+    /** Change the opacity between 1 and 0 */
     public opacity: number;
+    /** Define a mask color for the video */
     public maskColor: string;
+    /** Define the opacity of the mask color between 1 and 0 */
     public maskColorMix: number;
+    /** Define a color for tinting the video */
     public tintColor: string;
+    /** The render layer */
     public layer: string;
+    /** Cut the video based on straight coordinates starting from the top left downward */
     public slice?: Slice;
 
     private renderData: IVideoRenderData;
@@ -57,28 +118,34 @@ export class VideoRenderer extends RenderComponent {
     private _playing: boolean = false;
     private _paused: boolean = false;
 
+    /** The volume of the video */
     public set volume(volume: number) {
         this._volume = volume;
         if (this.video) this.video.volume = volume;
     }
 
+    /** The volume of the video */
     public get volume(): number {
         return this._volume;
     }
 
+    /** TRUE if the video will play in loop */
     public set loop(loop: boolean) {
         this._loop = loop;
         if (this.video) this.video.loop = loop;
     }
 
+    /** TRUE if the video will play in loop */
     public get loop(): boolean {
         return this._loop;
     }
 
+    /** TRUE if the video is playing */
     public get playing(): boolean {
         return this._playing;
     }
 
+    /** TRUE if the video is paused */
     public get paused(): boolean {
         return this._paused;
     }

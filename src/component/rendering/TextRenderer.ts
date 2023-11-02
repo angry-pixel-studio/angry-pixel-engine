@@ -5,48 +5,125 @@ import { ITextRenderData, RenderDataType, RenderLocation, TextOrientation } from
 
 export { TextOrientation };
 
+/**
+ * TextRenderer configuration options.
+ * @public
+ */
 export interface TextRendererOptions {
+    /** The text to render */
     text: string;
+    /** The font family to use */
     font: FontFace | string;
-    fontSize?: number;
-    color?: string;
+    /** The size of the font in pixels */
+    fontSize: number;
+    /** The text color */
+    color: string;
+    /** The width of the invisible box where the text is rendered */
+    width: number;
+    /** The height of the invisible box where the text is rendered */
+    height: number;
+    /** The separation between lines in pixels */
     lineSeparation?: number;
+    /** The space between chars in pixels */
     letterSpacing?: number;
-    width?: number;
-    height?: number;
+    /** X-axis and Y-axis offset */
     offset?: Vector2;
+    /** Range of characters covered by the component defined in number pairs.
+     * The default value is [32, 126, 161, 255], this means that characters
+     * from 32 to 126 and from 161 to 255 will be valid. */
     charRanges?: number[];
+    /** Smoothing pixels (not recommended for pixel art) */
     smooth?: boolean;
+    /** Text rotation (degrees or radians) */
     rotation?: Rotation;
+    /** Change the opacity between 1 and 0 */
     opacity?: number;
+    /** Direction in which the text will be rendered. */
     orientation?: TextOrientation;
+    /** Margin in pixels to correct badly sliced characters. */
     bitmapMargin?: Vector2;
+    /** Spacing in pixels to correct badly sliced characters. */
     bitmapSpacing?: Vector2;
 }
 
+/**
+ * The TextRenderer component allows to render text using font families, colors, and other configuration options.
+ * @public
+ * @example
+ * ```js
+ * this.addComponent(TextRenderer, {
+ *   text: "Hello world",
+ *   font: "Impact",
+ *   fontSize: 16,
+ *   width: 320,
+ *   height: 32,
+ *   color: "#FF0000",
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(TextRenderer, {
+ *   text: "Hello world",
+ *   font: "Impact",
+ *   fontSize: 16,
+ *   width: 320,
+ *   height: 32,
+ *   color: "#FF0000",
+ *   offset: new Vector2(0, 0),
+ *   lineSeparation: 1,
+ *   letterSpacing: 1,
+ *   charRanges: [32, 126, 161, 255],
+ *   smooth: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   orientation: TextOrientation.RightDown
+ *   bitmapMargin: new Vector2(0, 0),
+ *   bitmapSpacing: new Vector2(0, 0),
+ * });
+ * ```
+ */
 export class TextRenderer extends RenderComponent {
+    /** The text to render */
     public text: string;
+    /** The font family to use */
     public font: FontFace | string;
+    /** The size of the font in pixels. */
     public fontSize: number;
+    /** The width of the invisible box where the text is rendered */
     public width: number;
+    /** The height of the invisible box where the text is rendered */
     public height: number;
+    /** X-axis and Y-axis offset */
     public offset: Vector2;
+    /** The text color */
     public color: string;
+    /** The separation between lines in pixels */
     public lineSeparation: number;
+    /** The space between chars in pixels */
     public letterSpacing: number;
+    /** Range of characters covered by the component defined in number pairs.
+     * The default value is [32, 126, 161, 255], this means that characters
+     * from 32 to 126 and from 161 to 255 will be valid. */
     public charRanges: number[];
+    /** Smoothing pixels (not recommended for pixel art) */
     public smooth: boolean;
+    /** Text rotation (degrees or radians) */
     public rotation: Rotation;
+    /** Change the opacity between 1 and 0 */
     public opacity: number;
+    /** Direction in which the text will be rendered. */
     public orientation: TextOrientation;
+    /** Margin in pixels to correct badly sliced characters. */
     public bitmapMargin: Vector2;
+    /** Spacing in pixels to correct badly sliced characters. */
     public bitmapSpacing: Vector2;
 
     private renderData: ITextRenderData;
+    //cache
     private lastFrameText: string = "";
 
     protected init(config: TextRendererOptions): void {
-        this.text = config.text;
+        this.text = config.text ?? "";
         this.font = config.font ?? "Sans";
         this.fontSize = config.fontSize ?? 12;
         this.width = config.width ?? 100;

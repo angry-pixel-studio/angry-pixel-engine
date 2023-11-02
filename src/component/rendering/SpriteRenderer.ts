@@ -1,11 +1,11 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
-import { Sprite } from "../Sprite";
+import { Sprite } from "./Sprite";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 
 /**
- * SpriteRenderer configuration options
+ * SpriteRenderer configuration options.
  * @public
  */
 export interface SpriteRendererOptions {
@@ -40,8 +40,7 @@ export interface SpriteRendererOptions {
 }
 
 /**
- * The SpriteRenderer component render the Sprite and allow to configure options such as opacity, offser, color, etc.
- *
+ * The SpriteRenderer component renders the Sprite and allows to configure options such as opacity, offser, color, etc.
  * @public
  * @example
  * ```js
@@ -49,7 +48,6 @@ export interface SpriteRendererOptions {
  *   sprite: new Sprite({image: this.assetManager.getImage("image.png")})
  * });
  * ```
- *
  * @example
  * ```js
  * this.addComponent(SpriteRenderer, {

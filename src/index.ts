@@ -36,7 +36,7 @@ export * from "./component/Animator";
 export * from "./component/AudioPlayer";
 export * from "./component/Camera";
 export * from "./component/RigidBody";
-export * from "./component/Sprite";
+export * from "./component/rendering/Sprite";
 export * from "./component/Transform";
 export * from "./component/Button";
 

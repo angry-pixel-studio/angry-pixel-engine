@@ -1,6 +1,6 @@
 import { EngineComponent } from "../core/Component";
 import { SpriteRenderer } from "./rendering/SpriteRenderer";
-import { Sprite } from "./Sprite";
+import { Sprite } from "./rendering/Sprite";
 import { Exception } from "../utils/Exception";
 import { InitOptions } from "../core/GameActor";
 
