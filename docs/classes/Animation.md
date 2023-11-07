@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/component/Animator.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L18)
+[src/component/Animator.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L18)
 
 ## Properties
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[src/component/Animator.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L15)
+[src/component/Animator.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L15)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/component/Animator.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L16)
+[src/component/Animator.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L16)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/component/Animator.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/Animator.ts#L14)
+[src/component/Animator.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L14)

@@ -20,4 +20,4 @@ The canvas element where the game is rendered
 
 #### Defined in
 
-[src/core/managers/DomManager.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/DomManager.ts#L11)
+[src/core/managers/DomManager.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/DomManager.ts#L11)

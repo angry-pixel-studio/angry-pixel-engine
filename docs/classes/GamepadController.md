@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/input/GamepadController.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/GamepadController.ts#L6)
+[src/input/GamepadController.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L6)
 
 ## Methods
 
@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[src/input/GamepadController.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/GamepadController.ts#L13)
+[src/input/GamepadController.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L13)
 
 ___
 
@@ -59,4 +59,4 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/GamepadController.ts#L34)
+[src/input/GamepadController.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L34)

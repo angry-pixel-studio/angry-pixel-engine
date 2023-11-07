@@ -2,12 +2,14 @@
 
 # Interface: TilemapRendererOptions
 
+TilemapRenderer configuration options
+
 ## Table of contents
 
 ### Properties
 
-- [alpha](TilemapRendererOptions.md#alpha)
 - [layer](TilemapRendererOptions.md#layer)
+- [opacity](TilemapRendererOptions.md#opacity)
 - [orientation](TilemapRendererOptions.md#orientation)
 - [smooth](TilemapRendererOptions.md#smooth)
 - [tileHeight](TilemapRendererOptions.md#tileheight)
@@ -19,23 +21,27 @@
 
 ## Properties
 
-### alpha
-
-• `Optional` **alpha**: `number`
-
-#### Defined in
-
-[src/component/rendering/TilemapRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L24)
-
-___
-
 ### layer
 
 • `Optional` **layer**: `string`
 
+The render layer
+
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L22)
+[src/component/rendering/TilemapRenderer.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L43)
+
+___
+
+### opacity
+
+• `Optional` **opacity**: `number`
+
+Change the opacity between 1 and 0
+
+#### Defined in
+
+[src/component/rendering/TilemapRenderer.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L47)
 
 ___
 
@@ -43,9 +49,11 @@ ___
 
 • `Optional` **orientation**: [`TilemapOrientation`](../enums/TilemapOrientation.md)
 
+Direction in which the tilemap will be rendered.
+
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L23)
+[src/component/rendering/TilemapRenderer.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L45)
 
 ___
 
@@ -53,9 +61,11 @@ ___
 
 • `Optional` **smooth**: `boolean`
 
+Smoothing pixels (not recommended for pixel art)
+
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L26)
+[src/component/rendering/TilemapRenderer.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L51)
 
 ___
 
@@ -65,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L21)
+[src/component/rendering/TilemapRenderer.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L41)
 
 ___
 
@@ -75,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L20)
+[src/component/rendering/TilemapRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L39)
 
 ___
 
@@ -83,9 +93,12 @@ ___
 
 • **tiles**: `string`
 
+Id of tiles separated by commas. The ids start at 1, and increment from left to right,
+from top to bottom. ID 0 (zero) represents a space with no tile.
+
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L17)
+[src/component/rendering/TilemapRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L33)
 
 ___
 
@@ -93,9 +106,11 @@ ___
 
 • **tileset**: [`Tileset`](Tileset.md)
 
+The Tileset instance
+
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L18)
+[src/component/rendering/TilemapRenderer.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L35)
 
 ___
 
@@ -103,9 +118,11 @@ ___
 
 • `Optional` **tintColor**: `string`
 
+Define a color for tinting the tiles
+
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L25)
+[src/component/rendering/TilemapRenderer.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L49)
 
 ___
 
@@ -115,4 +132,4 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TilemapRenderer.ts#L19)
+[src/component/rendering/TilemapRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L37)

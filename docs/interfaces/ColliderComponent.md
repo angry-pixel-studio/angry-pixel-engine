@@ -34,7 +34,7 @@ TRUE if is colliding, FALSE instead
 
 #### Defined in
 
-[src/component/collider/Collider.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L32)
+[src/component/collider/Collider.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L32)
 
 ___
 
@@ -58,7 +58,7 @@ The collision data object, or NULL instead
 
 #### Defined in
 
-[src/component/collider/Collider.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L38)
+[src/component/collider/Collider.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L38)
 
 ___
 
@@ -82,4 +82,4 @@ The collection of collision data
 
 #### Defined in
 
-[src/component/collider/Collider.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L44)
+[src/component/collider/Collider.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L44)

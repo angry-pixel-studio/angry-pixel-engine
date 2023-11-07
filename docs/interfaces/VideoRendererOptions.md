@@ -2,6 +2,8 @@
 
 # Interface: VideoRendererOptions
 
+VideoRenderer configuration options.
+
 ## Table of contents
 
 ### Properties
@@ -28,9 +30,11 @@
 
 • `Optional` **flipHorizontal**: `boolean`
 
+Flip the video horizontally
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L24)
+[src/component/rendering/VideoRenderer.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L34)
 
 ___
 
@@ -38,9 +42,11 @@ ___
 
 • `Optional` **flipVertical**: `boolean`
 
+Flip the video vertically
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L25)
+[src/component/rendering/VideoRenderer.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L36)
 
 ___
 
@@ -48,9 +54,11 @@ ___
 
 • `Optional` **height**: `number`
 
+Overwrite the original video height
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L21)
+[src/component/rendering/VideoRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L28)
 
 ___
 
@@ -58,9 +66,11 @@ ___
 
 • `Optional` **layer**: `string`
 
+The render layer
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L30)
+[src/component/rendering/VideoRenderer.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L46)
 
 ___
 
@@ -68,9 +78,11 @@ ___
 
 • `Optional` **loop**: `boolean`
 
+TRUE if the video will play in loop
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L33)
+[src/component/rendering/VideoRenderer.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L52)
 
 ___
 
@@ -78,9 +90,11 @@ ___
 
 • `Optional` **maskColor**: `string`
 
+Define a mask color for the video
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L27)
+[src/component/rendering/VideoRenderer.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L40)
 
 ___
 
@@ -88,9 +102,11 @@ ___
 
 • `Optional` **maskColorMix**: `number`
 
+Define the opacity of the mask color between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L28)
+[src/component/rendering/VideoRenderer.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L42)
 
 ___
 
@@ -98,9 +114,11 @@ ___
 
 • `Optional` **offset**: [`Vector2`](../classes/Vector2.md)
 
+X-axis and Y-axis offset
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L22)
+[src/component/rendering/VideoRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L30)
 
 ___
 
@@ -108,9 +126,11 @@ ___
 
 • `Optional` **opacity**: `number`
 
+Change the opacity between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L26)
+[src/component/rendering/VideoRenderer.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L38)
 
 ___
 
@@ -118,9 +138,11 @@ ___
 
 • `Optional` **rotation**: [`Rotation`](../classes/Rotation.md)
 
+Video rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L23)
+[src/component/rendering/VideoRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L32)
 
 ___
 
@@ -128,9 +150,11 @@ ___
 
 • `Optional` **slice**: [`Slice`](Slice.md)
 
+Cut the video based on straight coordinates starting from the top left downward
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L31)
+[src/component/rendering/VideoRenderer.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L48)
 
 ___
 
@@ -138,9 +162,11 @@ ___
 
 • `Optional` **tintColor**: `string`
 
+Define a color for tinting the video
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L29)
+[src/component/rendering/VideoRenderer.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L44)
 
 ___
 
@@ -148,9 +174,11 @@ ___
 
 • **video**: `HTMLVideoElement`
 
+The video element to render
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L19)
+[src/component/rendering/VideoRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L24)
 
 ___
 
@@ -158,9 +186,11 @@ ___
 
 • `Optional` **volume**: `number`
 
+The volume of the video. Values between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L32)
+[src/component/rendering/VideoRenderer.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L50)
 
 ___
 
@@ -168,6 +198,8 @@ ___
 
 • `Optional` **width**: `number`
 
+Overwrite the original video width
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L20)
+[src/component/rendering/VideoRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L26)

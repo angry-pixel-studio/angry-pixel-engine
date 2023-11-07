@@ -73,7 +73,6 @@
 - [IPhysicsManager](interfaces/IPhysicsManager.md)
 - [IRenderManager](interfaces/IRenderManager.md)
 - [ISceneManager](interfaces/ISceneManager.md)
-- [ITilemapRenderer](interfaces/ITilemapRenderer.md)
 - [ITimeManager](interfaces/ITimeManager.md)
 - [InitOptions](interfaces/InitOptions.md)
 - [MaskRendererOptions](interfaces/MaskRendererOptions.md)
@@ -144,7 +143,7 @@ ___
 
 #### Defined in
 
-[src/core/Scene.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Scene.ts#L6)
+[src/core/Scene.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Scene.ts#L6)
 
 ## Variables
 
@@ -154,7 +153,7 @@ ___
 
 #### Defined in
 
-[src/core/GameObject.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameObject.ts#L10)
+[src/core/GameObject.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameObject.ts#L10)
 
 ## Functions
 

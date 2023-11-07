@@ -34,7 +34,7 @@ TRUE or FALSE
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L29)
+[src/core/managers/AssetManager.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L29)
 
 ___
 
@@ -58,7 +58,7 @@ The HTML Audio element
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:67](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L67)
+[src/core/managers/AssetManager.ts:67](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L67)
 
 ___
 
@@ -82,7 +82,7 @@ The Font element
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:73](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L73)
+[src/core/managers/AssetManager.ts:73](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L73)
 
 ___
 
@@ -106,7 +106,7 @@ The HTML Image element
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:61](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L61)
+[src/core/managers/AssetManager.ts:61](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L61)
 
 ___
 
@@ -130,7 +130,7 @@ The HTML Video element
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L79)
+[src/core/managers/AssetManager.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L79)
 
 ___
 
@@ -154,7 +154,7 @@ The HTML Audio element created
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L42)
+[src/core/managers/AssetManager.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L42)
 
 ___
 
@@ -179,7 +179,7 @@ The FontFace object created
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L49)
+[src/core/managers/AssetManager.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L49)
 
 ___
 
@@ -204,7 +204,7 @@ The HTML Image element created
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L36)
+[src/core/managers/AssetManager.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L36)
 
 ___
 
@@ -228,4 +228,4 @@ The HTML Video element created
 
 #### Defined in
 
-[src/core/managers/AssetManager.ts:55](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/AssetManager.ts#L55)
+[src/core/managers/AssetManager.ts:55](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/AssetManager.ts#L55)

@@ -32,7 +32,7 @@ If debug mode is enabled, the collider shape is rendered using the object's rend
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L27)
+[src/component/collider/EdgeCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L27)
 
 ___
 
@@ -44,7 +44,7 @@ Collision layer, if it's not setted, it uses the game object layer
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L23)
+[src/component/collider/EdgeCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L23)
 
 ___
 
@@ -56,7 +56,7 @@ x-axis offset
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L17)
+[src/component/collider/EdgeCollider.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L17)
 
 ___
 
@@ -68,7 +68,7 @@ y-axis offset
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L19)
+[src/component/collider/EdgeCollider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L19)
 
 ___
 
@@ -80,7 +80,7 @@ TRUE if this collider interact with rigid bodies
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L25)
+[src/component/collider/EdgeCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L25)
 
 ___
 
@@ -92,7 +92,7 @@ Edges rotation (degrees or radians)
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L21)
+[src/component/collider/EdgeCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L21)
 
 ___
 
@@ -104,4 +104,4 @@ Collection of 2d vectors representing the vertices of the collider
 
 #### Defined in
 
-[src/component/collider/EdgeCollider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/EdgeCollider.ts#L15)
+[src/component/collider/EdgeCollider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/EdgeCollider.ts#L15)

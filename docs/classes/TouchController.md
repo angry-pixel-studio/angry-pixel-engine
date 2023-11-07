@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/input/TouchController.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/TouchController.ts#L9)
+[src/input/TouchController.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/TouchController.ts#L9)
 
 ## Accessors
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/input/TouchController.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/TouchController.ts#L18)
+[src/input/TouchController.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/TouchController.ts#L18)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/input/TouchController.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/TouchController.ts#L26)
+[src/input/TouchController.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/TouchController.ts#L26)
 
 ___
 
@@ -74,4 +74,4 @@ ___
 
 #### Defined in
 
-[src/input/TouchController.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/TouchController.ts#L22)
+[src/input/TouchController.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/TouchController.ts#L22)

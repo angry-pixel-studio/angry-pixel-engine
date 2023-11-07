@@ -2,6 +2,34 @@
 
 # Class: VideoRenderer
 
+The VideoRenderer component plays and renders a video element, and allows configuring options such as its dimensions, coloring, etc.
+
+```js
+this.addComponent(VideoRenderer, {
+  video: this.assetManager.getVideo("video.mp4"),
+});
+```
+
+```js
+this.addComponent(VideoRenderer, {
+  video: this.assetManager.getVideo("video.mp4"),
+  width: 1920,
+  height: 1080,
+  offset: new Vector2(0, 0),
+  flipHorizontal:  false,
+  flipVertical: false,
+  rotation: new Rotation(0),
+  opacity: 1,
+  maskColor: "#FF0000",
+  maskColorMix: 0,
+  tintColor: "#00FF00",
+  layer: "Video",
+  slice: {x: 0, y:0, width: 1920, height: 1080},
+  volume: 1,
+  loop: false,
+});
+```
+
 ## Hierarchy
 
 - `RenderComponent`
@@ -83,7 +111,7 @@ RenderComponent.allowMultiple
 
 #### Defined in
 
-[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L52)
+[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L52)
 
 ___
 
@@ -99,7 +127,7 @@ RenderComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L29)
 
 ___
 
@@ -115,7 +143,7 @@ RenderComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L31)
 
 ___
 
@@ -123,9 +151,11 @@ ___
 
 • **flipHorizontal**: `boolean`
 
+Flip the video horizontally
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L41)
+[src/component/rendering/VideoRenderer.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L96)
 
 ___
 
@@ -133,9 +163,11 @@ ___
 
 • **flipVertical**: `boolean`
 
+Flip the video vertically
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L42)
+[src/component/rendering/VideoRenderer.ts:98](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L98)
 
 ___
 
@@ -151,7 +183,7 @@ RenderComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L45)
 
 ___
 
@@ -167,7 +199,7 @@ RenderComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L50)
 
 ___
 
@@ -183,7 +215,7 @@ RenderComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L35)
 
 ___
 
@@ -191,9 +223,11 @@ ___
 
 • **height**: `number`
 
+Overwrite the original video height
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L39)
+[src/component/rendering/VideoRenderer.ts:90](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L90)
 
 ___
 
@@ -209,7 +243,7 @@ RenderComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L33)
 
 ___
 
@@ -217,9 +251,11 @@ ___
 
 • **layer**: `string`
 
+The render layer
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L48)
+[src/component/rendering/VideoRenderer.ts:108](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L108)
 
 ___
 
@@ -227,9 +263,11 @@ ___
 
 • **maskColor**: `string`
 
+Define a mask color for the video
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L45)
+[src/component/rendering/VideoRenderer.ts:102](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L102)
 
 ___
 
@@ -237,9 +275,11 @@ ___
 
 • **maskColorMix**: `number`
 
+Define the opacity of the mask color between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L46)
+[src/component/rendering/VideoRenderer.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L104)
 
 ___
 
@@ -255,7 +295,7 @@ RenderComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L48)
 
 ___
 
@@ -263,9 +303,11 @@ ___
 
 • **offset**: [`Vector2`](Vector2.md)
 
+X-axis and Y-axis offset
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L40)
+[src/component/rendering/VideoRenderer.ts:92](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L92)
 
 ___
 
@@ -273,9 +315,11 @@ ___
 
 • **opacity**: `number`
 
+Change the opacity between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L44)
+[src/component/rendering/VideoRenderer.ts:100](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L100)
 
 ___
 
@@ -291,7 +335,7 @@ RenderComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L37)
 
 ___
 
@@ -307,7 +351,7 @@ RenderComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L39)
 
 ___
 
@@ -315,9 +359,11 @@ ___
 
 • **rotation**: [`Rotation`](Rotation.md)
 
+Video rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L43)
+[src/component/rendering/VideoRenderer.ts:94](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L94)
 
 ___
 
@@ -333,7 +379,7 @@ RenderComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L41)
 
 ___
 
@@ -341,9 +387,11 @@ ___
 
 • `Optional` **slice**: [`Slice`](../interfaces/Slice.md)
 
+Cut the video based on straight coordinates starting from the top left downward
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L49)
+[src/component/rendering/VideoRenderer.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L110)
 
 ___
 
@@ -359,7 +407,7 @@ RenderComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L43)
 
 ___
 
@@ -367,9 +415,11 @@ ___
 
 • **tintColor**: `string`
 
+Define a color for tinting the video
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L47)
+[src/component/rendering/VideoRenderer.ts:106](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L106)
 
 ___
 
@@ -383,7 +433,7 @@ RenderComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L204)
+[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L204)
 
 ___
 
@@ -391,9 +441,11 @@ ___
 
 • **video**: `HTMLVideoElement`
 
+The video element to render
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L37)
+[src/component/rendering/VideoRenderer.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L86)
 
 ___
 
@@ -401,9 +453,11 @@ ___
 
 • **width**: `number`
 
+Overwrite the original video width
+
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L38)
+[src/component/rendering/VideoRenderer.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L88)
 
 ## Accessors
 
@@ -423,7 +477,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -445,7 +499,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L71)
 
 ___
 
@@ -453,15 +507,19 @@ ___
 
 • `get` **loop**(): `boolean`
 
+TRUE if the video will play in loop
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:74](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L74)
+[src/component/rendering/VideoRenderer.ts:139](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L139)
 
 • `set` **loop**(`loop`): `void`
+
+TRUE if the video will play in loop
 
 #### Parameters
 
@@ -475,7 +533,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:69](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L69)
+[src/component/rendering/VideoRenderer.ts:133](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L133)
 
 ___
 
@@ -483,13 +541,15 @@ ___
 
 • `get` **paused**(): `boolean`
 
+TRUE if the video is paused
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L82)
+[src/component/rendering/VideoRenderer.ts:149](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L149)
 
 ___
 
@@ -497,13 +557,15 @@ ___
 
 • `get` **playing**(): `boolean`
 
+TRUE if the video is playing
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:78](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L78)
+[src/component/rendering/VideoRenderer.ts:144](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L144)
 
 ___
 
@@ -511,15 +573,19 @@ ___
 
 • `get` **volume**(): `number`
 
+The volume of the video
+
 #### Returns
 
 `number`
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:65](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L65)
+[src/component/rendering/VideoRenderer.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L128)
 
 • `set` **volume**(`volume`): `void`
+
+The volume of the video
 
 #### Parameters
 
@@ -533,7 +599,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:60](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L60)
+[src/component/rendering/VideoRenderer.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L122)
 
 ## Methods
 
@@ -567,7 +633,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -598,7 +664,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -629,7 +695,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -661,7 +727,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L132)
 
 ___
 
@@ -687,7 +753,7 @@ RenderComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L200)
 
 ___
 
@@ -721,7 +787,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -751,7 +817,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L180)
 
 ___
 
@@ -773,7 +839,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -803,7 +869,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L160)
 
 ___
 
@@ -837,7 +903,7 @@ RenderComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L192)
 
 ___
 
@@ -871,7 +937,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -901,7 +967,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L128)
 
 ___
 
@@ -923,7 +989,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -953,7 +1019,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L110)
 
 ___
 
@@ -979,7 +1045,7 @@ RenderComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L89)
 
 ___
 
@@ -1005,7 +1071,7 @@ RenderComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L96)
 
 ___
 
@@ -1039,7 +1105,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -1061,7 +1127,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L147)
 
 ___
 
@@ -1085,7 +1151,7 @@ RenderComponent.init
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L86)
+[src/component/rendering/VideoRenderer.ts:153](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L153)
 
 ___
 
@@ -1103,7 +1169,7 @@ RenderComponent.onActiveChange
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:232](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L232)
+[src/component/rendering/VideoRenderer.ts:299](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L299)
 
 ___
 
@@ -1121,7 +1187,7 @@ RenderComponent.onDestroy
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:238](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L238)
+[src/component/rendering/VideoRenderer.ts:305](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L305)
 
 ___
 
@@ -1137,7 +1203,7 @@ Plause the current video
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:165](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L165)
+[src/component/rendering/VideoRenderer.ts:232](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L232)
 
 ___
 
@@ -1153,7 +1219,7 @@ Play the loaded video
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L117)
+[src/component/rendering/VideoRenderer.ts:184](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L184)
 
 ___
 
@@ -1179,7 +1245,7 @@ RenderComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L158)
 
 ___
 
@@ -1199,7 +1265,7 @@ RenderComponent.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1215,7 +1281,7 @@ Stop playing the current video
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:151](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L151)
+[src/component/rendering/VideoRenderer.ts:218](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L218)
 
 ___
 
@@ -1233,4 +1299,4 @@ RenderComponent.update
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:188](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/VideoRenderer.ts#L188)
+[src/component/rendering/VideoRenderer.ts:255](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L255)

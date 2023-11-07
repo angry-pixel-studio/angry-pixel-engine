@@ -36,7 +36,7 @@ Adds a new scene.
 
 #### Defined in
 
-[src/core/managers/SceneManager.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/SceneManager.ts#L28)
+[src/core/managers/SceneManager.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/SceneManager.ts#L28)
 
 ___
 
@@ -60,7 +60,7 @@ The scene instance.
 
 #### Defined in
 
-[src/core/managers/SceneManager.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/SceneManager.ts#L20)
+[src/core/managers/SceneManager.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/SceneManager.ts#L20)
 
 ___
 
@@ -76,7 +76,7 @@ Loads the scene flagged as the opening scene.
 
 #### Defined in
 
-[src/core/managers/SceneManager.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/SceneManager.ts#L30)
+[src/core/managers/SceneManager.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/SceneManager.ts#L30)
 
 ___
 
@@ -98,4 +98,4 @@ Loads a Scene by the given name.
 
 #### Defined in
 
-[src/core/managers/SceneManager.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/managers/SceneManager.ts#L35)
+[src/core/managers/SceneManager.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/SceneManager.ts#L35)

@@ -3,26 +3,110 @@ import { Vector2 } from "angry-pixel-math";
 import { RenderComponent } from "../../core/Component";
 import { ITilemapRenderer, Tileset, TilemapOrientation } from "./TilemapRenderer";
 
+/**
+ * TiledTilemapRenderer configuration options
+ * @public
+ */
 export interface TiledTilemapRendererOptions {
+    /** Export of the Tiles application in JSON */
     tiledData: TiledTilemap;
+    /** The Tiled tilemap layer to render */
     tilemapLayer: string;
+    /** The Tileset instance */
     tileset: Tileset;
+    /* The width of the tile to render in pixels */
     tileWidth: number;
+    /* The height of the tile to render in pixels */
     tileHeight: number;
+    /** The render layer */
     layer?: string;
+    /** Direction in which the tilemap will be rendered. */
     orientation?: TilemapOrientation;
+    /** Smoothing pixels (not recommended for pixel art) */
     smooth?: boolean;
 }
 
+/**
+ * The TiledTilemapRenderer component allows you to render a tile map exported from the Tiled application,
+ * using an instance of the TileSet object.
+ * @public
+ * @example
+ * ```js
+ * import TilemapData from "export.json";
+ *
+ * this.addComponent(TiledTilemapRenderer, {
+ *   tileset: {
+ *     image: this.assetManager.getImage("image.png"),
+ *     width: 3,
+ *     tileWidth: 16,
+ *     tileHeight: 16,
+ *   }
+ *   tiledData: TilemapData,
+ *   tilemapLayer: "Layer1",
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ * });
+ * ```
+ * @example
+ * ```js
+ * import TilemapData from "export.json";
+ *
+ * this.addComponent(TilemapRenderer, {
+ *   tileset: {
+ *     image: this.assetManager.getImage("image.png"),
+ *     width: 3,
+ *     tileWidth: 16,
+ *     tileHeight: 16,
+ *     margin: new Vector2(0, 0),
+ *     spacing: new Vector2(0, 0),
+ *   }
+ *   tiledData: TilemapData,
+ *   tilemapLayer: "Layer1",
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ *   layer: "Tilemap",
+ *   orientation: TilemapOrientation.Center,
+ *   smooth: false,
+ * });
+ * ```
+ */
 export class TiledTilemapRenderer extends RenderComponent implements ITilemapRenderer {
+    /**
+     * Id of tiles separated by commas. The ids start at 1, and increment from left to right,
+     * from top to bottom. ID 0 (zero) represents a space with no tile.
+     * @readonly
+     */
     public tiles: number[] = [];
+    /** The width of the tile to render in pixels */
     public tileWidth: number;
+    /** The height of the tile to render in pixels */
     public tileHeight: number;
+    /**
+     * The width of the tilemap in tiles (this is calculated by the component)
+     * @readonly
+     */
     public width: number;
+    /**
+     * The height of the tilemap in tiles (this is calculated by the component)
+     * @readonly
+     */
     public height: number;
+    /** Direction in which the tilemap will be rendered (default value TilemapOrientation.Center) */
     public orientation: TilemapOrientation;
+    /** Define a color for tinting the tiles */
     public tintColor: string;
-    public alpha: number;
+    /** Change the opacity between 1 and 0 */
+    public opacity: number;
+    /**
+     * Tilemap width in pixels (this is calculated by the component)
+     * @readonly
+     */
+    public realWidth: number;
+    /**
+     * Tilemap height in pixels (this is calculated by the component)
+     * @readonly
+     */
+    public realHeight: number;
 
     private tiledData: TiledTilemap;
     private tilemapLayer: string;
@@ -34,9 +118,6 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     private chunks: TiledChunk[] = [];
     private scaledTileWidth: number = 0;
     private scaledTileHeight: number = 0;
-
-    public realWidth: number;
-    public realHeight: number;
 
     private renderData: ITilemapRenderData[] = [];
 
@@ -74,7 +155,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     private processTilemap(): void {
         this.tiledData.layers.forEach((layer: TiledLayer) => {
             if (layer.visible === true && this.tilemapLayer === layer.name) {
-                this.alpha = layer.opacity;
+                this.opacity = layer.opacity;
                 this.tintColor = layer.tintcolor;
 
                 this.tiledData.infinite === true
@@ -148,7 +229,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
             renderData.tilemap.tileWidth = this.scaledTileWidth;
             renderData.tilemap.tileHeight = this.scaledTileHeight;
             renderData.tintColor = this.tintColor;
-            renderData.alpha = this.alpha;
+            renderData.alpha = this.opacity;
         });
     }
 }

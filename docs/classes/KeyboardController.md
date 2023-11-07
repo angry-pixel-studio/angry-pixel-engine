@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[src/input/KeyboardController.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L6)
+[src/input/KeyboardController.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L6)
 
 ## Properties
 
@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[src/input/KeyboardController.ts:2](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L2)
+[src/input/KeyboardController.ts:2](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L2)
 
 ## Methods
 
@@ -69,7 +69,7 @@
 
 #### Defined in
 
-[src/input/KeyboardController.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L33)
+[src/input/KeyboardController.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L33)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/input/KeyboardController.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L47)
+[src/input/KeyboardController.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L47)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/input/KeyboardController.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L25)
+[src/input/KeyboardController.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L25)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[src/input/KeyboardController.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L37)
+[src/input/KeyboardController.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L37)
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-[src/input/KeyboardController.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L29)
+[src/input/KeyboardController.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L29)
 
 ___
 
@@ -193,4 +193,4 @@ ___
 
 #### Defined in
 
-[src/input/KeyboardController.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/input/KeyboardController.ts#L41)
+[src/input/KeyboardController.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/KeyboardController.ts#L41)

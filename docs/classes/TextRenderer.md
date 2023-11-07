@@ -2,6 +2,44 @@
 
 # Class: TextRenderer
 
+The TextRenderer component allows to render text using font families, colors, and other configuration options.
+
+**`Example`**
+
+```js
+this.addComponent(TextRenderer, {
+  text: "Hello world",
+  font: "Impact",
+  fontSize: 16,
+  width: 320,
+  height: 32,
+  color: "#FF0000",
+});
+```
+
+**`Example`**
+
+```js
+this.addComponent(TextRenderer, {
+  text: "Hello world",
+  font: "Impact",
+  fontSize: 16,
+  width: 320,
+  height: 32,
+  color: "#FF0000",
+  offset: new Vector2(0, 0),
+  lineSeparation: 1,
+  letterSpacing: 1,
+  charRanges: [32, 126, 161, 255],
+  smooth: false,
+  rotation: new Rotation(0),
+  opacity: 1,
+  orientation: TextOrientation.RightDown
+  bitmapMargin: new Vector2(0, 0),
+  bitmapSpacing: new Vector2(0, 0),
+});
+```
+
 ## Hierarchy
 
 - `RenderComponent`
@@ -79,7 +117,7 @@ RenderComponent.allowMultiple
 
 #### Defined in
 
-[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L52)
+[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L52)
 
 ___
 
@@ -95,7 +133,7 @@ RenderComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L29)
 
 ___
 
@@ -103,9 +141,11 @@ ___
 
 • **bitmapMargin**: [`Vector2`](Vector2.md)
 
+Margin in pixels to correct badly sliced characters.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L42)
+[src/component/rendering/TextRenderer.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L117)
 
 ___
 
@@ -113,9 +153,11 @@ ___
 
 • **bitmapSpacing**: [`Vector2`](Vector2.md)
 
+Spacing in pixels to correct badly sliced characters.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L43)
+[src/component/rendering/TextRenderer.ts:119](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L119)
 
 ___
 
@@ -123,9 +165,13 @@ ___
 
 • **charRanges**: `number`[]
 
+Range of characters covered by the component defined in number pairs.
+The default value is [32, 126, 161, 255], this means that characters
+from 32 to 126 and from 161 to 255 will be valid.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L37)
+[src/component/rendering/TextRenderer.ts:107](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L107)
 
 ___
 
@@ -133,9 +179,11 @@ ___
 
 • **color**: `string`
 
+The text color
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L34)
+[src/component/rendering/TextRenderer.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L99)
 
 ___
 
@@ -151,7 +199,7 @@ RenderComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L31)
 
 ___
 
@@ -159,9 +207,11 @@ ___
 
 • **font**: `string` \| `FontFace`
 
+The font family to use
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L29)
+[src/component/rendering/TextRenderer.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L89)
 
 ___
 
@@ -169,9 +219,11 @@ ___
 
 • **fontSize**: `number`
 
+The size of the font in pixels.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L30)
+[src/component/rendering/TextRenderer.ts:91](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L91)
 
 ___
 
@@ -187,7 +239,7 @@ RenderComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L45)
 
 ___
 
@@ -203,7 +255,7 @@ RenderComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L50)
 
 ___
 
@@ -219,7 +271,7 @@ RenderComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L35)
 
 ___
 
@@ -227,9 +279,11 @@ ___
 
 • **height**: `number`
 
+The height of the invisible box where the text is rendered
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L32)
+[src/component/rendering/TextRenderer.ts:95](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L95)
 
 ___
 
@@ -245,7 +299,7 @@ RenderComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L33)
 
 ___
 
@@ -253,9 +307,11 @@ ___
 
 • **letterSpacing**: `number`
 
+The space between chars in pixels
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L36)
+[src/component/rendering/TextRenderer.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L103)
 
 ___
 
@@ -263,9 +319,11 @@ ___
 
 • **lineSeparation**: `number`
 
+The separation between lines in pixels
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L35)
+[src/component/rendering/TextRenderer.ts:101](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L101)
 
 ___
 
@@ -281,7 +339,7 @@ RenderComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L48)
 
 ___
 
@@ -289,9 +347,11 @@ ___
 
 • **offset**: [`Vector2`](Vector2.md)
 
+X-axis and Y-axis offset
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L33)
+[src/component/rendering/TextRenderer.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L97)
 
 ___
 
@@ -299,9 +359,11 @@ ___
 
 • **opacity**: `number`
 
+Change the opacity between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L40)
+[src/component/rendering/TextRenderer.ts:113](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L113)
 
 ___
 
@@ -309,9 +371,11 @@ ___
 
 • **orientation**: [`TextOrientation`](../enums/TextOrientation.md)
 
+Direction in which the text will be rendered.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L41)
+[src/component/rendering/TextRenderer.ts:115](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L115)
 
 ___
 
@@ -327,7 +391,7 @@ RenderComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L37)
 
 ___
 
@@ -343,7 +407,7 @@ RenderComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L39)
 
 ___
 
@@ -351,9 +415,11 @@ ___
 
 • **rotation**: [`Rotation`](Rotation.md)
 
+Text rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L39)
+[src/component/rendering/TextRenderer.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L111)
 
 ___
 
@@ -369,7 +435,7 @@ RenderComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L41)
 
 ___
 
@@ -377,9 +443,11 @@ ___
 
 • **smooth**: `boolean`
 
+Smoothing pixels (not recommended for pixel art)
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L38)
+[src/component/rendering/TextRenderer.ts:109](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L109)
 
 ___
 
@@ -387,9 +455,11 @@ ___
 
 • **text**: `string`
 
+The text to render
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L28)
+[src/component/rendering/TextRenderer.ts:87](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L87)
 
 ___
 
@@ -405,7 +475,7 @@ RenderComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L43)
 
 ___
 
@@ -419,7 +489,7 @@ RenderComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L204)
+[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L204)
 
 ___
 
@@ -427,9 +497,11 @@ ___
 
 • **width**: `number`
 
+The width of the invisible box where the text is rendered
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L31)
+[src/component/rendering/TextRenderer.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L93)
 
 ## Accessors
 
@@ -449,7 +521,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -471,7 +543,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L71)
 
 ## Methods
 
@@ -505,7 +577,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -536,7 +608,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -567,7 +639,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -599,7 +671,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L132)
 
 ___
 
@@ -625,7 +697,7 @@ RenderComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L200)
 
 ___
 
@@ -659,7 +731,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -689,7 +761,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L180)
 
 ___
 
@@ -711,7 +783,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -741,7 +813,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L160)
 
 ___
 
@@ -775,7 +847,7 @@ RenderComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L192)
 
 ___
 
@@ -809,7 +881,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -839,7 +911,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L128)
 
 ___
 
@@ -861,7 +933,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -891,7 +963,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L110)
 
 ___
 
@@ -917,7 +989,7 @@ RenderComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L89)
 
 ___
 
@@ -943,7 +1015,7 @@ RenderComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L96)
 
 ___
 
@@ -977,7 +1049,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -999,7 +1071,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L147)
 
 ___
 
@@ -1023,7 +1095,7 @@ RenderComponent.init
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L48)
+[src/component/rendering/TextRenderer.ts:125](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L125)
 
 ___
 
@@ -1043,7 +1115,7 @@ RenderComponent.onActiveChange
 
 #### Defined in
 
-[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L82)
+[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L82)
 
 ___
 
@@ -1063,7 +1135,7 @@ RenderComponent.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L103)
 
 ___
 
@@ -1089,7 +1161,7 @@ RenderComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L158)
 
 ___
 
@@ -1107,7 +1179,7 @@ RenderComponent.start
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:75](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L75)
+[src/component/rendering/TextRenderer.ts:152](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L152)
 
 ___
 
@@ -1125,4 +1197,4 @@ RenderComponent.update
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L93)
+[src/component/rendering/TextRenderer.ts:170](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L170)

@@ -31,7 +31,7 @@ If debug mode is enabled, the collider shape is rendered using the object's rend
 
 #### Defined in
 
-[src/component/collider/BallCollider.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L24)
+[src/component/collider/BallCollider.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/BallCollider.ts#L24)
 
 ___
 
@@ -43,7 +43,7 @@ Collision layer, if it's not setted, it uses the game object layer
 
 #### Defined in
 
-[src/component/collider/BallCollider.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L20)
+[src/component/collider/BallCollider.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/BallCollider.ts#L20)
 
 ___
 
@@ -55,7 +55,7 @@ x-axis offset
 
 #### Defined in
 
-[src/component/collider/BallCollider.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L16)
+[src/component/collider/BallCollider.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/BallCollider.ts#L16)
 
 ___
 
@@ -67,7 +67,7 @@ y-axis offset
 
 #### Defined in
 
-[src/component/collider/BallCollider.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L18)
+[src/component/collider/BallCollider.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/BallCollider.ts#L18)
 
 ___
 
@@ -79,7 +79,7 @@ TRUE if this collider interact with rigid bodies
 
 #### Defined in
 
-[src/component/collider/BallCollider.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L22)
+[src/component/collider/BallCollider.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/BallCollider.ts#L22)
 
 ___
 
@@ -91,4 +91,4 @@ Radius in pixels
 
 #### Defined in
 
-[src/component/collider/BallCollider.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/BallCollider.ts#L14)
+[src/component/collider/BallCollider.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/BallCollider.ts#L14)

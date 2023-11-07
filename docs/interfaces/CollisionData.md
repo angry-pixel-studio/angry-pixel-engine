@@ -23,7 +23,7 @@ The collider on the other side of the collision.
 
 #### Defined in
 
-[src/component/collider/Collider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L13)
+[src/component/collider/Collider.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L13)
 
 ___
 
@@ -35,7 +35,7 @@ The object on the other side of the collision.
 
 #### Defined in
 
-[src/component/collider/Collider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L15)
+[src/component/collider/Collider.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L15)
 
 ___
 
@@ -61,7 +61,7 @@ The object on the other side of the collision.
 
 #### Defined in
 
-[src/component/collider/Collider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L19)
+[src/component/collider/Collider.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L19)
 
 ___
 
@@ -73,4 +73,4 @@ Contains information about the penetration and direction of the collision.
 
 #### Defined in
 
-[src/component/collider/Collider.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/collider/Collider.ts#L11)
+[src/component/collider/Collider.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/collider/Collider.ts#L11)

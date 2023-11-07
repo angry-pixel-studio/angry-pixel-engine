@@ -2,6 +2,8 @@
 
 # Interface: TextRendererOptions
 
+TextRenderer configuration options.
+
 ## Table of contents
 
 ### Properties
@@ -29,9 +31,11 @@
 
 • `Optional` **bitmapMargin**: [`Vector2`](../classes/Vector2.md)
 
+Margin in pixels to correct badly sliced characters.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L23)
+[src/component/rendering/TextRenderer.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L44)
 
 ___
 
@@ -39,9 +43,11 @@ ___
 
 • `Optional` **bitmapSpacing**: [`Vector2`](../classes/Vector2.md)
 
+Spacing in pixels to correct badly sliced characters.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L24)
+[src/component/rendering/TextRenderer.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L46)
 
 ___
 
@@ -49,19 +55,25 @@ ___
 
 • `Optional` **charRanges**: `number`[]
 
+Range of characters covered by the component defined in number pairs.
+The default value is [32, 126, 161, 255], this means that characters
+from 32 to 126 and from 161 to 255 will be valid.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L18)
+[src/component/rendering/TextRenderer.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L34)
 
 ___
 
 ### color
 
-• `Optional` **color**: `string`
+• **color**: `string`
+
+The text color
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L12)
+[src/component/rendering/TextRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L20)
 
 ___
 
@@ -69,29 +81,35 @@ ___
 
 • **font**: `string` \| `FontFace`
 
+The font family to use
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L10)
+[src/component/rendering/TextRenderer.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L16)
 
 ___
 
 ### fontSize
 
-• `Optional` **fontSize**: `number`
+• **fontSize**: `number`
+
+The size of the font in pixels
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L11)
+[src/component/rendering/TextRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L18)
 
 ___
 
 ### height
 
-• `Optional` **height**: `number`
+• **height**: `number`
+
+The height of the invisible box where the text is rendered
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L16)
+[src/component/rendering/TextRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L24)
 
 ___
 
@@ -99,9 +117,11 @@ ___
 
 • `Optional` **letterSpacing**: `number`
 
+The space between chars in pixels
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L14)
+[src/component/rendering/TextRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L28)
 
 ___
 
@@ -109,9 +129,11 @@ ___
 
 • `Optional` **lineSeparation**: `number`
 
+The separation between lines in pixels
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L13)
+[src/component/rendering/TextRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L26)
 
 ___
 
@@ -119,9 +141,11 @@ ___
 
 • `Optional` **offset**: [`Vector2`](../classes/Vector2.md)
 
+X-axis and Y-axis offset
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L17)
+[src/component/rendering/TextRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L30)
 
 ___
 
@@ -129,9 +153,11 @@ ___
 
 • `Optional` **opacity**: `number`
 
+Change the opacity between 1 and 0
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L21)
+[src/component/rendering/TextRenderer.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L40)
 
 ___
 
@@ -139,9 +165,11 @@ ___
 
 • `Optional` **orientation**: [`TextOrientation`](../enums/TextOrientation.md)
 
+Direction in which the text will be rendered.
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L22)
+[src/component/rendering/TextRenderer.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L42)
 
 ___
 
@@ -149,9 +177,11 @@ ___
 
 • `Optional` **rotation**: [`Rotation`](../classes/Rotation.md)
 
+Text rotation (degrees or radians)
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L20)
+[src/component/rendering/TextRenderer.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L38)
 
 ___
 
@@ -159,9 +189,11 @@ ___
 
 • `Optional` **smooth**: `boolean`
 
+Smoothing pixels (not recommended for pixel art)
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L19)
+[src/component/rendering/TextRenderer.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L36)
 
 ___
 
@@ -169,16 +201,20 @@ ___
 
 • **text**: `string`
 
+The text to render
+
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L9)
+[src/component/rendering/TextRenderer.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L14)
 
 ___
 
 ### width
 
-• `Optional` **width**: `number`
+• **width**: `number`
+
+The width of the invisible box where the text is rendered
 
 #### Defined in
 
-[src/component/rendering/TextRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/88e4d4a/src/component/rendering/TextRenderer.ts#L15)
+[src/component/rendering/TextRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TextRenderer.ts#L22)
