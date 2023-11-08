@@ -2,6 +2,45 @@
 
 # Class: Button
 
+The Button component is used to interact with the mouse and touch screens.
+
+**`Example`**
+
+```js
+cosnt button = this.addComponent(Button, {
+   type: ButtonType.Rectangle,
+   width: 64,
+   height: 64,
+   touchEnabled: true,
+ });
+
+ button.onClick = () => {
+   // some action on click
+ };
+
+ button.onPressed = () => {
+   // some action on pressed
+ };
+```
+
+**`Example`**
+
+```js
+cosnt button = this.addComponent(Button, {
+   type: ButtonType.Circumference,
+   radius: 32,
+   touchEnabled: true,
+ });
+
+ button.onClick = () => {
+   // some action on click
+ };
+
+ button.onPressed = () => {
+   // some action on pressed
+ };
+```
+
 ## Hierarchy
 
 - `EngineComponent`
@@ -12,7 +51,6 @@
 
 ### Properties
 
-- [allowMultiple](Button.md#allowmultiple)
 - [assetManager](Button.md#assetmanager)
 - [domManager](Button.md#dommanager)
 - [gameConfig](Button.md#gameconfig)
@@ -21,6 +59,7 @@
 - [height](Button.md#height)
 - [inputManager](Button.md#inputmanager)
 - [name](Button.md#name)
+- [offset](Button.md#offset)
 - [onClick](Button.md#onclick)
 - [onPressed](Button.md#onpressed)
 - [physicsManager](Button.md#physicsmanager)
@@ -37,7 +76,6 @@
 ### Accessors
 
 - [active](Button.md#active)
-- [offset](Button.md#offset)
 
 ### Methods
 
@@ -64,20 +102,6 @@
 
 ## Properties
 
-### allowMultiple
-
-• `Readonly` **allowMultiple**: `boolean` = `false`
-
-#### Overrides
-
-EngineComponent.allowMultiple
-
-#### Defined in
-
-[src/component/Button.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L22)
-
-___
-
 ### assetManager
 
 • `Protected` `Readonly` **assetManager**: [`IAssetManager`](../interfaces/IAssetManager.md)
@@ -90,7 +114,7 @@ EngineComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L29)
 
 ___
 
@@ -106,7 +130,7 @@ EngineComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L31)
 
 ___
 
@@ -122,7 +146,7 @@ EngineComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L45)
 
 ___
 
@@ -138,7 +162,7 @@ EngineComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L50)
 
 ___
 
@@ -154,7 +178,7 @@ EngineComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L35)
 
 ___
 
@@ -162,9 +186,11 @@ ___
 
 • **height**: `number` = `100`
 
+Height in pixels. Only for rectangle shaped buttons
+
 #### Defined in
 
-[src/component/Button.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L26)
+[src/component/Button.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L76)
 
 ___
 
@@ -180,7 +206,7 @@ EngineComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L33)
 
 ___
 
@@ -196,7 +222,19 @@ EngineComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L48)
+
+___
+
+### offset
+
+• **offset**: [`Vector2`](Vector2.md)
+
+X-axis and Y-axis offset
+
+#### Defined in
+
+[src/component/Button.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L82)
 
 ___
 
@@ -208,13 +246,15 @@ ___
 
 ▸ (): `void`
 
+Function executed when the button's click
+
 ##### Returns
 
 `void`
 
 #### Defined in
 
-[src/component/Button.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L46)
+[src/component/Button.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L86)
 
 ___
 
@@ -226,13 +266,15 @@ ___
 
 ▸ (): `void`
 
+Function executed when the button is pressed
+
 ##### Returns
 
 `void`
 
 #### Defined in
 
-[src/component/Button.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L47)
+[src/component/Button.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L88)
 
 ___
 
@@ -248,7 +290,7 @@ EngineComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L37)
 
 ___
 
@@ -256,9 +298,11 @@ ___
 
 • **pressed**: `boolean` = `false`
 
+TRUE if is pressed
+
 #### Defined in
 
-[src/component/Button.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L31)
+[src/component/Button.ts:84](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L84)
 
 ___
 
@@ -266,9 +310,11 @@ ___
 
 • **radius**: `number` = `50`
 
+Radius in pixels. Only for circumference shaped buttons
+
 #### Defined in
 
-[src/component/Button.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L27)
+[src/component/Button.ts:78](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L78)
 
 ___
 
@@ -284,7 +330,7 @@ EngineComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L39)
 
 ___
 
@@ -300,7 +346,7 @@ EngineComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L41)
 
 ___
 
@@ -316,7 +362,7 @@ EngineComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L43)
 
 ___
 
@@ -324,9 +370,11 @@ ___
 
 • **touchEnabled**: `boolean` = `true`
 
+Enables interaction with touch screens
+
 #### Defined in
 
-[src/component/Button.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L28)
+[src/component/Button.ts:80](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L80)
 
 ___
 
@@ -334,9 +382,11 @@ ___
 
 • **type**: [`ButtonType`](../enums/ButtonType.md)
 
+The shape of the button
+
 #### Defined in
 
-[src/component/Button.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L24)
+[src/component/Button.ts:72](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L72)
 
 ___
 
@@ -350,7 +400,7 @@ EngineComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:176](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L176)
+[src/core/Component.ts:176](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L176)
 
 ___
 
@@ -358,9 +408,11 @@ ___
 
 • **width**: `number` = `100`
 
+Width in pixels. Only for rectangle shaped buttons
+
 #### Defined in
 
-[src/component/Button.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L25)
+[src/component/Button.ts:74](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L74)
 
 ## Accessors
 
@@ -380,7 +432,7 @@ EngineComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -402,37 +454,7 @@ EngineComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L71)
-
-___
-
-### offset
-
-• `get` **offset**(): [`Vector2`](Vector2.md)
-
-#### Returns
-
-[`Vector2`](Vector2.md)
-
-#### Defined in
-
-[src/component/Button.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L49)
-
-• `set` **offset**(`offset`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `offset` | [`Vector2`](Vector2.md) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/component/Button.ts:53](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L53)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L71)
 
 ## Methods
 
@@ -466,7 +488,7 @@ EngineComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -497,7 +519,7 @@ EngineComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -528,7 +550,7 @@ EngineComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -560,7 +582,7 @@ EngineComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L132)
 
 ___
 
@@ -586,7 +608,7 @@ EngineComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L200)
 
 ___
 
@@ -620,7 +642,7 @@ EngineComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -650,7 +672,7 @@ EngineComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L180)
 
 ___
 
@@ -672,7 +694,7 @@ EngineComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -702,7 +724,7 @@ EngineComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L160)
 
 ___
 
@@ -736,7 +758,7 @@ EngineComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L192)
 
 ___
 
@@ -770,7 +792,7 @@ EngineComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -800,7 +822,7 @@ EngineComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L128)
 
 ___
 
@@ -822,7 +844,7 @@ EngineComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -852,7 +874,7 @@ EngineComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L110)
 
 ___
 
@@ -878,7 +900,7 @@ EngineComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L89)
 
 ___
 
@@ -904,7 +926,7 @@ EngineComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L96)
 
 ___
 
@@ -938,7 +960,7 @@ EngineComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -960,7 +982,7 @@ EngineComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L147)
 
 ___
 
@@ -984,7 +1006,7 @@ EngineComponent.init
 
 #### Defined in
 
-[src/component/Button.ts:57](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L57)
+[src/component/Button.ts:102](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L102)
 
 ___
 
@@ -1004,7 +1026,7 @@ EngineComponent.onActiveChange
 
 #### Defined in
 
-[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L82)
+[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L82)
 
 ___
 
@@ -1024,7 +1046,7 @@ EngineComponent.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L103)
 
 ___
 
@@ -1050,7 +1072,7 @@ EngineComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L158)
 
 ___
 
@@ -1064,7 +1086,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:118](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L118)
+[src/component/Button.ts:163](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L163)
 
 ___
 
@@ -1078,7 +1100,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:102](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L102)
+[src/component/Button.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L147)
 
 ___
 
@@ -1092,7 +1114,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:135](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L135)
+[src/component/Button.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L180)
 
 ___
 
@@ -1106,7 +1128,7 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:125](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L125)
+[src/component/Button.ts:170](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L170)
 
 ___
 
@@ -1126,7 +1148,7 @@ EngineComponent.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1144,4 +1166,4 @@ EngineComponent.update
 
 #### Defined in
 
-[src/component/Button.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L66)
+[src/component/Button.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L111)

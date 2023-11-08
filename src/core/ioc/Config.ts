@@ -15,6 +15,7 @@ import { ISceneManager, SceneManager } from "../managers/SceneManager";
 import { ITimeManager, TimeManager } from "../managers/TimeManager";
 import { Container } from "../../utils/Container";
 
+/** @private */
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
 

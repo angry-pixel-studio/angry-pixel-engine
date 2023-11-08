@@ -67,7 +67,7 @@
 
 #### Defined in
 
-[src/input/GamepadController.ts:187](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L187)
+[src/input/GamepadController.ts:187](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L187)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:155](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L155)
+[src/input/GamepadController.ts:155](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L155)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:123](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L123)
+[src/input/GamepadController.ts:123](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L123)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:80](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L80)
+[src/input/GamepadController.ts:80](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L80)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:92](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L92)
+[src/input/GamepadController.ts:92](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L92)
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L111)
+[src/input/GamepadController.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L111)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:115](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L115)
+[src/input/GamepadController.ts:115](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L115)
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:119](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L119)
+[src/input/GamepadController.ts:119](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L119)
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:107](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L107)
+[src/input/GamepadController.ts:107](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L107)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L76)
+[src/input/GamepadController.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L76)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:131](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L131)
+[src/input/GamepadController.ts:131](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L131)
 
 ___
 
@@ -221,7 +221,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:139](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L139)
+[src/input/GamepadController.ts:139](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L139)
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L97)
+[src/input/GamepadController.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L97)
 
 ___
 
@@ -249,7 +249,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:163](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L163)
+[src/input/GamepadController.ts:163](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L163)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:171](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L171)
+[src/input/GamepadController.ts:171](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L171)
 
 ___
 
@@ -277,7 +277,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:175](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L175)
+[src/input/GamepadController.ts:175](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L175)
 
 ___
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L147)
+[src/input/GamepadController.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L147)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:127](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L127)
+[src/input/GamepadController.ts:127](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L127)
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L143)
+[src/input/GamepadController.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L143)
 
 ___
 
@@ -333,7 +333,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:102](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L102)
+[src/input/GamepadController.ts:102](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L102)
 
 ___
 
@@ -347,7 +347,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:167](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L167)
+[src/input/GamepadController.ts:167](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L167)
 
 ___
 
@@ -361,7 +361,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:179](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L179)
+[src/input/GamepadController.ts:179](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L179)
 
 ___
 
@@ -375,7 +375,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:183](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L183)
+[src/input/GamepadController.ts:183](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L183)
 
 ___
 
@@ -389,7 +389,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:151](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L151)
+[src/input/GamepadController.ts:151](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L151)
 
 ___
 
@@ -403,7 +403,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:159](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L159)
+[src/input/GamepadController.ts:159](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L159)
 
 ___
 
@@ -417,7 +417,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:135](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L135)
+[src/input/GamepadController.ts:135](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L135)
 
 ___
 
@@ -431,7 +431,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:191](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L191)
+[src/input/GamepadController.ts:191](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L191)
 
 ## Methods
 
@@ -451,7 +451,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L88)
+[src/input/GamepadController.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L88)
 
 ___
 
@@ -471,7 +471,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:84](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L84)
+[src/input/GamepadController.ts:84](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L84)
 
 ___
 
@@ -491,7 +491,7 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:70](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L70)
+[src/input/GamepadController.ts:70](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L70)
 
 ___
 
@@ -514,4 +514,4 @@ ___
 
 #### Defined in
 
-[src/input/GamepadController.ts:195](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/GamepadController.ts#L195)
+[src/input/GamepadController.ts:195](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/GamepadController.ts#L195)

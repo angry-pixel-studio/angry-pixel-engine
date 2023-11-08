@@ -34,7 +34,7 @@ Flip the video horizontally
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L34)
+[src/component/rendering/VideoRenderer.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L34)
 
 ___
 
@@ -46,7 +46,7 @@ Flip the video vertically
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L36)
+[src/component/rendering/VideoRenderer.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L36)
 
 ___
 
@@ -58,7 +58,7 @@ Overwrite the original video height
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L28)
+[src/component/rendering/VideoRenderer.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L28)
 
 ___
 
@@ -70,7 +70,7 @@ The render layer
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L46)
+[src/component/rendering/VideoRenderer.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L46)
 
 ___
 
@@ -82,7 +82,7 @@ TRUE if the video will play in loop
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L52)
+[src/component/rendering/VideoRenderer.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L52)
 
 ___
 
@@ -94,7 +94,7 @@ Define a mask color for the video
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L40)
+[src/component/rendering/VideoRenderer.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L40)
 
 ___
 
@@ -106,7 +106,7 @@ Define the opacity of the mask color between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L42)
+[src/component/rendering/VideoRenderer.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L42)
 
 ___
 
@@ -118,7 +118,7 @@ X-axis and Y-axis offset
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L30)
+[src/component/rendering/VideoRenderer.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L30)
 
 ___
 
@@ -130,7 +130,7 @@ Change the opacity between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L38)
+[src/component/rendering/VideoRenderer.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L38)
 
 ___
 
@@ -142,7 +142,7 @@ Video rotation (degrees or radians)
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L32)
+[src/component/rendering/VideoRenderer.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L32)
 
 ___
 
@@ -154,7 +154,7 @@ Cut the video based on straight coordinates starting from the top left downward
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L48)
+[src/component/rendering/VideoRenderer.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L48)
 
 ___
 
@@ -166,7 +166,7 @@ Define a color for tinting the video
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L44)
+[src/component/rendering/VideoRenderer.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L44)
 
 ___
 
@@ -178,7 +178,7 @@ The video element to render
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L24)
+[src/component/rendering/VideoRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L24)
 
 ___
 
@@ -190,7 +190,7 @@ The volume of the video. Values between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L50)
+[src/component/rendering/VideoRenderer.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L50)
 
 ___
 
@@ -202,4 +202,4 @@ Overwrite the original video width
 
 #### Defined in
 
-[src/component/rendering/VideoRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/VideoRenderer.ts#L26)
+[src/component/rendering/VideoRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/VideoRenderer.ts#L26)

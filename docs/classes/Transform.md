@@ -2,6 +2,27 @@
 
 # Class: Transform
 
+All GameObject have a Transform natively, so it cannot be added manually.
+It is used to handle the position, rotation and scale of the object. If the object has a parent,
+it can be scaled, rotated and translated hierarchically.
+
+**`Example`**
+
+```js
+this.transform.position = new Vector2(0, 0);
+this.transform.position.set(0, 0);
+
+this.transform.scale = new Vector2(0, 0);
+this.transform.scale.set(0, 0);
+
+this.transform.rotation.radians = 0;
+this.transform.rotation.degrees = 0;
+
+// used to set position relative to the parent
+this.transform.innerPosition = new Vector2(0, 0);
+this.transform.innerPosition.set(0, 0);
+```
+
 ## Hierarchy
 
 - `TransformComponent`
@@ -12,7 +33,6 @@
 
 ### Properties
 
-- [allowMultiple](Transform.md#allowmultiple)
 - [assetManager](Transform.md#assetmanager)
 - [domManager](Transform.md#dommanager)
 - [gameConfig](Transform.md#gameconfig)
@@ -59,20 +79,6 @@
 
 ## Properties
 
-### allowMultiple
-
-• `Readonly` **allowMultiple**: `boolean` = `false`
-
-#### Overrides
-
-TransformComponent.allowMultiple
-
-#### Defined in
-
-[src/component/Transform.ts:5](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L5)
-
-___
-
 ### assetManager
 
 • `Protected` `Readonly` **assetManager**: [`IAssetManager`](../interfaces/IAssetManager.md)
@@ -85,7 +91,7 @@ TransformComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L29)
 
 ___
 
@@ -101,7 +107,7 @@ TransformComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L31)
 
 ___
 
@@ -117,7 +123,7 @@ TransformComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L45)
 
 ___
 
@@ -133,7 +139,7 @@ TransformComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L50)
 
 ___
 
@@ -149,7 +155,7 @@ TransformComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L35)
 
 ___
 
@@ -165,7 +171,7 @@ TransformComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L33)
 
 ___
 
@@ -181,7 +187,7 @@ TransformComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L48)
 
 ___
 
@@ -189,9 +195,11 @@ ___
 
 • **parentRotation**: `boolean` = `true`
 
+Apply rotation relative to the parent. Default value is TRUE
+
 #### Defined in
 
-[src/component/Transform.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L8)
+[src/component/Transform.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L32)
 
 ___
 
@@ -199,9 +207,11 @@ ___
 
 • **parentScale**: `boolean` = `true`
 
+Apply scale relative to the parent. Default value is TRUE
+
 #### Defined in
 
-[src/component/Transform.ts:7](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L7)
+[src/component/Transform.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L30)
 
 ___
 
@@ -217,7 +227,7 @@ TransformComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L37)
 
 ___
 
@@ -233,7 +243,7 @@ TransformComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L39)
 
 ___
 
@@ -249,7 +259,7 @@ TransformComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L41)
 
 ___
 
@@ -265,7 +275,7 @@ TransformComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L43)
 
 ___
 
@@ -279,7 +289,7 @@ TransformComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:190](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L190)
+[src/core/Component.ts:190](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L190)
 
 ## Accessors
 
@@ -299,7 +309,7 @@ TransformComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -321,7 +331,7 @@ TransformComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L71)
 
 ___
 
@@ -329,13 +339,15 @@ ___
 
 • `get` **direction**(): [`Vector2`](Vector2.md)
 
+Direction vector based on the Rotation
+
 #### Returns
 
 [`Vector2`](Vector2.md)
 
 #### Defined in
 
-[src/component/Transform.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L41)
+[src/component/Transform.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L71)
 
 ___
 
@@ -343,15 +355,19 @@ ___
 
 • `get` **innerPosition**(): [`Vector2`](Vector2.md)
 
+Position vector relative to the parent
+
 #### Returns
 
 [`Vector2`](Vector2.md)
 
 #### Defined in
 
-[src/component/Transform.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L45)
+[src/component/Transform.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L76)
 
 • `set` **innerPosition**(`innerPosition`): `void`
+
+Position vector relative to the parent
 
 #### Parameters
 
@@ -365,7 +381,7 @@ ___
 
 #### Defined in
 
-[src/component/Transform.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L49)
+[src/component/Transform.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L81)
 
 ___
 
@@ -373,15 +389,19 @@ ___
 
 • `get` **parent**(): [`Transform`](Transform.md)
 
+Parent transform
+
 #### Returns
 
 [`Transform`](Transform.md)
 
 #### Defined in
 
-[src/component/Transform.ts:53](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L53)
+[src/component/Transform.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L86)
 
 • `set` **parent**(`parent`): `void`
+
+Parent transform
 
 #### Parameters
 
@@ -395,7 +415,7 @@ ___
 
 #### Defined in
 
-[src/component/Transform.ts:57](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L57)
+[src/component/Transform.ts:91](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L91)
 
 ___
 
@@ -403,15 +423,19 @@ ___
 
 • `get` **position**(): [`Vector2`](Vector2.md)
 
+Position on x-axis and y-axis in pixels
+
 #### Returns
 
 [`Vector2`](Vector2.md)
 
 #### Defined in
 
-[src/component/Transform.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L21)
+[src/component/Transform.ts:46](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L46)
 
 • `set` **position**(`position`): `void`
+
+Position on x-axis and y-axis in pixels
 
 #### Parameters
 
@@ -425,7 +449,7 @@ ___
 
 #### Defined in
 
-[src/component/Transform.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L25)
+[src/component/Transform.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L51)
 
 ___
 
@@ -433,13 +457,15 @@ ___
 
 • `get` **rotation**(): [`Rotation`](Rotation.md)
 
+Rotation expressed in radians or degrees
+
 #### Returns
 
 [`Rotation`](Rotation.md)
 
 #### Defined in
 
-[src/component/Transform.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L37)
+[src/component/Transform.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L66)
 
 ___
 
@@ -447,15 +473,19 @@ ___
 
 • `get` **scale**(): [`Vector2`](Vector2.md)
 
+Scale on x-axis and y-axis in pixels
+
 #### Returns
 
 [`Vector2`](Vector2.md)
 
 #### Defined in
 
-[src/component/Transform.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L29)
+[src/component/Transform.ts:56](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L56)
 
 • `set` **scale**(`scale`): `void`
+
+Scale on x-axis and y-axis in pixels
 
 #### Parameters
 
@@ -469,7 +499,7 @@ ___
 
 #### Defined in
 
-[src/component/Transform.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L33)
+[src/component/Transform.ts:61](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L61)
 
 ## Methods
 
@@ -503,7 +533,7 @@ TransformComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -534,7 +564,7 @@ TransformComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -565,7 +595,7 @@ TransformComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -597,7 +627,7 @@ TransformComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L132)
 
 ___
 
@@ -623,7 +653,7 @@ TransformComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L200)
 
 ___
 
@@ -657,7 +687,7 @@ TransformComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -687,7 +717,7 @@ TransformComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L180)
 
 ___
 
@@ -709,7 +739,7 @@ TransformComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -739,7 +769,7 @@ TransformComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L160)
 
 ___
 
@@ -773,7 +803,7 @@ TransformComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L192)
 
 ___
 
@@ -807,7 +837,7 @@ TransformComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -837,7 +867,7 @@ TransformComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L128)
 
 ___
 
@@ -859,7 +889,7 @@ TransformComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -889,7 +919,7 @@ TransformComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L110)
 
 ___
 
@@ -915,7 +945,7 @@ TransformComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L89)
 
 ___
 
@@ -941,7 +971,7 @@ TransformComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L96)
 
 ___
 
@@ -975,7 +1005,7 @@ TransformComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -997,7 +1027,7 @@ TransformComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L147)
 
 ___
 
@@ -1023,7 +1053,7 @@ TransformComponent.init
 
 #### Defined in
 
-[src/core/GameActor.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L88)
+[src/core/GameActor.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L88)
 
 ___
 
@@ -1043,7 +1073,7 @@ TransformComponent.onActiveChange
 
 #### Defined in
 
-[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L82)
+[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L82)
 
 ___
 
@@ -1063,7 +1093,7 @@ TransformComponent.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L103)
 
 ___
 
@@ -1089,7 +1119,7 @@ TransformComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L158)
 
 ___
 
@@ -1109,7 +1139,7 @@ TransformComponent.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1127,4 +1157,4 @@ TransformComponent.update
 
 #### Defined in
 
-[src/component/Transform.ts:65](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Transform.ts#L65)
+[src/component/Transform.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Transform.ts#L99)

@@ -2,6 +2,8 @@
 
 # Interface: AudioPlayerOptions
 
+AudioPlayer configuration options
+
 ## Hierarchy
 
 - [`InitOptions`](InitOptions.md)
@@ -21,9 +23,11 @@
 
 • `Optional` **loop**: `boolean`
 
+[optional] Plays the audio in loop
+
 #### Defined in
 
-[src/component/AudioPlayer.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/AudioPlayer.ts#L6)
+[src/component/AudioPlayer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/AudioPlayer.ts#L27)
 
 ___
 
@@ -31,6 +35,8 @@ ___
 
 • `Optional` **volume**: `number`
 
+[optional] The initial volume. Values between 1 and 0.
+
 #### Defined in
 
-[src/component/AudioPlayer.ts:5](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/AudioPlayer.ts#L5)
+[src/component/AudioPlayer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/AudioPlayer.ts#L25)

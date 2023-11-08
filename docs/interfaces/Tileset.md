@@ -25,7 +25,7 @@ The tileset image element
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L13)
+[src/component/rendering/TilemapRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L13)
 
 ___
 
@@ -37,7 +37,7 @@ Margin of the tile in pixels (space in the top and the left)
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L21)
+[src/component/rendering/TilemapRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L21)
 
 ___
 
@@ -49,7 +49,7 @@ Spacing of the tile in pixels (space in the bottom and the right)
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L23)
+[src/component/rendering/TilemapRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L23)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L19)
+[src/component/rendering/TilemapRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L19)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L17)
+[src/component/rendering/TilemapRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L17)
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TilemapRenderer.ts#L15)
+[src/component/rendering/TilemapRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L15)

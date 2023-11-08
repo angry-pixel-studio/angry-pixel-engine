@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[src/input/MouseController.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L13)
+[src/input/MouseController.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L13)
 
 ## Accessors
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[src/input/MouseController.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L35)
+[src/input/MouseController.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L35)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/input/MouseController.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L19)
+[src/input/MouseController.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L19)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/input/MouseController.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L31)
+[src/input/MouseController.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L31)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/input/MouseController.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L27)
+[src/input/MouseController.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L27)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/input/MouseController.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L23)
+[src/input/MouseController.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L23)
 
 ## Methods
 
@@ -122,4 +122,4 @@ ___
 
 #### Defined in
 
-[src/input/MouseController.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/input/MouseController.ts#L39)
+[src/input/MouseController.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L39)

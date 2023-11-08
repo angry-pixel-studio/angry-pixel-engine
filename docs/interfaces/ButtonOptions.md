@@ -2,6 +2,8 @@
 
 # Interface: ButtonOptions
 
+Button configuration options
+
 ## Hierarchy
 
 - [`InitOptions`](InitOptions.md)
@@ -25,9 +27,11 @@
 
 • `Optional` **height**: `number`
 
+Height in pixels. Only for rectangle shaped buttons
+
 #### Defined in
 
-[src/component/Button.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L15)
+[src/component/Button.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L22)
 
 ___
 
@@ -35,9 +39,11 @@ ___
 
 • `Optional` **offset**: [`Vector2`](../classes/Vector2.md)
 
+X-axis and Y-axis offset
+
 #### Defined in
 
-[src/component/Button.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L18)
+[src/component/Button.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L28)
 
 ___
 
@@ -45,9 +51,11 @@ ___
 
 • `Optional` **radius**: `number`
 
+Radius in pixels. Only for circumference shaped buttons
+
 #### Defined in
 
-[src/component/Button.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L16)
+[src/component/Button.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L24)
 
 ___
 
@@ -55,9 +63,11 @@ ___
 
 • `Optional` **touchEnabled**: `boolean`
 
+Enables interaction with touch screens
+
 #### Defined in
 
-[src/component/Button.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L17)
+[src/component/Button.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L26)
 
 ___
 
@@ -65,9 +75,11 @@ ___
 
 • **type**: [`ButtonType`](../enums/ButtonType.md)
 
+The shape of the button
+
 #### Defined in
 
-[src/component/Button.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L13)
+[src/component/Button.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L18)
 
 ___
 
@@ -75,6 +87,8 @@ ___
 
 • `Optional` **width**: `number`
 
+Width in pixels. Only for rectangle shaped buttons
+
 #### Defined in
 
-[src/component/Button.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Button.ts#L14)
+[src/component/Button.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Button.ts#L20)

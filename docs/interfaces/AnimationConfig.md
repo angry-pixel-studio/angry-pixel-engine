@@ -2,6 +2,8 @@
 
 # Interface: AnimationConfig
 
+Animation configuration options
+
 ## Table of contents
 
 ### Properties
@@ -16,9 +18,11 @@
 
 • **framerate**: `number`
 
+Frame rate in seconds
+
 #### Defined in
 
-[src/component/Animator.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L10)
+[src/component/Animator.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Animator.ts#L19)
 
 ___
 
@@ -26,9 +30,11 @@ ___
 
 • **loop**: `boolean`
 
+Plays the animation in a loop
+
 #### Defined in
 
-[src/component/Animator.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L9)
+[src/component/Animator.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Animator.ts#L17)
 
 ___
 
@@ -36,6 +42,8 @@ ___
 
 • **sprites**: [`Sprite`](../classes/Sprite.md)[]
 
+Array of sprites to represent each animation frame
+
 #### Defined in
 
-[src/component/Animator.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/Animator.ts#L8)
+[src/component/Animator.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Animator.ts#L15)

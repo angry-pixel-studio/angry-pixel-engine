@@ -33,7 +33,7 @@ Flip the image horizontally
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L19)
+[src/component/rendering/SpriteRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L19)
 
 ___
 
@@ -45,7 +45,7 @@ Flip the image vertically
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L21)
+[src/component/rendering/SpriteRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L21)
 
 ___
 
@@ -57,7 +57,7 @@ Overwrite the original image height
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L39)
+[src/component/rendering/SpriteRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L39)
 
 ___
 
@@ -69,7 +69,7 @@ The render layer
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L33)
+[src/component/rendering/SpriteRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L33)
 
 ___
 
@@ -81,7 +81,7 @@ Define a mask color for the image
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L27)
+[src/component/rendering/SpriteRenderer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L27)
 
 ___
 
@@ -93,7 +93,7 @@ Define the opacity of the mask color between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L29)
+[src/component/rendering/SpriteRenderer.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L29)
 
 ___
 
@@ -105,7 +105,7 @@ X-axis and Y-axis offset
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L15)
+[src/component/rendering/SpriteRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L15)
 
 ___
 
@@ -117,7 +117,7 @@ Change the opacity between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L23)
+[src/component/rendering/SpriteRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L23)
 
 ___
 
@@ -129,7 +129,7 @@ Image rotation (degrees or radians)
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L17)
+[src/component/rendering/SpriteRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L17)
 
 ___
 
@@ -141,7 +141,7 @@ Scale the image based on a vector
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L35)
+[src/component/rendering/SpriteRenderer.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L35)
 
 ___
 
@@ -153,7 +153,7 @@ The sprite to render
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L13)
+[src/component/rendering/SpriteRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L13)
 
 ___
 
@@ -165,7 +165,7 @@ Render the image in tiles
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L25)
+[src/component/rendering/SpriteRenderer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L25)
 
 ___
 
@@ -177,7 +177,7 @@ Define a color for tinting the sprite image
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L31)
+[src/component/rendering/SpriteRenderer.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L31)
 
 ___
 
@@ -189,4 +189,4 @@ Overwrite the original image width
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/SpriteRenderer.ts#L37)
+[src/component/rendering/SpriteRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L37)

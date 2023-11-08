@@ -27,7 +27,7 @@ The render layer
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L22)
+[src/component/rendering/TiledTilemapRenderer.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L22)
 
 ___
 
@@ -39,7 +39,7 @@ Direction in which the tilemap will be rendered.
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L24)
+[src/component/rendering/TiledTilemapRenderer.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L24)
 
 ___
 
@@ -51,7 +51,7 @@ Smoothing pixels (not recommended for pixel art)
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L26)
+[src/component/rendering/TiledTilemapRenderer.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L26)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L20)
+[src/component/rendering/TiledTilemapRenderer.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L20)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L18)
+[src/component/rendering/TiledTilemapRenderer.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L18)
 
 ___
 
@@ -83,7 +83,7 @@ Export of the Tiles application in JSON
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L12)
+[src/component/rendering/TiledTilemapRenderer.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L12)
 
 ___
 
@@ -95,7 +95,7 @@ The Tiled tilemap layer to render
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L14)
+[src/component/rendering/TiledTilemapRenderer.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L14)
 
 ___
 
@@ -107,4 +107,4 @@ The Tileset instance
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/component/rendering/TiledTilemapRenderer.ts#L16)
+[src/component/rendering/TiledTilemapRenderer.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L16)

@@ -25,7 +25,7 @@ The time difference, in seconds, between the last frame of and the current frame
 
 #### Defined in
 
-[src/core/managers/TimeManager.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/TimeManager.ts#L38)
+[src/core/managers/TimeManager.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/TimeManager.ts#L38)
 
 ___
 
@@ -37,7 +37,7 @@ The time difference, in seconds, between the last frame and the current frame.
 
 #### Defined in
 
-[src/core/managers/TimeManager.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/TimeManager.ts#L23)
+[src/core/managers/TimeManager.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/TimeManager.ts#L23)
 
 ___
 
@@ -49,7 +49,7 @@ The time difference, in seconds, between the last physics frame and the current 
 
 #### Defined in
 
-[src/core/managers/TimeManager.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/TimeManager.ts#L25)
+[src/core/managers/TimeManager.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/TimeManager.ts#L25)
 
 ___
 
@@ -64,7 +64,7 @@ If set to 0, everything associated with the time will stop.
 
 #### Defined in
 
-[src/core/managers/TimeManager.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/TimeManager.ts#L32)
+[src/core/managers/TimeManager.ts:32](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/TimeManager.ts#L32)
 
 ___
 
@@ -76,7 +76,7 @@ The time difference, in seconds, between the last frame and the current frame, u
 
 #### Defined in
 
-[src/core/managers/TimeManager.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/TimeManager.ts#L34)
+[src/core/managers/TimeManager.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/TimeManager.ts#L34)
 
 ___
 
@@ -88,4 +88,4 @@ The time difference, in seconds, between the last physics frame and the current 
 
 #### Defined in
 
-[src/core/managers/TimeManager.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/2e7a4eb/src/core/managers/TimeManager.ts#L36)
+[src/core/managers/TimeManager.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/TimeManager.ts#L36)
