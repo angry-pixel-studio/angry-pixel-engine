@@ -80,7 +80,7 @@ GameActor.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L29)
 
 ___
 
@@ -96,7 +96,7 @@ GameActor.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L31)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/core/Scene.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Scene.ts#L34)
+[src/core/Scene.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Scene.ts#L34)
 
 ___
 
@@ -122,7 +122,7 @@ GameActor.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L45)
 
 ___
 
@@ -138,7 +138,7 @@ GameActor.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L35)
 
 ___
 
@@ -154,7 +154,7 @@ GameActor.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L33)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[src/core/Scene.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Scene.ts#L34)
+[src/core/Scene.ts:34](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Scene.ts#L34)
 
 ___
 
@@ -180,7 +180,7 @@ GameActor.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L37)
 
 ___
 
@@ -196,7 +196,7 @@ GameActor.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L39)
 
 ___
 
@@ -212,7 +212,7 @@ GameActor.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L41)
 
 ___
 
@@ -228,7 +228,7 @@ GameActor.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L43)
 
 ## Accessors
 
@@ -244,7 +244,7 @@ The main active camera
 
 #### Defined in
 
-[src/core/Scene.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Scene.ts#L45)
+[src/core/Scene.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Scene.ts#L45)
 
 ## Methods
 
@@ -278,7 +278,7 @@ GameActor.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -309,7 +309,7 @@ GameActor.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -340,7 +340,7 @@ GameActor.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -372,7 +372,7 @@ GameActor.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L132)
 
 ___
 
@@ -398,7 +398,7 @@ GameActor.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L200)
 
 ___
 
@@ -432,7 +432,7 @@ GameActor.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -462,7 +462,7 @@ GameActor.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L180)
 
 ___
 
@@ -484,7 +484,7 @@ GameActor.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -514,7 +514,7 @@ GameActor.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L160)
 
 ___
 
@@ -548,7 +548,7 @@ GameActor.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L192)
 
 ___
 
@@ -574,7 +574,7 @@ GameActor.init
 
 #### Defined in
 
-[src/core/GameActor.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L88)
+[src/core/GameActor.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L88)
 
 ___
 
@@ -594,7 +594,7 @@ GameActor.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L103)
 
 ___
 
@@ -614,7 +614,7 @@ GameActor.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L93)
 
 ___
 
@@ -634,4 +634,4 @@ GameActor.update
 
 #### Defined in
 
-[src/core/GameActor.ts:98](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L98)
+[src/core/GameActor.ts:98](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L98)

@@ -2,6 +2,12 @@
 
 # Class: KeyboardController
 
+Manages keyboard interaction. It uses the **code** property of the **js keyboard event**.
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 ## Table of contents
 
 ### Constructors
@@ -39,17 +45,19 @@
 
 #### Defined in
 
-[src/input/KeyboardController.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L6)
+[src/input/KeyboardController.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L15)
 
 ## Properties
 
 ### pressedKeys
 
-• **pressedKeys**: `string`[] = `[]`
+• `Readonly` **pressedKeys**: `string`[] = `[]`
+
+The current pressed keys
 
 #### Defined in
 
-[src/input/KeyboardController.ts:2](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L2)
+[src/input/KeyboardController.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L11)
 
 ## Methods
 
@@ -57,19 +65,27 @@
 
 ▸ **andPressed**(`keyCodes`): `boolean`
 
+Returns TRUE if all the given keys are being pressed.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `keyCodes` | `string`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `keyCodes` | `string`[] | The codes of the keys to check |
 
 #### Returns
 
 `boolean`
 
+TRUE for pressed, FALSE instead
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 #### Defined in
 
-[src/input/KeyboardController.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L33)
+[src/input/KeyboardController.ts:60](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L60)
 
 ___
 
@@ -77,6 +93,8 @@ ___
 
 ▸ **andPressedReturn**<`T`\>(`keyCodes`, `returnTrue`, `returnFalse`): `T`
 
+This method accepts two parameters that will be returned depending on whether all the given keys are being pressed.
+
 #### Type parameters
 
 | Name |
@@ -85,19 +103,25 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `keyCodes` | `string`[] |
-| `returnTrue` | `T` |
-| `returnFalse` | `T` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `keyCodes` | `string`[] | The codes of the keys to check |
+| `returnTrue` | `T` | The value to return if the key is pressed |
+| `returnFalse` | `T` | The value to return if the key is not pressed |
 
 #### Returns
 
 `T`
 
+The returnTrue for pressed or the returnFalse instead
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 #### Defined in
 
-[src/input/KeyboardController.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L47)
+[src/input/KeyboardController.ts:98](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L98)
 
 ___
 
@@ -105,19 +129,27 @@ ___
 
 ▸ **isPressed**(`keyCode`): `boolean`
 
+Returns TRUE if the given key is being pressed.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `keyCode` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `keyCode` | `string` | The code of the key to check |
 
 #### Returns
 
 `boolean`
 
+TRUE true for pressed, FALSE instead
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 #### Defined in
 
-[src/input/KeyboardController.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L25)
+[src/input/KeyboardController.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L40)
 
 ___
 
@@ -125,6 +157,8 @@ ___
 
 ▸ **isPressedReturn**<`T`\>(`keyCode`, `returnTrue`, `returnFalse`): `T`
 
+This method accepts two parameters that will be returned depending on whether the key is pressed or not.
+
 #### Type parameters
 
 | Name |
@@ -133,19 +167,25 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `keyCode` | `string` |
-| `returnTrue` | `T` |
-| `returnFalse` | `T` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `keyCode` | `string` | The code of the key to check |
+| `returnTrue` | `T` | The value to return if the key is pressed |
+| `returnFalse` | `T` | The value to return if the key is not pressed |
 
 #### Returns
 
 `T`
 
+The returnTrue for pressed or the returnFalse instead
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 #### Defined in
 
-[src/input/KeyboardController.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L37)
+[src/input/KeyboardController.ts:72](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L72)
 
 ___
 
@@ -153,25 +193,35 @@ ___
 
 ▸ **orPressed**(`keyCodes`): `boolean`
 
+Returns TRUE if one of the given keys is being pressed.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `keyCodes` | `string`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `keyCodes` | `string`[] | The codes of the keys to check |
 
 #### Returns
 
 `boolean`
 
+TRUE for pressed, FALSE instead
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 #### Defined in
 
-[src/input/KeyboardController.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L29)
+[src/input/KeyboardController.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L50)
 
 ___
 
 ### orPressedReturn
 
 ▸ **orPressedReturn**<`T`\>(`keyCodes`, `returnTrue`, `returnFalse`): `T`
+
+This method accepts two parameters that will be returned depending on whether one of the given keys is being pressed.
 
 #### Type parameters
 
@@ -181,16 +231,22 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `keyCodes` | `string`[] |
-| `returnTrue` | `T` |
-| `returnFalse` | `T` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `keyCodes` | `string`[] | The codes of the keys to check |
+| `returnTrue` | `T` | The value to return if the key is pressed |
+| `returnFalse` | `T` | The value to return if the key is not pressed |
 
 #### Returns
 
 `T`
 
+The returnTrue for pressed or the returnFalse instead
+
+**`See`**
+
+[KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
+
 #### Defined in
 
-[src/input/KeyboardController.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/KeyboardController.ts#L41)
+[src/input/KeyboardController.ts:84](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L84)

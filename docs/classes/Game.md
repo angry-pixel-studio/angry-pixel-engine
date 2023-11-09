@@ -71,7 +71,7 @@ The game configuration
 
 #### Defined in
 
-[src/core/Game.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L103)
+[src/core/Game.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L103)
 
 ___
 
@@ -87,7 +87,7 @@ TRUE if the game is running
 
 #### Defined in
 
-[src/core/Game.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L110)
+[src/core/Game.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L110)
 
 ## Methods
 
@@ -112,7 +112,7 @@ Add a scene to the game
 
 #### Defined in
 
-[src/core/Game.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L122)
+[src/core/Game.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L122)
 
 ___
 
@@ -128,7 +128,7 @@ Pauses the game
 
 #### Defined in
 
-[src/core/Game.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L143)
+[src/core/Game.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L143)
 
 ___
 
@@ -144,7 +144,7 @@ Resumes the paused game
 
 #### Defined in
 
-[src/core/Game.ts:150](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L150)
+[src/core/Game.ts:150](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L150)
 
 ___
 
@@ -160,7 +160,7 @@ Run the game
 
 #### Defined in
 
-[src/core/Game.ts:129](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L129)
+[src/core/Game.ts:129](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L129)
 
 ___
 
@@ -176,4 +176,4 @@ Stop the game
 
 #### Defined in
 
-[src/core/Game.ts:136](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Game.ts#L136)
+[src/core/Game.ts:136](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Game.ts#L136)

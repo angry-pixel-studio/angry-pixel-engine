@@ -22,7 +22,7 @@ Frame rate in seconds
 
 #### Defined in
 
-[src/component/Animator.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Animator.ts#L19)
+[src/component/Animator.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Animator.ts#L19)
 
 ___
 
@@ -34,7 +34,7 @@ Plays the animation in a loop
 
 #### Defined in
 
-[src/component/Animator.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Animator.ts#L17)
+[src/component/Animator.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Animator.ts#L17)
 
 ___
 
@@ -46,4 +46,4 @@ Array of sprites to represent each animation frame
 
 #### Defined in
 
-[src/component/Animator.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Animator.ts#L15)
+[src/component/Animator.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Animator.ts#L15)

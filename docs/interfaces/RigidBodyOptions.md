@@ -27,7 +27,7 @@ Gravity expressed in pixels per second squared. Only applies fot Dynamic bodies
 
 #### Defined in
 
-[src/component/RigidBody.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/RigidBody.ts#L20)
+[src/component/RigidBody.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/RigidBody.ts#L20)
 
 ___
 
@@ -42,4 +42,4 @@ The type determines how it will respond to physics and collisions.
 
 #### Defined in
 
-[src/component/RigidBody.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/RigidBody.ts#L18)
+[src/component/RigidBody.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/RigidBody.ts#L18)

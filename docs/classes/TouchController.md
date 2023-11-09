@@ -2,6 +2,8 @@
 
 # Class: TouchController
 
+Manages the touch screen interaction.
+
 ## Table of contents
 
 ### Constructors
@@ -10,8 +12,7 @@
 
 ### Accessors
 
-- [positionInViewport](TouchController.md#positioninviewport)
-- [radius](TouchController.md#radius)
+- [interactions](TouchController.md#interactions)
 - [touching](TouchController.md#touching)
 
 ## Constructors
@@ -32,35 +33,23 @@
 
 #### Defined in
 
-[src/input/TouchController.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/TouchController.ts#L9)
+[src/input/TouchController.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L23)
 
 ## Accessors
 
-### positionInViewport
+### interactions
 
-• `get` **positionInViewport**(): [`Vector2`](Vector2.md)
+• `get` **interactions**(): [`TouchInteraction`](../interfaces/TouchInteraction.md)[]
 
-#### Returns
-
-[`Vector2`](Vector2.md)
-
-#### Defined in
-
-[src/input/TouchController.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/TouchController.ts#L18)
-
-___
-
-### radius
-
-• `get` **radius**(): [`Vector2`](Vector2.md)
+The information about the interactions with the screen
 
 #### Returns
 
-[`Vector2`](Vector2.md)
+[`TouchInteraction`](../interfaces/TouchInteraction.md)[]
 
 #### Defined in
 
-[src/input/TouchController.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/TouchController.ts#L26)
+[src/input/TouchController.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L44)
 
 ___
 
@@ -68,10 +57,12 @@ ___
 
 • `get` **touching**(): `boolean`
 
+TRUE if there is an interaction with the screen
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/input/TouchController.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/TouchController.ts#L22)
+[src/input/TouchController.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L36)

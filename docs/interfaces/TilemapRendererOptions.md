@@ -29,7 +29,7 @@ The render layer
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L43)
+[src/component/rendering/TilemapRenderer.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L43)
 
 ___
 
@@ -41,7 +41,7 @@ Change the opacity between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L47)
+[src/component/rendering/TilemapRenderer.ts:47](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L47)
 
 ___
 
@@ -53,7 +53,7 @@ Direction in which the tilemap will be rendered.
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L45)
+[src/component/rendering/TilemapRenderer.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L45)
 
 ___
 
@@ -65,7 +65,7 @@ Smoothing pixels (not recommended for pixel art)
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L51)
+[src/component/rendering/TilemapRenderer.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L51)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L41)
+[src/component/rendering/TilemapRenderer.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L41)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L39)
+[src/component/rendering/TilemapRenderer.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L39)
 
 ___
 
@@ -98,7 +98,7 @@ from top to bottom. ID 0 (zero) represents a space with no tile.
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L33)
+[src/component/rendering/TilemapRenderer.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L33)
 
 ___
 
@@ -110,7 +110,7 @@ The Tileset instance
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L35)
+[src/component/rendering/TilemapRenderer.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L35)
 
 ___
 
@@ -122,7 +122,7 @@ Define a color for tinting the tiles
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L49)
+[src/component/rendering/TilemapRenderer.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L49)
 
 ___
 
@@ -132,4 +132,4 @@ ___
 
 #### Defined in
 
-[src/component/rendering/TilemapRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TilemapRenderer.ts#L37)
+[src/component/rendering/TilemapRenderer.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TilemapRenderer.ts#L37)

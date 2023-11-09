@@ -123,7 +123,7 @@ RenderComponent.allowMultiple
 
 #### Defined in
 
-[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L52)
+[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L52)
 
 ___
 
@@ -139,7 +139,7 @@ RenderComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L29)
 
 ___
 
@@ -155,7 +155,7 @@ RenderComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L31)
 
 ___
 
@@ -171,7 +171,7 @@ RenderComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L45)
 
 ___
 
@@ -187,7 +187,7 @@ RenderComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L50)
 
 ___
 
@@ -203,7 +203,7 @@ RenderComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L35)
 
 ___
 
@@ -219,7 +219,7 @@ ITilemapRenderer.height
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L93)
+[src/component/rendering/TiledTilemapRenderer.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L93)
 
 ___
 
@@ -235,7 +235,7 @@ RenderComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L33)
 
 ___
 
@@ -251,7 +251,7 @@ RenderComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L48)
 
 ___
 
@@ -263,7 +263,7 @@ Change the opacity between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L99)
+[src/component/rendering/TiledTilemapRenderer.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L99)
 
 ___
 
@@ -279,7 +279,7 @@ ITilemapRenderer.orientation
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:95](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L95)
+[src/component/rendering/TiledTilemapRenderer.ts:95](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L95)
 
 ___
 
@@ -295,7 +295,7 @@ RenderComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L37)
 
 ___
 
@@ -311,7 +311,7 @@ ITilemapRenderer.realHeight
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:109](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L109)
+[src/component/rendering/TiledTilemapRenderer.ts:109](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L109)
 
 ___
 
@@ -327,7 +327,7 @@ ITilemapRenderer.realWidth
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L104)
+[src/component/rendering/TiledTilemapRenderer.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L104)
 
 ___
 
@@ -343,7 +343,7 @@ RenderComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L39)
 
 ___
 
@@ -359,7 +359,7 @@ RenderComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L41)
 
 ___
 
@@ -375,7 +375,7 @@ ITilemapRenderer.tileHeight
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:83](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L83)
+[src/component/rendering/TiledTilemapRenderer.ts:83](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L83)
 
 ___
 
@@ -391,7 +391,7 @@ ITilemapRenderer.tileWidth
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L81)
+[src/component/rendering/TiledTilemapRenderer.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L81)
 
 ___
 
@@ -408,7 +408,7 @@ ITilemapRenderer.tiles
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L79)
+[src/component/rendering/TiledTilemapRenderer.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L79)
 
 ___
 
@@ -424,7 +424,7 @@ RenderComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L43)
 
 ___
 
@@ -436,7 +436,7 @@ Define a color for tinting the tiles
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L97)
+[src/component/rendering/TiledTilemapRenderer.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L97)
 
 ___
 
@@ -450,7 +450,7 @@ RenderComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L204)
+[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L204)
 
 ___
 
@@ -466,7 +466,7 @@ ITilemapRenderer.width
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L88)
+[src/component/rendering/TiledTilemapRenderer.ts:88](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L88)
 
 ## Accessors
 
@@ -486,7 +486,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -508,7 +508,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L71)
 
 ## Methods
 
@@ -542,7 +542,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -573,7 +573,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -604,7 +604,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -636,7 +636,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L132)
 
 ___
 
@@ -662,7 +662,7 @@ RenderComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L200)
 
 ___
 
@@ -696,7 +696,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -726,7 +726,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L180)
 
 ___
 
@@ -748,7 +748,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -778,7 +778,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L160)
 
 ___
 
@@ -812,7 +812,7 @@ RenderComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L192)
 
 ___
 
@@ -846,7 +846,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -876,7 +876,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L128)
 
 ___
 
@@ -898,7 +898,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -928,7 +928,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L110)
 
 ___
 
@@ -954,7 +954,7 @@ RenderComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L89)
 
 ___
 
@@ -980,7 +980,7 @@ RenderComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L96)
 
 ___
 
@@ -1014,7 +1014,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -1036,7 +1036,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L147)
 
 ___
 
@@ -1060,7 +1060,7 @@ RenderComponent.init
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L124)
+[src/component/rendering/TiledTilemapRenderer.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L124)
 
 ___
 
@@ -1080,7 +1080,7 @@ RenderComponent.onActiveChange
 
 #### Defined in
 
-[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L82)
+[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L82)
 
 ___
 
@@ -1100,7 +1100,7 @@ RenderComponent.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L103)
 
 ___
 
@@ -1126,7 +1126,7 @@ RenderComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L158)
 
 ___
 
@@ -1146,7 +1146,7 @@ RenderComponent.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1164,4 +1164,4 @@ RenderComponent.update
 
 #### Defined in
 
-[src/component/rendering/TiledTilemapRenderer.ts:149](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/TiledTilemapRenderer.ts#L149)
+[src/component/rendering/TiledTilemapRenderer.ts:149](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/TiledTilemapRenderer.ts#L149)

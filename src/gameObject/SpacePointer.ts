@@ -2,6 +2,12 @@ import { GameObject } from "../core/GameObject";
 import { Vector2 } from "angry-pixel-math";
 import { GameCamera } from "./GameCamera";
 
+/**
+ * This object can be used to click anywhere in the game and get the coordinates relative to the game world.
+ * The coordinates are expressed as an xy vector in the browser console.
+ * It is a useful tool to know where to position objects.
+ * @public
+ */
 export class SpacePointer extends GameObject {
     private camera: GameCamera;
     private mousePressed: boolean = false;

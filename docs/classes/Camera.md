@@ -80,7 +80,7 @@ CameraComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L29)
 
 ___
 
@@ -92,7 +92,7 @@ In case you have more than one camera, the depth value determines which camera i
 
 #### Defined in
 
-[src/component/Camera.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L36)
+[src/component/Camera.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L36)
 
 ___
 
@@ -108,7 +108,7 @@ CameraComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L31)
 
 ___
 
@@ -124,7 +124,7 @@ CameraComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L45)
 
 ___
 
@@ -140,7 +140,7 @@ CameraComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L50)
 
 ___
 
@@ -156,7 +156,7 @@ CameraComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L35)
 
 ___
 
@@ -172,7 +172,7 @@ CameraComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L33)
 
 ___
 
@@ -184,7 +184,7 @@ Layers to be rendered by this camera
 
 #### Defined in
 
-[src/component/Camera.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L38)
+[src/component/Camera.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L38)
 
 ___
 
@@ -200,7 +200,7 @@ CameraComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L48)
 
 ___
 
@@ -216,7 +216,7 @@ CameraComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L37)
 
 ___
 
@@ -232,7 +232,7 @@ CameraComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L39)
 
 ___
 
@@ -248,7 +248,7 @@ CameraComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L41)
 
 ___
 
@@ -264,7 +264,7 @@ CameraComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L43)
 
 ___
 
@@ -278,7 +278,7 @@ CameraComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:199](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L199)
+[src/core/Component.ts:199](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L199)
 
 ___
 
@@ -290,7 +290,7 @@ Rectangle representing the field of view of the camera from the perspective of t
 
 #### Defined in
 
-[src/component/Camera.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L28)
+[src/component/Camera.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L28)
 
 ___
 
@@ -302,7 +302,7 @@ Rectangle representing the field of view of the camera in the game world
 
 #### Defined in
 
-[src/component/Camera.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L33)
+[src/component/Camera.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L33)
 
 ## Accessors
 
@@ -322,7 +322,7 @@ CameraComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -344,7 +344,7 @@ CameraComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L71)
 
 ___
 
@@ -360,7 +360,7 @@ Camera zoom. Default value is 1
 
 #### Defined in
 
-[src/component/Camera.ts:54](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L54)
+[src/component/Camera.ts:54](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L54)
 
 • `set` **zoom**(`zoom`): `void`
 
@@ -378,7 +378,7 @@ Camera zoom. Default value is 1
 
 #### Defined in
 
-[src/component/Camera.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L45)
+[src/component/Camera.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L45)
 
 ## Methods
 
@@ -412,7 +412,7 @@ CameraComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -443,7 +443,7 @@ CameraComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -474,7 +474,7 @@ CameraComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -506,7 +506,7 @@ CameraComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L132)
 
 ___
 
@@ -528,7 +528,7 @@ Adds a new layer to the end of the stack
 
 #### Defined in
 
-[src/component/Camera.ts:59](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L59)
+[src/component/Camera.ts:59](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L59)
 
 ___
 
@@ -554,7 +554,7 @@ CameraComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L200)
 
 ___
 
@@ -588,7 +588,7 @@ CameraComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -618,7 +618,7 @@ CameraComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L180)
 
 ___
 
@@ -640,7 +640,7 @@ CameraComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -670,7 +670,7 @@ CameraComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L160)
 
 ___
 
@@ -704,7 +704,7 @@ CameraComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L192)
 
 ___
 
@@ -738,7 +738,7 @@ CameraComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -768,7 +768,7 @@ CameraComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L128)
 
 ___
 
@@ -790,7 +790,7 @@ CameraComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -820,7 +820,7 @@ CameraComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L110)
 
 ___
 
@@ -846,7 +846,7 @@ CameraComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L89)
 
 ___
 
@@ -872,7 +872,7 @@ CameraComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L96)
 
 ___
 
@@ -906,7 +906,7 @@ CameraComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -928,7 +928,7 @@ CameraComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L147)
 
 ___
 
@@ -946,7 +946,7 @@ CameraComponent.init
 
 #### Defined in
 
-[src/component/Camera.ts:63](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L63)
+[src/component/Camera.ts:63](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L63)
 
 ___
 
@@ -966,7 +966,7 @@ CameraComponent.onActiveChange
 
 #### Defined in
 
-[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L82)
+[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L82)
 
 ___
 
@@ -986,7 +986,7 @@ CameraComponent.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L103)
 
 ___
 
@@ -1012,7 +1012,7 @@ CameraComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L158)
 
 ___
 
@@ -1032,7 +1032,7 @@ CameraComponent.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1050,4 +1050,4 @@ CameraComponent.update
 
 #### Defined in
 
-[src/component/Camera.ts:68](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/Camera.ts#L68)
+[src/component/Camera.ts:68](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Camera.ts#L68)

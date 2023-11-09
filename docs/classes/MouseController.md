@@ -2,6 +2,8 @@
 
 # Class: MouseController
 
+Manages mouse interaction
+
 ## Table of contents
 
 ### Constructors
@@ -15,10 +17,6 @@
 - [positionInViewport](MouseController.md#positioninviewport)
 - [rightButtonPressed](MouseController.md#rightbuttonpressed)
 - [scrollButtonPressed](MouseController.md#scrollbuttonpressed)
-
-### Methods
-
-- [update](MouseController.md#update)
 
 ## Constructors
 
@@ -38,7 +36,7 @@
 
 #### Defined in
 
-[src/input/MouseController.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L13)
+[src/input/MouseController.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L17)
 
 ## Accessors
 
@@ -46,13 +44,15 @@
 
 • `get` **hasMoved**(): `boolean`
 
+TRUE if the mouse moved during the last frame
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/input/MouseController.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L35)
+[src/input/MouseController.ts:59](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L59)
 
 ___
 
@@ -60,13 +60,15 @@ ___
 
 • `get` **leftButtonPressed**(): `boolean`
 
+TRUE if the left button is being pressed
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/input/MouseController.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L19)
+[src/input/MouseController.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L27)
 
 ___
 
@@ -74,13 +76,15 @@ ___
 
 • `get` **positionInViewport**(): [`Vector2`](Vector2.md)
 
+The position of the pointer in the screen view port
+
 #### Returns
 
 [`Vector2`](Vector2.md)
 
 #### Defined in
 
-[src/input/MouseController.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L31)
+[src/input/MouseController.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L51)
 
 ___
 
@@ -88,13 +92,15 @@ ___
 
 • `get` **rightButtonPressed**(): `boolean`
 
+TRUE if the right button is beign pressed
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/input/MouseController.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L27)
+[src/input/MouseController.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L43)
 
 ___
 
@@ -102,24 +108,12 @@ ___
 
 • `get` **scrollButtonPressed**(): `boolean`
 
+TRUE if the scroll button is being pressed
+
 #### Returns
 
 `boolean`
 
 #### Defined in
 
-[src/input/MouseController.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L23)
-
-## Methods
-
-### update
-
-▸ **update**(): `void`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/input/MouseController.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/MouseController.ts#L39)
+[src/input/MouseController.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L35)

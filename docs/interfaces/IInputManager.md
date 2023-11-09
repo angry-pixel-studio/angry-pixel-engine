@@ -23,7 +23,7 @@ Manages gamepads information.
 
 #### Defined in
 
-[src/input/InputManager.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/InputManager.ts#L16)
+[src/input/InputManager.ts:16](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/InputManager.ts#L16)
 
 ___
 
@@ -35,7 +35,7 @@ Manages keyboard information.
 
 #### Defined in
 
-[src/input/InputManager.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/InputManager.ts#L14)
+[src/input/InputManager.ts:14](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/InputManager.ts#L14)
 
 ___
 
@@ -47,7 +47,7 @@ Manages mouse information.
 
 #### Defined in
 
-[src/input/InputManager.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/InputManager.ts#L12)
+[src/input/InputManager.ts:12](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/InputManager.ts#L12)
 
 ___
 
@@ -59,4 +59,4 @@ Manages toush information.
 
 #### Defined in
 
-[src/input/InputManager.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/input/InputManager.ts#L18)
+[src/input/InputManager.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/InputManager.ts#L18)

@@ -108,7 +108,7 @@ RenderComponent.allowMultiple
 
 #### Defined in
 
-[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L52)
+[src/core/Component.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L52)
 
 ___
 
@@ -124,7 +124,7 @@ RenderComponent.assetManager
 
 #### Defined in
 
-[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L29)
+[src/core/GameActor.ts:29](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L29)
 
 ___
 
@@ -140,7 +140,7 @@ RenderComponent.domManager
 
 #### Defined in
 
-[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L31)
+[src/core/GameActor.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L31)
 
 ___
 
@@ -152,7 +152,7 @@ Flip the image horizontally
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L79)
+[src/component/rendering/SpriteRenderer.ts:79](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L79)
 
 ___
 
@@ -164,7 +164,7 @@ Flip the image vertically
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L81)
+[src/component/rendering/SpriteRenderer.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L81)
 
 ___
 
@@ -180,7 +180,7 @@ RenderComponent.gameConfig
 
 #### Defined in
 
-[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L45)
+[src/core/GameActor.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L45)
 
 ___
 
@@ -196,7 +196,7 @@ RenderComponent.gameObject
 
 #### Defined in
 
-[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L50)
+[src/core/Component.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L50)
 
 ___
 
@@ -212,7 +212,7 @@ RenderComponent.gameObjectManager
 
 #### Defined in
 
-[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L35)
+[src/core/GameActor.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L35)
 
 ___
 
@@ -224,7 +224,7 @@ Overwrite the original image height
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L99)
+[src/component/rendering/SpriteRenderer.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L99)
 
 ___
 
@@ -240,7 +240,7 @@ RenderComponent.inputManager
 
 #### Defined in
 
-[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L33)
+[src/core/GameActor.ts:33](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L33)
 
 ___
 
@@ -252,7 +252,7 @@ The render layer
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L93)
+[src/component/rendering/SpriteRenderer.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L93)
 
 ___
 
@@ -264,7 +264,7 @@ Define a mask color for the image
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:87](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L87)
+[src/component/rendering/SpriteRenderer.ts:87](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L87)
 
 ___
 
@@ -276,7 +276,7 @@ Define the opacity of the mask color between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L89)
+[src/component/rendering/SpriteRenderer.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L89)
 
 ___
 
@@ -292,7 +292,7 @@ RenderComponent.name
 
 #### Defined in
 
-[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L48)
+[src/core/Component.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L48)
 
 ___
 
@@ -304,7 +304,7 @@ X-axis and Y-axis offset
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:77](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L77)
+[src/component/rendering/SpriteRenderer.ts:77](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L77)
 
 ___
 
@@ -316,7 +316,7 @@ Change the opacity between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:85](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L85)
+[src/component/rendering/SpriteRenderer.ts:85](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L85)
 
 ___
 
@@ -332,7 +332,7 @@ RenderComponent.physicsManager
 
 #### Defined in
 
-[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L37)
+[src/core/GameActor.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L37)
 
 ___
 
@@ -348,7 +348,7 @@ RenderComponent.renderManager
 
 #### Defined in
 
-[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L39)
+[src/core/GameActor.ts:39](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L39)
 
 ___
 
@@ -360,7 +360,7 @@ Image rotation (degrees or radians)
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:83](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L83)
+[src/component/rendering/SpriteRenderer.ts:83](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L83)
 
 ___
 
@@ -372,7 +372,7 @@ Scale the image based on a vector
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:95](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L95)
+[src/component/rendering/SpriteRenderer.ts:95](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L95)
 
 ___
 
@@ -388,7 +388,7 @@ RenderComponent.sceneManager
 
 #### Defined in
 
-[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L41)
+[src/core/GameActor.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L41)
 
 ___
 
@@ -400,7 +400,7 @@ The sprite to render
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:75](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L75)
+[src/component/rendering/SpriteRenderer.ts:75](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L75)
 
 ___
 
@@ -416,7 +416,7 @@ RenderComponent.timeManager
 
 #### Defined in
 
-[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L43)
+[src/core/GameActor.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L43)
 
 ___
 
@@ -428,7 +428,7 @@ Define a color for tinting the sprite image
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:91](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L91)
+[src/component/rendering/SpriteRenderer.ts:91](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L91)
 
 ___
 
@@ -442,7 +442,7 @@ RenderComponent.updateEvent
 
 #### Defined in
 
-[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L204)
+[src/core/Component.ts:204](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L204)
 
 ___
 
@@ -454,7 +454,7 @@ Overwrite the original image width
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L97)
+[src/component/rendering/SpriteRenderer.ts:97](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L97)
 
 ## Accessors
 
@@ -474,7 +474,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L66)
+[src/core/Component.ts:66](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L66)
 
 • `set` **active**(`active`): `void`
 
@@ -496,7 +496,7 @@ RenderComponent.active
 
 #### Defined in
 
-[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L71)
+[src/core/Component.ts:71](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L71)
 
 ___
 
@@ -512,7 +512,7 @@ Render the image in tiles
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:130](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L130)
+[src/component/rendering/SpriteRenderer.ts:130](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L130)
 
 • `set` **tiled**(`tiled`): `void`
 
@@ -530,7 +530,7 @@ Renders the image in tiles
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:135](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L135)
+[src/component/rendering/SpriteRenderer.ts:135](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L135)
 
 ## Methods
 
@@ -564,7 +564,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L110)
+[src/core/GameActor.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L110)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `name`): `T`
 
@@ -595,7 +595,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L117)
+[src/core/GameActor.ts:117](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L117)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options`): `T`
 
@@ -626,7 +626,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L124)
+[src/core/GameActor.ts:124](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L124)
 
 ▸ **addGameObject**<`T`\>(`gameObjectClass`, `options?`, `name?`): `T`
 
@@ -658,7 +658,7 @@ RenderComponent.addGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L132)
+[src/core/GameActor.ts:132](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L132)
 
 ___
 
@@ -684,7 +684,7 @@ RenderComponent.destroyGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L200)
+[src/core/GameActor.ts:200](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L200)
 
 ___
 
@@ -718,7 +718,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L174)
+[src/core/GameActor.ts:174](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L174)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -748,7 +748,7 @@ RenderComponent.findGameObject
 
 #### Defined in
 
-[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L180)
+[src/core/GameActor.ts:180](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L180)
 
 ___
 
@@ -770,7 +770,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L154)
+[src/core/GameActor.ts:154](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L154)
 
 ▸ **findGameObjects**<`T`\>(`gameObjectClass`): `T`[]
 
@@ -800,7 +800,7 @@ RenderComponent.findGameObjects
 
 #### Defined in
 
-[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L160)
+[src/core/GameActor.ts:160](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L160)
 
 ___
 
@@ -834,7 +834,7 @@ RenderComponent.findGameObjectsByTag
 
 #### Defined in
 
-[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L192)
+[src/core/GameActor.ts:192](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L192)
 
 ___
 
@@ -868,7 +868,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L122)
+[src/core/Component.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L122)
 
 ▸ **getComponent**<`T`\>(`name`): `T`
 
@@ -898,7 +898,7 @@ RenderComponent.getComponent
 
 #### Defined in
 
-[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L128)
+[src/core/Component.ts:128](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L128)
 
 ___
 
@@ -920,7 +920,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L104)
+[src/core/Component.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L104)
 
 ▸ **getComponents**<`T`\>(`componentClass`): `T`[]
 
@@ -950,7 +950,7 @@ RenderComponent.getComponents
 
 #### Defined in
 
-[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L110)
+[src/core/Component.ts:110](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L110)
 
 ___
 
@@ -976,7 +976,7 @@ RenderComponent.getCurrentScene
 
 #### Defined in
 
-[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L89)
+[src/core/Component.ts:89](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L89)
 
 ___
 
@@ -1002,7 +1002,7 @@ RenderComponent.getGameObject
 
 #### Defined in
 
-[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L96)
+[src/core/Component.ts:96](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L96)
 
 ___
 
@@ -1036,7 +1036,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L142)
+[src/core/Component.ts:142](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L142)
 
 ▸ **hasComponent**(`name`): `boolean`
 
@@ -1058,7 +1058,7 @@ RenderComponent.hasComponent
 
 #### Defined in
 
-[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L147)
+[src/core/Component.ts:147](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L147)
 
 ___
 
@@ -1082,7 +1082,7 @@ RenderComponent.init
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L111)
+[src/component/rendering/SpriteRenderer.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L111)
 
 ___
 
@@ -1102,7 +1102,7 @@ RenderComponent.onActiveChange
 
 #### Defined in
 
-[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L82)
+[src/core/Component.ts:82](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L82)
 
 ___
 
@@ -1122,7 +1122,7 @@ RenderComponent.onDestroy
 
 #### Defined in
 
-[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L103)
+[src/core/GameActor.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L103)
 
 ___
 
@@ -1148,7 +1148,7 @@ RenderComponent.removeComponent
 
 #### Defined in
 
-[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/Component.ts#L158)
+[src/core/Component.ts:158](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Component.ts#L158)
 
 ___
 
@@ -1168,7 +1168,7 @@ RenderComponent.start
 
 #### Defined in
 
-[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/GameActor.ts#L93)
+[src/core/GameActor.ts:93](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameActor.ts#L93)
 
 ___
 
@@ -1186,4 +1186,4 @@ RenderComponent.update
 
 #### Defined in
 
-[src/component/rendering/SpriteRenderer.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/rendering/SpriteRenderer.ts#L143)
+[src/component/rendering/SpriteRenderer.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/SpriteRenderer.ts#L143)

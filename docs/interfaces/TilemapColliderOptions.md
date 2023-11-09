@@ -29,7 +29,7 @@ Generate colliders that represent the outer lines of the tile map
 
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/collider/TilemapCollider.ts#L23)
+[src/component/collider/TilemapCollider.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/collider/TilemapCollider.ts#L23)
 
 ___
 
@@ -41,7 +41,7 @@ If debug mode is enabled, the collider shape is rendered using the object's rend
 
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/collider/TilemapCollider.ts#L27)
+[src/component/collider/TilemapCollider.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/collider/TilemapCollider.ts#L27)
 
 ___
 
@@ -53,7 +53,7 @@ Collision layer, if it's not setted, it uses the game object layer
 
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/collider/TilemapCollider.ts#L25)
+[src/component/collider/TilemapCollider.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/collider/TilemapCollider.ts#L25)
 
 ___
 
@@ -65,4 +65,4 @@ TilemapRenderer from which the tiles information will be obtained to generate th
 
 #### Defined in
 
-[src/component/collider/TilemapCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/component/collider/TilemapCollider.ts#L21)
+[src/component/collider/TilemapCollider.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/collider/TilemapCollider.ts#L21)

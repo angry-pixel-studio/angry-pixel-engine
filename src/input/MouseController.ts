@@ -1,5 +1,9 @@
 import { Vector2 } from "angry-pixel-math";
 
+/**
+ * Manages mouse interaction
+ * @public
+ */
 export class MouseController {
     private _leftButtonPressed: boolean = false;
     private _scrollButtonPressed: boolean = false;
@@ -16,26 +20,47 @@ export class MouseController {
         this.setup();
     }
 
+    /**
+     * TRUE if the left button is being pressed
+     * @readonly
+     */
     public get leftButtonPressed(): boolean {
         return this._leftButtonPressed;
     }
 
+    /**
+     * TRUE if the scroll button is being pressed
+     * @readonly
+     */
     public get scrollButtonPressed(): boolean {
         return this._scrollButtonPressed;
     }
 
+    /**
+     * TRUE if the right button is beign pressed
+     * @readonly
+     */
     public get rightButtonPressed(): boolean {
         return this._rightButtonPressed;
     }
 
+    /**
+     * The position of the pointer in the screen view port
+     * @readonly
+     */
     public get positionInViewport(): Vector2 {
         return this._positionInViewport;
     }
 
+    /**
+     * TRUE if the mouse moved during the last frame
+     * @readonly
+     */
     public get hasMoved(): boolean {
         return this._hasMoved;
     }
 
+    /** @private */
     public update(): void {
         if (this._positionInViewport.equals(this.lastPositionInViewport) === false) {
             this._hasMoved = true;

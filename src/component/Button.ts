@@ -146,7 +146,7 @@ export class Button extends EngineComponent {
 
     protected resolveMouseAndRectangle(): void {
         if (this.type === ButtonType.Rectangle) {
-            this.pressed ||=
+            this.pressed =
                 between(
                     this.mouse.positionInViewport.x,
                     this.position.x - this.scaled.width / 2,
@@ -163,24 +163,32 @@ export class Button extends EngineComponent {
     protected resolveMouseAndCircumference(): void {
         if (this.type === ButtonType.Circumference) {
             Vector2.subtract(this.distance, this.position, this.mouse.positionInViewport);
-            this.pressed ||= this.distance.magnitude <= this.scaled.radius;
+            this.pressed = this.distance.magnitude <= this.scaled.radius;
         }
     }
 
     protected resolveTouchAndRectangle(): void {
         if (this.type === ButtonType.Rectangle) {
-            this.pressed ||=
-                this.position.x + this.scaled.width / 2 >= this.touch.positionInViewport.x - this.touch.radius.x &&
-                this.position.x - this.scaled.width / 2 <= this.touch.positionInViewport.x + this.touch.radius.x &&
-                this.position.y + this.scaled.height / 2 >= this.touch.positionInViewport.y - this.touch.radius.y &&
-                this.position.y - this.scaled.height / 2 <= this.touch.positionInViewport.y + this.touch.radius.y;
+            for (const { positionInViewport, radius } of this.touch.interactions) {
+                if (this.pressed) return;
+
+                this.pressed =
+                    this.position.x + this.scaled.width / 2 >= positionInViewport.x - radius.x &&
+                    this.position.x - this.scaled.width / 2 <= positionInViewport.x + radius.x &&
+                    this.position.y + this.scaled.height / 2 >= positionInViewport.y - radius.y &&
+                    this.position.y - this.scaled.height / 2 <= positionInViewport.y + radius.y;
+            }
         }
     }
 
     protected resolveTouchAndCircumference(): void {
         if (this.type === ButtonType.Circumference) {
-            Vector2.subtract(this.distance, this.position, this.touch.positionInViewport);
-            this.pressed ||= this.distance.magnitude <= this.scaled.radius + this.touch.radius.x;
+            for (const { positionInViewport, radius } of this.touch.interactions) {
+                if (this.pressed) return;
+
+                Vector2.subtract(this.distance, this.position, positionInViewport);
+                this.pressed = this.distance.magnitude <= this.scaled.radius + Math.max(radius.x, radius.y);
+            }
         }
     }
 }

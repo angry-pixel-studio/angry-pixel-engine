@@ -49,7 +49,7 @@ The game object instance.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L19)
+[src/core/managers/GameObjectManager.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L19)
 
 ___
 
@@ -71,7 +71,7 @@ Destroy all game objets.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L81)
+[src/core/managers/GameObjectManager.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L81)
 
 ___
 
@@ -93,7 +93,7 @@ Destroy the given game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L86)
+[src/core/managers/GameObjectManager.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L86)
 
 ___
 
@@ -123,7 +123,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L42)
+[src/core/managers/GameObjectManager.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L42)
 
 ▸ **findGameObject**<`T`\>(`name`): `T`
 
@@ -149,7 +149,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L48)
+[src/core/managers/GameObjectManager.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L48)
 
 ▸ **findGameObject**<`T`\>(`filter`): `T`
 
@@ -171,7 +171,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L49)
+[src/core/managers/GameObjectManager.ts:49](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L49)
 
 ___
 
@@ -201,7 +201,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L36)
+[src/core/managers/GameObjectManager.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L36)
 
 ___
 
@@ -232,7 +232,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:62](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L62)
+[src/core/managers/GameObjectManager.ts:62](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L62)
 
 ▸ **findGameObjectByParent**<`T`\>(`parent`, `name`): `T`
 
@@ -259,7 +259,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:69](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L69)
+[src/core/managers/GameObjectManager.ts:69](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L69)
 
 ▸ **findGameObjectByParent**<`T`\>(`parent`, `filter`): `T`
 
@@ -282,7 +282,7 @@ The found game object.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:70](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L70)
+[src/core/managers/GameObjectManager.ts:70](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L70)
 
 ___
 
@@ -312,7 +312,7 @@ The found game objects.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L30)
+[src/core/managers/GameObjectManager.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L30)
 
 ___
 
@@ -342,7 +342,7 @@ The found game objects.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:55](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L55)
+[src/core/managers/GameObjectManager.ts:55](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L55)
 
 ___
 
@@ -372,4 +372,4 @@ The found game objects.
 
 #### Defined in
 
-[src/core/managers/GameObjectManager.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/8704b49/src/core/managers/GameObjectManager.ts#L76)
+[src/core/managers/GameObjectManager.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/managers/GameObjectManager.ts#L76)
