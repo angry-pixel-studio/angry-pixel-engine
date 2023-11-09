@@ -14,6 +14,7 @@ export class MouseController {
     private lastPositionInViewport: Vector2 = new Vector2(0, 0);
     private canvas: HTMLCanvasElement;
 
+    /** @private */
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
 

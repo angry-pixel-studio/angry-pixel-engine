@@ -45,6 +45,9 @@ export class Sprite {
     private _height: number = null;
     private _loaded: boolean = false;
 
+    /**
+     * @param config The sprite configuration options
+     */
     constructor(config: SpriteConfig) {
         this.image = config.image;
         this.smooth = config.smooth ?? false;

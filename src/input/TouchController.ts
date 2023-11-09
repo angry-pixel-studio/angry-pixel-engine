@@ -20,6 +20,7 @@ export class TouchController {
     private _touching: boolean = false;
     private _interactions: TouchInteraction[] = [];
 
+    /** @private */
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
 

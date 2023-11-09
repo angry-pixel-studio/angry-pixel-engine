@@ -46,6 +46,7 @@ export abstract class GameActor {
 
     private started: boolean = false;
 
+    /** @private */
     constructor(container: Container) {
         this.container = container;
 

@@ -7,6 +7,7 @@ import { Vector2 } from "angry-pixel-math";
 export class GamepadController {
     private readonly gamepads: Map<number, GamepadData> = new Map<number, GamepadData>();
 
+    /** @private */
     constructor() {
         // @ts-ignore
         window.addEventListener("gamepadconnected", this.eventHandler);
