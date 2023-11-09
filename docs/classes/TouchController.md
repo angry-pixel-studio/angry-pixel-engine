@@ -6,34 +6,10 @@ Manages the touch screen interaction.
 
 ## Table of contents
 
-### Constructors
-
-- [constructor](TouchController.md#constructor)
-
 ### Accessors
 
 - [interactions](TouchController.md#interactions)
 - [touching](TouchController.md#touching)
-
-## Constructors
-
-### constructor
-
-• **new TouchController**(`canvas`): [`TouchController`](TouchController.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `canvas` | `HTMLCanvasElement` |
-
-#### Returns
-
-[`TouchController`](TouchController.md)
-
-#### Defined in
-
-[src/input/TouchController.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L23)
 
 ## Accessors
 
@@ -49,7 +25,7 @@ The information about the interactions with the screen
 
 #### Defined in
 
-[src/input/TouchController.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L44)
+[src/input/TouchController.ts:45](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/TouchController.ts#L45)
 
 ___
 
@@ -65,4 +41,4 @@ TRUE if there is an interaction with the screen
 
 #### Defined in
 
-[src/input/TouchController.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L36)
+[src/input/TouchController.ts:37](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/TouchController.ts#L37)

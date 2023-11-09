@@ -6,28 +6,10 @@ Manages the connected gamepads
 
 ## Table of contents
 
-### Constructors
-
-- [constructor](GamepadController.md#constructor)
-
 ### Methods
 
 - [getGamepad](GamepadController.md#getgamepad)
 - [getGamepads](GamepadController.md#getgamepads)
-
-## Constructors
-
-### constructor
-
-• **new GamepadController**(): [`GamepadController`](GamepadController.md)
-
-#### Returns
-
-[`GamepadController`](GamepadController.md)
-
-#### Defined in
-
-[src/input/GamepadController.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L10)
 
 ## Methods
 
@@ -51,7 +33,7 @@ The found gamepad or NULL
 
 #### Defined in
 
-[src/input/GamepadController.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L22)
+[src/input/GamepadController.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L23)
 
 ___
 
@@ -69,4 +51,4 @@ An array of gamepads
 
 #### Defined in
 
-[src/input/GamepadController.ts:30](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L30)
+[src/input/GamepadController.ts:31](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L31)

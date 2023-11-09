@@ -31,7 +31,7 @@ Height in pixels. Only for rectangle shaped buttons
 
 #### Defined in
 
-[src/component/Button.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L22)
+[src/component/Button.ts:22](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L22)
 
 ___
 
@@ -43,7 +43,7 @@ X-axis and Y-axis offset
 
 #### Defined in
 
-[src/component/Button.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L28)
+[src/component/Button.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L28)
 
 ___
 
@@ -55,7 +55,7 @@ Radius in pixels. Only for circumference shaped buttons
 
 #### Defined in
 
-[src/component/Button.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L24)
+[src/component/Button.ts:24](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L24)
 
 ___
 
@@ -67,7 +67,7 @@ Enables interaction with touch screens
 
 #### Defined in
 
-[src/component/Button.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L26)
+[src/component/Button.ts:26](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L26)
 
 ___
 
@@ -79,7 +79,7 @@ The shape of the button
 
 #### Defined in
 
-[src/component/Button.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L18)
+[src/component/Button.ts:18](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L18)
 
 ___
 
@@ -91,4 +91,4 @@ Width in pixels. Only for rectangle shaped buttons
 
 #### Defined in
 
-[src/component/Button.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L20)
+[src/component/Button.ts:20](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L20)

@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[src/core/Scene.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/Scene.ts#L6)
+[src/core/Scene.ts:6](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/core/Scene.ts#L6)
 
 ## Variables
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[src/core/GameObject.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/core/GameObject.ts#L10)
+[src/core/GameObject.ts:10](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/core/GameObject.ts#L10)
 
 ## Functions
 

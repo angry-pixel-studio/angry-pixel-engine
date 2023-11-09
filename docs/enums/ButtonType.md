@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[src/component/Button.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L9)
+[src/component/Button.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L9)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[src/component/Button.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/Button.ts#L8)
+[src/component/Button.ts:8](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/Button.ts#L8)

@@ -10,10 +10,6 @@ Manages keyboard interaction. It uses the **code** property of the **js keyboard
 
 ## Table of contents
 
-### Constructors
-
-- [constructor](KeyboardController.md#constructor)
-
 ### Properties
 
 - [pressedKeys](KeyboardController.md#pressedkeys)
@@ -27,26 +23,6 @@ Manages keyboard interaction. It uses the **code** property of the **js keyboard
 - [orPressed](KeyboardController.md#orpressed)
 - [orPressedReturn](KeyboardController.md#orpressedreturn)
 
-## Constructors
-
-### constructor
-
-• **new KeyboardController**(`canvas`): [`KeyboardController`](KeyboardController.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `canvas` | `HTMLCanvasElement` |
-
-#### Returns
-
-[`KeyboardController`](KeyboardController.md)
-
-#### Defined in
-
-[src/input/KeyboardController.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L15)
-
 ## Properties
 
 ### pressedKeys
@@ -57,7 +33,7 @@ The current pressed keys
 
 #### Defined in
 
-[src/input/KeyboardController.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L11)
+[src/input/KeyboardController.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L11)
 
 ## Methods
 
@@ -85,7 +61,7 @@ TRUE for pressed, FALSE instead
 
 #### Defined in
 
-[src/input/KeyboardController.ts:60](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L60)
+[src/input/KeyboardController.ts:61](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L61)
 
 ___
 
@@ -121,7 +97,7 @@ The returnTrue for pressed or the returnFalse instead
 
 #### Defined in
 
-[src/input/KeyboardController.ts:98](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L98)
+[src/input/KeyboardController.ts:99](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L99)
 
 ___
 
@@ -149,7 +125,7 @@ TRUE true for pressed, FALSE instead
 
 #### Defined in
 
-[src/input/KeyboardController.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L40)
+[src/input/KeyboardController.ts:41](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L41)
 
 ___
 
@@ -185,7 +161,7 @@ The returnTrue for pressed or the returnFalse instead
 
 #### Defined in
 
-[src/input/KeyboardController.ts:72](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L72)
+[src/input/KeyboardController.ts:73](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L73)
 
 ___
 
@@ -213,7 +189,7 @@ TRUE for pressed, FALSE instead
 
 #### Defined in
 
-[src/input/KeyboardController.ts:50](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L50)
+[src/input/KeyboardController.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L51)
 
 ___
 
@@ -249,4 +225,4 @@ The returnTrue for pressed or the returnFalse instead
 
 #### Defined in
 
-[src/input/KeyboardController.ts:84](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/KeyboardController.ts#L84)
+[src/input/KeyboardController.ts:85](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/KeyboardController.ts#L85)

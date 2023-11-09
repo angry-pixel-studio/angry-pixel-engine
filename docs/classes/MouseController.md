@@ -6,10 +6,6 @@ Manages mouse interaction
 
 ## Table of contents
 
-### Constructors
-
-- [constructor](MouseController.md#constructor)
-
 ### Accessors
 
 - [hasMoved](MouseController.md#hasmoved)
@@ -17,26 +13,6 @@ Manages mouse interaction
 - [positionInViewport](MouseController.md#positioninviewport)
 - [rightButtonPressed](MouseController.md#rightbuttonpressed)
 - [scrollButtonPressed](MouseController.md#scrollbuttonpressed)
-
-## Constructors
-
-### constructor
-
-• **new MouseController**(`canvas`): [`MouseController`](MouseController.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `canvas` | `HTMLCanvasElement` |
-
-#### Returns
-
-[`MouseController`](MouseController.md)
-
-#### Defined in
-
-[src/input/MouseController.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L17)
 
 ## Accessors
 
@@ -52,7 +28,7 @@ TRUE if the mouse moved during the last frame
 
 #### Defined in
 
-[src/input/MouseController.ts:59](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L59)
+[src/input/MouseController.ts:60](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/MouseController.ts#L60)
 
 ___
 
@@ -68,7 +44,7 @@ TRUE if the left button is being pressed
 
 #### Defined in
 
-[src/input/MouseController.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L27)
+[src/input/MouseController.ts:28](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/MouseController.ts#L28)
 
 ___
 
@@ -84,7 +60,7 @@ The position of the pointer in the screen view port
 
 #### Defined in
 
-[src/input/MouseController.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L51)
+[src/input/MouseController.ts:52](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/MouseController.ts#L52)
 
 ___
 
@@ -100,7 +76,7 @@ TRUE if the right button is beign pressed
 
 #### Defined in
 
-[src/input/MouseController.ts:43](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L43)
+[src/input/MouseController.ts:44](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/MouseController.ts#L44)
 
 ___
 
@@ -116,4 +92,4 @@ TRUE if the scroll button is being pressed
 
 #### Defined in
 
-[src/input/MouseController.ts:35](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/MouseController.ts#L35)
+[src/input/MouseController.ts:36](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/MouseController.ts#L36)

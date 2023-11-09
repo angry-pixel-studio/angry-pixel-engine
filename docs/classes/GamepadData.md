@@ -70,7 +70,7 @@ TRUE if any button is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:330](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L330)
+[src/input/GamepadController.ts:331](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L331)
 
 ___
 
@@ -86,7 +86,7 @@ TRUE if back button is pressed (a.k.a. select button)
 
 #### Defined in
 
-[src/input/GamepadController.ts:266](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L266)
+[src/input/GamepadController.ts:267](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L267)
 
 ___
 
@@ -102,7 +102,7 @@ TRUE if bottom face button is pressed (Dual Shock: X. Xbox: A. Nintendo: B)
 
 #### Defined in
 
-[src/input/GamepadController.ts:202](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L202)
+[src/input/GamepadController.ts:203](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L203)
 
 ___
 
@@ -118,7 +118,7 @@ TRUE if the gamepad is connected
 
 #### Defined in
 
-[src/input/GamepadController.ts:111](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L111)
+[src/input/GamepadController.ts:112](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L112)
 
 ___
 
@@ -134,7 +134,7 @@ The values of the d-pad axes represented as a xy vector
 
 #### Defined in
 
-[src/input/GamepadController.ts:143](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L143)
+[src/input/GamepadController.ts:144](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L144)
 
 ___
 
@@ -150,7 +150,7 @@ TRUE if d-pad down is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:178](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L178)
+[src/input/GamepadController.ts:179](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L179)
 
 ___
 
@@ -166,7 +166,7 @@ TRUE if d-pad left is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:186](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L186)
+[src/input/GamepadController.ts:187](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L187)
 
 ___
 
@@ -182,7 +182,7 @@ TRUE if d-pad right is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:194](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L194)
+[src/input/GamepadController.ts:195](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L195)
 
 ___
 
@@ -198,7 +198,7 @@ TRUE if d-pad up is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:170](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L170)
+[src/input/GamepadController.ts:171](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L171)
 
 ___
 
@@ -214,7 +214,7 @@ The gamepad id
 
 #### Defined in
 
-[src/input/GamepadController.ts:103](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L103)
+[src/input/GamepadController.ts:104](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L104)
 
 ___
 
@@ -230,7 +230,7 @@ TRUE if left face button is pressed (Dual Shock: Circle. Xbox: B. Nintendo: A)
 
 #### Defined in
 
-[src/input/GamepadController.ts:218](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L218)
+[src/input/GamepadController.ts:219](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L219)
 
 ___
 
@@ -246,7 +246,7 @@ TRUE if left shoulder button is pressed (Dual Shock: L1. Xbox: LB. Nintendo: L)
 
 #### Defined in
 
-[src/input/GamepadController.ts:234](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L234)
+[src/input/GamepadController.ts:235](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L235)
 
 ___
 
@@ -262,7 +262,7 @@ The values of the left stick axes represented as a xy vector
 
 #### Defined in
 
-[src/input/GamepadController.ts:152](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L152)
+[src/input/GamepadController.ts:153](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L153)
 
 ___
 
@@ -278,7 +278,7 @@ TRUE if left stick button is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:282](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L282)
+[src/input/GamepadController.ts:283](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L283)
 
 ___
 
@@ -294,7 +294,7 @@ Left stick horizontal axes value
 
 #### Defined in
 
-[src/input/GamepadController.ts:298](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L298)
+[src/input/GamepadController.ts:299](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L299)
 
 ___
 
@@ -310,7 +310,7 @@ Left stick vertical axes value
 
 #### Defined in
 
-[src/input/GamepadController.ts:306](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L306)
+[src/input/GamepadController.ts:307](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L307)
 
 ___
 
@@ -326,7 +326,7 @@ TRUE if left trigger button is pressed (Dual Shock: L2. Xbox: LT. Nintendo: ZL)
 
 #### Defined in
 
-[src/input/GamepadController.ts:250](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L250)
+[src/input/GamepadController.ts:251](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L251)
 
 ___
 
@@ -342,7 +342,7 @@ TRUE if right face button is pressed (Dual Shock: Square. Xbox: X. Nintendo: Y)
 
 #### Defined in
 
-[src/input/GamepadController.ts:210](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L210)
+[src/input/GamepadController.ts:211](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L211)
 
 ___
 
@@ -358,7 +358,7 @@ TRUE if right shoulder button is pressed (Dual Shock: R1. Xbox: RB. Nintendo: R)
 
 #### Defined in
 
-[src/input/GamepadController.ts:242](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L242)
+[src/input/GamepadController.ts:243](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L243)
 
 ___
 
@@ -374,7 +374,7 @@ The values of the right stick axes represented as a xy vector
 
 #### Defined in
 
-[src/input/GamepadController.ts:161](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L161)
+[src/input/GamepadController.ts:162](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L162)
 
 ___
 
@@ -390,7 +390,7 @@ TRUE if right stick button is pressed
 
 #### Defined in
 
-[src/input/GamepadController.ts:290](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L290)
+[src/input/GamepadController.ts:291](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L291)
 
 ___
 
@@ -406,7 +406,7 @@ Right stick horizontal axes value
 
 #### Defined in
 
-[src/input/GamepadController.ts:314](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L314)
+[src/input/GamepadController.ts:315](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L315)
 
 ___
 
@@ -422,7 +422,7 @@ Right stick vertical axes value
 
 #### Defined in
 
-[src/input/GamepadController.ts:322](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L322)
+[src/input/GamepadController.ts:323](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L323)
 
 ___
 
@@ -438,7 +438,7 @@ TRUE if right trigger button is pressed (Dual Shock: R2. Xbox: RT. Nintendo: ZR)
 
 #### Defined in
 
-[src/input/GamepadController.ts:258](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L258)
+[src/input/GamepadController.ts:259](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L259)
 
 ___
 
@@ -454,7 +454,7 @@ TRUE if start button is pressed (a.k.a. options button)
 
 #### Defined in
 
-[src/input/GamepadController.ts:274](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L274)
+[src/input/GamepadController.ts:275](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L275)
 
 ___
 
@@ -470,7 +470,7 @@ TRUE if top face button is pressed (Dual Shock: Triangle. Xbox: Y. Nintendo: X)
 
 #### Defined in
 
-[src/input/GamepadController.ts:226](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L226)
+[src/input/GamepadController.ts:227](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L227)
 
 ___
 
@@ -486,7 +486,7 @@ TRUE if the vibration is on
 
 #### Defined in
 
-[src/input/GamepadController.ts:338](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L338)
+[src/input/GamepadController.ts:339](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L339)
 
 ## Methods
 
@@ -514,7 +514,7 @@ The axis value
 
 #### Defined in
 
-[src/input/GamepadController.ts:135](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L135)
+[src/input/GamepadController.ts:136](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L136)
 
 ___
 
@@ -542,7 +542,7 @@ TRUE if the button is pressed, FALSE instead
 
 #### Defined in
 
-[src/input/GamepadController.ts:121](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L121)
+[src/input/GamepadController.ts:122](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L122)
 
 ___
 
@@ -567,4 +567,4 @@ Turns on the gamepad vibration
 
 #### Defined in
 
-[src/input/GamepadController.ts:349](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/GamepadController.ts#L349)
+[src/input/GamepadController.ts:350](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/GamepadController.ts#L350)

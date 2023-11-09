@@ -46,9 +46,9 @@ const sprite = new Sprite({
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `config` | [`SpriteConfig`](../interfaces/SpriteConfig.md) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `config` | [`SpriteConfig`](../interfaces/SpriteConfig.md) | The sprite configuration options |
 
 #### Returns
 
@@ -56,7 +56,7 @@ const sprite = new Sprite({
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:48](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L48)
+[src/component/rendering/Sprite.ts:51](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L51)
 
 ## Properties
 
@@ -68,7 +68,7 @@ The image element to render
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L38)
+[src/component/rendering/Sprite.ts:38](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L38)
 
 ___
 
@@ -80,7 +80,7 @@ Cut the image based on straight coordinates starting from the top left downward
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L40)
+[src/component/rendering/Sprite.ts:40](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L40)
 
 ___
 
@@ -92,7 +92,7 @@ Smoothing pixels (not recommended for pixel art)
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L42)
+[src/component/rendering/Sprite.ts:42](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L42)
 
 ## Accessors
 
@@ -108,7 +108,7 @@ The image height
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:78](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L78)
+[src/component/rendering/Sprite.ts:81](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L81)
 
 ___
 
@@ -124,7 +124,7 @@ TRUE if the image is loaded
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:83](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L83)
+[src/component/rendering/Sprite.ts:86](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L86)
 
 ___
 
@@ -140,4 +140,4 @@ The image width
 
 #### Defined in
 
-[src/component/rendering/Sprite.ts:73](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/Sprite.ts#L73)
+[src/component/rendering/Sprite.ts:76](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/Sprite.ts#L76)

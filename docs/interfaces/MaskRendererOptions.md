@@ -26,7 +26,7 @@ The color of the mask
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L15)
+[src/component/rendering/MaskRenderer.ts:15](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L15)
 
 ___
 
@@ -38,7 +38,7 @@ Mask height in pixels
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L13)
+[src/component/rendering/MaskRenderer.ts:13](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L13)
 
 ___
 
@@ -50,7 +50,7 @@ The render layer
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L23)
+[src/component/rendering/MaskRenderer.ts:23](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L23)
 
 ___
 
@@ -62,7 +62,7 @@ X-axis and Y-axis offset
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L17)
+[src/component/rendering/MaskRenderer.ts:17](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L17)
 
 ___
 
@@ -74,7 +74,7 @@ Change the opacity between 1 and 0
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L21)
+[src/component/rendering/MaskRenderer.ts:21](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L21)
 
 ___
 
@@ -86,7 +86,7 @@ Mask rotation (degrees or radians)
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L19)
+[src/component/rendering/MaskRenderer.ts:19](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L19)
 
 ___
 
@@ -98,4 +98,4 @@ Mask width in pixels
 
 #### Defined in
 
-[src/component/rendering/MaskRenderer.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/rendering/MaskRenderer.ts#L11)
+[src/component/rendering/MaskRenderer.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/rendering/MaskRenderer.ts#L11)

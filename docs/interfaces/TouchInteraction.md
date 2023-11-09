@@ -21,7 +21,7 @@ The interaction position on the screen
 
 #### Defined in
 
-[src/input/TouchController.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L9)
+[src/input/TouchController.ts:9](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/TouchController.ts#L9)
 
 ___
 
@@ -33,4 +33,4 @@ The area of the interaction represented as a radius of the ellipse
 
 #### Defined in
 
-[src/input/TouchController.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/input/TouchController.ts#L11)
+[src/input/TouchController.ts:11](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/input/TouchController.ts#L11)

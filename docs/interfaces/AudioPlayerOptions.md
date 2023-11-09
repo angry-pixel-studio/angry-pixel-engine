@@ -27,7 +27,7 @@ AudioPlayer configuration options
 
 #### Defined in
 
-[src/component/AudioPlayer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/AudioPlayer.ts#L27)
+[src/component/AudioPlayer.ts:27](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/AudioPlayer.ts#L27)
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 #### Defined in
 
-[src/component/AudioPlayer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/9576100/src/component/AudioPlayer.ts#L25)
+[src/component/AudioPlayer.ts:25](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/93d7d6a/src/component/AudioPlayer.ts#L25)
