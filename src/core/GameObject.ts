@@ -7,6 +7,7 @@ import { FrameEvent } from "./managers/IterationManager";
 import { GameActor, InitOptions } from "./GameActor";
 import { Container } from "../utils/Container";
 
+/** @private */
 export const LAYER_DEFAULT = "Default";
 
 /** @private */
@@ -20,6 +21,7 @@ export type GameObjectClass<T extends GameObject = GameObject> = new (
 /**
  * Base class for all objects in the scene.
  * @public
+ * @category Core
  * @example
  * ```js
  * class Player extends GameObject {

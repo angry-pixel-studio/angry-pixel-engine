@@ -2,6 +2,23 @@
  * Manages keyboard interaction. It uses the **code** property of the **js keyboard event**.
  * @see [KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
  * @public
+ * @category Input
+ * @example
+ * ```js
+ * const keyboard = this.inputManager.keyboard;
+ *
+ * if (keyboard.isPressed("ArrowRight")) {
+ *   // if the right arrow key is pressed, do some action
+ * }
+ *
+ * if (keyboard.orPressed("Enter", "Space")) {
+ *   // if the enter key or space key are pressed, do some action
+ * }
+ *
+ * if (keyboard.andPressed("ControlLeft", "KeyC")) {
+ *   // if the left control key and the letter C key are pressed, do some action
+ * }
+ * ```
  */
 export class KeyboardController {
     /**

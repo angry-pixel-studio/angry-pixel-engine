@@ -15,6 +15,7 @@ import { ICollider, Line, Polygon, Rectangle } from "angry-pixel-2d-physics";
 /**
  * TilemapCollider configuration options
  * @public
+ * @category Components
  */
 export interface TilemapColliderOptions extends InitOptions {
     /** TilemapRenderer from which the tiles information will be obtained to generate the colliders */
@@ -30,6 +31,7 @@ export interface TilemapColliderOptions extends InitOptions {
 /**
  * Generates rectanble colliders for the map edge tiles (or lines if composite is TRUE).
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(TilemapCollider, {

@@ -6,6 +6,14 @@ import { TouchController } from "./TouchController";
 /**
  * Manages the input sources: Keyboard, Mouse, Gamepad, Touch.
  * @public
+ * @category Managers
+ * @example
+ * ```js
+ * const mouseController = this.inputManager.mouse;
+ * const keyboardController = this.inputManager.keyboard;
+ * const gamepadController = this.inputManager.gamepad;
+ * const touchController = this.inputManager.touch;
+ * ```
  */
 export interface IInputManager {
     /** Manages mouse information. */

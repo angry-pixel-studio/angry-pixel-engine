@@ -3,6 +3,7 @@ import { Vector2 } from "angry-pixel-math";
 /**
  * The information about one interaction with the screen
  * @public
+ * @category Input
  */
 export interface TouchInteraction {
     /** The interaction position on the screen */
@@ -14,6 +15,16 @@ export interface TouchInteraction {
 /**
  * Manages the touch screen interaction.
  * @public
+ * @category Input
+ * @example
+ * ```js
+ * const touch = this.inputController.touch;
+ *
+ * if (touch.touching) {
+ *   const interaction = touch.interactions[0];
+ * }
+ *
+ * ```
  */
 export class TouchController {
     private canvas: HTMLCanvasElement;

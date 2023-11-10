@@ -7,6 +7,7 @@ export { TilemapOrientation };
 /**
  * Tileset configuration to be used with the TilemapRenderer
  * @public
+ * @category Components
  */
 export interface Tileset {
     /** The tileset image element */
@@ -26,6 +27,7 @@ export interface Tileset {
 /**
  * TilemapRenderer configuration options
  * @public
+ * @category Components
  */
 export interface TilemapRendererOptions {
     /** Id of tiles separated by commas. The ids start at 1, and increment from left to right,
@@ -68,6 +70,7 @@ export interface ITilemapRenderer {
 /**
  * The TilemapRenderer component allows you to render a tile map defined by an array of tile ids, using an instance of the TileSet object.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(TilemapRenderer, {

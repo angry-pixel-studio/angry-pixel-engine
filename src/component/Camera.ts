@@ -9,6 +9,7 @@ const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
 /**
  * The Camera component is used to organize the rendering order by layers and to manage the general zooming of these layers.
  * @public
+ * @category Components
  * @example
  * ```js
  * const camera = this.addComponent(Camera);

@@ -7,6 +7,7 @@ import { GameCamera } from "./GameCamera";
  * The coordinates are expressed as an xy vector in the browser console.
  * It is a useful tool to know where to position objects.
  * @public
+ * @category Game Objects
  */
 export class SpacePointer extends GameObject {
     private camera: GameCamera;

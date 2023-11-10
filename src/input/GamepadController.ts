@@ -3,6 +3,15 @@ import { Vector2 } from "angry-pixel-math";
 /**
  * Manages the connected gamepads
  * @public
+ * @category Input
+ * @example
+ * ```js
+ * // get all connected gamepads
+ * const gamepads = this.inputManager.gamepad.getGamepads();
+ *
+ * // get the first connected gamepad
+ * const gamepad = this.inputManager.gamepad.getGamepad(0);
+ * ```
  */
 export class GamepadController {
     private readonly gamepads: Map<number, GamepadData> = new Map<number, GamepadData>();
@@ -78,6 +87,19 @@ export class GamepadController {
 /**
  * Represents a connected gamepad and has the information of all its buttons and axes.
  * @public
+ * @category Input
+ * @example
+ * ```js
+ * const gamepad = this.inputManager.gamepad.getGamepad(0);
+ *
+ * if (gamepad.dpadAxes.x > 1) {
+ *   // if the depad x-axis is pressed to the right, do some action
+ * }
+ *
+ * if (gamepad.rightFace) {
+ *   // if the right face button is pressed, do some action
+ * }
+ * ```
  */
 export class GamepadData {
     private _gamepad: Gamepad;

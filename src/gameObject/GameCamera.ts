@@ -6,6 +6,7 @@ import { Rectangle } from "angry-pixel-math";
  * This GameCamera object is automatically added to all scenes, but it also allows
  * new instances of it to be created, for example, to generate parallax effects.
  * @public
+ * @category Game Objects
  */
 export class GameCamera extends GameObject {
     /** The Camera component instance */

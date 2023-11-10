@@ -4,6 +4,7 @@ import { MouseController } from "../input/MouseController";
 import { TouchController } from "../input/TouchController";
 import { between, Vector2 } from "angry-pixel-math";
 
+/** @category Components */
 export enum ButtonType {
     Rectangle,
     Circumference,
@@ -12,6 +13,7 @@ export enum ButtonType {
 /**
  * Button configuration options
  * @public
+ * @category Components
  */
 export interface ButtonOptions extends InitOptions {
     /** The shape of the button */
@@ -31,6 +33,7 @@ export interface ButtonOptions extends InitOptions {
 /**
  * The Button component is used to interact with the mouse and touch screens.
  * @public
+ * @category Components
  * @example
  * ```js
  * cosnt button = this.addComponent(Button, {

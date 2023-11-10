@@ -13,7 +13,7 @@
         "lint-and-fix": "eslint . --ext .ts --fix",
         "prettier-format": "prettier --write \"src/**/*.{ts,js,css,html}\"",
         "prettier-check": "prettier --check \"src/**/*.{ts,js,css,html}\"",
-        "docs": "typedoc --excludePrivate --plugin typedoc-plugin-markdown --out docs  src/index.ts"
+        "docs": "typedoc"
     },
     "repository": {
         "type": "git",
@@ -40,9 +40,9 @@
         "@rollup/plugin-commonjs": "^19.0.0",
         "@rollup/plugin-node-resolve": "^13.0.0",
         "@types/node": "^20.8.9",
-        "@typescript-eslint/eslint-plugin": "^5.50.0",
-        "@typescript-eslint/parser": "^5.50.0",
-        "eslint": "^8.45.0",
+        "@typescript-eslint/eslint-plugin": "^6.10.0",
+        "@typescript-eslint/parser": "^6.10.0",
+        "eslint": "^8.53.0",
         "prettier": "^2.1.2",
         "rollup": "^2.49.0",
         "rollup-plugin-terser": "^7.0.2",

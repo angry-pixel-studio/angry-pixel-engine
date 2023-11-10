@@ -7,6 +7,7 @@ import { CollisionMethods, Rectangle } from "angry-pixel-2d-physics";
 /**
  * BoxCollider configuration options
  * @public
+ * @category Components
  */
 export interface BoxColliderOptions extends InitOptions {
     /** Width of the rectangle in pixels */
@@ -30,6 +31,7 @@ export interface BoxColliderOptions extends InitOptions {
 /**
  * Rectangle shaped collider for 2d collisions.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(BoxCollider, {

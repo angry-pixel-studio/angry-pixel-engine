@@ -9,6 +9,7 @@ import { CollisionMethods, ICollider, Polygon } from "angry-pixel-2d-physics";
 /**
  * PolygonCollider configuration options
  * @public
+ * @category Components
  */
 export interface PolygonColliderOptions extends InitOptions {
     /** Collection of 2d vectors representing the vertices of the collider */
@@ -30,6 +31,7 @@ export interface PolygonColliderOptions extends InitOptions {
 /**
  * Polygon shaped Collider for 2d collisions. Only convex polygons are allowed.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(PolygonCollider, {

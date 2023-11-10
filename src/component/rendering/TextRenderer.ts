@@ -8,6 +8,7 @@ export { TextOrientation };
 /**
  * TextRenderer configuration options.
  * @public
+ * @category Components
  */
 export interface TextRendererOptions {
     /** The text to render */
@@ -49,6 +50,7 @@ export interface TextRendererOptions {
 /**
  * The TextRenderer component allows to render text using font families, colors, and other configuration options.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(TextRenderer, {

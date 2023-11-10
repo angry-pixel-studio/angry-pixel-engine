@@ -6,6 +6,7 @@ import { ITilemapRenderer, Tileset, TilemapOrientation } from "./TilemapRenderer
 /**
  * TiledTilemapRenderer configuration options
  * @public
+ * @category Components
  */
 export interface TiledTilemapRendererOptions {
     /** Export of the Tiles application in JSON */
@@ -30,6 +31,7 @@ export interface TiledTilemapRendererOptions {
  * The TiledTilemapRenderer component allows you to render a tile map exported from the Tiled application,
  * using an instance of the TileSet object.
  * @public
+ * @category Components
  * @example
  * ```js
  * import TilemapData from "export.json";
@@ -234,6 +236,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     }
 }
 
+/** @category Components */
 export interface TiledTilemap {
     width: number;
     height: number;
@@ -245,6 +248,7 @@ export interface TiledTilemap {
     tileheight: number;
 }
 
+/** @category Components */
 export interface TiledChunk {
     data: number[];
     x: number;
@@ -254,6 +258,7 @@ export interface TiledChunk {
     type?: string;
 }
 
+/** @category Components */
 export interface TiledLayer {
     name: string;
     id: number;

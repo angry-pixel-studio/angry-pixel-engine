@@ -7,7 +7,11 @@ import { IRigidBody, RigidBodyType } from "angry-pixel-2d-physics";
 
 export { RigidBodyType } from "angry-pixel-2d-physics";
 
-/** RigidBody configuration options */
+/**
+ * RigidBody configuration options
+ * @public
+ * @category Components
+ */
 export interface RigidBodyOptions extends InitOptions {
     /** 
      * The type determines how it will respond to physics and collisions.
@@ -29,6 +33,7 @@ export interface RigidBodyOptions extends InitOptions {
  * - Kinematic = This body type is not affected by gravity but can have velocity applied to it. Dynamic bodies can collide with it.
  * - Static = This type of body is immovable, no velocity can be applied to it and it is not affected by gravity. It is the body type that consumes the least processing resources.
  * @public
+ * @category Components
  * @example
  * ```js
   const body = this.addComponent(RigidBody, {

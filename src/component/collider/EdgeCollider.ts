@@ -9,6 +9,7 @@ import { CollisionMethods, ICollider, Line } from "angry-pixel-2d-physics";
 /**
  * EdgeCollider configuration options
  * @public
+ * @category Components
  */
 export interface EdgeColliderOptions extends InitOptions {
     /** Collection of 2d vectors representing the vertices of the collider */
@@ -30,6 +31,7 @@ export interface EdgeColliderOptions extends InitOptions {
 /**
  * Collider composed of lines defined by its vertices, for 2d collisions.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(EdgeCollider, {

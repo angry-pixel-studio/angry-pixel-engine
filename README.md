@@ -165,4 +165,6 @@ game.addScene(MainScene, "MainScene");
 game.run();
 ```
 
-#### Check this example live [here](https://angrypixel.gg/angry-pixel-logo-bounce)
+### Check this example live
+
+➡️ [https://angrypixel.gg/angry-pixel-logo-bounce](https://angrypixel.gg/angry-pixel-logo-bounce)

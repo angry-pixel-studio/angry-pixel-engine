@@ -5,6 +5,7 @@ import { ICollisionResolution, ICollider, ICollision } from "angry-pixel-2d-phys
 /**
  * Information about the collision
  * @public
+ * @category Components
  */
 export interface CollisionData {
     /** Contains information about the penetration and direction of the collision. */
@@ -22,6 +23,7 @@ export interface CollisionData {
 /**
  * Every collider component implements this interface.
  * @public
+ * @category Components
  */
 export interface IColliderComponent {
     /**

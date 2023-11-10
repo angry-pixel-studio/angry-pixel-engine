@@ -7,6 +7,7 @@ import { ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2
 /**
  * SpriteRenderer configuration options.
  * @public
+ * @category Components
  */
 export interface SpriteRendererOptions {
     /** The sprite to render */
@@ -42,6 +43,7 @@ export interface SpriteRendererOptions {
 /**
  * The SpriteRenderer component renders the Sprite and allows to configure options such as opacity, offser, color, etc.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(SpriteRenderer, {

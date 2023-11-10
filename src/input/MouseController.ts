@@ -3,6 +3,15 @@ import { Vector2 } from "angry-pixel-math";
 /**
  * Manages mouse interaction
  * @public
+ * @category Input
+ * @example
+ * ```js
+ * const mouse = this.inputManager.mouse;
+ *
+ * if (mouse.positionInViewport.y < 0 && mouse.leftButtonPressed()) {
+ *   // if the mouse pointer is below the middle of the screen and left click, do something
+ * }
+ * ```
  */
 export class MouseController {
     private _leftButtonPressed: boolean = false;

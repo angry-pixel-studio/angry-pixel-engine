@@ -4,6 +4,7 @@ import { Rectangle, Vector2 } from "angry-pixel-math";
 /**
  * Game configuration options
  * @public
+ * @category Core
  */
 export interface GameConfig {
     /** HTML element where the game will be created */

@@ -27,6 +27,7 @@ const defaultConfig: GameConfig = {
 /**
  * Game is the main class that contains all the managers, scenes, objects and components. It allows to start and stop the execution of the game.
  * @public
+ * @category Core
  * @example
  * ```js
  * const game = new Game({

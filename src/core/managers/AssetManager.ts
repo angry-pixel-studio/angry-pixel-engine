@@ -20,6 +20,23 @@ interface Asset {
 /**
  * Manages the asset loading (images, fonts, audios, videos).
  * @public
+ * @category Managers
+ * @example
+ * ```js
+ * this.assetManager.loadImage("image.png");
+ * this.assetManager.loadAudio("audio.ogg");
+ * this.assetManager.loadVideo("video.mp4");
+ * this.assetManager.loadFont("custom-font", "custom-font.ttf");
+ *
+ * const imageElement = this.assetManager.getImage("image.png");
+ * const audioElement = this.assetManager.getAudio("audio.ogg");
+ * const videoElement = this.assetManager.getVideo("video.mp4");
+ * const fontFace = this.assetManager.getFont("custom-font");
+ *
+ * if (this.assetManager.getAssetsLoaded()) {
+ *   // do something when assets are loaded
+ * }
+ * ```
  */
 export interface IAssetManager {
     /**

@@ -19,6 +19,7 @@ const defaultAudioSourceName = "default";
 /**
  * AudioPlayer configuration options
  * @public
+ * @category Components
  */
 export interface AudioPlayerOptions extends InitOptions {
     /** [optional] The initial volume. Values between 1 and 0. */
@@ -30,6 +31,7 @@ export interface AudioPlayerOptions extends InitOptions {
 /**
  * The AudioPlayer component is used to play audio files and audio clips, like music and sound fx.
  * @public
+ * @category Components
  * @example
  * ```js
  * const audioPlayer = this.addComponent(AudioPlayer);

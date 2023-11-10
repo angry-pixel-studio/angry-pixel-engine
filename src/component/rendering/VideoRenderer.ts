@@ -18,6 +18,7 @@ const userInputEventNames = [
 /**
  * VideoRenderer configuration options.
  * @public
+ * @category Components
  */
 export interface VideoRendererOptions {
     /**The video element to render */
@@ -55,12 +56,14 @@ export interface VideoRendererOptions {
 /**
  * The VideoRenderer component plays and renders a video element, and allows configuring options such as its dimensions, coloring, etc.
  * @public
+ * @category Components
+ * @example
  * ```js
  * this.addComponent(VideoRenderer, {
  *   video: this.assetManager.getVideo("video.mp4"),
  * });
  * ```
- * @public
+ * @example
  * ```js
  * this.addComponent(VideoRenderer, {
  *   video: this.assetManager.getVideo("video.mp4"),

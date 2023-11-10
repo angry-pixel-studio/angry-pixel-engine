@@ -11,6 +11,11 @@ type SceneConstructor = () => Scene;
 /**
  * Manges the loading of the scenes.
  * @public
+ * @category Managers
+ * @example
+ * ```js
+ * this.sceneManager.loadScene("MainScene");
+ * ```
  */
 export interface ISceneManager {
     /**

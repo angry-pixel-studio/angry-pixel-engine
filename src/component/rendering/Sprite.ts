@@ -5,6 +5,7 @@ export { Slice };
 /**
  * Sprite configuration options
  * @public
+ * @category Components
  */
 export interface SpriteConfig {
     /** The image element to render */
@@ -17,13 +18,12 @@ export interface SpriteConfig {
 
 /**
  * The Sprite is an object that is composed of the Image element and allow to slice it and smooth its pixels.
- *
  * @public
+ * @category Components
  * @example
  * ```js
  * const sprite = new Sprite({image: this.assetManager.getImage("image.png")});
  * ```
- *
  * @example
  * ```js
  * const sprite = new Sprite({

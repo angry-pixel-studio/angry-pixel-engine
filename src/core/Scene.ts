@@ -3,11 +3,13 @@ import { Container } from "../utils/Container";
 import { Game } from "./Game";
 import { GameActor } from "./GameActor";
 
+/** @private */
 export type SceneClass = new (container: Container, name: string, game: Game) => Scene;
 
 /**
  * Base class for all game scenes
  * @public
+ * @category Core
  * @example
  * ```js
  * class GameScene extends Scene {

@@ -5,6 +5,7 @@ import { Vector2, Rotation } from "angry-pixel-math";
 /**
  * MaskRenderer configuration options.
  * @public
+ * @category Components
  */
 export interface MaskRendererOptions {
     /** Mask width in pixels */
@@ -26,6 +27,7 @@ export interface MaskRendererOptions {
 /**
  * Renders a rectangle based on width, height and color
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(MaskRenderer, {

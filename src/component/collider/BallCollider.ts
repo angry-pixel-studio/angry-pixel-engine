@@ -8,6 +8,7 @@ import { Circumference, ICollider } from "angry-pixel-2d-physics";
 /**
  * BallCollider configuration options
  * @public
+ * @category Components
  */
 export interface BallColliderOptions extends InitOptions {
     /** Radius in pixels */
@@ -27,6 +28,7 @@ export interface BallColliderOptions extends InitOptions {
 /**
  * Circumference shaped collider for 2d collisions.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.addComponent(BallCollider, {

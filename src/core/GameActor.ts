@@ -11,6 +11,7 @@ import { ISceneManager } from "./managers/SceneManager";
 import { ITimeManager } from "./managers/TimeManager";
 import { IRenderManager } from "angry-pixel-2d-renderer";
 
+/** @private */
 export interface InitOptions {
     [key: string]: any; // eslint-disable-line
 }

@@ -6,6 +6,7 @@ import { Rotation, Vector2 } from "angry-pixel-math";
  * It is used to handle the position, rotation and scale of the object. If the object has a parent,
  * it can be scaled, rotated and translated hierarchically.
  * @public
+ * @category Components
  * @example
  * ```js
  * this.transform.position = new Vector2(0, 0);

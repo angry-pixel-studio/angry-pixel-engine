@@ -9,6 +9,7 @@ const defaultAnimationName = "default";
 /**
  * Animation configuration options
  * @public
+ * @category Components
  */
 export interface AnimationConfig {
     /** Array of sprites to represent each animation frame */
@@ -22,6 +23,7 @@ export interface AnimationConfig {
 /**
  * Animator configuration options
  * @public
+ * @category Components
  */
 export interface AnimatorOptions extends InitOptions {
     /** The SpriteRenderer component in which the animation will be rendered */
@@ -30,6 +32,7 @@ export interface AnimatorOptions extends InitOptions {
 /**
  * The Animator component is used to render sets of sprites as animations.
  * @public
+ * @category Components
  * @example
  * ```js
 const animator = this.addComponent(Animator, {

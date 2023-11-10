@@ -14,6 +14,7 @@ export type ComponentClass<T extends Component = Component> = new (
 /**
  * Base class for all components to be added to game objects.
  * @public
+ * @category Core
  * @example
  * ```js
  * class MovementsController extends Component {
@@ -181,6 +182,39 @@ export abstract class ColliderComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateCollider;
 }
 
+/**
+ * Base class for all components that execute logic at physics frame rate. Ideal for custom physics.
+ * @public
+ * @category Core
+ * @example
+ * ```js
+ * class PlayerMovements extends PhysicsComponent {
+ *   init(options) {
+ *     // executed after instantiation
+ *   }
+ *   start() {
+ *     // executed in the first available frame
+ *   }
+ *   update() {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class PlayerMovements extends PhysicsComponent {
+ *   protected init(options?: InitOptions): void {
+ *     // executed after instantiation
+ *   }
+ *   protected start(): void {
+ *     // executed in the first available frame
+ *   }
+ *   protected update(): void {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ */
 export abstract class PhysicsComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdatePhysics;
 }
@@ -190,6 +224,39 @@ export abstract class TransformComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateTransform;
 }
 
+/**
+ * Base class for all components that execute logic before rendering. Ideal for components that translate cameras.
+ * @public
+ * @category Core
+ * @example
+ * ```js
+ * class FollowPlayerCamera extends PreRenderComponent {
+ *   init(options) {
+ *     // executed after instantiation
+ *   }
+ *   start() {
+ *     // executed in the first available frame
+ *   }
+ *   update() {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class FollowPlayerCamera extends PreRenderComponent {
+ *   protected init(options?: InitOptions): void {
+ *     // executed after instantiation
+ *   }
+ *   protected start(): void {
+ *     // executed in the first available frame
+ *   }
+ *   protected update(): void {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ */
 export abstract class PreRenderComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdatePreRender;
 }

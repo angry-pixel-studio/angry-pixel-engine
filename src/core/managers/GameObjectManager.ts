@@ -6,6 +6,24 @@ import { Container } from "../../utils/Container";
 /**
  * Used to create, retrieve and destroy GameObject instances.
  * @public
+ * @category Managers
+ * @example
+ * ```js
+ * // create a new game object instance
+ * this.gameObjectManager.addGameObject(Player);
+ *
+ * // find a game object by its class
+ * const player = this.gameObjectManager.findGameObject(Player);
+ *
+ * // find game objects by their class
+ * const coins = this.gameObjectManager.findGameObjects(Coin);
+ *
+ * // find game objects by their tag
+ * const enemies = this.gameObjectManager.findGameObjectsByTag("Enemy");
+ *
+ * // destroy a game object
+ * this.gameObjectManager.destroyGameObject(player);
+ * ```
  */
 export interface IGameObjectManager {
     /**
