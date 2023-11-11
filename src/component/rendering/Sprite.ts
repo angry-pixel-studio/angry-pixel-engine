@@ -6,6 +6,14 @@ export { Slice };
  * Sprite configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const sprite = new Sprite({
+ *   image: this.assetManager.getImage("image.png"),
+ *   slice: {x: 0, y:0, width: 16, height: 16},
+ *   smooth: false
+ * });
+ * ```
  */
 export interface SpriteConfig {
     /** The image element to render */

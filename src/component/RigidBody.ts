@@ -11,6 +11,25 @@ export { RigidBodyType } from "angry-pixel-2d-physics";
  * RigidBody configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+  const body = this.addComponent(RigidBody, {
+    rigidBodyType: RigidBodyType.Dynamic,
+    gravity: 10
+  });
+ * ```
+ * @example
+ * ```js
+  const body = this.addComponent(RigidBody, {
+    rigidBodyType: RigidBodyType.Kinematic,
+  });
+ * ```
+ * @example
+ * ```js
+  const body = this.addComponent(RigidBody, {
+    rigidBodyType: RigidBodyType.Static,
+  });
+ * ```
  */
 export interface RigidBodyOptions extends InitOptions {
     /** 

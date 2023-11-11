@@ -9,6 +9,27 @@ export { TextOrientation };
  * TextRenderer configuration options.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(TextRenderer, {
+ *   text: "Hello world",
+ *   font: "Impact",
+ *   fontSize: 16,
+ *   width: 320,
+ *   height: 32,
+ *   color: "#FF0000",
+ *   offset: new Vector2(0, 0),
+ *   lineSeparation: 1,
+ *   letterSpacing: 1,
+ *   charRanges: [32, 126, 161, 255],
+ *   smooth: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   orientation: TextOrientation.RightDown
+ *   bitmapMargin: new Vector2(0, 0),
+ *   bitmapSpacing: new Vector2(0, 0),
+ * });
+ * ```
  */
 export interface TextRendererOptions {
     /** The text to render */

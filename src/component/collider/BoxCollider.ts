@@ -8,6 +8,19 @@ import { CollisionMethods, Rectangle } from "angry-pixel-2d-physics";
  * BoxCollider configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(BoxCollider, {
+ *   width: 32,
+ *   height: 32,
+ *   rotation: new Rotation(0),
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "PlayerHitbox",
+ *   debug: false,
+ *   physics: true,
+ * });
+ * ```
  */
 export interface BoxColliderOptions extends InitOptions {
     /** Width of the rectangle in pixels */

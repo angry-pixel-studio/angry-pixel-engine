@@ -10,6 +10,18 @@ import { CollisionMethods, ICollider, Line } from "angry-pixel-2d-physics";
  * EdgeCollider configuration options
  * @public
  * @category Components
+ *  @example
+ * ```js
+ * this.addComponent(EdgeCollider, {
+ *   vertexModel: [new Vector2(0,0), new Vector2(32, 32)],
+ *   rotation: new Rotation(0),
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "Hills",
+ *   debug: false,
+ *   physics: true,
+ * });
+ * ```
  */
 export interface EdgeColliderOptions extends InitOptions {
     /** Collection of 2d vectors representing the vertices of the collider */
@@ -49,6 +61,7 @@ export interface EdgeColliderOptions extends InitOptions {
  *   debug: false,
  *   physics: true,
  * });
+ * ```
  */
 export class EdgeCollider extends BaseCollider {
     /** If debug mode is enabled, the collider shape is rendered using the object's render layer */

@@ -14,6 +14,23 @@ export enum ButtonType {
  * Button configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * cosnt button = this.addComponent(Button, {
+    type: ButtonType.Rectangle,
+    width: 64,
+    height: 64,
+    touchEnabled: true,
+    offset: new Vector2(0, 0),
+  });
+
+  cosnt button = this.addComponent(Button, {
+    type: ButtonType.Circumference,
+    radius: 32,
+    touchEnabled: true,
+    offset: new Vector2(0, 0),
+  });
+ * ```
  */
 export interface ButtonOptions extends InitOptions {
     /** The shape of the button */

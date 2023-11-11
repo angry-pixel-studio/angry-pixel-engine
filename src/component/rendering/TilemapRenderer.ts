@@ -8,6 +8,17 @@ export { TilemapOrientation };
  * Tileset configuration to be used with the TilemapRenderer
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const tileset = {
+ *   image: this.assetManager.getImage("image.png"),
+ *   width: 3,
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ *   margin: new Vector2(0, 0),
+ *   spacing: new Vector2(0, 0),
+ * };
+ * ```
  */
 export interface Tileset {
     /** The tileset image element */
@@ -28,6 +39,26 @@ export interface Tileset {
  * TilemapRenderer configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(TilemapRenderer, {
+ *   tileset: {
+ *     image: this.assetManager.getImage("image.png"),
+ *     width: 3,
+ *     tileWidth: 16,
+ *     tileHeight: 16,
+ *     margin: new Vector2(0, 0),
+ *     spacing: new Vector2(0, 0),
+ *   }
+ *   tiles: [1, 2, 0, 0, 0, 0, 2, 1, 3, 4, 5, 5, 5, 5, 4, 3],
+ *   width: 8,
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ *   layer: "Tilemap",
+ *   orientation: TilemapOrientation.Center,
+ *   smooth: false,
+ * });
+ * ```
  */
 export interface TilemapRendererOptions {
     /** Id of tiles separated by commas. The ids start at 1, and increment from left to right,

@@ -7,6 +7,28 @@ import { ITilemapRenderer, Tileset, TilemapOrientation } from "./TilemapRenderer
  * TiledTilemapRenderer configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * import TilemapData from "export.json";
+ *
+ * this.addComponent(TilemapRenderer, {
+ *   tileset: {
+ *     image: this.assetManager.getImage("image.png"),
+ *     width: 3,
+ *     tileWidth: 16,
+ *     tileHeight: 16,
+ *     margin: new Vector2(0, 0),
+ *     spacing: new Vector2(0, 0),
+ *   }
+ *   tiledData: TilemapData,
+ *   tilemapLayer: "Layer1",
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ *   layer: "Tilemap",
+ *   orientation: TilemapOrientation.Center,
+ *   smooth: false,
+ * });
+ * ```
  */
 export interface TiledTilemapRendererOptions {
     /** Export of the Tiles application in JSON */

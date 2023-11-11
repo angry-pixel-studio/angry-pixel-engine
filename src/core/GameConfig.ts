@@ -5,6 +5,28 @@ import { Rectangle, Vector2 } from "angry-pixel-math";
  * Game configuration options
  * @public
  * @category Core
+ *  @example
+ * ```js
+ * const gameConfig = {
+ *   containerNode: document.getElementById("app"),
+ *   gameWidth: 1920,
+ *   gameHeight: 1080,
+ *   debugEnabled: false,
+ *   canvasColor: "#000000",
+ *   physicsFramerate: 180,
+ *   headless: false,
+ *   spriteDefaultScale: new Vector2(1, 1),
+ *   collisions: {
+ *     collisionMatrix: [
+ *       ["layer1", "layer2"],
+ *       ["layer1", "layer3"],
+ *     ],
+ *     collisionMethod: CollisionMethods.SAT,
+ *     collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+ *     collisionArea: new Rectangle(-960, -540, 1920, 1080),
+ *   }
+ * };
+ * ```
  */
 export interface GameConfig {
     /** HTML element where the game will be created */

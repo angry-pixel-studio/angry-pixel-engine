@@ -6,6 +6,18 @@ import { Vector2, Rotation } from "angry-pixel-math";
  * MaskRenderer configuration options.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(MaskRenderer, {
+ *   width: 32,
+ *   height: 32,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   layer: "Mask",
+ * });
+ * ```
  */
 export interface MaskRendererOptions {
     /** Mask width in pixels */

@@ -9,6 +9,17 @@ import { Circumference, ICollider } from "angry-pixel-2d-physics";
  * BallCollider configuration options
  * @public
  * @category Components
+ *  @example
+ * ```js
+ * this.addComponent(BallCollider, {
+ *   radius: 32,
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "PlayerHitbox",
+ *   debug: false,
+ *   physics: true,
+ * });
+ * ```
  */
 export interface BallColliderOptions extends InitOptions {
     /** Radius in pixels */

@@ -19,6 +19,26 @@ const userInputEventNames = [
  * VideoRenderer configuration options.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(VideoRenderer, {
+ *   video: this.assetManager.getVideo("video.mp4"),
+ *   width: 1920,
+ *   height: 1080,
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontal:  false,
+ *   flipVertical: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Video",
+ *   slice: {x: 0, y:0, width: 1920, height: 1080},
+ *   volume: 1,
+ *   loop: false,
+ * });
+ * ```
  */
 export interface VideoRendererOptions {
     /**The video element to render */

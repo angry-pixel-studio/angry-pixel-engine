@@ -20,6 +20,13 @@ const defaultAudioSourceName = "default";
  * AudioPlayer configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const audioPlayer = this.addComponent(AudioPlayer, {
+ *   volume: 1,
+ *   loop: true,
+ * });
+ * ```
  */
 export interface AudioPlayerOptions extends InitOptions {
     /** [optional] The initial volume. Values between 1 and 0. */

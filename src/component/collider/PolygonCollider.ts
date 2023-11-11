@@ -10,6 +10,18 @@ import { CollisionMethods, ICollider, Polygon } from "angry-pixel-2d-physics";
  * PolygonCollider configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(PolygonCollider, {
+ *   vertexModel: [new Vector2(0,0), new Vector2(32, 32), new Vector2(64, 0)],
+ *   rotation: new Rotation(0),
+ *   offsetX: 0,
+ *   offsetY: 0,
+ *   layer: "Hills",
+ *   debug: false,
+ *   physics: true,
+ * });
+ * ```
  */
 export interface PolygonColliderOptions extends InitOptions {
     /** Collection of 2d vectors representing the vertices of the collider */
@@ -49,6 +61,7 @@ export interface PolygonColliderOptions extends InitOptions {
  *   debug: false,
  *   physics: true,
  * });
+ * ```
  */
 export class PolygonCollider extends BaseCollider {
     /** If debug mode is enabled, the collider shape is rendered using the object's render layer */

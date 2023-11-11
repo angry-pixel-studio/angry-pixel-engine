@@ -10,6 +10,21 @@ const defaultAnimationName = "default";
  * Animation configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+animator.addAnimation({
+    sprites: [0, 16, 32, 48].map(
+      (x: number) =>
+        new Sprite({
+          image: assetManager.getImage("spritesheet.png"),
+          smooth: false,
+          slice: {x, y: 64, width: 16, height: 16),
+        })
+    ),
+    framerate: 10,
+    loop: true,
+});
+ * ```
  */
 export interface AnimationConfig {
     /** Array of sprites to represent each animation frame */
@@ -24,11 +39,18 @@ export interface AnimationConfig {
  * Animator configuration options
  * @public
  * @category Components
+ * @example
+ * ```js
+  this.addComponent(Animator, {
+    spriteRenderer: this.getComponent(SpriteRenderer),
+  });
+ * ```
  */
 export interface AnimatorOptions extends InitOptions {
     /** The SpriteRenderer component in which the animation will be rendered */
     spriteRenderer: SpriteRenderer;
 }
+
 /**
  * The Animator component is used to render sets of sprites as animations.
  * @public

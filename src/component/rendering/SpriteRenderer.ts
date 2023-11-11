@@ -8,6 +8,25 @@ import { ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2
  * SpriteRenderer configuration options.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * this.addComponent(SpriteRenderer, {
+ *   sprite: new Sprite({image: this.assetManager.getImage("image.png")}),
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontal:  false,
+ *   flipVertical: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   tiled: new Vector2(1,1),
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Background",
+ *   scale: new Vector2(1,1),
+ *   width: 16,
+ *   height: 16
+ * });
+ * ```
  */
 export interface SpriteRendererOptions {
     /** The sprite to render */
