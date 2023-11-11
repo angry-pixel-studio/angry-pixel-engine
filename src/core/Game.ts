@@ -10,7 +10,7 @@ import { Vector2 } from "angry-pixel-math";
 import { BroadPhaseMethods, CollisionMethods } from "angry-pixel-2d-physics";
 
 const defaultConfig: GameConfig = {
-    containerNode: null,
+    containerNode: undefined,
     gameWidth: 320,
     gameHeight: 180,
     debugEnabled: false,
@@ -24,13 +24,56 @@ const defaultConfig: GameConfig = {
     },
 };
 
+/**
+ * Game is the main class that contains all the managers, scenes, objects and components. It allows to start and stop the execution of the game.
+ * @public
+ * @category Core
+ * @example
+ * ```js
+ * const game = new Game({
+ *   containerNode: document.getElementById("app"),
+ *   gameWidth: 1920,
+ *   gameHeight: 1080,
+ * });
+ * game.addScene(GameScene, "GameScene");
+ * game.run();
+ * ```
+ * @example
+ * ```js
+ * const game = new Game({
+ *   containerNode: document.getElementById("app"),
+ *   gameWidth: 1920,
+ *   gameHeight: 1080,
+ *   debugEnabled: false,
+ *   canvasColor: "#000000",
+ *   physicsFramerate: 180,
+ *   headless: false,
+ *   spriteDefaultScale: new Vector2(1, 1),
+ *   collisions: {
+ *     collisionMatrix: [
+ *       ["layer1", "layer2"],
+ *       ["layer1", "layer3"],
+ *     ],
+ *     collisionMethod: CollisionMethods.SAT,
+ *     collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+ *     collisionArea: new Rectangle(-960, -540, 1920, 1080),
+ *   }
+ * });
+ * game.addScene(GameScene, "GameScene");
+ * game.run();
+ * ```
+ */
 export class Game {
+    /** @private */
     private readonly container: Container;
+    /** @private */
     private sceneManager: ISceneManager;
+    /** @private */
     private iterationManager: IIterationManager;
-
+    /** @private */
     private _config: GameConfig;
 
+    /** @private */
     constructor(config: GameConfig) {
         this._config = {
             ...defaultConfig,
@@ -47,6 +90,7 @@ export class Game {
         this.setupManagers();
     }
 
+    /** @private */
     private setupManagers(): void {
         loadDependencies(this.container, this._config);
 
@@ -55,14 +99,14 @@ export class Game {
     }
 
     /**
-     * @returns GameConfig
+     * The game configuration
      */
     public get config(): GameConfig {
         return this._config;
     }
 
     /**
-     * @returns running
+     * TRUE if the game is running
      */
     public get running(): boolean {
         return this.iterationManager.running;

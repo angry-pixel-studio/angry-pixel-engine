@@ -1,11 +1,6 @@
 import { EngineComponent } from "../core/Component";
 import { InitOptions } from "../core/GameActor";
 
-export interface AudioPlayerOptions extends InitOptions {
-    volume?: number;
-    loop?: boolean;
-}
-
 const userInputEventNames = [
     "click",
     "contextmenu",
@@ -21,7 +16,42 @@ const userInputEventNames = [
 
 const defaultAudioSourceName = "default";
 
+/**
+ * AudioPlayer configuration options
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * const audioPlayer = this.addComponent(AudioPlayer, {
+ *   volume: 1,
+ *   loop: true,
+ * });
+ * ```
+ */
+export interface AudioPlayerOptions extends InitOptions {
+    /** [optional] The initial volume. Values between 1 and 0. */
+    volume?: number;
+    /** [optional] Plays the audio in loop */
+    loop?: boolean;
+}
+
+/**
+ * The AudioPlayer component is used to play audio files and audio clips, like music and sound fx.
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * const audioPlayer = this.addComponent(AudioPlayer);
+ * audioPlayer.addAudioSource(AssetManager.getAudio("audio.ogg"), "AudioName");
+ * audioPlayer.loadAudioSource("AudioName", true, 1);
+ * audioPlayer.play();
+ *
+ * // plays a clip only once
+ * audioPlayer.playClip(AssetManager.getAudio("clip.ogg"), 1);
+ * ```
+ */
 export class AudioPlayer extends EngineComponent {
+    /** @private */
     public readonly allowMultiple: boolean = false;
 
     private audioContext: AudioContext;
@@ -35,32 +65,39 @@ export class AudioPlayer extends EngineComponent {
     private _playing: boolean = false;
     private _paused: boolean = false;
 
+    /** The loaded audio source element */
     public get audioSource(): HTMLAudioElement {
         return this._audioSource;
     }
 
+    /** The loaded audio volume */
     public set volume(volume: number) {
         this._volume = volume;
         if (this._audioSource) this._audioSource.volume = volume;
     }
 
+    /** The loaded audio volume */
     public get volume(): number {
         return this._volume;
     }
 
+    /** Plays the loaded audio in loop */
     public set loop(loop: boolean) {
         this._loop = loop;
         if (this._audioSource) this._audioSource.loop = loop;
     }
 
+    /** Plays the loaded audio in loop */
     public get loop(): boolean {
         return this._loop;
     }
 
+    /** The loaded audio is playing */
     public get playing(): boolean {
         return this._playing;
     }
 
+    /** The loaded audio is paused */
     public get paused(): boolean {
         return this._paused;
     }
@@ -79,8 +116,8 @@ export class AudioPlayer extends EngineComponent {
 
     /**
      * Play once the given audio source
-     * @param audioSource
-     * @param volume optional
+     * @param audioSource The audio source element
+     * @param volume [optional] The audio volume. Values between 1 and 0.
      */
     public playClip(audioSource: HTMLAudioElement, volume?: number): void {
         if (audioSource.currentTime > 0) audioSource.currentTime = 0;
@@ -90,7 +127,8 @@ export class AudioPlayer extends EngineComponent {
 
     /**
      * Add a new audio source
-     * @param audioSource
+     * @param audioSource The audio source element
+     * @param name The name to identify the audio source. Optional if the AudioPlayer will only play one audio.
      */
     public addAudioSource(audioSource: HTMLAudioElement, name: string = defaultAudioSourceName): void {
         const newAudioSource = audioSource.cloneNode() as HTMLAudioElement;
@@ -103,9 +141,9 @@ export class AudioPlayer extends EngineComponent {
 
     /**
      * Load the given audio source (if there is other audio source playing, it will stop)
-     * @param audioSourceName
-     * @param loop optional
-     * @param volume optional
+     * @param audioSourceName The name to identify the audio source
+     * @param loop [optional] Play the audio in loop
+     * @param volume [optional] The audio volume. Values between 1 and 0.
      */
     public loadAudioSource(audioSourceName: string, loop?: boolean, volume?: number): void {
         this.stop();

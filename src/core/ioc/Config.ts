@@ -1,20 +1,21 @@
-import { AssetManager } from "../managers/AssetManager";
-import { DomManager, IDomManager } from "../managers/DomManager";
-import { GameObjectManager, IGameObjectManager } from "../managers/GameObjectManager";
+import { IRenderManager, renderManagerFactory } from "angry-pixel-2d-renderer";
+import { physicsManagerFactory, IPhysicsManager } from "angry-pixel-2d-physics";
+import { GameConfig } from "../GameConfig";
 import { GamepadController } from "../../input/GamepadController";
 import { IInputManager, InputManager } from "../../input/InputManager";
 import { KeyboardController } from "../../input/KeyboardController";
 import { MouseController } from "../../input/MouseController";
+import { TouchController } from "../../input/TouchController";
+import { AssetManager } from "../managers/AssetManager";
+import { DomManager, IDomManager } from "../managers/DomManager";
+import { GameObjectManager, IGameObjectManager } from "../managers/GameObjectManager";
+import { HeadlessIterationManager } from "../managers/HeadlessIterationManager";
+import { IterationManager } from "../managers/IterationManager";
 import { ISceneManager, SceneManager } from "../managers/SceneManager";
 import { ITimeManager, TimeManager } from "../managers/TimeManager";
 import { Container } from "../../utils/Container";
-import { TouchController } from "../../input/TouchController";
-import { IterationManager } from "../managers/IterationManager";
-import { HeadlessIterationManager } from "../managers/HeadlessIterationManager";
-import { IRenderManager, renderManagerFactory } from "angry-pixel-2d-renderer";
-import { physicsManagerFactory, IPhysicsManager } from "angry-pixel-2d-physics";
-import { GameConfig } from "../GameConfig";
 
+/** @private */
 export const loadDependencies = (container: Container, gameConfig: GameConfig): void => {
     container.addConstant("GameConfig", gameConfig);
 
@@ -33,7 +34,17 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
             renderManagerFactory(container.getSingleton<IDomManager>("DomManager").canvas)
         );
 
-        inputDependencies(container);
+        const canvas: HTMLCanvasElement = container.getSingleton<IDomManager>("DomManager").canvas;
+        container.add(
+            "InputManager",
+            () =>
+                new InputManager(
+                    new MouseController(canvas),
+                    new KeyboardController(canvas),
+                    new GamepadController(),
+                    new TouchController(canvas)
+                )
+        );
 
         container.add("AssetManager", () => new AssetManager(container.getSingleton<IRenderManager>("RenderManager")));
 
@@ -69,21 +80,6 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
             new SceneManager(
                 container,
                 !gameConfig.headless ? container.getSingleton<IRenderManager>("RenderManager") : undefined
-            )
-    );
-};
-
-const inputDependencies = (container: Container): void => {
-    const domManager = container.getSingleton<IDomManager>("DomManager");
-
-    container.add(
-        "InputManager",
-        () =>
-            new InputManager(
-                new MouseController(domManager.canvas),
-                new KeyboardController(domManager.canvas),
-                new GamepadController(),
-                new TouchController(domManager.canvas)
             )
     );
 };

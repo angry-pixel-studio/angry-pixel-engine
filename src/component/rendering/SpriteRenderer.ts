@@ -1,44 +1,133 @@
 import { RenderComponent } from "../../core/Component";
 import { Exception } from "../../utils/Exception";
-import { Sprite } from "../Sprite";
+import { Sprite } from "./Sprite";
 import { Rotation, Vector2 } from "angry-pixel-math";
 import { ISpriteRenderData, RenderDataType, RenderLocation } from "angry-pixel-2d-renderer";
 
+/**
+ * SpriteRenderer configuration options.
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * this.addComponent(SpriteRenderer, {
+ *   sprite: new Sprite({image: this.assetManager.getImage("image.png")}),
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontal:  false,
+ *   flipVertical: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   tiled: new Vector2(1,1),
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Background",
+ *   scale: new Vector2(1,1),
+ *   width: 16,
+ *   height: 16
+ * });
+ * ```
+ */
 export interface SpriteRendererOptions {
+    /** The sprite to render */
     sprite?: Sprite;
+    /** X-axis and Y-axis offset */
     offset?: Vector2;
+    /** Image rotation (degrees or radians) */
     rotation?: Rotation;
+    /** Flip the image horizontally */
     flipHorizontal?: boolean;
+    /** Flip the image vertically */
     flipVertical?: boolean;
+    /** Change the opacity between 1 and 0 */
     opacity?: number;
+    /** Render the image in tiles */
     tiled?: Vector2;
+    /** Define a mask color for the image */
     maskColor?: string;
+    /** Define the opacity of the mask color between 1 and 0 */
     maskColorMix?: number;
+    /** Define a color for tinting the sprite image */
     tintColor?: string;
+    /** The render layer */
     layer?: string;
+    /** Scale the image based on a vector */
+    scale?: Vector2;
+    /** Overwrite the original image width */
+    width?: number;
+    /** Overwrite the original image height */
+    height?: number;
 }
 
+/**
+ * The SpriteRenderer component renders the Sprite and allows to configure options such as opacity, offser, color, etc.
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * this.addComponent(SpriteRenderer, {
+ *   sprite: new Sprite({image: this.assetManager.getImage("image.png")})
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(SpriteRenderer, {
+ *   sprite: new Sprite({image: this.assetManager.getImage("image.png")}),
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontal:  false,
+ *   flipVertical: false,
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   tiled: new Vector2(1,1),
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Background",
+ *   scale: new Vector2(1,1),
+ *   width: 16,
+ *   height: 16
+ * });
+ * ```
+ */
 export class SpriteRenderer extends RenderComponent {
     private readonly spriteDefaultScale: Vector2 = this.gameConfig.spriteDefaultScale;
 
+    /** The sprite to render */
     public sprite: Sprite;
+    /** X-axis and Y-axis offset */
     public offset: Vector2;
+    /** Flip the image horizontally */
     public flipHorizontal: boolean;
+    /** Flip the image vertically */
     public flipVertical: boolean;
+    /** Image rotation (degrees or radians) */
     public rotation: Rotation;
+    /** Change the opacity between 1 and 0 */
     public opacity: number;
-    private _tiled: Vector2;
+    /** Define a mask color for the image */
     public maskColor: string;
+    /** Define the opacity of the mask color between 1 and 0 */
     public maskColorMix: number;
+    /** Define a color for tinting the sprite image */
     public tintColor: string;
+    /** The render layer */
     public layer: string;
+    /** Scale the image based on a vector */
+    public scale: Vector2;
+    /** Overwrite the original image width */
+    public width: number;
+    /** Overwrite the original image height */
+    public height: number;
 
+    private _tiled: Vector2;
     private renderData: ISpriteRenderData[] = [];
 
+    // cache
     private innerPosition: Vector2 = new Vector2();
     private cachePosition: Vector2 = new Vector2();
     private cacheRenderPosition: Vector2 = new Vector2();
     private scaledOffset: Vector2 = new Vector2();
+    private cacheScale: Vector2 = new Vector2();
 
     protected init(config: SpriteRendererOptions = {}): void {
         this.sprite = config.sprite;
@@ -53,12 +142,17 @@ export class SpriteRenderer extends RenderComponent {
         this.maskColorMix = config.maskColorMix ?? 0;
         this.tintColor = config.tintColor;
         this.layer = config.layer;
+        this.scale = config.scale ?? new Vector2(1, 1);
+        this.width = config.width;
+        this.height = config.height;
     }
 
+    /** Render the image in tiles */
     public get tiled(): Vector2 {
         return this._tiled;
     }
 
+    /** Renders the image in tiles */
     public set tiled(tiled: Vector2) {
         if (tiled.x % 1 !== 0 || tiled.y % 1 !== 0) {
             throw new Exception("SpriteRenderer.tiled: Vector2 components must be integers");
@@ -69,7 +163,11 @@ export class SpriteRenderer extends RenderComponent {
 
     protected update(): void {
         if (this.sprite && this.sprite.loaded === true) {
-            this.sprite.scale = this.sprite.scale ?? this.spriteDefaultScale;
+            this.scale = this.scale ?? this.spriteDefaultScale;
+            this.cacheScale.set(
+                this.scale.x * this.gameObject.transform.scale.x,
+                this.scale.y * this.gameObject.transform.scale.y
+            );
 
             this.updateRenderDataArray();
 
@@ -104,11 +202,11 @@ export class SpriteRenderer extends RenderComponent {
         this.renderData[index].location = this.gameObject.ui ? RenderLocation.ViewPort : RenderLocation.WorldSpace;
         this.renderData[index].layer = this.layer ?? this.gameObject.layer;
         this.renderData[index].image = this.sprite.image;
-        this.renderData[index].width = this.sprite.width * Math.abs(this.gameObject.transform.scale.x);
-        this.renderData[index].height = this.sprite.height * Math.abs(this.gameObject.transform.scale.y);
+        this.renderData[index].width = (this.width ?? this.sprite.width) * Math.abs(this.cacheScale.x);
+        this.renderData[index].height = (this.height ?? this.sprite.height) * Math.abs(this.cacheScale.y);
         this.renderData[index].slice = this.sprite.slice;
-        this.renderData[index].flipHorizontal = this.flipHorizontal !== this.gameObject.transform.scale.x < 0;
-        this.renderData[index].flipVertical = this.flipVertical !== this.gameObject.transform.scale.y < 0;
+        this.renderData[index].flipHorizontal = this.flipHorizontal !== this.cacheScale.x < 0;
+        this.renderData[index].flipVertical = this.flipVertical !== this.cacheScale.y < 0;
         this.renderData[index].rotation = this.gameObject.transform.rotation.radians + this.rotation.radians;
         this.renderData[index].smooth = this.sprite.smooth;
         this.renderData[index].alpha = this.opacity;

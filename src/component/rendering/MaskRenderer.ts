@@ -2,27 +2,83 @@ import { RenderComponent } from "../../core/Component";
 import { IMaskRenderData, RenderLocation, RenderDataType } from "angry-pixel-2d-renderer";
 import { Vector2, Rotation } from "angry-pixel-math";
 
+/**
+ * MaskRenderer configuration options.
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * this.addComponent(MaskRenderer, {
+ *   width: 32,
+ *   height: 32,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   layer: "Mask",
+ * });
+ * ```
+ */
 export interface MaskRendererOptions {
+    /** Mask width in pixels */
     width: number;
+    /** Mask height in pixels */
     height: number;
+    /** The color of the mask */
     color: string;
+    /** X-axis and Y-axis offset */
     offset?: Vector2;
+    /** Mask rotation (degrees or radians) */
     rotation?: Rotation;
+    /** Change the opacity between 1 and 0 */
     opacity?: number;
+    /** The render layer */
     layer?: string;
 }
 
+/**
+ * Renders a rectangle based on width, height and color
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * this.addComponent(MaskRenderer, {
+ *   width: 32,
+ *   height: 32,
+ *   color: "#000000",
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(MaskRenderer, {
+ *   width: 32,
+ *   height: 32,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   rotation: new Rotation(0),
+ *   opacity: 1,
+ *   layer: "Mask",
+ * });
+ * ```
+ */
 export class MaskRenderer extends RenderComponent {
+    /** Mask width in pixels */
     public width: number;
+    /** Mask height in pixels */
     public height: number;
+    /** The color of the mask */
     public color: string;
+    /** X-axis and Y-axis offset */
     public offset: Vector2 = new Vector2();
+    /** Mask rotation (degrees or radians) */
     public rotation: Rotation = new Rotation();
+    /** Change the opacity between 1 and 0 */
     public opacity: number = 1;
+    /** The render layer */
     public layer: string;
 
     private renderData: IMaskRenderData;
-
+    // cache
     private innerPosition: Vector2 = new Vector2();
     private scaledOffset: Vector2 = new Vector2();
 

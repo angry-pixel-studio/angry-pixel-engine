@@ -2,7 +2,7 @@
 
 ## What is Angry Pixel?
 
-Angry Pixel is a 2D engine for browsers games written in Typescript.
+Angry Pixel is a 2D engine for browser games written in Typescript.
 
 Main features:
 
@@ -165,4 +165,6 @@ game.addScene(MainScene, "MainScene");
 game.run();
 ```
 
-#### Check this example live [here](https://angrypixel.gg/angry-pixel-logo-bounce)
+### Check this example live
+
+➡️ [https://angrypixel.gg/angry-pixel-logo-bounce](https://angrypixel.gg/angry-pixel-logo-bounce)

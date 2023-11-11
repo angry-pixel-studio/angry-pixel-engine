@@ -1,6 +1,6 @@
 {
     "name": "angry-pixel",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -12,7 +12,8 @@
         "lint": "eslint . --ext .ts",
         "lint-and-fix": "eslint . --ext .ts --fix",
         "prettier-format": "prettier --write \"src/**/*.{ts,js,css,html}\"",
-        "prettier-check": "prettier --check \"src/**/*.{ts,js,css,html}\""
+        "prettier-check": "prettier --check \"src/**/*.{ts,js,css,html}\"",
+        "docs": "typedoc"
     },
     "repository": {
         "type": "git",
@@ -38,14 +39,17 @@
     "devDependencies": {
         "@rollup/plugin-commonjs": "^19.0.0",
         "@rollup/plugin-node-resolve": "^13.0.0",
-        "@typescript-eslint/eslint-plugin": "^5.50.0",
-        "@typescript-eslint/parser": "^5.50.0",
-        "eslint": "^8.45.0",
+        "@types/node": "^20.8.9",
+        "@typescript-eslint/eslint-plugin": "^6.10.0",
+        "@typescript-eslint/parser": "^6.10.0",
+        "eslint": "^8.53.0",
         "prettier": "^2.1.2",
         "rollup": "^2.49.0",
         "rollup-plugin-terser": "^7.0.2",
         "rollup-plugin-typescript2": "^0.35.0",
         "tslib": "^2.6.1",
+        "typedoc": "^0.25.3",
+        "typedoc-plugin-markdown": "^3.16.0",
         "typescript": "^5.1.6"
     },
     "dependencies": {

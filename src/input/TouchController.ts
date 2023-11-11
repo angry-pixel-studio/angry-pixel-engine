@@ -1,11 +1,37 @@
 import { Vector2 } from "angry-pixel-math";
 
+/**
+ * The information about one interaction with the screen
+ * @public
+ * @category Input
+ */
+export interface TouchInteraction {
+    /** The interaction position on the screen */
+    positionInViewport: Vector2;
+    /** The area of the interaction represented as a radius of the ellipse */
+    radius: Vector2;
+}
+
+/**
+ * Manages the touch screen interaction.
+ * @public
+ * @category Input
+ * @example
+ * ```js
+ * const touch = this.inputController.touch;
+ *
+ * if (touch.touching) {
+ *   const interaction = touch.interactions[0];
+ * }
+ *
+ * ```
+ */
 export class TouchController {
     private canvas: HTMLCanvasElement;
     private _touching: boolean = false;
-    private _positionInViewport: Vector2 = new Vector2(0, 0);
-    private _radius: Vector2 = new Vector2(0, 0);
+    private _interactions: TouchInteraction[] = [];
 
+    /** @private */
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
 
@@ -15,16 +41,20 @@ export class TouchController {
         this.canvas.addEventListener("touchmove", this.eventHandler);
     }
 
-    public get positionInViewport(): Vector2 {
-        return this._positionInViewport;
-    }
-
+    /**
+     * TRUE if there is an interaction with the screen
+     * @readonly
+     */
     public get touching(): boolean {
         return this._touching;
     }
 
-    public get radius(): Vector2 {
-        return this._radius;
+    /**
+     * The information about the interactions with the screen
+     * @readonly
+     */
+    public get interactions(): TouchInteraction[] {
+        return this._interactions;
     }
 
     private eventHandler = (event: TouchEvent) => {
@@ -46,16 +76,22 @@ export class TouchController {
         event.preventDefault();
         event.stopPropagation();
 
+        this._interactions = [];
+
         if (event.targetTouches.length === 0) return;
 
-        this._positionInViewport.set(
-            (event.targetTouches[0].clientX - this.canvas.offsetLeft) / (this.canvas.clientWidth / this.canvas.width) -
-                this.canvas.width / 2,
-            -(event.targetTouches[0].clientY - this.canvas.offsetTop) /
-                (this.canvas.clientHeight / this.canvas.height) +
-                this.canvas.height / 2
-        );
-
-        this._radius.set(event.targetTouches[0].radiusX, event.targetTouches[0].radiusY);
+        for (let i = 0; i < event.targetTouches.length; i++) {
+            this._interactions[i] = {
+                positionInViewport: new Vector2(
+                    (event.targetTouches[i].clientX - this.canvas.offsetLeft) /
+                        (this.canvas.clientWidth / this.canvas.width) -
+                        this.canvas.width / 2,
+                    -(event.targetTouches[i].clientY - this.canvas.offsetTop) /
+                        (this.canvas.clientHeight / this.canvas.height) +
+                        this.canvas.height / 2
+                ),
+                radius: new Vector2(event.targetTouches[i].radiusX, event.targetTouches[i].radiusY),
+            };
+        }
     }
 }

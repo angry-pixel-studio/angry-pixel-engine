@@ -4,3 +4,4 @@
 angry-pixel-*.tgz
 /lib
 yarn-error.log
+/api-docs

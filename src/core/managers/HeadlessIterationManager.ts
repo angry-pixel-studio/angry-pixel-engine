@@ -6,9 +6,9 @@ import { Component } from "../Component";
 import { Scene } from "../Scene";
 import { IIterationManager } from "./IterationManager";
 import { FrameEvent } from "./IterationManager";
-
 import { IPhysicsManager } from "angry-pixel-2d-physics";
 
+/** @private */
 export class HeadlessIterationManager implements IIterationManager {
     public running: boolean = false;
 
@@ -16,8 +16,8 @@ export class HeadlessIterationManager implements IIterationManager {
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
 
-    private gameInterval: NodeJS.Timer;
-    private physicsInterval: NodeJS.Timer;
+    private gameInterval: NodeJS.Timer | number;
+    private physicsInterval: NodeJS.Timer | number;
 
     constructor(
         private readonly timeManager: ITimeManager,
@@ -97,14 +97,14 @@ export class HeadlessIterationManager implements IIterationManager {
 
     private asyncGameLoop(): void {
         this.gameInterval = setInterval(() => {
-            if (!this.running) return clearInterval(this.gameInterval);
+            if (!this.running) return clearInterval(this.gameInterval as number);
             this.gameLogicIteration(process.uptime());
         }, 1000 / this.timeManager.gameFramerate);
     }
 
     private asyncPhysicsLoop(): void {
         this.physicsInterval = setInterval(() => {
-            if (!this.running) return clearInterval(this.physicsInterval);
+            if (!this.running) return clearInterval(this.physicsInterval as number);
             this.timeManager.updateForPhysics(process.uptime());
             this.physicsIteration();
         }, 1000 / this.timeManager.physicsFramerate);

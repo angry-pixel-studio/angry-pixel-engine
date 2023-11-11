@@ -3,9 +3,36 @@ import { Container } from "../utils/Container";
 import { Game } from "./Game";
 import { GameActor } from "./GameActor";
 
+/** @private */
 export type SceneClass = new (container: Container, name: string, game: Game) => Scene;
 
+/**
+ * Base class for all game scenes
+ * @public
+ * @category Core
+ * @example
+ * ```js
+ * class GameScene extends Scene {
+ *   init(options) {
+ *     this.addGameObject(Player);
+ *   }
+ *   start() {}
+ *   update() {}
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class GameScene extends Scene {
+ *   protected init(options?: InitOptions): void {
+ *     this.addGameObject(Player);
+ *   }
+ *   protected start(): void {}
+ *   protected update(): void {}
+ * }
+ * ```
+ */
 export class Scene extends GameActor {
+    /** @private */
     constructor(container: Container, public readonly name: string, public readonly game: Game) {
         super(container);
 
@@ -14,10 +41,14 @@ export class Scene extends GameActor {
         }
     }
 
+    /**
+     * The main active camera
+     */
     public get gameCamera(): GameCamera {
         return this.findGameObject(GameCamera);
     }
 
+    /** @private */
     protected _destroy(): void {
         this.gameObjectManager.destroyAllGameObjects(false);
 
@@ -25,6 +56,7 @@ export class Scene extends GameActor {
         Object.keys(this).forEach((key) => delete this[key]);
     }
 
+    /** @private */
     protected _stopGame(): void {
         this.gameObjectManager.destroyAllGameObjects(true);
 

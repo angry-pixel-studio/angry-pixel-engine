@@ -7,8 +7,10 @@ import { FrameEvent } from "./managers/IterationManager";
 import { GameActor, InitOptions } from "./GameActor";
 import { Container } from "../utils/Container";
 
+/** @private */
 export const LAYER_DEFAULT = "Default";
 
+/** @private */
 export type GameObjectClass<T extends GameObject = GameObject> = new (
     container: Container,
     id: number,
@@ -16,22 +18,68 @@ export type GameObjectClass<T extends GameObject = GameObject> = new (
     parent?: GameObject
 ) => T;
 
+/**
+ * Base class for all objects in the scene.
+ * @public
+ * @category Core
+ * @example
+ * ```js
+ * class Player extends GameObject {
+ *   init(options) {
+ *     this.tag = "Tag";
+ *     this.layer = "Default";
+ *   }
+ *   start() {
+ *     // executed in the first available frame
+ *   }
+ *   update() {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ * @example
+ * ```ts
+ * class Player extends GameObject {
+ *   protected init(options?: InitOptions): void {
+ *     this.tag = "Tag";
+ *     this.layer = "Default";
+ *   }
+ *   protected start(): void {
+ *     // executed in the first available frame
+ *   }
+ *   protected update(): void {
+ *     // executed on every frame
+ *   }
+ * }
+ * ```
+ */
 export class GameObject extends GameActor {
+    /** Id automatically assigned at the time of instantiation. */
     public readonly id: number;
+    /** Name given manually at the time of instantiation. */
     public readonly name: string;
-
+    /** Tag used to group objects and optimize their retrieval. */
     public tag: string;
+    /** Layer used for rendering and physics. Default value is "Default". */
     public layer: string = LAYER_DEFAULT;
+    /** TRUE for UI objects. Default value is FALSE. Renders the object outside the game world coordinates. */
     public ui: boolean = false;
+    /** TRUE to prevent the object from being automatically destroyed when changing the scene. Default value is FALSE. */
     public keep: boolean = false;
-    private _parent: GameObject | null = null;
 
+    /** @private */
+    private _parent: GameObject | null = null;
+    /** @private */
     private _active: boolean = true;
 
+    /** @private */
     private components: Component[] = [];
+    /** @private */
     private activeComponentsCache: Component[] = [];
+    /** @private */
     private activeChildrenCache: GameObject[] = [];
 
+    /** @private */
     constructor(container: Container, id: number, name: string = "", parent: GameObject = null) {
         super(container);
 
@@ -42,10 +90,12 @@ export class GameObject extends GameActor {
         this.parent = parent; // using the setter instead of the private attribute
     }
 
+    /** TRUE for enabled object, FALSE for disabled object. */
     public get active(): boolean {
         return this._active;
     }
 
+    /** TRUE for enabled object, FALSE for disabled object. */
     public set active(active: boolean) {
         if (this._active === active) return;
 
@@ -56,31 +106,39 @@ export class GameObject extends GameActor {
         this.onActiveChange();
     }
 
+    /** Parent game object. A child object depends on the parent's Transform. */
     public get parent(): GameObject | null {
         return this._parent;
     }
 
+    /** Parent game object. A child object depends on the parent's Transform. */
     public set parent(parent: GameObject | null) {
         this._parent = parent;
         this.transform.parent = parent !== null ? parent.transform : null;
     }
 
+    /** @private */
     private updateComponentsActiveStatus(): void {
         if (this.active === false) this.activeComponentsCache = this.components.filter((component) => component.active);
         this.activeComponentsCache.forEach((component) => (component.active = this.active));
         if (this.active === true) this.activeComponentsCache = [];
     }
 
+    /** @private */
     private updateChildrenActiveStatus(): void {
         if (this.active === false) this.activeChildrenCache = this.getChildren().filter((children) => children.active);
         this.activeChildrenCache.forEach((children) => (children.active = this.active));
         if (this.active === true) this.activeChildrenCache = [];
     }
 
+    /**
+     * Transform component added natively in the object
+     */
     public get transform(): Transform {
         return this.getComponent<Transform>(Transform);
     }
 
+    /** RigidBody Component (if any) */
     public get rigidBody(): RigidBody {
         return this.getComponent<RigidBody>(RigidBody);
     }
@@ -156,6 +214,7 @@ export class GameObject extends GameActor {
         return component;
     }
 
+    /** @private */
     private checkMultipleComponent(component: Component, componentClass: ComponentClass): void {
         if (component.allowMultiple === false && this.hasComponent(componentClass)) {
             throw new Exception(`GameObject only allows one component of type ${componentClass.name}`);
@@ -283,6 +342,7 @@ export class GameObject extends GameActor {
             .forEach((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
+    /** @private */
     protected _destroy(): void {
         this.destroyComponents();
 
@@ -290,6 +350,7 @@ export class GameObject extends GameActor {
         Object.keys(this).forEach((key) => delete this[key]);
     }
 
+    /** @private */
     private destroyComponents(): void {
         for (let i = 0; i < this.components.length; i++) {
             this.components[i].dispatch(FrameEvent.Destroy);
@@ -299,6 +360,7 @@ export class GameObject extends GameActor {
         this.components = [];
     }
 
+    /** @private */
     protected _stopGame(): void {
         // do nothing
     }

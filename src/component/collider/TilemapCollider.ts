@@ -12,16 +12,57 @@ import {
 import { Vector2 } from "angry-pixel-math";
 import { ICollider, Line, Polygon, Rectangle } from "angry-pixel-2d-physics";
 
+/**
+ * TilemapCollider configuration options
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * this.addComponent(TilemapCollider, {
+ *   tilemapRenderer: this.getComponent(TilemapRenderer),
+ *   layer: "Foreground",
+ *   debug: false,
+ *   composite: true,
+ * });
+ * ```
+ */
 export interface TilemapColliderOptions extends InitOptions {
+    /** TilemapRenderer from which the tiles information will be obtained to generate the colliders */
     tilemapRenderer: ITilemapRenderer;
+    /** Generate colliders that represent the outer lines of the tile map */
     composite?: boolean;
+    /** Collision layer, if it's not setted, it uses the game object layer */
     layer?: string;
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     debug?: boolean;
 }
 
+/**
+ * Generates rectanble colliders for the map edge tiles (or lines if composite is TRUE).
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * this.addComponent(TilemapCollider, {
+ *   tilemapRenderer: this.getComponent(TilemapRenderer),
+ * });
+ * ```
+ * @example
+ * ```js
+ * this.addComponent(TilemapCollider, {
+ *   tilemapRenderer: this.getComponent(TilemapRenderer),
+ *   layer: "Foreground",
+ *   debug: false,
+ *   composite: true,
+ * });
+ * ```
+ */
 export class TilemapCollider extends BaseCollider {
+    /** TilemapRenderer from which the tiles information will be obtained to generate the colliders */
     private tilemapRenderer: ITilemapRenderer;
+    /** If debug mode is enabled, the collider shape is rendered using the object's render layer */
     private debug: boolean = false;
+    /** Generate colliders that represent the outer lines of the tile map */
     private composite: boolean;
 
     // cache
@@ -215,6 +256,7 @@ export class TilemapCollider extends BaseCollider {
     }
 }
 
+/** @private */
 class TilemapColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData[] = [];
     private colliders: ICollider[] = [];

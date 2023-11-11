@@ -8,22 +8,50 @@ import { Container } from "../../utils/Container";
 
 type SceneConstructor = () => Scene;
 
+/**
+ * Manges the loading of the scenes.
+ * @public
+ * @category Managers
+ * @example
+ * ```js
+ * this.sceneManager.loadScene("MainScene");
+ * ```
+ */
 export interface ISceneManager {
+    /**
+     * Retrieves the current loaded scene.
+     * @returns The scene instance.
+     */
     getCurrentScene<T extends Scene>(): T;
+    /**
+     * Adds a new scene.
+     * @param sceneClass The scene class .
+     * @param name The name to identify the scene.
+     * @param options [optional] Options for the init method.
+     * @param openingScene [optional] TRUE if it's the first scene to load.
+     */
     addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene?: boolean): void;
+    /** Loads the scene flagged as the opening scene. */
     loadOpeningScene(): void;
+    /**
+     * Loads a Scene by the given name.
+     * @param name The name of the Scene.
+     */
     loadScene(name: string): void;
+    /** @private */
     update(): void;
+    /** @private */
     unloadCurrentScene(): void;
+    /** @private */
     stopGame(): void;
 }
 
+/** @private */
 export class SceneManager implements ISceneManager {
     private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
     private currentScene: Scene = null;
     private openingSceneName: string = null;
     private sceneToLoad: string | null = null;
-    public currentSceneName: string;
 
     constructor(private readonly container: Container, private renderManager?: IRenderManager) {}
 
@@ -82,7 +110,6 @@ export class SceneManager implements ISceneManager {
         if (this.currentScene !== null) {
             this.currentScene.dispatch(FrameEvent.Destroy);
             this.currentScene = null;
-            this.currentSceneName = null;
 
             if (this.renderManager) {
                 this.renderManager.clearData();
@@ -94,7 +121,6 @@ export class SceneManager implements ISceneManager {
         if (this.currentScene !== null) {
             this.currentScene.dispatch(FrameEvent.StopGame);
             this.currentScene = null;
-            this.currentSceneName = null;
 
             if (this.renderManager) {
                 this.renderManager.clearData();

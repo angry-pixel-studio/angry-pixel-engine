@@ -1,41 +1,117 @@
-import { Component } from "../core/Component";
+import { EngineComponent } from "../core/Component";
 import { InitOptions } from "../core/GameActor";
 import { MouseController } from "../input/MouseController";
 import { TouchController } from "../input/TouchController";
 import { between, Vector2 } from "angry-pixel-math";
 
+/** @category Components */
 export enum ButtonType {
     Rectangle,
     Circumference,
 }
 
+/**
+ * Button configuration options
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * cosnt button = this.addComponent(Button, {
+    type: ButtonType.Rectangle,
+    width: 64,
+    height: 64,
+    touchEnabled: true,
+    offset: new Vector2(0, 0),
+  });
+
+  cosnt button = this.addComponent(Button, {
+    type: ButtonType.Circumference,
+    radius: 32,
+    touchEnabled: true,
+    offset: new Vector2(0, 0),
+  });
+ * ```
+ */
 export interface ButtonOptions extends InitOptions {
+    /** The shape of the button */
     type: ButtonType;
+    /** Width in pixels. Only for rectangle shaped buttons */
     width?: number;
+    /** Height in pixels. Only for rectangle shaped buttons */
     height?: number;
+    /** Radius in pixels. Only for circumference shaped buttons */
     radius?: number;
+    /** Enables interaction with touch screens */
     touchEnabled?: boolean;
+    /** X-axis and Y-axis offset */
     offset?: Vector2;
 }
 
-export class Button extends Component {
+/**
+ * The Button component is used to interact with the mouse and touch screens.
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * cosnt button = this.addComponent(Button, {
+    type: ButtonType.Rectangle,
+    width: 64,
+    height: 64,
+    touchEnabled: true,
+  });
+
+  button.onClick = () => {
+    // some action on click
+  };
+
+  button.onPressed = () => {
+    // some action on pressed
+  };
+ * ```
+ * @example
+ * ```js
+ * cosnt button = this.addComponent(Button, {
+    type: ButtonType.Circumference,
+    radius: 32,
+    touchEnabled: true,
+  });
+
+  button.onClick = () => {
+    // some action on click
+  };
+
+  button.onPressed = () => {
+    // some action on pressed
+  };
+ * ```
+ */
+export class Button extends EngineComponent {
+    /** @private */
     public readonly allowMultiple: boolean = false;
-
+    /** The shape of the button */
     public type: ButtonType;
+    /** Width in pixels. Only for rectangle shaped buttons */
     public width: number = 100;
+    /** Height in pixels. Only for rectangle shaped buttons */
     public height: number = 100;
+    /** Radius in pixels. Only for circumference shaped buttons */
     public radius: number = 50;
+    /** Enables interaction with touch screens */
     public touchEnabled: boolean = true;
-    private _offset: Vector2 = new Vector2();
-
+    /** X-axis and Y-axis offset */
+    public offset: Vector2 = new Vector2();
+    /** TRUE if is pressed */
     public pressed: boolean = false;
+    /** Function executed when the button's click */
+    public onClick: () => void;
+    /** Function executed when the button is pressed */
+    public onPressed: () => void;
 
     private mouse: MouseController = this.inputManager.mouse;
     private touch: TouchController = this.inputManager.touch;
     private position: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();
     private pressedLastFrame: boolean = false;
-
     private scaled: { width: number; height: number; radius: number; offset: Vector2 } = {
         width: 0,
         height: 0,
@@ -43,24 +119,13 @@ export class Button extends Component {
         offset: new Vector2(),
     };
 
-    public onClick: () => void;
-    public onPressed: () => void;
-
-    public get offset(): Vector2 {
-        return this._offset;
-    }
-
-    public set offset(offset: Vector2) {
-        this._offset = offset;
-    }
-
     protected init({ type, height, radius, touchEnabled, width, offset }: ButtonOptions): void {
         this.type = type;
         this.width = width ?? this.width;
         this.height = height ?? this.height;
         this.radius = radius ?? this.radius;
         this.touchEnabled = touchEnabled ?? this.touchEnabled;
-        this._offset = offset ?? this._offset;
+        this.offset = offset ?? this.offset;
     }
 
     protected update(): void {
@@ -92,8 +157,8 @@ export class Button extends Component {
     private scale(): void {
         this.scaled.width = this.width * this.gameObject.transform.scale.x;
         this.scaled.height = this.width * this.gameObject.transform.scale.y;
-        this.scaled.offset.x = this._offset.x * this.gameObject.transform.scale.x;
-        this.scaled.offset.y = this._offset.y * this.gameObject.transform.scale.y;
+        this.scaled.offset.x = this.offset.x * this.gameObject.transform.scale.x;
+        this.scaled.offset.y = this.offset.y * this.gameObject.transform.scale.y;
         this.scaled.radius =
             this.radius *
             Math.max(Math.abs(this.gameObject.transform.scale.x), Math.abs(this.gameObject.transform.scale.y));
@@ -101,7 +166,7 @@ export class Button extends Component {
 
     protected resolveMouseAndRectangle(): void {
         if (this.type === ButtonType.Rectangle) {
-            this.pressed ||=
+            this.pressed =
                 between(
                     this.mouse.positionInViewport.x,
                     this.position.x - this.scaled.width / 2,
@@ -118,24 +183,32 @@ export class Button extends Component {
     protected resolveMouseAndCircumference(): void {
         if (this.type === ButtonType.Circumference) {
             Vector2.subtract(this.distance, this.position, this.mouse.positionInViewport);
-            this.pressed ||= this.distance.magnitude <= this.scaled.radius;
+            this.pressed = this.distance.magnitude <= this.scaled.radius;
         }
     }
 
     protected resolveTouchAndRectangle(): void {
         if (this.type === ButtonType.Rectangle) {
-            this.pressed ||=
-                this.position.x + this.scaled.width / 2 >= this.touch.positionInViewport.x - this.touch.radius.x &&
-                this.position.x - this.scaled.width / 2 <= this.touch.positionInViewport.x + this.touch.radius.x &&
-                this.position.y + this.scaled.height / 2 >= this.touch.positionInViewport.y - this.touch.radius.y &&
-                this.position.y - this.scaled.height / 2 <= this.touch.positionInViewport.y + this.touch.radius.y;
+            for (const { positionInViewport, radius } of this.touch.interactions) {
+                if (this.pressed) return;
+
+                this.pressed =
+                    this.position.x + this.scaled.width / 2 >= positionInViewport.x - radius.x &&
+                    this.position.x - this.scaled.width / 2 <= positionInViewport.x + radius.x &&
+                    this.position.y + this.scaled.height / 2 >= positionInViewport.y - radius.y &&
+                    this.position.y - this.scaled.height / 2 <= positionInViewport.y + radius.y;
+            }
         }
     }
 
     protected resolveTouchAndCircumference(): void {
         if (this.type === ButtonType.Circumference) {
-            Vector2.subtract(this.distance, this.position, this.touch.positionInViewport);
-            this.pressed ||= this.distance.magnitude <= this.scaled.radius + this.touch.radius.x;
+            for (const { positionInViewport, radius } of this.touch.interactions) {
+                if (this.pressed) return;
+
+                Vector2.subtract(this.distance, this.position, positionInViewport);
+                this.pressed = this.distance.magnitude <= this.scaled.radius + Math.max(radius.x, radius.y);
+            }
         }
     }
 }
