@@ -142,7 +142,7 @@ export class SpriteRenderer extends RenderComponent {
         this.maskColorMix = config.maskColorMix ?? 0;
         this.tintColor = config.tintColor;
         this.layer = config.layer;
-        this.scale = config.scale ?? new Vector2(1, 1);
+        this.scale = config.scale ?? this.spriteDefaultScale ?? new Vector2(1, 1);
         this.width = config.width;
         this.height = config.height;
     }

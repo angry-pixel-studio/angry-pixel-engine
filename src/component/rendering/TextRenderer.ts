@@ -220,9 +220,16 @@ export class TextRenderer extends RenderComponent {
         const lines = this.text.split("\n");
 
         for (const line of lines) {
-            const newLines = line.match(
-                new RegExp(".{1," + Math.floor(this.width / (this.fontSize + this.letterSpacing)) + "}", "g")
-            ) ?? [""];
+            const newLines = line.split(" ").reduce(
+                (lines, word) => {
+                    const currentLine =
+                        lines[lines.length - 1] + (lines[lines.length - 1].length > 0 ? " " : "") + word;
+                    if (currentLine.length * (this.fontSize + this.letterSpacing) > this.width) lines.push(word);
+                    else lines[lines.length - 1] = currentLine;
+                    return lines;
+                },
+                [""]
+            );
 
             for (const newLine of newLines) {
                 height += this.fontSize + this.lineSeparation;

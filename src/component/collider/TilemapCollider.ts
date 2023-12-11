@@ -38,7 +38,8 @@ export interface TilemapColliderOptions extends InitOptions {
 }
 
 /**
- * Generates rectanble colliders for the map edge tiles (or lines if composite is TRUE).
+ * Generates rectangle colliders for the map edge tiles (or lines if composite is TRUE).
+ * **Limitations:** At the moment, it is not possible to modify the shape, position, scale and rotation of the collider once it has been generated.
  * @public
  * @category Components
  * @example
@@ -76,7 +77,7 @@ export class TilemapCollider extends BaseCollider {
         this.tilemapRenderer = config.tilemapRenderer;
         this.layer = config.layer;
         this.debug = (config.debug ?? this.debug) && this.gameConfig.debugEnabled;
-        this.physics = true; // todo: fix this shit
+        this.physics = true; // TODO: find a better way
         this.composite = config.composite ?? false;
 
         this.scaledTileWidth = this.tilemapRenderer.tileWidth * this.gameObject.transform.scale.x;
