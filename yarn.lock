@@ -291,8 +291,10 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-"angry-pixel-2d-physics@file:../angry-pixel-2d-physics":
+angry-pixel-2d-physics@^1.0.2:
   version "1.0.2"
+  resolved "https://registry.yarnpkg.com/angry-pixel-2d-physics/-/angry-pixel-2d-physics-1.0.2.tgz#09d2a7b5c35e98a7d2d026a910cfb696750728b8"
+  integrity sha512-JRrYwtzMcAlK0bMq/fi2kZv3XS/YMkFiH3q9uFjOv6frNPPOMI8rkmSPncmWR955TBSG9xyk/s6eR+XiTVCkJg==
   dependencies:
     angry-pixel-math "^1.0.2"
 

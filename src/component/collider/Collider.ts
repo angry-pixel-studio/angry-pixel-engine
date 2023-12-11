@@ -18,6 +18,8 @@ export interface CollisionData {
      * @return The object on the other side of the collision.
      */
     getGameObject: <T extends GameObject>() => T;
+    /** The collider belonging to the queried component */
+    localCollider: ICollider;
 }
 
 /**
@@ -128,6 +130,7 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
             getGameObject: function <T extends GameObject>(): T {
                 return this.gameObject as T;
             },
+            localCollider: collision.localCollider,
         };
     }
 
