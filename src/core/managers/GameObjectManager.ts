@@ -107,6 +107,7 @@ export interface IGameObjectManager {
 /** @private */
 export class GameObjectManager implements IGameObjectManager {
     private gameObjects: GameObject[] = [];
+    private lastId: number = 0;
 
     constructor(private readonly container: Container) {}
 
@@ -116,7 +117,7 @@ export class GameObjectManager implements IGameObjectManager {
         parent?: GameObject,
         name?: string
     ): T {
-        const gameObject = new gameObjectClass(this.container, this.gameObjects.length + 1, name, parent);
+        const gameObject = new gameObjectClass(this.container, ++this.lastId, name, parent);
         this.gameObjects.push(gameObject);
 
         gameObject.dispatch(FrameEvent.Init, options);

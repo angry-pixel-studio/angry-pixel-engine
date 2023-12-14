@@ -12,12 +12,15 @@ import { IPhysicsManager } from "angry-pixel-2d-physics";
 export class HeadlessIterationManager implements IIterationManager {
     public running: boolean = false;
 
-    private currentScene: Scene;
+    private loadedScene: Scene;
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
-
     private gameInterval: NodeJS.Timer | number;
     private physicsInterval: NodeJS.Timer | number;
+    private changingScene: boolean = false;
+
+    private readonly sceneEvents: FrameEvent[] = [FrameEvent.Start, FrameEvent.Update, FrameEvent.StopGame];
+    private readonly gameObjectEvents: FrameEvent[] = [FrameEvent.Start, FrameEvent.Update];
 
     constructor(
         private readonly timeManager: ITimeManager,
@@ -40,7 +43,7 @@ export class HeadlessIterationManager implements IIterationManager {
 
     public stop(): void {
         this.running = false;
-        this.sceneManager.unloadCurrentScene();
+        this.dispatchFrameEvent(FrameEvent.StopGame);
         this.physicsManager.clear();
     }
 
@@ -65,6 +68,12 @@ export class HeadlessIterationManager implements IIterationManager {
 
     private gameLogicIteration(time: number): void {
         this.timeManager.updateForGame(time);
+
+        if (this.sceneManager.pendingSceneToload()) {
+            this.sceneManager.loadPendingScene();
+            this.changingScene = false;
+        }
+
         this.load();
 
         // starts all game objects and components
@@ -82,11 +91,14 @@ export class HeadlessIterationManager implements IIterationManager {
             this.physicsIteration();
         }
 
-        this.sceneManager.update();
+        if (this.sceneManager.pendingSceneToload()) {
+            this.changingScene = true;
+            this.sceneManager.unloadCurrentScene();
+        }
     }
 
     private physicsIteration(): void {
-        if (this.timeManager.timeScale <= 0) return;
+        if (this.timeManager.timeScale <= 0 || this.changingScene) return;
 
         this.dispatchFrameEvent(FrameEvent.UpdatePhysics);
         this.dispatchFrameEvent(FrameEvent.UpdateCollider);
@@ -111,7 +123,7 @@ export class HeadlessIterationManager implements IIterationManager {
     }
 
     private load(): void {
-        this.currentScene = this.sceneManager.getCurrentScene();
+        this.loadedScene = this.sceneManager.getLoadedScene();
         this.gameObjects = this.gameObjectManager.findGameObjects().filter((gameObject) => gameObject.active);
         this.components = this.gameObjects.reduce(
             (components, gameObject) => [
@@ -123,8 +135,9 @@ export class HeadlessIterationManager implements IIterationManager {
     }
 
     private dispatchFrameEvent(event: FrameEvent): void {
-        if (event === FrameEvent.Start || event === FrameEvent.Update) {
-            this.currentScene.dispatch(event);
+        if (this.sceneEvents.includes(event)) {
+            this.loadedScene.dispatch(event);
+        } else if (this.gameObjectEvents.includes(event)) {
             this.gameObjects
                 .filter((gameObject) => gameObject.active)
                 .forEach((gameObject) => gameObject.dispatch(event));

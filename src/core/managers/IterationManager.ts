@@ -41,10 +41,14 @@ export class IterationManager implements IIterationManager {
     public running: boolean = false;
 
     private gameLoopAccumulator: number = 0;
-    private currentScene: Scene;
+    private loadedScene: Scene;
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
     private physicsIntervalId: number;
+    private changingScene: boolean = false;
+
+    private readonly sceneEvents: FrameEvent[] = [FrameEvent.Start, FrameEvent.Update, FrameEvent.StopGame];
+    private readonly gameObjectEvents: FrameEvent[] = [FrameEvent.Start, FrameEvent.Update];
 
     constructor(
         private readonly timeManager: ITimeManager,
@@ -71,7 +75,7 @@ export class IterationManager implements IIterationManager {
     public stop(): void {
         this.running = false;
 
-        this.sceneManager.stopGame();
+        this.dispatchFrameEvent(FrameEvent.StopGame);
         this.physicsManager.clear();
         this.renderManager.clearScreen(this.canvasColor);
     }
@@ -87,7 +91,6 @@ export class IterationManager implements IIterationManager {
             this.sceneManager.loadOpeningScene();
         }
 
-        // this.gameLogicIteration();
         this.requestAnimationLoop(window.performance.now());
 
         // physics fixed at its own frame rate
@@ -101,6 +104,11 @@ export class IterationManager implements IIterationManager {
 
         this.timeManager.updateForBrowser(time * 0.001);
 
+        if (this.sceneManager.pendingSceneToload()) {
+            this.sceneManager.loadPendingScene();
+            this.changingScene = false;
+        }
+
         this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
 
         if (this.gameLoopAccumulator >= this.timeManager.minGameDeltatime) {
@@ -109,6 +117,11 @@ export class IterationManager implements IIterationManager {
         }
 
         this.renderIteration();
+
+        if (this.sceneManager.pendingSceneToload()) {
+            this.changingScene = true;
+            this.sceneManager.unloadCurrentScene();
+        }
 
         window.requestAnimationFrame((time: number) => this.requestAnimationLoop(time));
     }
@@ -135,8 +148,6 @@ export class IterationManager implements IIterationManager {
         }
 
         this.dispatchFrameEvent(FrameEvent.UpdatePreRender);
-
-        this.sceneManager.update();
     }
 
     private renderIteration(): void {
@@ -150,7 +161,7 @@ export class IterationManager implements IIterationManager {
     }
 
     private physicsIteration(): void {
-        if (this.timeManager.timeScale <= 0) return;
+        if (this.timeManager.timeScale <= 0 || this.changingScene) return;
 
         this.dispatchFrameEvent(FrameEvent.UpdatePhysics);
         this.dispatchFrameEvent(FrameEvent.UpdateCollider);
@@ -168,7 +179,7 @@ export class IterationManager implements IIterationManager {
     }
 
     private load(): void {
-        this.currentScene = this.sceneManager.getCurrentScene();
+        this.loadedScene = this.sceneManager.getLoadedScene();
         this.gameObjects = this.gameObjectManager.findGameObjects().filter((gameObject) => gameObject.active);
         this.components = this.gameObjects.reduce(
             (components, gameObject) => [
@@ -180,8 +191,11 @@ export class IterationManager implements IIterationManager {
     }
 
     private dispatchFrameEvent(event: FrameEvent): void {
-        if (event === FrameEvent.Start || event === FrameEvent.Update) {
-            this.currentScene.dispatch(event);
+        if (this.sceneEvents.includes(event)) {
+            this.loadedScene.dispatch(event);
+        }
+
+        if (this.gameObjectEvents.includes(event)) {
             this.gameObjects
                 .filter((gameObject) => gameObject.active)
                 .forEach((gameObject) => gameObject.dispatch(event));

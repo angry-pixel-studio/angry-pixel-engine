@@ -15,14 +15,10 @@ type SceneConstructor = () => Scene;
  * @example
  * ```js
  * this.sceneManager.loadScene("MainScene");
+ * const loadedScene = this.sceneManager.getLoadedScene();
  * ```
  */
 export interface ISceneManager {
-    /**
-     * Retrieves the current loaded scene.
-     * @returns The scene instance.
-     */
-    getCurrentScene<T extends Scene>(): T;
     /**
      * Adds a new scene.
      * @param sceneClass The scene class .
@@ -31,34 +27,51 @@ export interface ISceneManager {
      * @param openingScene [optional] TRUE if it's the first scene to load.
      */
     addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene?: boolean): void;
-    /** Loads the scene flagged as the opening scene. */
-    loadOpeningScene(): void;
     /**
      * Loads a Scene by the given name.
      * @param name The name of the Scene.
      */
     loadScene(name: string): void;
-    /** @private */
-    update(): void;
-    /** @private */
+    /**
+     * Retrieves the current loaded scene.
+     * @returns The scene instance.
+     */
+    getLoadedScene<T extends Scene>(): T;
+    /**
+     * Loads the scene flagged as the opening scene.
+     * @private
+     */
+    loadOpeningScene(): void;
+    /**
+     * Check if there is a pending scene change.
+     * @return TRUE if there is a pending scene to load, FALSE instead
+     * @private
+     */
+    pendingSceneToload(): boolean;
+    /**
+     * Loads the next pending scene.
+     * @private
+     */
+    loadPendingScene(): void;
+    /**
+     * Unloads the current loaded scene.
+     * @private
+     */
     unloadCurrentScene(): void;
-    /** @private */
-    stopGame(): void;
 }
 
 /** @private */
 export class SceneManager implements ISceneManager {
     private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
-    private currentScene: Scene = null;
-    private openingSceneName: string = null;
-    private sceneToLoad: string | null = null;
+    private currentScene: Scene;
+    private openingSceneName: string;
+    private sceneNamePendingToLoad: string = null;
 
     constructor(private readonly container: Container, private renderManager?: IRenderManager) {}
 
-    public getCurrentScene<T extends Scene>(): T {
-        return this.currentScene as T;
-    }
-
+    /**
+     * @inheritdoc
+     */
     public addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene: boolean = false): void {
         if (this.scenes.has(name)) {
             throw new Exception(`There is already a scene with the name '${name}'`);
@@ -73,58 +86,64 @@ export class SceneManager implements ISceneManager {
             return scene;
         });
 
-        if (openingScene === true || this.openingSceneName === null) {
+        if (openingScene || !this.openingSceneName) {
             this.openingSceneName = name;
         }
     }
 
-    public loadOpeningScene(): void {
-        if (this.openingSceneName === null) {
-            throw new Exception(`There is no opening scene`);
-        }
-
-        this._loadScene(this.openingSceneName);
-    }
-
+    /**
+     * @inheritdoc
+     */
     public loadScene(name: string): void {
         if (this.scenes.has(name) === false) {
             throw new Exception(`Scene with name ${name} does not exists`);
         }
 
-        this.sceneToLoad = name;
+        this.sceneNamePendingToLoad = name;
     }
 
-    public update(): void {
-        if (this.sceneToLoad !== null) {
-            this._loadScene(this.sceneToLoad);
-            this.sceneToLoad = null;
+    /**
+     * @inheritdoc
+     */
+    public getLoadedScene<T extends Scene>(): T {
+        return this.currentScene as T;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public loadOpeningScene(): void {
+        if (this.openingSceneName === null) {
+            throw new Exception(`There is no opening scene`);
         }
+
+        this.scenes.get(this.openingSceneName)();
     }
 
-    private _loadScene(name: string) {
-        this.unloadCurrentScene();
-        this.scenes.get(name)();
+    /**
+     * @inheritdoc
+     */
+    public pendingSceneToload(): boolean {
+        return this.sceneNamePendingToLoad !== null;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public loadPendingScene(): void {
+        if (!this.sceneNamePendingToLoad) return;
+
+        this.scenes.get(this.sceneNamePendingToLoad)();
+        this.sceneNamePendingToLoad = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public unloadCurrentScene(): void {
-        if (this.currentScene !== null) {
-            this.currentScene.dispatch(FrameEvent.Destroy);
-            this.currentScene = null;
+        if (!this.currentScene) return;
 
-            if (this.renderManager) {
-                this.renderManager.clearData();
-            }
-        }
-    }
-
-    public stopGame(): void {
-        if (this.currentScene !== null) {
-            this.currentScene.dispatch(FrameEvent.StopGame);
-            this.currentScene = null;
-
-            if (this.renderManager) {
-                this.renderManager.clearData();
-            }
-        }
+        this.currentScene.dispatch(FrameEvent.Destroy);
+        this.currentScene = undefined;
     }
 }

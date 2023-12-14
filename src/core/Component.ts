@@ -88,7 +88,7 @@ export abstract class Component extends GameActor {
      * @returns The current loaded scene
      */
     protected getCurrentScene<T extends Scene>(): T {
-        return this.sceneManager.getCurrentScene<T>();
+        return this.sceneManager.getLoadedScene<T>();
     }
 
     /**

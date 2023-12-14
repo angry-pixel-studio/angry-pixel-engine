@@ -117,11 +117,43 @@ export class Game {
      *
      * @param sceneClass the class of the scene
      * @param name The name of the scene
-     * @param options [optional] This options will be passed to the init method
-     * @param openingScene [default FALSE] If this is the opening scene, set TRUE, FALSE instead
      */
-    public addScene(sceneClass: SceneClass, name: string, options?: InitOptions, openingScene: boolean = false): void {
-        this.sceneManager.addScene(sceneClass, name, options, openingScene);
+    public addScene(sceneClass: SceneClass, name: string): void;
+    /**
+     * Add a scene to the game
+     *
+     * @param sceneClass the class of the scene
+     * @param name The name of the scene
+     * @param options This options will be passed to the init method
+     */
+    public addScene(sceneClass: SceneClass, name: string, options: InitOptions): void;
+    /**
+     * Add a scene to the game
+     *
+     * @param sceneClass the class of the scene
+     * @param name The name of the scene
+     * @param openingScene If this is the opening scene, set TRUE, FALSE instead
+     */
+    public addScene(sceneClass: SceneClass, name: string, openingScene: boolean): void;
+    /**
+     * Add a scene to the game
+     *
+     * @param sceneClass the class of the scene
+     * @param name The name of the scene
+     * @param options This options will be passed to the init method
+     * @param openingScene If this is the opening scene, set TRUE, FALSE instead
+     */
+    public addScene(sceneClass: SceneClass, name: string, options: InitOptions, openingScene: boolean): void;
+    /**
+     * @private
+     */
+    public addScene(sceneClass: SceneClass, name: string, arg1?: InitOptions | boolean, arg2?: boolean): void {
+        this.sceneManager.addScene(
+            sceneClass,
+            name,
+            typeof arg1 === "object" ? arg1 : undefined,
+            typeof arg1 === "boolean" ? arg1 : arg2 ?? false
+        );
     }
 
     /**
