@@ -24,11 +24,11 @@ export interface IInputManager {
     gamepad: GamepadController;
     /** Manages toush information. */
     touch: TouchController;
-    /** @private */
+    /** @internal */
     update(): void;
 }
 
-/** @private */
+/** @internal */
 export class InputManager implements IInputManager {
     public mouse: MouseController;
     public keyboard: KeyboardController;

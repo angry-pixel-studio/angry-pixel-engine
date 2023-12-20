@@ -20,7 +20,7 @@ const DEFAULT_LAYERS: string[] = [LAYER_DEFAULT];
  * ```
  */
 export class Camera extends CameraComponent {
-    /** @private */
+    /** @internal */
     public readonly allowMultiple: boolean = false;
     /**
      * Rectangle representing the field of view of the camera from the perspective of the screen

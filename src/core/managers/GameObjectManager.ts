@@ -104,7 +104,7 @@ export interface IGameObjectManager {
     destroyGameObject(gameObject: GameObject): void;
 }
 
-/** @private */
+/** @internal */
 export class GameObjectManager implements IGameObjectManager {
     private gameObjects: GameObject[] = [];
     private lastId: number = 0;

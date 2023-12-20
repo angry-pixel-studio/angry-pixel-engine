@@ -76,7 +76,7 @@ export interface RigidBodyOptions extends InitOptions {
  * ```
  */
 export class RigidBody extends EngineComponent {
-    /** @private */
+    /** @internal */
     public readonly allowMultiple: boolean = false;
 
     private rigidBody: IRigidBody;

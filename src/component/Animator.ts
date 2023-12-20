@@ -201,7 +201,7 @@ export class Animator extends EngineComponent {
 }
 
 /**
- * @private
+ * @internal
  */
 class AnimationPlayer {
     private _animation: AnimationConfig;

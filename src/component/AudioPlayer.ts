@@ -51,7 +51,7 @@ export interface AudioPlayerOptions extends InitOptions {
  * ```
  */
 export class AudioPlayer extends EngineComponent {
-    /** @private */
+    /** @internal */
     public readonly allowMultiple: boolean = false;
 
     private audioContext: AudioContext;

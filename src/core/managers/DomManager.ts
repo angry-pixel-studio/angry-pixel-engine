@@ -16,7 +16,7 @@ export interface IDomManager {
     canvas: HTMLCanvasElement;
 }
 
-/** @private */
+/** @internal */
 export class DomManager implements IDomManager {
     private gameWidth: number;
     private gameHeight: number;

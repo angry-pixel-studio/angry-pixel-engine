@@ -133,7 +133,7 @@ export class BallCollider extends BaseCollider {
     }
 }
 
-/** @private */
+/** @internal */
 class BallColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData;
     private collider: ICollider;

@@ -23,13 +23,13 @@ const allowedPhysicsFramerates = [60, 120, 180, 240];
  * ```
  */
 export interface ITimeManager {
-    /** @private */
+    /** @internal */
     minGameDeltatime: number;
-    /** @private */
+    /** @internal */
     minPhysicsDeltaTime: number;
-    /** @private */
+    /** @internal */
     gameFramerate: number;
-    /** @private */
+    /** @internal */
     physicsFramerate: number;
     /** The time difference, in seconds, between the last frame and the current frame. */
     deltaTime: number;
@@ -48,15 +48,15 @@ export interface ITimeManager {
     unscaledPhysicsDeltaTime: number;
     /** The time difference, in seconds, between the last frame of and the current frame recorded by the browser. */
     browserDeltaTime: number;
-    /** @private */
+    /** @internal */
     updateForGame(time: number): void;
-    /** @private */
+    /** @internal */
     updateForBrowser(time: number): void;
-    /** @private */
+    /** @internal */
     updateForPhysics(time: number): void;
 }
 
-/** @private */
+/** @internal */
 export class TimeManager implements ITimeManager {
     public readonly minGameDeltatime: number = 0;
     public readonly minPhysicsDeltaTime: number = 0;

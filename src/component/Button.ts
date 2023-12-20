@@ -86,7 +86,7 @@ export interface ButtonOptions extends InitOptions {
  * ```
  */
 export class Button extends EngineComponent {
-    /** @private */
+    /** @internal */
     public readonly allowMultiple: boolean = false;
     /** The shape of the button */
     public type: ButtonType;

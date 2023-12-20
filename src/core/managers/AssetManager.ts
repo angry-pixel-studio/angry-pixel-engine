@@ -96,7 +96,7 @@ export interface IAssetManager {
     getVideo(url: string): HTMLVideoElement;
 }
 
-/** @private */
+/** @internal */
 export class AssetManager implements IAssetManager {
     private readonly assets: Asset[] = [];
 

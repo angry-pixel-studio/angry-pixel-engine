@@ -11,19 +11,19 @@ import { ISceneManager } from "./managers/SceneManager";
 import { ITimeManager } from "./managers/TimeManager";
 import { IRenderManager } from "angry-pixel-2d-renderer";
 
-/** @private */
+/** @internal */
 export interface InitOptions {
     [key: string]: any; // eslint-disable-line
 }
 
 /**
  * Base class from which Scene, GameObjects and Component are extended.
- * @private
+ * @internal
  */
 export abstract class GameActor {
-    /** @private */
+    /** @internal */
     protected readonly updateEvent: FrameEvent = FrameEvent.Update;
-    /** @private */
+    /** @internal */
     protected readonly container: Container;
 
     /** Used to load and retrieve assets. */
@@ -47,7 +47,7 @@ export abstract class GameActor {
 
     private started: boolean = false;
 
-    /** @private */
+    /** @internal */
     constructor(container: Container) {
         this.container = container;
 
@@ -66,7 +66,7 @@ export abstract class GameActor {
         this.timeManager = this.container.getSingleton<ITimeManager>("TimeManager");
     }
 
-    /** @private */
+    /** @internal */
     public dispatch(event: FrameEvent, options?: InitOptions): void {
         if (event === FrameEvent.Init && this.init) {
             this.init(options);
@@ -203,9 +203,9 @@ export abstract class GameActor {
         this.gameObjectManager.destroyGameObject(gameObject);
     }
 
-    /** @private */
+    /** @internal */
     protected abstract _destroy(): void;
 
-    /** @private */
+    /** @internal */
     protected abstract _stopGame(): void;
 }

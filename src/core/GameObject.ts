@@ -7,10 +7,10 @@ import { FrameEvent } from "./managers/IterationManager";
 import { GameActor, InitOptions } from "./GameActor";
 import { Container } from "../utils/Container";
 
-/** @private */
+/** @internal */
 export const LAYER_DEFAULT = "Default";
 
-/** @private */
+/** @internal */
 export type GameObjectClass<T extends GameObject = GameObject> = new (
     container: Container,
     id: number,
@@ -67,19 +67,19 @@ export class GameObject extends GameActor {
     /** TRUE to prevent the object from being automatically destroyed when changing the scene. Default value is FALSE. */
     public keep: boolean = false;
 
-    /** @private */
+    /** @internal */
     private _parent: GameObject | null = null;
-    /** @private */
+    /** @internal */
     private _active: boolean = true;
 
-    /** @private */
+    /** @internal */
     private components: Component[] = [];
-    /** @private */
+    /** @internal */
     private activeComponentsCache: Component[] = [];
-    /** @private */
+    /** @internal */
     private activeChildrenCache: GameObject[] = [];
 
-    /** @private */
+    /** @internal */
     constructor(container: Container, id: number, name: string = "", parent: GameObject = null) {
         super(container);
 
@@ -117,14 +117,14 @@ export class GameObject extends GameActor {
         this.transform.parent = parent !== null ? parent.transform : null;
     }
 
-    /** @private */
+    /** @internal */
     private updateComponentsActiveStatus(): void {
         if (this.active === false) this.activeComponentsCache = this.components.filter((component) => component.active);
         this.activeComponentsCache.forEach((component) => (component.active = this.active));
         if (this.active === true) this.activeComponentsCache = [];
     }
 
-    /** @private */
+    /** @internal */
     private updateChildrenActiveStatus(): void {
         if (this.active === false) this.activeChildrenCache = this.getChildren().filter((children) => children.active);
         this.activeChildrenCache.forEach((children) => (children.active = this.active));
@@ -214,7 +214,7 @@ export class GameObject extends GameActor {
         return component;
     }
 
-    /** @private */
+    /** @internal */
     private checkMultipleComponent(component: Component, componentClass: ComponentClass): void {
         if (component.allowMultiple === false && this.hasComponent(componentClass)) {
             throw new Exception(`GameObject only allows one component of type ${componentClass.name}`);
@@ -342,7 +342,7 @@ export class GameObject extends GameActor {
             .forEach((gameObject: GameObject) => this.gameObjectManager.destroyGameObject(gameObject));
     }
 
-    /** @private */
+    /** @internal */
     protected _destroy(): void {
         this.destroyComponents();
 
@@ -350,7 +350,7 @@ export class GameObject extends GameActor {
         Object.keys(this).forEach((key) => delete this[key]);
     }
 
-    /** @private */
+    /** @internal */
     private destroyComponents(): void {
         for (let i = 0; i < this.components.length; i++) {
             this.components[i].dispatch(FrameEvent.Destroy);
@@ -360,7 +360,7 @@ export class GameObject extends GameActor {
         this.components = [];
     }
 
-    /** @private */
+    /** @internal */
     protected _stopGame(): void {
         // do nothing
     }

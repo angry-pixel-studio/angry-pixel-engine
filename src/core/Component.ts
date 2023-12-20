@@ -4,7 +4,7 @@ import { FrameEvent } from "./managers/IterationManager";
 import { GameActor } from "./GameActor";
 import { Container } from "../utils/Container";
 
-/** @private */
+/** @internal */
 export type ComponentClass<T extends Component = Component> = new (
     container: Container,
     gameObject: GameObject,
@@ -52,10 +52,10 @@ export abstract class Component extends GameActor {
     /** TRUE if several instances of this component are allowed in the same object. */
     public readonly allowMultiple: boolean = true;
 
-    /** @private */
+    /** @internal */
     private _active: boolean = true;
 
-    /** @private */
+    /** @internal */
     constructor(container: Container, gameObject: GameObject, name: string = "") {
         super(container);
 
@@ -160,24 +160,24 @@ export abstract class Component extends GameActor {
         this.gameObject.removeComponent(component);
     }
 
-    /** @private */
+    /** @internal */
     protected _destroy(): void {
         // @ts-ignore
         Object.keys(this).forEach((key) => delete this[key]);
     }
 
-    /** @private */
+    /** @internal */
     protected _stopGame(): void {
         // do nothing
     }
 }
 
-/** @private */
+/** @internal */
 export abstract class EngineComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateEngine;
 }
 
-/** @private */
+/** @internal */
 export abstract class ColliderComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateCollider;
 }
@@ -219,7 +219,7 @@ export abstract class PhysicsComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdatePhysics;
 }
 
-/** @private */
+/** @internal */
 export abstract class TransformComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateTransform;
 }
@@ -261,12 +261,12 @@ export abstract class PreRenderComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdatePreRender;
 }
 
-/** @private */
+/** @internal */
 export abstract class CameraComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateCamera;
 }
 
-/** @private */
+/** @internal */
 export abstract class RenderComponent extends Component {
     protected readonly updateEvent: FrameEvent = FrameEvent.UpdateRender;
 }

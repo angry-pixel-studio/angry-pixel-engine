@@ -29,7 +29,7 @@ export class KeyboardController {
 
     private keyMap: Map<string, boolean> = new Map<string, boolean>();
 
-    /** @private */
+    /** @internal */
     constructor(canvas: HTMLCanvasElement) {
         canvas.addEventListener("keydown", this.eventHandler);
         canvas.addEventListener("keyup", this.eventHandler);

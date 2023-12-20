@@ -64,16 +64,16 @@ const defaultConfig: GameConfig = {
  * ```
  */
 export class Game {
-    /** @private */
+    /** @internal */
     private readonly container: Container;
-    /** @private */
+    /** @internal */
     private sceneManager: ISceneManager;
-    /** @private */
+    /** @internal */
     private iterationManager: IIterationManager;
-    /** @private */
+    /** @internal */
     private _config: GameConfig;
 
-    /** @private */
+    /** @internal */
     constructor(config: GameConfig) {
         this._config = {
             ...defaultConfig,
@@ -90,7 +90,7 @@ export class Game {
         this.setupManagers();
     }
 
-    /** @private */
+    /** @internal */
     private setupManagers(): void {
         loadDependencies(this.container, this._config);
 
@@ -145,7 +145,7 @@ export class Game {
      */
     public addScene(sceneClass: SceneClass, name: string, options: InitOptions, openingScene: boolean): void;
     /**
-     * @private
+     * @internal
      */
     public addScene(sceneClass: SceneClass, name: string, arg1?: InitOptions | boolean, arg2?: boolean): void {
         this.sceneManager.addScene(

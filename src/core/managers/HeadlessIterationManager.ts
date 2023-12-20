@@ -8,7 +8,7 @@ import { IIterationManager } from "./IterationManager";
 import { FrameEvent } from "./IterationManager";
 import { IPhysicsManager } from "angry-pixel-2d-physics";
 
-/** @private */
+/** @internal */
 export class HeadlessIterationManager implements IIterationManager {
     public running: boolean = false;
 

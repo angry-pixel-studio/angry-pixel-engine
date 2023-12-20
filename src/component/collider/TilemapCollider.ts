@@ -257,7 +257,7 @@ export class TilemapCollider extends BaseCollider {
     }
 }
 
-/** @private */
+/** @internal */
 class TilemapColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData[] = [];
     private colliders: ICollider[] = [];

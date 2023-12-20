@@ -85,7 +85,7 @@ export interface TilemapRendererOptions {
 }
 
 /**
- * @private
+ * @internal
  */
 export interface ITilemapRenderer {
     tiles: number[];

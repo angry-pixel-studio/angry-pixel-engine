@@ -23,7 +23,7 @@ export class MouseController {
     private lastPositionInViewport: Vector2 = new Vector2(0, 0);
     private canvas: HTMLCanvasElement;
 
-    /** @private */
+    /** @internal */
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
 
@@ -70,7 +70,7 @@ export class MouseController {
         return this._hasMoved;
     }
 
-    /** @private */
+    /** @internal */
     public update(): void {
         if (this._positionInViewport.equals(this.lastPositionInViewport) === false) {
             this._hasMoved = true;

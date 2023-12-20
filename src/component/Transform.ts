@@ -24,7 +24,7 @@ import { Rotation, Vector2 } from "angry-pixel-math";
  * ```
  */
 export class Transform extends TransformComponent {
-    /** @private */
+    /** @internal */
     public readonly allowMultiple: boolean = false;
 
     /** Apply scale relative to the parent. Default value is TRUE */

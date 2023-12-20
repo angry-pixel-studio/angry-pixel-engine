@@ -3,7 +3,6 @@
     "name": "Angry Pixel Engine",
     "entryPoints": ["./src/index.ts"],
     "out": "api-docs",
-    "excludePrivate": true,
     "excludeInternal": true,
     "navigation": {
         "includeCategories": true

@@ -164,7 +164,7 @@ export class EdgeCollider extends BaseCollider {
 }
 
 /**
- * @private
+ * @internal
  */
 class EdgeColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData[] = [];

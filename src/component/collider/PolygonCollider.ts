@@ -161,7 +161,7 @@ export class PolygonCollider extends BaseCollider {
     }
 }
 
-/** @private */
+/** @internal */
 export class PolygonColliderRenderer extends RenderComponent {
     private renderData: IGeometricRenderData;
     private collider: ICollider;

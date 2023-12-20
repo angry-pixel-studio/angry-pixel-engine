@@ -48,7 +48,7 @@ export interface IColliderComponent {
     getCollisionsWithLayer(layer: string): CollisionData[];
 }
 
-/** @private */
+/** @internal */
 export abstract class BaseCollider extends ColliderComponent implements IColliderComponent {
     protected renderer: RenderComponent = null;
 

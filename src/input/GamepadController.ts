@@ -16,7 +16,7 @@ import { Vector2 } from "angry-pixel-math";
 export class GamepadController {
     private readonly gamepads: Map<number, GamepadData> = new Map<number, GamepadData>();
 
-    /** @private */
+    /** @internal */
     constructor() {
         // @ts-ignore
         window.addEventListener("gamepadconnected", this.eventHandler);
@@ -58,7 +58,7 @@ export class GamepadController {
         this.gamepads.delete(gamepad.index);
     }
 
-    /** @private */
+    /** @internal */
     public update(): void {
         for (const gamepad of this.getGamepadsFromBrowser()) {
             if (gamepad === null) {
@@ -112,7 +112,7 @@ export class GamepadData {
 
     private _vibrating: boolean = false;
 
-    /** @private */
+    /** @internal */
     public updateFromGamepad(gamepad: Gamepad): void {
         this._gamepad = gamepad;
         gamepad.buttons.forEach((button: GamepadButton, index: number) => this.buttons.set(index, button.pressed));

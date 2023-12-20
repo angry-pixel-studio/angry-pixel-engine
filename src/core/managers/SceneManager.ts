@@ -39,28 +39,28 @@ export interface ISceneManager {
     getLoadedScene<T extends Scene>(): T;
     /**
      * Loads the scene flagged as the opening scene.
-     * @private
+     * @internal
      */
     loadOpeningScene(): void;
     /**
      * Check if there is a pending scene change.
      * @return TRUE if there is a pending scene to load, FALSE instead
-     * @private
+     * @internal
      */
     pendingSceneToload(): boolean;
     /**
      * Loads the next pending scene.
-     * @private
+     * @internal
      */
     loadPendingScene(): void;
     /**
      * Unloads the current loaded scene.
-     * @private
+     * @internal
      */
     unloadCurrentScene(): void;
 }
 
-/** @private */
+/** @internal */
 export class SceneManager implements ISceneManager {
     private scenes: Map<string, SceneConstructor> = new Map<string, SceneConstructor>();
     private currentScene: Scene;
