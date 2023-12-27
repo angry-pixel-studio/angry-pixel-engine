@@ -1,18 +1,22 @@
 {
     "name": "angry-pixel",
-    "version": "1.2.6",
+    "version": "1.2.7",
+    "private": true,
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "module": "lib/index.esm.js",
+    "workspaces": [
+        "packages/**"
+    ],
     "scripts": {
         "build": "rollup -c",
         "clean": "tsc --build --clean",
         "prepare": "npm run build",
         "lint": "eslint . --ext .ts",
         "lint-and-fix": "eslint . --ext .ts --fix",
-        "prettier-format": "prettier --write \"src/**/*.{ts,js,css,html}\"",
-        "prettier-check": "prettier --check \"src/**/*.{ts,js,css,html}\"",
+        "prettier-format": "prettier --write \"packages/*/src/**/*.{ts,js,css,html}\"",
+        "prettier-check": "prettier --check \"packages/*/src/**/*.{ts,js,css,html}\"",
         "docs": "typedoc"
     },
     "repository": {
@@ -51,10 +55,5 @@
         "typedoc": "^0.25.3",
         "typedoc-plugin-markdown": "^3.16.0",
         "typescript": "^5.1.6"
-    },
-    "dependencies": {
-        "angry-pixel-2d-physics": "^1.0.3",
-        "angry-pixel-2d-renderer": "^1.0.6",
-        "angry-pixel-math": "^1.0.2"
     }
 }

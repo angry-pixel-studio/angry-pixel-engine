@@ -1,12 +1,13 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "name": "Angry Pixel Engine",
-    "entryPoints": ["./src/index.ts"],
+    "entryPoints": ["./packages/core/src/index.ts"],
     "out": "api-docs",
     "excludeInternal": true,
     "navigation": {
         "includeCategories": true
     },
-    "categoryOrder": ["Core", "Components", "Managers", "Game Objects", "Input"],
-    "defaultCategory": "Core"
+    "categoryOrder": ["Core", "Config", "Components", "Managers", "Game Objects", "Input", "Math"],
+    "defaultCategory": "Core",
+    "readme": "./README.md"
 }

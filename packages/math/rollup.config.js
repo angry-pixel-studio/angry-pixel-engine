@@ -5,13 +5,13 @@ import { terser } from "rollup-plugin-terser";
 
 const builder = (format, filename) => ({
     exports: "named",
-    name: "AngryPixel",
+    name: "AngryPixelMath",
     file: "lib/" + filename,
     format,
 });
 
 export default {
-    input: "packages/core/src/index.ts",
+    input: "src/index.ts",
     output: [builder("umd", "index.js"), builder("esm", "index.esm.js"), builder("cjs", "index.cjs.js")],
     plugins: [nodeResolve({ preferBuiltins: false }), typescript(), commonjs({ extensions: [".ts", ".js"] }), terser()],
 };

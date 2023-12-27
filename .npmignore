@@ -1,9 +1,11 @@
 /node_modules
 /src
+/api-docs
 .eslintignore
 .eslintrc
+.gitignore
 .prettierrc
 rollup.config.js
 tsconfig.json
-.gitignore
+typedoc.json
 yarn-error.log

@@ -1,0 +1,17 @@
+{
+    "name": "@angry-pixel/core",
+    "version": "1.0.0",
+    "description": "Core package for Angry Pixel Engine",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine"
+    },
+    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
+    "author": "Mauro Cristy <maurocristy@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "@angry-pixel/2d-physics": "1.0.0",
+        "@angry-pixel/2d-renderer": "1.0.0",
+        "@angry-pixel/math": "1.0.0"
+    }
+}

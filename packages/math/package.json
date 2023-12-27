@@ -1,0 +1,23 @@
+{
+    "name": "@angry-pixel/math",
+    "version": "1.0.0",
+    "description": "Angry Pixel math tools.",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "module": "lib/index.esm.js",
+    "scripts": {
+        "build": "rollup -c",
+        "clean": "tsc --build --clean",
+        "prepare": "npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine"
+    },
+    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
+    "author": "Mauro Cristy <maurocristy@gmail.com>",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    }
+}

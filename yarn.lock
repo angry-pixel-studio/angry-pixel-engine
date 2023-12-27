@@ -291,26 +291,6 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-angry-pixel-2d-physics@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/angry-pixel-2d-physics/-/angry-pixel-2d-physics-1.0.3.tgz#8f055dcdd8d69f2bb27767730b47fe4c6f2b18ed"
-  integrity sha512-vtOj4VKL5MucsjVCDikd5dP1tZDnOdzjnzYSWYCWiP8R95dLJAqmcO1pA4pdYhKUFoBaF4J8Vtz+/LDyBsiJCg==
-  dependencies:
-    angry-pixel-math "^1.0.2"
-
-angry-pixel-2d-renderer@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/angry-pixel-2d-renderer/-/angry-pixel-2d-renderer-1.0.6.tgz#812e3a2f415025d9e1a9d38a1d50f149532a0c53"
-  integrity sha512-OprhMgSj5rlUxbdEBqeR4htWbUoJVT3FyzrJexrzIFk6kGBv3YAwmBOCXx4l/4JQEueBM7ivZPX1z5pTzWvwmg==
-  dependencies:
-    angry-pixel-math "^1.0.2"
-    gl-matrix "^3.4.3"
-
-angry-pixel-math@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/angry-pixel-math/-/angry-pixel-math-1.0.2.tgz#707b73fe8401262e1328c99c904d660d9ef2080f"
-  integrity sha512-btX6ayaWn4QgqPSJvWSTCOzD1W5wEHEomy6szUQ06zOJe/JefjPHlrNzMdcPlPCDP02az1Noe0mpZ041gehNzA==
-
 ansi-regex@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
