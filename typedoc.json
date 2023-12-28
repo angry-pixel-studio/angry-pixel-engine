@@ -1,7 +1,7 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "name": "Angry Pixel Engine",
-    "entryPoints": ["./packages/core/src/index.ts"],
+    "entryPoints": ["./bundles/angry-pixel/src/index.ts"],
     "out": "api-docs",
     "excludeInternal": true,
     "navigation": {

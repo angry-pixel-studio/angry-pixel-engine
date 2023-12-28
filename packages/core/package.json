@@ -1,7 +1,15 @@
 {
     "name": "@angry-pixel/core",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Core package for Angry Pixel Engine",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "module": "lib/index.esm.js",
+    "scripts": {
+        "build": "rollup -c",
+        "clean": "tsc --build --clean",
+        "prepare": "npm run build"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine"
@@ -9,9 +17,13 @@
     "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
     "dependencies": {
-        "@angry-pixel/2d-physics": "1.0.0",
-        "@angry-pixel/2d-renderer": "1.0.0",
-        "@angry-pixel/math": "1.0.0"
+        "@angry-pixel/2d-physics": "1.0.1",
+        "@angry-pixel/2d-renderer": "1.0.1",
+        "@angry-pixel/math": "1.0.1",
+        "@angry-pixel/input": "1.0.1"
     }
 }

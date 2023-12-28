@@ -1,6 +1,3 @@
-// math
-export * from "@angry-pixel/math";
-
 // core
 export { Component, PhysicsComponent, PreRenderComponent } from "./core/Component";
 export { Game } from "./core/Game";
@@ -13,11 +10,8 @@ export { InitOptions } from "./core/GameActor";
 export { IAssetManager } from "./core/managers/AssetManager";
 export { IDomManager } from "./core/managers/DomManager";
 export { IGameObjectManager } from "./core/managers/GameObjectManager";
-export { IInputManager } from "@angry-pixel/input";
 export { ISceneManager } from "./core/managers/SceneManager";
 export { ITimeManager } from "./core/managers/TimeManager";
-export { IPhysicsManager } from "@angry-pixel/2d-physics";
-export { IRenderManager } from "@angry-pixel/2d-renderer";
 
 // components
 export * from "./component/collider/BoxCollider";
@@ -43,23 +37,3 @@ export * from "./component/Button";
 // game objects
 export * from "./gameObject/GameCamera";
 export * from "./gameObject/SpacePointer";
-
-// collision
-export {
-    ICollisionResolution,
-    ICollision,
-    CollisionMatrix,
-    CollisionMethods,
-    ICollider,
-    BroadPhaseMethods,
-} from "@angry-pixel/2d-physics";
-
-// input
-export {
-    GamepadController,
-    GamepadData,
-    KeyboardController,
-    MouseController,
-    TouchController,
-    TouchInteraction,
-} from "@angry-pixel/input";

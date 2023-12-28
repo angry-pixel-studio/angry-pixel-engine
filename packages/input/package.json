@@ -1,6 +1,6 @@
 {
     "name": "@angry-pixel/input",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Angry Pixel input capturing tools.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -21,6 +21,6 @@
         "access": "public"
     },
     "dependencies": {
-        "@angry-pixel/math": "1.0.0"
+        "@angry-pixel/math": "1.0.1"
     }
 }
