@@ -2,6 +2,6 @@
 .vscode
 .vs
 angry-pixel-*.tgz
-/lib
+**/lib
 yarn-error.log
 /api-docs

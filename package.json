@@ -1,60 +1,45 @@
 {
-    "name": "angry-pixel",
-    "version": "1.2.6",
-    "description": "Lightweight 2D game engine made with TypeScript.",
-    "main": "lib/index.js",
-    "types": "lib/index.d.ts",
-    "module": "lib/index.esm.js",
+    "name": "angry-pixel-monorepo",
+    "version": "1.2.8",
+    "private": true,
+    "workspaces": [
+        "packages/*",
+        "bundles/*"
+    ],
     "scripts": {
         "build": "rollup -c",
         "clean": "tsc --build --clean",
         "prepare": "npm run build",
         "lint": "eslint . --ext .ts",
         "lint-and-fix": "eslint . --ext .ts --fix",
-        "prettier-format": "prettier --write \"src/**/*.{ts,js,css,html}\"",
-        "prettier-check": "prettier --check \"src/**/*.{ts,js,css,html}\"",
-        "docs": "typedoc"
+        "prettier-format": "prettier --write \"packages/*/src/**/*.{ts,js,css,html}\"",
+        "prettier-check": "prettier --check \"packages/*/src/**/*.{ts,js,css,html}\"",
+        "docs": "typedoc",
+        "publish": "yarn workspace angry-pixel publish",
+        "publish-math": "yarn workspace @angry-pixel/math publish",
+        "publish-physics": "yarn workspace @angry-pixel/2d-physics publish",
+        "publish-renderer": "yarn workspace @angry-pixel/2d-renderer publish",
+        "publish-input": "yarn workspace @angry-pixel/input publish",
+        "publish-core": "yarn workspace @angry-pixel/core publish"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine.git"
-    },
-    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
-    "keywords": [
-        "angry pixel",
-        "game engine",
-        "video games",
-        "engine",
-        "2d engine",
-        "webgl",
-        "canvas",
-        "typescript",
-        "game development"
-    ],
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "license": "MIT",
-    "publishConfig": {
-        "access": "public"
-    },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^19.0.0",
         "@rollup/plugin-node-resolve": "^13.0.0",
+        "@rollup/plugin-typescript": "^11.1.5",
         "@types/node": "^20.8.9",
         "@typescript-eslint/eslint-plugin": "^6.10.0",
         "@typescript-eslint/parser": "^6.10.0",
         "eslint": "^8.53.0",
         "prettier": "^2.1.2",
         "rollup": "^2.49.0",
+        "rollup-plugin-del": "^1.0.1",
+        "rollup-plugin-dts": "^6.1.0",
         "rollup-plugin-terser": "^7.0.2",
-        "rollup-plugin-typescript2": "^0.35.0",
         "tslib": "^2.6.1",
         "typedoc": "^0.25.3",
         "typedoc-plugin-markdown": "^3.16.0",
         "typescript": "^5.1.6"
-    },
-    "dependencies": {
-        "angry-pixel-2d-physics": "^1.0.3",
-        "angry-pixel-2d-renderer": "^1.0.6",
-        "angry-pixel-math": "^1.0.2"
     }
 }

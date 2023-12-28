@@ -1,18 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "ES5",
-    "module": "ES2015",
-    "lib": ["ES2020", "dom"],
-    "declaration": true,
-    "outDir": "lib/",
-    "rootDir": "src/",
-    "strict": true,
-    "strictNullChecks": false,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "lib"]
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "ES2015",
+        "lib": ["ES2020", "dom"],
+        "declaration": true,
+        "declarationDir": "./types",
+        "strict": true,
+        "strictNullChecks": false,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "baseUrl": "./",
+        "paths": {
+            "@angry-pixel/*": ["packages/*/src"],
+            "angry-pixel": ["bundles/angry-pixel/src"]
+        }
+    },
+    "exclude": ["node_modules", "**/dist/**", "**/lib/**"]
 }
