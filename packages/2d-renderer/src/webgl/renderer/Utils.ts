@@ -19,9 +19,8 @@ export const setProjectionMatrix = (
         1
     );
 
-    mat4.translate(projectionMatrix, projectionMatrix, [0, 0, 0]);
-
     if (renderLocation === RenderLocation.WorldSpace) {
         mat4.scale(projectionMatrix, projectionMatrix, [cameraData.zoom ?? 1, cameraData.zoom ?? 1, 1]);
+        mat4.translate(projectionMatrix, projectionMatrix, [-cameraData.position.x, -cameraData.position.y, 0]);
     }
 };

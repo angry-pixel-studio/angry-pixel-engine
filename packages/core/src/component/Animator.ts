@@ -175,6 +175,7 @@ export class Animator extends EngineComponent {
         if (this.currentAnimation !== null) {
             this.currentAnimation.reset();
             this.currentAnimation = null;
+            this.paused = false;
         }
     }
 

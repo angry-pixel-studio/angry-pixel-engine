@@ -1,7 +1,7 @@
 import { Vector2 } from "@angry-pixel/math";
 import { mat4 } from "gl-matrix";
 import { ICameraData } from "../../CameraData";
-import { RenderDataType, RenderLocation } from "../../renderData/RenderData";
+import { RenderDataType } from "../../renderData/RenderData";
 import { IProcessedTilemapData } from "../../renderData/TilemapRenderData";
 import { hexToRgba } from "../../utils/hexToRgba";
 import { IProgramManager } from "../program/ProgramManager";
@@ -33,7 +33,6 @@ export class TilemapRenderer implements IRenderer {
         texHeight: 0,
         texCorrection: new Vector2(),
     };
-    private modelPosition: Vector2 = new Vector2();
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -60,13 +59,12 @@ export class TilemapRenderer implements IRenderer {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        Vector2.round(
-            this.modelPosition,
-            renderData.location === RenderLocation.WorldSpace
-                ? Vector2.subtract(this.modelPosition, renderData.renderPosition, cameraData.position)
-                : renderData.renderPosition
-        );
-        mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
+
+        mat4.translate(this.modelMatrix, this.modelMatrix, [
+            renderData.renderPosition.x,
+            renderData.renderPosition.y,
+            0,
+        ]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             renderData.tilemap.tileWidth * (renderData.flipHorizontal ? -1 : 1),

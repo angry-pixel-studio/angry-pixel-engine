@@ -15,13 +15,10 @@ export interface IRigidBodyFactory {
 }
 
 export class RigidBodyFactory implements IRigidBodyFactory {
-    private lastId: number = 0;
-
     public create({ colliderIds, type, gravity, position, velocity, onResolve }: IRigidBodyDto): IRigidBody {
         if (colliderIds.length === 0) throw new Error("RigidBody needs at least one collider");
 
         return {
-            id: ++this.lastId,
             active: true,
             colliderIds,
             type,

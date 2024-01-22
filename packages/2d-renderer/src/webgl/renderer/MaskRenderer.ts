@@ -1,8 +1,7 @@
-import { Vector2 } from "@angry-pixel/math";
 import { mat4 } from "gl-matrix";
 import { ICameraData } from "../../CameraData";
 import { IMaskRenderData } from "../../renderData/MaskRenderData";
-import { RenderDataType, RenderLocation } from "../../renderData/RenderData";
+import { RenderDataType } from "../../renderData/RenderData";
 import { hexToRgba } from "../../utils/hexToRgba";
 import { IProgramManager } from "../program/ProgramManager";
 import { IRenderer } from "./IRenderer";
@@ -25,7 +24,6 @@ export class MaskRenderer implements IRenderer {
         -0.5, 0.5,
         0.5, 0.5
     ]);
-    private modelPosition: Vector2 = new Vector2();
 
     constructor(private readonly gl: WebGL2RenderingContext, private readonly programManager: IProgramManager) {
         this.projectionMatrix = mat4.create();
@@ -40,13 +38,8 @@ export class MaskRenderer implements IRenderer {
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        Vector2.round(
-            this.modelPosition,
-            renderData.location === RenderLocation.WorldSpace
-                ? Vector2.subtract(this.modelPosition, renderData.position, cameraData.position)
-                : renderData.position
-        );
-        mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
+
+        mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
         mat4.scale(this.modelMatrix, this.modelMatrix, [renderData.width, renderData.height, 1]);
 

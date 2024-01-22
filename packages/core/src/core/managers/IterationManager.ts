@@ -181,12 +181,13 @@ export class IterationManager implements IIterationManager {
     private load(): void {
         this.loadedScene = this.sceneManager.getLoadedScene();
         this.gameObjects = this.gameObjectManager.findGameObjects().filter((gameObject) => gameObject.active);
-        this.components = this.gameObjects.reduce(
-            (components, gameObject) => [
-                ...components,
-                ...gameObject.getComponents().filter((component) => component.active),
-            ],
-            []
+
+        this.components = [];
+        this.gameObjects.forEach((gameObject) =>
+            gameObject
+                .getComponents()
+                .filter((component) => component.active)
+                .forEach((c) => this.components.push(c))
         );
     }
 
