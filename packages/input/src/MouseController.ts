@@ -17,11 +17,13 @@ export class MouseController {
     private _leftButtonPressed: boolean = false;
     private _scrollButtonPressed: boolean = false;
     private _rightButtonPressed: boolean = false;
-    private _positionInViewport: Vector2 = new Vector2(0, 0);
+    private _positionInViewport: Vector2 = new Vector2();
     private _hasMoved: boolean = false;
+    private _wheelOffset: Vector2 = new Vector2();
 
-    private lastPositionInViewport: Vector2 = new Vector2(0, 0);
+    private lastPositionInViewport: Vector2 = new Vector2();
     private canvas: HTMLCanvasElement;
+    private wheelEvent: WheelEvent;
 
     /** @internal */
     constructor(canvas: HTMLCanvasElement) {
@@ -70,6 +72,14 @@ export class MouseController {
         return this._hasMoved;
     }
 
+    /**
+     * The offset of the wheel movement
+     * @readonly
+     */
+    public get wheelOffset(): Vector2 {
+        return this._wheelOffset;
+    }
+
     /** @internal */
     public update(): void {
         if (this._positionInViewport.equals(this.lastPositionInViewport) === false) {
@@ -78,12 +88,20 @@ export class MouseController {
         } else {
             this._hasMoved = false;
         }
+
+        if (this.wheelEvent) {
+            this._wheelOffset.set(this.wheelEvent.offsetX, this.wheelEvent.offsetY);
+            this.wheelEvent = undefined;
+        } else {
+            this._wheelOffset.set(0, 0);
+        }
     }
 
     private setup(): void {
-        this.canvas.addEventListener("mousemove", (e: MouseEvent) => this.updatePosition(e));
-        this.canvas.addEventListener("mousedown", (e: MouseEvent) => this.updateButtonDown(e));
-        this.canvas.addEventListener("mouseup", (e: MouseEvent) => this.updateButtonUp(e));
+        this.canvas.addEventListener("mousemove", (e) => this.updatePosition(e));
+        this.canvas.addEventListener("mousedown", (e) => this.updateButtonDown(e));
+        this.canvas.addEventListener("mouseup", (e) => this.updateButtonUp(e));
+        this.canvas.addEventListener("wheel", (e) => this.handleWheelEvent(e));
     }
 
     private updateButtonDown(event: MouseEvent) {
@@ -114,5 +132,12 @@ export class MouseController {
             event.offsetX / (this.canvas.clientWidth / this.canvas.width) - this.canvas.width / 2,
             -event.offsetY / (this.canvas.clientHeight / this.canvas.height) + this.canvas.height / 2
         );
+    }
+
+    private handleWheelEvent(event: WheelEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.wheelEvent = event;
     }
 }
