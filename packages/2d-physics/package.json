@@ -1,6 +1,6 @@
 {
     "name": "@angry-pixel/2d-physics",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "2D physics for Angry Pixel Engine",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",

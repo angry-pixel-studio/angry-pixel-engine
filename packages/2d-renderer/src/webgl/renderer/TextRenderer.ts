@@ -1,7 +1,7 @@
 import { mat4 } from "gl-matrix";
 import { Vector2 } from "@angry-pixel/math";
 import { ICameraData } from "../../CameraData";
-import { RenderDataType, RenderLocation } from "../../renderData/RenderData";
+import { RenderDataType } from "../../renderData/RenderData";
 import { ITextRenderData, TextOrientation } from "../../renderData/TextRenderData";
 import { hexToRgba } from "../../utils/hexToRgba";
 import { FontAtlas, IFontAtlasFactory } from "../FontAtlasFactory";
@@ -72,12 +72,7 @@ export class TextRenderer implements IRenderer {
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
         this.setPositionFromOrientation(renderData);
-        Vector2.round(
-            this.modelPosition,
-            renderData.location === RenderLocation.WorldSpace
-                ? Vector2.subtract(this.modelPosition, this.modelPosition, cameraData.position)
-                : this.modelPosition
-        );
+
         mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
         mat4.scale(this.modelMatrix, this.modelMatrix, [renderData.fontSize, renderData.fontSize, 1]);

@@ -19,8 +19,6 @@ export interface IColliderFactory {
 }
 
 export class ColliderFactory implements IColliderFactory {
-    private lastId: number = 0;
-
     public create({
         shape,
         layer,
@@ -32,7 +30,7 @@ export class ColliderFactory implements IColliderFactory {
         onCollision,
     }: IColliderDto): ICollider {
         return {
-            id: ++this.lastId,
+            id: 0,
             active: true,
             layer,
             shape,

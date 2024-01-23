@@ -1,7 +1,7 @@
 import { mat4 } from "gl-matrix";
 import { IRenderer } from "./IRenderer";
 import { IProgramManager } from "../program/ProgramManager";
-import { RenderDataType, RenderLocation } from "../../renderData/RenderData";
+import { RenderDataType } from "../../renderData/RenderData";
 import { ICameraData } from "../../CameraData";
 import { range, Vector2 } from "@angry-pixel/math";
 import { GeometricShape, IGeometricRenderData } from "../../renderData/GeometricRenderData";
@@ -20,7 +20,6 @@ export class GeometricRenderer implements IRenderer {
     private readonly vertices: Map<symbol, Float32Array> = new Map<symbol, Float32Array>();
     private readonly circumferenceVertices: Float32Array;
     private lastVertices: symbol = null;
-    private modelPosition: Vector2 = new Vector2();
 
     constructor(private readonly gl: WebGL2RenderingContext, private readonly programManager: IProgramManager) {
         this.projectionMatrix = mat4.create();
@@ -70,13 +69,8 @@ export class GeometricRenderer implements IRenderer {
         this.lastVertices = verticesKey;
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        Vector2.round(
-            this.modelPosition,
-            renderData.location === RenderLocation.WorldSpace
-                ? Vector2.subtract(this.modelPosition, renderData.position, cameraData.position)
-                : renderData.position
-        );
-        mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
+
+        mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
 
         setProjectionMatrix(this.projectionMatrix, this.gl, cameraData, renderData.location);
@@ -117,13 +111,7 @@ export class GeometricRenderer implements IRenderer {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.circumferenceVertices, this.gl.DYNAMIC_DRAW);
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        Vector2.round(
-            this.modelPosition,
-            renderData.location === RenderLocation.WorldSpace
-                ? Vector2.subtract(this.modelPosition, renderData.position, cameraData.position)
-                : renderData.position
-        );
-        mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.scale(this.modelMatrix, this.modelMatrix, [renderData.radius, renderData.radius, 1]);
 
         setProjectionMatrix(this.projectionMatrix, this.gl, cameraData, renderData.location);
