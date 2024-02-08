@@ -19,7 +19,7 @@ export class MouseController {
     private _rightButtonPressed: boolean = false;
     private _positionInViewport: Vector2 = new Vector2();
     private _hasMoved: boolean = false;
-    private _wheelOffset: Vector2 = new Vector2();
+    private _wheelScroll: Vector2 = new Vector2();
 
     private lastPositionInViewport: Vector2 = new Vector2();
     private canvas: HTMLCanvasElement;
@@ -73,11 +73,11 @@ export class MouseController {
     }
 
     /**
-     * The offset of the wheel movement
+     * The scroll amount of the mouse wheel
      * @readonly
      */
-    public get wheelOffset(): Vector2 {
-        return this._wheelOffset;
+    public get wheelScroll(): Vector2 {
+        return this._wheelScroll;
     }
 
     /** @internal */
@@ -90,10 +90,10 @@ export class MouseController {
         }
 
         if (this.wheelEvent) {
-            this._wheelOffset.set(this.wheelEvent.offsetX, this.wheelEvent.offsetY);
+            this._wheelScroll.set(this.wheelEvent.deltaX, this.wheelEvent.deltaY);
             this.wheelEvent = undefined;
         } else {
-            this._wheelOffset.set(0, 0);
+            this._wheelScroll.set(0, 0);
         }
     }
 

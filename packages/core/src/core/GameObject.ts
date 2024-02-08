@@ -87,7 +87,10 @@ export class GameObject extends GameActor {
         this.name = name;
         this.addComponent(Transform);
 
-        this.parent = parent; // using the setter instead of the private attribute
+        if (parent) {
+            this.transform.position = parent.transform.position;
+            this.parent = parent; // using the setter instead of the private attribute
+        }
     }
 
     /** TRUE for enabled object, FALSE for disabled object. */
