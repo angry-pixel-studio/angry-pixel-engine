@@ -139,8 +139,6 @@ export interface ITilemapRenderer {
  * ```
  */
 export class TilemapRenderer extends RenderComponent implements ITilemapRenderer {
-    private readonly spriteDefaultScale: Vector2 = this.gameConfig.spriteDefaultScale;
-
     /** Id of tiles separated by commas. The ids start at 1, and increment from left to right,
      * from top to bottom. ID 0 (zero) represents a space with no tile.  */
     public tiles: number[] = [];
@@ -196,8 +194,8 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
         });
         this.tileset = tileset;
         this.width = width;
-        this.tileWidth = tileWidth ?? this.tileset.tileWidth * this.spriteDefaultScale.x;
-        this.tileHeight = tileHeight ?? this.tileset.tileHeight * this.spriteDefaultScale.y;
+        this.tileWidth = tileWidth ?? this.tileset.tileWidth * this.gameConfig.spriteDefaultScale.x;
+        this.tileHeight = tileHeight ?? this.tileset.tileHeight * this.gameConfig.spriteDefaultScale.y;
         this.layer = layer;
         this.height = Math.ceil(this.tiles.length / this.width);
         this.orientation = orientation ?? TilemapOrientation.Center;

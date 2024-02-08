@@ -90,8 +90,6 @@ export interface SpriteRendererOptions {
  * ```
  */
 export class SpriteRenderer extends RenderComponent {
-    private readonly spriteDefaultScale: Vector2 = this.gameConfig.spriteDefaultScale;
-
     /** The sprite to render */
     public sprite: Sprite;
     /** X-axis and Y-axis offset */
@@ -142,7 +140,7 @@ export class SpriteRenderer extends RenderComponent {
         this.maskColorMix = config.maskColorMix ?? 0;
         this.tintColor = config.tintColor;
         this.layer = config.layer;
-        this.scale = config.scale ?? this.spriteDefaultScale ?? new Vector2(1, 1);
+        this.scale = config.scale ?? this.gameConfig.spriteDefaultScale.clone() ?? new Vector2(1, 1);
         this.width = config.width;
         this.height = config.height;
     }
@@ -163,7 +161,6 @@ export class SpriteRenderer extends RenderComponent {
 
     protected update(): void {
         if (this.sprite && this.sprite.loaded === true) {
-            this.scale = this.scale ?? this.spriteDefaultScale;
             this.cacheScale.set(
                 this.scale.x * this.gameObject.transform.scale.x,
                 this.scale.y * this.gameObject.transform.scale.y
