@@ -1,5 +1,10 @@
 import { IRenderData } from "./RenderData";
 
+/**
+ * Mask shape: Rectangle or Circumference.
+ * @category Components
+ * @public
+ */
 export enum MaskShape {
     Rectangle,
     Circumference,
