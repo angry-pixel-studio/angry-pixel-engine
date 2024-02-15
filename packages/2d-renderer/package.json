@@ -1,6 +1,6 @@
 {
     "name": "@angry-pixel/2d-renderer",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "WebGL rendering for Angry Pixel Engine",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",

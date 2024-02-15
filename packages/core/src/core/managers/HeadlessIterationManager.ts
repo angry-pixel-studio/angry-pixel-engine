@@ -138,12 +138,16 @@ export class HeadlessIterationManager implements IIterationManager {
     private dispatchFrameEvent(event: FrameEvent): void {
         if (this.sceneEvents.includes(event)) {
             this.loadedScene.dispatch(event);
-        } else if (this.gameObjectEvents.includes(event)) {
-            this.gameObjects
-                .filter((gameObject) => gameObject.active)
-                .forEach((gameObject) => gameObject.dispatch(event));
         }
 
-        this.components.filter((component) => component.active).forEach((component) => component.dispatch(event));
+        if (this.gameObjectEvents.includes(event)) {
+            this.gameObjects.forEach((gameObject) => {
+                if (gameObject.active) gameObject.dispatch(event);
+            });
+        }
+
+        this.components.forEach((component) => {
+            if (component.active) component.dispatch(event);
+        });
     }
 }

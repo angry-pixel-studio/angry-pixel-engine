@@ -197,11 +197,13 @@ export class IterationManager implements IIterationManager {
         }
 
         if (this.gameObjectEvents.includes(event)) {
-            this.gameObjects
-                .filter((gameObject) => gameObject.active)
-                .forEach((gameObject) => gameObject.dispatch(event));
+            this.gameObjects.forEach((gameObject) => {
+                if (gameObject.active) gameObject.dispatch(event);
+            });
         }
 
-        this.components.filter((component) => component.active).forEach((component) => component.dispatch(event));
+        this.components.forEach((component) => {
+            if (component.active) component.dispatch(event);
+        });
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "@angry-pixel/core",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Core package for Angry Pixel Engine",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@angry-pixel/2d-physics": "1.0.2",
-        "@angry-pixel/2d-renderer": "1.0.2",
+        "@angry-pixel/2d-renderer": "1.0.3",
         "@angry-pixel/math": "1.0.1",
         "@angry-pixel/input": "1.0.3"
     }

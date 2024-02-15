@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 import { ICameraData } from "../../CameraData";
-import { IMaskRenderData } from "../../renderData/MaskRenderData";
+import { IMaskRenderData, MaskShape } from "../../renderData/MaskRenderData";
 import { RenderDataType } from "../../renderData/RenderData";
 import { hexToRgba } from "../../utils/hexToRgba";
 import { IProgramManager } from "../program/ProgramManager";
@@ -16,7 +16,7 @@ export class MaskRenderer implements IRenderer {
     private textureMatrix: mat4;
 
     // prettier-ignore
-    private readonly vertices = new Float32Array([
+    private readonly rectangleVertices = new Float32Array([
         -0.5, -0.5,
         -0.5, 0.5,
         0.5, -0.5,
@@ -24,24 +24,45 @@ export class MaskRenderer implements IRenderer {
         -0.5, 0.5,
         0.5, 0.5
     ]);
+    private readonly circumferenceVertices: Float32Array;
+    private lastShape: MaskShape;
 
     constructor(private readonly gl: WebGL2RenderingContext, private readonly programManager: IProgramManager) {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
+
+        const a = (2 * Math.PI) / 60;
+        const v = [0, 0];
+
+        for (let i = 0; i <= 60; i++) {
+            v.push(Math.cos(i * a), Math.sin(i * a));
+        }
+
+        this.circumferenceVertices = new Float32Array(v);
     }
 
     public render(renderData: IMaskRenderData, cameraData: ICameraData, lastRender?: RenderDataType): void {
-        if (lastRender !== RenderDataType.Mask) {
+        if (lastRender !== RenderDataType.Mask || this.lastShape !== renderData.shape) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertices, this.gl.STATIC_DRAW);
+            this.gl.bufferData(
+                this.gl.ARRAY_BUFFER,
+                renderData.shape === MaskShape.Rectangle ? this.rectangleVertices : this.circumferenceVertices,
+                this.gl.STATIC_DRAW
+            );
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
 
         mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
-        mat4.scale(this.modelMatrix, this.modelMatrix, [renderData.width, renderData.height, 1]);
+        mat4.scale(
+            this.modelMatrix,
+            this.modelMatrix,
+            renderData.shape === MaskShape.Rectangle
+                ? [renderData.width, renderData.height, 1]
+                : [renderData.radius, renderData.radius, 1]
+        );
 
         setProjectionMatrix(this.projectionMatrix, this.gl, cameraData, renderData.location);
 
@@ -59,9 +80,14 @@ export class MaskRenderer implements IRenderer {
 
         const { r, g, b, a } = hexToRgba(renderData.color);
         this.gl.uniform4f(this.programManager.solidColorUniform, r, g, b, a);
-
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.alpha ?? 1);
 
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+        if (renderData.shape === MaskShape.Rectangle) {
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+        } else {
+            this.gl.drawArrays(this.gl.TRIANGLE_FAN, 0, this.circumferenceVertices.length / 2);
+        }
+
+        this.lastShape = renderData.shape;
     }
 }
