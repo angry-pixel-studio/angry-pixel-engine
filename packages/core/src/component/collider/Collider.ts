@@ -35,6 +35,13 @@ export interface IColliderComponent {
      */
     collidesWithLayer(layer: string): boolean;
     /**
+     * Check if the collider is in contact with any collider of the given layers.
+     * @param layers The layers to check
+     * @param condition "or" if collides with at least one layer (default value), "and" if collides with all layers.
+     * @returns TRUE if is colliding, FALSE instead
+     */
+    collidesWithLayers(layers: string[], condition: "or" | "and"): boolean;
+    /**
      * If there is a collision with the given layer, it returns information about it, or null if there is none.
      * @param layer The layer to check
      * @returns The collision data object, or NULL instead
@@ -46,6 +53,12 @@ export interface IColliderComponent {
      * @returns The collection of collision data
      */
     getCollisionsWithLayer(layer: string): CollisionData[];
+    /**
+     * If there are collisions with the given layers, it returns information about every collision.
+     * @param layers The layers to check
+     * @returns The collection of collision data
+     */
+    getCollisionsWithLayers(layers: string[]): CollisionData[];
 }
 
 /** @internal */
@@ -81,7 +94,38 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
      * @returns TRUE if is colliding, FALSE instead
      */
     public collidesWithLayer(layer: string): boolean {
-        return this.getCollisionWithLayer(layer) !== null;
+        for (const collider of this.colliders) {
+            const collisions = this.physicsManager.getCollisionsForCollider(collider);
+            for (const collision of collisions) {
+                if (collision.remoteCollider.layer === layer) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if the collider is in contact with any collider of the given layers.
+     * @param layers The layers to check
+     * @param condition "or" if collides with at least one layer (default value), "and" if collides with all layers.
+     * @returns TRUE if is colliding, FALSE instead
+     */
+    public collidesWithLayers(layers: string[], condition: "or" | "and" = "or"): boolean {
+        let matches = 0;
+
+        for (const collider of this.colliders) {
+            const collisions = this.physicsManager.getCollisionsForCollider(collider);
+            for (const collision of collisions) {
+                if (layers.includes(collision.remoteCollider.layer)) {
+                    if (condition === "or") return true;
+                    matches++;
+                }
+            }
+        }
+
+        if (condition === "and" && matches === layers.length) return true;
+
+        return false;
     }
 
     /**
@@ -114,6 +158,26 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
             const collisions = this.physicsManager.getCollisionsForCollider(collider);
             for (const collision of collisions) {
                 if (collision.remoteCollider.layer === layer) {
+                    result.push(this.createCollisionData(collision));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * If there are collisions with the given layers, it returns information about every collision.
+     * @param layers The layers to check
+     * @returns The collection of collision data
+     */
+    public getCollisionsWithLayers(layers: string[]): CollisionData[] {
+        const result: CollisionData[] = [];
+
+        for (const collider of this.colliders) {
+            const collisions = this.physicsManager.getCollisionsForCollider(collider);
+            for (const collision of collisions) {
+                if (layers.includes(collision.remoteCollider.layer)) {
                     result.push(this.createCollisionData(collision));
                 }
             }
