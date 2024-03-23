@@ -2,8 +2,6 @@ import { ITilemapRenderData, RenderDataType, RenderLocation, TilemapOrientation 
 import { Vector2 } from "@angry-pixel/math";
 import { RenderComponent } from "../../core/Component";
 
-export { TilemapOrientation };
-
 /**
  * Tileset configuration to be used with the TilemapRenderer
  * @public
@@ -55,7 +53,6 @@ export interface Tileset {
  *   tileWidth: 16,
  *   tileHeight: 16,
  *   layer: "Tilemap",
- *   orientation: TilemapOrientation.Center,
  *   smooth: false,
  * });
  * ```
@@ -74,8 +71,6 @@ export interface TilemapRendererOptions {
     tileHeight?: number;
     /** The render layer */
     layer?: string;
-    /** Direction in which the tilemap will be rendered. */
-    orientation?: TilemapOrientation;
     /** Change the opacity between 1 and 0 */
     opacity?: number;
     /** Define a color for tinting the tiles */
@@ -93,7 +88,6 @@ export interface ITilemapRenderer {
     height: number;
     tileWidth: number;
     tileHeight: number;
-    orientation: TilemapOrientation;
     realWidth: number;
     realHeight: number;
 }
@@ -133,7 +127,6 @@ export interface ITilemapRenderer {
  *   tileWidth: 16,
  *   tileHeight: 16,
  *   layer: "Tilemap",
- *   orientation: TilemapOrientation.Center,
  *   smooth: false,
  * });
  * ```
@@ -157,8 +150,6 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
     public tintColor: string;
     /** Change the opacity between 1 and 0 */
     public opacity: number;
-    /** Direction in which the tilemap will be rendered (default value TilemapOrientation.Center) */
-    public orientation: TilemapOrientation;
     /**
      * Tilemap width in pixels (this is calculated by the component)
      * @readonly
@@ -184,7 +175,6 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
         tileHeight,
         width,
         layer,
-        orientation,
         opacity,
         tintColor,
         smooth,
@@ -198,7 +188,6 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
         this.tileHeight = tileHeight ?? this.tileset.tileHeight * this.gameConfig.spriteDefaultScale.y;
         this.layer = layer;
         this.height = Math.ceil(this.tiles.length / this.width);
-        this.orientation = orientation ?? TilemapOrientation.Center;
         this.opacity = opacity;
         this.tintColor = tintColor;
 
@@ -214,7 +203,7 @@ export class TilemapRenderer extends RenderComponent implements ITilemapRenderer
                 tileHeight: this.tileHeight,
             },
             tiles: this.tiles,
-            orientation: this.orientation,
+            orientation: TilemapOrientation.Center,
             smooth,
         } as ITilemapRenderData;
 

@@ -86,14 +86,8 @@ export class TilemapCollider extends BaseCollider {
         this.scaledHeight = this.tilemapRenderer.height * this.scaledTileHeight;
 
         this.position.set(
-            this.gameObject.transform.position.x +
-                (this.tilemapRenderer.orientation === TilemapOrientation.Center ? -this.scaledWidth / 2 : 0),
-            this.gameObject.transform.position.y +
-                ([TilemapOrientation.Center, TilemapOrientation.RightCenter].includes(this.tilemapRenderer.orientation)
-                    ? this.scaledHeight / 2
-                    : this.tilemapRenderer.orientation == TilemapOrientation.RightUp
-                    ? this.scaledHeight
-                    : 0)
+            this.gameObject.transform.position.x - this.scaledWidth / 2,
+            this.gameObject.transform.position.y + this.scaledHeight / 2
         );
 
         this.composite ? this.useLineColliders() : this.useBoxColliders();

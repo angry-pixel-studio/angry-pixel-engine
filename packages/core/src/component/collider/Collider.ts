@@ -6,6 +6,19 @@ import { ICollisionResolution, ICollider, ICollision } from "@angry-pixel/2d-phy
  * Information about the collision
  * @public
  * @category Components
+ * @example
+ * ```
+ {
+    resolution: {
+        penetration: 10;
+        direction: {x: 1, y: 0};
+        displacementDirection: {x: -1, y: 0};
+    },
+    collider: {},
+    localCollider: {},
+    gameObject: {}
+  }
+ * ```
  */
 export interface CollisionData {
     /** Contains information about the penetration and direction of the collision. */
