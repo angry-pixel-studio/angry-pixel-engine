@@ -2,13 +2,7 @@ import { ITilemapRenderer } from "../rendering/TilemapRenderer";
 import { BaseCollider } from "./Collider";
 import { RenderComponent } from "../../core/Component";
 import { InitOptions } from "../../core/GameActor";
-import {
-    IGeometricRenderData,
-    GeometricShape,
-    RenderDataType,
-    RenderLocation,
-    TilemapOrientation,
-} from "@angry-pixel/2d-renderer";
+import { IGeometricRenderData, GeometricShape, RenderDataType, RenderLocation } from "@angry-pixel/2d-renderer";
 import { Vector2 } from "@angry-pixel/math";
 import { ICollider, Line, Polygon, Rectangle } from "@angry-pixel/2d-physics";
 
