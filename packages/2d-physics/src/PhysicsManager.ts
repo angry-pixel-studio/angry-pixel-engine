@@ -13,6 +13,7 @@ export interface IPhysicsManager {
     addCollider(colliderDto: IColliderDto): ICollider;
     removeCollider(collider: ICollider): void;
     getCollisionsForCollider(collider: ICollider): ICollision[];
+    getCollisionsForColliderAndLayer(collider: ICollider, layer: string): ICollision[];
     addRigidBody(rigidBodyDto: IRigidBodyDto): IRigidBody;
     removeRigidBody(rigidBody: IRigidBody): void;
     resolve(time: number): void;
@@ -40,6 +41,10 @@ export class PhysicsManager implements IPhysicsManager {
 
     public getCollisionsForCollider(collider: ICollider): ICollision[] {
         return this.collisionManager.getCollisionsForCollider(collider);
+    }
+
+    public getCollisionsForColliderAndLayer(collider: ICollider, layer: string): ICollision[] {
+        return this.collisionManager.getCollisionsForColliderAndLayer(collider, layer);
     }
 
     public addRigidBody(rigidBodyDto: IRigidBodyDto): IRigidBody {

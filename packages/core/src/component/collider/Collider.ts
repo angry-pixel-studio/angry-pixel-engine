@@ -6,6 +6,19 @@ import { ICollisionResolution, ICollider, ICollision } from "@angry-pixel/2d-phy
  * Information about the collision
  * @public
  * @category Components
+ * @example
+ * ```
+ {
+    resolution: {
+        penetration: 10;
+        direction: {x: 1, y: 0};
+        displacementDirection: {x: -1, y: 0};
+    },
+    collider: {},
+    localCollider: {},
+    gameObject: {}
+  }
+ * ```
  */
 export interface CollisionData {
     /** Contains information about the penetration and direction of the collision. */
@@ -95,13 +108,9 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
      */
     public collidesWithLayer(layer: string): boolean {
         for (const collider of this.colliders) {
-            const collisions = this.physicsManager.getCollisionsForCollider(collider);
-            for (const collision of collisions) {
-                if (collision.remoteCollider.layer === layer) {
-                    return true;
-                }
-            }
+            if (this.physicsManager.getCollisionsForColliderAndLayer(collider, layer).length > 0) return true;
         }
+        return false;
     }
 
     /**
@@ -129,18 +138,14 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
     }
 
     /**
-     * If there is a collision with the given layer, it returns information about it, or null if there is none.
+     * Finds the first collision with the given layer and returns it, or returns null instead.
      * @param layer The layer to check
      * @returns The collision data object, or NULL instead
      */
     public getCollisionWithLayer(layer: string): CollisionData | null {
         for (const collider of this.colliders) {
-            const collisions = this.physicsManager.getCollisionsForCollider(collider);
-            for (const collision of collisions) {
-                if (collision.remoteCollider.layer === layer) {
-                    return this.createCollisionData(collision);
-                }
-            }
+            const collisions = this.physicsManager.getCollisionsForColliderAndLayer(collider, layer);
+            if (collisions.length > 0) return this.createCollisionData(collisions[0]);
         }
 
         return null;
@@ -155,12 +160,9 @@ export abstract class BaseCollider extends ColliderComponent implements ICollide
         const result: CollisionData[] = [];
 
         for (const collider of this.colliders) {
-            const collisions = this.physicsManager.getCollisionsForCollider(collider);
-            for (const collision of collisions) {
-                if (collision.remoteCollider.layer === layer) {
-                    result.push(this.createCollisionData(collision));
-                }
-            }
+            this.physicsManager
+                .getCollisionsForColliderAndLayer(collider, layer)
+                .forEach((collision) => result.push(this.createCollisionData(collision)));
         }
 
         return result;

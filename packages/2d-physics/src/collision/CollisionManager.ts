@@ -15,6 +15,7 @@ export interface ICollisionManager {
     clearColliders(): void;
     resolve(): void;
     getCollisionsForCollider(collider: ICollider): ICollision[];
+    getCollisionsForColliderAndLayer(collider: ICollider, layer: string): ICollision[];
     refreshCollisionsForCollider(collider: ICollider): void;
 }
 
@@ -85,14 +86,20 @@ export class CollisionManager implements ICollisionManager {
     }
 
     public getCollisionsForCollider(collider: ICollider): ICollision[] {
-        return collider.active ? this.collisions.filter((collision) => collision.localCollider.id === collider.id) : [];
+        return collider.active ? this.collisions.filter((c) => c.localCollider.id === collider.id) : [];
+    }
+
+    public getCollisionsForColliderAndLayer(collider: ICollider, layer: string): ICollision[] {
+        return collider.active
+            ? this.collisions.filter((c) => c.localCollider.id === collider.id && c.remoteCollider.layer === layer)
+            : [];
     }
 
     public refreshCollisionsForCollider(collider: ICollider): void {
         if (!this.colliders[collider.id] || !collider.active) return;
 
         this.collisions = this.collisions.filter(
-            (collision) => collision.localCollider.id !== collider.id && collision.remoteCollider.id !== collider.id
+            (c) => c.localCollider.id !== collider.id && c.remoteCollider.id !== collider.id
         );
 
         this.updateShape(collider);

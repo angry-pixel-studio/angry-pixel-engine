@@ -1,7 +1,7 @@
-import { ITilemapRenderData, RenderDataType, RenderLocation } from "@angry-pixel/2d-renderer";
+import { ITilemapRenderData, RenderDataType, RenderLocation, TilemapOrientation } from "@angry-pixel/2d-renderer";
 import { Vector2 } from "@angry-pixel/math";
 import { RenderComponent } from "../../core/Component";
-import { ITilemapRenderer, Tileset, TilemapOrientation } from "./TilemapRenderer";
+import { ITilemapRenderer, Tileset } from "./TilemapRenderer";
 import { Exception } from "../../utils/Exception";
 
 /**
@@ -26,7 +26,6 @@ import { Exception } from "../../utils/Exception";
  *   tileWidth: 16,
  *   tileHeight: 16,
  *   layer: "Tilemap",
- *   orientation: TilemapOrientation.Center,
  *   smooth: false,
  * });
  * ```
@@ -44,8 +43,6 @@ export interface TiledTilemapRendererOptions {
     tileHeight?: number;
     /** The render layer */
     layer?: string;
-    /** Direction in which the tilemap will be rendered. */
-    orientation?: TilemapOrientation;
     /** Smoothing pixels (not recommended for pixel art) */
     smooth?: boolean;
 }
@@ -90,7 +87,6 @@ export interface TiledTilemapRendererOptions {
  *   tileWidth: 16,
  *   tileHeight: 16,
  *   layer: "Tilemap",
- *   orientation: TilemapOrientation.Center,
  *   smooth: false,
  * });
  * ```
@@ -116,8 +112,6 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
      * @readonly
      */
     public height: number;
-    /** Direction in which the tilemap will be rendered (default value TilemapOrientation.Center) */
-    public orientation: TilemapOrientation;
     /** Define a color for tinting the tiles */
     public tintColor: string;
     /** Change the opacity between 1 and 0 */
@@ -139,6 +133,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
     private layer: string;
     private smooth?: boolean;
 
+    private infinite: boolean = false;
     private tilesetTileIds: number[] = [];
     private chunks: TiledChunk[] = [];
     private scaledTileWidth: number = 0;
@@ -153,7 +148,6 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         tileWidth,
         tileHeight,
         layer,
-        orientation,
         smooth,
     }: TiledTilemapRendererOptions): void {
         this.tiledData = tiledData;
@@ -162,13 +156,17 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.tileHeight = tileHeight ?? this.tileset.tileHeight * this.gameConfig.spriteDefaultScale.y;
         this.layer = layer;
         this.smooth = smooth ?? false;
-        this.orientation = orientation ?? TilemapOrientation.Center;
 
         this.tiledLayer = this.tiledData.layers.find((layer) => layer.name === tilemapLayer);
         if (!this.tiledLayer) throw new Exception("Invalid tilemap layer");
 
-        this.width = this.tiledLayer.width;
-        this.height = this.tiledLayer.height;
+        this.width = 0;
+        this.height = 0;
+
+        this.tiledData.layers.forEach((layer) => {
+            this.width = Math.max(this.width, layer.width);
+            this.height = Math.max(this.height, layer.height);
+        });
 
         this.processTilemap();
     }
@@ -185,12 +183,13 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
             this.tintColor = this.tiledLayer.tintcolor;
 
             if (this.tiledData.infinite) {
+                this.infinite = true;
                 this.tiledLayer.chunks
                     .sort((a, b) => a.x - b.x)
                     .sort((a, b) => a.y - b.y)
                     .forEach((chunk) => this.processChunk(chunk));
             } else {
-                this.processChunk(this.tiledLayer);
+                this.processFixedLayer();
             }
         }
 
@@ -199,7 +198,27 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.tilesetTileIds = []; // free memory
     }
 
-    private processChunk(chunk: TiledChunk | TiledLayer): void {
+    private processFixedLayer(): void {
+        this.tiles = this.tiledLayer.data.map((tile) => this.getTilesetTileId(tile));
+
+        this.renderData.push({
+            type: RenderDataType.Tilemap,
+            layer: this.layer ?? this.gameObject.layer,
+            location: this.gameObject.ui ? RenderLocation.ViewPort : RenderLocation.WorldSpace,
+            position: new Vector2(),
+            tileset: this.tileset,
+            tilemap: {
+                width: this.width,
+                tileWidth: this.tileWidth,
+                tileHeight: this.tileHeight,
+            },
+            tiles: this.tiles,
+            orientation: TilemapOrientation.Center,
+            smooth: this.smooth,
+        });
+    }
+
+    private processChunk(chunk: TiledChunk): void {
         const renderData: ITilemapRenderData = {
             type: RenderDataType.Tilemap,
             layer: this.layer ?? this.gameObject.layer,
@@ -212,21 +231,13 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
                 tileHeight: this.tileHeight,
             },
             tiles: chunk.data.map((tile) => this.getTilesetTileId(tile)),
-            orientation: TilemapOrientation.RightDown,
+            orientation: TilemapOrientation.Center,
             smooth: this.smooth,
         };
 
-        if (chunk.type && chunk.type === "tilelayer") {
-            this.tiles = renderData.tiles;
-        } else {
-            renderData.tiles.forEach((tile, index) => {
-                this.tiles[
-                    this.tiledLayer.width * (chunk.y + Math.floor(index / chunk.width)) +
-                        chunk.x +
-                        (index % chunk.width)
-                ] = tile;
-            });
-        }
+        renderData.tiles.forEach((t, i) => {
+            this.tiles[this.width * (chunk.y + Math.floor(i / chunk.width)) + chunk.x + (i % chunk.width)] = t;
+        });
 
         this.renderData.push(renderData);
         this.chunks.push(chunk as TiledChunk);
@@ -247,24 +258,25 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.scaledTileWidth = this.tileWidth * this.gameObject.transform.scale.x;
         this.scaledTileHeight = this.tileHeight * this.gameObject.transform.scale.y;
 
-        this.realWidth = this.tiledLayer.width * this.scaledTileWidth;
-        this.realHeight = this.tiledLayer.height * this.scaledTileHeight;
+        this.realWidth = this.width * this.scaledTileWidth;
+        this.realHeight = this.height * this.scaledTileHeight;
 
         this.renderData.forEach((renderData, index) => {
             renderData.layer = this.layer ?? this.gameObject.layer;
 
-            renderData.position.set(
-                this.gameObject.transform.position.x +
-                    (this.orientation === TilemapOrientation.Center ? -this.realWidth / 2 : 0) +
-                    this.chunks[index].x * this.scaledTileWidth,
-                this.gameObject.transform.position.y +
-                    ([TilemapOrientation.Center, TilemapOrientation.RightCenter].includes(this.orientation)
-                        ? this.realHeight / 2
-                        : this.orientation == TilemapOrientation.RightUp
-                        ? this.realHeight
-                        : 0) -
-                    this.chunks[index].y * this.scaledTileHeight
-            );
+            if (this.infinite) {
+                const chunk = this.chunks[index];
+                renderData.position.set(
+                    this.gameObject.transform.position.x -
+                        this.realWidth / 2 +
+                        (chunk.x + chunk.width / 2) * this.scaledTileWidth,
+                    this.gameObject.transform.position.y +
+                        this.realHeight / 2 -
+                        (chunk.y + chunk.height / 2) * this.scaledTileHeight
+                );
+            } else {
+                renderData.position.copy(this.gameObject.transform.position);
+            }
 
             renderData.tilemap.tileWidth = this.scaledTileWidth;
             renderData.tilemap.tileHeight = this.scaledTileHeight;
