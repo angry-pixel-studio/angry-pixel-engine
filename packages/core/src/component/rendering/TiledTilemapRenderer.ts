@@ -157,13 +157,16 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.layer = layer;
         this.smooth = smooth ?? false;
 
-        this.tiledLayer = this.tiledData.layers.find((layer) => layer.name === tilemapLayer);
+        this.tiledLayer = this.tiledData.layers.find(
+            (layer) => layer.type === "tilelayer" && layer.name === tilemapLayer
+        ) as TiledLayer;
         if (!this.tiledLayer) throw new Exception("Invalid tilemap layer");
 
         this.width = 0;
         this.height = 0;
 
         this.tiledData.layers.forEach((layer) => {
+            if (layer.type !== "tilelayer") return;
             this.width = Math.max(this.width, layer.width);
             this.height = Math.max(this.height, layer.height);
         });
@@ -291,7 +294,7 @@ export interface TiledTilemap {
     width: number;
     height: number;
     infinite: boolean;
-    layers: TiledLayer[];
+    layers: (TiledLayer | TiledObjectLayer)[];
     renderorder: string;
     tilesets: { firstgid: number }[];
     tilewidth: number;
@@ -316,7 +319,7 @@ export interface TiledLayer {
     data?: number[];
     x: number;
     y: number;
-    type: string;
+    type: "tilelayer";
     width: number;
     height: number;
     opacity: number;
@@ -326,4 +329,41 @@ export interface TiledLayer {
     offsetx?: number;
     offsety?: number;
     tintcolor?: string;
+    properties?: TiledProperty[];
+}
+
+/** @category Components */
+export interface TiledObjectLayer {
+    draworder: string;
+    id: number;
+    name: string;
+    objects: TiledObject[];
+    opacity: number;
+    type: "objectgroup";
+    visible: true;
+    x: number;
+    y: number;
+    properties?: TiledProperty[];
+}
+
+/** @category Components */
+export interface TiledObject {
+    gid: number;
+    height: number;
+    id: number;
+    name: string;
+    rotation: number;
+    type: string;
+    visible: true;
+    width: number;
+    x: number;
+    y: number;
+    properties?: TiledProperty[];
+}
+
+/** @category Components */
+export interface TiledProperty {
+    name: string;
+    type: "int" | "bool" | "float" | "color" | "string";
+    value: number | string | boolean;
 }

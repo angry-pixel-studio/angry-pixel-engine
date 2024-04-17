@@ -1,6 +1,6 @@
 {
     "name": "angry-pixel",
-    "version": "1.2.16",
+    "version": "1.2.17",
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -27,10 +27,6 @@
         "access": "public"
     },
     "dependencies": {
-        "@angry-pixel/core": "file:../../packages/core",
-        "@angry-pixel/2d-physics": "file:../../packages/2d-physics",
-        "@angry-pixel/2d-renderer": "file:../../packages/2d-renderer",
-        "@angry-pixel/math": "file:../../packages/math",
-        "@angry-pixel/input": "file:../../packages/input"
+        "@angry-pixel/core": "file:../../packages/core"
     }
 }
