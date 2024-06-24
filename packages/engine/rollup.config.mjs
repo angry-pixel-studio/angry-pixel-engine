@@ -28,7 +28,7 @@ const main = () => {
             input: "../../bundles/angry-pixel-ecs/lib/packages/engine/types/ecs-engine/index.d.ts",
             output: [
                 {
-                    file: "../../bundles/angry-pixel-ecs/index.d.ts",
+                    file: "../../bundles/angry-pixel-ecs/lib/index.d.ts",
                     format: "es",
                 },
             ],

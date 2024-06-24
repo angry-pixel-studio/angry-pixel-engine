@@ -1,3 +1,3 @@
-# Angry Pixel Tester
+# Angry Pixel Tester ECS
 
 Angry Pixel ECS testing project.
