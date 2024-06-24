@@ -1,0 +1,128 @@
+import { IRenderManager, ITextRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
+import { Vector2 } from "../../../math";
+import { Entity, IEntityManager } from "../../manager/EntityManager";
+import { System, SystemGroup } from "../../manager/SystemManager";
+import { Transform } from "../../component/Transform";
+import { TextRenderer } from "../../component/renderer/TextRenderer";
+
+export class TextRendererSystem extends System {
+    private readonly renderData: Map<Entity, ITextRenderData> = new Map();
+    private entitiesUpdated: Entity[];
+    private scaledOffset: Vector2 = new Vector2();
+
+    constructor(
+        private entityManager: IEntityManager,
+        private renderManager: IRenderManager,
+    ) {
+        super();
+        this.group = SystemGroup.Render;
+    }
+
+    public onUpdate(): void {
+        this.entitiesUpdated = [];
+
+        this.entityManager.search(TextRenderer).forEach(({ entity, component: textRenderer }) => {
+            if (
+                textRenderer.text.length === 0 ||
+                (textRenderer.font instanceof FontFace && textRenderer.font.status !== "loaded")
+            ) {
+                return;
+            }
+
+            const renderData = this.getOrCreate(entity);
+            const transform = this.entityManager.getComponent(entity, Transform);
+
+            this.scaledOffset.set(
+                textRenderer.offset.x * transform.localScale.x,
+                textRenderer.offset.y * transform.localScale.y,
+            );
+            Vector2.add(renderData.position, transform.localPosition, this.scaledOffset);
+
+            if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
+                this.translateRenderPosition(renderData, transform);
+            }
+
+            renderData.layer = textRenderer.layer;
+            renderData.font = textRenderer.font;
+            renderData.fontSize = textRenderer.fontSize;
+            renderData.text = this.crop(textRenderer);
+            renderData.orientation = textRenderer.orientation;
+            renderData.color = textRenderer.color;
+            renderData.lineSeparation = textRenderer.lineSeparation;
+            renderData.letterSpacing = textRenderer.letterSpacing;
+            renderData.smooth = textRenderer.smooth;
+            renderData.rotation = transform.localRotation + textRenderer.rotation;
+            renderData.alpha = textRenderer.opacity; // unify names
+
+            renderData.bitmap.charRanges = textRenderer.charRanges;
+            renderData.bitmap.margin = textRenderer.bitmapMargin;
+            renderData.bitmap.spacing = textRenderer.bitmapSpacing;
+
+            this.entitiesUpdated.push(entity);
+        });
+
+        for (const entity of this.renderData.keys()) {
+            if (!this.entitiesUpdated.includes(entity)) this.renderData.delete(entity);
+            else this.renderManager.addRenderData(this.renderData.get(entity));
+        }
+    }
+
+    private getOrCreate(entity: Entity): ITextRenderData {
+        if (!this.renderData.has(entity)) {
+            this.renderData.set(entity, {
+                type: RenderDataType.Text,
+                location: RenderLocation.WorldSpace, // TODO: remove this from the renderer
+                layer: undefined,
+                position: new Vector2(),
+                font: undefined,
+                fontSize: undefined,
+                text: undefined,
+                bitmap: {
+                    charRanges: undefined,
+                    margin: undefined,
+                    spacing: undefined,
+                },
+            });
+        }
+
+        return this.renderData.get(entity);
+    }
+
+    private translateRenderPosition(renderData: ITextRenderData, transform: Transform): void {
+        const translatedAngle = Math.atan2(this.scaledOffset.y, this.scaledOffset.x) + transform.localRotation;
+
+        renderData.position.set(
+            transform.localPosition.x + this.scaledOffset.magnitude * Math.cos(translatedAngle),
+            transform.localPosition.y + this.scaledOffset.magnitude * Math.sin(translatedAngle),
+        );
+    }
+
+    private crop({ fontSize, height, text, letterSpacing, width, lineSeparation }: TextRenderer): string {
+        if (fontSize > height) return "";
+
+        const croppedText: string[] = [];
+        let croppedHeight = 0;
+
+        for (const line of text.split("\n")) {
+            const newLines = line.split(" ").reduce(
+                (lines, word) => {
+                    const currentLine =
+                        lines[lines.length - 1] + (lines[lines.length - 1].length > 0 ? " " : "") + word;
+                    if (currentLine.length * (fontSize + letterSpacing) > width) lines.push(word);
+                    else lines[lines.length - 1] = currentLine;
+                    return lines;
+                },
+                [""],
+            );
+
+            for (const newLine of newLines) {
+                croppedHeight += fontSize + lineSeparation;
+                if (croppedHeight > height) return croppedText.join("\n");
+
+                croppedText.push(newLine);
+            }
+        }
+
+        return croppedText.join("\n");
+    }
+}
