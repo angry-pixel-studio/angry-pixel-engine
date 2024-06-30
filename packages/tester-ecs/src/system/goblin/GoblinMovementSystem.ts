@@ -19,22 +19,11 @@ export class GoblinMovementSystem extends GameSystem {
                 this.collisionQueryManager.findCollisionsForColliderAndLayer(edgeCollider, COLLISION_LAYERS.Foreground)
                     .length > 0;
 
-            /*const ninjaCollision =
-                this.collisionQueryManager.findCollisionsForColliderAndLayer(edgeCollider, COLLISION_LAYERS.Ninja)
-                    .length > 0;*/
-
             const wallCollision = bodyCollision && bodyCollisions.some((c) => c.resolution.direction.x !== 0);
 
             const yVelocity: number = bodyCollision ? 0 : rigidBody.velocity.y;
 
             if ((!edgeCollision || wallCollision) && bodyCollision) transform.scale.x *= -1;
-
-            /*if (ninjaCollision && !movement.jumping) {
-                movement.jumping = true;
-                yVelocity = movement.jumpSpeed;
-            }
-
-            if (!ninjaCollision) movement.jumping = false;*/
 
             rigidBody.velocity.set(Math.sign(transform.scale.x) * movement.walkSpeed, yVelocity);
         });

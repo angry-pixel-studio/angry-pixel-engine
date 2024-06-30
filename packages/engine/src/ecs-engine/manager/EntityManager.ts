@@ -48,12 +48,24 @@ export class EntityManager implements IEntityManager {
     }
 
     public removeEntity(entity: Entity): void {
-        this.components.forEach((row) => (row.has(entity) ? row.delete(entity) : undefined));
+        this.removeChildren(entity);
+
+        this.components.forEach((row) => {
+            if (row.has(entity)) row.delete(entity);
+        });
     }
 
     public removeAllEntities(): void {
         this.components.clear();
         this.lastEntityId = 0;
+    }
+
+    private removeChildren(parent: Entity): void {
+        const parentTransform = this.getComponent(parent, Transform);
+
+        this.components.get(Transform.name).forEach((transform, entity) => {
+            if (transform.parent === parentTransform) this.removeEntity(entity);
+        });
     }
 
     public isEntityEnabled(entity: Entity): boolean {
@@ -63,10 +75,28 @@ export class EntityManager implements IEntityManager {
     public enableEntity(entity: Entity): void {
         if (this.isEntityEnabled(entity)) return;
         this.disabledEntities.splice(this.disabledEntities.indexOf(entity), 1);
+        this.enableChildren(entity);
+    }
+
+    private enableChildren(parent: Entity): void {
+        const parentTransform = this.getComponent(parent, Transform);
+
+        this.components.get(Transform.name).forEach((transform, entity) => {
+            if (transform.parent === parentTransform) this.enableEntity(entity);
+        });
     }
 
     public disableEntity(entity: Entity): void {
         if (this.isEntityEnabled(entity)) this.disabledEntities.push(entity);
+        this.disableChildren(entity);
+    }
+
+    private disableChildren(parent: Entity): void {
+        const parentTransform = this.getComponent(parent, Transform);
+
+        this.components.get(Transform.name).forEach((transform, entity) => {
+            if (transform.parent === parentTransform) this.disableEntity(entity);
+        });
     }
 
     public addComponent<T extends Component>(entity: Entity, componentType: ComponentType<T>): T;

@@ -54,7 +54,7 @@ export const goblinFactory = (
     lightRenderer.radius = 32;
     lightRenderer.layer = RENDER_LAYERS.Shadow;
     lightRenderer.smooth = true;
-    lightRenderer.intensity = 1;
+    lightRenderer.intensity = 0.5;
 
     return [transform, spriteRenderer, animator, bodyCollider, edgeCollider, rigidBody, movement, lightRenderer];
 };
