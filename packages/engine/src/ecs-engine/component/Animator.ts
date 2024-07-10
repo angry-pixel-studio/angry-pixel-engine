@@ -2,15 +2,17 @@ import { Vector2 } from "../../math";
 
 export class Animator {
     public animations: Map<string, Animation> = new Map();
-    public defaultAnimation: string;
-    public animationToPlay: string;
-    public action: AnimatorAction = "stop";
+    public animation: string;
+    public speed: number = 1;
+    public reset: boolean = false;
+    public state: AnimationState = "playing";
     public currentFrame: number = 0;
     public currentTime: number = 0;
-    public currentAnimation: string = undefined;
+    /**  @internal */
+    public _currentAnimation: string = undefined;
 }
 
-export type AnimatorAction = "stop" | "play" | "pause";
+export type AnimationState = "playing" | "ended";
 
 export class Animation {
     public image: HTMLImageElement | HTMLImageElement[];

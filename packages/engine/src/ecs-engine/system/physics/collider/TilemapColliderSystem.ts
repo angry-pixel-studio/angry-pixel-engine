@@ -42,11 +42,14 @@ export class TilemapColliderSystem extends System {
             if (!this.needsCollider(tile, index, tilemapRenderer)) return;
 
             this.colliders.get(entity).push({
+                entity: undefined,
+                id: undefined,
                 layer,
                 shape: new Polygon(this.generateRectangleVertices(index, tilemapRenderer)),
                 updateCollisions: false,
                 physics: false,
                 offset: new Vector2(),
+                ignoreCollisionsWithLayers: undefined,
             });
         });
     }
@@ -174,11 +177,14 @@ export class TilemapColliderSystem extends System {
         end.y = (height * tileHeight) / 2 - end.y * tileHeight;
 
         this.colliders.get(entity).push({
+            entity: undefined,
+            id: undefined,
             layer,
             shape: new Polygon([new Vector2(start.x, start.y), new Vector2(end.x, end.y)]),
             updateCollisions: false,
             physics: true, // TODO: let change this
             offset: new Vector2(),
+            ignoreCollisionsWithLayers: undefined,
         });
     }
 

@@ -19,6 +19,8 @@ export class BoxCollider {
     offset: Vector2 = new Vector2();
     /** Rectangle rotation in radians */
     rotation: number = 0;
+    /** Ignores collisions with layers in the array */
+    ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     _collider: ICollider<Polygon>;
 }

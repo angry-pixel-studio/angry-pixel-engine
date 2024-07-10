@@ -15,6 +15,8 @@ export class BallCollider {
     layer: string = "";
     /** TRUE if this collider interact with rigid bodies */
     physics: boolean = true;
+    /** Ignores collisions with layers in the array */
+    ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     _collider: ICollider<Circumference>;
 }

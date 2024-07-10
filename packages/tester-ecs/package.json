@@ -4,8 +4,7 @@
     "description": "Angry Pixel ECS testing project.",
     "scripts": {
         "start": "webpack serve --mode development",
-        "build": "webpack --mode production",
-        "dev": "webpack --mode development"
+        "build": "webpack --mode production"
     },
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "license": "MIT",

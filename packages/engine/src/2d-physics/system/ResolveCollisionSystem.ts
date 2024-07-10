@@ -43,20 +43,18 @@ export class ResolveCollisionSystem extends SystemBase {
 
     // broad phase takes care of looking for possible collisions
     private broadPhase(collider: ICollider): ICollider[] {
-        if (this.collisionMatrix) {
-            return this.broadPhaseResolver
-                .retrieve(collider.shape.boundingBox)
-                .map<ICollider>((id) => this.colliders[id])
-                .filter((remoteCollider) =>
-                    this.collisionMatrix.some(
-                        (row) =>
-                            (row[0] === collider.layer && row[1] === remoteCollider.layer) ||
-                            (row[1] === collider.layer && row[0] === remoteCollider.layer),
-                    ),
-                );
-        }
-
-        return this.broadPhaseResolver.retrieve(collider.shape.boundingBox).map<ICollider>((id) => this.colliders[id]);
+        return this.collisionMatrix
+            ? this.broadPhaseResolver
+                  .retrieve(collider.shape.boundingBox)
+                  .map<ICollider>((id) => this.colliders[id])
+                  .filter((remoteCollider) =>
+                      this.collisionMatrix.some(
+                          (row) =>
+                              (row[0] === collider.layer && row[1] === remoteCollider.layer) ||
+                              (row[1] === collider.layer && row[0] === remoteCollider.layer),
+                      ),
+                  )
+            : this.broadPhaseResolver.retrieve(collider.shape.boundingBox).map<ICollider>((id) => this.colliders[id]);
     }
 
     // narrow phase takes care of checking for actual collision
@@ -66,6 +64,10 @@ export class ResolveCollisionSystem extends SystemBase {
                 (neighbor: ICollider) =>
                     neighbor.entity !== collider.entity &&
                     collider.id !== neighbor.id &&
+                    (!collider.ignoreCollisionsWithLayers ||
+                        !collider.ignoreCollisionsWithLayers.includes(neighbor.layer)) &&
+                    (!neighbor.ignoreCollisionsWithLayers ||
+                        !neighbor.ignoreCollisionsWithLayers.includes(collider.layer)) &&
                     !this.isResolved(collider, neighbor),
             )
             .forEach((neighbor: ICollider) => {

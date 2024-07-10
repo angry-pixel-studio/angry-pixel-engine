@@ -3,7 +3,6 @@ import { BallCollider } from "../component/collider/BallCollider";
 import { BoxCollider } from "../component/collider/BoxCollider";
 import { EdgeCollider } from "../component/collider/EdgeCollider";
 import { PolygonCollider } from "../component/collider/PolygonCollider";
-import { TilemapRenderer } from "../component/renderer/TilemapRenderer";
 
 export type ColliderComponent = BallCollider | BoxCollider | EdgeCollider | PolygonCollider;
 
@@ -16,6 +15,8 @@ export class CollisionQueryManager implements ICollisionQueryManager {
     constructor(private readonly physicsManager: IPhysicsManager) {}
 
     public findCollisionsForCollider(collider: ColliderComponent): ICollision[] {
+        if (collider instanceof TilemapCollider) return [];
+
         if (collider instanceof EdgeCollider) {
             return collider._colliders.reduce(
                 (acc, c) => [...acc, ...this.physicsManager.getCollisionsForCollider(c)],
@@ -27,6 +28,8 @@ export class CollisionQueryManager implements ICollisionQueryManager {
     }
 
     public findCollisionsForColliderAndLayer(collider: ColliderComponent, layer: string): ICollision[] {
+        if (collider instanceof TilemapCollider) return [];
+
         if (collider instanceof EdgeCollider) {
             return collider._colliders.reduce(
                 (acc, c) => [...acc, ...this.physicsManager.getCollisionsForColliderAndLayer(c, layer)],

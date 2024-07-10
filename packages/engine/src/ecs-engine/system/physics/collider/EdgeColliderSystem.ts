@@ -26,6 +26,10 @@ export class EdgeColliderSystem extends System {
                     edgeCollider.vertexModel[i],
                     edgeCollider.vertexModel[i + 1],
                 ];
+                edgeCollider._colliders[i].ignoreCollisionsWithLayers =
+                    edgeCollider.ignoreCollisionsWithLayers.length > 0
+                        ? edgeCollider.ignoreCollisionsWithLayers
+                        : undefined;
 
                 this.physicsManager.addCollider(entity, edgeCollider._colliders[i]);
             }
@@ -35,11 +39,14 @@ export class EdgeColliderSystem extends System {
     private updateColliders(edgeCollider: EdgeCollider, index: number): void {
         if (!edgeCollider._colliders[index]) {
             edgeCollider._colliders[index] = {
+                entity: undefined,
+                id: undefined,
                 layer: "",
                 offset: new Vector2(),
                 shape: new Polygon([new Vector2(), new Vector2()]),
                 updateCollisions: true,
                 physics: true,
+                ignoreCollisionsWithLayers: undefined,
             };
         }
     }

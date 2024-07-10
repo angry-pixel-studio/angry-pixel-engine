@@ -28,7 +28,7 @@ export const goblinFactory = (
 
     const animator = new Animator();
     animator.animations.set("walk", walkAnimation(assetManager));
-    animator.defaultAnimation = "walk";
+    animator.animation = "walk";
 
     const bodyCollider = new BoxCollider();
     bodyCollider.layer = COLLISION_LAYERS.Goblin;

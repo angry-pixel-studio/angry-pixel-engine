@@ -22,8 +22,8 @@ export class SpriteRendererSystem extends System {
         this.entitiesUpdated = [];
 
         this.entityManager.search(SpriteRenderer).forEach(({ entity, component: spriteRenderer }) => {
-            // The natural width value determines if the image was loaded
-            if (!spriteRenderer.image || !spriteRenderer.image.naturalWidth) return;
+            // The complete property determines if the image was loaded
+            if (!spriteRenderer.image || !spriteRenderer.image.complete) return;
 
             const renderData = this.getOrCreate(entity);
             const transform = this.entityManager.getComponent(entity, Transform);

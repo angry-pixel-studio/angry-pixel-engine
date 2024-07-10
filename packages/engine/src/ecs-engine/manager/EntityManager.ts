@@ -24,6 +24,7 @@ export interface IEntityManager {
     getComponent<T extends Component>(entity: Entity, componentType: ComponentType<T>): T;
     removeComponent(entity: Entity, componentType: ComponentType): void;
     removeComponent(entity: Entity, component: Component): void;
+    hasComponent(entity: Entity, componentType: ComponentType): boolean;
 
     search<T extends Component>(componentType: ComponentType<T>, includeDisabled?: boolean): SearchResult<T>[];
     searchInChildren<T extends Component>(
@@ -35,7 +36,8 @@ export interface IEntityManager {
 
 export class EntityManager implements IEntityManager {
     private lastEntityId: number = 0;
-    private components: Map<string, Map<Entity, Component>> = new Map(); // componentType => entity => component
+    private lastComponentTypeId: number = 0;
+    private components: Map<number, Map<Entity, Component>> = new Map(); // componentTypeId => entity => component
     private disabledEntities: Entity[] = [];
 
     public createEntity(): Entity;
@@ -63,7 +65,7 @@ export class EntityManager implements IEntityManager {
     private removeChildren(parent: Entity): void {
         const parentTransform = this.getComponent(parent, Transform);
 
-        this.components.get(Transform.name).forEach((transform, entity) => {
+        this.components.get(this.getComponentTypeId(Transform)).forEach((transform, entity) => {
             if (transform.parent === parentTransform) this.removeEntity(entity);
         });
     }
@@ -81,7 +83,7 @@ export class EntityManager implements IEntityManager {
     private enableChildren(parent: Entity): void {
         const parentTransform = this.getComponent(parent, Transform);
 
-        this.components.get(Transform.name).forEach((transform, entity) => {
+        this.components.get(this.getComponentTypeId(Transform)).forEach((transform, entity) => {
             if (transform.parent === parentTransform) this.enableEntity(entity);
         });
     }
@@ -94,54 +96,71 @@ export class EntityManager implements IEntityManager {
     private disableChildren(parent: Entity): void {
         const parentTransform = this.getComponent(parent, Transform);
 
-        this.components.get(Transform.name).forEach((transform, entity) => {
+        this.components.get(this.getComponentTypeId(Transform)).forEach((transform, entity) => {
             if (transform.parent === parentTransform) this.disableEntity(entity);
         });
+    }
+
+    private getOrCreateComponentTypeId<T extends Component>(component: ComponentType<T> | T): number {
+        const prototype = (typeof component === "object" ? component.constructor : component).prototype;
+        if (!prototype.__APComponentTypeId__) prototype.__APComponentTypeId__ = ++this.lastComponentTypeId;
+
+        return prototype.__APComponentTypeId__;
+    }
+
+    private getComponentTypeId<T extends Component>(component: ComponentType<T> | T): number {
+        return (typeof component === "object" ? component.constructor : component).prototype.__APComponentTypeId__;
     }
 
     public addComponent<T extends Component>(entity: Entity, componentType: ComponentType<T>): T;
     public addComponent<T extends Component>(entity: Entity, component: T): T;
     public addComponent<T extends Component>(entity: Entity, component: ComponentType<T> | T): T {
-        const name = typeof component === "object" ? component.constructor.name : component.name;
-        component = typeof component === "object" ? component : new component();
+        const cType = this.getOrCreateComponentTypeId(component);
+        const instance = typeof component === "object" ? component : new component();
 
-        if (!this.components.has(name)) this.components.set(name, new Map());
+        if (!this.components.has(cType)) this.components.set(cType, new Map());
 
-        if (this.components.get(name).has(entity)) {
-            throw new Error(`Entity ${entity} already has a component of type ${name}`);
+        if (this.components.get(cType).has(entity)) {
+            throw new Error(`Entity ${entity} already has a component of type ${cType}`);
         }
 
-        this.components.get(name).set(entity, component);
+        this.components.get(cType).set(entity, instance);
 
-        return component as T;
+        return instance as T;
     }
 
-    public getComponent<T extends Component>(entity: Entity, { name }: ComponentType<T>): T {
-        return this.components.get(name)?.get(entity) as T;
+    public getComponent<T extends Component>(entity: Entity, componentType: ComponentType<T>): T {
+        const cType = this.getComponentTypeId(componentType);
+        return this.components.get(cType)?.get(entity) as T;
     }
 
     public removeComponent(entity: Entity, componentType: ComponentType): void;
     public removeComponent(entity: Entity, component: Component): void;
     public removeComponent(entity: Entity, component: ComponentType | Component): void {
-        const name = typeof component === "object" ? component.constructor.name : component.name;
+        const cType = this.getComponentTypeId(component);
 
         if (
-            this.components.has(name) &&
-            this.components.get(name).has(entity) &&
-            (typeof component !== "object" || this.components.get(name).get(entity) === component)
+            this.components.has(cType) &&
+            this.components.get(cType).has(entity) &&
+            (typeof component !== "object" || this.components.get(cType).get(entity) === component)
         ) {
-            this.components.get(name).delete(entity);
+            this.components.get(cType).delete(entity);
         }
     }
 
+    public hasComponent(entity: Entity, componentType: ComponentType): boolean {
+        return this.getComponent(entity, componentType) !== undefined;
+    }
+
     public search<T extends Component>(
-        { name }: ComponentType<T>,
+        componentType: ComponentType<T>,
         includeDisabled: boolean = false,
     ): SearchResult<T>[] {
         const result: SearchResult<T>[] = [];
+        const cType = this.getComponentTypeId(componentType);
 
-        if (this.components.has(name)) {
-            this.components.get(name).forEach((component, entity) => {
+        if (this.components.has(cType)) {
+            this.components.get(cType).forEach((component, entity) => {
                 if (includeDisabled || this.isEntityEnabled(entity)) result.push({ entity, component: component as T });
             });
         }
@@ -157,7 +176,7 @@ export class EntityManager implements IEntityManager {
         const result: SearchResult<T>[] = [];
         const parentTransform = this.getComponent(parent, Transform);
 
-        this.components.get(Transform.name).forEach((transform, entity) => {
+        this.components.get(this.getComponentTypeId(Transform)).forEach((transform, entity) => {
             if ((includeDisabled || this.isEntityEnabled(entity)) && transform.parent === parentTransform) {
                 const component = this.getComponent(entity, componentType);
                 if (component) result.push({ entity, component });

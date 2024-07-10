@@ -25,6 +25,8 @@ export class BoxColliderSystem extends System {
             boxCollider._collider.shape.vertexModel[1].set(-boxCollider.width / 2, boxCollider.height / 2);
             boxCollider._collider.shape.vertexModel[2].set(boxCollider.width / 2, boxCollider.height / 2);
             boxCollider._collider.shape.vertexModel[3].set(boxCollider.width / 2, -boxCollider.height / 2);
+            boxCollider._collider.ignoreCollisionsWithLayers =
+                boxCollider.ignoreCollisionsWithLayers.length > 0 ? boxCollider.ignoreCollisionsWithLayers : undefined;
 
             this.physicsManager.addCollider(entity, boxCollider._collider);
         });
@@ -33,11 +35,14 @@ export class BoxColliderSystem extends System {
     private createColliderIfNotExists(boxCollider: BoxCollider): void {
         if (!boxCollider._collider) {
             boxCollider._collider = {
+                entity: undefined,
+                id: undefined,
                 layer: "",
                 offset: new Vector2(),
                 shape: new Polygon([new Vector2(), new Vector2(), new Vector2(), new Vector2()]),
                 updateCollisions: true,
                 physics: true,
+                ignoreCollisionsWithLayers: undefined,
             };
         }
     }

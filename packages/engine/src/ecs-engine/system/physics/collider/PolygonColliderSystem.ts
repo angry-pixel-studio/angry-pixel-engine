@@ -22,6 +22,10 @@ export class PolygonColliderSystem extends System {
             polygonCollider._collider.offset.copy(polygonCollider.offset);
             polygonCollider._collider.shape.rotation = polygonCollider.rotation;
             polygonCollider._collider.shape.vertexModel = polygonCollider.vertexModel;
+            polygonCollider._collider.ignoreCollisionsWithLayers =
+                polygonCollider.ignoreCollisionsWithLayers.length > 0
+                    ? polygonCollider.ignoreCollisionsWithLayers
+                    : undefined;
 
             this.physicsManager.addCollider(entity, polygonCollider._collider);
         });
@@ -30,11 +34,14 @@ export class PolygonColliderSystem extends System {
     private createColliderIfNotExists(polygonCollider: PolygonCollider): void {
         if (!polygonCollider._collider) {
             polygonCollider._collider = {
+                entity: undefined,
+                id: undefined,
                 layer: "",
                 offset: new Vector2(),
                 shape: new Polygon([]),
                 updateCollisions: true,
                 physics: true,
+                ignoreCollisionsWithLayers: undefined,
             };
         }
     }

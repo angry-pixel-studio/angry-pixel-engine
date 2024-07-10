@@ -30,8 +30,8 @@ export class TilemapRendererSystem extends System {
         this.entityManager.search(TilemapRenderer).forEach(({ entity, component: tilemapRenderer }) => {
             if (!this.renderData.has(entity)) this.createRenderData(entity, tilemapRenderer);
 
-            // The natural width value determines if the image was loaded
-            if (!tilemapRenderer.tileset.image || !tilemapRenderer.tileset.image.naturalWidth) return;
+            // The complete property determines if the image was loaded
+            if (!tilemapRenderer.tileset.image || !tilemapRenderer.tileset.image.complete) return;
 
             const transform = this.entityManager.getComponent(entity, Transform);
 

@@ -13,8 +13,8 @@ export class NinjaAnimationSystem extends GameSystem {
                 ? Math.sign(rigidBody.velocity.x) * Math.abs(transform.scale.x)
                 : transform.scale.x;
 
-        if (rigidBody.velocity.x !== 0 && movements.grounded) animator.animationToPlay = "run";
-        else animator.animationToPlay = "idle";
+        if (rigidBody.velocity.x !== 0 && movements.grounded) animator.animation = "run";
+        else animator.animation = "idle";
 
         // console.log(this.entityManager.getComponent(entity, SpriteRenderer).slice);
     }

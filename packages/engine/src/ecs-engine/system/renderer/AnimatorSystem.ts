@@ -20,49 +20,53 @@ export class AnimatorSystem extends System {
 
     public onUpdate(): void {
         this.entityManager.search(Animator).forEach(({ entity, component: animator }) => {
-            this.stop(animator);
+            this.reset(animator);
 
-            this.animation = animator.animations.get(animator.animationToPlay);
+            this.animation = animator.animations.get(animator.animation);
             if (!this.animation) return;
 
             this.play(animator);
+
+            animator._currentAnimation = animator.animation;
 
             const spriteRenderer = this.entityManager.getComponent(entity, SpriteRenderer);
             if (spriteRenderer) this.renderSprite(animator, spriteRenderer);
         });
     }
 
-    private stop(animator: Animator): void {
-        if (animator.action === "stop") {
+    private reset(animator: Animator): void {
+        if (animator.reset) {
             animator.currentFrame = 0;
             animator.currentTime = 0;
-
-            if (animator.defaultAnimation) {
-                animator.action = "play";
-                animator.animationToPlay = animator.defaultAnimation;
-            }
+            animator.state = "playing";
+            animator.reset = false;
         }
     }
 
     private play(animator: Animator): void {
-        if (animator.action === "play") {
-            if (animator.animationToPlay !== animator.currentAnimation) {
-                animator.currentAnimation = animator.animationToPlay;
-                animator.currentFrame = 0;
-                animator.currentTime = 0;
-            }
+        if (animator.animation !== animator._currentAnimation) {
+            animator._currentAnimation = animator.animation;
+            animator.currentFrame = 0;
+            animator.currentTime = 0;
+            animator.state = "playing";
+        }
 
-            if (animator.currentTime >= (1 / this.animation.fps) * (animator.currentFrame + 1)) {
-                if (animator.currentFrame === this.animation.frames.length - 1) {
+        if (animator.state !== "playing") return;
+
+        if (animator.currentTime >= (1 / this.animation.fps) * (animator.currentFrame + 1)) {
+            if (animator.currentFrame === this.animation.frames.length - 1) {
+                if (this.animation.loop) {
                     animator.currentFrame = 0;
                     animator.currentTime = 0;
                 } else {
-                    animator.currentFrame++;
+                    animator.state = "ended";
                 }
+            } else {
+                animator.currentFrame++;
             }
-
-            animator.currentTime += this.timeManager.renderDeltaTime;
         }
+
+        animator.currentTime += this.timeManager.renderDeltaTime * animator.speed;
     }
 
     private renderSprite(animator: Animator, spriteRenderer: SpriteRenderer): void {

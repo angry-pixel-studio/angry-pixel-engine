@@ -29,7 +29,7 @@ export const ninjaFactory = (
     const animator = new Animator();
     animator.animations.set("idle", idleAnimation(assetManager));
     animator.animations.set("run", runAnimation(assetManager));
-    animator.defaultAnimation = "idle";
+    animator.animation = "idle";
 
     const collider = new BoxCollider();
     collider.layer = COLLISION_LAYERS.Ninja;

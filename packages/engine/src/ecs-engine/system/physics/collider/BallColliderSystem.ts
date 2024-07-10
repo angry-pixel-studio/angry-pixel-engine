@@ -21,6 +21,10 @@ export class BallColliderSystem extends System {
             ballCollider._collider.physics = ballCollider.physics;
             ballCollider._collider.offset.copy(ballCollider.offset);
             ballCollider._collider.shape.radius = ballCollider.radius;
+            ballCollider._collider.ignoreCollisionsWithLayers =
+                ballCollider.ignoreCollisionsWithLayers.length > 0
+                    ? ballCollider.ignoreCollisionsWithLayers
+                    : undefined;
 
             this.physicsManager.addCollider(entity, ballCollider._collider);
         });
@@ -29,11 +33,14 @@ export class BallColliderSystem extends System {
     private createColliderIfNotExists(ballCollider: BallCollider): void {
         if (!ballCollider._collider) {
             ballCollider._collider = {
+                entity: undefined,
+                id: undefined,
                 layer: "",
                 offset: new Vector2(),
                 shape: new Circumference(0),
                 updateCollisions: true,
                 physics: true,
+                ignoreCollisionsWithLayers: undefined,
             };
         }
     }
