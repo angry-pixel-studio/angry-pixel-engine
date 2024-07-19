@@ -1,8 +1,9 @@
-import { ICollision, IPhysicsManager, TilemapCollider } from "..";
+import { ICollision, IPhysicsManager } from "../../2d-physics";
 import { BallCollider } from "../component/collider/BallCollider";
 import { BoxCollider } from "../component/collider/BoxCollider";
 import { EdgeCollider } from "../component/collider/EdgeCollider";
 import { PolygonCollider } from "../component/collider/PolygonCollider";
+import { TilemapCollider } from "../component/collider/TilemapCollider";
 
 export type ColliderComponent = BallCollider | BoxCollider | EdgeCollider | PolygonCollider;
 

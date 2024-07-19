@@ -5,14 +5,12 @@ export class Animator {
     public animation: string;
     public speed: number = 1;
     public reset: boolean = false;
-    public state: AnimationState = "playing";
+    public playing: boolean = false;
     public currentFrame: number = 0;
     public currentTime: number = 0;
     /**  @internal */
     public _currentAnimation: string = undefined;
 }
-
-export type AnimationState = "playing" | "ended";
 
 export class Animation {
     public image: HTMLImageElement | HTMLImageElement[];

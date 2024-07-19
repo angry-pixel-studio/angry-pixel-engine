@@ -38,7 +38,7 @@ export class LoaderSystem extends GameSystem {
         this.entityManager.createEntity(ninjaFactory(this.assetManager, this.entityManager, new Vector2(-300, 0)));
         this.entityManager.createEntity(movingPlatformFactory(this.assetManager));
 
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 10; i++) {
             this.entityManager.createEntity(
                 goblinFactory(this.assetManager, this.entityManager, new Vector2(randomInt(-600, 192), 0)),
             );

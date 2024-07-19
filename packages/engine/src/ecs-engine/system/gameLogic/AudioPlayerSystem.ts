@@ -1,6 +1,7 @@
 import { IEntityManager } from "../../manager/EntityManager";
 import { System, SystemGroup } from "../../manager/SystemManager";
 import { AudioPlayer } from "../../component/AudioPlayer";
+import { IInputManager } from "../../../input";
 
 const userInputEventNames = [
     "click",
@@ -18,7 +19,10 @@ const userInputEventNames = [
 export class AudioPlayerSystem extends System {
     private canPlay: boolean = false;
 
-    constructor(private entityManager: IEntityManager) {
+    constructor(
+        private entityManager: IEntityManager,
+        private inputManager: IInputManager,
+    ) {
         super();
         this.group = SystemGroup.PreGameLogic;
     }
@@ -27,6 +31,14 @@ export class AudioPlayerSystem extends System {
         // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
         this.canPlay = false;
         userInputEventNames.forEach((eventName) => window.addEventListener(eventName, this.userInputEventHandler));
+
+        // pauses audio when document is not visible
+        document.addEventListener("visibilitychange", () => {
+            this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource, playing } }) => {
+                if (document.hidden && audioSource) audioSource.pause();
+                else if (!document.hidden && audioSource && playing) audioSource.play();
+            });
+        });
     }
 
     // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
@@ -38,8 +50,13 @@ export class AudioPlayerSystem extends System {
         this.canPlay = true;
     };
 
+    private checkGamepad(): boolean {
+        this.canPlay = this.inputManager.gamepads.some((gp) => gp.anyButtonPressed);
+        return this.canPlay;
+    }
+
     public onUpdate(): void {
-        if (!this.canPlay) return;
+        if (!this.canPlay) if (!this.checkGamepad()) return;
 
         this.entityManager.search(AudioPlayer).forEach(({ component: audioPlayer }) => {
             if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
@@ -47,19 +64,37 @@ export class AudioPlayerSystem extends System {
             audioPlayer.audioSource.loop = audioPlayer.loop;
             audioPlayer.audioSource.volume = audioPlayer.volume;
 
-            if (audioPlayer.action === "play" && audioPlayer.audioSource.paused) {
-                audioPlayer.audioSource.play();
-                audioPlayer.action = "playing";
-            } else if (audioPlayer.action === "pause" && !audioPlayer.audioSource.paused) {
+            // new audio source
+            if (audioPlayer.audioSource.src !== audioPlayer._currentAudio) {
+                audioPlayer._currentAudio = audioPlayer.audioSource.src;
+                audioPlayer.playing = false;
+                audioPlayer.audioSource.currentTime = 0;
+            }
+
+            if (audioPlayer.action === "play" && !audioPlayer.playing) {
+                // start playing
+                try {
+                    audioPlayer.audioSource.play();
+                    audioPlayer.playing = true;
+                } catch {
+                    // do nothing
+                }
+            } else if (audioPlayer.action === "pause" && audioPlayer.playing) {
+                // set pause
                 audioPlayer.audioSource.pause();
+                audioPlayer.playing = false;
             } else if (
                 audioPlayer.action === "stop" &&
                 (!audioPlayer.audioSource.paused || audioPlayer.audioSource.currentTime !== 0)
             ) {
+                // force stop
                 audioPlayer.audioSource.pause();
                 audioPlayer.audioSource.currentTime = 0;
-            } else if (audioPlayer.action === "playing" && audioPlayer.audioSource.paused) {
+                audioPlayer.playing = false;
+            } else if (audioPlayer.playing && audioPlayer.audioSource.paused) {
+                // track is ended
                 audioPlayer.action = "stop";
+                audioPlayer.playing = false;
             }
         });
     }

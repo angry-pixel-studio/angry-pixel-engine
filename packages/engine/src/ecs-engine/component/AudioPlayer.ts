@@ -1,8 +1,11 @@
 export class AudioPlayer {
-    audioSource: HTMLAudioElement;
-    volume: number = 1;
-    loop: boolean = false;
-    action: AudioPlayerAction = "stop";
+    public action: AudioPlayerAction = "stop";
+    public audioSource: HTMLAudioElement;
+    public loop: boolean = false;
+    public playing: boolean = false;
+    public volume: number = 1;
+    /** @internal */
+    public _currentAudio: string = undefined;
 }
 
-export type AudioPlayerAction = "stop" | "play" | "pause" | "playing";
+export type AudioPlayerAction = "stop" | "play" | "pause";

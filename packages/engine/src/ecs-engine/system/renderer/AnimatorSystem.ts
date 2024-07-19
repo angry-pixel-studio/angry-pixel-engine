@@ -38,7 +38,7 @@ export class AnimatorSystem extends System {
         if (animator.reset) {
             animator.currentFrame = 0;
             animator.currentTime = 0;
-            animator.state = "playing";
+            animator.playing = animator.animation !== undefined;
             animator.reset = false;
         }
     }
@@ -48,10 +48,10 @@ export class AnimatorSystem extends System {
             animator._currentAnimation = animator.animation;
             animator.currentFrame = 0;
             animator.currentTime = 0;
-            animator.state = "playing";
+            animator.playing = true;
         }
 
-        if (animator.state !== "playing") return;
+        if (!animator.playing) return;
 
         if (animator.currentTime >= (1 / this.animation.fps) * (animator.currentFrame + 1)) {
             if (animator.currentFrame === this.animation.frames.length - 1) {
@@ -59,7 +59,7 @@ export class AnimatorSystem extends System {
                     animator.currentFrame = 0;
                     animator.currentTime = 0;
                 } else {
-                    animator.state = "ended";
+                    animator.playing = false;
                 }
             } else {
                 animator.currentFrame++;

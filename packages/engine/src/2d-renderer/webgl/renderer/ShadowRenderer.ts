@@ -61,7 +61,9 @@ export class ShadowRenderer implements IRenderer {
 
         this.gl.uniform1i(this.programManager.numLightsUniform, renderData.lights.length);
 
-        renderData.lights.forEach((light, i) => {
+        for (const [i, light] of renderData.lights.entries()) {
+            if (i >= 64) break; // 64 is the max lights allowed
+
             this.gl.uniform2f(
                 this.gl.getUniformLocation(this.programManager.program, `u_lights[${i}].position`),
                 this.gl.canvas.width / 2 + (light.position.x - cameraData.position.x) * cameraData.zoom,
@@ -82,7 +84,7 @@ export class ShadowRenderer implements IRenderer {
                 this.gl.getUniformLocation(this.programManager.program, `u_lights[${i}].intensity`),
                 Math.max(0, Math.min(1, light.intensity)),
             );
-        });
+        }
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
         this.gl.uniform1i(this.programManager.renderLightUniform, 0);

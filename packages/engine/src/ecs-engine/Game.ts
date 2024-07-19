@@ -168,7 +168,7 @@ export class Game implements IGame {
         this.systemManager.addSystem(new ButtonSystem(this.entityManager, this.inputManager));
         this.systemManager.addSystem(new TiledWrapperSystem(this.entityManager));
         this.systemManager.addSystem(new TilemapPreProcessingSystem(this.entityManager));
-        this.systemManager.addSystem(new AudioPlayerSystem(this.entityManager));
+        this.systemManager.addSystem(new AudioPlayerSystem(this.entityManager, this.inputManager));
 
         // post game logic
         this.systemManager.addSystem(new TransformSystem(this.entityManager));
