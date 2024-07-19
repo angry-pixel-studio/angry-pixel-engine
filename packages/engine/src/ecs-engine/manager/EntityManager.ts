@@ -41,6 +41,7 @@ export interface IEntityManager {
         includeDisabled?: boolean,
     ): SearchResult<T>[];
     searchInParent<T extends Component>(child: Entity, componentType: ComponentType<T>): T;
+    searchEntitiesByComponents(componentTypes: ComponentType[]): Entity[];
 }
 
 export class EntityManager implements IEntityManager {
@@ -248,5 +249,29 @@ export class EntityManager implements IEntityManager {
         }
 
         return undefined;
+    }
+
+    public searchEntitiesByComponents(componentTypes: ComponentType[]): Entity[] {
+        const entities: Entity[] = [];
+        let first = true;
+
+        for (const componentType of componentTypes) {
+            const id = this.getComponentTypeId(componentType);
+            if (!id || !this.components.has(id)) return [];
+
+            if (first) {
+                entities.push(...this.components.get(id).keys());
+                first = false;
+                continue;
+            }
+
+            const toCompare = Array.from(this.components.get(id).keys());
+
+            entities.forEach((e, i) => {
+                if (!toCompare.includes(e)) entities.splice(i, 1);
+            });
+        }
+
+        return entities;
     }
 }
