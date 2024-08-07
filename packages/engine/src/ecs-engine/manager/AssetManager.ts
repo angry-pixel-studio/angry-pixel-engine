@@ -82,7 +82,7 @@ export interface IAssetManager {
     getAudio(url: string): HTMLAudioElement;
     /**
      * Retrieves a font asset
-     * @param url The asset URL
+     * @param family The font family name
      * @returns The Font element
      */
     getFont(family: string): FontFace;

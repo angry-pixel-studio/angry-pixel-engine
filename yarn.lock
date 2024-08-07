@@ -764,7 +764,7 @@ ajv@^8.0.0, ajv@^8.9.0:
     require-from-string "^2.0.2"
     uri-js "^4.4.1"
 
-"angry-pixel-ecs@file:bundles/angry-pixel-ecs":
+"angry-pixel-ecs@file:./bundles/angry-pixel-ecs":
   version "1.0.0"
 
 ansi-html-community@^0.0.8:

@@ -28,6 +28,8 @@ export class TilemapRendererSystem extends System {
 
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer).forEach(({ entity, component: tilemapRenderer }) => {
+            if (!tilemapRenderer._processed) return;
+
             if (!this.renderData.has(entity)) this.createRenderData(entity, tilemapRenderer);
 
             // The complete property determines if the image was loaded
@@ -37,6 +39,7 @@ export class TilemapRendererSystem extends System {
 
             tilemapRenderer.chunks.forEach((chunk, index) => {
                 const renderData = this.renderData.get(entity)[index];
+                if (!renderData) return;
 
                 renderData.alpha = tilemapRenderer.opacity;
                 renderData.layer = tilemapRenderer.layer;

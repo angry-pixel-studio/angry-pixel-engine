@@ -104,12 +104,12 @@ export class TextRendererSystem extends System {
         let croppedHeight = 0;
 
         for (const line of text.split("\n")) {
-            const newLines = line.split(" ").reduce(
+            const newLines = line.split(/(\s+)/).reduce(
                 (lines, word) => {
-                    const currentLine =
-                        lines[lines.length - 1] + (lines[lines.length - 1].length > 0 ? " " : "") + word;
+                    const i = lines.length - 1;
+                    const currentLine = lines[i] + word;
                     if (currentLine.length * (fontSize + letterSpacing) > width) lines.push(word);
-                    else lines[lines.length - 1] = currentLine;
+                    else lines[i] = currentLine;
                     return lines;
                 },
                 [""],

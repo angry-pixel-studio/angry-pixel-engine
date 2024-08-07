@@ -59,9 +59,8 @@ export class SceneManager implements ISceneManager {
         this.scenes.get(this.currentSceneName).forEach((systemType) => this.systemManager.disable(systemType));
     }
 
-    private mainCameraFactory(): Camera {
-        const entity = this.entityManager.createEntity([Transform, Camera]);
-        return this.entityManager.getComponent(entity, Camera);
+    private mainCameraFactory(): void {
+        this.entityManager.createEntity([Transform, Camera]);
     }
 
     private enableCurrentScene(): void {

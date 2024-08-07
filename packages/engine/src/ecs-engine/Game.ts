@@ -71,7 +71,6 @@ export interface IGame {
     running: boolean;
     start(): void;
     stop(): void;
-    addSystem<T extends GameSystem>(systemType: SystemType<T>): T;
     addScene(name: string, systemTypes: SystemType[], openingScene?: boolean): void;
 }
 
@@ -109,7 +108,13 @@ export class Game implements IGame {
         this.loopManager.stop();
     }
 
-    public addSystem<T extends GameSystem>(systemType: SystemType<T>): T {
+    public addScene(name: string, systemTypes: SystemType<GameSystem>[], openingScene?: boolean): void {
+        systemTypes.forEach((systemType) => this.addSystem(systemType));
+
+        this.sceneManager.addScene(name, systemTypes, openingScene);
+    }
+
+    private addSystem<T extends GameSystem>(systemType: SystemType<T>): T {
         if (this.systemManager.hasSystem(systemType)) return;
 
         const system = new systemType(
@@ -124,12 +129,6 @@ export class Game implements IGame {
         return this.systemManager.addSystem(system, false);
     }
 
-    public addScene(name: string, systemTypes: SystemType<GameSystem>[], openingScene?: boolean): void {
-        systemTypes.forEach((systemType) => this.addSystem(systemType));
-
-        this.sceneManager.addScene(name, systemTypes, openingScene);
-    }
-
     private createCanvas({ containerNode, width, height }: IGameConfig): HTMLCanvasElement {
         const canvas = document.createElement("canvas");
 
@@ -137,11 +136,8 @@ export class Game implements IGame {
         canvas.width = Math.floor(width);
         canvas.height = Math.floor(height);
         canvas.tabIndex = 0;
-
         canvas.addEventListener("contextmenu", (e: MouseEvent) => e.preventDefault());
-
         containerNode.appendChild(canvas);
-
         canvas.focus();
 
         return canvas;
@@ -168,7 +164,7 @@ export class Game implements IGame {
         this.systemManager.addSystem(new ButtonSystem(this.entityManager, this.inputManager));
         this.systemManager.addSystem(new TiledWrapperSystem(this.entityManager));
         this.systemManager.addSystem(new TilemapPreProcessingSystem(this.entityManager));
-        this.systemManager.addSystem(new AudioPlayerSystem(this.entityManager, this.inputManager));
+        this.systemManager.addSystem(new AudioPlayerSystem(this.entityManager, this.inputManager, this.timeManager));
 
         // post game logic
         this.systemManager.addSystem(new TransformSystem(this.entityManager));
@@ -181,7 +177,7 @@ export class Game implements IGame {
         this.systemManager.addSystem(new SpriteRendererSystem(this.entityManager, this.renderManager));
         this.systemManager.addSystem(new MaskRendererSystem(this.entityManager, this.renderManager));
         this.systemManager.addSystem(new TextRendererSystem(this.entityManager, this.renderManager));
-        this.systemManager.addSystem(new VideoRendererSystem(this.entityManager, this.renderManager));
+        this.systemManager.addSystem(new VideoRendererSystem(this.entityManager, this.renderManager, this.timeManager));
         this.systemManager.addSystem(new ShadowLightRendererSystem(this.entityManager, this.renderManager));
         if (debugEnabled) {
             this.systemManager.addSystem(

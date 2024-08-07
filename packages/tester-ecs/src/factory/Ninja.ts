@@ -46,9 +46,9 @@ export const ninjaFactory = (
     transform.position = position;
 
     const lightRenderer = new LightRenderer();
-    lightRenderer.radius = 32;
+    lightRenderer.radius = 64;
     lightRenderer.layer = RENDER_LAYERS.Shadow;
-    lightRenderer.smooth = false;
+    lightRenderer.smooth = true;
     lightRenderer.intensity = 1;
 
     return [

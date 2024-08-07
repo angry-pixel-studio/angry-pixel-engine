@@ -51,10 +51,10 @@ export const goblinFactory = (
     movement.walkSpeed = randomInt(20, 60);
 
     const lightRenderer = new LightRenderer();
-    lightRenderer.radius = 32;
+    lightRenderer.radius = 64;
     lightRenderer.layer = RENDER_LAYERS.Shadow;
     lightRenderer.smooth = true;
-    lightRenderer.intensity = 0.5;
+    lightRenderer.intensity = 0.7;
 
     return [transform, spriteRenderer, animator, bodyCollider, edgeCollider, rigidBody, movement, lightRenderer];
 };

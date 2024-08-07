@@ -1,9 +1,10 @@
 import { IRenderManager, IVideoRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
-import { Vector2 } from "../../../math";
+import { clamp, Vector2 } from "../../../math";
 import { Entity, IEntityManager } from "../../manager/EntityManager";
 import { System, SystemGroup } from "../../manager/SystemManager";
 import { Transform } from "../../component/Transform";
 import { VideoRenderer } from "../../component/renderer/VideoRenderer";
+import { ITimeManager } from "../../manager/TimeManager";
 
 const userInputEventNames = [
     "click",
@@ -27,6 +28,7 @@ export class VideoRendererSystem extends System {
     constructor(
         private entityManager: IEntityManager,
         private renderManager: IRenderManager,
+        private timeManager: ITimeManager,
     ) {
         super();
         this.group = SystemGroup.Render;
@@ -123,6 +125,7 @@ export class VideoRendererSystem extends System {
 
         video.loop = loop;
         video.volume = volume;
+        video.playbackRate = this.timeManager.timeScale < 0.0625 ? 0 : Math.min(this.timeManager.timeScale, 16);
 
         if (play && video.ended) videoRenderer.play = false;
 
@@ -138,7 +141,7 @@ export class VideoRendererSystem extends System {
     }
 
     public onDisable(): void {
-        this.entityManager.search(VideoRenderer).forEach(({ entity, component: videoRenderer }) => {
+        this.entityManager.search(VideoRenderer).forEach(({ component: videoRenderer }) => {
             if (videoRenderer.video) {
                 videoRenderer.video.pause();
                 videoRenderer.video.currentTime = 0;

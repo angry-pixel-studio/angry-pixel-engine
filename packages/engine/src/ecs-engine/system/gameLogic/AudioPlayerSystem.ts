@@ -2,6 +2,7 @@ import { IEntityManager } from "../../manager/EntityManager";
 import { System, SystemGroup } from "../../manager/SystemManager";
 import { AudioPlayer } from "../../component/AudioPlayer";
 import { IInputManager } from "../../../input";
+import { ITimeManager } from "../../manager/TimeManager";
 
 const userInputEventNames = [
     "click",
@@ -22,6 +23,7 @@ export class AudioPlayerSystem extends System {
     constructor(
         private entityManager: IEntityManager,
         private inputManager: IInputManager,
+        private timeManager: ITimeManager,
     ) {
         super();
         this.group = SystemGroup.PreGameLogic;
@@ -73,12 +75,14 @@ export class AudioPlayerSystem extends System {
 
             if (audioPlayer.action === "play" && !audioPlayer.playing) {
                 // start playing
-                try {
-                    audioPlayer.audioSource.play();
-                    audioPlayer.playing = true;
-                } catch {
-                    // do nothing
-                }
+                audioPlayer.audioSource.playbackRate =
+                    this.timeManager.timeScale < 0.0625 ? 0 : Math.min(this.timeManager.timeScale, 16);
+                audioPlayer.audioSource
+                    .play()
+                    .then(() => (audioPlayer.playing = true))
+                    .catch(() => {
+                        /* waiting for user interaction */
+                    });
             } else if (audioPlayer.action === "pause" && audioPlayer.playing) {
                 // set pause
                 audioPlayer.audioSource.pause();
@@ -97,5 +101,18 @@ export class AudioPlayerSystem extends System {
                 audioPlayer.playing = false;
             }
         });
+    }
+
+    public onDisable(): void {
+        this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource } }) => {
+            if (audioSource) {
+                audioSource.pause();
+                audioSource.currentTime = 0;
+            }
+        });
+    }
+
+    public onDestroy(): void {
+        this.onDisable();
     }
 }
