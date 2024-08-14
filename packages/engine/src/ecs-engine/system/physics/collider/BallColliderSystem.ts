@@ -1,17 +1,14 @@
 import { Circumference, IPhysicsManager } from "../../../../2d-physics";
-import { IEntityManager } from "../../../manager/EntityManager";
+import { EntityManager } from "../../../../ecs/EntityManager";
+import { System } from "../../../../ecs/SystemManager";
 import { Vector2 } from "../../../../math";
-import { System, SystemGroup } from "../../../manager/SystemManager";
 import { BallCollider } from "../../../component/collider/BallCollider";
 
-export class BallColliderSystem extends System {
+export class BallColliderSystem implements System {
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         private readonly physicsManager: IPhysicsManager,
-    ) {
-        super();
-        this.group = SystemGroup.Physics;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.entityManager.search(BallCollider).forEach(({ entity, component: ballCollider }) => {
@@ -44,4 +41,9 @@ export class BallColliderSystem extends System {
             };
         }
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

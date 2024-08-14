@@ -1,22 +1,20 @@
 import { IMaskRenderData, IRenderManager, RenderDataType, RenderLocation } from "../../../2d-renderer";
-import { Entity, IEntityManager } from "../../manager/EntityManager";
+
 import { Vector2 } from "../../../math";
 import { MaskRenderer } from "../../component/renderer/MaskRenderer";
 import { Transform } from "../../component/Transform";
-import { System, SystemGroup } from "../../manager/SystemManager";
+import { System } from "../../../ecs/SystemManager";
+import { Entity, EntityManager } from "../../../ecs/EntityManager";
 
-export class MaskRendererSystem extends System {
+export class MaskRendererSystem implements System {
     private readonly renderData: Map<Entity, IMaskRenderData> = new Map();
     private entitiesUpdated: Entity[];
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onCreate(): void {}
 
@@ -24,8 +22,10 @@ export class MaskRendererSystem extends System {
         this.entitiesUpdated = [];
 
         this.entityManager.search(MaskRenderer).forEach(({ entity, component: maskRenderer }) => {
-            const renderData = this.getOrCreate(entity);
             const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("MaskRenderer component needs a Transform");
+
+            const renderData = this.getOrCreate(entity);
 
             this.scaledOffset.set(
                 maskRenderer.offset.x * transform.localScale.x,
@@ -80,5 +80,7 @@ export class MaskRendererSystem extends System {
         );
     }
 
+    public onEnable(): void {}
+    public onDisable(): void {}
     public onDestroy(): void {}
 }

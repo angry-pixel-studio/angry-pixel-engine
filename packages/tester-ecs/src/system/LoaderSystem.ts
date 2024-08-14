@@ -1,14 +1,4 @@
-import {
-    Camera,
-    GameSystem,
-    ShadowRenderer,
-    TextRenderer,
-    Transform,
-    Vector2,
-    clamp,
-    defaultRenderLayer,
-    randomInt,
-} from "angry-pixel-ecs";
+import { Camera, GameSystem, ShadowRenderer, Transform, Vector2, defaultRenderLayer, randomInt } from "angry-pixel-ecs";
 import { ASSETS } from "../config/assets";
 import { foregroundFactory } from "../factory/Foreground";
 import { ninjaFactory } from "../factory/Ninja";
@@ -21,8 +11,6 @@ import { textFactory } from "../factory/Text";
 import { FpsMetter } from "../component/FpsMetter";
 
 export class LoaderSystem extends GameSystem {
-    private loaded: boolean = false;
-
     public onCreate(): void {
         Object.values(ASSETS.fonts).forEach((data) => this.assetManager.loadFont(data.name, data.url));
         Object.values(ASSETS.images).forEach((filename) => this.assetManager.loadImage(filename));
@@ -38,7 +26,7 @@ export class LoaderSystem extends GameSystem {
         this.entityManager.createEntity(ninjaFactory(this.assetManager, this.entityManager, new Vector2(-300, 0)));
         this.entityManager.createEntity(movingPlatformFactory(this.assetManager));
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 200; i++) {
             this.entityManager.createEntity(
                 goblinFactory(this.assetManager, this.entityManager, new Vector2(randomInt(-600, 192), 0)),
             );
@@ -53,23 +41,24 @@ export class LoaderSystem extends GameSystem {
     }
 
     private setupMainCamera(): void {
-        const camera = this.entityManager.search(Camera)[0];
-        camera.component.layers = [
+        const camera = new Camera();
+        camera.layers = [
             RENDER_LAYERS.Foreground,
             RENDER_LAYERS.Goblin,
             RENDER_LAYERS.Ninja,
             RENDER_LAYERS.Shadow,
             defaultRenderLayer,
         ];
-        camera.component.zoom = 4;
-        this.entityManager.addComponent(camera.entity, FollowPlayerCamera);
+        camera.zoom = 4;
 
-        const shadowRenderer = this.entityManager.addComponent(camera.entity, ShadowRenderer);
+        const shadowRenderer = new ShadowRenderer();
         shadowRenderer.color = "#000000";
-        shadowRenderer.width = 1920 / camera.component.zoom;
-        shadowRenderer.height = 1080 / camera.component.zoom;
+        shadowRenderer.width = 1920 / camera.zoom;
+        shadowRenderer.height = 1080 / camera.zoom;
         shadowRenderer.layer = RENDER_LAYERS.Shadow;
         shadowRenderer.opacity = 1;
+
+        this.entityManager.createEntity([Transform, camera, shadowRenderer, FollowPlayerCamera]);
     }
 
     private setupUiCamera(): void {
@@ -77,6 +66,6 @@ export class LoaderSystem extends GameSystem {
         camera.depth = 1;
         camera.layers = [RENDER_LAYERS.UI];
 
-        this.entityManager.createEntity([new Transform(), camera]);
+        this.entityManager.createEntity([Transform, camera]);
     }
 }

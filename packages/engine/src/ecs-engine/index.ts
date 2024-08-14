@@ -23,19 +23,10 @@ export * from "./component/AudioPlayer";
 
 // export managers
 export { IAssetManager } from "./manager/AssetManager";
-export { Component, ComponentType, Entity, IEntityManager, SearchResult } from "./manager/EntityManager";
+export { Component, ComponentType, Entity, SearchResult, EntityManager } from "../ecs/EntityManager";
 export { ILoopManager } from "./manager/LoopManager";
 export { ISceneManager } from "./manager/SceneManager";
-export {
-    ISystem,
-    ISystemManager,
-    GameSystem,
-    SystemGroup,
-    SystemType,
-    gameLogicSystem,
-    gamePeRenderSystem,
-    gamePhysicsSystem,
-} from "./manager/SystemManager";
+export { System, SystemType, SystemManager, SystemGroup } from "../ecs/SystemManager";
 export { ITimeManager } from "./manager/TimeManager";
 
 // export external managers
@@ -66,6 +57,7 @@ export { Rectangle, Vector2, between, clamp, fixedRound, randomFloat, randomInt,
 
 // export game
 export { IGame, IGameConfig };
+export { GameSystem, gameLogicSystem, gamePhysicsSystem, gamePreRenderSystem } from "./system/GameSystem";
 
 export const createGame = (config: IGameConfig): IGame => {
     return new Game(config);

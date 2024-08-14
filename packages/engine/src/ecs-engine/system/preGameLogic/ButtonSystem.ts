@@ -1,13 +1,13 @@
 import { IInputManager, Mouse, TouchScreen } from "../../../input";
 import { Vector2, between } from "../../../math";
-import { System, SystemGroup } from "../../manager/SystemManager";
-import { IEntityManager } from "../../manager/EntityManager";
 import { Button, ButtonShape } from "../../component/Button";
 import { Transform } from "../../component/Transform";
+import { System } from "../../../ecs/SystemManager";
+import { EntityManager } from "../../../ecs/EntityManager";
 
 type ScaledButton = { width: number; height: number; radius: number; position: Vector2 };
 
-export class ButtonSystem extends System {
+export class ButtonSystem implements System {
     private readonly mouse: Mouse;
     private readonly touchScreen: TouchScreen;
 
@@ -17,11 +17,9 @@ export class ButtonSystem extends System {
     private pressedLastFrame: boolean = false;
 
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         inputManager: IInputManager,
     ) {
-        super();
-        this.group = SystemGroup.PreGameLogic;
         this.mouse = inputManager.mouse;
         this.touchScreen = inputManager.touchScreen;
     }
@@ -29,6 +27,7 @@ export class ButtonSystem extends System {
     public onUpdate(): void {
         this.entityManager.search(Button).forEach(({ entity, component: button }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("Button component needs a Transform");
 
             this.pressedLastFrame = button.pressed;
             button.pressed = false;
@@ -110,4 +109,9 @@ export class ButtonSystem extends System {
             }
         }
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

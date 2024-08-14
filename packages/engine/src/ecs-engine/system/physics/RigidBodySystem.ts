@@ -1,20 +1,22 @@
 import { IPhysicsManager } from "../../../2d-physics";
-import { System, SystemGroup } from "../../manager/SystemManager";
+import { EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { RigidBody } from "../../component/RigidBody";
-import { IEntityManager } from "../../manager/EntityManager";
 
-export class RigidBodySystem extends System {
+export class RigidBodySystem implements System {
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         private readonly physicsManager: IPhysicsManager,
-    ) {
-        super();
-        this.group = SystemGroup.Physics;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.entityManager.search(RigidBody).forEach(({ entity, component: rigidBody }) => {
             this.physicsManager.addRigidBody(entity, rigidBody);
         });
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

@@ -7,20 +7,17 @@ import {
     RenderDataType,
     RenderLocation,
 } from "../../../2d-renderer";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { defaultRenderLayer } from "../../component/Camera";
+import { System } from "../../../ecs/SystemManager";
 
-export class ColliderRenderSystem extends System {
+export class ColliderRenderSystem implements System {
     private renderData: Map<number, IGeometricRenderData> = new Map();
 
     constructor(
         private physicsManager: IPhysicsManager,
         private renderManager: IRenderManager,
         private collisionMethod: CollisionMethods,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.physicsManager.getEntities().forEach(([id, t, rb, colliders]) => {
@@ -70,4 +67,9 @@ export class ColliderRenderSystem extends System {
 
         return this.renderData.get(colliderId);
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

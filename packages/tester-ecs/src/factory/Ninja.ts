@@ -5,7 +5,7 @@ import {
     BoxCollider,
     Component,
     IAssetManager,
-    IEntityManager,
+    EntityManager,
     LightRenderer,
     RigidBody,
     RigidBodyType,
@@ -20,7 +20,7 @@ import { NinjaSfx } from "../component/ninja/NinjaSfx";
 
 export const ninjaFactory = (
     assetManager: IAssetManager,
-    entityManager: IEntityManager,
+    entityManager: EntityManager,
     position: Vector2,
 ): Component[] => {
     const spriteRenderer = new SpriteRenderer();
@@ -88,7 +88,7 @@ const runAnimation = (assetManager: IAssetManager): Animation => {
     return animation;
 };
 
-const setupFeet = (entityManager: IEntityManager, parentTransform: Transform): void => {
+const setupFeet = (entityManager: EntityManager, parentTransform: Transform): void => {
     const transform = new Transform();
     transform.parent = parentTransform;
 

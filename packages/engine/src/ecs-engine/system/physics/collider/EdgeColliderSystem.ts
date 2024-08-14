@@ -1,17 +1,14 @@
 import { IPhysicsManager, Polygon } from "../../../../2d-physics";
+import { EntityManager } from "../../../../ecs/EntityManager";
+import { System } from "../../../../ecs/SystemManager";
 import { Vector2 } from "../../../../math";
-import { IEntityManager } from "../../../manager/EntityManager";
-import { System, SystemGroup } from "../../../manager/SystemManager";
 import { EdgeCollider } from "../../../component/collider/EdgeCollider";
 
-export class EdgeColliderSystem extends System {
+export class EdgeColliderSystem implements System {
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         private readonly physicsManager: IPhysicsManager,
-    ) {
-        super();
-        this.group = SystemGroup.Physics;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.entityManager.search(EdgeCollider).forEach(({ entity, component: edgeCollider }) => {
@@ -50,4 +47,9 @@ export class EdgeColliderSystem extends System {
             };
         }
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

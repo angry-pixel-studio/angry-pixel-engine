@@ -1,15 +1,11 @@
+import { EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { Chunk, TilemapRenderer } from "../../component/renderer/TilemapRenderer";
-import { IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 
 const chunkSize = 16;
 
-export class TilemapPreProcessingSystem extends System {
-    constructor(private readonly entityManager: IEntityManager) {
-        super();
-
-        this.group = SystemGroup.PreGameLogic;
-    }
+export class TilemapPreProcessingSystem implements System {
+    constructor(private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer).forEach(({ component: tilemapRenderer }) => {
@@ -68,4 +64,9 @@ export class TilemapPreProcessingSystem extends System {
 
         tilemapRenderer.height = Math.ceil(tilemapRenderer.data.length / tilemapRenderer.width);
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

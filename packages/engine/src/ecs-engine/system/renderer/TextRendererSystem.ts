@@ -1,27 +1,27 @@
 import { IRenderManager, ITextRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
+import { Entity, EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { Vector2 } from "../../../math";
-import { Entity, IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { Transform } from "../../component/Transform";
 import { TextRenderer } from "../../component/renderer/TextRenderer";
 
-export class TextRendererSystem extends System {
+export class TextRendererSystem implements System {
     private readonly renderData: Map<Entity, ITextRenderData> = new Map();
     private entitiesUpdated: Entity[];
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.entitiesUpdated = [];
 
         this.entityManager.search(TextRenderer).forEach(({ entity, component: textRenderer }) => {
+            const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("TextRenderer component needs a Transform");
+
             if (
                 textRenderer.text.length === 0 ||
                 (textRenderer.font instanceof FontFace && textRenderer.font.status !== "loaded")
@@ -30,7 +30,6 @@ export class TextRendererSystem extends System {
             }
 
             const renderData = this.getOrCreate(entity);
-            const transform = this.entityManager.getComponent(entity, Transform);
 
             this.scaledOffset.set(
                 textRenderer.offset.x * transform.localScale.x,
@@ -125,4 +124,9 @@ export class TextRendererSystem extends System {
 
         return croppedText.join("\n");
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

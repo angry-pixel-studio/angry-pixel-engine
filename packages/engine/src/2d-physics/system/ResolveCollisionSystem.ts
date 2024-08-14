@@ -1,5 +1,5 @@
 import { Vector2 } from "../../math";
-import { IEntityManager } from "../EntityManager";
+import { IPhysicsEntityManager } from "../PhysicsEntityManager";
 import { IBroadPhaseResolver } from "../collision/broadPhase/IBroadPhaseResolver";
 import { ICollider } from "../component/Collider";
 import { ICollision } from "../collision/Collision";
@@ -20,7 +20,7 @@ export class ResolveCollisionSystem extends SystemBase {
     private colliders: ICollider[] = [];
 
     constructor(
-        entityManager: IEntityManager,
+        entityManager: IPhysicsEntityManager,
         private broadPhaseResolver: IBroadPhaseResolver,
         private collisionMatrix: CollisionMatrix,
         private method: ICollisionMethod,

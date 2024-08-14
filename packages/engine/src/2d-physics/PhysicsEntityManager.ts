@@ -2,7 +2,7 @@ import { IRigidBody } from "./component/RigidBody";
 import { ITransform } from "./component/Transform";
 import { ICollider } from "./component/Collider";
 
-export interface IEntityManager {
+export interface IPhysicsEntityManager {
     getEntities(): PhysicsEntity[];
     removeAllEntities(): void;
     addTransform(entityId: number, transform: ITransform): void;
@@ -12,7 +12,7 @@ export interface IEntityManager {
 
 export type PhysicsEntity = [number, ITransform, IRigidBody?, ICollider[]?];
 
-export class EntityManager implements IEntityManager {
+export class PhysicsEntityManager implements IPhysicsEntityManager {
     private entities: PhysicsEntity[] = [];
     private lastColliderId: number = 0;
 

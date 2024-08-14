@@ -13,7 +13,7 @@ import { CircumferenceAABBResolver } from "./collision/resolver/CircumferenceAAB
 import { CircumferenceResolver } from "./collision/resolver/CircumferenceResolver";
 import { SatMethod } from "./collision/method/SatMethod";
 import { SatResolver } from "./collision/resolver/SatResolver";
-import { PhysicsEntity, EntityManager, IEntityManager } from "./EntityManager";
+import { PhysicsEntity, PhysicsEntityManager, IPhysicsEntityManager } from "./PhysicsEntityManager";
 import { IRigidBody } from "./component/RigidBody";
 import { ICollider } from "./component/Collider";
 import { ITransform } from "./component/Transform";
@@ -37,7 +37,7 @@ export interface IPhysicsManager {
 }
 
 export class PhysicsManager implements IPhysicsManager {
-    private entityManager: IEntityManager;
+    private entityManager: IPhysicsEntityManager;
     private applyVelocitySystem: ApplyVelocitySystem;
     private updateTransformSystem: UpdateTransformSystem;
     private updateColliderShapeSystem: UpdateColliderSystemShape;
@@ -45,7 +45,7 @@ export class PhysicsManager implements IPhysicsManager {
     private applyRepositionSystem: ApplyRepositionSystem;
 
     constructor(options: PhysicsManagerOptions) {
-        this.entityManager = new EntityManager();
+        this.entityManager = new PhysicsEntityManager();
         this.initializeSystems(options);
     }
 

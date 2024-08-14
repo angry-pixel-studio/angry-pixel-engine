@@ -2,24 +2,23 @@ import { ICameraData, IRenderManager } from "../../../2d-renderer";
 import { Vector2 } from "../../../math";
 import { Transform } from "../../component/Transform";
 import { Camera } from "../../component/Camera";
-import { Entity, IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
+import { System } from "../../../ecs/SystemManager";
+import { Entity, EntityManager } from "../../../ecs/EntityManager";
 
-export class CameraSystem extends System {
+export class CameraSystem implements System {
     private readonly cameraData: Map<Entity, ICameraData> = new Map();
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.entityManager.search(Camera).forEach(({ entity, component: camera }) => {
-            const cameraData = this.getOrCreate(entity);
             const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("Camera component needs a Transform");
+
+            const cameraData = this.getOrCreate(entity);
 
             cameraData.position.copy(transform.localPosition);
             cameraData.layers = camera.layers;
@@ -42,4 +41,9 @@ export class CameraSystem extends System {
 
         return this.cameraData.get(entity);
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

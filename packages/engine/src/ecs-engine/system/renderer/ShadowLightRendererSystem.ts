@@ -1,22 +1,19 @@
 import { IShadowRenderData, IRenderManager, Light, RenderDataType, RenderLocation } from "../../../2d-renderer";
 import { Vector2 } from "../../../math";
-import { Entity, IEntityManager, SearchResult } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { LightRenderer } from "../../component/renderer/LightRenderer";
 import { Transform } from "../../component/Transform";
 import { ShadowRenderer } from "../../component/renderer/ShadowRenderer";
+import { System } from "../../../ecs/SystemManager";
+import { Entity, EntityManager, SearchResult } from "../../../ecs/EntityManager";
 
-export class ShadowLightRendererSystem extends System {
+export class ShadowLightRendererSystem implements System {
     // cache
     private renderData: Map<Entity, IShadowRenderData> = new Map();
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onEnable(): void {
         this.renderData.clear();
@@ -77,27 +74,35 @@ export class ShadowLightRendererSystem extends System {
     }
 
     private updateLightRendererBoundingBox(entity: Entity, lightRenderer: LightRenderer): void {
-        const { localPosition, localScale } = this.entityManager.getComponent(entity, Transform);
-        const scaledRadius = lightRenderer.radius * Math.abs(Math.max(localScale.x, localScale.y));
+        const transform = this.entityManager.getComponent(entity, Transform);
+        if (!transform) throw new Error("LightRenderer component needs a Transform");
+
+        const scaledRadius = lightRenderer.radius * Math.abs(Math.max(transform.localScale.x, transform.localScale.y));
 
         lightRenderer._boundingBox.set(
-            localPosition.x - scaledRadius / 2,
-            localPosition.y - scaledRadius / 2,
+            transform.localPosition.x - scaledRadius / 2,
+            transform.localPosition.y - scaledRadius / 2,
             scaledRadius,
             scaledRadius,
         );
     }
 
     private updatShadowRendererBoundingBox(entity: Entity, lightRenderer: ShadowRenderer): void {
-        const { localPosition, localScale } = this.entityManager.getComponent(entity, Transform);
-        const scaledWidth = lightRenderer.width * Math.abs(Math.max(localScale.x, localScale.y));
-        const scaledHeight = lightRenderer.height * Math.abs(Math.max(localScale.x, localScale.y));
+        const transform = this.entityManager.getComponent(entity, Transform);
+        if (!transform) throw new Error("ShadowRenderer component needs a Transform");
+
+        const scaledWidth = lightRenderer.width * Math.abs(Math.max(transform.localScale.x, transform.localScale.y));
+        const scaledHeight = lightRenderer.height * Math.abs(Math.max(transform.localScale.x, transform.localScale.y));
 
         lightRenderer._boundingBox.set(
-            localPosition.x - scaledWidth / 2,
-            localPosition.y - scaledHeight / 2,
+            transform.localPosition.x - scaledWidth / 2,
+            transform.localPosition.y - scaledHeight / 2,
             scaledWidth,
             scaledHeight,
         );
     }
+
+    public onCreate(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

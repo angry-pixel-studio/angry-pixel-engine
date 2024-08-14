@@ -5,22 +5,19 @@ import {
     RenderLocation,
     TilemapOrientation,
 } from "../../../2d-renderer";
+import { Entity, EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { Vector2 } from "../../../math";
-import { Entity, IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { TilemapRenderer } from "../../component/renderer/TilemapRenderer";
 import { Transform } from "../../component/Transform";
 
-export class TilemapRendererSystem extends System {
+export class TilemapRendererSystem implements System {
     private renderData: Map<Entity, ITilemapRenderData[]> = new Map();
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onEnable(): void {
         this.renderData = new Map();
@@ -28,14 +25,15 @@ export class TilemapRendererSystem extends System {
 
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer).forEach(({ entity, component: tilemapRenderer }) => {
+            const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("TilemapRenderer component needs a Transform");
+
             if (!tilemapRenderer._processed) return;
 
             if (!this.renderData.has(entity)) this.createRenderData(entity, tilemapRenderer);
 
             // The complete property determines if the image was loaded
             if (!tilemapRenderer.tileset.image || !tilemapRenderer.tileset.image.complete) return;
-
-            const transform = this.entityManager.getComponent(entity, Transform);
 
             tilemapRenderer.chunks.forEach((chunk, index) => {
                 const renderData = this.renderData.get(entity)[index];
@@ -84,4 +82,8 @@ export class TilemapRendererSystem extends System {
                 }),
         );
     }
+
+    public onCreate(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

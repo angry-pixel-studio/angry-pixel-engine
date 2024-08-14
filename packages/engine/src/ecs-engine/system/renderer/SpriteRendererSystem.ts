@@ -1,32 +1,31 @@
 import { IRenderManager, ISpriteRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
 import { Vector2 } from "../../../math";
-import { Entity, IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { SpriteRenderer } from "../../component/renderer/SpriteRenderer";
 import { Transform } from "../../component/Transform";
+import { System } from "../../../ecs/SystemManager";
+import { Entity, EntityManager } from "../../../ecs/EntityManager";
 
-export class SpriteRendererSystem extends System {
+export class SpriteRendererSystem implements System {
     private readonly renderData: Map<Entity, ISpriteRenderData> = new Map();
     private entitiesUpdated: Entity[];
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.entitiesUpdated = [];
 
         this.entityManager.search(SpriteRenderer).forEach(({ entity, component: spriteRenderer }) => {
+            const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("SpriteRenderer component needs a Transform");
+
             // The complete property determines if the image was loaded
             if (!spriteRenderer.image || !spriteRenderer.image.complete) return;
 
             const renderData = this.getOrCreate(entity);
-            const transform = this.entityManager.getComponent(entity, Transform);
 
             this.scaledOffset.set(
                 spriteRenderer.offset.x * transform.localScale.x,
@@ -90,4 +89,9 @@ export class SpriteRendererSystem extends System {
             transform.localPosition.y + this.scaledOffset.magnitude * Math.sin(translatedAngle),
         );
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

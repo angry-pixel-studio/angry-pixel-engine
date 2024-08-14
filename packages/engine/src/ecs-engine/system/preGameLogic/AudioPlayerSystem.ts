@@ -1,8 +1,8 @@
-import { IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { AudioPlayer } from "../../component/AudioPlayer";
 import { IInputManager } from "../../../input";
 import { ITimeManager } from "../../manager/TimeManager";
+import { System } from "../../../ecs/SystemManager";
+import { EntityManager } from "../../../ecs/EntityManager";
 
 const userInputEventNames = [
     "click",
@@ -17,17 +17,14 @@ const userInputEventNames = [
     "keyup",
 ];
 
-export class AudioPlayerSystem extends System {
+export class AudioPlayerSystem implements System {
     private canPlay: boolean = false;
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private inputManager: IInputManager,
         private timeManager: ITimeManager,
-    ) {
-        super();
-        this.group = SystemGroup.PreGameLogic;
-    }
+    ) {}
 
     public onCreate(): void {
         // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
@@ -115,4 +112,6 @@ export class AudioPlayerSystem extends System {
     public onDestroy(): void {
         this.onDisable();
     }
+
+    public onEnable(): void {}
 }

@@ -5,7 +5,7 @@ import {
     Component,
     EdgeCollider,
     IAssetManager,
-    IEntityManager,
+    EntityManager,
     LightRenderer,
     RigidBody,
     RigidBodyType,
@@ -20,7 +20,7 @@ import { GoblinMovement } from "../component/goblin/GoblinMovement";
 
 export const goblinFactory = (
     assetManager: IAssetManager,
-    entityManager: IEntityManager,
+    entityManager: EntityManager,
     position: Vector2,
 ): Component[] => {
     const spriteRenderer = new SpriteRenderer();

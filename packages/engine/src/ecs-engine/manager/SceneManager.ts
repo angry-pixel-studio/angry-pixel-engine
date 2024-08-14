@@ -1,8 +1,7 @@
-import { Transform } from "../component/Transform";
-import { Camera } from "../component/Camera";
-import { IEntityManager } from "./EntityManager";
-
-import { ISystem, ISystemManager, SystemType } from "./SystemManager";
+import { EntityManager } from "../../ecs/EntityManager";
+import { System, SystemManager, SystemType } from "../../ecs/SystemManager";
+import { AudioPlayerSystem } from "../system/preGameLogic/AudioPlayerSystem";
+import { VideoRendererSystem } from "../system/renderer/VideoRendererSystem";
 
 export interface ISceneManager {
     addScene(name: string, systemTypes: SystemType[], openingScene?: boolean): void;
@@ -12,17 +11,17 @@ export interface ISceneManager {
 }
 
 export class SceneManager implements ISceneManager {
-    private scenes: Map<string, SystemType<ISystem>[]> = new Map();
+    private scenes: Map<string, SystemType<System>[]> = new Map();
     private openingSceneName: string;
     private currentSceneName: string;
     private pendingToLoadSceneName: string;
 
     constructor(
-        private entityManager: IEntityManager,
-        private systemManager: ISystemManager,
+        private entityManager: EntityManager,
+        private systemManager: SystemManager,
     ) {}
 
-    public addScene(name: string, systemTypes: SystemType<ISystem>[], openingScene: boolean = false): void {
+    public addScene(name: string, systemTypes: SystemType<System>[], openingScene: boolean = false): void {
         if (this.scenes.has(name)) throw new Error(`There is already a scene with the name '${name}'`);
 
         this.scenes.set(name, systemTypes);
@@ -49,21 +48,25 @@ export class SceneManager implements ISceneManager {
             this.currentSceneName = this.pendingToLoadSceneName;
             this.pendingToLoadSceneName = undefined;
 
-            this.mainCameraFactory();
             this.enableCurrentScene();
         }
     }
 
     private destroyCurrentScene(): void {
-        this.entityManager.removeAllEntities();
-        this.scenes.get(this.currentSceneName).forEach((systemType) => this.systemManager.disable(systemType));
-    }
+        this.systemManager.disableSystem(AudioPlayerSystem);
+        this.systemManager.disableSystem(VideoRendererSystem);
 
-    private mainCameraFactory(): void {
-        this.entityManager.createEntity([Transform, Camera]);
+        this.entityManager.removeAllEntities();
+        this.scenes.get(this.currentSceneName).forEach((systemType) => this.systemManager.disableSystem(systemType));
+
+        this.systemManager.enableSystem(AudioPlayerSystem);
+        this.systemManager.enableSystem(VideoRendererSystem);
     }
 
     private enableCurrentScene(): void {
-        this.scenes.get(this.currentSceneName).forEach((systemType) => this.systemManager.enable(systemType));
+        this.scenes.get(this.currentSceneName).forEach((systemType, index) => {
+            this.systemManager.enableSystem(systemType);
+            this.systemManager.setExecutionOrder(systemType, index);
+        });
     }
 }

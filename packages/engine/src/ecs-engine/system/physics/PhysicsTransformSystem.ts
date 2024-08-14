@@ -1,16 +1,13 @@
 import { IPhysicsManager } from "../../../2d-physics";
-import { System, SystemGroup } from "../../manager/SystemManager";
+import { EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { Transform } from "../../component/Transform";
-import { IEntityManager } from "../../manager/EntityManager";
 
-export class PhysicsTransformSystem extends System {
+export class PhysicsTransformSystem implements System {
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         private readonly physicsManager: IPhysicsManager,
-    ) {
-        super();
-        this.group = SystemGroup.Physics;
-    }
+    ) {}
 
     public onUpdate(): void {
         this.physicsManager.removeAllEntities();
@@ -19,4 +16,9 @@ export class PhysicsTransformSystem extends System {
             this.physicsManager.addTransform(entity, transform);
         });
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

@@ -1,7 +1,7 @@
 import { IRenderManager, IVideoRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
-import { clamp, Vector2 } from "../../../math";
-import { Entity, IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
+import { Entity, EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
+import { Vector2 } from "../../../math";
 import { Transform } from "../../component/Transform";
 import { VideoRenderer } from "../../component/renderer/VideoRenderer";
 import { ITimeManager } from "../../manager/TimeManager";
@@ -19,20 +19,17 @@ const userInputEventNames = [
     "keyup",
 ];
 
-export class VideoRendererSystem extends System {
+export class VideoRendererSystem implements System {
     private readonly renderData: Map<Entity, IVideoRenderData> = new Map();
     private entitiesUpdated: Entity[];
     private scaledOffset: Vector2 = new Vector2();
     private canPlay: boolean;
 
     constructor(
-        private entityManager: IEntityManager,
+        private entityManager: EntityManager,
         private renderManager: IRenderManager,
         private timeManager: ITimeManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onCreate(): void {
         // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
@@ -53,10 +50,12 @@ export class VideoRendererSystem extends System {
         this.entitiesUpdated = [];
 
         this.entityManager.search(VideoRenderer).forEach(({ entity, component: videoRenderer }) => {
+            const transform = this.entityManager.getComponent(entity, Transform);
+            if (!transform) throw new Error("VideoRenderer component needs a Transform");
+
             if (!videoRenderer.video || !videoRenderer.video.duration) return;
 
             const renderData = this.getOrCreate(entity);
-            const transform = this.entityManager.getComponent(entity, Transform);
 
             this.checkVideoState(videoRenderer);
 
@@ -152,4 +151,6 @@ export class VideoRendererSystem extends System {
     public onDestroy(): void {
         this.onDisable();
     }
+
+    public onEnable(): void {}
 }

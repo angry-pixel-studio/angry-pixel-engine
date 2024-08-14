@@ -15,10 +15,13 @@ export class NinjaMovementSystem extends GameSystem {
         this.inputController = this.entityManager.search(InputController)[0].component;
 
         const { entity, component } = this.entityManager.search(NinjaMovement)[0];
+
         this.ninjaMovement = component;
-        this.rigidBody = this.entityManager.getComponent(entity, RigidBody);
-        this.collider = this.entityManager.searchInChildren(entity, BoxCollider)[0].component;
         this.transform = this.entityManager.getComponent(entity, Transform);
+        this.rigidBody = this.entityManager.getComponent(entity, RigidBody);
+
+        const children = this.entityManager.search(Transform, { parent: this.transform });
+        this.collider = this.entityManager.getComponent(children[0].entity, BoxCollider);
     }
 
     public onUpdate(): void {

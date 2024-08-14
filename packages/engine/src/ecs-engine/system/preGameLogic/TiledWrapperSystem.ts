@@ -1,14 +1,10 @@
+import { EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { TilemapRenderer } from "../../component/renderer/TilemapRenderer";
-import { IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { TiledLayer, TiledWrapper } from "../../component/TiledWrapper";
 
-export class TiledWrapperSystem extends System {
-    constructor(private readonly entityManager: IEntityManager) {
-        super();
-
-        this.group = SystemGroup.PreGameLogic;
-    }
+export class TiledWrapperSystem implements System {
+    constructor(private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
         this.entityManager.search(TiledWrapper).forEach(({ entity, component: tiledWrapper }) => {
@@ -27,4 +23,9 @@ export class TiledWrapperSystem extends System {
             tilemapRenderer.width = tiledWrapper.tilemap.width;
         });
     }
+
+    public onCreate(): void {}
+    public onEnable(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

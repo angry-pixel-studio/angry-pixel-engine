@@ -1,5 +1,5 @@
-import { IEntityManager } from "../EntityManager";
+import { IPhysicsEntityManager } from "../PhysicsEntityManager";
 
 export abstract class SystemBase {
-    constructor(protected readonly entityManager: IEntityManager) {}
+    constructor(protected readonly entityManager: IPhysicsEntityManager) {}
 }

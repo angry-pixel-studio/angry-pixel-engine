@@ -1,20 +1,17 @@
 import { ICollider, IPhysicsManager, Polygon } from "../../../../2d-physics";
 import { Vector2 } from "../../../../math";
-import { Entity, IEntityManager } from "../../../manager/EntityManager";
-import { System, SystemGroup } from "../../../manager/SystemManager";
 import { TilemapCollider } from "../../../component/collider/TilemapCollider";
 import { TilemapRenderer } from "../../../component/renderer/TilemapRenderer";
+import { Entity, EntityManager } from "../../../../ecs/EntityManager";
+import { System } from "../../../../ecs/SystemManager";
 
-export class TilemapColliderSystem extends System {
+export class TilemapColliderSystem implements System {
     private colliders: Map<Entity, ICollider<Polygon>[]> = new Map();
 
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         private readonly physicsManager: IPhysicsManager,
-    ) {
-        super();
-        this.group = SystemGroup.Physics;
-    }
+    ) {}
 
     public onEnable(): void {
         this.colliders.clear();
@@ -197,4 +194,8 @@ export class TilemapColliderSystem extends System {
             index % width < width - 1 ? index + 1 : undefined,
         ];
     }
+
+    public onCreate(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

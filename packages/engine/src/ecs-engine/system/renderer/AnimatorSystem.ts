@@ -1,20 +1,17 @@
+import { EntityManager } from "../../../ecs/EntityManager";
+import { System } from "../../../ecs/SystemManager";
 import { Animation, Animator } from "../../component/Animator";
 import { SpriteRenderer } from "../../component/renderer/SpriteRenderer";
-import { IEntityManager } from "../../manager/EntityManager";
-import { System, SystemGroup } from "../../manager/SystemManager";
 import { ITimeManager } from "../../manager/TimeManager";
 
-export class AnimatorSystem extends System {
+export class AnimatorSystem implements System {
     // cache
     private animation: Animation;
 
     constructor(
-        private readonly entityManager: IEntityManager,
+        private readonly entityManager: EntityManager,
         private readonly timeManager: ITimeManager,
-    ) {
-        super();
-        this.group = SystemGroup.Render;
-    }
+    ) {}
 
     public onEnable(): void {}
 
@@ -85,4 +82,8 @@ export class AnimatorSystem extends System {
             };
         }
     }
+
+    public onCreate(): void {}
+    public onDisable(): void {}
+    public onDestroy(): void {}
 }

@@ -1,5 +1,6 @@
+import { SystemManager } from "../../ecs/SystemManager";
+import { SystemGroup } from "../system/GameSystem";
 import { ISceneManager } from "./SceneManager";
-import { ISystemManager, SystemGroup } from "./SystemManager";
 import { ITimeManager } from "./TimeManager";
 
 /** @internal */
@@ -22,7 +23,7 @@ export class LoopManager implements ILoopManager {
     constructor(
         private readonly timeManager: ITimeManager,
         private readonly sceneManager: ISceneManager,
-        private readonly systemManager: ISystemManager,
+        private readonly systemManager: SystemManager,
     ) {}
 
     public start(): void {
