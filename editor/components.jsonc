@@ -1,5 +1,5 @@
 {
-    "collider": {
+    "collision": {
         "BallCollider": {
             "layer": "string",
             "radius": "number",
@@ -34,7 +34,7 @@
             "physics": "boolean",
         },
     },
-    "render": {
+    "rendering": {
         "LightRenderer": {
             "layer": "string",
             "radius": "number",
@@ -96,7 +96,6 @@
         },
         "TilemapRenderer": {
             "layer": "string",
-            "tileset": "Tileset",
             "data": ["number"], // array of number
             "chunks": [
                 {
@@ -114,6 +113,14 @@
             "tintColor": "string", // color palette,
             "opacity": "number", // min: 0, max: 1
             "smooth": "boolean",
+        },
+        "Tileset": {
+            "image": "string", // path to img,
+            "width": "number",
+            "tileWidth": "number",
+            "tileHeight": "number",
+            "margin": { "x": "number", "y": "number" },
+            "spacing": { "x": "number", "y": "number" },
         },
         "VideoRenderer": {
             "layer": "string",
@@ -137,6 +144,7 @@
     "Animator": {
         "animations": [
             {
+                "name": "string",
                 "image": "string", // path to the image file
                 "slice": {
                     "size": { "x": "number", "y": "number" },
@@ -146,8 +154,8 @@
                 "frames": ["number"], // array of numbers
                 "fps": "number", // default 12
                 "loop": "boolean", // default false
-            }, // array of animations
-        ],
+            },
+        ], // array of animations
     },
     "AudioPlayer": {
         "audioSource": "string", // path to audio file
@@ -165,8 +173,8 @@
     },
     "Camera": {
         "layers": ["string"], // array of strings
-        "zoom": "number", //  min: 0.001
-        "depth": "number",
+        "zoom": "number", //  min: 0.001, max: 1000
+        "depth": "number", // integers
     },
     "RigidBody": {
         "type": ["Dynamic", "Static"], // default dynamic
@@ -175,7 +183,7 @@
         "gravity": "number", // visible if type === dynamic, min: 0
     },
     "TiledWrapper": {
-        "tilemap": "string", // path to tiled file
+        "tilemap": "string", // path to tiled file, .json o .tmj
         "layerToRender": "string",
     },
     "Transform": {
