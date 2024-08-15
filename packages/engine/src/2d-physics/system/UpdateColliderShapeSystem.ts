@@ -22,20 +22,16 @@ export class UpdateColliderSystemShape extends SystemBase {
             });
     }
 
-    private updatePositionAndVertices(
-        shape: IShape,
-        offset: Vector2,
-        { localPosition, localScale, localRotation }: ITransform,
-    ): void {
-        this.scaledOffset.set(offset.x * localScale.x, offset.y * localScale.y);
-
+    private updatePositionAndVertices(shape: IShape, offset: Vector2, transform: ITransform): void {
         // update position
-        Vector2.add(shape.position, localPosition, this.scaledOffset);
+        this.translatePosition(shape, offset, transform);
 
         if (shape instanceof Polygon) {
-            this.angle = shape.rotation + localRotation;
+            this.angle = shape.rotation + transform.localRotation;
             // scale vertices
-            shape.vertexModel.forEach((v, i) => shape.vertices[i].set(v.x * localScale.x, v.y * localScale.y));
+            shape.vertexModel.forEach((v, i) =>
+                shape.vertices[i].set(v.x * transform.localScale.x, v.y * transform.localScale.y),
+            );
             // translate vertices
             shape.vertices.forEach((vertex) =>
                 vertex.set(
@@ -45,7 +41,25 @@ export class UpdateColliderSystemShape extends SystemBase {
             );
         } else if (shape instanceof Circumference) {
             // scale radius
-            shape.radius *= Math.max(Math.abs(localScale.x), Math.abs(localScale.y));
+            shape.radius *= Math.max(Math.abs(transform.localScale.x), Math.abs(transform.localScale.y));
+        }
+    }
+
+    private translatePosition(
+        shape: IShape,
+        offset: Vector2,
+        { localPosition, localScale, localRotation }: ITransform,
+    ): void {
+        this.scaledOffset.set(offset.x * localScale.x, offset.y * localScale.y);
+
+        if (localRotation !== 0) {
+            const translatedAngle = Math.atan2(this.scaledOffset.y, this.scaledOffset.x) + localRotation;
+            shape.position.set(
+                localPosition.x + this.scaledOffset.magnitude * Math.cos(translatedAngle),
+                localPosition.y + this.scaledOffset.magnitude * Math.sin(translatedAngle),
+            );
+        } else {
+            Vector2.add(shape.position, localPosition, this.scaledOffset);
         }
     }
 

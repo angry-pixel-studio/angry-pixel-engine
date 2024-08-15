@@ -1,0 +1,186 @@
+{
+    "collider": {
+        "BallCollider": {
+            "layer": "string",
+            "radius": "number",
+            "offset": { "x": "number", "y": "number" },
+            "physics": "boolean",
+        },
+        "BoxCollider": {
+            "layer": "string",
+            "width": "number",
+            "height": "number",
+            "rotation": "number",
+            "offset": { "x": "number", "y": "number" },
+            "physics": "boolean",
+        },
+        "EdgeCollider": {
+            "layer": "string",
+            "vertexModel": [{ "x": "number", "y": "number" }], // array of vectors
+            "rotation": "number",
+            "offset": { "x": "number", "y": "number" },
+            "physics": "boolean",
+        },
+        "PolygonCollider": {
+            "layer": "string",
+            "vertexModel": [{ "x": "number", "y": "number" }], // array of vectors
+            "rotation": "number",
+            "offset": { "x": "number", "y": "number" },
+            "physics": "boolean",
+        },
+        "TilemapCollider": {
+            "layer": "string",
+            "composite": "boolean",
+            "physics": "boolean",
+        },
+    },
+    "render": {
+        "LightRenderer": {
+            "layer": "string",
+            "radius": "number",
+            "smooth": "boolean",
+            "intensity": "number", // min: 0, max: 1
+        },
+        "MaskRenderer": {
+            "layer": "string",
+            "shape": ["Rectangle", "Circumference"], // default rectangle
+            "width": "number", // visible if type === rectangle
+            "height": "number", // visible if type === rectangle
+            "rotation": "number", // visible if type === rectangle
+            "radius": "number", // visible if type === circumference
+            "offset": { "x": "number", "y": "number" },
+            "opacity": "number", // min: 0, max: 1
+        },
+        "ShadowRenderer": {
+            "layer": "string",
+            "width": "number",
+            "height": "number",
+            "color": "string", // color palette
+            "opacity": "number", // min: 0, max: 1
+        },
+        "SpriteRenderer": {
+            "layer": "string",
+            "image": "string", // path to the image
+            "slice": { "x": "number", "y": "number", "width": "number", "height": "number" },
+            "smooth": "boolean",
+            "offset": { "x": "number", "y": "number" },
+            "flipHorizontally": "boolean",
+            "flipVertically": "boolean",
+            "rotation": "number",
+            "opacity": "number", // min: 0, max: 1
+            "maskColor": "string", // color palette,
+            "maskColorMix": "number", // min: 0, max: 1
+            "tintColor": "string", // color palette
+            "scale": { "x": "number", "y": "number" },
+            "width": "number",
+            "height": "number",
+        },
+        "TextRenderer": {
+            "layer": "string",
+            "text": "string", // text area
+            "font": "string",
+            "fontSize": "number",
+            "width": "number",
+            "height": "number",
+            "offset": { "x": "number", "y": "number" },
+            "color": "string", // color palette,
+            "lineSeparation": "number",
+            "letterSpacing": "number",
+            "smooth": "boolean",
+            "rotation": "number",
+            "opacity": "number", // min: 0, max: 1
+            "orientation": ["Center", "RightUp", "RightDown", "RightCenter"],
+            "charRanges": ["number"], // array of number
+            "bitmapMargin": { "x": "number", "y": "number" },
+            "bitmapSpacing": { "x": "number", "y": "number" },
+        },
+        "TilemapRenderer": {
+            "layer": "string",
+            "tileset": "Tileset",
+            "data": ["number"], // array of number
+            "chunks": [
+                {
+                    "data": ["number"], // array of number
+                    "x": "number",
+                    "y": "number",
+                    "width": "number",
+                    "height": "number",
+                },
+            ], // array of chunks
+            "width": "number",
+            "height": "number",
+            "tileWidth": "number",
+            "tileHeight": "number",
+            "tintColor": "string", // color palette,
+            "opacity": "number", // min: 0, max: 1
+            "smooth": "boolean",
+        },
+        "VideoRenderer": {
+            "layer": "string",
+            "video": "string", // path to the video
+            "slice": { "x": "number", "y": "number", "width": "number", "height": "number" },
+            "smooth": "boolean",
+            "offset": { "x": "number", "y": "number" },
+            "flipHorizontally": "boolean",
+            "flipVertically": "boolean",
+            "rotation": "number",
+            "opacity": "number", // min: 0, max: 1
+            "maskColor": "string", // color palette,
+            "maskColorMix": "number", // min: 0, max: 1
+            "tintColor": "string", // color palette
+            "scale": { "x": "number", "y": "number" },
+            "width": "number",
+            "height": "number",
+            "loop": "boolean",
+        },
+    },
+    "Animator": {
+        "animations": [
+            {
+                "image": "string", // path to the image file
+                "slice": {
+                    "size": { "x": "number", "y": "number" },
+                    "offset": { "x": "number", "y": "number" },
+                    "padding": { "x": "number", "y": "number" },
+                },
+                "frames": ["number"], // array of numbers
+                "fps": "number", // default 12
+                "loop": "boolean", // default false
+            }, // array of animations
+        ],
+    },
+    "AudioPlayer": {
+        "audioSource": "string", // path to audio file
+        "loop": "boolean",
+        "volume": "number", // min: 0, max: 1
+    },
+    "Button": {
+        "shape": ["Rectangle", "Circumference"], // default rectangle
+        "width": "number", // visible if type === rectangle
+        "height": "number", // visible if type === rectangle
+        "rotation": "number", // visible if type === rectangle
+        "radius": "number", // visible if type === circumference
+        "offset": { "x": "number", "y": "number" },
+        "touchEnabled": "boolean",
+    },
+    "Camera": {
+        "layers": ["string"], // array of strings
+        "zoom": "number", //  min: 0.001
+        "depth": "number",
+    },
+    "RigidBody": {
+        "type": ["Dynamic", "Static"], // default dynamic
+        "velocity": { "x": "number", "y": "number" }, // visible if type === dynamic
+        "acceleration": { "x": "number", "y": "number" }, // visible if type === dynamic
+        "gravity": "number", // visible if type === dynamic, min: 0
+    },
+    "TiledWrapper": {
+        "tilemap": "string", // path to tiled file
+        "layerToRender": "string",
+    },
+    "Transform": {
+        "position": { "x": "number", "y": "number" },
+        "scale": { "x": "number", "y": "number" },
+        "rotation": "number",
+    },
+}
