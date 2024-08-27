@@ -43,9 +43,4 @@ export class TransformSystem implements System {
             parent.localPosition.y + child.position.magnitude * Math.sin(translatedAngle),
         );
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

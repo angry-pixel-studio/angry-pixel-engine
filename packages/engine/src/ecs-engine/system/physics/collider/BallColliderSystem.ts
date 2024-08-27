@@ -41,9 +41,4 @@ export class BallColliderSystem implements System {
             };
         }
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

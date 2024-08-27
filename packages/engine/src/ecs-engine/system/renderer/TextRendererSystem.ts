@@ -124,9 +124,4 @@ export class TextRendererSystem implements System {
 
         return croppedText.join("\n");
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

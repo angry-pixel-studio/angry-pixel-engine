@@ -41,9 +41,4 @@ export class CameraSystem implements System {
 
         return this.cameraData.get(entity);
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

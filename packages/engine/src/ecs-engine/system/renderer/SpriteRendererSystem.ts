@@ -89,9 +89,4 @@ export class SpriteRendererSystem implements System {
             transform.localPosition.y + this.scaledOffset.magnitude * Math.sin(translatedAngle),
         );
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

@@ -16,9 +16,4 @@ export class PhysicsTransformSystem implements System {
             this.physicsManager.addTransform(entity, transform);
         });
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

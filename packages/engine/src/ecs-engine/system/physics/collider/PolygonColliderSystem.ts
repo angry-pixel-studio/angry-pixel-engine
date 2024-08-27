@@ -42,9 +42,4 @@ export class PolygonColliderSystem implements System {
             };
         }
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

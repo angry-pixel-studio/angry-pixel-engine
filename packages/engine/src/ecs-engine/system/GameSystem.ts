@@ -26,15 +26,7 @@ export abstract class GameSystem implements System {
         protected collisionQueryManager: ICollisionQueryManager,
     ) {}
 
-    public onCreate(): void {}
-
-    public onEnable(): void {}
-
     public onUpdate(): void {}
-
-    public onDisable(): void {}
-
-    public onDestroy(): void {}
 }
 
 export function gameLogicSystem() {

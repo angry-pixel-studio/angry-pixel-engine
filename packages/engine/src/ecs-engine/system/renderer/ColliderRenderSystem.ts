@@ -67,9 +67,4 @@ export class ColliderRenderSystem implements System {
 
         return this.renderData.get(colliderId);
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

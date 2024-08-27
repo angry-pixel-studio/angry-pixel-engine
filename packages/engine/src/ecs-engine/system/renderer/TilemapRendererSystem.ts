@@ -82,8 +82,4 @@ export class TilemapRendererSystem implements System {
                 }),
         );
     }
-
-    public onCreate(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

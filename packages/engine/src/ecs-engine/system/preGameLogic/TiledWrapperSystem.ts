@@ -23,9 +23,4 @@ export class TiledWrapperSystem implements System {
             tilemapRenderer.width = tiledWrapper.tilemap.width;
         });
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

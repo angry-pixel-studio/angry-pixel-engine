@@ -112,6 +112,4 @@ export class AudioPlayerSystem implements System {
     public onDestroy(): void {
         this.onDisable();
     }
-
-    public onEnable(): void {}
 }

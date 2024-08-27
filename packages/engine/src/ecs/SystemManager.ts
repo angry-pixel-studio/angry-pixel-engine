@@ -1,8 +1,8 @@
 export interface System {
-    onCreate(): void;
-    onDestroy(): void;
-    onDisable(): void;
-    onEnable(): void;
+    onCreate?(): void;
+    onDestroy?(): void;
+    onDisabled?(): void;
+    onEnabled?(): void;
     onUpdate(): void;
 }
 
@@ -41,11 +41,11 @@ export class SystemManager {
 
         if (system[3] === false) {
             system[3] = true;
-            system[0].onCreate();
+            if (system[0].onCreate) system[0].onCreate();
         }
 
         system[2] = true;
-        system[0].onEnable();
+        if (system[0].onEnabled) system[0].onEnabled();
     }
 
     public disableSystem(systemType: SystemType): void {
@@ -55,7 +55,7 @@ export class SystemManager {
         const system = this.systems[index];
 
         system[2] = false;
-        system[0].onDisable();
+        if (system[0].onDisabled) system[0].onDisabled();
     }
 
     public setExecutionOrder(systemType: SystemType, position: number): void {
@@ -67,7 +67,8 @@ export class SystemManager {
     public removeSystem(systemType: SystemType): void {
         const index = this.findSystemIndex(systemType);
         if (index === -1) return;
-        this.systems.splice(index, 1)[0][0].onDestroy();
+        const system = this.systems.splice(index, 1)[0][0];
+        if (system.onDestroy) system.onDestroy();
     }
 
     public update(group: SystemGroup): void {

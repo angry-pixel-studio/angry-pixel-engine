@@ -64,9 +64,4 @@ export class TilemapPreProcessingSystem implements System {
 
         tilemapRenderer.height = Math.ceil(tilemapRenderer.data.length / tilemapRenderer.width);
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

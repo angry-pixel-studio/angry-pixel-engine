@@ -14,9 +14,4 @@ export class RigidBodySystem implements System {
             this.physicsManager.addRigidBody(entity, rigidBody);
         });
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

@@ -11,9 +11,4 @@ export class PhysicsSystem implements System {
     public onUpdate(): void {
         this.physicsManager.update(this.timeManager.physicsDeltaTime);
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

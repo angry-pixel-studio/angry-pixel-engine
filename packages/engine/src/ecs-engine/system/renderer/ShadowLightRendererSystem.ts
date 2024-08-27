@@ -101,8 +101,4 @@ export class ShadowLightRendererSystem implements System {
             scaledHeight,
         );
     }
-
-    public onCreate(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

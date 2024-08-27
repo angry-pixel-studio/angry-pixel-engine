@@ -151,6 +151,4 @@ export class VideoRendererSystem implements System {
     public onDestroy(): void {
         this.onDisable();
     }
-
-    public onEnable(): void {}
 }

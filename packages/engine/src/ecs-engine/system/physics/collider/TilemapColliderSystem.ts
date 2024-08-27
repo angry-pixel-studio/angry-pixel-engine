@@ -194,8 +194,4 @@ export class TilemapColliderSystem implements System {
             index % width < width - 1 ? index + 1 : undefined,
         ];
     }
-
-    public onCreate(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

@@ -9,9 +9,4 @@ export class RenderSystem implements System {
         this.renderManager.clearCameraData();
         this.renderManager.clearRenderData();
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

@@ -40,6 +40,8 @@ import { AudioPlayerSystem } from "./system/preGameLogic/AudioPlayerSystem";
 import { EntityManager } from "../ecs/EntityManager";
 import { SystemManager, SystemType } from "../ecs/SystemManager";
 import { GameSystem, getSystemGroup, SystemGroup } from "./system/GameSystem";
+import { ParentSystem } from "./system/postGameLogic/ParentSystem";
+import { ChildrenSystem } from "./system/postGameLogic/ChildrenSystem";
 
 export interface IGameConfig {
     /** HTML element where the game will be created */
@@ -175,6 +177,8 @@ export class Game implements IGame {
 
         // post game logic
         this.systemManager.addSystem(new TransformSystem(this.entityManager), SystemGroup.PostGameLogic);
+        this.systemManager.addSystem(new ParentSystem(this.entityManager), SystemGroup.PostGameLogic);
+        this.systemManager.addSystem(new ChildrenSystem(this.entityManager), SystemGroup.PostGameLogic);
 
         // render
         this.systemManager.addSystem(new ClearScreenSystem(this.renderManager, canvasColor), SystemGroup.Render);
@@ -249,6 +253,8 @@ export class Game implements IGame {
 
         // post game logic
         this.systemManager.enableSystem(TransformSystem);
+        this.systemManager.enableSystem(ChildrenSystem);
+        this.systemManager.enableSystem(ParentSystem);
 
         // render
         this.systemManager.enableSystem(ClearScreenSystem);

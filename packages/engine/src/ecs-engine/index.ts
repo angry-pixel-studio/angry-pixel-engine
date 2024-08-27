@@ -3,6 +3,8 @@ import { IGame, Game, IGameConfig } from "./Game";
 // export components
 export * from "./component/RigidBody";
 export * from "./component/Transform";
+export * from "./component/Children";
+export * from "./component/Parent";
 export * from "./component/collider/BoxCollider";
 export * from "./component/collider/BallCollider";
 export * from "./component/collider/EdgeCollider";

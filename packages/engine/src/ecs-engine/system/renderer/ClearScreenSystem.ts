@@ -10,9 +10,4 @@ export class ClearScreenSystem implements System {
     public onUpdate(): void {
         this.renderManager.clearScreen(this.canvasColor ?? "#000000");
     }
-
-    public onCreate(): void {}
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }

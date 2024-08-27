@@ -79,8 +79,4 @@ export class MaskRendererSystem implements System {
             transform.localPosition.y + this.scaledOffset.magnitude * Math.sin(translatedAngle),
         );
     }
-
-    public onEnable(): void {}
-    public onDisable(): void {}
-    public onDestroy(): void {}
 }
