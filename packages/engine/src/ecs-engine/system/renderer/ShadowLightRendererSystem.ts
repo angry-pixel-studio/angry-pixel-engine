@@ -5,14 +5,16 @@ import { Transform } from "../../component/Transform";
 import { ShadowRenderer } from "../../component/renderer/ShadowRenderer";
 import { System } from "../../../ecs/SystemManager";
 import { Entity, EntityManager, SearchResult } from "../../../ecs/EntityManager";
+import { inject } from "../../../ioc/container";
+import { TYPES } from "../../config/types";
 
 export class ShadowLightRendererSystem implements System {
     // cache
     private renderData: Map<Entity, IShadowRenderData> = new Map();
 
     constructor(
-        private entityManager: EntityManager,
-        private renderManager: IRenderManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.RenderManager) private readonly renderManager: IRenderManager,
     ) {}
 
     public onEnable(): void {
@@ -41,10 +43,10 @@ export class ShadowLightRendererSystem implements System {
                         lightRenderer._boundingBox.overlaps(shadowRenderer._boundingBox),
                 )
                 .map(
-                    ({ component: { _boundingBox, radius, smooth, intensity } }) =>
+                    ({ component: { _boundingBox, smooth, intensity } }) =>
                         ({
                             position: _boundingBox.center,
-                            radius,
+                            radius: _boundingBox.width / 2,
                             smooth,
                             intensity,
                         }) as Light,
@@ -80,21 +82,21 @@ export class ShadowLightRendererSystem implements System {
         const scaledRadius = lightRenderer.radius * Math.abs(Math.max(transform.localScale.x, transform.localScale.y));
 
         lightRenderer._boundingBox.set(
-            transform.localPosition.x - scaledRadius / 2,
-            transform.localPosition.y - scaledRadius / 2,
-            scaledRadius,
-            scaledRadius,
+            transform.localPosition.x - scaledRadius,
+            transform.localPosition.y - scaledRadius,
+            scaledRadius * 2,
+            scaledRadius * 2,
         );
     }
 
-    private updatShadowRendererBoundingBox(entity: Entity, lightRenderer: ShadowRenderer): void {
+    private updatShadowRendererBoundingBox(entity: Entity, shadowRenderer: ShadowRenderer): void {
         const transform = this.entityManager.getComponent(entity, Transform);
         if (!transform) throw new Error("ShadowRenderer component needs a Transform");
 
-        const scaledWidth = lightRenderer.width * Math.abs(Math.max(transform.localScale.x, transform.localScale.y));
-        const scaledHeight = lightRenderer.height * Math.abs(Math.max(transform.localScale.x, transform.localScale.y));
+        const scaledWidth = shadowRenderer.width * Math.abs(transform.localScale.x);
+        const scaledHeight = shadowRenderer.height * Math.abs(transform.localScale.y);
 
-        lightRenderer._boundingBox.set(
+        shadowRenderer._boundingBox.set(
             transform.localPosition.x - scaledWidth / 2,
             transform.localPosition.y - scaledHeight / 2,
             scaledWidth,

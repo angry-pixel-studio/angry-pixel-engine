@@ -9,17 +9,27 @@ import {
 } from "../../../2d-renderer";
 import { defaultRenderLayer } from "../../component/Camera";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
+import { TYPES } from "../../config/types";
+import { IGameConfig } from "../../Game";
 
 export class ColliderRenderSystem implements System {
-    private renderData: Map<number, IGeometricRenderData> = new Map();
+    private readonly renderData: Map<number, IGeometricRenderData> = new Map();
+    private readonly collisionMethod: CollisionMethods;
+    private readonly debugEnabled: boolean;
 
     constructor(
-        private physicsManager: IPhysicsManager,
-        private renderManager: IRenderManager,
-        private collisionMethod: CollisionMethods,
-    ) {}
+        @inject(TYPES.PhysicsManager) private physicsManager: IPhysicsManager,
+        @inject(TYPES.RenderManager) private renderManager: IRenderManager,
+        @inject(TYPES.GameConfig) gameConfig: IGameConfig,
+    ) {
+        this.collisionMethod = gameConfig.collisions.collisionMethod;
+        this.debugEnabled = gameConfig.debugEnabled;
+    }
 
     public onUpdate(): void {
+        if (!this.debugEnabled) return;
+
         this.physicsManager.getEntities().forEach(([id, t, rb, colliders]) => {
             colliders.forEach((c) => {
                 const renderData = this.getOrCreateRenderData(c.id);

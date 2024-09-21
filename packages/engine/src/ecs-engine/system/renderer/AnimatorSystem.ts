@@ -1,7 +1,9 @@
 import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { Animation, Animator } from "../../component/Animator";
 import { SpriteRenderer } from "../../component/renderer/SpriteRenderer";
+import { TYPES } from "../../config/types";
 import { ITimeManager } from "../../manager/TimeManager";
 
 export class AnimatorSystem implements System {
@@ -9,8 +11,8 @@ export class AnimatorSystem implements System {
     private animation: Animation;
 
     constructor(
-        private readonly entityManager: EntityManager,
-        private readonly timeManager: ITimeManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.TimeManager) private readonly timeManager: ITimeManager,
     ) {}
 
     public onEnable(): void {}

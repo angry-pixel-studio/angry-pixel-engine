@@ -1,5 +1,7 @@
 import { EntityManager } from "../../ecs/EntityManager";
 import { System, SystemManager, SystemType } from "../../ecs/SystemManager";
+import { inject, injectable } from "../../ioc/container";
+import { TYPES } from "../config/types";
 import { AudioPlayerSystem } from "../system/preGameLogic/AudioPlayerSystem";
 import { VideoRendererSystem } from "../system/renderer/VideoRendererSystem";
 
@@ -10,6 +12,7 @@ export interface ISceneManager {
     update(): void;
 }
 
+@injectable(TYPES.SceneManager)
 export class SceneManager implements ISceneManager {
     private scenes: Map<string, SystemType<System>[]> = new Map();
     private openingSceneName: string;
@@ -17,8 +20,8 @@ export class SceneManager implements ISceneManager {
     private pendingToLoadSceneName: string;
 
     constructor(
-        private entityManager: EntityManager,
-        private systemManager: SystemManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
     ) {}
 
     public addScene(name: string, systemTypes: SystemType<System>[], openingScene: boolean = false): void {

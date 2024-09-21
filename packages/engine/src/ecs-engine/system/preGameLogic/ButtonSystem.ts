@@ -4,6 +4,8 @@ import { Button, ButtonShape } from "../../component/Button";
 import { Transform } from "../../component/Transform";
 import { System } from "../../../ecs/SystemManager";
 import { EntityManager } from "../../../ecs/EntityManager";
+import { TYPES } from "../../config/types";
+import { inject } from "../../../ioc/container";
 
 type ScaledButton = { width: number; height: number; radius: number; position: Vector2 };
 
@@ -17,8 +19,8 @@ export class ButtonSystem implements System {
     private pressedLastFrame: boolean = false;
 
     constructor(
-        private readonly entityManager: EntityManager,
-        inputManager: IInputManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.InputManager) inputManager: IInputManager,
     ) {
         this.mouse = inputManager.mouse;
         this.touchScreen = inputManager.touchScreen;

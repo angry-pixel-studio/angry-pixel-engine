@@ -1,3 +1,6 @@
+import { injectable } from "../../ioc/container";
+import { TYPES } from "../config/types";
+
 enum AssetType {
     Image,
     Audio,
@@ -95,6 +98,7 @@ export interface IAssetManager {
 }
 
 /** @internal */
+@injectable(TYPES.AssetManager)
 export class AssetManager implements IAssetManager {
     private readonly assets: Asset[] = [];
 

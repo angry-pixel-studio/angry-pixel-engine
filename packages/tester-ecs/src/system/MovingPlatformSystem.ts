@@ -5,7 +5,7 @@ export class MovingPlatformSystem extends GameSystem {
     //cache
     private position: Vector2 = new Vector2();
 
-    public onEnable(): void {
+    public onEnabled(): void {
         this.entityManager.search(MovingPlatform).forEach(({ entity, component: movingPlatform }) => {
             this.entityManager
                 .getComponent(entity, Transform)

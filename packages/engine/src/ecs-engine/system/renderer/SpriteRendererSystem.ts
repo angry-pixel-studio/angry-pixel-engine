@@ -4,6 +4,8 @@ import { SpriteRenderer } from "../../component/renderer/SpriteRenderer";
 import { Transform } from "../../component/Transform";
 import { System } from "../../../ecs/SystemManager";
 import { Entity, EntityManager } from "../../../ecs/EntityManager";
+import { inject } from "../../../ioc/container";
+import { TYPES } from "../../config/types";
 
 export class SpriteRendererSystem implements System {
     private readonly renderData: Map<Entity, ISpriteRenderData> = new Map();
@@ -11,8 +13,8 @@ export class SpriteRendererSystem implements System {
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        private entityManager: EntityManager,
-        private renderManager: IRenderManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.RenderManager) private readonly renderManager: IRenderManager,
     ) {}
 
     public onUpdate(): void {

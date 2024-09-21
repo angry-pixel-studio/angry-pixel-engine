@@ -1,4 +1,6 @@
 import { SystemManager } from "../../ecs/SystemManager";
+import { inject, injectable } from "../../ioc/container";
+import { TYPES } from "../config/types";
 import { SystemGroup } from "../system/GameSystem";
 import { ISceneManager } from "./SceneManager";
 import { ITimeManager } from "./TimeManager";
@@ -14,6 +16,7 @@ export interface ILoopManager {
 }
 
 /** @internal */
+@injectable(TYPES.LoopManager)
 export class LoopManager implements ILoopManager {
     public running: boolean = false;
 
@@ -21,9 +24,9 @@ export class LoopManager implements ILoopManager {
     private physicsIntervalId: number;
 
     constructor(
-        private readonly timeManager: ITimeManager,
-        private readonly sceneManager: ISceneManager,
-        private readonly systemManager: SystemManager,
+        @inject(TYPES.TimeManager) private readonly timeManager: ITimeManager,
+        @inject(TYPES.SceneManager) private readonly sceneManager: ISceneManager,
+        @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
     ) {}
 
     public start(): void {

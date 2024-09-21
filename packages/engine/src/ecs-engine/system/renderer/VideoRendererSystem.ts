@@ -1,9 +1,11 @@
 import { IRenderManager, IVideoRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
 import { Entity, EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { Vector2 } from "../../../math";
 import { Transform } from "../../component/Transform";
 import { VideoRenderer } from "../../component/renderer/VideoRenderer";
+import { TYPES } from "../../config/types";
 import { ITimeManager } from "../../manager/TimeManager";
 
 const userInputEventNames = [
@@ -26,9 +28,9 @@ export class VideoRendererSystem implements System {
     private canPlay: boolean;
 
     constructor(
-        private entityManager: EntityManager,
-        private renderManager: IRenderManager,
-        private timeManager: ITimeManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.RenderManager) private readonly renderManager: IRenderManager,
+        @inject(TYPES.TimeManager) private readonly timeManager: ITimeManager,
     ) {}
 
     public onCreate(): void {

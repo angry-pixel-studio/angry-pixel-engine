@@ -49,7 +49,7 @@ export const ninjaFactory = (
     lightRenderer.radius = 64;
     lightRenderer.layer = RENDER_LAYERS.Shadow;
     lightRenderer.smooth = true;
-    lightRenderer.intensity = 1;
+    lightRenderer.intensity = 0.7;
 
     return [
         transform,

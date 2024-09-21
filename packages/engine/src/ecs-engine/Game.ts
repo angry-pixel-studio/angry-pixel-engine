@@ -1,16 +1,10 @@
-import { IInputManager, inputManagerFactory } from "../input";
-import { IRenderManager, renderManagerFactory } from "../2d-renderer";
-import {
-    BroadPhaseMethods,
-    CollisionMatrix,
-    CollisionMethods,
-    IPhysicsManager,
-    physicsManagerFactory,
-} from "../2d-physics";
-import { AssetManager, IAssetManager } from "./manager/AssetManager";
+import { inputManagerFactory } from "../input";
+import { renderManagerFactory } from "../2d-renderer";
+import { BroadPhaseMethods, CollisionMatrix, CollisionMethods, physicsManagerFactory } from "../2d-physics";
+import { AssetManager } from "./manager/AssetManager";
 import { ILoopManager, LoopManager } from "./manager/LoopManager";
 import { ISceneManager, SceneManager } from "./manager/SceneManager";
-import { ITimeManager, TimeManager } from "./manager/TimeManager";
+import { TimeManager } from "./manager/TimeManager";
 import { TransformSystem } from "./system/postGameLogic/TransformSystem";
 import { ClearScreenSystem } from "./system/renderer/ClearScreenSystem";
 import { CameraSystem } from "./system/renderer/CameraSystem";
@@ -34,14 +28,16 @@ import { TiledWrapperSystem } from "./system/preGameLogic/TiledWrapperSystem";
 import { TilemapColliderSystem } from "./system/physics/collider/TilemapColliderSystem";
 import { EdgeColliderSystem } from "./system/physics/collider/EdgeColliderSystem";
 import { TilemapPreProcessingSystem } from "./system/preGameLogic/TilemapPreProcessingSystem";
-import { CollisionQueryManager, ICollisionQueryManager } from "./manager/CollisionQueryManager";
+import { CollisionQueryManager } from "./manager/CollisionQueryManager";
 import { ShadowLightRendererSystem } from "./system/renderer/ShadowLightRendererSystem";
 import { AudioPlayerSystem } from "./system/preGameLogic/AudioPlayerSystem";
 import { EntityManager } from "../ecs/EntityManager";
-import { SystemManager, SystemType } from "../ecs/SystemManager";
+import { System, SystemManager, SystemType } from "../ecs/SystemManager";
 import { GameSystem, getSystemGroup, SystemGroup } from "./system/GameSystem";
 import { ParentSystem } from "./system/postGameLogic/ParentSystem";
 import { ChildrenSystem } from "./system/postGameLogic/ChildrenSystem";
+import { Container } from "../ioc/container";
+import { TYPES } from "./config/types";
 
 export interface IGameConfig {
     /** HTML element where the game will be created */
@@ -80,59 +76,47 @@ export interface IGame {
 export const canvasId = "angryPixelGameCanvas";
 
 export class Game implements IGame {
-    private config: IGameConfig;
-    private canvas: HTMLCanvasElement;
-    private assetManager: IAssetManager;
-    private entityManager: EntityManager;
-    private loopManager: ILoopManager;
-    private sceneManager: ISceneManager;
-    private systemManager: SystemManager;
-    private timeManager: ITimeManager;
-    private inputManager: IInputManager;
-    private renderManager: IRenderManager;
-    private physicsManager: IPhysicsManager;
-    private collisionQueryManager: ICollisionQueryManager;
+    private container: Container;
+    private gameSystemCounter: number = 0;
 
     constructor(config: IGameConfig) {
-        this.config = config;
-        this.canvas = this.createCanvas(config);
+        this.container = new Container();
+        this.container.set(TYPES.GameConfig, config);
+        this.container.set(TYPES.CanvasElement, this.createCanvas(config));
 
-        this.initializeManagers(config);
-        this.initializeSystems(config);
+        this.initializeManagers();
+        this.initializeSystems();
     }
 
     public get running(): boolean {
-        return this.loopManager.running;
+        return this.container.get<ILoopManager>(TYPES.LoopManager).running;
     }
 
     public start(): void {
-        this.enableSystems(this.config.debugEnabled);
-        this.loopManager.start();
+        this.enableSystems();
+        this.container.get<ILoopManager>(TYPES.LoopManager).start();
     }
 
     public stop(): void {
-        this.loopManager.stop();
+        this.container.get<ILoopManager>(TYPES.LoopManager).stop();
     }
 
     public addScene(name: string, systemTypes: SystemType<GameSystem>[], openingScene?: boolean): void {
         systemTypes.forEach((systemType) => this.gameSystemFactory(systemType));
 
-        this.sceneManager.addScene(name, systemTypes, openingScene);
+        this.container.get<ISceneManager>(TYPES.SceneManager).addScene(name, systemTypes, openingScene);
     }
 
-    private gameSystemFactory<T extends GameSystem>(systemType: SystemType<T>): T {
-        if (this.systemManager.hasSystem(systemType)) return;
+    private gameSystemFactory<T extends GameSystem>(systemType: SystemType<T>): void {
+        if (!systemType.prototype._type_id) systemType.prototype._type_id = `System${this.gameSystemCounter++}`;
+        const name = systemType.prototype._type_id;
 
-        const system = new systemType(
-            this.entityManager,
-            this.assetManager,
-            this.sceneManager,
-            this.timeManager,
-            this.inputManager,
-            this.collisionQueryManager,
-        );
-
-        this.systemManager.addSystem(system, getSystemGroup(systemType));
+        if (!this.container.has(name)) {
+            this.container.add(systemType, name);
+            this.container
+                .get<SystemManager>(TYPES.SystemManager)
+                .addSystem(this.container.get<GameSystem>(name), getSystemGroup(systemType));
+        }
     }
 
     private createCanvas({ containerNode, width, height }: IGameConfig): HTMLCanvasElement {
@@ -149,137 +133,80 @@ export class Game implements IGame {
         return canvas;
     }
 
-    private initializeManagers({ physicsFramerate, collisions }: IGameConfig): void {
-        this.entityManager = new EntityManager();
-        this.systemManager = new SystemManager();
-        this.timeManager = new TimeManager(physicsFramerate);
-        this.assetManager = new AssetManager();
-        this.sceneManager = new SceneManager(this.entityManager, this.systemManager);
-        this.loopManager = new LoopManager(this.timeManager, this.sceneManager, this.systemManager);
+    private initializeManagers(): void {
+        const canvasElement = this.container.get<HTMLCanvasElement>(TYPES.CanvasElement);
+        const gameConfig = this.container.get<IGameConfig>(TYPES.GameConfig);
 
-        this.inputManager = inputManagerFactory(this.canvas);
-        this.renderManager = renderManagerFactory(this.canvas);
-        this.physicsManager = physicsManagerFactory(collisions);
+        // external
+        this.container.set(TYPES.EntityManager, new EntityManager());
+        this.container.set(TYPES.SystemManager, new SystemManager());
+        this.container.set(TYPES.InputManager, inputManagerFactory(canvasElement));
+        this.container.set(TYPES.RenderManager, renderManagerFactory(canvasElement));
+        this.container.set(TYPES.PhysicsManager, physicsManagerFactory(gameConfig.collisions));
 
-        this.collisionQueryManager = new CollisionQueryManager(this.physicsManager);
+        this.container.add(TimeManager);
+        this.container.add(AssetManager);
+        this.container.add(SceneManager);
+        this.container.add(LoopManager);
+        this.container.add(CollisionQueryManager);
     }
 
-    private initializeSystems({ canvasColor, collisions: { collisionMethod } }: IGameConfig): void {
-        // pre game logic
-        this.systemManager.addSystem(new InputSystem(this.inputManager), SystemGroup.PreGameLogic);
-        this.systemManager.addSystem(new ButtonSystem(this.entityManager, this.inputManager), SystemGroup.PreGameLogic);
-        this.systemManager.addSystem(new TiledWrapperSystem(this.entityManager), SystemGroup.PreGameLogic);
-        this.systemManager.addSystem(new TilemapPreProcessingSystem(this.entityManager), SystemGroup.PreGameLogic);
-        this.systemManager.addSystem(
-            new AudioPlayerSystem(this.entityManager, this.inputManager, this.timeManager),
-            SystemGroup.PreGameLogic,
-        );
-
-        // post game logic
-        this.systemManager.addSystem(new TransformSystem(this.entityManager), SystemGroup.PostGameLogic);
-        this.systemManager.addSystem(new ParentSystem(this.entityManager), SystemGroup.PostGameLogic);
-        this.systemManager.addSystem(new ChildrenSystem(this.entityManager), SystemGroup.PostGameLogic);
-
-        // render
-        this.systemManager.addSystem(new ClearScreenSystem(this.renderManager, canvasColor), SystemGroup.Render);
-        this.systemManager.addSystem(new CameraSystem(this.entityManager, this.renderManager), SystemGroup.Render);
-        this.systemManager.addSystem(new AnimatorSystem(this.entityManager, this.timeManager), SystemGroup.Render);
-        this.systemManager.addSystem(
-            new TilemapRendererSystem(this.entityManager, this.renderManager),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(
-            new SpriteRendererSystem(this.entityManager, this.renderManager),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(
-            new MaskRendererSystem(this.entityManager, this.renderManager),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(
-            new TextRendererSystem(this.entityManager, this.renderManager),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(
-            new VideoRendererSystem(this.entityManager, this.renderManager, this.timeManager),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(
-            new ShadowLightRendererSystem(this.entityManager, this.renderManager),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(
-            new ColliderRenderSystem(this.physicsManager, this.renderManager, collisionMethod),
-            SystemGroup.Render,
-        );
-        this.systemManager.addSystem(new RenderSystem(this.renderManager), SystemGroup.Render);
-
-        // physics
-        this.systemManager.addSystem(
-            new PhysicsTransformSystem(this.entityManager, this.physicsManager),
-            SystemGroup.Physics,
-        );
-        this.systemManager.addSystem(new RigidBodySystem(this.entityManager, this.physicsManager), SystemGroup.Physics);
-        this.systemManager.addSystem(
-            new BoxColliderSystem(this.entityManager, this.physicsManager),
-            SystemGroup.Physics,
-        );
-        this.systemManager.addSystem(
-            new BallColliderSystem(this.entityManager, this.physicsManager),
-            SystemGroup.Physics,
-        );
-        this.systemManager.addSystem(
-            new EdgeColliderSystem(this.entityManager, this.physicsManager),
-            SystemGroup.Physics,
-        );
-        this.systemManager.addSystem(
-            new PolygonColliderSystem(this.entityManager, this.physicsManager),
-            SystemGroup.Physics,
-        );
-        this.systemManager.addSystem(
-            new TilemapColliderSystem(this.entityManager, this.physicsManager),
-            SystemGroup.Physics,
-        );
-        this.systemManager.addSystem(new PhysicsSystem(this.physicsManager, this.timeManager), SystemGroup.Physics);
+    private getEngineSystemTypes(): Map<SystemGroup, SystemType[]> {
+        return new Map([
+            [
+                SystemGroup.PreGameLogic,
+                [InputSystem, ButtonSystem, TiledWrapperSystem, TilemapPreProcessingSystem, AudioPlayerSystem],
+            ],
+            [SystemGroup.PostGameLogic, [TransformSystem, ChildrenSystem, ParentSystem]],
+            [
+                SystemGroup.Render,
+                [
+                    ClearScreenSystem,
+                    CameraSystem,
+                    AnimatorSystem,
+                    TilemapRendererSystem,
+                    SpriteRendererSystem,
+                    MaskRendererSystem,
+                    TextRendererSystem,
+                    VideoRendererSystem,
+                    ShadowLightRendererSystem,
+                    RenderSystem,
+                    ColliderRenderSystem,
+                ],
+            ],
+            [
+                SystemGroup.Physics,
+                [
+                    PhysicsTransformSystem,
+                    RigidBodySystem,
+                    BoxColliderSystem,
+                    BallColliderSystem,
+                    EdgeColliderSystem,
+                    PolygonColliderSystem,
+                    TilemapColliderSystem,
+                    PhysicsSystem,
+                ],
+            ],
+        ]);
     }
 
-    private enableSystems(debugEnabled: boolean): void {
-        // pre game logic
-        this.systemManager.enableSystem(InputSystem);
-        this.systemManager.enableSystem(ButtonSystem);
-        this.systemManager.enableSystem(TiledWrapperSystem);
-        this.systemManager.enableSystem(TilemapPreProcessingSystem);
-        this.systemManager.enableSystem(AudioPlayerSystem);
+    private initializeSystems(): void {
+        this.getEngineSystemTypes().forEach((systemTypes, systemGroup) => {
+            systemTypes.forEach((systemType) => {
+                const name = `System${this.gameSystemCounter++}`;
+                this.container.add(systemType, name);
+                this.container
+                    .get<SystemManager>(TYPES.SystemManager)
+                    .addSystem(this.container.get<System>(name), systemGroup);
+            });
+        });
+    }
 
-        // post game logic
-        this.systemManager.enableSystem(TransformSystem);
-        this.systemManager.enableSystem(ChildrenSystem);
-        this.systemManager.enableSystem(ParentSystem);
-
-        // render
-        this.systemManager.enableSystem(ClearScreenSystem);
-        this.systemManager.enableSystem(CameraSystem);
-        this.systemManager.enableSystem(AnimatorSystem);
-        this.systemManager.enableSystem(TilemapRendererSystem);
-        this.systemManager.enableSystem(SpriteRendererSystem);
-        this.systemManager.enableSystem(MaskRendererSystem);
-        this.systemManager.enableSystem(TextRendererSystem);
-        this.systemManager.enableSystem(VideoRendererSystem);
-        this.systemManager.enableSystem(ShadowLightRendererSystem);
-        this.systemManager.enableSystem(RenderSystem);
-
-        if (debugEnabled) {
-            this.systemManager.enableSystem(ColliderRenderSystem);
-        }
-
-        // physics
-        this.systemManager.enableSystem(PhysicsTransformSystem);
-        this.systemManager.enableSystem(RigidBodySystem);
-        this.systemManager.enableSystem(BoxColliderSystem);
-        this.systemManager.enableSystem(BallColliderSystem);
-        this.systemManager.enableSystem(EdgeColliderSystem);
-        this.systemManager.enableSystem(PolygonColliderSystem);
-        this.systemManager.enableSystem(TilemapColliderSystem);
-        this.systemManager.enableSystem(PhysicsSystem);
+    private enableSystems(): void {
+        this.getEngineSystemTypes().forEach((systemTypes) => {
+            systemTypes.forEach((systemType) =>
+                this.container.get<SystemManager>(TYPES.SystemManager).enableSystem(systemType),
+            );
+        });
     }
 }

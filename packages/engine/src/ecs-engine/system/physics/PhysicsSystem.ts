@@ -1,11 +1,13 @@
 import { IPhysicsManager } from "../../../2d-physics";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
+import { TYPES } from "../../config/types";
 import { ITimeManager } from "../../manager/TimeManager";
 
 export class PhysicsSystem implements System {
     constructor(
-        private readonly physicsManager: IPhysicsManager,
-        private readonly timeManager: ITimeManager,
+        @inject(TYPES.PhysicsManager) private readonly physicsManager: IPhysicsManager,
+        @inject(TYPES.TimeManager) private readonly timeManager: ITimeManager,
     ) {}
 
     public onUpdate(): void {

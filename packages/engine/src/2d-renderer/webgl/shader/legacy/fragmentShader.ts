@@ -18,6 +18,7 @@ struct Light {
     vec2 position;
     float radius;
     float smoothMode;
+    float intensity;
 };
 
 uniform int u_renderLight;
@@ -42,6 +43,22 @@ void main()
         }
 
         gl_FragColor = vec4(texColor.rgb, u_alpha * texColor.a);
+    } else if (u_renderLight == 1) {
+        vec2 fragCoord = gl_FragCoord.xy;
+        float alpha = u_alpha;
+
+        for (int i = 0; i < u_numLights; i++) {
+            Light light = u_lights[i];
+            float dist = distance(fragCoord, light.position);
+        
+            if (dist < light.radius) {
+                alpha -= (light.smoothMode > 0.0 ? smoothstep(light.radius, 0.0, dist) : 1.0) * light.intensity;
+            }
+        }
+
+        alpha = clamp(alpha, 0.0, u_alpha);
+
+        gl_FragColor = vec4(u_solidColor.rgb, alpha);
     } else {
         gl_FragColor =  vec4(u_solidColor.rgb, u_alpha);
     }

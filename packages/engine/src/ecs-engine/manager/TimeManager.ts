@@ -1,3 +1,7 @@
+import { inject, injectable } from "../../ioc/container";
+import { TYPES } from "../config/types";
+import { IGameConfig } from "../Game";
+
 const minGameFramerate = 30;
 const defaultGameFramerate = 60;
 const defaultPhysicsFramerate = 180;
@@ -41,6 +45,7 @@ export interface ITimeManager {
 }
 
 /** @internal */
+@injectable(TYPES.TimeManager)
 export class TimeManager implements ITimeManager {
     public readonly fixedGameFramerate: number;
     public readonly fixedGameDeltaTime: number;
@@ -69,7 +74,7 @@ export class TimeManager implements ITimeManager {
         return this.browserDeltaTime * this.timeScale;
     }
 
-    constructor(physicsFramerate?: number) {
+    constructor(@inject(TYPES.GameConfig) { physicsFramerate }: IGameConfig) {
         if (physicsFramerate && !allowedPhysicsFramerates.includes(physicsFramerate)) {
             throw new Error(`Invalid Physics frame rate. Allowed: [${allowedPhysicsFramerates.join(", ")}]`);
         }

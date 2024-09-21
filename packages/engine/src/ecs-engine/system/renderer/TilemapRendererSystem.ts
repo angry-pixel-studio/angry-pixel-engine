@@ -7,16 +7,18 @@ import {
 } from "../../../2d-renderer";
 import { Entity, EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { Vector2 } from "../../../math";
 import { TilemapRenderer } from "../../component/renderer/TilemapRenderer";
 import { Transform } from "../../component/Transform";
+import { TYPES } from "../../config/types";
 
 export class TilemapRendererSystem implements System {
     private renderData: Map<Entity, ITilemapRenderData[]> = new Map();
 
     constructor(
-        private entityManager: EntityManager,
-        private renderManager: IRenderManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.RenderManager) private readonly renderManager: IRenderManager,
     ) {}
 
     public onEnable(): void {

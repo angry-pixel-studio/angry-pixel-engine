@@ -3,6 +3,8 @@ import { IInputManager } from "../../../input";
 import { ITimeManager } from "../../manager/TimeManager";
 import { System } from "../../../ecs/SystemManager";
 import { EntityManager } from "../../../ecs/EntityManager";
+import { inject } from "../../../ioc/container";
+import { TYPES } from "../../config/types";
 
 const userInputEventNames = [
     "click",
@@ -21,9 +23,9 @@ export class AudioPlayerSystem implements System {
     private canPlay: boolean = false;
 
     constructor(
-        private entityManager: EntityManager,
-        private inputManager: IInputManager,
-        private timeManager: ITimeManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.InputManager) private readonly inputManager: IInputManager,
+        @inject(TYPES.TimeManager) private readonly timeManager: ITimeManager,
     ) {}
 
     public onCreate(): void {

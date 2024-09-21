@@ -4,13 +4,15 @@ import { TilemapCollider } from "../../../component/collider/TilemapCollider";
 import { TilemapRenderer } from "../../../component/renderer/TilemapRenderer";
 import { Entity, EntityManager } from "../../../../ecs/EntityManager";
 import { System } from "../../../../ecs/SystemManager";
+import { inject } from "../../../../ioc/container";
+import { TYPES } from "../../../config/types";
 
 export class TilemapColliderSystem implements System {
     private colliders: Map<Entity, ICollider<Polygon>[]> = new Map();
 
     constructor(
-        private readonly entityManager: EntityManager,
-        private readonly physicsManager: IPhysicsManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.PhysicsManager) private readonly physicsManager: IPhysicsManager,
     ) {}
 
     public onEnable(): void {

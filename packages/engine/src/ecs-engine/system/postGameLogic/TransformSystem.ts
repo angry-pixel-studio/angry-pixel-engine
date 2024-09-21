@@ -1,9 +1,11 @@
 import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { Transform } from "../../component/Transform";
+import { TYPES } from "../../config/types";
 
 export class TransformSystem implements System {
-    constructor(private readonly entityManager: EntityManager) {}
+    constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
         this.entityManager.search(Transform).forEach(({ component: transform }) => {

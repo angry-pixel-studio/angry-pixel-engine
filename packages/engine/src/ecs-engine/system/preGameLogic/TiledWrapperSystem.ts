@@ -1,10 +1,12 @@
 import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { TilemapRenderer } from "../../component/renderer/TilemapRenderer";
 import { TiledLayer, TiledWrapper } from "../../component/TiledWrapper";
+import { TYPES } from "../../config/types";
 
 export class TiledWrapperSystem implements System {
-    constructor(private readonly entityManager: EntityManager) {}
+    constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
         this.entityManager.search(TiledWrapper).forEach(({ entity, component: tiledWrapper }) => {

@@ -1,6 +1,8 @@
 import { EntityManager } from "../../ecs/EntityManager";
 import { System, SystemType } from "../../ecs/SystemManager";
 import { IInputManager } from "../../input";
+import { inject } from "../../ioc/container";
+import { TYPES } from "../config/types";
 import { IAssetManager } from "../manager/AssetManager";
 import { ICollisionQueryManager } from "../manager/CollisionQueryManager";
 import { ISceneManager } from "../manager/SceneManager";
@@ -18,12 +20,12 @@ export enum SystemGroup {
 
 export abstract class GameSystem implements System {
     constructor(
-        protected entityManager: EntityManager,
-        protected assetManager: IAssetManager,
-        protected sceneManager: ISceneManager,
-        protected timeManager: ITimeManager,
-        protected inputManager: IInputManager,
-        protected collisionQueryManager: ICollisionQueryManager,
+        @inject(TYPES.EntityManager) protected readonly entityManager: EntityManager,
+        @inject(TYPES.AssetManager) protected readonly assetManager: IAssetManager,
+        @inject(TYPES.SceneManager) protected readonly sceneManager: ISceneManager,
+        @inject(TYPES.TimeManager) protected readonly timeManager: ITimeManager,
+        @inject(TYPES.InputManager) protected readonly inputManager: IInputManager,
+        @inject(TYPES.CollisionQueryManager) protected readonly collisionQueryManager: ICollisionQueryManager,
     ) {}
 
     public onUpdate(): void {}

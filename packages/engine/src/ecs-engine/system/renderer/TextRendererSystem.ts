@@ -1,9 +1,11 @@
 import { IRenderManager, ITextRenderData, RenderDataType, RenderLocation } from "../../../2d-renderer";
 import { Entity, EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { Vector2 } from "../../../math";
 import { Transform } from "../../component/Transform";
 import { TextRenderer } from "../../component/renderer/TextRenderer";
+import { TYPES } from "../../config/types";
 
 export class TextRendererSystem implements System {
     private readonly renderData: Map<Entity, ITextRenderData> = new Map();
@@ -11,8 +13,8 @@ export class TextRendererSystem implements System {
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        private entityManager: EntityManager,
-        private renderManager: IRenderManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.RenderManager) private readonly renderManager: IRenderManager,
     ) {}
 
     public onUpdate(): void {

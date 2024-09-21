@@ -1,12 +1,14 @@
 import { IPhysicsManager } from "../../../2d-physics";
 import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
+import { inject } from "../../../ioc/container";
 import { RigidBody } from "../../component/RigidBody";
+import { TYPES } from "../../config/types";
 
 export class RigidBodySystem implements System {
     constructor(
-        private readonly entityManager: EntityManager,
-        private readonly physicsManager: IPhysicsManager,
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.PhysicsManager) private readonly physicsManager: IPhysicsManager,
     ) {}
 
     public onUpdate(): void {

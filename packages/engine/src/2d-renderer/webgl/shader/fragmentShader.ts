@@ -47,20 +47,21 @@ void main()
 
         fragColor = vec4(texColor.rgb, u_alpha * texColor.a);        
     } else if (u_renderLight == 1) {
-        float attenuation = 1.0;
-        float distance = 0.0;
+        vec2 fragCoord = gl_FragCoord.xy;
+        float alpha = u_alpha;
 
-        for (int i = 0; i < u_numLights; ++i) {
-            distance = length(gl_FragCoord.xy - u_lights[i].position);
-            
-            if (u_lights[i].smoothMode > 0.0) {
-                attenuation = min(attenuation, max(1.0 - u_lights[i].intensity, smoothstep(0.0, u_lights[i].radius, distance)));
-            } else {
-                attenuation = min(attenuation, max(1.0 - u_lights[i].intensity, step(u_lights[i].radius, distance)));
+        for (int i = 0; i < u_numLights; i++) {
+            Light light = u_lights[i];
+            float dist = distance(fragCoord, light.position);
+        
+            if (dist < light.radius) {
+                alpha -= (light.smoothMode > 0.0 ? smoothstep(light.radius, 0.0, dist) : 1.0) * light.intensity;
             }
         }
 
-        fragColor = vec4(u_solidColor.rgb, clamp(attenuation, 0.0, u_alpha));
+        alpha = clamp(alpha, 0.0, u_alpha);
+
+        fragColor = vec4(u_solidColor.rgb, alpha);
     } else {
         fragColor = vec4(u_solidColor.rgb, u_alpha);
     }
