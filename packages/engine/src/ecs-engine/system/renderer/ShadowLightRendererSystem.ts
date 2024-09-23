@@ -6,7 +6,7 @@ import { ShadowRenderer } from "../../component/renderer/ShadowRenderer";
 import { System } from "../../../ecs/SystemManager";
 import { Entity, EntityManager, SearchResult } from "../../../ecs/EntityManager";
 import { inject } from "../../../ioc/container";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class ShadowLightRendererSystem implements System {
     // cache

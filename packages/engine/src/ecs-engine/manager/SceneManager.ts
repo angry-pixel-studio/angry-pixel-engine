@@ -1,7 +1,7 @@
 import { EntityManager } from "../../ecs/EntityManager";
 import { System, SystemManager, SystemType } from "../../ecs/SystemManager";
 import { inject, injectable } from "../../ioc/container";
-import { TYPES } from "../config/types";
+import { TYPES } from "../../config/types";
 import { AudioPlayerSystem } from "../system/preGameLogic/AudioPlayerSystem";
 import { VideoRendererSystem } from "../system/renderer/VideoRendererSystem";
 

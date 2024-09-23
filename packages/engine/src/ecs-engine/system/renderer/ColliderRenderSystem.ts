@@ -10,7 +10,7 @@ import {
 import { defaultRenderLayer } from "../../component/Camera";
 import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { IGameConfig } from "../../Game";
 
 export class ColliderRenderSystem implements System {

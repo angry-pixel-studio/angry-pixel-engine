@@ -5,7 +5,7 @@ import { inject } from "../../../ioc/container";
 import { Vector2 } from "../../../math";
 import { Transform } from "../../component/Transform";
 import { TextRenderer } from "../../component/renderer/TextRenderer";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class TextRendererSystem implements System {
     private readonly renderData: Map<Entity, ITextRenderData> = new Map();

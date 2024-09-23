@@ -1,7 +1,7 @@
 import { IRenderManager } from "../../../2d-renderer";
 import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { IGameConfig } from "../../Game";
 
 export class ClearScreenSystem implements System {

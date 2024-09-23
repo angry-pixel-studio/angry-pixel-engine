@@ -3,7 +3,7 @@ import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
 import { Transform } from "../../component/Transform";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class PhysicsTransformSystem implements System {
     constructor(

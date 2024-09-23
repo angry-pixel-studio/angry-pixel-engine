@@ -2,7 +2,7 @@ import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
 import { Chunk, TilemapRenderer } from "../../component/renderer/TilemapRenderer";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 const chunkSize = 16;
 

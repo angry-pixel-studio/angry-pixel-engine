@@ -4,7 +4,7 @@ import { System } from "../../../../ecs/SystemManager";
 import { inject } from "../../../../ioc/container";
 import { Vector2 } from "../../../../math";
 import { BoxCollider } from "../../../component/collider/BoxCollider";
-import { TYPES } from "../../../config/types";
+import { TYPES } from "../../../../config/types";
 
 export class BoxColliderSystem implements System {
     constructor(

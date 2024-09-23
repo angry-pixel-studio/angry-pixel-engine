@@ -2,7 +2,7 @@ import { EntityManager } from "../../ecs/EntityManager";
 import { System, SystemType } from "../../ecs/SystemManager";
 import { IInputManager } from "../../input";
 import { inject } from "../../ioc/container";
-import { TYPES } from "../config/types";
+import { TYPES } from "../../config/types";
 import { IAssetManager } from "../manager/AssetManager";
 import { ICollisionQueryManager } from "../manager/CollisionQueryManager";
 import { ISceneManager } from "../manager/SceneManager";

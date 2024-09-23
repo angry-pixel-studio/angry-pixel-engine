@@ -3,7 +3,7 @@ import { EntityManager } from "../../../ecs/EntityManager";
 import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
 import { RigidBody } from "../../component/RigidBody";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class RigidBodySystem implements System {
     constructor(

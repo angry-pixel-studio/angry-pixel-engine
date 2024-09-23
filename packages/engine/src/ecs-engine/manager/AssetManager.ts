@@ -1,5 +1,5 @@
 import { injectable } from "../../ioc/container";
-import { TYPES } from "../config/types";
+import { TYPES } from "../../config/types";
 
 enum AssetType {
     Image,

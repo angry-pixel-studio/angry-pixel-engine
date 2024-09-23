@@ -5,7 +5,7 @@ import { TilemapRenderer } from "../../../component/renderer/TilemapRenderer";
 import { Entity, EntityManager } from "../../../../ecs/EntityManager";
 import { System } from "../../../../ecs/SystemManager";
 import { inject } from "../../../../ioc/container";
-import { TYPES } from "../../../config/types";
+import { TYPES } from "../../../../config/types";
 
 export class TilemapColliderSystem implements System {
     private colliders: Map<Entity, ICollider<Polygon>[]> = new Map();

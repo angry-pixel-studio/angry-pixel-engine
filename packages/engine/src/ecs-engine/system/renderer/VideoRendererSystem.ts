@@ -5,7 +5,7 @@ import { inject } from "../../../ioc/container";
 import { Vector2 } from "../../../math";
 import { Transform } from "../../component/Transform";
 import { VideoRenderer } from "../../component/renderer/VideoRenderer";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { ITimeManager } from "../../manager/TimeManager";
 
 const userInputEventNames = [

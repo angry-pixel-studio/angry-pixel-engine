@@ -4,7 +4,7 @@ import { PolygonCollider } from "../../../component/collider/PolygonCollider";
 import { EntityManager } from "../../../../ecs/EntityManager";
 import { System } from "../../../../ecs/SystemManager";
 import { inject } from "../../../../ioc/container";
-import { TYPES } from "../../../config/types";
+import { TYPES } from "../../../../config/types";
 
 export class PolygonColliderSystem implements System {
     constructor(

@@ -37,7 +37,7 @@ import { GameSystem, getSystemGroup, SystemGroup } from "./system/GameSystem";
 import { ParentSystem } from "./system/postGameLogic/ParentSystem";
 import { ChildrenSystem } from "./system/postGameLogic/ChildrenSystem";
 import { Container } from "../ioc/container";
-import { TYPES } from "./config/types";
+import { TYPES } from "../config/types";
 
 export interface IGameConfig {
     /** HTML element where the game will be created */

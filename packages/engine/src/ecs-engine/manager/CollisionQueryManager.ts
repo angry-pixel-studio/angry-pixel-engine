@@ -5,7 +5,7 @@ import { BoxCollider } from "../component/collider/BoxCollider";
 import { EdgeCollider } from "../component/collider/EdgeCollider";
 import { PolygonCollider } from "../component/collider/PolygonCollider";
 import { TilemapCollider } from "../component/collider/TilemapCollider";
-import { TYPES } from "../config/types";
+import { TYPES } from "../../config/types";
 
 export type ColliderComponent = BallCollider | BoxCollider | EdgeCollider | PolygonCollider;
 

@@ -11,7 +11,7 @@ import { inject } from "../../../ioc/container";
 import { Vector2 } from "../../../math";
 import { TilemapRenderer } from "../../component/renderer/TilemapRenderer";
 import { Transform } from "../../component/Transform";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class TilemapRendererSystem implements System {
     private renderData: Map<Entity, ITilemapRenderData[]> = new Map();

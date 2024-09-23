@@ -4,7 +4,7 @@ import { Transform } from "../../component/Transform";
 import { Camera } from "../../component/Camera";
 import { System } from "../../../ecs/SystemManager";
 import { Entity, EntityManager } from "../../../ecs/EntityManager";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { inject } from "../../../ioc/container";
 
 export class CameraSystem implements System {

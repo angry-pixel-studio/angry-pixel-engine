@@ -1,5 +1,5 @@
 import { inject, injectable } from "../../ioc/container";
-import { TYPES } from "../config/types";
+import { TYPES } from "../../config/types";
 import { IGameConfig } from "../Game";
 
 const minGameFramerate = 30;

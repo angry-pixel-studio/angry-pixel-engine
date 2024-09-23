@@ -1,7 +1,7 @@
 import { IPhysicsManager } from "../../../2d-physics";
 import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { ITimeManager } from "../../manager/TimeManager";
 
 export class PhysicsSystem implements System {

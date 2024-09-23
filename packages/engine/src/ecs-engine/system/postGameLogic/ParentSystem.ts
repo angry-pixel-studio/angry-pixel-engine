@@ -3,7 +3,7 @@ import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
 import { Parent } from "../../component/Parent";
 import { Transform } from "../../component/Transform";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class ParentSystem implements System {
     constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {}

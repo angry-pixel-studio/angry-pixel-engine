@@ -1,6 +1,6 @@
 export type Entity = number;
 export type Component = { [key: string]: any };
-export type ComponentType<T extends Component = Component> = { new (): T };
+export type ComponentType<T extends Component = Component> = { new (...args: any[]): T };
 export type SearchResult<T extends Component> = { entity: Entity; component: T };
 export type SearchCriteria = { [key: string]: any };
 

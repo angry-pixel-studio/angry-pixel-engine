@@ -1,6 +1,6 @@
 import { SystemManager } from "../../ecs/SystemManager";
 import { inject, injectable } from "../../ioc/container";
-import { TYPES } from "../config/types";
+import { TYPES } from "../../config/types";
 import { SystemGroup } from "../system/GameSystem";
 import { ISceneManager } from "./SceneManager";
 import { ITimeManager } from "./TimeManager";

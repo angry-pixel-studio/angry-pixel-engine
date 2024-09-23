@@ -4,7 +4,7 @@ import { ITimeManager } from "../../manager/TimeManager";
 import { System } from "../../../ecs/SystemManager";
 import { EntityManager } from "../../../ecs/EntityManager";
 import { inject } from "../../../ioc/container";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 const userInputEventNames = [
     "click",

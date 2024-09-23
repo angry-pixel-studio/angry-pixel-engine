@@ -6,7 +6,7 @@ import { Transform } from "../../component/Transform";
 import { System } from "../../../ecs/SystemManager";
 import { Entity, EntityManager } from "../../../ecs/EntityManager";
 import { inject } from "../../../ioc/container";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 
 export class MaskRendererSystem implements System {
     private readonly renderData: Map<Entity, IMaskRenderData> = new Map();

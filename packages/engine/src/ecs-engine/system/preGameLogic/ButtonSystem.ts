@@ -4,7 +4,7 @@ import { Button, ButtonShape } from "../../component/Button";
 import { Transform } from "../../component/Transform";
 import { System } from "../../../ecs/SystemManager";
 import { EntityManager } from "../../../ecs/EntityManager";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { inject } from "../../../ioc/container";
 
 type ScaledButton = { width: number; height: number; radius: number; position: Vector2 };

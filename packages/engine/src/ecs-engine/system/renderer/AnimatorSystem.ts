@@ -3,7 +3,7 @@ import { System } from "../../../ecs/SystemManager";
 import { inject } from "../../../ioc/container";
 import { Animation, Animator } from "../../component/Animator";
 import { SpriteRenderer } from "../../component/renderer/SpriteRenderer";
-import { TYPES } from "../../config/types";
+import { TYPES } from "../../../config/types";
 import { ITimeManager } from "../../manager/TimeManager";
 
 export class AnimatorSystem implements System {
