@@ -3,7 +3,20 @@
     "compilerOptions": {
         "declaration": true,
         "declarationDir": "./types",
-        "rootDir": "src"
+        "rootDir": "src",
+        "outDir": "../../bundles/angry-pixel-ecs",
+        "paths": {
+            "@config/*": ["./src/config/*"],
+            "@component/*": ["./src/component/*"],
+            "@manager/*": ["./src/manager/*"],
+            "@system/*": ["./src/system/*"],
+            "@ecs": ["./src/utils/ecs"],
+            "@input": ["./src/utils/input"],
+            "@ioc": ["./src/utils/ioc"],
+            "@math": ["./src/utils/math"],
+            "@physics2d": ["./src/utils/physics2d"],
+            "@webgl": ["./src/utils/webgl"]
+        }
     },
     "include": ["src"]
 }

@@ -16,6 +16,6 @@
         "webpack-dev-server": "^5.0.4"
     },
     "dependencies": {
-        "angry-pixel-ecs": "file:./bundles/angry-pixel-ecs"
+        "angry-pixel-ecs": "file:../../bundles/angry-pixel-ecs"
     }
 }

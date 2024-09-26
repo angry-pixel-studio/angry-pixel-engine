@@ -16,7 +16,7 @@ const builderECS = (format, filename) => ({
 const main = () => {
     return [
         {
-            input: "src/ecs-engine/index.ts",
+            input: "src/index.ts",
             output: [
                 builderECS("umd", "index.js"),
                 builderECS("esm", "index.esm.js"),
@@ -25,7 +25,7 @@ const main = () => {
             plugins: [nodeResolve(), typescript(), commonjs({ extensions: [".ts", ".js"] }), terser()],
         },
         {
-            input: "../../bundles/angry-pixel-ecs/lib/packages/engine/types/ecs-engine/index.d.ts",
+            input: "../../bundles/angry-pixel-ecs/lib/packages/engine/types/index.d.ts",
             output: [
                 {
                     file: "../../bundles/angry-pixel-ecs/lib/index.d.ts",
