@@ -9,7 +9,7 @@ export class TiledWrapper {
     tilemap: TiledTilemap;
     layerToRender: string;
 
-    constructor(options: Partial<TiledWrapperOptions>) {
+    constructor(options?: Partial<TiledWrapperOptions>) {
         Object.assign(this, options);
     }
 }

@@ -40,10 +40,8 @@ export class BoxCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
-    /** @internal */
-    updateCollisions: boolean = true;
 
-    constructor(options: Partial<BoxColliderOptions>) {
+    constructor(options?: Partial<BoxColliderOptions>) {
         Object.assign(this, options);
     }
 }

@@ -33,7 +33,7 @@ export class Button {
     /** Function executed when the button is pressed */
     onPressed: () => void;
 
-    constructor(options: Partial<ButtonOptions>) {
+    constructor(options?: Partial<ButtonOptions>) {
         Object.assign(this, options);
     }
 }

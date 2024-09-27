@@ -74,8 +74,8 @@ export class TextRenderer implements Renderer {
         this.textureMatrix = mat4.create();
     }
 
-    public render(renderData: TextRenderData, cameraData: CameraData, lastRender: RenderDataType): void {
-        if (!renderData.text) throw new Error("Nothing to render");
+    public render(renderData: TextRenderData, cameraData: CameraData, lastRender: RenderDataType): boolean {
+        if (!renderData.text) return false;
 
         this.setDefaultValues(renderData);
 
@@ -136,6 +136,8 @@ export class TextRenderer implements Renderer {
         this.gl.uniform1i(this.programManager.useMaskColorUniform, 1);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
+
+        return true;
     }
 
     private setDefaultValues(renderData: TextRenderData): void {

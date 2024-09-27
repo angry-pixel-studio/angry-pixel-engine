@@ -4,6 +4,17 @@ import { Rectangle, Vector2 } from "@math";
  * @public
  * @category Components
  */
+export interface LightRendererOptions {
+    radius: number;
+    smooth: boolean;
+    layer: string;
+    intensity: number;
+}
+
+/**
+ * @public
+ * @category Components
+ */
 export class LightRenderer {
     /** Light radius */
     radius: number = 0;
@@ -17,4 +28,8 @@ export class LightRenderer {
     _boundingBox: Rectangle = new Rectangle();
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<LightRendererOptions>) {
+        Object.assign(this, options);
+    }
 }

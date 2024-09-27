@@ -20,7 +20,7 @@ export class Animator {
     /**  @internal */
     _currentAnimation: string = undefined;
 
-    constructor(options: Partial<AnimatorOptions>) {
+    constructor(options?: Partial<AnimatorOptions>) {
         Object.assign(this, options);
     }
 }

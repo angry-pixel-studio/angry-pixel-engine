@@ -47,7 +47,7 @@ export class ShadowRenderer implements Renderer {
         this.textureMatrix = mat4.create();
     }
 
-    public render(renderData: ShadowRenderData, cameraData: CameraData): void {
+    public render(renderData: ShadowRenderData, cameraData: CameraData): boolean {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertices, this.gl.STATIC_DRAW);
 
@@ -101,5 +101,7 @@ export class ShadowRenderer implements Renderer {
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
         this.gl.uniform1i(this.programManager.renderLightUniform, 0);
+
+        return true;
     }
 }

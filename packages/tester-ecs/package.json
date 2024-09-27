@@ -11,11 +11,9 @@
     "private": true,
     "devDependencies": {
         "ts-loader": "^9.5.1",
+        "tsconfig-paths-webpack-plugin": "^4.1.0",
         "webpack": "^5.91.0",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^5.0.4"
-    },
-    "dependencies": {
-        "angry-pixel-ecs": "file:../../bundles/angry-pixel-ecs"
     }
 }

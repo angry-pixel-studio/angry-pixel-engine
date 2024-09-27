@@ -27,10 +27,8 @@ export class TilemapCollider implements Collider {
     physics: boolean = true;
     /** @internal */
     shapes: Shape[] = [];
-    /** @internal */
-    updateCollisions: boolean = false;
 
-    constructor(options: Partial<TilemapColliderOptions>) {
+    constructor(options?: Partial<TilemapColliderOptions>) {
         Object.assign(this, options);
     }
 }

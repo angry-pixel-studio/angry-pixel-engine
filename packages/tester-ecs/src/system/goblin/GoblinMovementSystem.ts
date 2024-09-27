@@ -1,6 +1,6 @@
 import { BoxCollider, EdgeCollider, GameSystem, RigidBody, Transform } from "angry-pixel-ecs";
-import { GoblinMovement } from "../../component/goblin/GoblinMovement";
-import { COLLISION_LAYERS } from "../../config/layers";
+import { GoblinMovement } from "@component/goblin/GoblinMovement";
+import { COLLISION_LAYERS } from "@config/layers";
 
 export class GoblinMovementSystem extends GameSystem {
     public onUpdate(): void {
@@ -9,14 +9,14 @@ export class GoblinMovementSystem extends GameSystem {
             const transform = this.entityManager.getComponent(entity, Transform);
             const edgeCollider = this.entityManager.getComponent(entity, EdgeCollider);
 
-            const bodyCollisions = this.collisionQueryManager.findCollisionsForColliderAndLayer(
+            const bodyCollisions = this.collisionRepository.findCollisionsForColliderAndLayer(
                 this.entityManager.getComponent(entity, BoxCollider),
                 COLLISION_LAYERS.Foreground,
             );
             const bodyCollision = bodyCollisions.length > 0;
 
             const edgeCollision =
-                this.collisionQueryManager.findCollisionsForColliderAndLayer(edgeCollider, COLLISION_LAYERS.Foreground)
+                this.collisionRepository.findCollisionsForColliderAndLayer(edgeCollider, COLLISION_LAYERS.Foreground)
                     .length > 0;
 
             const wallCollision = bodyCollision && bodyCollisions.some((c) => c.resolution.direction.x !== 0);

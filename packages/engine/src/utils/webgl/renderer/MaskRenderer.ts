@@ -60,7 +60,7 @@ export class MaskRenderer implements Renderer {
         this.circumferenceVertices = new Float32Array(v);
     }
 
-    public render(renderData: MaskRenderData, cameraData: CameraData, lastRender?: RenderDataType): void {
+    public render(renderData: MaskRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
         if (lastRender !== RenderDataType.Mask || this.lastShape !== renderData.shape) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
             this.gl.bufferData(
@@ -107,5 +107,7 @@ export class MaskRenderer implements Renderer {
         }
 
         this.lastShape = renderData.shape;
+
+        return true;
     }
 }

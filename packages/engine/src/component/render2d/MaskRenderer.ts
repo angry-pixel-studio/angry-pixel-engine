@@ -3,6 +3,22 @@ import { defaultRenderLayer } from "./Camera";
 import { MaskShape } from "@webgl";
 
 /**
+ * @public
+ * @category Components
+ */
+export interface MaskRendererOptions {
+    shape: MaskShape;
+    color: string;
+    width: number;
+    height: number;
+    radius: number;
+    offset: Vector2;
+    rotation: number;
+    opacity: number;
+    layer: string;
+}
+
+/**
  * Renders a filled shape (rectangle or circumference)
  * @public
  * @category Components
@@ -48,4 +64,8 @@ export class MaskRenderer {
     layer: string = defaultRenderLayer;
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<MaskRendererOptions>) {
+        Object.assign(this, options);
+    }
 }

@@ -764,9 +764,6 @@ ajv@^8.0.0, ajv@^8.9.0:
     require-from-string "^2.0.2"
     uri-js "^4.4.1"
 
-"angry-pixel-ecs@file:bundles/angry-pixel-ecs":
-  version "0.0.0"
-
 ansi-html-community@^0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/ansi-html-community/-/ansi-html-community-0.0.8.tgz#69fbc4d6ccbe383f9736934ae34c3f8290f1bf41"
@@ -1232,6 +1229,14 @@ enhanced-resolve@^5.0.0, enhanced-resolve@^5.17.0:
   version "5.17.0"
   resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.17.0.tgz#d037603789dd9555b89aaec7eb78845c49089bc5"
   integrity sha512-dwDPwZL0dmye8Txp2gzFmA6sxALaSvdRDjPH0viLcKrtlOL3tw62nWWweVD1SdILDTJrbrL6tdWVN58Wo6U3eA==
+  dependencies:
+    graceful-fs "^4.2.4"
+    tapable "^2.2.0"
+
+enhanced-resolve@^5.7.0:
+  version "5.17.1"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.17.1.tgz#67bfbbcc2f81d511be77d686a90267ef7f898a15"
+  integrity sha512-LMHl3dXhTcfv8gM4kEzIUeTQ+7fpdA0l2tUf34BddXPkz2A5xJ5L/Pchd5BL6rdccM9QGvu0sWZzK1Z1t4wwyg==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -2665,13 +2670,6 @@ rollup-plugin-terser@^7.0.2:
     serialize-javascript "^4.0.0"
     terser "^5.0.0"
 
-rollup-plugin-tsconfig-paths@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-tsconfig-paths/-/rollup-plugin-tsconfig-paths-1.5.2.tgz#753bf970b14594b9ea1e93f3237eda380635f5b5"
-  integrity sha512-tyS7u2Md0eXKwbDfTuDDa1izciwqhOZsHzX7zYc5gKC1L7q5ozdSt+q1jjtD1dDqWyjrt8lZoiLtOQGhMHh1OQ==
-  dependencies:
-    typescript-paths "^1.5.1"
-
 rollup@^4.18.0:
   version "4.18.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-4.18.0.tgz#497f60f0c5308e4602cf41136339fbf87d5f5dda"
@@ -3122,7 +3120,16 @@ tsc-alias@^1.8.10:
     normalize-path "^3.0.0"
     plimit-lit "^1.2.6"
 
-tsconfig-paths@^4.2.0:
+tsconfig-paths-webpack-plugin@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths-webpack-plugin/-/tsconfig-paths-webpack-plugin-4.1.0.tgz#3c6892c5e7319c146eee1e7302ed9e6f2be4f763"
+  integrity sha512-xWFISjviPydmtmgeUAuXp4N1fky+VCtfhOkDUFIv5ea7p4wuTomI4QTrXvFBX2S4jZsmyTSrStQl+E+4w+RzxA==
+  dependencies:
+    chalk "^4.1.0"
+    enhanced-resolve "^5.7.0"
+    tsconfig-paths "^4.1.2"
+
+tsconfig-paths@^4.1.2:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-4.2.0.tgz#ef78e19039133446d244beac0fd6a1632e2d107c"
   integrity sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==
@@ -3159,11 +3166,6 @@ typescript-eslint@^7.14.1:
     "@typescript-eslint/eslint-plugin" "7.14.1"
     "@typescript-eslint/parser" "7.14.1"
     "@typescript-eslint/utils" "7.14.1"
-
-typescript-paths@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/typescript-paths/-/typescript-paths-1.5.1.tgz#975cf5883915b24f9287315a8fa70b3b3451e32e"
-  integrity sha512-lYErSLCON2MSplVV5V/LBgD4UNjMgY3guATdFCZY2q1Nr6OZEu4q6zX/rYMsG1TaWqqQSszg6C9EU7AGWMDrIw==
 
 typescript@^5.4.5:
   version "5.5.2"

@@ -13,7 +13,7 @@ export abstract class GameSystem implements System {
     @inject(TYPES.SceneManager) protected readonly sceneManager: SceneManager;
     @inject(TYPES.TimeManager) protected readonly timeManager: TimeManager;
     @inject(TYPES.InputManager) protected readonly inputManager: InputManager;
-    @inject(TYPES.CollisionRepository) protected readonly collisionQueryManager: CollisionRepository;
+    @inject(TYPES.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
 
     public onUpdate(): void {}
 }

@@ -36,10 +36,8 @@ export class PolygonCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
-    /** @internal */
-    updateCollisions: boolean = true;
 
-    constructor(options: Partial<PolygonColliderOptions>) {
+    constructor(options?: Partial<PolygonColliderOptions>) {
         Object.assign(this, options);
     }
 }

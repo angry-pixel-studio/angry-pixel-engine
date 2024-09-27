@@ -4,6 +4,7 @@ import { TimeManager } from "./TimeManager";
 import { SystemManager } from "@ecs";
 import { SystemGroup } from "@system/SystemGroup";
 import { SceneManager } from "./SceneManager";
+import { systemTypes } from "@config/systemTypes";
 
 /** @internal */
 export const nowInSeconds = (): number => window.performance.now() * 0.001;
@@ -27,9 +28,16 @@ export class LoopManager {
         this.running = true;
         this.gameLoopAccumulator = 0;
 
+        this.enableSystems();
         this.sceneManager.loadOpeningScene();
         this.requestAnimationLoop(window.performance.now());
         this.asyncPhysicsLoop();
+    }
+
+    private enableSystems(): void {
+        systemTypes.forEach((systemTypes) => {
+            systemTypes.forEach((systemType) => this.systemManager.enableSystem(systemType.type));
+        });
     }
 
     public stop(): void {

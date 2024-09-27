@@ -5,11 +5,20 @@ import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 import { SystemFactory } from "@system/SystemFactory";
 import { AssetManager } from "./AssetManager";
 import { SystemGroup } from "@system/SystemGroup";
+import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
 
-export interface Scene {
-    systems: SystemType[];
-    loadAssets(): void;
-    setup(): void;
+export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityManager, assetManager: AssetManager): T };
+
+export abstract class Scene {
+    public systems: SystemType[];
+
+    constructor(
+        protected readonly entityManager: EntityManager,
+        protected readonly assetManager: AssetManager,
+    ) {}
+
+    public loadAssets(): void {}
+    public setup(): void {}
 }
 
 @injectable(TYPES.SceneManager)
@@ -28,7 +37,8 @@ export class SceneManager {
         @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
-    public addScene(scene: Scene, name: string, openingScene: boolean = false): void {
+    public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {
+        const scene = new sceneType(this.entityManager, this.assetManager);
         this.scenes.set(name, scene);
         scene.systems.forEach((systemType) => this.systemFactory.createSystemIfNotExists(systemType));
         if (openingScene) this.openingSceneName = name;
@@ -73,7 +83,7 @@ export class SceneManager {
 
     private destroyCurrentScene(): void {
         this.systemManager.disableSystem(AudioPlayerSystem);
-        // this.systemManager.disableSystem(VideoRendererSystem);
+        this.systemManager.disableSystem(VideoRendererSystem);
 
         this.entityManager.removeAllEntities();
         this.scenes
@@ -81,6 +91,6 @@ export class SceneManager {
             .systems.forEach((systemType) => this.systemManager.disableSystem(systemType));
 
         this.systemManager.enableSystem(AudioPlayerSystem);
-        // this.systemManager.enableSystem(VideoRendererSystem);
+        this.systemManager.enableSystem(VideoRendererSystem);
     }
 }

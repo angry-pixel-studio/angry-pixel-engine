@@ -1,7 +1,7 @@
 import { AudioPlayer, GameSystem } from "angry-pixel-ecs";
-import { NinjaMovement } from "../../component/ninja/NinjaMovement";
-import { NinjaSfx } from "../../component/ninja/NinjaSfx";
-import { ASSETS } from "../../config/assets";
+import { NinjaMovement } from "@component/ninja/NinjaMovement";
+import { NinjaSfx } from "@component/ninja/NinjaSfx";
+import { ASSETS } from "@config/assets";
 
 const sfxVolume = 0.5;
 

@@ -23,8 +23,8 @@ export class CameraSystem implements System {
             this.renderManager.addCameraData({
                 position: camera._position,
                 layers: camera.layers,
-                depth: camera.zoom,
-                zoom: camera.depth,
+                depth: camera.depth,
+                zoom: camera.zoom,
             });
         });
     }

@@ -25,7 +25,7 @@ export class RigidBody {
     gravity: number = 0;
     acceleration: Vector2 = new Vector2();
 
-    constructor(options: Partial<RigidBodyOptions>) {
+    constructor(options?: Partial<RigidBodyOptions>) {
         Object.assign(this, options);
     }
 }

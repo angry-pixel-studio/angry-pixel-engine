@@ -2,6 +2,24 @@ import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
 
 /**
+ * @public
+ * @category Components
+ */
+export interface TilemapRendererOptions {
+    layer: string;
+    tileset: Tileset;
+    data: number[];
+    chunks: Chunk[];
+    width: number;
+    height: number;
+    tileWidth: number;
+    tileHeight: number;
+    tintColor: string;
+    opacity: number;
+    smooth: boolean;
+}
+
+/**
  * The TilemapRenderer component allows you to render a tile map defined by an array of tile ids, using an instance of the TileSet object.
  * @public
  * @category Components
@@ -33,6 +51,10 @@ export class TilemapRenderer {
     _processed: boolean = false;
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<TilemapRendererOptions>) {
+        Object.assign(this, options);
+    }
 }
 
 /**

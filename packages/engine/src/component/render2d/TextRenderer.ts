@@ -3,6 +3,30 @@ import { defaultRenderLayer } from "./Camera";
 import { TextOrientation } from "@webgl";
 
 /**
+ * @public
+ * @category Components
+ */
+export interface TextRendererOptions {
+    layer: string;
+    text: string;
+    font: FontFace | string;
+    fontSize: number;
+    width: number;
+    height: number;
+    offset: Vector2;
+    color: string;
+    lineSeparation: number;
+    letterSpacing: number;
+    charRanges: number[];
+    smooth: boolean;
+    rotation: number;
+    opacity: number;
+    orientation: TextOrientation;
+    bitmapMargin: Vector2;
+    bitmapSpacing: Vector2;
+}
+
+/**
  * The TextRenderer component allows to render text using font families, colors, and other configuration options.
  * @public
  * @category Components
@@ -66,4 +90,8 @@ export class TextRenderer {
     bitmapSpacing: Vector2;
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<TextRendererOptions>) {
+        Object.assign(this, options);
+    }
 }

@@ -76,7 +76,7 @@ export class SpriteRenderer implements Renderer {
         ]);
     }
 
-    public render(renderData: SpriteRenderData, cameraData: CameraData, lastRender?: RenderDataType): void {
+    public render(renderData: SpriteRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
         if (lastRender !== renderData.type) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, this.posVertices, this.gl.STATIC_DRAW);
@@ -141,5 +141,7 @@ export class SpriteRenderer implements Renderer {
         }
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+
+        return true;
     }
 }

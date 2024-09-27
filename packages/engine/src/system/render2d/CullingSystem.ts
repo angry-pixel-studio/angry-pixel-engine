@@ -39,8 +39,8 @@ export class CullingSystem implements System {
                     if (this.isInViewPort(renderData)) {
                         if (renderData.type === RenderDataType.Tilemap) {
                             this.applyCullingInTiles(renderData as TilemapRenderData);
-                            this.culledRenderData.push(renderData);
                         }
+                        this.culledRenderData.push(renderData);
                     }
                 });
         });

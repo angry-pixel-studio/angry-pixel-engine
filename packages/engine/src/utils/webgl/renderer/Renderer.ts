@@ -26,5 +26,5 @@ export interface RenderData {
 export interface Renderer {
     readonly type: RenderDataType;
 
-    render(renderData: RenderData, cameraData: CameraData, lastRender: RenderDataType): void;
+    render(renderData: RenderData, cameraData: CameraData, lastRender: RenderDataType): boolean;
 }

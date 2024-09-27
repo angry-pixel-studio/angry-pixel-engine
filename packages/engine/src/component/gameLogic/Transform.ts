@@ -46,7 +46,7 @@ export class Transform {
         }
     }
 
-    constructor(options: Partial<TransformOptions>) {
+    constructor(options?: Partial<TransformOptions>) {
         Object.assign(this, options);
     }
 }

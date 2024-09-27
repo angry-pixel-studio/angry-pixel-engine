@@ -5,4 +5,8 @@ export class MovingPlatform {
     public nextPositionIndex: number = 0;
     public positions: Vector2[] = [];
     public speed: number = 50;
+
+    constructor(options?: Partial<MovingPlatform>) {
+        Object.assign(this, options);
+    }
 }

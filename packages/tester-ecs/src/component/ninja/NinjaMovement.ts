@@ -1,4 +1,4 @@
-import { ICollision } from "angry-pixel-ecs";
+import { Collision } from "angry-pixel-ecs";
 
 export class NinjaMovement {
     public gravity: number = 1000;
@@ -8,5 +8,5 @@ export class NinjaMovement {
     public jumping: boolean = false;
     public jumpReleased: boolean = false;
     public walking: boolean = false;
-    public platformCollision: ICollision = undefined;
+    public platformCollision: Collision = undefined;
 }

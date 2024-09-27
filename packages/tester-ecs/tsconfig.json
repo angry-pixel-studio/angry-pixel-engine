@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "paths": {
+            "@archetype/*": ["./src/archetype/*"],
+            "@component/*": ["./src/component/*"],
+            "@config/*": ["./src/config/*"],
+            "@scene/*": ["./src/scene/*"],
+            "@system/*": ["./src/system/*"],
+            "@tilemap/*": ["./src/tilemap/*"]
+        }
+    }
+}

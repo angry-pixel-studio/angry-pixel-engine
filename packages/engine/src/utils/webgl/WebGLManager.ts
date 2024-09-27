@@ -30,12 +30,10 @@ export class WebGLManager {
         const contextVersion = contextManager.contextVersion;
         const programManager = new ProgramManager(gl, contextVersion, new ProgramFactory(gl, new ShaderLoader(gl)));
         const textureManager = new TextureManager(new TextureFactory(gl));
+        const fontFactoryAtlas = new FontAtlasFactory();
 
-        this.renderers.set(RenderDataType.Sprite, new SpriteRenderer(gl, programManager, textureManager)),
-            this.renderers.set(
-                RenderDataType.Text,
-                new TextRenderer(gl, programManager, textureManager, new FontAtlasFactory()),
-            );
+        this.renderers.set(RenderDataType.Sprite, new SpriteRenderer(gl, programManager, textureManager));
+        this.renderers.set(RenderDataType.Text, new TextRenderer(gl, programManager, textureManager, fontFactoryAtlas));
         this.renderers.set(RenderDataType.Tilemap, new TilemapRenderer(gl, programManager, textureManager));
         this.renderers.set(RenderDataType.Geometric, new GeometricRenderer(gl, programManager));
         this.renderers.set(RenderDataType.Mask, new MaskRenderer(gl, programManager));
@@ -48,11 +46,8 @@ export class WebGLManager {
     }
 
     public render(renderData: RenderData, cameraData: CameraData): void {
-        try {
-            this.renderers.get(renderData.type).render(renderData, cameraData, this.lastRender);
+        if (this.renderers.get(renderData.type).render(renderData, cameraData, this.lastRender)) {
             this.lastRender = renderData.type;
-        } catch (error: unknown) {
-            return;
         }
     }
 

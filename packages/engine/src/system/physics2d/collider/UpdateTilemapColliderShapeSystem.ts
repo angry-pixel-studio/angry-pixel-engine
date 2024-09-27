@@ -44,7 +44,9 @@ export class UpdateTilemapColliderShapeSystem extends BaseUpdateColliderShapeSys
         tilemapRenderer.data.forEach((tile, index) => {
             if (!this.needsCollider(tile, index, tilemapRenderer)) return;
 
-            tilemapCollider.shapes.push(new Polygon(this.generateRectangleVertices(index, tilemapRenderer)));
+            const shape = new Polygon(this.generateRectangleVertices(index, tilemapRenderer));
+            shape.updateCollisions = false;
+            tilemapCollider.shapes.push(shape);
         });
     }
 
@@ -168,7 +170,10 @@ export class UpdateTilemapColliderShapeSystem extends BaseUpdateColliderShapeSys
         end.x = -(width * tileWidth) / 2 + end.x * tileWidth;
         end.y = (height * tileHeight) / 2 - end.y * tileHeight;
 
-        return new Polygon([new Vector2(start.x, start.y), new Vector2(end.x, end.y)]);
+        const shape = new Polygon([new Vector2(start.x, start.y), new Vector2(end.x, end.y)]);
+        shape.updateCollisions = false;
+
+        return shape;
     }
 
     private getNeighbors(index: number, width: number, height: number): number[] {

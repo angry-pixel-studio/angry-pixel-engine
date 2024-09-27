@@ -7,5 +7,4 @@ export interface Collider {
     offset: Vector2;
     physics: boolean;
     shapes: Shape[];
-    updateCollisions: boolean;
 }

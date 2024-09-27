@@ -1,5 +1,5 @@
 import { GameSystem, Transform, Vector2 } from "angry-pixel-ecs";
-import { MovingPlatform } from "../component/MovingPlatform";
+import { MovingPlatform } from "@component/MovingPlatform";
 
 export class MovingPlatformSystem extends GameSystem {
     //cache

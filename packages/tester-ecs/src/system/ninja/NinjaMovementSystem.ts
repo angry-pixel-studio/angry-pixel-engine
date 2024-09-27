@@ -1,7 +1,7 @@
 import { BoxCollider, GameSystem, RigidBody, Transform } from "angry-pixel-ecs";
-import { NinjaMovement } from "../../component/ninja/NinjaMovement";
-import { InputController } from "../../component/InputController";
-import { COLLISION_LAYERS } from "../../config/layers";
+import { NinjaMovement } from "@component/ninja/NinjaMovement";
+import { InputController } from "@component/InputController";
+import { COLLISION_LAYERS } from "@config/layers";
 
 export class NinjaMovementSystem extends GameSystem {
     // We keep these references in memory because this system only works with a single entity.
@@ -27,13 +27,13 @@ export class NinjaMovementSystem extends GameSystem {
     public onUpdate(): void {
         this.rigidBody.gravity = this.ninjaMovement.gravity;
 
-        this.ninjaMovement.platformCollision = this.collisionQueryManager.findCollisionsForColliderAndLayer(
+        this.ninjaMovement.platformCollision = this.collisionRepository.findCollisionsForColliderAndLayer(
             this.collider,
             COLLISION_LAYERS.MovingPlatform,
         )[0];
 
         this.ninjaMovement.grounded =
-            this.collisionQueryManager.findCollisionsForColliderAndLayer(this.collider, COLLISION_LAYERS.Foreground)
+            this.collisionRepository.findCollisionsForColliderAndLayer(this.collider, COLLISION_LAYERS.Foreground)
                 .length > 0 || this.ninjaMovement.platformCollision !== undefined;
 
         this.walk();
@@ -60,7 +60,7 @@ export class NinjaMovementSystem extends GameSystem {
     private checkForMovingPlatform(): void {
         if (this.ninjaMovement.platformCollision && !this.transform.parent) {
             this.transform.parent = this.entityManager.getComponent(
-                this.ninjaMovement.platformCollision.remoteCollider.entity,
+                this.ninjaMovement.platformCollision.remoteEntity,
                 Transform,
             );
         } else if (!this.ninjaMovement.platformCollision && this.transform.parent) {

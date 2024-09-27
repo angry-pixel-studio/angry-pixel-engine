@@ -4,3 +4,4 @@
 **/lib
 **/yarn-error.log
 /api-docs
+local.bat

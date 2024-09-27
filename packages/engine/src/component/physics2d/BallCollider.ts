@@ -32,10 +32,8 @@ export class BallCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
-    /** @internal */
-    updateCollisions: boolean = true;
 
-    constructor(options: Partial<BallColliderOptions>) {
+    constructor(options?: Partial<BallColliderOptions>) {
         Object.assign(this, options);
     }
 }

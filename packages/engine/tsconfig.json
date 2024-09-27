@@ -2,9 +2,10 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "declaration": true,
-        "declarationDir": "./types",
+        "emitDeclarationOnly": true,
+        "declarationDir": "../../bundles/angry-pixel-ecs/types",
+        "outDir": "../../bundles/angry-pixel-ecs/types",
         "rootDir": "src",
-        "outDir": "../../bundles/angry-pixel-ecs",
         "paths": {
             "@config/*": ["./src/config/*"],
             "@component/*": ["./src/component/*"],

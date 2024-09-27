@@ -16,7 +16,7 @@ export class AudioPlayer {
     /** @internal */
     _currentAudio: string = undefined;
 
-    constructor(options: Partial<AudioPlayerOptions>) {
+    constructor(options?: Partial<AudioPlayerOptions>) {
         Object.assign(this, options);
     }
 }

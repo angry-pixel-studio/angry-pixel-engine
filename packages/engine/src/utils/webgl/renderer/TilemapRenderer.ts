@@ -47,19 +47,6 @@ export interface TilemapRenderData extends RenderData {
     orientation?: TilemapOrientation;
 }
 
-export interface ProcessedTilemapData extends TilemapRenderData {
-    culledTiles: number[];
-    tilemap: {
-        height: number;
-        width: number;
-        tileWidth: number;
-        tileHeight: number;
-        realWidth: number;
-        realHeight: number;
-    };
-    renderPosition: Vector2;
-}
-
 export class TilemapRenderer implements Renderer {
     public readonly type: RenderDataType.Tilemap;
 
@@ -92,13 +79,13 @@ export class TilemapRenderer implements Renderer {
         this.textureMatrix = mat4.create();
     }
 
-    public render(renderData: ProcessedTilemapData, cameraData: CameraData, lastRender?: RenderDataType): void {
-        if (renderData.culledTiles.reduce((acc, tile) => acc + tile, 0) === 0) throw new Error("Nothing to render");
+    public render(renderData: TilemapRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
+        if (renderData.tiles.reduce((acc, tile) => acc + tile, 0) === 0) return false;
 
         this.processTileset(renderData);
         this.generateVertices(renderData);
 
-        if (this.posVertices.length === 0) throw new Error("Nothing to render");
+        if (this.posVertices.length === 0) return false;
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.DYNAMIC_DRAW);
@@ -108,11 +95,7 @@ export class TilemapRenderer implements Renderer {
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
 
-        mat4.translate(this.modelMatrix, this.modelMatrix, [
-            renderData.renderPosition.x,
-            renderData.renderPosition.y,
-            0,
-        ]);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             renderData.tilemap.tileWidth * (renderData.flipHorizontal ? -1 : 1),
@@ -160,9 +143,11 @@ export class TilemapRenderer implements Renderer {
         }
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
+
+        return true;
     }
 
-    private processTileset({ tileset }: ProcessedTilemapData): void {
+    private processTileset({ tileset }: TilemapRenderData): void {
         tileset.margin = tileset.margin ?? new Vector2();
         tileset.spacing = tileset.spacing ?? new Vector2();
         tileset.correction = tileset.correction ?? new Vector2();
@@ -190,13 +175,13 @@ export class TilemapRenderer implements Renderer {
             1 - this.tileset.texMargin.y - this.tileset.texSpacing.y - 2 * this.tileset.texCorrection.y;
     }
 
-    private generateVertices({ culledTiles, tilemap }: ProcessedTilemapData): void {
+    private generateVertices({ tiles, tilemap }: TilemapRenderData): void {
         this.posVertices = [];
         this.texVertices = [];
 
-        const height = Math.floor(culledTiles.length / tilemap.width);
+        const height = Math.floor(tiles.length / tilemap.width);
 
-        culledTiles.forEach((tilesetTile, tilemapTile) => {
+        tiles.forEach((tilesetTile, tilemapTile) => {
             if (tilesetTile === 0) return;
 
             const px = (tilemapTile % tilemap.width) - tilemap.width / 2;

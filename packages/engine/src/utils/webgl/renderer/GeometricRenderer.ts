@@ -42,7 +42,7 @@ export class GeometricRenderer implements Renderer {
         );
     }
 
-    public render(renderData: GeometricRenderData, cameraData: CameraData): void {
+    public render(renderData: GeometricRenderData, cameraData: CameraData): boolean {
         switch (renderData.shape) {
             case GeometricShape.Polygon:
                 this.renderLines(renderData, cameraData, this.gl.LINE_LOOP);
@@ -53,7 +53,11 @@ export class GeometricRenderer implements Renderer {
             case GeometricShape.Circumference:
                 this.renderCircumference(renderData, cameraData);
                 break;
+            default:
+                return false;
         }
+
+        return true;
     }
 
     private renderLines(renderData: GeometricRenderData, cameraData: CameraData, mode: number): void {

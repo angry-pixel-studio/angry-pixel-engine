@@ -5,7 +5,7 @@ import { TYPES } from "@config/types";
 
 @injectable(TYPES.CollisionRepository)
 export class CollisionRepository {
-    private collisions: Collision[];
+    private collisions: Collision[] = [];
 
     public findCollisionsForCollider(collider: Collider): Collision[] {
         return this.collisions.filter((c) => c.localCollider === collider);

@@ -4,6 +4,18 @@ import { Rectangle, Vector2 } from "@math";
  * @public
  * @category Components
  */
+export interface ShadowRendererOptions {
+    width: number;
+    height: number;
+    color: string;
+    opacity: number;
+    layer: string;
+}
+
+/**
+ * @public
+ * @category Components
+ */
 export class ShadowRenderer {
     /** Shadow width */
     width: number = 0;
@@ -19,4 +31,8 @@ export class ShadowRenderer {
     _boundingBox: Rectangle = new Rectangle();
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<ShadowRendererOptions>) {
+        Object.assign(this, options);
+    }
 }

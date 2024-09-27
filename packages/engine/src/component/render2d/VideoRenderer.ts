@@ -3,6 +3,30 @@ import { defaultRenderLayer } from "./Camera";
 import { Slice } from "@webgl";
 
 /**
+ * @public
+ * @category Components
+ */
+export interface VideoRendererOptions {
+    video: HTMLVideoElement;
+    width: number;
+    height: number;
+    offset: Vector2;
+    rotation: number;
+    flipHorizontally: boolean;
+    flipVertically: boolean;
+    opacity: number;
+    maskColor: string;
+    maskColorMix: number;
+    tintColor: string;
+    layer: string;
+    slice: Slice;
+    loop: boolean;
+    volume: number;
+    play: boolean;
+    pause: boolean;
+}
+
+/**
  * The VideoRenderer component plays and renders a video element,
  * and allows configuring options such as its dimensions, coloring, etc.
  * @public
@@ -65,4 +89,8 @@ export class VideoRenderer {
     pause: boolean = false;
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<VideoRendererOptions>) {
+        Object.assign(this, options);
+    }
 }

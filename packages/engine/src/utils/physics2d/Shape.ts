@@ -13,6 +13,7 @@ export interface Shape {
     rotation: number;
     vertexModel: Vector2[];
     vertices: Vector2[];
+    updateCollisions: boolean;
 }
 
 export class Polygon implements Shape {
@@ -26,6 +27,7 @@ export class Polygon implements Shape {
     public projectionAxes: Vector2[] = [];
     public radius: number = 0;
     public vertices: Vector2[] = [];
+    public updateCollisions: boolean = true;
 
     private _vertexModel: Vector2[] = [];
 
@@ -71,6 +73,7 @@ export class Circumference implements Shape {
     public rotation: number = 0;
     public vertexModel: Vector2[] = [];
     public vertices: Vector2[] = [new Vector2(), new Vector2()];
+    public updateCollisions: boolean = true;
 
     constructor(public radius: number) {}
 }

@@ -24,6 +24,14 @@ import { TilemapRendererSystem } from "@system/render2d/TilemapRendererSystem";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
 import { SystemGroup } from "@system/SystemGroup";
 import { SYSTEMS } from "./systems";
+import { ApplyVelocitySystem } from "@system/physics2d/ApplyVelocitySystem";
+import { UpdateBallColliderShapeSystem } from "@system/physics2d/collider/UpdateBallColliderShapeSystem";
+import { UpdateBoxColliderShapeSystem } from "@system/physics2d/collider/UpdateBoxColliderShapeSystem";
+import { UpdateEdgeColliderShapeSystem } from "@system/physics2d/collider/UpdateEdgeColliderShapeSystem";
+import { UpdatePolygonColliderShapeSystem } from "@system/physics2d/collider/UpdatePolygonColliderShapeSystem";
+import { UpdateTilemapColliderShapeSystem } from "@system/physics2d/collider/UpdateTilemapColliderShapeSystem";
+import { ResolveCollisionSystem } from "@system/physics2d/ResolveCollisionSystem";
+import { ApplyRepositionSystem } from "@system/physics2d/ApplyRepositionSystem";
 
 export const systemTypes: Map<SystemGroup, { name: symbol; type: SystemType }[]> = new Map([
     [
@@ -50,15 +58,15 @@ export const systemTypes: Map<SystemGroup, { name: symbol; type: SystemType }[]>
     [
         SystemGroup.Physics,
         [
-            { name: SYSTEMS.ApplyVelocitySystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.UpdateBallColliderShapeSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.UpdateBoxColliderShapeSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.UpdateEdgeColliderShapeSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.UpdatePolygonColliderShapeSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.UpdateTilemapColliderShapeSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.ResolveCollisionSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.ApplyRepositionSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.ResolveCollisionSystem, type: AudioPlayerSystem },
+            { name: SYSTEMS.ApplyVelocitySystem, type: ApplyVelocitySystem },
+            { name: SYSTEMS.UpdateBallColliderShapeSystem, type: UpdateBallColliderShapeSystem },
+            { name: SYSTEMS.UpdateBoxColliderShapeSystem, type: UpdateBoxColliderShapeSystem },
+            { name: SYSTEMS.UpdateEdgeColliderShapeSystem, type: UpdateEdgeColliderShapeSystem },
+            { name: SYSTEMS.UpdatePolygonColliderShapeSystem, type: UpdatePolygonColliderShapeSystem },
+            { name: SYSTEMS.UpdateTilemapColliderShapeSystem, type: UpdateTilemapColliderShapeSystem },
+            { name: SYSTEMS.ResolveCollisionSystem, type: ResolveCollisionSystem },
+            { name: SYSTEMS.ApplyRepositionSystem, type: ApplyRepositionSystem },
+            { name: SYSTEMS.ResolveCollisionSystem, type: ResolveCollisionSystem },
         ],
     ],
     [

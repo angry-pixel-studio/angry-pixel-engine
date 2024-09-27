@@ -2,7 +2,7 @@ import { bootstrap, GameConfig } from "@config/bootstrap";
 import { TYPES } from "@config/types";
 import { Container } from "@ioc";
 import { LoopManager } from "@manager/LoopManager";
-import { Scene, SceneManager } from "@manager/SceneManager";
+import { SceneManager, SceneType } from "@manager/SceneManager";
 
 export class Game {
     private readonly container: Container;
@@ -15,8 +15,8 @@ export class Game {
         return this.container.get<LoopManager>(TYPES.LoopManager).running;
     }
 
-    public addScene(scene: Scene, name: string, openingScene: boolean = false): void {
-        this.container.get<SceneManager>(TYPES.SceneManager).addScene(scene, name, openingScene);
+    public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {
+        this.container.get<SceneManager>(TYPES.SceneManager).addScene(sceneType, name, openingScene);
     }
 
     public start(): void {

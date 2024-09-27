@@ -31,7 +31,7 @@ export class RenderManager {
     }
 
     public removeCameraData(): void {
-        this.renderData = [];
+        this.cameraData = [];
     }
 
     public removeRenderData(): void {

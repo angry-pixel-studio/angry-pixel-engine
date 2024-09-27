@@ -6,6 +6,16 @@ export const defaultRenderLayer = "Default";
  * @public
  * @category Components
  */
+export interface CameraOptions {
+    layers: string[];
+    zoom: number;
+    depth: number;
+}
+
+/**
+ * @public
+ * @category Components
+ */
 export class Camera {
     /** Layers to be rendered by this camera. Layers are rendered in ascending order */
     layers: string[] = [defaultRenderLayer];
@@ -15,4 +25,8 @@ export class Camera {
     depth: number = 0;
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<CameraOptions>) {
+        Object.assign(this, options);
+    }
 }

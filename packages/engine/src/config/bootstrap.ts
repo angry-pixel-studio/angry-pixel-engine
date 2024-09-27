@@ -60,9 +60,9 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
     container.set(TYPES.GameConfig, gameConfig);
     container.set(TYPES.CanvasElement, createCanvas(gameConfig));
 
+    setupPhysicsDependencies(container);
     setupManagers(container);
     setupEngineSystems(container);
-    setupPhysicsDependencies(container);
 
     return container;
 };

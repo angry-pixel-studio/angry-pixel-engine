@@ -5,5 +5,5 @@ export { CameraData, RenderDataType } from "./renderer/Renderer";
 export { Light, ShadowRenderData } from "./renderer/ShadowRenderer";
 export { Slice, SpriteRenderData } from "./renderer/SpriteRenderer";
 export { TextOrientation, TextRenderData } from "./renderer/TextRenderer";
-export { ProcessedTilemapData, TilemapOrientation, TilemapRenderData } from "./renderer/TilemapRenderer";
+export { TilemapOrientation, TilemapRenderData } from "./renderer/TilemapRenderer";
 export { VideoRenderData } from "./renderer/VideoRenderer";

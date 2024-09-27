@@ -33,29 +33,30 @@ export class ResolveCollisionSystem implements System {
     ) {}
 
     public onUpdate(): void {
+        this.collisionRepository.removeAll();
         this.colliders = [];
         this.collisions.clear();
         this.shapes = [];
 
         [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
-            this.entityManager
-                .search<Collider>(type, { updateCollisions: true })
-                .forEach(({ component: collider, entity }) => {
-                    this.colliders.push(collider);
-                    collider.shapes.forEach((shape) => {
-                        shape.entity = entity;
-                        shape.collider = this.colliders.length - 1;
-                        shape.id = this.shapes.length;
-                        shape.ignoreCollisionsWithLayers = collider.ignoreCollisionsWithLayers ?? [];
-                        shape.layer = collider.layer;
-                        this.shapes.push(shape);
-                    });
-                }),
+            this.entityManager.search<Collider>(type).forEach(({ component: collider, entity }) => {
+                this.colliders.push(collider);
+                collider.shapes.forEach((shape) => {
+                    shape.entity = entity;
+                    shape.collider = this.colliders.length - 1;
+                    shape.id = this.shapes.length;
+                    shape.ignoreCollisionsWithLayers = collider.ignoreCollisionsWithLayers ?? [];
+                    shape.layer = collider.layer;
+                    this.shapes.push(shape);
+                });
+            }),
         );
 
         this.broadPhaseResolver.update(this.shapes);
 
-        this.shapes.forEach((shape) => this.narrowPhase(shape, this.broadPhase(shape)));
+        this.shapes
+            .filter((shape) => shape.updateCollisions)
+            .forEach((shape) => this.narrowPhase(shape, this.broadPhase(shape)));
     }
 
     // broad phase takes care of looking for possible collisions

@@ -6,6 +6,28 @@ import { Slice } from "@webgl";
  * @public
  * @category Components
  */
+export interface SpriteRendererOptions {
+    image: HTMLImageElement;
+    layer: string;
+    slice: Slice;
+    smooth: boolean;
+    offset: Vector2;
+    flipHorizontally: boolean;
+    flipVertically: boolean;
+    rotation: number;
+    opacity: number;
+    maskColor: string;
+    maskColorMix: number;
+    tintColor: string;
+    scale: Vector2;
+    width: number;
+    height: number;
+}
+
+/**
+ * @public
+ * @category Components
+ */
 export class SpriteRenderer {
     /** The render layer */
     layer: string = defaultRenderLayer;
@@ -39,4 +61,8 @@ export class SpriteRenderer {
     height: number;
     /** @internal */
     _position: Vector2 = new Vector2();
+
+    constructor(options?: Partial<SpriteRendererOptions>) {
+        Object.assign(this, options);
+    }
 }

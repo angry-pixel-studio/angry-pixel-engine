@@ -16,23 +16,34 @@ const builderECS = (format, filename) => ({
 const main = () => {
     return [
         {
-            input: "src/index.ts",
-            output: [
-                builderECS("umd", "index.js"),
-                builderECS("esm", "index.esm.js"),
-                builderECS("cjs", "index.cjs.js"),
-            ],
-            plugins: [nodeResolve(), typescript(), commonjs({ extensions: [".ts", ".js"] }), terser()],
-        },
-        {
-            input: "../../bundles/angry-pixel-ecs/lib/packages/engine/types/index.d.ts",
+            input: "../../bundles/angry-pixel-ecs/types/index.d.ts",
             output: [
                 {
                     file: "../../bundles/angry-pixel-ecs/lib/index.d.ts",
                     format: "es",
                 },
             ],
-            plugins: [dts(), del({ dest: "../../bundles/angry-pixel-ecs/lib/packages" })],
+            plugins: [dts(), del({ dest: "../../bundles/angry-pixel-ecs/types" })],
+        },
+        {
+            input: "src/index.ts",
+            output: [
+                builderECS("umd", "index.js"),
+                builderECS("esm", "index.esm.js"),
+                builderECS("cjs", "index.cjs.js"),
+            ],
+            plugins: [
+                nodeResolve(),
+                typescript({
+                    compilerOptions: {
+                        declaration: false,
+                        emitDeclarationOnly: false,
+                        declarationDir: undefined,
+                    },
+                }),
+                commonjs({ extensions: [".ts", ".js"] }),
+                terser(),
+            ],
         },
     ];
 };

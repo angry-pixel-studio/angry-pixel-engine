@@ -1,5 +1,5 @@
 import { GameSystem, GamepadController, Keyboard } from "angry-pixel-ecs";
-import { InputController } from "../component/InputController";
+import { InputController } from "@component/InputController";
 
 export class InputControllerSystem extends GameSystem {
     private keyboard: Keyboard;
