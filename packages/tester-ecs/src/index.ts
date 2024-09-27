@@ -1,4 +1,4 @@
-import { BroadPhaseMethods, CollisionMethods, Game } from "angry-pixel-ecs";
+import { BroadPhaseMethods, CollisionMethods, Game } from "angry-pixel-engine";
 import { MainScene } from "@scene/MainScene";
 import { collisionMatrix } from "@config/collisionMatrix";
 

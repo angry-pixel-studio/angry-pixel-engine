@@ -1,4 +1,4 @@
-import { GameSystem, GamepadController, Keyboard } from "angry-pixel-ecs";
+import { GameSystem, GamepadController, Keyboard } from "angry-pixel-engine";
 import { InputController } from "@component/InputController";
 
 export class InputControllerSystem extends GameSystem {

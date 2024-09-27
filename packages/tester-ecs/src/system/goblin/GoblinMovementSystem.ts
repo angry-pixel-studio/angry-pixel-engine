@@ -1,4 +1,4 @@
-import { BoxCollider, EdgeCollider, GameSystem, RigidBody, Transform } from "angry-pixel-ecs";
+import { BoxCollider, EdgeCollider, GameSystem, RigidBody, Transform } from "angry-pixel-engine";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
 import { COLLISION_LAYERS } from "@config/layers";
 

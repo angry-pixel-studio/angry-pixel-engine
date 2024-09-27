@@ -1,4 +1,4 @@
-import { Vector2 } from "angry-pixel-ecs";
+import { Vector2 } from "angry-pixel-engine";
 
 export class MovingPlatform {
     public direction: Vector2 = new Vector2();

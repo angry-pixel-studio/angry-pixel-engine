@@ -8,7 +8,7 @@ import {
     Vector2,
     clamp,
     inject,
-} from "angry-pixel-ecs";
+} from "angry-pixel-engine";
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";
 

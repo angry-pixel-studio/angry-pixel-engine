@@ -1,4 +1,4 @@
-import { AudioPlayer, GameSystem } from "angry-pixel-ecs";
+import { AudioPlayer, GameSystem } from "angry-pixel-engine";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";
 import { NinjaSfx } from "@component/ninja/NinjaSfx";
 import { ASSETS } from "@config/assets";

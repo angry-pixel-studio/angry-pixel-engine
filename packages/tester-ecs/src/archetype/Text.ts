@@ -1,4 +1,4 @@
-import { Component, AssetManager, TextOrientation, TextRenderer, Transform, Vector2 } from "angry-pixel-ecs";
+import { Component, AssetManager, TextOrientation, TextRenderer, Transform, Vector2 } from "angry-pixel-engine";
 import { ASSETS } from "@config/assets";
 import { RENDER_LAYERS } from "@config/layers";
 

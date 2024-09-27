@@ -1,4 +1,4 @@
-import { GameSystem, Transform, Vector2 } from "angry-pixel-ecs";
+import { GameSystem, Transform, Vector2 } from "angry-pixel-engine";
 import { MovingPlatform } from "@component/MovingPlatform";
 
 export class MovingPlatformSystem extends GameSystem {

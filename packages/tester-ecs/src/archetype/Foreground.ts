@@ -7,7 +7,7 @@ import {
     TilemapCollider,
     TilemapRenderer,
     Transform,
-} from "angry-pixel-ecs";
+} from "angry-pixel-engine";
 import { ASSETS } from "@config/assets";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 

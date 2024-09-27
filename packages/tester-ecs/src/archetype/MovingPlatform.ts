@@ -7,7 +7,7 @@ import {
     SpriteRenderer,
     Transform,
     Vector2,
-} from "angry-pixel-ecs";
+} from "angry-pixel-engine";
 import { MovingPlatform } from "@component/MovingPlatform";
 import { ASSETS } from "@config/assets";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";

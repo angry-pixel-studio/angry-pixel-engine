@@ -3,8 +3,8 @@
     "compilerOptions": {
         "declaration": true,
         "emitDeclarationOnly": true,
-        "declarationDir": "../../bundles/angry-pixel-ecs/types",
-        "outDir": "../../bundles/angry-pixel-ecs/types",
+        "declarationDir": "../../bundles/angry-pixel-engine/types",
+        "outDir": "../../bundles/angry-pixel-engine/types",
         "rootDir": "src",
         "paths": {
             "@config/*": ["./src/config/*"],
