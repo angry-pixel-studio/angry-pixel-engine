@@ -59,7 +59,7 @@ export class MainScene extends Scene {
 
         this.entityManager.createEntity(movingPlatformArchetype(this.assetManager));
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 320; i++) {
             this.entityManager.createEntity(goblinArchetype(this.assetManager, new Vector2(randomInt(-600, 192), 0)));
         }
 

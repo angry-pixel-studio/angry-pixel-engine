@@ -36,6 +36,8 @@ export class Transform {
 
     /** The parent transform. The position property became relative to this transform */
     set parent(parent: Transform) {
+        if (this._parent === parent) return;
+
         this._parent = parent;
 
         if (this._parent) {

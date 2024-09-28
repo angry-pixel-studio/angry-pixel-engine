@@ -4,11 +4,30 @@ import { TYPES } from "@config/types";
 import { SYSTEMS } from "@config/systems";
 import { Transform } from "@component/gameLogic/Transform";
 
+const getBranchLength = (transform: Transform): number =>
+    transform.parent ? 1 + getBranchLength(transform.parent) : 0;
+
 @injectable(SYSTEMS.TransformSystem)
 export class TransformSystem implements System {
     constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
+        this.entityManager
+            .search(Transform)
+            .sort((a, b) => getBranchLength(a.component) - getBranchLength(b.component))
+            .forEach(({ component: transform }) => {
+                if (!transform.parent || !this.entityManager.getEntityForComponent(transform.parent)) {
+                    transform.parent = undefined;
+                    transform.localPosition.copy(transform.position);
+                    transform.localScale.copy(transform.scale);
+                    transform.localRotation = transform.rotation;
+                } else {
+                    this.translateChild(transform.parent, transform);
+                }
+            });
+    }
+
+    public onUpdateOld(): void {
         this.entityManager.search(Transform).forEach(({ component: transform }) => {
             if (!transform.parent) {
                 this.updateTransform(transform);

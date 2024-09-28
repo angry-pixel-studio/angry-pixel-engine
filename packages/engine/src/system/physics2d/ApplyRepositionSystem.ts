@@ -50,6 +50,7 @@ export class ApplyRepositionSystem implements System {
         this.transformSystem.onUpdate();
     }
 
+    // TODO: this method consumes too much
     public getChildren(parent: Transform): Entity[] {
         const result: Entity[] = [];
 

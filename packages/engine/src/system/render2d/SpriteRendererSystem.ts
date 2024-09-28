@@ -31,26 +31,35 @@ export class SpriteRendererSystem implements System {
                 spriteRenderer.offset.y * transform.localScale.y,
             );
 
-            const renderData: SpriteRenderData = {
-                ...spriteRenderer,
-                type: RenderDataType.Sprite,
-                position: Vector2.add(spriteRenderer._position, transform.localPosition, this.scaledOffset),
-                width:
-                    (spriteRenderer.width ?? spriteRenderer.slice?.width ?? spriteRenderer.image.naturalWidth) *
-                    Math.abs(spriteRenderer.scale.x * transform.localScale.x),
-                height:
-                    (spriteRenderer.height ?? spriteRenderer.slice?.height ?? spriteRenderer.image.naturalHeight) *
-                    Math.abs(spriteRenderer.scale.y * transform.localScale.y),
-                flipHorizontally: spriteRenderer.flipHorizontally !== transform.scale.x < 0,
-                flipVertically: spriteRenderer.flipVertically !== transform.scale.y < 0,
-                rotation: transform.localRotation + spriteRenderer.rotation,
-            };
+            Vector2.add(spriteRenderer._renderData.position, transform.localPosition, this.scaledOffset);
+
+            spriteRenderer._renderData.width =
+                (spriteRenderer.width ?? spriteRenderer.slice?.width ?? spriteRenderer.image.naturalWidth) *
+                Math.abs(spriteRenderer.scale.x * transform.localScale.x);
+
+            spriteRenderer._renderData.height =
+                (spriteRenderer.height ?? spriteRenderer.slice?.height ?? spriteRenderer.image.naturalHeight) *
+                Math.abs(spriteRenderer.scale.y * transform.localScale.y);
+
+            spriteRenderer._renderData.flipHorizontally = spriteRenderer.flipHorizontally !== transform.scale.x < 0;
+            spriteRenderer._renderData.flipVertically = spriteRenderer.flipVertically !== transform.scale.y < 0;
+
+            spriteRenderer._renderData.rotation = transform.localRotation + spriteRenderer.rotation;
 
             if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
-                this.translateRenderPosition(renderData, transform);
+                this.translateRenderPosition(spriteRenderer._renderData, transform);
             }
 
-            this.renderManager.addRenderData(renderData);
+            spriteRenderer._renderData.image = spriteRenderer.image;
+            spriteRenderer._renderData.layer = spriteRenderer.layer;
+            spriteRenderer._renderData.maskColor = spriteRenderer.maskColor;
+            spriteRenderer._renderData.maskColorMix = spriteRenderer.maskColorMix;
+            spriteRenderer._renderData.opacity = spriteRenderer.opacity;
+            spriteRenderer._renderData.slice = spriteRenderer.slice;
+            spriteRenderer._renderData.smooth = spriteRenderer.smooth;
+            spriteRenderer._renderData.tintColor = spriteRenderer.tintColor;
+
+            this.renderManager.addRenderData(spriteRenderer._renderData);
         });
     }
 

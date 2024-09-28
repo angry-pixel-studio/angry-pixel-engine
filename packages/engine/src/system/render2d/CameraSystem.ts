@@ -18,14 +18,12 @@ export class CameraSystem implements System {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("Camera component needs a Transform");
 
-            camera._position.copy(transform.localPosition);
+            camera._renderData.position.copy(transform.localPosition);
+            camera._renderData.layers = camera.layers;
+            camera._renderData.depth = camera.depth;
+            camera._renderData.zoom = camera.zoom;
 
-            this.renderManager.addCameraData({
-                position: camera._position,
-                layers: camera.layers,
-                depth: camera.depth,
-                zoom: camera.zoom,
-            });
+            this.renderManager.addCameraData(camera._renderData);
         });
     }
 }

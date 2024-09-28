@@ -18,16 +18,6 @@ export enum TextOrientation {
     RightCenter,
 }
 
-const DEFAULT_BITMAP_FONT_SIZE = 64;
-const DEFAULT_BITMAP_MARGIN = new Vector2();
-const DEFAULT_BITMAP_SPACING = new Vector2();
-const DEFAULT_CHAR_RANGES = [32, 126, 161, 255];
-const DEFAULT_COLOR = "#000000";
-const DEFAULT_LETTER_SPACING = 0;
-const DEFAULT_LINE_SEPARATION = 0;
-const DEFAULT_ORIENTATION = TextOrientation.Center;
-const DEFAULT_ALPHA = 1;
-const DEFAULT_ROTATION = 0;
 const TEXTURE_PREFIX = "FontFamily:";
 
 export interface TextRenderData extends RenderData {
@@ -76,8 +66,6 @@ export class TextRenderer implements Renderer {
 
     public render(renderData: TextRenderData, cameraData: CameraData, lastRender: RenderDataType): boolean {
         if (!renderData.text) return false;
-
-        this.setDefaultValues(renderData);
 
         const fontAtlas = this.fontAtlasFactory.getOrCreate(
             renderData.bitmap.charRanges,
@@ -138,29 +126,6 @@ export class TextRenderer implements Renderer {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
 
         return true;
-    }
-
-    private setDefaultValues(renderData: TextRenderData): void {
-        if (renderData.bitmap) {
-            renderData.bitmap.margin = renderData.bitmap.margin ?? DEFAULT_BITMAP_MARGIN;
-            renderData.bitmap.spacing = renderData.bitmap.spacing ?? DEFAULT_BITMAP_SPACING;
-            renderData.bitmap.fontSize = renderData.bitmap.fontSize ?? DEFAULT_BITMAP_FONT_SIZE;
-            renderData.bitmap.charRanges = renderData.bitmap.charRanges ?? DEFAULT_CHAR_RANGES;
-        } else {
-            renderData.bitmap = {
-                margin: DEFAULT_BITMAP_MARGIN,
-                spacing: DEFAULT_BITMAP_SPACING,
-                fontSize: DEFAULT_BITMAP_FONT_SIZE,
-                charRanges: DEFAULT_CHAR_RANGES,
-            };
-        }
-
-        renderData.color = renderData.color ?? DEFAULT_COLOR;
-        renderData.letterSpacing = renderData.letterSpacing ?? DEFAULT_LETTER_SPACING;
-        renderData.lineSeparation = renderData.lineSeparation ?? DEFAULT_LINE_SEPARATION;
-        renderData.opacity = renderData.opacity ?? DEFAULT_ALPHA;
-        renderData.orientation = renderData.orientation ?? DEFAULT_ORIENTATION;
-        renderData.rotation = renderData.rotation ?? DEFAULT_ROTATION;
     }
 
     private generateTextVertices(

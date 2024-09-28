@@ -34,34 +34,28 @@ export class TextRendererSystem implements System {
                 textRenderer.offset.x * transform.localScale.x,
                 textRenderer.offset.y * transform.localScale.y,
             );
+            Vector2.add(textRenderer._renderData.position, transform.localPosition, this.scaledOffset);
 
-            const renderData: TextRenderData = {
-                type: RenderDataType.Text,
-                layer: textRenderer.layer,
-                position: Vector2.add(textRenderer._position, transform.localPosition, this.scaledOffset),
-                font: textRenderer.font,
-                fontSize: textRenderer.fontSize,
-                text: this.crop(textRenderer),
-                orientation: textRenderer.orientation,
-                color: textRenderer.color,
-                lineSeparation: textRenderer.lineSeparation,
-                letterSpacing: textRenderer.letterSpacing,
-                smooth: textRenderer.smooth,
-                rotation: transform.localRotation + textRenderer.rotation,
-                opacity: textRenderer.opacity,
-                bitmap: {
-                    fontSize: undefined,
-                    charRanges: textRenderer.charRanges,
-                    margin: textRenderer.bitmapMargin,
-                    spacing: textRenderer.bitmapSpacing,
-                },
-            };
+            textRenderer._renderData.layer = textRenderer.layer;
+            textRenderer._renderData.font = textRenderer.font;
+            textRenderer._renderData.fontSize = textRenderer.fontSize;
+            textRenderer._renderData.text = this.crop(textRenderer);
+            textRenderer._renderData.orientation = textRenderer.orientation;
+            textRenderer._renderData.color = textRenderer.color;
+            textRenderer._renderData.lineSeparation = textRenderer.lineSeparation;
+            textRenderer._renderData.letterSpacing = textRenderer.letterSpacing;
+            textRenderer._renderData.smooth = textRenderer.smooth;
+            textRenderer._renderData.rotation = transform.localRotation + textRenderer.rotation;
+            textRenderer._renderData.opacity = textRenderer.opacity;
+            textRenderer._renderData.bitmap.charRanges = textRenderer.charRanges;
+            textRenderer._renderData.bitmap.margin = textRenderer.bitmapMargin;
+            textRenderer._renderData.bitmap.spacing = textRenderer.bitmapSpacing;
 
             if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
-                this.translateRenderPosition(renderData, transform);
+                this.translateRenderPosition(textRenderer._renderData, transform);
             }
 
-            this.renderManager.addRenderData(renderData);
+            this.renderManager.addRenderData(textRenderer._renderData);
         });
     }
 

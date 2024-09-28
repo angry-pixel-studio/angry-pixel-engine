@@ -1,6 +1,6 @@
 import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
-import { TextOrientation } from "@webgl";
+import { RenderDataType, TextOrientation, TextRenderData } from "@webgl";
 
 /**
  * @public
@@ -85,11 +85,32 @@ export class TextRenderer {
     /** Direction in which the text will be rendered. */
     orientation: TextOrientation = TextOrientation.Center;
     /** Margin in pixels to correct badly sliced characters. */
-    bitmapMargin: Vector2;
+    bitmapMargin: Vector2 = new Vector2();
     /** Spacing in pixels to correct badly sliced characters. */
-    bitmapSpacing: Vector2;
+    bitmapSpacing: Vector2 = new Vector2();
+
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: TextRenderData = {
+        type: RenderDataType.Text,
+        position: new Vector2(),
+        layer: undefined,
+        text: undefined,
+        color: undefined,
+        font: undefined,
+        fontSize: undefined,
+        opacity: undefined,
+        smooth: undefined,
+        rotation: undefined,
+        orientation: undefined,
+        letterSpacing: undefined,
+        lineSeparation: undefined,
+        bitmap: {
+            charRanges: undefined,
+            fontSize: 64,
+            margin: undefined,
+            spacing: undefined,
+        },
+    };
 
     constructor(options?: Partial<TextRendererOptions>) {
         Object.assign(this, options);

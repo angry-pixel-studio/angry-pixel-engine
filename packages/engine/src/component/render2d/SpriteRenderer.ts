@@ -1,6 +1,6 @@
 import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
-import { Slice } from "@webgl";
+import { RenderDataType, Slice, SpriteRenderData } from "@webgl";
 
 /**
  * @public
@@ -60,7 +60,14 @@ export class SpriteRenderer {
     /** Overwrite the original image height */
     height: number;
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: SpriteRenderData = {
+        type: RenderDataType.Sprite,
+        position: new Vector2(),
+        layer: undefined,
+        image: undefined,
+        width: undefined,
+        height: undefined,
+    };
 
     constructor(options?: Partial<SpriteRendererOptions>) {
         Object.assign(this, options);

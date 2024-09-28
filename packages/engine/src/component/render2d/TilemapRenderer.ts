@@ -1,5 +1,6 @@
 import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
+import { RenderDataType, TilemapRenderData } from "@webgl";
 
 /**
  * @public
@@ -47,10 +48,11 @@ export class TilemapRenderer {
     opacity: number = 1;
     /** TRUE for smooth pixels (not recommended for pixel art) */
     smooth: boolean = false;
+
     /** @internal */
     _processed: boolean = false;
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: TilemapRenderData[] = [];
 
     constructor(options?: Partial<TilemapRendererOptions>) {
         Object.assign(this, options);

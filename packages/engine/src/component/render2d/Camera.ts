@@ -1,4 +1,5 @@
 import { Vector2 } from "@math";
+import { CameraData } from "@webgl";
 
 export const defaultRenderLayer = "Default";
 
@@ -24,7 +25,12 @@ export class Camera {
     /** In case you have more than one camera, the depth value determines which camera is rendered first. The lesser value, the first to render */
     depth: number = 0;
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: CameraData = {
+        position: new Vector2(),
+        depth: 0,
+        zoom: 1,
+        layers: [],
+    };
 
     constructor(options?: Partial<CameraOptions>) {
         Object.assign(this, options);
