@@ -7,32 +7,45 @@ import del from "rollup-plugin-del";
 
 const builderECS = (format, filename) => ({
     exports: "named",
-    name: "angry-pixel-engine-ecs",
-    file: "../../bundles/angry-pixel-ecs/lib/" + filename,
+    name: "angry-pixel-engine",
+    file: "../../bundles/angry-pixel-engine/lib/" + filename,
     format,
     sourcemap: true,
 });
 
 const main = () => {
     return [
+        // this generates one file containing all the type declarations
         {
-            input: "src/ecs-engine/index.ts",
+            input: "../../bundles/angry-pixel-engine/types/index.d.ts",
+            output: [
+                {
+                    file: "../../bundles/angry-pixel-engine/lib/index.d.ts",
+                    format: "es",
+                },
+            ],
+            plugins: [dts(), del({ dest: "../../bundles/angry-pixel-engine/types" })],
+        },
+        // this generates thie modules
+        {
+            input: "src/index.ts",
             output: [
                 builderECS("umd", "index.js"),
                 builderECS("esm", "index.esm.js"),
                 builderECS("cjs", "index.cjs.js"),
             ],
-            plugins: [nodeResolve(), typescript(), commonjs({ extensions: [".ts", ".js"] }), terser()],
-        },
-        {
-            input: "../../bundles/angry-pixel-ecs/lib/packages/engine/types/ecs-engine/index.d.ts",
-            output: [
-                {
-                    file: "../../bundles/angry-pixel-ecs/lib/index.d.ts",
-                    format: "es",
-                },
+            plugins: [
+                nodeResolve(),
+                typescript({
+                    compilerOptions: {
+                        declaration: false,
+                        emitDeclarationOnly: false,
+                        declarationDir: undefined,
+                    },
+                }),
+                commonjs({ extensions: [".ts", ".js"] }),
+                terser(),
             ],
-            plugins: [dts(), del({ dest: "../../bundles/angry-pixel-ecs/lib/packages" })],
         },
     ];
 };

@@ -1,13 +1,25 @@
-import { GameSystem, Rectangle, TilemapRenderer, Transform, Vector2, clamp } from "angry-pixel-ecs";
-import { FollowPlayerCamera } from "../../component/camera/FollowPlayerCamera";
-import { NinjaMovement } from "../../component/ninja/NinjaMovement";
+import {
+    EntityManager,
+    Rectangle,
+    Symbols,
+    System,
+    TilemapRenderer,
+    Transform,
+    Vector2,
+    clamp,
+    inject,
+} from "angry-pixel-engine";
+import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
+import { NinjaMovement } from "@component/ninja/NinjaMovement";
 
 const maxOffset = 40;
 
-export class FollowPlayerCameraSystem extends GameSystem {
+export class FollowPlayerCameraSystem implements System {
     // cache
     private playerOffset: Vector2 = new Vector2();
     private cachePosition: Vector2 = new Vector2();
+
+    @inject(Symbols.EntityManager) private readonly entityManager: EntityManager;
 
     public onUpdate(): void {
         this.entityManager.search(FollowPlayerCamera).forEach(({ entity, component }) => {

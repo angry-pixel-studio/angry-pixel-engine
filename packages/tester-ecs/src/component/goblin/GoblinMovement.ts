@@ -4,4 +4,8 @@ export class GoblinMovement {
     public jumpSpeed: number = 350;
     public grounded: boolean = false;
     public jumping: boolean = false;
+
+    constructor(options: Partial<GoblinMovement>) {
+        Object.assign(this, options);
+    }
 }

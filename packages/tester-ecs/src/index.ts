@@ -1,6 +1,6 @@
-import { BroadPhaseMethods, CollisionMethods, createGame } from "angry-pixel-ecs";
-import { mainScene } from "./scene/MainScene";
-import { collisionMatrix } from "./config/collisionMatrix";
+import { BroadPhaseMethods, CollisionMethods, Game } from "angry-pixel-engine";
+import { MainScene } from "@scene/MainScene";
+import { collisionMatrix } from "@config/collisionMatrix";
 
 const params = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop.toString()),
@@ -8,7 +8,7 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 
 export const createAndStart = () => {
     // create game
-    const game = createGame({
+    const game = new Game({
         containerNode: document.querySelector("#app"),
         width: 1920,
         height: 1080,
@@ -24,7 +24,7 @@ export const createAndStart = () => {
     });
 
     //  add scenes
-    game.addScene("MainScene", mainScene, true);
+    game.addScene(MainScene, "MainScene", true);
 
     // start game
     game.start();
