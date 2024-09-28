@@ -1,0 +1,27 @@
+{
+    "name": "@angry-pixel/engine",
+    "version": "1.0.0",
+    "description": "Angry Pixel Engine private module.",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "tsc && tsc-alias && rollup -c",
+        "prepare": "yarn run build",
+        "clean": "tsc --build --clean"
+    },
+    "author": "Mauro Cristy <maurocristy@gmail.com>",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "gl-matrix": "^3.4.3"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "rollup": "^4.18.0",
+        "rollup-plugin-del": "^1.0.1",
+        "rollup-plugin-dts": "^6.1.1",
+        "rollup-plugin-terser": "^7.0.2",
+        "tsc-alias": "^1.8.10"
+    }
+}

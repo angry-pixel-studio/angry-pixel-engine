@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+    <head>
+        <title>ECS Engine Tester</title>
+        <link rel="icon" type="image/png" href="favicon.ico" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                background-color: black;
+                overflow: hidden;
+            }
+
+            #app {
+                margin-left: auto;
+                margin-right: auto;
+                height: 100vh;
+                aspect-ratio: 16/9;
+            }
+
+            canvas {
+                width: 100%;
+                height: 100%;
+                outline: none;
+            }
+
+            @media all and (display-mode: fullscreen) {
+                body {
+                    cursor: none;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="app"></div>
+        <script src="./bundle.js"></script>
+    </body>
+</html>

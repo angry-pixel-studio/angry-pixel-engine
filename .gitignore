@@ -1,0 +1,7 @@
+**/node_modules
+.vscode
+.vs
+**/lib
+**/yarn-error.log
+/api-docs
+local.bat

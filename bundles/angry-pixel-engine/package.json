@@ -1,0 +1,28 @@
+{
+    "name": "angry-pixel-engine",
+    "version": "2.0.0",
+    "description": "Lightweight 2D game engine made with TypeScript.",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "module": "lib/index.esm.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine.git"
+    },
+    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
+    "keywords": [
+        "video game engine",
+        "game engine",
+        "2d engine",
+        "webgl",
+        "canvas",
+        "typescript",
+        "game development",
+        "entity component system"
+    ],
+    "author": "Mauro Cristy <maurocristy@gmail.com>",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    }
+}
