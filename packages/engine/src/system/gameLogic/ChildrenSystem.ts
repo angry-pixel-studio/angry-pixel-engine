@@ -11,8 +11,7 @@ export class ChildrenSystem implements System {
 
     public onUpdate(): void {
         this.entityManager.search(Children).forEach(({ entity, component: children }) => {
-            const transform = this.entityManager.getComponent(entity, Transform);
-            children.entities = this.entityManager.search(Transform, { parent: transform }).map(({ entity }) => entity);
+            children.entities = this.entityManager.getComponent(entity, Transform)._childEntities;
         });
     }
 }

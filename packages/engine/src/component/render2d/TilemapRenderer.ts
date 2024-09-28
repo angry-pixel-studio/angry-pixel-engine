@@ -1,6 +1,6 @@
 import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
-import { RenderDataType, TilemapRenderData } from "@webgl";
+import { TilemapRenderData } from "@webgl";
 
 /**
  * @public

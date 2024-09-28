@@ -11,8 +11,7 @@ export class ParentSystem implements System {
 
     public onUpdate(): void {
         this.entityManager.search(Parent).forEach(({ entity, component: parent }) => {
-            const transform = this.entityManager.getComponent(entity, Transform);
-            parent.entity = transform.parent ? this.entityManager.getEntityForComponent(transform.parent) : undefined;
+            parent.entity = this.entityManager.getComponent(entity, Transform)._parentEntity;
         });
     }
 }

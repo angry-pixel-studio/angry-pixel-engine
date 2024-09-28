@@ -1,8 +1,21 @@
-import { BoxCollider, EdgeCollider, GameSystem, RigidBody, Transform } from "angry-pixel-engine";
+import {
+    BoxCollider,
+    CollisionRepository,
+    EdgeCollider,
+    EntityManager,
+    inject,
+    RigidBody,
+    Symbols,
+    System,
+    Transform,
+} from "angry-pixel-engine";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
 import { COLLISION_LAYERS } from "@config/layers";
 
-export class GoblinMovementSystem extends GameSystem {
+export class GoblinMovementSystem implements System {
+    @inject(Symbols.EntityManager) private readonly entityManager: EntityManager;
+    @inject(Symbols.CollisionRepository) private readonly collisionRepository: CollisionRepository;
+
     public onUpdate(): void {
         this.entityManager.search(GoblinMovement).forEach(({ entity, component: movement }) => {
             const rigidBody = this.entityManager.getComponent(entity, RigidBody);

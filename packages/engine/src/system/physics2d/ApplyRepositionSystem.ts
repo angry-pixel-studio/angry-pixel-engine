@@ -1,5 +1,5 @@
 import { inject, injectable } from "@ioc";
-import { EntityManager, System, Entity } from "@ecs";
+import { EntityManager, System } from "@ecs";
 import { Vector2 } from "@math";
 import { CollisionRepository } from "@physics2d";
 import { TYPES } from "@config/types";
@@ -24,8 +24,7 @@ export class ApplyRepositionSystem implements System {
             .search(RigidBody, { type: RigidBodyType.Dynamic })
             .forEach(({ component: rigidBody, entity }) => {
                 const transform = this.entityManager.getComponent(entity, Transform);
-                const entities = this.getChildren(transform);
-                entities.unshift(entity);
+                const entities = [entity, ...transform._childEntities];
                 this.displacement.set(0, 0);
 
                 this.collisionRepository
@@ -48,17 +47,5 @@ export class ApplyRepositionSystem implements System {
             });
 
         this.transformSystem.onUpdate();
-    }
-
-    // TODO: this method consumes too much
-    public getChildren(parent: Transform): Entity[] {
-        const result: Entity[] = [];
-
-        this.entityManager.search(Transform, { parent }).forEach(({ entity, component: transform }) => {
-            result.push(entity);
-            result.push(...this.getChildren(transform));
-        });
-
-        return result;
     }
 }

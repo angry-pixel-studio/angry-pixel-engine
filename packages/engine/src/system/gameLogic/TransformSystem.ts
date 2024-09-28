@@ -15,42 +15,25 @@ export class TransformSystem implements System {
         this.entityManager
             .search(Transform)
             .sort((a, b) => getBranchLength(a.component) - getBranchLength(b.component))
-            .forEach(({ component: transform }) => {
+            .forEach(({ component: transform, entity }) => {
                 if (!transform.parent || !this.entityManager.getEntityForComponent(transform.parent)) {
-                    transform.parent = undefined;
-                    transform.localPosition.copy(transform.position);
-                    transform.localScale.copy(transform.scale);
-                    transform.localRotation = transform.rotation;
+                    this.updateTransform(transform);
                 } else {
+                    transform._parentEntity = this.entityManager.getEntityForComponent(transform.parent);
+                    transform.parent._childEntities.push(entity);
                     this.translateChild(transform.parent, transform);
                 }
             });
     }
 
-    public onUpdateOld(): void {
-        this.entityManager.search(Transform).forEach(({ component: transform }) => {
-            if (!transform.parent) {
-                this.updateTransform(transform);
-            } else if (!this.entityManager.getEntityForComponent(transform.parent)) {
-                transform.parent = undefined;
-                this.updateTransform(transform);
-            }
-        });
-    }
-
     private updateTransform(transform: Transform): void {
+        transform.parent = undefined;
+        transform._parentEntity = undefined;
+        transform._childEntities = [];
+
         transform.localPosition.copy(transform.position);
         transform.localScale.copy(transform.scale);
         transform.localRotation = transform.rotation;
-
-        this.updateChildren(transform);
-    }
-
-    private updateChildren(parent: Transform): void {
-        this.entityManager.search(Transform, { parent }).forEach(({ component: transform }) => {
-            this.translateChild(parent, transform);
-            this.updateChildren(transform);
-        });
     }
 
     private translateChild(parent: Transform, child: Transform): void {

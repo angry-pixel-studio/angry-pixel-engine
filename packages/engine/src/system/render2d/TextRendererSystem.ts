@@ -6,7 +6,7 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
-import { RenderDataType, TextRenderData } from "@webgl";
+import { TextRenderData } from "@webgl";
 
 @injectable(SYSTEMS.TextRendererSystem)
 export class TextRendererSystem implements System {

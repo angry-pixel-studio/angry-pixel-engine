@@ -15,6 +15,7 @@ const builderECS = (format, filename) => ({
 
 const main = () => {
     return [
+        // this generates one file containing all the type declarations
         {
             input: "../../bundles/angry-pixel-engine/types/index.d.ts",
             output: [
@@ -25,6 +26,7 @@ const main = () => {
             ],
             plugins: [dts(), del({ dest: "../../bundles/angry-pixel-engine/types" })],
         },
+        // this generates thie modules
         {
             input: "src/index.ts",
             output: [

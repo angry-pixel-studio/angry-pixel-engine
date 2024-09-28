@@ -1,3 +1,4 @@
+import { Entity } from "@ecs";
 import { Vector2 } from "@math";
 
 /** @category Components */
@@ -26,6 +27,11 @@ export class Transform {
     localScale: Vector2 = new Vector2(1, 1);
     /** The real rotation in the simulated world. It has the same value as `rotation` property if there is no parent */
     localRotation: number = 0;
+
+    /** @internal */
+    _parentEntity: Entity;
+    /** @internal */
+    _childEntities: Entity[] = [];
 
     private _parent: Transform = undefined;
 

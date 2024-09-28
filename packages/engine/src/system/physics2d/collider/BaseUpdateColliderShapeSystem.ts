@@ -69,7 +69,7 @@ export abstract class BaseUpdateColliderShapeSystem {
         this.auxMax.x = shape.vertices[0].x;
         this.auxMax.y = shape.vertices[0].y;
 
-        shape.vertices.forEach((vertex, i) => {
+        shape.vertices.forEach((vertex) => {
             this.auxMin.x = Math.min(vertex.x, this.auxMin.x);
             this.auxMin.y = Math.min(vertex.y, this.auxMin.y);
             this.auxMax.x = Math.max(vertex.x, this.auxMax.x);

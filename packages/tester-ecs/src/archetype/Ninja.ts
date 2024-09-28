@@ -5,7 +5,6 @@ import {
     BoxCollider,
     Component,
     AssetManager,
-    EntityManager,
     LightRenderer,
     RigidBody,
     RigidBodyType,
@@ -82,18 +81,4 @@ const runAnimation = (assetManager: AssetManager): Animation => {
     animation.frames = [8, 9, 10, 11, 12, 13];
 
     return animation;
-};
-
-const setupFeet = (entityManager: EntityManager, parentTransform: Transform): void => {
-    const transform = new Transform();
-    transform.parent = parentTransform;
-
-    const collider = new BoxCollider();
-    collider.layer = COLLISION_LAYERS.Ninja;
-    collider.width = 10;
-    collider.height = 8;
-    collider.offset.y = -4;
-    collider.physics = false;
-
-    entityManager.createEntity([transform, collider]);
 };

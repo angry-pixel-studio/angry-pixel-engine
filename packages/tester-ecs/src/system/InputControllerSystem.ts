@@ -11,7 +11,7 @@ export class InputControllerSystem extends GameSystem {
 
     public onUpdate(): void {
         this.gamepad = this.inputManager.gamepads[0];
-        this.entityManager.search(InputController).forEach(({ entity, component: input }) => {
+        this.entityManager.search(InputController).forEach(({ component: input }) => {
             this.updateKeyboard(input);
             if (this.gamepad) this.updateGamepad(input);
         });

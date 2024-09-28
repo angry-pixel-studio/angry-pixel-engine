@@ -1,4 +1,16 @@
-export { TYPES as Symbols } from "@config/types";
+import { TYPES } from "@config/types";
+export const Symbols = {
+    AssetManager: TYPES.AssetManager,
+    CanvasElement: TYPES.CanvasElement,
+    CollisionRepository: TYPES.CollisionRepository,
+    EntityManager: TYPES.EntityManager,
+    GameConfig: TYPES.GameConfig,
+    InputManager: TYPES.InputManager,
+    SceneManager: TYPES.SceneManager,
+    SystemManager: TYPES.SystemManager,
+    TimeManager: TYPES.TimeManager,
+};
+
 export { GameConfig } from "@config/bootstrap";
 export { Game } from "./Game";
 
