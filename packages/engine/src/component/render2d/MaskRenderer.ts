@@ -1,6 +1,6 @@
 import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
-import { MaskShape } from "@webgl";
+import { MaskRenderData, MaskShape, RenderDataType } from "@webgl";
 
 /**
  * @public
@@ -62,8 +62,20 @@ export class MaskRenderer {
     opacity: number = 1;
     /** The render layer */
     layer: string = defaultRenderLayer;
+
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: MaskRenderData = {
+        type: RenderDataType.Mask,
+        color: undefined,
+        height: undefined,
+        layer: undefined,
+        opacity: undefined,
+        position: new Vector2(),
+        radius: undefined,
+        rotation: undefined,
+        shape: undefined,
+        width: undefined,
+    };
 
     constructor(options?: Partial<MaskRendererOptions>) {
         Object.assign(this, options);

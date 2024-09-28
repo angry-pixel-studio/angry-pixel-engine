@@ -6,7 +6,7 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
-import { MaskRenderData, RenderDataType } from "@webgl";
+import { MaskRenderData } from "@webgl";
 
 @injectable(SYSTEMS.MaskRendererSystem)
 export class MaskRendererSystem implements System {
@@ -28,20 +28,22 @@ export class MaskRendererSystem implements System {
                 maskRenderer.offset.y * transform.localScale.y,
             );
 
-            const renderData: MaskRenderData = {
-                ...maskRenderer,
-                type: RenderDataType.Sprite,
-                position: Vector2.add(maskRenderer._position, transform.localPosition, this.scaledOffset),
-                width: maskRenderer.width * Math.abs(transform.localScale.x),
-                height: maskRenderer.height * Math.abs(transform.localScale.y),
-                rotation: transform.localRotation + maskRenderer.rotation,
-            };
+            Vector2.add(maskRenderer._renderData.position, transform.localPosition, this.scaledOffset);
+            maskRenderer._renderData.width = maskRenderer.width * Math.abs(transform.localScale.x);
+            maskRenderer._renderData.height = maskRenderer.height * Math.abs(transform.localScale.y);
+            maskRenderer._renderData.rotation = transform.localRotation + maskRenderer.rotation;
+            maskRenderer._renderData.color = maskRenderer.color;
+            maskRenderer._renderData.layer = maskRenderer.layer;
+            maskRenderer._renderData.opacity = maskRenderer.opacity;
+            maskRenderer._renderData.radius =
+                maskRenderer.radius * Math.max(Math.abs(transform.localScale.x), Math.abs(transform.localScale.y));
+            maskRenderer._renderData.shape = maskRenderer.shape;
 
             if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
-                this.translateRenderPosition(renderData, transform);
+                this.translateRenderPosition(maskRenderer._renderData, transform);
             }
 
-            this.renderManager.addRenderData(renderData);
+            this.renderManager.addRenderData(maskRenderer._renderData);
         });
     }
 

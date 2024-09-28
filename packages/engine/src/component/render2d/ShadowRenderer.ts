@@ -1,4 +1,5 @@
-import { Rectangle, Vector2 } from "@math";
+import { Rectangle } from "@math";
+import { RenderDataType, ShadowRenderData } from "@webgl";
 
 /**
  * @public
@@ -27,10 +28,21 @@ export class ShadowRenderer {
     opacity: number = 1;
     /** The render layer */
     layer: string = "";
+
     /** @internal */
     _boundingBox: Rectangle = new Rectangle();
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: ShadowRenderData = {
+        type: RenderDataType.Shadow,
+        layer: undefined,
+        color: undefined,
+        opacity: undefined,
+        width: undefined,
+        height: undefined,
+        position: undefined,
+        rotation: undefined,
+        lights: [],
+    };
 
     constructor(options?: Partial<ShadowRendererOptions>) {
         Object.assign(this, options);

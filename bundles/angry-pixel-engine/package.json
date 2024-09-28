@@ -11,15 +11,14 @@
     },
     "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
     "keywords": [
-        "angry pixel",
+        "video game engine",
         "game engine",
-        "video games",
-        "engine",
         "2d engine",
         "webgl",
         "canvas",
         "typescript",
-        "game development"
+        "game development",
+        "entity component system"
     ],
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "license": "MIT",

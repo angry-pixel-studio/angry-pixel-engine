@@ -6,7 +6,7 @@ import { TYPES } from "@config/types";
 import { Entity, EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
-import { Light, RenderDataType, ShadowRenderData } from "@webgl";
+import { Light } from "@webgl";
 
 @injectable(SYSTEMS.ShadowLightRendererSystem)
 export class ShadowLightRendererSystem implements System {
@@ -21,37 +21,30 @@ export class ShadowLightRendererSystem implements System {
 
         this.entityManager.search(ShadowRenderer).forEach(({ entity, component: shadowRenderer }) => {
             this.updatShadowRendererBoundingBox(entity, shadowRenderer);
-            shadowRenderer._position.copy(shadowRenderer._boundingBox.center);
 
-            const renderData: ShadowRenderData = {
-                type: RenderDataType.Shadow,
-                layer: shadowRenderer.layer,
-                color: shadowRenderer.color,
-                opacity: shadowRenderer.opacity,
-                width: shadowRenderer._boundingBox.width,
-                height: shadowRenderer._boundingBox.height,
-                position: shadowRenderer._position,
-                rotation: 0,
-                lights: [],
-            };
+            shadowRenderer._renderData.layer = shadowRenderer.layer;
+            shadowRenderer._renderData.color = shadowRenderer.color;
+            shadowRenderer._renderData.opacity = shadowRenderer.opacity;
+            shadowRenderer._renderData.width = shadowRenderer._boundingBox.width;
+            shadowRenderer._renderData.height = shadowRenderer._boundingBox.height;
+            shadowRenderer._renderData.position = shadowRenderer._boundingBox.center;
+            shadowRenderer._renderData.rotation = 0;
+            shadowRenderer._renderData.lights = [];
 
-            renderData.lights = lightRenderers
+            shadowRenderer._renderData.lights = lightRenderers
                 .filter(
                     ({ component: lightRenderer }) =>
                         lightRenderer.layer === shadowRenderer.layer &&
                         lightRenderer._boundingBox.overlaps(shadowRenderer._boundingBox),
                 )
-                .map(
-                    ({ component: { _boundingBox, smooth, intensity } }) =>
-                        ({
-                            position: _boundingBox.center,
-                            radius: _boundingBox.width / 2,
-                            smooth,
-                            intensity,
-                        }) as Light,
-                );
+                .map<Light>(({ component: { _boundingBox, smooth, intensity } }) => ({
+                    position: _boundingBox.center,
+                    radius: _boundingBox.width / 2,
+                    smooth,
+                    intensity,
+                }));
 
-            this.renderManager.addRenderData(renderData);
+            this.renderManager.addRenderData(shadowRenderer._renderData);
         });
     }
 

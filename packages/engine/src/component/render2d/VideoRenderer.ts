@@ -1,6 +1,6 @@
 import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
-import { Slice } from "@webgl";
+import { RenderDataType, Slice, VideoRenderData } from "@webgl";
 
 /**
  * @public
@@ -87,8 +87,24 @@ export class VideoRenderer {
     play: boolean = false;
     /** TRUE to pause the video */
     pause: boolean = false;
+
     /** @internal */
-    _position: Vector2 = new Vector2();
+    _renderData: VideoRenderData = {
+        type: RenderDataType.Video,
+        height: undefined,
+        layer: undefined,
+        position: new Vector2(),
+        video: undefined,
+        width: undefined,
+        flipHorizontal: undefined,
+        flipVertical: undefined,
+        maskColor: undefined,
+        maskColorMix: undefined,
+        opacity: undefined,
+        rotation: undefined,
+        slice: undefined,
+        tintColor: undefined,
+    };
 
     constructor(options?: Partial<VideoRendererOptions>) {
         Object.assign(this, options);

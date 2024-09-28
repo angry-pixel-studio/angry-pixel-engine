@@ -7,7 +7,7 @@ import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { TimeManager } from "@manager/TimeManager";
 import { Vector2 } from "@math";
-import { RenderDataType, VideoRenderData } from "@webgl";
+import { VideoRenderData } from "@webgl";
 
 const userInputEventNames = [
     "click",
@@ -63,28 +63,27 @@ export class VideoRendererSystem implements System {
                 videoRenderer.offset.y * transform.localScale.y,
             );
 
-            const renderData: VideoRenderData = {
-                type: RenderDataType.Video,
-                position: Vector2.add(videoRenderer._position, transform.localPosition, this.scaledOffset),
-                layer: videoRenderer.layer,
-                video: videoRenderer.video,
-                width: (videoRenderer.width ?? videoRenderer.video.videoWidth) * Math.abs(transform.localScale.x),
-                height: (videoRenderer.height ?? videoRenderer.video.videoHeight) * Math.abs(transform.localScale.y),
-                rotation: transform.localRotation + videoRenderer.rotation,
-                slice: videoRenderer.slice,
-                flipHorizontal: videoRenderer.flipHorizontally,
-                flipVertical: videoRenderer.flipVertically,
-                opacity: videoRenderer.opacity,
-                maskColor: videoRenderer.maskColor,
-                maskColorMix: videoRenderer.maskColorMix,
-                tintColor: videoRenderer.tintColor,
-            };
+            Vector2.add(videoRenderer._renderData.position, transform.localPosition, this.scaledOffset);
+            videoRenderer._renderData.layer = videoRenderer.layer;
+            videoRenderer._renderData.video = videoRenderer.video;
+            videoRenderer._renderData.width =
+                (videoRenderer.width ?? videoRenderer.video.videoWidth) * Math.abs(transform.localScale.x);
+            videoRenderer._renderData.height =
+                (videoRenderer.height ?? videoRenderer.video.videoHeight) * Math.abs(transform.localScale.y);
+            videoRenderer._renderData.rotation = transform.localRotation + videoRenderer.rotation;
+            videoRenderer._renderData.slice = videoRenderer.slice;
+            videoRenderer._renderData.flipHorizontal = videoRenderer.flipHorizontally;
+            videoRenderer._renderData.flipVertical = videoRenderer.flipVertically;
+            videoRenderer._renderData.opacity = videoRenderer.opacity;
+            videoRenderer._renderData.maskColor = videoRenderer.maskColor;
+            videoRenderer._renderData.maskColorMix = videoRenderer.maskColorMix;
+            videoRenderer._renderData.tintColor = videoRenderer.tintColor;
 
             if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
-                this.translateRenderPosition(renderData, transform);
+                this.translateRenderPosition(videoRenderer._renderData, transform);
             }
 
-            this.renderManager.addRenderData(renderData);
+            this.renderManager.addRenderData(videoRenderer._renderData);
         });
     }
 
