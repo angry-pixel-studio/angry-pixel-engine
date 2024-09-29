@@ -19,6 +19,7 @@ export class TransformSystem implements System {
                 if (!transform.parent || !this.entityManager.getEntityForComponent(transform.parent)) {
                     this.updateTransform(transform);
                 } else {
+                    transform._childEntities = [];
                     transform._parentEntity = this.entityManager.getEntityForComponent(transform.parent);
                     transform.parent._childEntities.push(entity);
                     this.translateChild(transform.parent, transform);
