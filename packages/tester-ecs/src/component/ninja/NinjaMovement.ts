@@ -1,4 +1,4 @@
-import { Collision } from "angry-pixel-engine";
+import { Collision } from "angry-pixel";
 
 export class NinjaMovement {
     public gravity: number = 1000;

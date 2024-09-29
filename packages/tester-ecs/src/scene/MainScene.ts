@@ -8,7 +8,7 @@ import {
     SystemType,
     Transform,
     Vector2,
-} from "angry-pixel-engine";
+} from "angry-pixel";
 import { FpsMetterSystem } from "@system/FpsMetterSystem";
 import { InputControllerSystem } from "@system/InputControllerSystem";
 import { MovingPlatformSystem } from "@system/MovingPlatformSystem";

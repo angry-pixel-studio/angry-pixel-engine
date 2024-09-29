@@ -8,7 +8,7 @@ import {
     Symbols,
     System,
     Transform,
-} from "angry-pixel-engine";
+} from "angry-pixel";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
 import { COLLISION_LAYERS } from "@config/layers";
 

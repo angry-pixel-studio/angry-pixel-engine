@@ -1,6 +1,6 @@
 # Introduction
 
-## What is Angry Pixel ECS Engine?
+## What is Angry Pixel Engine?
 
 It is a 2D engine for browser games written in Typescript.
 

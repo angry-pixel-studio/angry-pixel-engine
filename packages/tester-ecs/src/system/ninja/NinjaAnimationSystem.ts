@@ -1,4 +1,4 @@
-import { Animator, GameSystem, RigidBody, Transform } from "angry-pixel-engine";
+import { Animator, GameSystem, RigidBody, Transform } from "angry-pixel";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";
 
 export class NinjaAnimationSystem extends GameSystem {

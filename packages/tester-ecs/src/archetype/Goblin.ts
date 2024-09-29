@@ -12,7 +12,7 @@ import {
     Transform,
     Vector2,
     randomInt,
-} from "angry-pixel-engine";
+} from "angry-pixel";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { ASSETS } from "@config/assets";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";

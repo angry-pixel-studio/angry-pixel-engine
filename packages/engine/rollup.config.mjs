@@ -7,8 +7,8 @@ import del from "rollup-plugin-del";
 
 const builderECS = (format, filename) => ({
     exports: "named",
-    name: "angry-pixel-engine",
-    file: "../../bundles/angry-pixel-engine/lib/" + filename,
+    name: "angry-pixel",
+    file: "../../bundles/angry-pixel/lib/" + filename,
     format,
     sourcemap: true,
 });
@@ -17,14 +17,14 @@ const main = () => {
     return [
         // this generates one file containing all the type declarations
         {
-            input: "../../bundles/angry-pixel-engine/types/index.d.ts",
+            input: "../../bundles/angry-pixel/types/index.d.ts",
             output: [
                 {
-                    file: "../../bundles/angry-pixel-engine/lib/index.d.ts",
+                    file: "../../bundles/angry-pixel/lib/index.d.ts",
                     format: "es",
                 },
             ],
-            plugins: [dts(), del({ dest: "../../bundles/angry-pixel-engine/types" })],
+            plugins: [dts(), del({ dest: "../../bundles/angry-pixel/types" })],
         },
         // this generates thie modules
         {

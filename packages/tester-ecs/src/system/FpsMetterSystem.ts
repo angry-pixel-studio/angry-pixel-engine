@@ -1,4 +1,4 @@
-import { GameSystem, TextRenderer, gamePhysicsSystem } from "angry-pixel-engine";
+import { GameSystem, TextRenderer, gamePhysicsSystem } from "angry-pixel";
 import { FpsMetter } from "@component/FpsMetter";
 
 const refreshTime = 0.1;

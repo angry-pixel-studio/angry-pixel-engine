@@ -1,5 +1,5 @@
 {
-    "name": "angry-pixel-engine",
+    "name": "angry-pixel",
     "version": "2.0.0",
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",

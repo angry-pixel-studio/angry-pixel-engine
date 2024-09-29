@@ -11,7 +11,7 @@ import {
     SpriteRenderer,
     Transform,
     Vector2,
-} from "angry-pixel-engine";
+} from "angry-pixel";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { ASSETS } from "@config/assets";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";

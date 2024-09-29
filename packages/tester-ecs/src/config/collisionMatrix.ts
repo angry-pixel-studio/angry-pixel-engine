@@ -1,4 +1,4 @@
-import { CollisionMatrix } from "angry-pixel-engine";
+import { CollisionMatrix } from "angry-pixel";
 import { COLLISION_LAYERS } from "./layers";
 
 export const collisionMatrix = [
