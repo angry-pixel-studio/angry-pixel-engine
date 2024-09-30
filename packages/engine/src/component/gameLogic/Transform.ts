@@ -55,6 +55,12 @@ export class Transform {
     }
 
     constructor(options?: Partial<TransformOptions>) {
+        if (options && options.parent) {
+            this.position = options.parent.position.clone();
+            this.parent = options.parent;
+            delete options.parent;
+        }
+
         Object.assign(this, options);
     }
 }
