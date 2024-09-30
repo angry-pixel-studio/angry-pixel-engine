@@ -1,5 +1,5 @@
 import { Vector2 } from "@math";
-import { Collider, Shape } from "@physics2d";
+import { Collider, Shape } from "@collisions2d";
 
 export interface BallColliderOptions {
     /** Circumference radius */

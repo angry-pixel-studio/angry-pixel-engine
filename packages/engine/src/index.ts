@@ -61,5 +61,5 @@ export {
     CollisionResolution,
     Polygon,
     Shape,
-} from "@physics2d";
+} from "@collisions2d";
 export { Light, MaskShape, Slice, TextOrientation, TilemapOrientation } from "@webgl";

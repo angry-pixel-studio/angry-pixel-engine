@@ -5,7 +5,7 @@ import { AssetManager } from "@manager/AssetManager";
 import { InputManager } from "@manager/InputManager";
 import { SceneManager } from "@manager/SceneManager";
 import { TimeManager } from "@manager/TimeManager";
-import { CollisionRepository } from "@physics2d";
+import { CollisionRepository } from "@collisions2d";
 
 export abstract class GameSystem implements System {
     @inject(TYPES.EntityManager) protected readonly entityManager: EntityManager;

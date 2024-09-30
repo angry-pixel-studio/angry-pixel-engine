@@ -11,7 +11,7 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
-import { Circumference, Collider, CollisionMethods, Polygon } from "@physics2d";
+import { Circumference, Collider, CollisionMethods, Polygon } from "@collisions2d";
 import { GeometricRenderData, GeometricShape, RenderDataType } from "@webgl";
 
 @injectable(SYSTEMS.ColliderRenderSystem)

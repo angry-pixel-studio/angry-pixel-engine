@@ -1,5 +1,5 @@
 import { Vector2 } from "@math";
-import { Collider, Shape } from "@physics2d";
+import { Collider, Shape } from "@collisions2d";
 
 export interface EdgeColliderOptions {
     /** Collection of 2d vectors representing the vertices of the collider */

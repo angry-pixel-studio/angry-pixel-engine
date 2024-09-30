@@ -1,7 +1,7 @@
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { Vector2 } from "@math";
-import { BroadPhaseResolver, Collider, CollisionRepository, CollisionMethod, Shape } from "@physics2d";
+import { BroadPhaseResolver, Collider, CollisionRepository, CollisionMethod, Shape } from "@collisions2d";
 import { TYPES } from "@config/types";
 import { SYSTEMS } from "@config/systems";
 import { BallCollider } from "@component/physics2d/BallCollider";

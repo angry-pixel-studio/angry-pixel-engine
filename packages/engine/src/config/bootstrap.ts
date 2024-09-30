@@ -11,7 +11,7 @@ import {
     SatMethod,
     SatResolver,
     SpartialGrid,
-} from "@physics2d";
+} from "@collisions2d";
 import { CollisionMatrix } from "@system/physics2d/ResolveCollisionSystem";
 import { TYPES } from "./types";
 import { EntityManager, System, SystemManager } from "@ecs";

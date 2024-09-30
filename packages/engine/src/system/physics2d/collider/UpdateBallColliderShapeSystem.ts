@@ -1,6 +1,6 @@
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
-import { Circumference } from "@physics2d";
+import { Circumference } from "@collisions2d";
 import { TYPES } from "@config/types";
 import { SYSTEMS } from "@config/systems";
 import { Transform } from "@component/gameLogic/Transform";

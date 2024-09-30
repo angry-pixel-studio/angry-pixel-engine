@@ -1,7 +1,7 @@
 import { inject, injectable } from "@ioc";
 import { EntityManager, System } from "@ecs";
 import { Vector2 } from "@math";
-import { CollisionRepository } from "@physics2d";
+import { CollisionRepository } from "@collisions2d";
 import { TYPES } from "@config/types";
 import { SYSTEMS } from "@config/systems";
 import { Transform } from "@component/gameLogic/Transform";

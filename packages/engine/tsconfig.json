@@ -15,7 +15,7 @@
             "@input": ["./src/utils/input"],
             "@ioc": ["./src/utils/ioc"],
             "@math": ["./src/utils/math"],
-            "@physics2d": ["./src/utils/physics2d"],
+            "@collisions2d": ["./src/utils/collisions2d"],
             "@webgl": ["./src/utils/webgl"]
         }
     },

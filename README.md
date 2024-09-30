@@ -1,14 +1,16 @@
 # Introduction
 
-## What is Angry Pixel ECS Engine?
+## What is Angry Pixel Engine?
 
 It is a 2D engine for browser games written in Typescript.
 
 Main features:
 
--   Sprite-based graphics and frame-by-frame animations
--   Text with bitmap fonts
+-   Entity-Component-System based architecture
 -   WebGL rendering
--   Polygonal collisions and static physics resolution
+-   Sprite-based graphics and frame-by-frame animations
+-   Text rendering based on bitmap fonts
+-   Shadow/Lights rendering
+-   Polygonal collisions and static/dynamic physical responses
 -   Keyboard, mouse, gamepad and touch screen input support
--   Entity Component System based architecture
+-   Dependency Injection
