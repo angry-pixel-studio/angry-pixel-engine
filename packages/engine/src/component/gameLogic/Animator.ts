@@ -32,6 +32,10 @@ export class Animation {
     frames: number[] = [];
     fps: number = 12;
     loop: boolean = false;
+
+    constructor(options?: Partial<Animation>) {
+        Object.assign(this, options);
+    }
 }
 
 /** @category Components */
