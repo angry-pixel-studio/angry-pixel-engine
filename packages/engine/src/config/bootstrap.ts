@@ -20,10 +20,12 @@ import { defaultPhysicsFramerate, TimeManager } from "@manager/TimeManager";
 import { AssetManager } from "@manager/AssetManager";
 import { SceneManager } from "@manager/SceneManager";
 import { LoopManager } from "@manager/LoopManager";
-import { systemTypes } from "./systemTypes";
+import { SystemTypes, systemTypes } from "./systemTypes";
 import { SystemFactory } from "@system/SystemFactory";
 import { WebGLManager } from "@webgl";
 import { RenderManager } from "@manager/RenderManager";
+import { SystemGroup } from "@system/SystemGroup";
+import { SYSTEMS } from "./systems";
 
 export interface GameConfig {
     /** HTML element where the game will be created */
@@ -41,6 +43,8 @@ export interface GameConfig {
      * Default value is 180.
      */
     physicsFramerate?: number;
+    /** Enable Headless mode. The input and rendering functions are turned off. Ideal for game server development */
+    headless?: boolean;
     /** Collision configuration options */
     collisions?: {
         /** Collision detection method: CollisionMethods.SAT or CollisionMethods.ABB. Default value is CollisionMethods.SAT */
@@ -75,6 +79,7 @@ const setDefaultValues = (gameConfig: GameConfig) => {
     gameConfig.debugEnabled = gameConfig.debugEnabled ?? false;
     gameConfig.canvasColor = gameConfig.canvasColor ?? "#000000";
     gameConfig.physicsFramerate = gameConfig.physicsFramerate ?? defaultPhysicsFramerate;
+    gameConfig.headless = gameConfig.headless ?? false;
 
     gameConfig.collisions = gameConfig.collisions ?? {};
     gameConfig.collisions.collisionBroadPhaseMethod =
@@ -112,11 +117,33 @@ const setupManagers = (container: Container): void => {
 };
 
 const setupEngineSystems = (container: Container): void => {
+    if (container.get<GameConfig>(TYPES.GameConfig).headless) headlessFilter(systemTypes);
+
     systemTypes.forEach((systems, group) =>
         systems.forEach(({ type, name }) => {
             container.add(type);
             container.get<SystemManager>(TYPES.SystemManager).addSystem(container.get<System>(name), group);
         }),
+    );
+};
+
+const headlessFilter = (systemTypes: SystemTypes): void => {
+    systemTypes.delete(SystemGroup.Render);
+    systemTypes.set(
+        SystemGroup.PreGameLogic,
+        systemTypes
+            .get(SystemGroup.PreGameLogic)
+            .filter(
+                ({ name }) =>
+                    ![
+                        SYSTEMS.AudioPlayerSystem,
+                        SYSTEMS.ButtonSystem,
+                        SYSTEMS.GamepadSystem,
+                        SYSTEMS.KeyboardSystem,
+                        SYSTEMS.MouseSystem,
+                        SYSTEMS.TouchScreenSystem,
+                    ].includes(name),
+            ),
     );
 };
 

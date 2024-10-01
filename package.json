@@ -15,7 +15,8 @@
         "lint": "eslint .",
         "lint-and-fix": "eslint . --fix",
         "prettier-format": "prettier --write \"packages/*/src/**/*.ts\"",
-        "prettier-check": "prettier --check \"packages/*/src/**/*.ts\""
+        "prettier-check": "prettier --check \"packages/*/src/**/*.ts\"",
+        "publish": "yarn run build && yarn workspace angry-pixel publish"
     },
     "devDependencies": {
         "eslint": "^9.2.0",

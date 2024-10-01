@@ -32,8 +32,11 @@ import { UpdatePolygonColliderShapeSystem } from "@system/physics2d/collider/Upd
 import { UpdateTilemapColliderShapeSystem } from "@system/physics2d/collider/UpdateTilemapColliderShapeSystem";
 import { ResolveCollisionSystem } from "@system/physics2d/ResolveCollisionSystem";
 import { ApplyRepositionSystem } from "@system/physics2d/ApplyRepositionSystem";
+import { UpdateCollidersAfterRepositionSystem } from "@system/physics2d/collider/UpdateCollidersAfterRepositionSystem";
 
-export const systemTypes: Map<SystemGroup, { name: symbol; type: SystemType }[]> = new Map([
+export type SystemTypes = Map<SystemGroup, { name: symbol; type: SystemType }[]>;
+
+export const systemTypes: SystemTypes = new Map([
     [
         SystemGroup.PreGameLogic,
         [
@@ -66,7 +69,7 @@ export const systemTypes: Map<SystemGroup, { name: symbol; type: SystemType }[]>
             { name: SYSTEMS.UpdateTilemapColliderShapeSystem, type: UpdateTilemapColliderShapeSystem },
             { name: SYSTEMS.ResolveCollisionSystem, type: ResolveCollisionSystem },
             { name: SYSTEMS.ApplyRepositionSystem, type: ApplyRepositionSystem },
-            { name: SYSTEMS.ResolveCollisionSystem, type: ResolveCollisionSystem },
+            { name: SYSTEMS.UpdateCollidersAfterRepositionSystem, type: UpdateCollidersAfterRepositionSystem },
         ],
     ],
     [
