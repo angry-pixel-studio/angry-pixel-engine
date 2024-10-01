@@ -40,7 +40,6 @@ export class SceneManager {
     public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {
         const scene = new sceneType(this.entityManager, this.assetManager);
         this.scenes.set(name, scene);
-        scene.systems.forEach((systemType) => this.systemFactory.createSystemIfNotExists(systemType));
         if (openingScene) this.openingSceneName = name;
     }
 
@@ -75,6 +74,7 @@ export class SceneManager {
             this.systemManager.update(SystemGroup.PostGameLogic);
 
             this.scenes.get(this.currentSceneName).systems.forEach((systemType, index) => {
+                this.systemFactory.createSystemIfNotExists(systemType);
                 this.systemManager.enableSystem(systemType);
                 this.systemManager.setExecutionOrder(systemType, index);
             });
