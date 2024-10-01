@@ -3,6 +3,7 @@ import { inject, injectable } from "@ioc";
 import { WebGLManager } from "@webgl";
 import { CameraData, RenderData } from "../utils/webgl/renderer/Renderer";
 
+/** @internal */
 @injectable(TYPES.RenderManager)
 export class RenderManager {
     private renderData: RenderData[] = [];

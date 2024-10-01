@@ -1,6 +1,9 @@
 import { Entity } from "@ecs";
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class Parent {
     entity: Entity;
 }

@@ -1,6 +1,10 @@
 import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
+/**
+ * @public
+ * @category Components
+ */
 export interface TilemapColliderOptions {
     /** Generate colliders that represent the outer lines of the tile map */
     composite: boolean;
@@ -14,6 +18,10 @@ export interface TilemapColliderOptions {
     physics: boolean;
 }
 
+/**
+ * @public
+ * @category Components
+ */
 export class TilemapCollider implements Collider {
     /** Generate colliders that represent the outer lines of the tile map */
     composite: boolean = true;

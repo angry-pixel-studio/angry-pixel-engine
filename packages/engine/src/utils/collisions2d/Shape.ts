@@ -1,5 +1,9 @@
 import { Rectangle, Vector2 } from "@math";
 
+/**
+ * @public
+ * @category Collisions
+ */
 export interface Shape {
     boundingBox: Rectangle;
     collider: number;
@@ -16,6 +20,10 @@ export interface Shape {
     updateCollisions: boolean;
 }
 
+/**
+ * @public
+ * @category Collisions
+ */
 export class Polygon implements Shape {
     public boundingBox: Rectangle = new Rectangle();
     public collider: number = undefined;
@@ -61,6 +69,10 @@ export class Polygon implements Shape {
     }
 }
 
+/**
+ * @public
+ * @category Collisions
+ */
 export class Circumference implements Shape {
     public boundingBox: Rectangle = new Rectangle();
     public collider: number = undefined;

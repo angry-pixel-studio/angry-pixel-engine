@@ -12,6 +12,10 @@ export enum RigidBodyType {
     Static,
 }
 
+/**
+ * @public
+ * @category Components
+ */
 export interface RigidBodyOptions {
     type: RigidBodyType;
     velocity: Vector2;
@@ -19,6 +23,10 @@ export interface RigidBodyOptions {
     acceleration: Vector2;
 }
 
+/**
+ * @public
+ * @category Components
+ */
 export class RigidBody {
     type: RigidBodyType = RigidBodyType.Dynamic;
     velocity: Vector2 = new Vector2();

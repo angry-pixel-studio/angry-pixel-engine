@@ -1,6 +1,10 @@
 import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
+/**
+ * @public
+ * @category Components
+ */
 export interface EdgeColliderOptions {
     /** Collection of 2d vectors representing the vertices of the collider */
     vertexModel: Vector2[];

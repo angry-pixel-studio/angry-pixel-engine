@@ -1,6 +1,10 @@
 import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
+/**
+ * @public
+ * @category Components
+ */
 export interface BoxColliderOptions {
     /** Collision layer*/
     layer: string;

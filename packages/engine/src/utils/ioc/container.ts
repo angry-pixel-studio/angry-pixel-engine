@@ -47,6 +47,17 @@ export class Container {
     }
 }
 
+/**
+ * Decorator to identify a class as an injectable dependency
+ * @param name the name to identify the dependency
+ * @public
+ * @category Decorators
+ * @example
+ * ```typescript
+ * @injectable("SomeDependency")
+ * class SomeDependency {}
+ * ```
+ */
 export function injectable(name: DependencyName) {
     return function (target: DependencyType) {
         if (!target.prototype.__ioc_injectable || target.prototype.__ioc_injectable !== name) {
@@ -55,6 +66,28 @@ export function injectable(name: DependencyName) {
     };
 }
 
+/**
+ * Decorator to identify a property, or constructor argument, as a dependency to be injected
+ * @param name the name to identify the dependency
+ * @public
+ * @category Decorators
+ * @example
+ * ```typescript
+ * class SomeClass {
+ *   private anotherDependency: DependencyType;
+ *
+ *   constructor(@inject("AnotherDependency") anotherDependency: DependencyType) {
+ *     this.anotherDependency = anotherDependency;
+ *   }
+ * }
+ * ```
+ * @example
+ * ```typescript
+ * class SomeClass {
+ *   @inject("AnotherDependency") private anotherDependency: DependencyType;
+ * }
+ * ```
+ */
 export function inject(name: DependencyName) {
     return function (target: any, propertyKey: PropertyKey, parameterIndex?: number) {
         if (parameterIndex !== undefined) {

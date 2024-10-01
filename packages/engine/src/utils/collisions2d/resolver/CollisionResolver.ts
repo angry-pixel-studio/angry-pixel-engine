@@ -1,6 +1,10 @@
 import { Vector2 } from "@math";
 import { Shape } from "../Shape";
 
+/**
+ * @public
+ * @category Collisions
+ */
 export interface CollisionResolution {
     penetration: number;
     direction: Vector2;

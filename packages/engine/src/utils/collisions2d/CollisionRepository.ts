@@ -3,6 +3,10 @@ import { Collider } from "./Collider";
 import { Collision } from "./Collision";
 import { TYPES } from "@config/types";
 
+/**
+ * @public
+ * @category Collisions
+ */
 @injectable(TYPES.CollisionRepository)
 export class CollisionRepository {
     private collisions: Collision[] = [];

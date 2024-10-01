@@ -3,8 +3,8 @@ import { Collider } from "./Collider";
 import { CollisionResolution } from "./resolver/CollisionResolver";
 
 /**
- * Represent a collision. It contains the colliders involved and the resolution data.
- * @category Components
+ * Represent a collision. It contains the colliders involved, the entities, and the resolution data.
+ * @category Collisions
  * @public
  */
 export interface Collision {
