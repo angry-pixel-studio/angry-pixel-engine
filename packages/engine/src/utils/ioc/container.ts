@@ -1,5 +1,16 @@
+/**
+ * This type represents a dependency class
+ * @public
+ * @category Core
+ */
 export type DependencyType = { new (...args: any[]): any };
+/**
+ * This type represents a dependency name
+ * @public
+ * @category Core
+ */
 export type DependencyName = string | symbol;
+
 type PropertyKey = string | symbol;
 
 export class Container {

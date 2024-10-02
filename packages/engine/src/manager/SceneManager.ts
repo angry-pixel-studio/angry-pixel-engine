@@ -7,7 +7,11 @@ import { AssetManager } from "./AssetManager";
 import { SystemGroup } from "@system/SystemGroup";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
 
-/** @internal */
+/**
+ * This type represents a scene class
+ * @public
+ * @category Core
+ */
 export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityManager, assetManager: AssetManager): T };
 
 /**
@@ -65,6 +69,7 @@ export class SceneManager {
     private sceneNameToBeLoaded: string;
     private loadingScene: boolean = false;
 
+    /** @internal */
     constructor(
         @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
         @inject(TYPES.SystemFactory) private readonly systemFactory: SystemFactory,

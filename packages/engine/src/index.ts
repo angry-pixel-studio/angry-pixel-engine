@@ -54,7 +54,7 @@ export { gameLogicSystem, gamePhysicsSystem, gamePreRenderSystem } from "@system
 
 export * from "@ecs";
 export * from "@input";
-export { inject, injectable } from "@ioc";
+export { inject, injectable, DependencyName, DependencyType } from "@ioc";
 export * from "@math";
 export {
     BroadPhaseMethods,

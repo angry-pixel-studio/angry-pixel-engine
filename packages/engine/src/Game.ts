@@ -78,7 +78,7 @@ export class Game {
     /**
      * Add a new instance to be used as dependency
      *
-     * @param dependency The dependency instance
+     * @param dependencyInstance The dependency instance
      * @param name The name for the dependecy
      */
     public addDependencyInstance(dependencyInstance: any, name: DependencyName): void {
