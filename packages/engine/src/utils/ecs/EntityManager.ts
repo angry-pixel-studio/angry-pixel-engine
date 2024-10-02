@@ -78,7 +78,7 @@ export class EntityManager {
 
     /**
      * Creates multiple entities based on an array of component collections
-     * @param components An array of collections of component instances and component classes
+     * @param componentsList An array of collections of component instances and component classes
      * @return An array with the created entities, in the same order of the collections of components
      * @public
      * @example
