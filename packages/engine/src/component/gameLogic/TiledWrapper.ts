@@ -1,10 +1,16 @@
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledWrapperOptions {
     tilemap: TiledTilemap;
     layerToRender: string;
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class TiledWrapper {
     tilemap: TiledTilemap;
     layerToRender: string;
@@ -14,7 +20,10 @@ export class TiledWrapper {
     }
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledTilemap {
     width: number;
     height: number;
@@ -27,7 +36,10 @@ export interface TiledTilemap {
     properties?: TiledProperty[];
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledChunk {
     data: number[];
     x: number;
@@ -37,7 +49,10 @@ export interface TiledChunk {
     type?: string;
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledLayer {
     name: string;
     id: number;
@@ -58,7 +73,10 @@ export interface TiledLayer {
     properties?: TiledProperty[];
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledObjectLayer {
     draworder: string;
     id: number;
@@ -72,7 +90,10 @@ export interface TiledObjectLayer {
     properties?: TiledProperty[];
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledObject {
     gid: number;
     height: number;
@@ -87,7 +108,10 @@ export interface TiledObject {
     properties?: TiledProperty[];
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TiledProperty {
     name: string;
     type: "int" | "bool" | "float" | "color" | "string";

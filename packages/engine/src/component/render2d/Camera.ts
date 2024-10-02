@@ -1,6 +1,11 @@
 import { Vector2 } from "@math";
 import { CameraData } from "@webgl";
 
+/**
+ * Default render layer
+ * @public
+ * @category Components
+ */
 export const defaultRenderLayer = "Default";
 
 /**

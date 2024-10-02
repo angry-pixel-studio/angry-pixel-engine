@@ -27,6 +27,31 @@ import { RenderManager } from "@manager/RenderManager";
 import { SystemGroup } from "@system/SystemGroup";
 import { SYSTEMS } from "./systems";
 
+/**
+ * Game configuration options
+ * @public
+ * @category Config
+ *  @example
+ * ```js
+ * const gameConfig = {
+ *   containerNode: document.getElementById("app"),
+ *   width: 1920,
+ *   height: 1080,
+ *   debugEnabled: false,
+ *   canvasColor: "#000000",
+ *   physicsFramerate: 180,
+ *   headless: false,
+ *   collisions: {
+ *     collisionMatrix: [
+ *       ["layer1", "layer2"],
+ *       ["layer1", "layer3"],
+ *     ],
+ *     collisionMethod: CollisionMethods.SAT,
+ *     collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+ *   }
+ * };
+ * ```
+ */
 export interface GameConfig {
     /** HTML element where the game will be created */
     containerNode: HTMLElement;

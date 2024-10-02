@@ -1,6 +1,22 @@
 import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
+/**
+ * Configuration object for PolygonCollider creation
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * const polygonCollider = new PolygonCollider({
+ *   vertexModel: [new Vector2(0, 16), new Vector2(16, 16), new Vector2(16, 0), new Vector2(0, 0)],
+ *   rotation: 0,
+ *   offset: new Vector2(),
+ *   layer: "CollisionLayer",
+ *   physics: true,
+ *   ignoreCollisionsWithLayer: ["IgnoredLayer"]
+ * });
+ * ```
+ */
 export interface PolygonColliderOptions {
     /** Collection of 2d vectors representing the vertices of the collider */
     vertexModel: Vector2[];
@@ -20,6 +36,17 @@ export interface PolygonColliderOptions {
  * Polygon shaped Collider for 2d collisions. Only convex polygons are allowed.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const polygonCollider = new PolygonCollider({
+ *   vertexModel: [new Vector2(0, 16), new Vector2(16, 16), new Vector2(16, 0), new Vector2(0, 0)],
+ *   rotation: 0,
+ *   offset: new Vector2(),
+ *   layer: "CollisionLayer",
+ *   physics: true,
+ *   ignoreCollisionsWithLayer: ["IgnoredLayer"]
+ * });
+ * ```
  */
 export class PolygonCollider implements Collider {
     /** Collection of 2d vectors representing the vertices of the collider */

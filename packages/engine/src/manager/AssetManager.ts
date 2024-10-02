@@ -54,7 +54,6 @@ export class AssetManager {
     /**
      * Loads an image asset
      * @param url The asset URL
-     * @param preloadTexture Creates the texture to be rendered at load time [optional]
      * @returns The HTML Image element created
      */
     public loadImage(url: string): HTMLImageElement {

@@ -1,6 +1,23 @@
 import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
+/**
+ * Configuration object for BoxCollider creation
+ * @public
+ * @category Components
+ * @example
+ * ```js
+ * const boxCollider = new BoxCollider({
+ *   width: 16,
+ *   height: 16,
+ *   rotation: 0,
+ *   offset: new Vector2(),
+ *   layer: "CollisionLayer",
+ *   physics: true,
+ *   ignoreCollisionsWithLayer: ["IgnoredLayer"]
+ * });
+ * ```
+ */
 export interface BoxColliderOptions {
     /** Collision layer*/
     layer: string;
@@ -22,6 +39,18 @@ export interface BoxColliderOptions {
  * Rectangle shaped collider for 2d collisions.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const boxCollider = new BoxCollider({
+ *   width: 16,
+ *   height: 16,
+ *   rotation: 0,
+ *   offset: new Vector2(),
+ *   layer: "CollisionLayer",
+ *   physics: true,
+ *   ignoreCollisionsWithLayer: ["IgnoredLayer"]
+ * });
+ * ```
  */
 export class BoxCollider implements Collider {
     /** Collision layer*/

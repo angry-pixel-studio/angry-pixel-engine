@@ -7,8 +7,38 @@ import { AssetManager } from "./AssetManager";
 import { SystemGroup } from "@system/SystemGroup";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
 
+/**
+ * This type represents a scene class
+ * @public
+ * @category Core
+ */
 export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityManager, assetManager: AssetManager): T };
 
+/**
+ * Base class for all game scenes
+ * @public
+ * @category Core
+ * @example
+ * ```js
+ * class GameScene extends Scene {
+ *   systems = [
+ *     SomeSystem,
+ *     AnotherSystem
+ *   ];
+ *
+ *   loadAssets() {
+ *      this.assetManager.loadImage("image.png");
+ *   }
+ *
+ *   setup() {
+ *     this.entityManager.createEntity([
+ *       SomeComponent,
+ *       AnotherComponent
+ *     ]);
+ *   }
+ * }
+ * ```
+ */
 export abstract class Scene {
     public systems: SystemType[];
 
@@ -21,6 +51,15 @@ export abstract class Scene {
     public setup(): void {}
 }
 
+/**
+ * Manges the loading of the scenes.
+ * @public
+ * @category Managers
+ * @example
+ * ```js
+ * this.sceneManager.loadScene("MainScene");
+ * ```
+ */
 @injectable(TYPES.SceneManager)
 export class SceneManager {
     private readonly scenes: Map<string, Scene> = new Map();
@@ -30,6 +69,7 @@ export class SceneManager {
     private sceneNameToBeLoaded: string;
     private loadingScene: boolean = false;
 
+    /** @internal */
     constructor(
         @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
         @inject(TYPES.SystemFactory) private readonly systemFactory: SystemFactory,

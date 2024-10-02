@@ -1,6 +1,9 @@
 import { Vector2 } from "@math";
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface AnimatorOptions {
     animations: Map<string, Animation>;
     animation: string;
@@ -8,7 +11,10 @@ export interface AnimatorOptions {
     playing: boolean;
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class Animator {
     animations: Map<string, Animation> = new Map();
     animation: string;
@@ -25,7 +31,10 @@ export class Animator {
     }
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class Animation {
     image: HTMLImageElement | HTMLImageElement[];
     slice: AnimationSlice = { size: new Vector2(), offset: new Vector2(), padding: new Vector2() };
@@ -38,5 +47,8 @@ export class Animation {
     }
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export type AnimationSlice = { size: Vector2; offset: Vector2; padding: Vector2 };

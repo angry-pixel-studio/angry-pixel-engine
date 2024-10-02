@@ -1,4 +1,7 @@
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface AudioPlayerOptions {
     action: AudioPlayerAction;
     audioSource: HTMLAudioElement;
@@ -6,7 +9,10 @@ export interface AudioPlayerOptions {
     volume: number;
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class AudioPlayer {
     action: AudioPlayerAction = "stop";
     audioSource: HTMLAudioElement;
@@ -21,4 +27,8 @@ export class AudioPlayer {
     }
 }
 
+/**
+ * @public
+ * @category Components
+ */
 export type AudioPlayerAction = "stop" | "play" | "pause";

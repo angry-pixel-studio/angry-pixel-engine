@@ -245,6 +245,7 @@ export class GamepadController {
     }
 }
 
+/** @internal */
 export type VibrationInput = {
     duration: number;
     weakMagnitude: number;

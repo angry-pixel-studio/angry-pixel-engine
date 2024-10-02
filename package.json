@@ -16,11 +16,14 @@
         "lint-and-fix": "eslint . --fix",
         "prettier-format": "prettier --write \"packages/*/src/**/*.ts\"",
         "prettier-check": "prettier --check \"packages/*/src/**/*.ts\"",
-        "publish": "yarn run build && yarn workspace angry-pixel publish"
+        "publish": "yarn run build && yarn workspace angry-pixel publish",
+        "docs": "yarn workspace @angry-pixel/engine typedoc"
     },
     "devDependencies": {
         "eslint": "^9.2.0",
         "prettier": "^3.2.5",
+        "typedoc": "^0.26.7",
+        "typedoc-plugin-markdown": "^4.2.8",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.14.1"
     }

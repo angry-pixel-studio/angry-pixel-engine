@@ -13,10 +13,27 @@ export interface ShadowRenderData extends RenderData {
     lights: Light[];
 }
 
+/**
+ * Represents a light source
+ * @internal
+ * @example
+ * ```js
+ * const light = {
+ *   position: new Vector2(10, 10),
+ *   radius: 32,
+ *   smooth: true,
+ *   intensity: 0.7,
+ * }
+ * ```
+ */
 export interface Light {
+    /** The position of the light source */
     position: Vector2;
+    /** The radius of the light source */
     radius: number;
+    /** If it's TRUE the light will gradually disappear away from the origin point, if FALSE the light will be constant over its entire area. */
     smooth: boolean;
+    /** The intensity of the light, between 0 and 1 */
     intensity: number;
 }
 

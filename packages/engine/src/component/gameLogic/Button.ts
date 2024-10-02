@@ -1,6 +1,9 @@
 import { Vector2 } from "@math";
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface ButtonOptions {
     shape: ButtonShape;
     width: number;
@@ -12,7 +15,10 @@ export interface ButtonOptions {
     onPressed: () => void;
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class Button {
     /** The shape of the button */
     shape: ButtonShape;
@@ -38,7 +44,10 @@ export class Button {
     }
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export enum ButtonShape {
     Rectangle,
     Circumference,

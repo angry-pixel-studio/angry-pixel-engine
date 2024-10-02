@@ -1,4 +1,9 @@
 import { TYPES } from "@config/types";
+/**
+ * Symbols to be used as dependency identifiers
+ * @public
+ * @category Config
+ */
 export const Symbols = {
     AssetManager: TYPES.AssetManager,
     CanvasElement: TYPES.CanvasElement,
@@ -49,7 +54,7 @@ export { gameLogicSystem, gamePhysicsSystem, gamePreRenderSystem } from "@system
 
 export * from "@ecs";
 export * from "@input";
-export { inject, injectable } from "@ioc";
+export { inject, injectable, DependencyName, DependencyType } from "@ioc";
 export * from "@math";
 export {
     BroadPhaseMethods,
@@ -62,4 +67,4 @@ export {
     Polygon,
     Shape,
 } from "@collisions2d";
-export { Light, MaskShape, Slice, TextOrientation, TilemapOrientation } from "@webgl";
+export { MaskShape, Slice, TextOrientation, TilemapOrientation } from "@webgl";

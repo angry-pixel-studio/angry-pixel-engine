@@ -11,5 +11,5 @@
         "resolveJsonModule": true,
         "experimentalDecorators": true
     },
-    "exclude": ["node_modules", "**/dist/**", "**/lib/**"]
+    "exclude": ["node_modules", "**/editor/**", "**/lib/**"]
 }

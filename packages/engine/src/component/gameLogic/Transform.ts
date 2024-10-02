@@ -1,7 +1,10 @@
 import { Entity } from "@ecs";
 import { Vector2 } from "@math";
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export interface TransformOptions {
     position: Vector2;
     scale: Vector2;
@@ -12,7 +15,10 @@ export interface TransformOptions {
     localRotation: number;
 }
 
-/** @category Components */
+/**
+ * @public
+ * @category Components
+ */
 export class Transform {
     /** Position relative to the zero point of the simulated world, or relative to the parent if it has one */
     position: Vector2 = new Vector2();
