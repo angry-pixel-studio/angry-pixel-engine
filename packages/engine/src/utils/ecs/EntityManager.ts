@@ -48,9 +48,8 @@ export class EntityManager {
 
     /**
      * Creates an entity without component
-     * @return the created Entity
+     * @return The created Entity
      * @public
-     * @category Core
      * @example
      * ```js
      * const entity = entityManager.createEntity();
@@ -59,9 +58,9 @@ export class EntityManager {
     public createEntity(): Entity;
     /**
      * Creates an Entity based on a collection of Component instances and ComponentTypes
-     * @param components A collection of Component instances and ComponentTypes
+     * @param components A collection of component instances and component classes
+     * @return The created Entity
      * @public
-     * @category Core
      * @example
      * ```js
      * const entity = entityManager.createEntity([
@@ -78,10 +77,37 @@ export class EntityManager {
     }
 
     /**
+     * Creates multiple entities based on an array of component collections
+     * @param components An array of collections of component instances and component classes
+     * @return An array with the created entities, in the same order of the collections of components
+     * @public
+     * @example
+     * ```js
+     * const parent =  [
+     *   new Transform({position: new Vector2(100, 100)}),
+     *   SpriteRenderer
+     * ];
+     *
+     * const child =  [
+     *   new Transform({parent: parent[0]}),
+     *   SpriteRenderer
+     * ];
+     *
+     * const entity = entityManager.createEntities([parent, child]);
+     * ```
+     */
+    public createEntities(componentsList: Component[][]): Entity[] {
+        const entities: Entity[] = [];
+
+        componentsList.forEach((components) => entities.push(this.createEntity(components)));
+
+        return entities;
+    }
+
+    /**
      * Removes an Entity and all its Components
      * @param entity The entity to remove
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.removeEntity(entity);
@@ -98,7 +124,6 @@ export class EntityManager {
     /**
      * Removes all Entities and all their Components
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.removeAllEntities();
@@ -116,7 +141,6 @@ export class EntityManager {
      * @param entity The entity to verify
      * @returns boolean
      * @public
-     * @category Core
      * @example
      * ```js
      * const entityEnabled = entityManager.isEntityEnabled(entity);
@@ -130,7 +154,6 @@ export class EntityManager {
      * Enables an Entity
      * @param entity The entity to be enabled
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.enableEntity(entity);
@@ -144,7 +167,6 @@ export class EntityManager {
      * Disables an Entity
      * @param entity The entity to be disabled
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.disableEntity(entity);
@@ -158,7 +180,6 @@ export class EntityManager {
      * Disable all Entities that have a component of the given type
      * @param componentType The class of the component
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.disableEntitiesByComponent(SpriteRenderer);
@@ -174,7 +195,6 @@ export class EntityManager {
      * Enable all Entities that have a component of the given type
      * @param componentType The class of the component
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.enableEntitiesByComponent(SpriteRenderer);
@@ -192,7 +212,6 @@ export class EntityManager {
      * @param componentType The class of the component
      * @returns The instance of the component
      * @public
-     * @category Core
      * @example
      * ```js
      * const spriteRenderer = entityManager.addComponent(entity, SpriteRenderer);
@@ -205,7 +224,6 @@ export class EntityManager {
      * @param component The instance of the component
      * @returns The instance of the component
      * @public
-     * @category Core
      * @example
      * ```js
      * const spriteRenderer = new SpriteRenderer();
@@ -234,7 +252,6 @@ export class EntityManager {
      * @param componentType The class of the component
      * @returns boolean
      * @public
-     * @category Core
      * @example
      * ```js
      * const hasSpriteRenderer = entityManager.hasComponent(entity, SpriteRenderer);
@@ -250,7 +267,6 @@ export class EntityManager {
      * @param componentType The class of the component
      * @returns The instance of the component
      * @public
-     * @category Core
      * @example
      * ```js
      * const spriteRenderer = entityManager.getComponent(entity, SpriteRenderer);
@@ -265,7 +281,6 @@ export class EntityManager {
      * @param entity The entity
      * @returns A collection of component instances
      * @public
-     * @category Core
      * @example
      * ```js
      * const components = entityManager.getComponents(entity);
@@ -288,7 +303,6 @@ export class EntityManager {
      * @param component The component instance
      * @returns The found Entity
      * @public
-     * @category Core
      * @example
      * ```js
      * const entity = entityManager.getEntityForComponent(spriteRenderer);
@@ -308,7 +322,6 @@ export class EntityManager {
      * Removes the component instance from its Entity
      * @param component The component instance
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.removeComponent(spriteRenderer)
@@ -320,7 +333,6 @@ export class EntityManager {
      * @param entity The target entity
      * @param componentType The component class
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.removeComponent(entity, SriteRenderer)
@@ -339,7 +351,6 @@ export class EntityManager {
      * @param component The component instance
      * @returns boolean
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.isComponentEnabled(spriteRenderer)
@@ -352,7 +363,6 @@ export class EntityManager {
      * @param componentType The component class
      * @returns boolean
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.isComponentEnabled(entity, SpriteRenderer)
@@ -370,7 +380,6 @@ export class EntityManager {
      * Disables a component instance
      * @param component The component instance
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.disableComponent(spriteRenderer);
@@ -382,7 +391,6 @@ export class EntityManager {
      * @param entity The target entity
      * @param componentType The component class
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.disableComponent(entity, SpriteRenderer);
@@ -404,7 +412,6 @@ export class EntityManager {
      * Enables a component instance
      * @param component The component instance
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.enableComponent(spriteRenderer);
@@ -416,7 +423,6 @@ export class EntityManager {
      * @param entity The target entity
      * @param componentType The component class
      * @public
-     * @category Core
      * @example
      * ```js
      * entityManager.enableComponent(entity, SpriteRenderer);
@@ -442,7 +448,6 @@ export class EntityManager {
      * @param includeDisabled TRUE to incluide disabled entities and components, FALSE otherwise
      * @returns SearchResult
      * @public
-     * @category Core
      * @example
      * ```js
      * const searchResult = entityManager.search(SpriteRenderer);
@@ -487,7 +492,6 @@ export class EntityManager {
      * @param componentTypes A collection of component classes
      * @returns A collection of entities
      * @public
-     * @category Core
      * @example
      * ```js
      * const entities = entityManager.searchEntitiesByComponents([Transform, SpriteRenderer, Animator]);

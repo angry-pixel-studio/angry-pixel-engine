@@ -33,7 +33,7 @@ yarn add angry-pixel
 
 ### Initialize
 
-First we create an instance of the Game class:
+First we create an instance of the `Game` class:
 
 ```typescript
 import { Game, GameConfig } from "angry-pixel";
@@ -50,7 +50,7 @@ const game = new Game(config);
 
 ### Create a Scene
 
-Then we will create the MainScene class, which extends the Scene base class. This class represents a scene in our game, and has three main functions:
+Then we will create the `MainScene` class, which extends the `Scene` base class. This class represents a scene in our game, and has three main functions:
 
 -   To load assets.
 -   To create the initial entities.
@@ -78,7 +78,7 @@ game.addScene(MainScene, "MainScene", true);
 
 ### Create a Component
 
-Then we will create the MoveAndBounce component which has the necessary attributes to define the movement of our entity.
+Then we will create the `MoveAndBounce` component which has the necessary attributes to define the movement of our entity.
 
 ```typescript
 import { Vector2 } from "angry-pixel";
@@ -92,7 +92,7 @@ class MoveAndBounce {
 
 ### Create a System
 
-Once we have created our component, we will need a system that executes the business logic. Extending the base class GameSystem, we will create our MoveAndBounceSystem, which, using the EntityManager, obtains all the entities that have the MoveAndBounce component, and executes the business logic necessary for the entity to move by bouncing on the edges of the screen:
+Once we have created our component, we will need a system that executes the business logic. Extending the base class `GameSystem`, we will create our `MoveAndBounceSystem`, which, using the `EntityManager`, obtains all the entities that have the `MoveAndBounce` component, and executes the business logic necessary for the entity to move by bouncing on the edges of the screen:
 
 ```typescript
 import { GameSystem, Transform } from "angry-pixel";
@@ -135,10 +135,10 @@ class MainScene extends Scene {
 
 ### Create the entities
 
-Finally, we need two entities, one that represents our logo, which we want to move, and another one that represents the camera of our game. To do this we will create the entities in the following way:
+Finally, we need to create two entities, one that represents our logo, to which we want to apply the behavior of moving and bouncing, and another one that represents the camera of our game. For it we will use the `EntityManager`, specifically the `createEntity` method. This method accepts both classes and instances of components.
 
 ```typescript
-import { Camera, Component, Scene, SpriteRenderer, Transform } from "angry-pixel";
+import { Camera, Scene, SpriteRenderer, Transform } from "angry-pixel";
 
 class MainScene extends Scene {
     public systems: SystemType<System>[] = [MoveAndBounceSystem];
@@ -150,24 +150,26 @@ class MainScene extends Scene {
     // within this method we create the entities
     public setup(): void {
         // camera
-        const cameraArchetype: Component[] = [new Transform(), new Camera({ layers: ["Logo"] })];
-        this.entityManager.createEntity(cameraArchetype);
+        const camera = [Transform, new Camera({ layers: ["Logo"] })];
+        this.entityManager.createEntity(camera);
 
         // logo
-        const logoArchetype: Component[] = [
-            new Transform(),
+        const logo = [
+            Transform,
+            MoveAndBounce,
             new SpriteRenderer({
                 layer: "Logo",
                 image: this.assetManager.getImage("logo.png"),
             }),
-            new MoveAndBounce(),
         ];
-        this.entityManager.createEntity(logoArchetype);
+        this.entityManager.createEntity(logo);
     }
 }
 ```
 
 ### Run the game
+
+Now we can start the game:
 
 ```typescript
 game.run();
