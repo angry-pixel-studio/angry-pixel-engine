@@ -21,7 +21,7 @@ import { AssetManager } from "@manager/AssetManager";
 import { SceneManager } from "@manager/SceneManager";
 import { LoopManager } from "@manager/LoopManager";
 import { SystemTypes, systemTypes } from "./systemTypes";
-import { SystemFactory } from "@system/SystemFactory";
+import { CreateSystemService } from "@system/CreateSystemService";
 import { WebGLManager } from "@webgl";
 import { RenderManager } from "@manager/RenderManager";
 import { SystemGroup } from "@system/SystemGroup";
@@ -130,7 +130,10 @@ const createCanvas = ({ containerNode, width, height }: Partial<GameConfig>): HT
 const setupManagers = (container: Container): void => {
     container.add(EntityManager);
     container.add(SystemManager);
-    container.set(TYPES.SystemFactory, new SystemFactory(container, container.get<SystemManager>(TYPES.SystemManager)));
+    container.set(
+        TYPES.CreateSystemService,
+        new CreateSystemService(container, container.get<SystemManager>(TYPES.SystemManager)),
+    );
     container.add(TimeManager);
     container.add(AssetManager);
     container.add(InputManager);

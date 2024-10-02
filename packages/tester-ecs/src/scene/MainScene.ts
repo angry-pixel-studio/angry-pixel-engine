@@ -19,11 +19,11 @@ import { NinjaMovementSystem } from "@system/ninja/NinjaMovementSystem";
 import { NinjaSfxSystem } from "@system/ninja/NinjaSfxSystem";
 import { ASSETS } from "@config/assets";
 import { InputController } from "@component/InputController";
-import { foregroundArchetype } from "@archetype/Foreground";
-import { ninjaArchetypes } from "@archetype/Ninja";
-import { movingPlatformArchetype } from "@archetype/MovingPlatform";
-import { goblinArchetype } from "@archetype/Goblin";
-import { textArchetype } from "@archetype/Text";
+import { foregroundFactory } from "@factory/Foreground";
+import { ninjaFactory } from "@factory/Ninja";
+import { movingPlatformFactory } from "@factory/MovingPlatform";
+import { goblinFactory } from "@factory/Goblin";
+import { textFactory } from "@factory/Text";
 import { FpsMetter } from "@component/FpsMetter";
 import { RENDER_LAYERS } from "@config/layers";
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
@@ -51,25 +51,20 @@ export class MainScene extends Scene {
         this.setupUiCamera();
 
         this.entityManager.createEntity([InputController]);
-        this.entityManager.createEntity(foregroundArchetype(this.assetManager));
+        this.entityManager.createEntity(foregroundFactory(this.assetManager));
 
-        ninjaArchetypes(this.assetManager, new Vector2(0, 0)).forEach((archetype) =>
-            this.entityManager.createEntity(archetype),
-        );
-
-        this.entityManager.createEntity(movingPlatformArchetype(this.assetManager));
+        this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(0, 0)));
+        this.entityManager.createEntity(movingPlatformFactory(this.assetManager));
 
         for (let i = 0; i < 20; i++) {
-            this.entityManager.createEntity(goblinArchetype(this.assetManager, new Vector2(randomInt(-600, 192), 0)));
+            this.entityManager.createEntity(goblinFactory(this.assetManager, new Vector2(randomInt(-600, 192), 0)));
         }
 
         this.entityManager.createEntity(
-            textArchetype(this.assetManager, "USE WASD TO MOVE AND SPACE BAR TO JUMP.", new Vector2(-940, -450)),
+            textFactory(this.assetManager, "USE WASD TO MOVE AND SPACE BAR TO JUMP.", new Vector2(-940, -450)),
         );
 
-        const fpsMetter = this.entityManager.createEntity(
-            textArchetype(this.assetManager, "", new Vector2(-940, -500)),
-        );
+        const fpsMetter = this.entityManager.createEntity(textFactory(this.assetManager, "", new Vector2(-940, -500)));
         this.entityManager.addComponent(fpsMetter, FpsMetter);
     }
 

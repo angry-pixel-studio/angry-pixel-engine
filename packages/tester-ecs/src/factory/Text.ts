@@ -2,7 +2,7 @@ import { Component, AssetManager, TextOrientation, TextRenderer, Transform, Vect
 import { ASSETS } from "@config/assets";
 import { RENDER_LAYERS } from "@config/layers";
 
-export const textArchetype = (
+export const textFactory = (
     assetManager: AssetManager,
     text: string = "",
     position: Vector2 = new Vector2(),

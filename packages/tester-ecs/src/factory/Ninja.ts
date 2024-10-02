@@ -17,7 +17,7 @@ import { ASSETS } from "@config/assets";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";
 import { NinjaSfx } from "@component/ninja/NinjaSfx";
 
-export const ninjaArchetypes = (assetManager: AssetManager, position: Vector2): Component[][] => {
+export const ninjaFactory = (assetManager: AssetManager, position: Vector2): Component[][] => {
     const ninjaArchetype = [
         new Transform({ position }),
         new SpriteRenderer({ layer: RENDER_LAYERS.Ninja }),

@@ -17,7 +17,7 @@ import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { ASSETS } from "@config/assets";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
 
-export const goblinArchetype = (assetManager: AssetManager, position: Vector2): Component[] => [
+export const goblinFactory = (assetManager: AssetManager, position: Vector2): Component[] => [
     new Transform({ position }),
     new SpriteRenderer({ layer: RENDER_LAYERS.Goblin }),
     new Animator({

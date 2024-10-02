@@ -2,7 +2,7 @@ import { System, SystemManager, SystemType } from "@ecs";
 import { Container } from "@ioc";
 import { getSystemGroup } from "./SystemGroup";
 
-export class SystemFactory {
+export class CreateSystemService {
     private lastSystemTypeId: number = 0;
 
     constructor(

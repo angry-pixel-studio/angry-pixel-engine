@@ -2,7 +2,7 @@ import { TYPES } from "@config/types";
 import { EntityManager, SystemManager, SystemType } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
-import { SystemFactory } from "@system/SystemFactory";
+import { CreateSystemService } from "@system/CreateSystemService";
 import { AssetManager } from "./AssetManager";
 import { SystemGroup } from "@system/SystemGroup";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
@@ -72,7 +72,7 @@ export class SceneManager {
     /** @internal */
     constructor(
         @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
-        @inject(TYPES.SystemFactory) private readonly systemFactory: SystemFactory,
+        @inject(TYPES.CreateSystemService) private readonly systemFactory: CreateSystemService,
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}

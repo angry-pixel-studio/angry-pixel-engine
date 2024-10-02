@@ -11,7 +11,7 @@ import {
 import { ASSETS } from "@config/assets";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 
-export const foregroundArchetype = (assetManager: AssetManager): Component[] => [
+export const foregroundFactory = (assetManager: AssetManager): Component[] => [
     new Transform(),
     new TiledWrapper({
         layerToRender: "Foreground",
