@@ -175,4 +175,8 @@ game.run();
 
 ### Check this example live
 
-➡️ [https://angrypixel.gg/angry-pixel-logo-bounce](https://angrypixel.gg/angry-pixel-logo-bounce)
+🎮 [https://angrypixel.gg/angry-pixel-logo-bounce](https://angrypixel.gg/angry-pixel-logo-bounce)
+
+## API DOCS
+
+🔎 [https://angrypixel.gg/engine/api-docs](https://angrypixel.gg/engine/api-docs)
