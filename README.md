@@ -6,7 +6,7 @@ It is a 2D engine for browser games written in Typescript.
 
 Main features:
 
--   Entity-Component-System based architecture
+-   [Entity-Component-System](https://github.com/SanderMertens/ecs-faq) based architecture
 -   WebGL rendering
 -   Sprite-based graphics and frame-by-frame animations
 -   Text rendering based on bitmap fonts
