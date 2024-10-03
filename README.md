@@ -1,6 +1,6 @@
 ![Angry Pixel](https://angrypixel.gg/assets/image/logo-text-white-mid.png)
 
-[![Version](https://img.shields.io/github/v/release/angry-pixel-studio/angry-pixel-engine?include_prereleases&style=for-the-badge)](https://github.com/angry-pixel-studio/angry-pixel-engine/releases)
+[![NPM Version](https://img.shields.io/npm/v/angry-pixel?style=for-the-badge)](https://www.npmjs.com/package/angry-pixel)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/master/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-angrypixel-blue?style=for-the-badge&color=blue)](https://angrypixel.gg/engine/api-docs)
 [![Actions](https://img.shields.io/github/actions/workflow/status/angry-pixel-studio/angry-pixel-engine/main.yml?branch=main&style=for-the-badge)](https://github.com/angry-pixel-studio/angry-pixel-engine/actions?query=workflow%3AContinuous)
