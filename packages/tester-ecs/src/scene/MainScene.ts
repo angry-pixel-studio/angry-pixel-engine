@@ -53,7 +53,7 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([InputController]);
         this.entityManager.createEntity(foregroundFactory(this.assetManager));
 
-        this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(0, 0)));
+        this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(-300, 0)));
         this.entityManager.createEntity(movingPlatformFactory(this.assetManager));
 
         for (let i = 0; i < 20; i++) {
