@@ -1,5 +1,5 @@
 import { inject, injectable } from "@ioc";
-import { Entity, EntityManager, System } from "@ecs";
+import { EntityManager, System } from "@ecs";
 import { Vector2 } from "@math";
 import { CollisionRepository } from "@collisions2d";
 import { TYPES } from "@config/types";
@@ -43,14 +43,14 @@ export class ApplyRepositionSystem implements System {
 
                 collisions
                     .filter(({ localEntity }) => entity === localEntity)
-                    .forEach(({ resolution: { direction, penetration } }) => {
+                    .forEach(({ remoteEntity, resolution: { direction, penetration } }) => {
+                        // since the displacement distance must be the same as the penetration, each entity will be displaced by half the penetration
+                        if (this.entityManager.getComponent(remoteEntity, RigidBody).type === RigidBodyType.Dynamic) {
+                            penetration /= 2;
+                        }
                         Vector2.scale(this.correction, direction, -penetration);
 
-                        if (this.correction.x > 0) this.max.x = Math.max(this.max.x, this.correction.x);
-                        else if (this.correction.x < 0) this.min.x = Math.min(this.min.x, this.correction.x);
-
-                        if (this.correction.y > 0) this.max.y = Math.max(this.max.y, this.correction.y);
-                        else if (this.correction.y < 0) this.min.y = Math.min(this.min.y, this.correction.y);
+                        if (this.correction.magnitude > this.max.magnitude) this.max.copy(this.correction);
                     });
 
                 Vector2.add(this.totalCorrection, this.max, this.min);
@@ -59,10 +59,10 @@ export class ApplyRepositionSystem implements System {
                 const { position } = this.entityManager.getComponent(entity, Transform);
                 Vector2.add(position, position, this.totalCorrection);
 
-                // stop velocity if it's direction is inverse to the displacement direction
-                // e.g. stops the gravity velocity if the object reachs ground
-                if (this.totalCorrection.x * rigidBody.velocity.x < 0) rigidBody.velocity.x = 0;
-                if (this.totalCorrection.y * rigidBody.velocity.y < 0) rigidBody.velocity.y = 0;
+                // due to gravity, we need to stop vertical velocity if it's direction is inverse to the displacement direction
+                if (rigidBody.gravity > 0 && this.totalCorrection.y * rigidBody.velocity.y < 0) {
+                    rigidBody.velocity.y = 0;
+                }
             });
 
         this.transformSystem.onUpdate();

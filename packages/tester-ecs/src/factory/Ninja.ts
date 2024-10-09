@@ -51,7 +51,7 @@ export const ninjaFactory = (assetManager: AssetManager, position: Vector2): Com
             layer: COLLISION_LAYERS.Ninja,
             width: 10,
             height: 8,
-            offset: new Vector2(0, -4),
+            offset: new Vector2(0, -6),
             physics: false,
         }),
     ];

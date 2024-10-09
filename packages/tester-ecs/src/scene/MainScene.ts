@@ -1,7 +1,10 @@
 import {
     Camera,
     defaultRenderLayer,
+    PolygonCollider,
     randomInt,
+    RigidBody,
+    RigidBodyType,
     Scene,
     ShadowRenderer,
     System,
@@ -25,7 +28,7 @@ import { movingPlatformFactory } from "@factory/MovingPlatform";
 import { goblinFactory } from "@factory/Goblin";
 import { textFactory } from "@factory/Text";
 import { FpsMetter } from "@component/FpsMetter";
-import { RENDER_LAYERS } from "@config/layers";
+import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
 
 export class MainScene extends Scene {
@@ -66,6 +69,15 @@ export class MainScene extends Scene {
 
         const fpsMetter = this.entityManager.createEntity(textFactory(this.assetManager, "", new Vector2(-940, -500)));
         this.entityManager.addComponent(fpsMetter, FpsMetter);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(128, -112) }),
+            new RigidBody({ type: RigidBodyType.Static }),
+            new PolygonCollider({
+                layer: COLLISION_LAYERS.Foreground,
+                vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 0)],
+            }),
+        ]);
     }
 
     private setupMainCamera(): void {
@@ -84,7 +96,7 @@ export class MainScene extends Scene {
         shadowRenderer.width = 1920 / camera.zoom;
         shadowRenderer.height = 1080 / camera.zoom;
         shadowRenderer.layer = RENDER_LAYERS.Shadow;
-        shadowRenderer.opacity = 1;
+        shadowRenderer.opacity = 0.8;
 
         this.entityManager.createEntity([Transform, camera, FollowPlayerCamera, shadowRenderer]);
     }
