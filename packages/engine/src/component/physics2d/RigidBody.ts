@@ -104,9 +104,6 @@ export class RigidBody {
      */
     acceleration: Vector2 = new Vector2();
 
-    /** @internal */
-    _accelerationWithGravity: Vector2 = new Vector2();
-
     constructor(options?: Partial<RigidBodyOptions>) {
         Object.assign(this, options);
     }

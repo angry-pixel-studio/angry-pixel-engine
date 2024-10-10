@@ -10,8 +10,11 @@ import { TransformSystem } from "@system/gameLogic/TransformSystem";
 
 @injectable(SYSTEMS.ApplyVelocitySystem)
 export class ApplyVelocitySystem implements System {
-    // auxiliar
-    private distance: Vector2 = new Vector2();
+    // auxiliars
+    private displacement: Vector2 = new Vector2();
+    private totalAcceleration: Vector2 = new Vector2();
+    private scaledAcceleration: Vector2 = new Vector2();
+    private scaledVelocity: Vector2 = new Vector2();
 
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
@@ -22,20 +25,32 @@ export class ApplyVelocitySystem implements System {
     public onUpdate(): void {
         this.entityManager
             .search(RigidBody, { type: RigidBodyType.Dynamic })
-            .forEach(({ component: rigidBody, entity }) => {
-                const transform = this.entityManager.getComponent(entity, Transform);
+            .forEach(({ component: { velocity, acceleration, gravity }, entity }) => {
+                const { position } = this.entityManager.getComponent(entity, Transform);
 
-                // apply gravity to velocity
-                rigidBody.velocity.y -= rigidBody.gravity * this.timeManager.physicsDeltaTime;
+                // apply gravity to acceleration
+                this.totalAcceleration.y = acceleration.y - gravity;
+                this.totalAcceleration.x = acceleration.x;
 
-                // apply acceleration and velocity to transform
+                // update velocity by the acceleration
                 Vector2.add(
-                    transform.position,
-                    transform.position,
-                    Vector2.scale(
-                        this.distance,
-                        Vector2.add(rigidBody.velocity, rigidBody.velocity, rigidBody.acceleration),
-                        this.timeManager.physicsDeltaTime,
+                    velocity,
+                    velocity,
+                    Vector2.scale(this.scaledAcceleration, this.totalAcceleration, this.timeManager.physicsDeltaTime),
+                );
+
+                // update position using UAM
+                Vector2.add(
+                    position,
+                    position,
+                    Vector2.add(
+                        this.displacement,
+                        Vector2.scale(this.scaledVelocity, velocity, this.timeManager.physicsDeltaTime),
+                        Vector2.scale(
+                            this.scaledAcceleration,
+                            this.totalAcceleration,
+                            0.5 * this.timeManager.physicsDeltaTime ** 2,
+                        ),
                     ),
                 );
             });

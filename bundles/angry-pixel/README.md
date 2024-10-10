@@ -1,4 +1,9 @@
-# Angry Pixel Engine
+![Angry Pixel](https://angrypixel.gg/assets/image/logo-text-white-mid.png)
+
+[![NPM Version](https://img.shields.io/npm/v/angry-pixel?style=for-the-badge)](https://www.npmjs.com/package/angry-pixel)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/master/LICENSE)
+[![Docs](https://img.shields.io/badge/docs-angrypixel-blue?style=for-the-badge&color=blue)](https://angrypixel.gg/engine/api-docs)
+[![Actions](https://img.shields.io/github/actions/workflow/status/angry-pixel-studio/angry-pixel-engine/main.yml?branch=main&style=for-the-badge)](https://github.com/angry-pixel-studio/angry-pixel-engine/actions?query=workflow%3AContinuous)
 
 ## What is Angry Pixel Engine?
 
@@ -6,7 +11,7 @@ It is a 2D engine for browser games written in Typescript.
 
 Main features:
 
--   Entity-Component-System based architecture
+-   [Entity-Component-System](https://github.com/SanderMertens/ecs-faq) based architecture
 -   WebGL rendering
 -   Sprite-based graphics and frame-by-frame animations
 -   Text rendering based on bitmap fonts
