@@ -106,6 +106,8 @@ export interface TiledObject {
     x: number;
     y: number;
     properties?: TiledProperty[];
+    polygon?: { x: number; y: number }[];
+    polyline?: { x: number; y: number }[];
 }
 
 /**

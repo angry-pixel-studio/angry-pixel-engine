@@ -26,7 +26,7 @@ const main = () => {
             ],
             plugins: [dts(), del({ dest: "../../bundles/angry-pixel/types" })],
         },
-        // this generates thie modules
+        // this generates the modules
         {
             input: "src/index.ts",
             output: [

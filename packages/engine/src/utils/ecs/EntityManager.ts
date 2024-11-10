@@ -42,6 +42,7 @@ export type SearchCriteria = { [key: string]: any };
 export class EntityManager {
     private lastEntityId: number = 0;
     private lastComponentTypeId: number = 0;
+    private entities: Set<Entity> = new Set();
     private components: Map<number, Map<Entity, Component>> = new Map(); // componen type id -> entity id -> component
     private disabledEntities: Set<Entity> = new Set();
     private disabledComponents: Map<Entity, Set<number>> = new Map(); // entity -> set of componen type id
@@ -72,6 +73,7 @@ export class EntityManager {
     public createEntity(components: Array<ComponentType | Component>): Entity;
     public createEntity(components?: Array<ComponentType | Component>): Entity {
         this.lastEntityId++;
+        this.entities.add(this.lastEntityId);
         if (components) components.forEach((component) => this.addComponent(this.lastEntityId, component));
         return this.lastEntityId;
     }
@@ -119,6 +121,7 @@ export class EntityManager {
         });
         this.disabledComponents.delete(entity);
         this.disabledEntities.delete(entity);
+        this.entities.delete(entity);
     }
 
     /**
@@ -134,10 +137,24 @@ export class EntityManager {
         this.disabledComponents.clear();
         this.disabledEntities.clear();
         this.lastEntityId = 0;
+        this.entities.clear();
     }
 
     /**
-     * Returns TRUE if the Entity is enabled, otherwise it returns FALSE
+     * If the Entity exists, returns TRUE, otherwise it returns FALSE
+     * @param entity
+     * @returns boolean
+     * @example
+     * ```js
+     * const isEntity = entityManager.isEntity(entity);
+     * ```
+     */
+    public isEntity(entity: Entity): boolean {
+        return this.entities.has(entity);
+    }
+
+    /**
+     * If the Entity is enabled, returns TRUE, otherwise it returns FALSE
      * @param entity The entity to verify
      * @returns boolean
      * @public
@@ -147,7 +164,7 @@ export class EntityManager {
      * ```
      */
     public isEntityEnabled(entity: Entity): boolean {
-        return !this.disabledEntities.has(entity);
+        return this.isEntity(entity) && !this.disabledEntities.has(entity);
     }
 
     /**
@@ -160,7 +177,7 @@ export class EntityManager {
      * ```
      */
     public enableEntity(entity: Entity): void {
-        this.disabledEntities.delete(entity);
+        if (this.isEntity(entity)) this.disabledEntities.delete(entity);
     }
 
     /**
@@ -173,7 +190,7 @@ export class EntityManager {
      * ```
      */
     public disableEntity(entity: Entity): void {
-        this.disabledEntities.add(entity);
+        if (this.isEntity(entity)) this.disabledEntities.add(entity);
     }
 
     /**
@@ -343,7 +360,7 @@ export class EntityManager {
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
 
-        if (this.components.get(id)?.has(entity)) this.components.get(id).delete(entity);
+        if (entity !== undefined && this.components.get(id)?.has(entity)) this.components.get(id).delete(entity);
     }
 
     /**
@@ -373,7 +390,7 @@ export class EntityManager {
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
 
-        return !this.disabledComponents.get(entity)?.has(id) ?? true; // eslint-disable-line
+        return entity !== undefined && !this.disabledComponents.get(entity)?.has(id);
     }
 
     /**
@@ -400,6 +417,8 @@ export class EntityManager {
     public disableComponent<T extends Component>(arg1: Entity | T, arg2?: ComponentType<T>): void {
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
+
+        if (entity == undefined) return;
 
         if (!this.disabledComponents.has(entity)) {
             this.disabledComponents.set(entity, new Set([id]));
@@ -433,7 +452,7 @@ export class EntityManager {
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
 
-        if (this.disabledComponents.get(entity)?.has(id)) {
+        if (entity !== undefined && this.disabledComponents.get(entity)?.has(id)) {
             this.disabledComponents.get(entity).delete(id);
         }
     }
