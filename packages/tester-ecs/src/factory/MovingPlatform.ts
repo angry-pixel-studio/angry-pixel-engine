@@ -14,7 +14,7 @@ import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 
 export const movingPlatformFactory = (assetManager: AssetManager): Component[] => [
     new Transform(),
-    new MovingPlatform({ positions: [new Vector2(-112, -72), new Vector2(192, -72)] }),
+    new MovingPlatform({ spots: [new Vector2(-112, -72), new Vector2(192, -72)] }),
     new SpriteRenderer({
         image: assetManager.getImage(ASSETS.images.tileset),
         layer: RENDER_LAYERS.Foreground,
@@ -26,7 +26,6 @@ export const movingPlatformFactory = (assetManager: AssetManager): Component[] =
         height: 16,
     }),
     new RigidBody({
-        gravity: 0,
-        type: RigidBodyType.Static,
+        type: RigidBodyType.Kinematic,
     }),
 ];

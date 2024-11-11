@@ -11,6 +11,7 @@ import { TransformSystem } from "@system/gameLogic/TransformSystem";
 @injectable(SYSTEMS.ApplyVelocitySystem)
 export class ApplyVelocitySystem implements System {
     // auxiliars
+    private types = new Set([RigidBodyType.Dynamic, RigidBodyType.Kinematic]);
     private displacement: Vector2 = new Vector2();
     private totalAcceleration: Vector2 = new Vector2();
     private scaledAcceleration: Vector2 = new Vector2();
@@ -24,13 +25,18 @@ export class ApplyVelocitySystem implements System {
 
     public onUpdate(): void {
         this.entityManager
-            .search(RigidBody, { type: RigidBodyType.Dynamic })
-            .forEach(({ component: { velocity, acceleration, gravity }, entity }) => {
+            .search(RigidBody)
+            .filter(({ component: { type } }) => this.types.has(type))
+            .forEach(({ component: { velocity, acceleration, gravity, type }, entity }) => {
                 const { position } = this.entityManager.getComponent(entity, Transform);
 
-                // apply gravity to acceleration
-                this.totalAcceleration.y = acceleration.y - gravity;
-                this.totalAcceleration.x = acceleration.x;
+                // apply gravity to acceleration (only for dynamyc bodies)
+                if (type === RigidBodyType.Dynamic) {
+                    this.totalAcceleration.y = acceleration.y - gravity;
+                    this.totalAcceleration.x = acceleration.x;
+                } else {
+                    this.totalAcceleration.copy(acceleration);
+                }
 
                 // update velocity by the acceleration
                 Vector2.add(
