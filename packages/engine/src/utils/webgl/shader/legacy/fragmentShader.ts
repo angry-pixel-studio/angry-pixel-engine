@@ -22,7 +22,7 @@ struct Light {
 };
 
 uniform int u_renderLight;
-uniform Light u_lights[10];
+uniform Light u_lights[64];
 uniform int u_numLights;
 
 void main()
@@ -47,7 +47,9 @@ void main()
         vec2 fragCoord = gl_FragCoord.xy;
         float alpha = u_alpha;
 
-        for (int i = 0; i < u_numLights; i++) {
+        for (int i = 0; i < 64; i++) {
+            if (u_lights[i].intensity == 0.0) continue;    
+            
             Light light = u_lights[i];
             float dist = distance(fragCoord, light.position);
         
