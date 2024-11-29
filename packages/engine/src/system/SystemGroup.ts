@@ -9,6 +9,7 @@ export enum SystemGroup {
     PostGameLogic,
     PreGameLogic,
     Render,
+    Transform,
 }
 
 /**

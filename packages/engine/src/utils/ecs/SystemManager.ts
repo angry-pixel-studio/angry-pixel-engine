@@ -113,6 +113,16 @@ export class SystemManager {
     }
 
     /**
+     * Returns TRUE wether the given group has systems
+     * @param group The system group
+     * @returns boolean
+     * @internal
+     */
+    public groupHasSystems(group: SystemGroup): boolean {
+        return this.systems.filter((system) => system[1] === group).length > 0;
+    }
+
+    /**
      * Enables a system by its type.\
      * The method `onEnabled` of the system will be called. If the system is enabled for the first time, the method `onCreate` will also be called.
      * @param systemType The system class

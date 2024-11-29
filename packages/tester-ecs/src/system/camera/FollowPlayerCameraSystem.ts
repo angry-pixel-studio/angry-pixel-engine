@@ -7,6 +7,7 @@ import {
     Transform,
     Vector2,
     clamp,
+    gamePreRenderSystem,
     inject,
 } from "angry-pixel";
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
@@ -14,6 +15,7 @@ import { NinjaMovement } from "@component/ninja/NinjaMovement";
 
 const maxOffset = 40;
 
+@gamePreRenderSystem()
 export class FollowPlayerCameraSystem implements System {
     // cache
     private playerOffset: Vector2 = new Vector2();

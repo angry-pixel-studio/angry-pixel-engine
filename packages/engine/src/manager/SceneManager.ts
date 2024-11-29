@@ -40,13 +40,14 @@ export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityMan
  * ```
  */
 export abstract class Scene {
-    public systems: SystemType[];
+    public systems: SystemType[] = [];
 
     constructor(
         protected readonly entityManager: EntityManager,
         protected readonly assetManager: AssetManager,
     ) {}
 
+    public loadSystems(): void {}
     public loadAssets(): void {}
     public setup(): void {}
 }
@@ -67,7 +68,7 @@ export class SceneManager {
     private openingSceneName: string;
     private currentSceneName: string;
     private sceneNameToBeLoaded: string;
-    private loadingScene: boolean = false;
+    private _loadingScene: boolean = false;
 
     /** @internal */
     constructor(
@@ -93,6 +94,10 @@ export class SceneManager {
         this.sceneNameToBeLoaded = this.openingSceneName;
     }
 
+    public loadingScene(): boolean {
+        return this._loadingScene;
+    }
+
     /** @internal */
     public update(): void {
         if (this.sceneNameToBeLoaded) {
@@ -102,15 +107,18 @@ export class SceneManager {
             this.sceneNameToBeLoaded = undefined;
 
             this.scenes.get(this.currentSceneName).loadAssets();
-            this.loadingScene = true;
+            this.scenes.get(this.currentSceneName).loadSystems();
+            this._loadingScene = true;
         }
 
-        if (this.loadingScene && this.assetManager.getAssetsLoaded()) {
-            this.loadingScene = false;
+        if (this._loadingScene && this.assetManager.getAssetsLoaded()) {
+            this._loadingScene = false;
 
             this.scenes.get(this.currentSceneName).setup();
 
-            // this line update the transforms of the first entities
+            // update components for the initial entities
+            this.systemManager.update(SystemGroup.PreGameLogic);
+            this.systemManager.update(SystemGroup.Transform);
             this.systemManager.update(SystemGroup.PostGameLogic);
 
             this.scenes.get(this.currentSceneName).systems.forEach((systemType, index) => {

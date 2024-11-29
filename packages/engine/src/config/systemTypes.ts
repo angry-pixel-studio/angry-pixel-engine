@@ -50,10 +50,10 @@ export const systemTypes: SystemTypes = new Map([
             { name: SYSTEMS.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
         ],
     ],
+    [SystemGroup.Transform, [{ name: SYSTEMS.TransformSystem, type: TransformSystem }]],
     [
         SystemGroup.PostGameLogic,
         [
-            { name: SYSTEMS.TransformSystem, type: TransformSystem },
             { name: SYSTEMS.ChildrenSystem, type: ChildrenSystem },
             { name: SYSTEMS.ParentSystem, type: ParentSystem },
         ],

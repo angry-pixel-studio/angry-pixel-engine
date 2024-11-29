@@ -7,8 +7,6 @@ import {
     RigidBodyType,
     Scene,
     ShadowRenderer,
-    System,
-    SystemType,
     Transform,
     Vector2,
 } from "angry-pixel";
@@ -32,16 +30,18 @@ import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
 
 export class MainScene extends Scene {
-    public systems: SystemType<System>[] = [
-        InputControllerSystem,
-        MovingPlatformSystem,
-        NinjaMovementSystem,
-        NinjaAnimationSystem,
-        NinjaSfxSystem,
-        GoblinMovementSystem,
-        FollowPlayerCameraSystem,
-        FpsMetterSystem,
-    ];
+    public loadSystems(): void {
+        this.systems.push(
+            InputControllerSystem,
+            MovingPlatformSystem,
+            NinjaMovementSystem,
+            NinjaAnimationSystem,
+            NinjaSfxSystem,
+            GoblinMovementSystem,
+            FollowPlayerCameraSystem,
+            FpsMetterSystem,
+        );
+    }
 
     public loadAssets(): void {
         Object.values(ASSETS.fonts).forEach((data) => this.assetManager.loadFont(data.name, data.url));

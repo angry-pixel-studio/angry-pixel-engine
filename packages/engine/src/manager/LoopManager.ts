@@ -50,14 +50,16 @@ export class LoopManager {
         this.timeManager.updateForRender(time * 0.001);
         this.sceneManager.update();
 
-        this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
+        if (!this.sceneManager.loadingScene()) {
+            this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
 
-        if (this.gameLoopAccumulator >= this.timeManager.fixedGameDeltaTime) {
-            this.gameLogicIteration(time * 0.001);
-            this.gameLoopAccumulator -= this.timeManager.fixedGameDeltaTime;
+            if (this.gameLoopAccumulator >= this.timeManager.fixedGameDeltaTime) {
+                this.gameLogicIteration(time * 0.001);
+                this.gameLoopAccumulator -= this.timeManager.fixedGameDeltaTime;
+            }
+
+            this.renderIteration();
         }
-
-        this.renderIteration();
 
         window.requestAnimationFrame((time) => this.requestAnimationLoop(time));
     }
@@ -67,11 +69,15 @@ export class LoopManager {
 
         this.systemManager.update(SystemGroup.PreGameLogic);
         this.systemManager.update(SystemGroup.GameLogic);
+        this.systemManager.update(SystemGroup.Transform);
         this.systemManager.update(SystemGroup.PostGameLogic);
     }
 
     private renderIteration(): void {
-        this.systemManager.update(SystemGroup.GamePreRender);
+        if (this.systemManager.groupHasSystems(SystemGroup.GamePreRender)) {
+            this.systemManager.update(SystemGroup.GamePreRender);
+            this.systemManager.update(SystemGroup.Transform);
+        }
         this.systemManager.update(SystemGroup.Render);
     }
 
