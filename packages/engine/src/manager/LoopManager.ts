@@ -74,10 +74,8 @@ export class LoopManager {
     }
 
     private renderIteration(): void {
-        if (this.systemManager.groupHasSystems(SystemGroup.GamePreRender)) {
-            this.systemManager.update(SystemGroup.GamePreRender);
-            this.systemManager.update(SystemGroup.Transform);
-        }
+        this.systemManager.update(SystemGroup.GamePreRender);
+        this.systemManager.update(SystemGroup.Transform);
         this.systemManager.update(SystemGroup.Render);
     }
 

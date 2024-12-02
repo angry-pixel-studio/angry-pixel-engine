@@ -20,14 +20,16 @@ export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityMan
  * @category Core
  * @example
  * ```js
- * class GameScene extends Scene {
- *   systems = [
- *     SomeSystem,
- *     AnotherSystem
- *   ];
- *
+ * class MainScene extends Scene {
  *   loadAssets() {
  *      this.assetManager.loadImage("image.png");
+ *   }
+ *
+ *   loadSystems() {
+ *     this.systems.push(
+ *         SomeSystem,
+ *         AnotherSystem
+ *     );
  *   }
  *
  *   setup() {

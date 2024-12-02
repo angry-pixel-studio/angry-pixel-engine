@@ -47,6 +47,8 @@ export class TilemapRendererSystem implements System {
                 renderData.rotation = transform.localRotation;
                 renderData.tintColor = tilemapRenderer.tintColor;
                 renderData.smooth = tilemapRenderer.smooth;
+                renderData.maskColor = tilemapRenderer.maskColor;
+                renderData.maskColorMix = tilemapRenderer.maskColorMix;
 
                 renderData.position.x =
                     transform.localPosition.x +

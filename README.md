@@ -7,7 +7,7 @@
 
 ## What is Angry Pixel Engine?
 
-It is a 2D engine for browser games written in Typescript.
+Angry Pixel Engine is a 2D game engine for browser written in Typescript.
 
 Main features:
 
@@ -15,9 +15,11 @@ Main features:
 -   WebGL rendering
 -   Sprite-based graphics and frame-by-frame animations
 -   Text rendering based on bitmap fonts
--   Shadow/Lights rendering
--   Polygonal collisions and static/dynamic physical responses
+-   Basic 2D lightning system
+-   Polygonal collision detection and physical responses based on speed and acceleration.
 -   Keyboard, mouse, gamepad and touch screen input support
+-   Ability to create desktop/mobile games using frameworks such as Electron.js
+-   Tilemaps: rendering based on comma separated values, and automatic collider generation. Support for JSON files exported from Tiled.
 -   Dependency Injection
 
 ## Getting Started
@@ -68,7 +70,7 @@ import { Scene } from "angry-pixel";
 
 class MainScene extends Scene {
     // within this method we load the assets
-    public loadAssets(): void {
+    loadAssets(): void {
         this.assetManager.loadImage("logo.png");
     }
 }
@@ -77,7 +79,7 @@ class MainScene extends Scene {
 And we add this scene to our game:
 
 ```typescript
-// arguments: the scene class, the scene name, and true because is the opening scene
+// arguments: the scene class, the scene name, opening scene = true
 game.addScene(MainScene, "MainScene", true);
 ```
 
@@ -103,7 +105,7 @@ Once we have created our component, we will need a system that executes the busi
 import { GameSystem, Transform } from "angry-pixel";
 
 class MoveAndBounceSystem extends GameSystem {
-    public onUpdate(): void {
+    onUpdate(): void {
         this.entityManager.search(MoveAndBounce).forEach(({ component, entity }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             const { boundaries, direction, speed } = component;
@@ -129,45 +131,47 @@ Once the system is created, we can add it to the scene
 import { Scene } from "angry-pixel";
 
 class MainScene extends Scene {
-    // in this attribute we load the systems of the scene
-    public systems: SystemType<System>[] = [MoveAndBounceSystem];
-
-    public loadAssets(): void {
+    loadAssets(): void {
         this.assetManager.loadImage("logo.png");
+    }
+
+    // within this method we load the systems of the scene
+    loadSystems(): void {
+        this.systems.push(MoveAndBounceSystem);
     }
 }
 ```
 
 ### Create the entities
 
-Finally, we need to create two entities, one that represents our logo, to which we want to apply the behavior of moving and bouncing, and another one that represents the camera of our game. For it we will use the `EntityManager`, specifically the `createEntity` method. This method accepts both classes and instances of components.
+Finally, we need to create two entities, one that represents our logo, to which we want to apply the behavior of moving and bouncing, and another one that represents the camera of our game. For this we will use the `EntityManager`, specifically the `createEntity` method. This method accepts an array of components, the components can be concrete instances (this is useful when it is necessary to pass parameters by constructor) or classes (if it is not necessary to pass parameters by constructor, we can pass only the class).
 
 ```typescript
 import { Camera, Scene, SpriteRenderer, Transform } from "angry-pixel";
 
 class MainScene extends Scene {
-    public systems: SystemType<System>[] = [MoveAndBounceSystem];
-
-    public loadAssets(): void {
+    loadAssets(): void {
         this.assetManager.loadImage("logo.png");
     }
 
+    loadSystems(): void {
+        this.systems.push(MoveAndBounceSystem);
+    }
+
     // within this method we create the entities
-    public setup(): void {
+    setup(): void {
         // camera
-        const camera = [Transform, new Camera({ layers: ["Logo"] })];
-        this.entityManager.createEntity(camera);
+        this.entityManager.createEntity([new Transform(), new Camera({ layers: ["Logo"] })]);
 
         // logo
-        const logo = [
-            Transform,
-            MoveAndBounce,
+        this.entityManager.createEntity([
+            new Transform(),
+            new MoveAndBounce(),
             new SpriteRenderer({
                 layer: "Logo",
                 image: this.assetManager.getImage("logo.png"),
             }),
-        ];
-        this.entityManager.createEntity(logo);
+        ]);
     }
 }
 ```

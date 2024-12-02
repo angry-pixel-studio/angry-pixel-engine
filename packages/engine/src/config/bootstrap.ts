@@ -1,4 +1,4 @@
-import { Container } from "@ioc";
+import { Container, DependencyName, DependencyType } from "@ioc";
 import {
     AABBMethod,
     AABBResolver,
@@ -41,6 +41,7 @@ import { SYSTEMS } from "./systems";
  *   canvasColor: "#000000",
  *   physicsFramerate: 180,
  *   headless: false,
+ *   dependencies: [[Symbol.for("DependencyName"), dependencyInstance]],
  *   collisions: {
  *     collisionMatrix: [
  *       ["layer1", "layer2"],
@@ -70,6 +71,8 @@ export interface GameConfig {
     physicsFramerate?: number;
     /** Enable Headless mode. The input and rendering functions are turned off. Ideal for game server development */
     headless?: boolean;
+    /** External elements which can be accessed through dependency injection.*/
+    dependencies?: [DependencyName, any][];
     /** Collision configuration options */
     collisions?: {
         /** Collision detection method: CollisionMethods.SAT or CollisionMethods.ABB. Default value is CollisionMethods.SAT */
@@ -92,6 +95,7 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
     setupPhysicsDependencies(container);
     setupManagers(container);
     setupEngineSystems(container);
+    setupExternalDependencies(container);
 
     return container;
 };
@@ -194,4 +198,13 @@ const setupPhysicsDependencies = (container: Container): void => {
     container.add(collisionMethod === CollisionMethods.AABB ? AABBMethod : SatMethod);
 
     container.set(TYPES.CollisionMatrix, collisionMatrix);
+};
+
+const setupExternalDependencies = (container: Container): void => {
+    const config = container.get<GameConfig>(TYPES.GameConfig);
+    if (!config.dependencies) return;
+
+    config.dependencies.forEach(([name, dependency]) => {
+        container.set(name, dependency);
+    });
 };
