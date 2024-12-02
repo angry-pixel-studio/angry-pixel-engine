@@ -1,4 +1,4 @@
-import { Container, DependencyName, DependencyType } from "@ioc";
+import { Container, DependencyName } from "@ioc";
 import {
     AABBMethod,
     AABBResolver,
