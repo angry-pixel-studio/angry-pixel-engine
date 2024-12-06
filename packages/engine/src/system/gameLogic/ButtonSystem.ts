@@ -60,7 +60,7 @@ export class ButtonSystem implements System {
 
     private scale(button: Button, { localPosition, localScale }: Transform): void {
         this.scaled.width = button.width * localScale.x;
-        this.scaled.height = button.width * localScale.y;
+        this.scaled.height = button.height * localScale.y;
         this.scaled.position.x = localPosition.x + button.offset.x * localScale.x;
         this.scaled.position.y = localPosition.y + button.offset.y * localScale.y;
         this.scaled.radius = button.radius * Math.max(Math.abs(localScale.x), Math.abs(localScale.y));

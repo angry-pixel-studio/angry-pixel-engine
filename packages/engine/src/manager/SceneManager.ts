@@ -135,10 +135,11 @@ export class SceneManager {
         this.systemManager.disableSystem(AudioPlayerSystem);
         this.systemManager.disableSystem(VideoRendererSystem);
 
-        this.entityManager.removeAllEntities();
         this.scenes
             .get(this.currentSceneName)
             .systems.forEach((systemType) => this.systemManager.disableSystem(systemType));
+
+        this.entityManager.removeAllEntities();
 
         this.systemManager.enableSystem(AudioPlayerSystem);
         this.systemManager.enableSystem(VideoRendererSystem);
