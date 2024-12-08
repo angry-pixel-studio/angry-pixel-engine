@@ -116,7 +116,7 @@ export class VideoRendererSystem implements System {
         if (!pause && video.paused && play && this.canPlay) video.play();
     }
 
-    public onDisable(): void {
+    public onDisabled(): void {
         this.entityManager.search(VideoRenderer).forEach(({ component: videoRenderer }) => {
             if (videoRenderer.video) {
                 videoRenderer.video.pause();
@@ -126,6 +126,6 @@ export class VideoRendererSystem implements System {
     }
 
     public onDestroy(): void {
-        this.onDisable();
+        this.onDisabled();
     }
 }

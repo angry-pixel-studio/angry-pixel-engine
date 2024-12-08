@@ -103,7 +103,7 @@ export class AudioPlayerSystem implements System {
         });
     }
 
-    public onDisable(): void {
+    public onDisabled(): void {
         this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource } }) => {
             if (audioSource) {
                 audioSource.pause();
@@ -113,6 +113,6 @@ export class AudioPlayerSystem implements System {
     }
 
     public onDestroy(): void {
-        this.onDisable();
+        this.onDisabled();
     }
 }

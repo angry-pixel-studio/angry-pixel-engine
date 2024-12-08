@@ -34,6 +34,8 @@ export class Button {
     offset: Vector2 = new Vector2();
     /** TRUE if it's pressed */
     pressed: boolean = false;
+    /** TRUE if mouse cursor is over the button */
+    mouseOver: boolean = false;
     /** Function executed when the button's click */
     onClick: () => void;
     /** Function executed when the button is pressed */

@@ -41,6 +41,9 @@ export class LoopManager {
     }
 
     public stop(): void {
+        if (!this.running) return;
+
+        this.systemManager.disableAllSystems();
         this.running = false;
     }
 

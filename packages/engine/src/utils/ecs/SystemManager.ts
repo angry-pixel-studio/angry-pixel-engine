@@ -193,6 +193,16 @@ export class SystemManager {
     }
 
     /**
+     * Disables all systems
+     * @internal
+     */
+    public disableAllSystems(): void {
+        this.systems.forEach((system) => {
+            if (system[2]) this.disableSystem(system[0].constructor as SystemType);
+        });
+    }
+
+    /**
      * Call the method onUpdate for systems belonging to the given group
      * @param group The system group
      * @internal

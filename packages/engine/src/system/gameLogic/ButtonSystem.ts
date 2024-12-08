@@ -38,10 +38,9 @@ export class ButtonSystem implements System {
 
             this.scale(button, transform);
 
-            if (this.mouse.leftButtonPressed) {
-                this.resolveMouseAndRectangle(button);
-                this.resolveMouseAndCircumference(button);
-            }
+            // mouse interaction
+            button.mouseOver = this.isMouseOverButton(button);
+            button.pressed = button.mouseOver && this.mouse.leftButtonPressed;
 
             if (button.touchEnabled && this.touchScreen.touching) {
                 this.resolveTouchAndRectangle(button);
@@ -66,9 +65,13 @@ export class ButtonSystem implements System {
         this.scaled.radius = button.radius * Math.max(Math.abs(localScale.x), Math.abs(localScale.y));
     }
 
-    protected resolveMouseAndRectangle(button: Button): void {
+    private isMouseOverButton(button: Button): boolean {
+        return this.isMouseOverRectangleButton(button) || this.isMouseOverCircumferenceButton(button);
+    }
+
+    protected isMouseOverRectangleButton(button: Button): boolean {
         if (button.shape === ButtonShape.Rectangle) {
-            button.pressed =
+            return (
                 between(
                     this.mouse.positionInViewport.x,
                     this.scaled.position.x - this.scaled.width / 2,
@@ -78,15 +81,19 @@ export class ButtonSystem implements System {
                     this.mouse.positionInViewport.y,
                     this.scaled.position.y - this.scaled.height / 2,
                     this.scaled.position.y + this.scaled.height / 2,
-                );
+                )
+            );
         }
+
+        return false;
     }
 
-    protected resolveMouseAndCircumference(button: Button): void {
+    protected isMouseOverCircumferenceButton(button: Button): boolean {
         if (button.shape === ButtonShape.Circumference) {
             Vector2.subtract(this.distance, this.scaled.position, this.mouse.positionInViewport);
-            button.pressed = this.distance.magnitude <= this.scaled.radius;
+            return this.distance.magnitude <= this.scaled.radius;
         }
+        return false;
     }
 
     protected resolveTouchAndRectangle(button: Button): void {
