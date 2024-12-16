@@ -44,16 +44,7 @@ export class ShadowRenderer implements Renderer {
     private projectionMatrix: mat4;
     private modelMatrix: mat4;
     private textureMatrix: mat4;
-
-    // prettier-ignore
-    private readonly vertices = new Float32Array([
-    -0.5, -0.5,
-    -0.5, 0.5,
-    0.5, -0.5,
-    0.5, -0.5,
-    -0.5, 0.5,
-    0.5, 0.5
-]);
+    private positionBuffer: WebGLBuffer;
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -62,11 +53,22 @@ export class ShadowRenderer implements Renderer {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
+        this.positionBuffer = this.gl.createBuffer();
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.bufferData(
+            this.gl.ARRAY_BUFFER,
+            new Float32Array([-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]),
+            this.gl.STATIC_DRAW,
+        );
     }
 
-    public render(renderData: ShadowRenderData, cameraData: CameraData): boolean {
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertices, this.gl.STATIC_DRAW);
+    public render(renderData: ShadowRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
+        if (lastRender !== RenderDataType.Shadow) {
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+            this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
+            this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+        }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
 

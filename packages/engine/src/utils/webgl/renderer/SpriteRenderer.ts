@@ -41,8 +41,8 @@ export class SpriteRenderer implements Renderer {
     private projectionMatrix: mat4;
     private modelMatrix: mat4;
     private textureMatrix: mat4;
-    private posVertices: Float32Array;
-    private texVertices: Float32Array;
+    private positionBuffer: WebGLBuffer;
+    private textureBuffer: WebGLBuffer;
 
     private lastTexture: WebGLTexture = null;
 
@@ -54,35 +54,33 @@ export class SpriteRenderer implements Renderer {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
+        this.positionBuffer = this.gl.createBuffer();
+        this.textureBuffer = this.gl.createBuffer();
 
-        // prettier-ignore
-        this.posVertices = new Float32Array([
-            -0.5, -0.5,
-            -0.5, 0.5,
-            0.5, -0.5,
-            0.5, -0.5,
-            -0.5, 0.5,
-            0.5, 0.5
-        ]);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.bufferData(
+            this.gl.ARRAY_BUFFER,
+            new Float32Array([-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]),
+            this.gl.STATIC_DRAW,
+        );
 
-        // prettier-ignore
-        this.texVertices = new Float32Array([
-            0, 1,
-            0, 0,
-            1, 1,
-            1, 1,
-            0, 0,
-            1, 0
-        ]);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bufferData(
+            this.gl.ARRAY_BUFFER,
+            new Float32Array([0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0]),
+            this.gl.STATIC_DRAW,
+        );
     }
 
     public render(renderData: SpriteRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
-        if (lastRender !== renderData.type) {
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.posVertices, this.gl.STATIC_DRAW);
+        if (lastRender !== RenderDataType.Sprite) {
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+            this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
+            this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, this.texVertices, this.gl.STATIC_DRAW);
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+            this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
+            this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);

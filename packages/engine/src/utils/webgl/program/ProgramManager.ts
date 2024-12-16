@@ -8,10 +8,6 @@ import { ProgramFactory } from "./ProgramFactory";
 export class ProgramManager {
     public program: WebGLProgram;
 
-    // buffers
-    public positionBuffer: WebGLBuffer;
-    public textureBuffer: WebGLBuffer;
-
     // attributes
     public positionCoordsAttr: GLint;
     public texCoordsAttr: GLint;
@@ -47,9 +43,6 @@ export class ProgramManager {
                 ? this.programFactory.create(vertexShader, fragmentShader)
                 : this.programFactory.create(legacyVertexShader, legacyFragmentShader);
 
-        this.positionBuffer = this.gl.createBuffer();
-        this.textureBuffer = this.gl.createBuffer();
-
         this.positionCoordsAttr = this.gl.getAttribLocation(this.program, "positionCoords");
         this.texCoordsAttr = this.gl.getAttribLocation(this.program, "textureCoords");
 
@@ -72,13 +65,5 @@ export class ProgramManager {
         this.gl.useProgram(this.program);
 
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-
-        this.gl.enableVertexAttribArray(this.positionCoordsAttr);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.vertexAttribPointer(this.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
-
-        this.gl.enableVertexAttribArray(this.texCoordsAttr);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.vertexAttribPointer(this.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
     }
 }

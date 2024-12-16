@@ -6,7 +6,7 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
-import { MaskRenderData } from "@webgl";
+import { MaskRenderData, MaskShape } from "@webgl";
 
 @injectable(SYSTEMS.MaskRendererSystem)
 export class MaskRendererSystem implements System {
@@ -38,6 +38,30 @@ export class MaskRendererSystem implements System {
             maskRenderer._renderData.radius =
                 maskRenderer.radius * Math.max(Math.abs(transform.localScale.x), Math.abs(transform.localScale.y));
             maskRenderer._renderData.shape = maskRenderer.shape;
+
+            if (maskRenderer.shape === MaskShape.Polygon) {
+                if (maskRenderer._renderData.vertices.length !== maskRenderer.vertexModel.length) {
+                    maskRenderer._renderData.vertices = maskRenderer.vertexModel.map(() => new Vector2());
+                }
+
+                // scale vertices
+                maskRenderer.vertexModel.forEach((v, i) =>
+                    maskRenderer._renderData.vertices[i].set(
+                        v.x * transform.localScale.x,
+                        v.y * transform.localScale.y,
+                    ),
+                );
+
+                // translate vertices
+                if (transform.localRotation !== 0) {
+                    maskRenderer._renderData.vertices.forEach((vertex) =>
+                        vertex.set(
+                            vertex.x * Math.cos(transform.localRotation) - vertex.y * Math.sin(transform.localRotation),
+                            vertex.x * Math.sin(transform.localRotation) + vertex.y * Math.cos(transform.localRotation),
+                        ),
+                    );
+                }
+            }
 
             if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
                 this.translateRenderPosition(maskRenderer._renderData, transform);

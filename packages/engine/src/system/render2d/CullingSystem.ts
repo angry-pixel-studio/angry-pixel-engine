@@ -3,7 +3,14 @@ import { System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { CameraData, RenderData, RenderDataType } from "../../utils/webgl/renderer/Renderer";
-import { GeometricRenderData, GeometricShape, TextRenderData, TilemapRenderData } from "@webgl";
+import {
+    GeometricRenderData,
+    GeometricShape,
+    MaskRenderData,
+    MaskShape,
+    TextRenderData,
+    TilemapRenderData,
+} from "@webgl";
 import { SYSTEMS } from "@config/systems";
 
 type BoundingBox = { x: number; x1: number; y: number; y1: number };
@@ -51,10 +58,12 @@ export class CullingSystem implements System {
     private isInViewPort(renderData: RenderData): boolean {
         switch (renderData.type) {
             case RenderDataType.Video:
-            case RenderDataType.Mask:
             case RenderDataType.Shadow:
             case RenderDataType.Sprite:
                 this.setObjectForResizeable(renderData as ResizeableRenderData);
+                break;
+            case RenderDataType.Mask:
+                this.setObjectForMask(renderData as MaskRenderData);
                 break;
             case RenderDataType.Geometric:
                 this.setObjectForGeometric(renderData as GeometricRenderData);
@@ -135,6 +144,29 @@ export class CullingSystem implements System {
                 this.object.x1 = Math.max(vertex.x + position.x, this.object.x1);
                 this.object.y1 = Math.max(vertex.y + position.y, this.object.y1);
             });
+        }
+    }
+
+    private setObjectForMask({ position, vertices, shape, radius, rotation, width, height }: MaskRenderData): void {
+        if (shape === MaskShape.Circumference) {
+            this.object.x = position.x - radius;
+            this.object.y = position.y - radius;
+            this.object.x1 = position.x + radius;
+            this.object.y1 = position.y + radius;
+        } else if (shape === MaskShape.Polygon) {
+            this.object.x = Number.MAX_SAFE_INTEGER;
+            this.object.y = Number.MAX_SAFE_INTEGER;
+            this.object.x1 = Number.MIN_SAFE_INTEGER;
+            this.object.y1 = Number.MIN_SAFE_INTEGER;
+
+            vertices.forEach((vertex) => {
+                this.object.x = Math.min(vertex.x + position.x, this.object.x);
+                this.object.y = Math.min(vertex.y + position.y, this.object.y);
+                this.object.x1 = Math.max(vertex.x + position.x, this.object.x1);
+                this.object.y1 = Math.max(vertex.y + position.y, this.object.y1);
+            });
+        } else {
+            this.setObjectForResizeable({ position, width, height, rotation } as ResizeableRenderData);
         }
     }
 

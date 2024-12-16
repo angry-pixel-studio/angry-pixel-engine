@@ -1,8 +1,11 @@
 import {
     Camera,
     defaultRenderLayer,
+    MaskRenderer,
+    MaskShape,
     PolygonCollider,
     randomInt,
+    range,
     RigidBody,
     RigidBodyType,
     Scene,
@@ -76,6 +79,12 @@ export class MainScene extends Scene {
             new PolygonCollider({
                 layer: COLLISION_LAYERS.Foreground,
                 vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 0)],
+            }),
+            new MaskRenderer({
+                shape: MaskShape.Polygon,
+                vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 0)],
+                color: "#597f1e",
+                layer: RENDER_LAYERS.Foreground,
             }),
         ]);
     }

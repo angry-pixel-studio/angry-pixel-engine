@@ -55,6 +55,8 @@ export class TilemapRenderer implements Renderer {
     private textureMatrix: mat4;
     private posVertices: number[] = [];
     private texVertices: number[] = [];
+    private positionBuffer: WebGLBuffer;
+    private textureBuffer: WebGLBuffer;
 
     // cache
     private lastTexture: WebGLTexture = null;
@@ -77,6 +79,8 @@ export class TilemapRenderer implements Renderer {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
+        this.positionBuffer = this.gl.createBuffer();
+        this.textureBuffer = this.gl.createBuffer();
     }
 
     public render(renderData: TilemapRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
@@ -87,11 +91,15 @@ export class TilemapRenderer implements Renderer {
 
         if (this.posVertices.length === 0) return false;
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.positionBuffer);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.DYNAMIC_DRAW);
+        this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
+        this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.programManager.textureBuffer);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
+        this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
+        this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
 

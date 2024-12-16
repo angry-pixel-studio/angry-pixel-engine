@@ -36,7 +36,7 @@ export const ninjaFactory = (assetManager: AssetManager, position: Vector2): Com
         }),
         new BoxCollider({
             layer: COLLISION_LAYERS.Ninja,
-            width: 12,
+            width: 8,
             height: 16,
         }),
         new RigidBody({ type: RigidBodyType.Dynamic }),
@@ -49,7 +49,7 @@ export const ninjaFactory = (assetManager: AssetManager, position: Vector2): Com
         new Transform({ parent: ninjaArchetype[0] as Transform }),
         new BoxCollider({
             layer: COLLISION_LAYERS.Ninja,
-            width: 10,
+            width: 6,
             height: 8,
             offset: new Vector2(0, -6),
             physics: false,
