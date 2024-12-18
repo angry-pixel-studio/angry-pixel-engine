@@ -21,7 +21,8 @@ const userInputEventNames = [
 
 @injectable(SYSTEMS.AudioPlayerSystem)
 export class AudioPlayerSystem implements System {
-    private canPlay: boolean = false;
+    private canPlay: boolean = true;
+    private userInputErrorCatched: boolean = false;
 
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
@@ -30,10 +31,6 @@ export class AudioPlayerSystem implements System {
     ) {}
 
     public onCreate(): void {
-        // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
-        this.canPlay = false;
-        userInputEventNames.forEach((eventName) => window.addEventListener(eventName, this.userInputEventHandler));
-
         // pauses audio when document is not visible
         document.addEventListener("visibilitychange", () => {
             this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource, playing } }) => {
@@ -41,6 +38,13 @@ export class AudioPlayerSystem implements System {
                 else if (!document.hidden && audioSource && playing) audioSource.play();
             });
         });
+    }
+
+    private catchUserInput(): void {
+        // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
+        this.canPlay = false;
+        this.userInputErrorCatched = true;
+        userInputEventNames.forEach((eventName) => window.addEventListener(eventName, this.userInputEventHandler));
     }
 
     // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
@@ -63,25 +67,33 @@ export class AudioPlayerSystem implements System {
         this.entityManager.search(AudioPlayer).forEach(({ component: audioPlayer }) => {
             if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
 
-            audioPlayer.audioSource.loop = audioPlayer.loop;
-            audioPlayer.audioSource.volume = audioPlayer.volume;
-
             // new audio source
-            if (audioPlayer.audioSource.src !== audioPlayer._currentAudio) {
-                audioPlayer._currentAudio = audioPlayer.audioSource.src;
+            if (audioPlayer.audioSource.src !== audioPlayer._currentAudioSrc) {
+                audioPlayer._currentAudioSrc = audioPlayer.audioSource.src;
                 audioPlayer.playing = false;
                 audioPlayer.audioSource.currentTime = 0;
             }
 
-            if (audioPlayer.action === "play" && !audioPlayer.playing) {
+            audioPlayer.audioSource.loop = audioPlayer.loop;
+            audioPlayer.audioSource.volume = audioPlayer.volume;
+
+            if (audioPlayer.action === "play" && !audioPlayer.playing && !audioPlayer._playPromisePendind) {
                 // start playing
-                audioPlayer.audioSource.playbackRate =
-                    this.timeManager.timeScale < 0.0625 ? 0 : Math.min(this.timeManager.timeScale, 16);
+                audioPlayer._playPromisePendind = true;
+                audioPlayer.audioSource.playbackRate = audioPlayer.fixedToTimeScale
+                    ? this.timeManager.timeScale < 0.0625
+                        ? 0
+                        : Math.min(this.timeManager.timeScale, 16)
+                    : 1;
                 audioPlayer.audioSource
                     .play()
-                    .then(() => (audioPlayer.playing = true))
+                    .then(() => {
+                        audioPlayer._playPromisePendind = false;
+                        audioPlayer.playing = true;
+                    })
                     .catch(() => {
-                        /* waiting for user interaction */
+                        audioPlayer._playPromisePendind = false;
+                        if (!this.userInputErrorCatched) this.catchUserInput();
                     });
             } else if (audioPlayer.action === "pause" && audioPlayer.playing) {
                 // set pause

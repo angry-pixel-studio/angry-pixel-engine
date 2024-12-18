@@ -12,9 +12,9 @@ import { MovingPlatform } from "@component/MovingPlatform";
 import { ASSETS } from "@config/assets";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 
-export const movingPlatformFactory = (assetManager: AssetManager): Component[] => [
+export const movingPlatformFactory = (assetManager: AssetManager, spots: Vector2[]): Component[] => [
     new Transform(),
-    new MovingPlatform({ spots: [new Vector2(-112, -72), new Vector2(192, -72)] }),
+    new MovingPlatform({ spots }),
     new SpriteRenderer({
         image: assetManager.getImage(ASSETS.images.tileset),
         layer: RENDER_LAYERS.Foreground,

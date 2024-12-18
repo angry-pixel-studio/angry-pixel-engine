@@ -26,7 +26,8 @@ const userInputEventNames = [
 export class VideoRendererSystem implements System {
     // auxiliars
     private scaledOffset: Vector2 = new Vector2();
-    private canPlay: boolean;
+    private canPlay: boolean = true;
+    private userInputErrorCatched: boolean = false;
 
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
@@ -35,8 +36,19 @@ export class VideoRendererSystem implements System {
     ) {}
 
     public onCreate(): void {
+        // pauses video when document is not visible
+        document.addEventListener("visibilitychange", () => {
+            this.entityManager.search(VideoRenderer).forEach(({ component: { video, playing } }) => {
+                if (document.hidden && video) video.pause();
+                else if (!document.hidden && video && playing) video.play();
+            });
+        });
+    }
+
+    private catchUserInput(): void {
         // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
         this.canPlay = false;
+        this.userInputErrorCatched = true;
         userInputEventNames.forEach((eventName) => window.addEventListener(eventName, this.userInputEventHandler));
     }
 
@@ -97,23 +109,49 @@ export class VideoRendererSystem implements System {
     }
 
     private checkVideoState(videoRenderer: VideoRenderer): void {
-        const { video, play, pause, loop, volume } = videoRenderer;
+        const { video, action, loop, volume } = videoRenderer;
 
-        video.loop = loop;
-        video.volume = volume;
-        video.playbackRate = this.timeManager.timeScale < 0.0625 ? 0 : Math.min(this.timeManager.timeScale, 16);
-
-        if (play && video.ended) videoRenderer.play = false;
-
-        if (play && video.paused && this.canPlay) video.play();
-
-        if (!play && video.currentTime > 0) {
-            video.pause();
+        // new video source
+        if (video.src !== videoRenderer._currentVideoSrc) {
+            videoRenderer._currentVideoSrc = video.src;
+            videoRenderer.playing = false;
             video.currentTime = 0;
         }
 
-        if (pause && !video.paused) video.pause();
-        if (!pause && video.paused && play && this.canPlay) video.play();
+        video.loop = loop;
+        video.volume = volume;
+        video.playbackRate = videoRenderer.fixedToTimeScale
+            ? this.timeManager.timeScale < 0.0625
+                ? 0
+                : Math.min(this.timeManager.timeScale, 16)
+            : 1;
+
+        if (action === "play" && !videoRenderer.playing && !videoRenderer._playPromisePendind && this.canPlay) {
+            videoRenderer._playPromisePendind = true;
+            video
+                .play()
+                .then(() => {
+                    videoRenderer._playPromisePendind = false;
+                    videoRenderer.playing = true;
+                })
+                .catch(() => {
+                    videoRenderer._playPromisePendind = false;
+                    if (!this.userInputErrorCatched) this.catchUserInput();
+                });
+        }
+
+        if (action === "play" && video.ended) {
+            videoRenderer.action = "stop";
+            videoRenderer.playing = false;
+        }
+
+        if (action === "stop" && video.currentTime > 0) {
+            video.pause();
+            video.currentTime = 0;
+            videoRenderer.playing = false;
+        }
+
+        if (action === "pause" && !video.paused) video.pause();
     }
 
     public onDisabled(): void {

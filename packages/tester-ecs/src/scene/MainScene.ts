@@ -1,17 +1,18 @@
 import {
+    AudioPlayer,
     Camera,
     defaultRenderLayer,
     MaskRenderer,
     MaskShape,
     PolygonCollider,
     randomInt,
-    range,
     RigidBody,
     RigidBodyType,
     Scene,
     ShadowRenderer,
     Transform,
     Vector2,
+    VideoRenderer,
 } from "angry-pixel";
 import { FpsMetterSystem } from "@system/FpsMetterSystem";
 import { InputControllerSystem } from "@system/InputControllerSystem";
@@ -50,6 +51,7 @@ export class MainScene extends Scene {
         Object.values(ASSETS.fonts).forEach((data) => this.assetManager.loadFont(data.name, data.url));
         Object.values(ASSETS.images).forEach((filename) => this.assetManager.loadImage(filename));
         Object.values(ASSETS.audio).forEach((filename) => this.assetManager.loadAudio(filename));
+        Object.values(ASSETS.video).forEach((filename) => this.assetManager.loadVideo(filename));
     }
 
     public setup(): void {
@@ -60,7 +62,9 @@ export class MainScene extends Scene {
         this.entityManager.createEntity(foregroundFactory(this.assetManager));
 
         this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(-300, 0)));
-        this.entityManager.createEntity(movingPlatformFactory(this.assetManager));
+        this.entityManager.createEntity(
+            movingPlatformFactory(this.assetManager, [new Vector2(-112, -72), new Vector2(168, -72)]),
+        );
 
         for (let i = 0; i < 20; i++) {
             this.entityManager.createEntity(goblinFactory(this.assetManager, new Vector2(randomInt(-600, 192), 0)));
@@ -82,9 +86,31 @@ export class MainScene extends Scene {
             }),
             new MaskRenderer({
                 shape: MaskShape.Polygon,
-                vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 0)],
+                vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 60), new Vector2(6, 0)],
                 color: "#597f1e",
                 layer: RENDER_LAYERS.Foreground,
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new AudioPlayer({
+                audioSource: this.assetManager.getAudio(ASSETS.audio.mainSong),
+                loop: true,
+                volume: 0.3,
+                action: "play",
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(0, 0) }),
+            new VideoRenderer({
+                video: this.assetManager.getVideo(ASSETS.video.example),
+                loop: true,
+                volume: 0.3,
+                action: "play",
+                layer: RENDER_LAYERS.Foreground,
+                width: 1920 / 9,
+                height: 1080 / 9,
             }),
         ]);
     }

@@ -11,13 +11,12 @@ export class NinjaSfxSystem extends GameSystem {
         const ninjaMovement = this.entityManager.getComponent(entity, NinjaMovement);
         const audioPlayer = this.entityManager.getComponent(entity, AudioPlayer);
 
-        audioPlayer.volume = sfxVolume;
-
         if (ninjaMovement.walking) {
             ninjaSfx.stepTimer += this.timeManager.deltaTime;
 
             if (ninjaSfx.stepTimer >= ninjaSfx.stepCooldown) {
                 ninjaSfx.stepTimer = 0;
+                audioPlayer.volume = sfxVolume;
                 audioPlayer.audioSource = this.assetManager.getAudio(ASSETS.audio.sfxStep);
                 audioPlayer.action = "play";
             }
@@ -27,6 +26,7 @@ export class NinjaSfxSystem extends GameSystem {
 
         if (ninjaMovement.grounded && ninjaMovement.jumping) {
             audioPlayer.audioSource = this.assetManager.getAudio(ASSETS.audio.sfxJump);
+            audioPlayer.volume = sfxVolume * 0.4;
             audioPlayer.action = "play";
         }
     }

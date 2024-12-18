@@ -25,7 +25,7 @@ module.exports = {
             directory: path.join(__dirname, "dist"),
         },
         compress: false,
-        port: 8080,
+        port: 3000,
         client: {
             overlay: {
                 errors: true,
