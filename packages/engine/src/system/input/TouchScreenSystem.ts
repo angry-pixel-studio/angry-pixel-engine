@@ -1,6 +1,6 @@
 import { inject, injectable } from "@ioc";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TouchInteraction, TouchScreen } from "@input";
 import { InputManager } from "@manager/InputManager";
 import { Vector2 } from "@math";

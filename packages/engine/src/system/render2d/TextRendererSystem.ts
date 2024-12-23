@@ -1,6 +1,6 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { TextRenderer } from "@component/render2d/TextRenderer";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";

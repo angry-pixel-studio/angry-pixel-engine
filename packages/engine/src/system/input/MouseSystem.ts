@@ -1,5 +1,5 @@
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { Mouse } from "@input";
 import { inject, injectable } from "@ioc";
 import { InputManager } from "@manager/InputManager";

@@ -1,7 +1,7 @@
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 
 const getBranchLength = (transform: Transform): number =>

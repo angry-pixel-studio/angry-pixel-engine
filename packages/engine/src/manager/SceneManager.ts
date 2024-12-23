@@ -71,6 +71,7 @@ export class SceneManager {
     private currentSceneName: string;
     private sceneNameToBeLoaded: string;
     private _loadingScene: boolean = false;
+    private _sceneLoadedThisFrame: boolean = false;
 
     /** @internal */
     constructor(
@@ -96,12 +97,18 @@ export class SceneManager {
         this.sceneNameToBeLoaded = this.openingSceneName;
     }
 
-    public loadingScene(): boolean {
+    public get loadingScene(): boolean {
         return this._loadingScene;
+    }
+
+    public get sceneLoadedThisFrame(): boolean {
+        return this._sceneLoadedThisFrame;
     }
 
     /** @internal */
     public update(): void {
+        this._sceneLoadedThisFrame = false;
+
         if (this.sceneNameToBeLoaded) {
             if (this.currentSceneName) this.destroyCurrentScene();
 
@@ -115,13 +122,13 @@ export class SceneManager {
 
         if (this._loadingScene && this.assetManager.getAssetsLoaded()) {
             this._loadingScene = false;
+            this._sceneLoadedThisFrame = true;
 
             this.scenes.get(this.currentSceneName).setup();
 
-            // update components for the initial entities
-            this.systemManager.update(SystemGroup.PreGameLogic);
+            // update some components for the initial entities
             this.systemManager.update(SystemGroup.Transform);
-            this.systemManager.update(SystemGroup.PostGameLogic);
+            this.systemManager.update(SystemGroup.PreGameLogic);
 
             this.scenes.get(this.currentSceneName).systems.forEach((systemType, index) => {
                 this.systemFactory.createSystemIfNotExists(systemType);

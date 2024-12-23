@@ -1,7 +1,7 @@
 import { Button, ButtonShape } from "@component/gameLogic/Button";
 import { Transform } from "@component/gameLogic/Transform";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { EntityManager, System } from "@ecs";
 import { Mouse, TouchScreen } from "@input";
 import { inject, injectable } from "@ioc";

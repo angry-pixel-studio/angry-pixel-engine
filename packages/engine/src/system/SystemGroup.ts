@@ -6,7 +6,6 @@ export enum SystemGroup {
     GamePhysics,
     GamePreRender,
     Physics,
-    PostGameLogic,
     PreGameLogic,
     Render,
     Transform,

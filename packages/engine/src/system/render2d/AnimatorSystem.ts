@@ -1,6 +1,6 @@
 import { Animation, Animator } from "@component/gameLogic/Animator";
 import { SpriteRenderer } from "@component/render2d/SpriteRenderer";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";

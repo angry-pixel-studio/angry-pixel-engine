@@ -11,7 +11,7 @@ import {
     TextRenderData,
     TilemapRenderData,
 } from "@webgl";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 
 type BoundingBox = { x: number; x1: number; y: number; y1: number };
 

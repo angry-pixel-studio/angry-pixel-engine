@@ -2,7 +2,7 @@ import { inject, injectable } from "@ioc";
 import { EntityManager, System } from "@ecs";
 import { Vector2 } from "@math";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TimeManager } from "@manager/TimeManager";
 import { Transform } from "@component/gameLogic/Transform";
 import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
