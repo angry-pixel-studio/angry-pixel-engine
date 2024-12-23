@@ -159,11 +159,11 @@ const setupEngineSystems = (container: Container): void => {
     );
 };
 
-const headlessFilter = (systemTypes: SystemsByGroup): void => {
-    systemTypes.delete(SystemGroup.Render);
-    systemTypes.set(
+const headlessFilter = (systemsByGroup: SystemsByGroup): void => {
+    systemsByGroup.delete(SystemGroup.Render);
+    systemsByGroup.set(
         SystemGroup.PreGameLogic,
-        systemTypes
+        systemsByGroup
             .get(SystemGroup.PreGameLogic)
             .filter(
                 ({ name }) =>
