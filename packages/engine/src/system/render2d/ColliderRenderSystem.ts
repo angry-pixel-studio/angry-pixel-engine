@@ -5,7 +5,7 @@ import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";
 import { defaultRenderLayer } from "@component/render2d/Camera";
 import { GameConfig } from "@config/bootstrap";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";

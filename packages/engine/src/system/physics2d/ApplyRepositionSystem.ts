@@ -3,7 +3,7 @@ import { EntityManager, System } from "@ecs";
 import { Vector2 } from "@math";
 import { CollisionRepository } from "@collisions2d";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
@@ -41,7 +41,8 @@ export class ApplyRepositionSystem implements System {
                 collisions
                     .filter(({ localEntity }) => entity === localEntity)
                     .forEach(({ remoteEntity, resolution: { direction, penetration } }) => {
-                        // since the displacement distance must be the same as the penetration, each entity will be displaced by half the penetration
+                        // if remote body is dynamic and since the correction distance must be the same as the penetration,
+                        // both bodies will be displaced by half the penetration
                         if (this.entityManager.getComponent(remoteEntity, RigidBody).type === RigidBodyType.Dynamic) {
                             penetration /= 2;
                         }
@@ -58,7 +59,7 @@ export class ApplyRepositionSystem implements System {
                 const { position } = this.entityManager.getComponent(entity, Transform);
                 Vector2.add(position, position, this.maxCorrection);
 
-                // due to gravity, we need to stop vertical velocity if it's direction is inverse to the displacement direction
+                // due to gravity, we need to stop vertical velocity if it's direction is inverse to the correction direction
                 if (rigidBody.gravity > 0 && this.maxCorrection.y * rigidBody.velocity.y < 0) {
                     rigidBody.velocity.y = 0;
                 }

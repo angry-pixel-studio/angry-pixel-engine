@@ -4,7 +4,7 @@ import { TimeManager } from "./TimeManager";
 import { SystemManager } from "@ecs";
 import { SystemGroup } from "@system/SystemGroup";
 import { SceneManager } from "./SceneManager";
-import { systemTypes } from "@config/systemTypes";
+import { systemsByGroup } from "@config/systemsByGroup";
 
 /** @internal */
 export const nowInSeconds = (): number => window.performance.now() * 0.001;
@@ -35,8 +35,8 @@ export class LoopManager {
     }
 
     private enableSystems(): void {
-        systemTypes.forEach((systemTypes) => {
-            systemTypes.forEach((systemType) => this.systemManager.enableSystem(systemType.type));
+        systemsByGroup.forEach((systems) => {
+            systems.forEach(({ type }) => this.systemManager.enableSystem(type));
         });
     }
 
@@ -53,8 +53,11 @@ export class LoopManager {
         this.timeManager.updateForRender(time * 0.001);
         this.sceneManager.update();
 
-        if (!this.sceneManager.loadingScene()) {
+        if (!this.sceneManager.loadingScene) {
             this.gameLoopAccumulator += this.timeManager.browserDeltaTime;
+
+            // if the current scene is loaded this frame, we force to execute first the game logic iteration
+            if (this.sceneManager.sceneLoadedThisFrame) this.gameLoopAccumulator = this.timeManager.fixedGameDeltaTime;
 
             if (this.gameLoopAccumulator >= this.timeManager.fixedGameDeltaTime) {
                 this.gameLogicIteration(time * 0.001);
@@ -73,12 +76,13 @@ export class LoopManager {
         this.systemManager.update(SystemGroup.PreGameLogic);
         this.systemManager.update(SystemGroup.GameLogic);
         this.systemManager.update(SystemGroup.Transform);
-        this.systemManager.update(SystemGroup.PostGameLogic);
     }
 
     private renderIteration(): void {
-        this.systemManager.update(SystemGroup.GamePreRender);
-        this.systemManager.update(SystemGroup.Transform);
+        if (this.systemManager.groupHasSystems(SystemGroup.GamePhysics)) {
+            this.systemManager.update(SystemGroup.GamePreRender);
+            this.systemManager.update(SystemGroup.Transform);
+        }
         this.systemManager.update(SystemGroup.Render);
     }
 
@@ -93,7 +97,10 @@ export class LoopManager {
     private physicsIteration(): void {
         if (this.timeManager.timeScale <= 0) return;
 
-        this.systemManager.update(SystemGroup.GamePhysics);
+        if (this.systemManager.groupHasSystems(SystemGroup.GamePhysics)) {
+            this.systemManager.update(SystemGroup.GamePhysics);
+            this.systemManager.update(SystemGroup.Transform);
+        }
         this.systemManager.update(SystemGroup.Physics);
     }
 }

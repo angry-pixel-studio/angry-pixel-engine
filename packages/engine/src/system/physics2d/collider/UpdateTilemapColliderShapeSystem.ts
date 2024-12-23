@@ -3,7 +3,7 @@ import { inject, injectable } from "@ioc";
 import { Vector2 } from "@math";
 import { Polygon } from "@collisions2d";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";

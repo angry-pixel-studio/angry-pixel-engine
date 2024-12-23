@@ -2,7 +2,7 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { Polygon } from "@collisions2d";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";

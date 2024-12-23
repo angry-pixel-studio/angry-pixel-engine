@@ -1,7 +1,7 @@
 import { Children } from "@component/gameLogic/Children";
 import { Transform } from "@component/gameLogic/Transform";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 

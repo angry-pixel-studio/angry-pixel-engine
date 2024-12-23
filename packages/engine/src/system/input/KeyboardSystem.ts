@@ -1,5 +1,5 @@
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { System } from "@ecs";
 import { Keyboard } from "@input";
 import { inject, injectable } from "@ioc";

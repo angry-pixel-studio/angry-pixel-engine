@@ -1,6 +1,6 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { MaskRenderer } from "@component/render2d/MaskRenderer";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";

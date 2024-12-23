@@ -20,12 +20,12 @@ import { defaultPhysicsFramerate, TimeManager } from "@manager/TimeManager";
 import { AssetManager } from "@manager/AssetManager";
 import { SceneManager } from "@manager/SceneManager";
 import { LoopManager } from "@manager/LoopManager";
-import { SystemTypes, systemTypes } from "./systemTypes";
+import { SystemsByGroup, systemsByGroup } from "./systemsByGroup";
 import { CreateSystemService } from "@system/CreateSystemService";
 import { WebGLManager } from "@webgl";
 import { RenderManager } from "@manager/RenderManager";
 import { SystemGroup } from "@system/SystemGroup";
-import { SYSTEMS } from "./systems";
+import { SYSTEMS } from "./systemTypes";
 
 /**
  * Game configuration options
@@ -149,9 +149,9 @@ const setupManagers = (container: Container): void => {
 };
 
 const setupEngineSystems = (container: Container): void => {
-    if (container.get<GameConfig>(TYPES.GameConfig).headless) headlessFilter(systemTypes);
+    if (container.get<GameConfig>(TYPES.GameConfig).headless) headlessFilter(systemsByGroup);
 
-    systemTypes.forEach((systems, group) =>
+    systemsByGroup.forEach((systems, group) =>
         systems.forEach(({ type, name }) => {
             container.add(type);
             container.get<SystemManager>(TYPES.SystemManager).addSystem(container.get<System>(name), group);
@@ -159,7 +159,7 @@ const setupEngineSystems = (container: Container): void => {
     );
 };
 
-const headlessFilter = (systemTypes: SystemTypes): void => {
+const headlessFilter = (systemTypes: SystemsByGroup): void => {
     systemTypes.delete(SystemGroup.Render);
     systemTypes.set(
         SystemGroup.PreGameLogic,

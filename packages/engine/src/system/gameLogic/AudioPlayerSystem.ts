@@ -1,6 +1,6 @@
 import { AudioPlayer } from "@component/gameLogic/AudioPlayer";
 import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { InputManager } from "@manager/InputManager";

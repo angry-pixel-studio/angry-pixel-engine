@@ -1,7 +1,7 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { LightRenderer } from "@component/render2d/LightRenderer";
 import { ShadowRenderer } from "@component/render2d/ShadowRenderer";
-import { SYSTEMS } from "@config/systems";
+import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { Entity, EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
