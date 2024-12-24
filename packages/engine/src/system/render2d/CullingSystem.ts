@@ -12,6 +12,7 @@ import {
     TilemapRenderData,
 } from "@webgl";
 import { SYSTEMS } from "@config/systemTypes";
+import { Vector2 } from "@math";
 
 type BoundingBox = { x: number; x1: number; y: number; y1: number };
 
@@ -19,6 +20,7 @@ interface ResizeableRenderData extends RenderData {
     width: number;
     height: number;
     rotation: number;
+    tiled?: Vector2;
 }
 
 @injectable(SYSTEMS.CullingSystem)
@@ -91,9 +93,14 @@ export class CullingSystem implements System {
         this.viewport.y1 = position.y + this.canvas.height / zoom / 2;
     }
 
-    private setObjectForResizeable({ position, width, height, rotation = 0 }: ResizeableRenderData): void {
+    private setObjectForResizeable({ position, width, height, rotation = 0, tiled }: ResizeableRenderData): void {
         const sin = Math.abs(Math.sin(rotation));
         const cos = Math.abs(Math.cos(rotation));
+
+        if (tiled) {
+            width *= tiled.x;
+            height *= tiled.y;
+        }
 
         const rotatedWidth = sin * height + cos * width;
         const rotatedHeight = sin * width + cos * height;

@@ -1,4 +1,5 @@
 import { Rectangle } from "@math";
+import { defaultRenderLayer } from "./Camera";
 
 /**
  * @public
@@ -21,7 +22,7 @@ export class LightRenderer {
     /** Smooth */
     smooth: boolean = false;
     /** Shadow render layer */
-    layer: string = "";
+    layer: string = defaultRenderLayer;
     /** Light intensitry between 0 and 1 */
     intensity: number = 1;
 

@@ -22,11 +22,31 @@ export interface SpriteRendererOptions {
     scale: Vector2;
     width: number;
     height: number;
+    tiled: Vector2;
 }
 
 /**
  * @public
  * @category Components
+ * @example
+ * ```js
+ * spriteRenderer.image = this.assetManager.getImage("image.png");
+ * spriteRenderer.width = 1920;
+ * spriteRenderer.height = 1080;
+ * spriteRenderer.offset = new Vector2(0, 0);
+ * spriteRenderer.flipHorizontally =  false;
+ * spriteRenderer.flipVertically = false;
+ * spriteRenderer.rotation = 0;
+ * spriteRenderer.opacity = 1;
+ * spriteRenderer.maskColor = "#FF0000";
+ * spriteRenderer.maskColorMix = 0;
+ * spriteRenderer.tintColor = "#00FF00";
+ * spriteRenderer.layer = "Default";
+ * spriteRenderer.slice = {x: 0, y:0, width: 1920, height: 1080};
+ * spriteRenderer.scale = new Vector2(1, 1);
+ * spriteRenderer.tiled = new Vector2(1, 1);
+ * spriteRenderer.smooth = false;
+ * ```
  */
 export class SpriteRenderer {
     /** The render layer */
@@ -59,6 +79,8 @@ export class SpriteRenderer {
     width: number;
     /** Overwrite the original image height */
     height: number;
+    /** Enable tiled draw mode */
+    tiled: Vector2;
     /** @internal */
     _renderData: SpriteRenderData = {
         type: RenderDataType.Sprite,
