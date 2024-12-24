@@ -15,7 +15,5 @@ export class NinjaAnimationSystem extends GameSystem {
 
         if (rigidBody.velocity.x !== 0 && movements.grounded) animator.animation = "run";
         else animator.animation = "idle";
-
-        // console.log(this.entityManager.getComponent(entity, SpriteRenderer).slice);
     }
 }

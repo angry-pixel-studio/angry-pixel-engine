@@ -8,6 +8,21 @@ const allowedPhysicsFramerates = [60, 120, 180, 240];
 
 export const defaultPhysicsFramerate = 180;
 
+type Interval = {
+    callback: () => void;
+    delay: number;
+    timestamp: number;
+    times: number;
+    loop: boolean;
+};
+
+export type IntervalOptions = {
+    callback: () => void;
+    delay: number;
+    times?: number;
+    loop?: boolean;
+};
+
 /**
  * Manages the properties associated with time.
  * @public
@@ -53,6 +68,9 @@ export class TimeManager {
     private thenForGame: number = 0;
     private thenForPhysics: number = 0;
     private thenForRender: number = 0;
+
+    private lastIntervalId: number = 0;
+    private intervals: Map<number, Interval> = new Map();
 
     /** The time difference, in seconds, between the last frame and the current frame. */
     public get deltaTime(): number {
@@ -100,5 +118,54 @@ export class TimeManager {
     public updateForPhysics(time: number): void {
         this.unscaledPhysicsDeltaTime = Math.min(Math.max(0, time - this.thenForPhysics), this.maxDeltaTime);
         this.thenForPhysics = time;
+    }
+
+    /** @internal */
+    public updateIntervals(): void {
+        if (this.intervals.size === 0) return;
+
+        const now = performance.now();
+
+        for (const [intervalId, interval] of this.intervals) {
+            if (now - interval.timestamp >= interval.delay) {
+                interval.callback();
+
+                if ((!interval.times || --interval.times <= 0) && !interval.loop) {
+                    this.intervals.delete(intervalId);
+                    if (this.intervals.size === 0) this.lastIntervalId = 0;
+                } else {
+                    interval.timestamp = now;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets a timer which executes a function repeatedly at a fixed time interval.\
+     * Intervals are cleared when loading a new scene.
+     * @param intervalOptions
+     * @returns intervalId
+     */
+    public setInterval({ callback, delay, loop, times }: IntervalOptions): number {
+        const intervalId = ++this.lastIntervalId;
+        this.intervals.set(intervalId, { callback, delay, loop, times, timestamp: performance.now() });
+        return intervalId;
+    }
+
+    /**
+     * Clears the interval with the given id.
+     * @param intervalId
+     */
+    public clearInterval(intervalId: number): void {
+        this.intervals.delete(intervalId);
+        if (this.intervals.size === 0) this.lastIntervalId = 0;
+    }
+
+    /**
+     * Clears all intervals.
+     */
+    public clearAllIntervals(): void {
+        this.intervals.clear();
+        this.lastIntervalId = 0;
     }
 }
