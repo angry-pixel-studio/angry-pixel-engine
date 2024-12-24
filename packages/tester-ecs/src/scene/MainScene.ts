@@ -74,8 +74,7 @@ export class MainScene extends Scene {
             textFactory(this.assetManager, "USE WASD TO MOVE AND SPACE BAR TO JUMP.", new Vector2(-940, -450)),
         );
 
-        const fpsMetter = this.entityManager.createEntity(textFactory(this.assetManager, "", new Vector2(-940, -500)));
-        this.entityManager.addComponent(fpsMetter, FpsMetter);
+        this.entityManager.createEntity([...textFactory(this.assetManager, "", new Vector2(-940, -500)), FpsMetter]);
 
         this.entityManager.createEntity([
             new Transform({ position: new Vector2(128, -112) }),
@@ -101,18 +100,7 @@ export class MainScene extends Scene {
             }),
         ]);
 
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(0, 0) }),
-            new VideoRenderer({
-                video: this.assetManager.getVideo(ASSETS.video.example),
-                loop: true,
-                volume: 0.3,
-                action: "play",
-                layer: RENDER_LAYERS.Foreground,
-                width: 1920 / 9,
-                height: 1080 / 9,
-            }),
-        ]);
+        // this.entitiesForTesting();
     }
 
     private setupMainCamera(): void {
@@ -142,5 +130,30 @@ export class MainScene extends Scene {
         camera.layers = [RENDER_LAYERS.UI];
 
         this.entityManager.createEntity([Transform, camera]);
+    }
+
+    private entitiesForTesting(): void {
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(0, 0) }),
+            new VideoRenderer({
+                video: this.assetManager.getVideo(ASSETS.video.example),
+                loop: true,
+                volume: 0.3,
+                action: "play",
+                layer: RENDER_LAYERS.Foreground,
+                width: 1920 / 9,
+                height: 1080 / 9,
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(128, -112) }),
+            new MaskRenderer({
+                shape: MaskShape.Circumference,
+                radius: 64,
+                color: "#597f1e",
+                layer: RENDER_LAYERS.Foreground,
+            }),
+        ]);
     }
 }
