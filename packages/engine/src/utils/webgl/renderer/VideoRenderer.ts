@@ -58,7 +58,7 @@ export class VideoRenderer implements Renderer {
     }
 
     public render(renderData: VideoRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
-        if (lastRender !== renderData.type) {
+        if (lastRender !== RenderDataType.Video) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
@@ -102,13 +102,22 @@ export class VideoRenderer implements Renderer {
 
         const texture = this.textureManager.getOrCreateTextureFromVideo(renderData.video);
 
-        if (this.lastTexture !== texture || lastRender !== renderData.type) {
+        if (this.lastTexture !== texture || lastRender !== RenderDataType.Video) {
             this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
             this.gl.uniform1i(this.programManager.textureUniform, 0);
             this.lastTexture = texture;
         }
 
-        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, renderData.video);
+        if (renderData.video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+            this.gl.texImage2D(
+                this.gl.TEXTURE_2D,
+                0,
+                this.gl.RGBA,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                renderData.video,
+            );
+        }
 
         this.gl.uniform1i(this.programManager.renderTextureUniform, 1);
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.opacity ?? 1);

@@ -68,6 +68,8 @@ export class ShadowRenderer implements Renderer {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+
+            this.gl.disableVertexAttribArray(this.programManager.texCoordsAttr);
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);

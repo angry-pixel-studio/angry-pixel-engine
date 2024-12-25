@@ -149,6 +149,8 @@ const setupManagers = (container: Container): void => {
 };
 
 const setupEngineSystems = (container: Container): void => {
+    // headless means that the engine will run without rendering, audio and input systems
+    // this mode is ideal for game server development
     if (container.get<GameConfig>(TYPES.GameConfig).headless) headlessFilter(systemsByGroup);
 
     systemsByGroup.forEach((systems, group) =>
@@ -159,6 +161,9 @@ const setupEngineSystems = (container: Container): void => {
     );
 };
 
+/**
+ * Remove rendering, audio and input systems from the list of systems to be executed
+ */
 const headlessFilter = (systemsByGroup: SystemsByGroup): void => {
     systemsByGroup.delete(SystemGroup.Render);
     systemsByGroup.set(

@@ -58,6 +58,7 @@ export class SpriteRendererSystem implements System {
             spriteRenderer._renderData.slice = spriteRenderer.slice;
             spriteRenderer._renderData.smooth = spriteRenderer.smooth;
             spriteRenderer._renderData.tintColor = spriteRenderer.tintColor;
+            spriteRenderer._renderData.tiled = spriteRenderer.tiled;
 
             this.renderManager.addRenderData(spriteRenderer._renderData);
         });

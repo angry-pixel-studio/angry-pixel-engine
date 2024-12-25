@@ -264,4 +264,8 @@ export class Vector2 {
 
         return out;
     }
+
+    public toString(): string {
+        return `(${this._x}, ${this._y})`;
+    }
 }

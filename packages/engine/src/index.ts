@@ -46,7 +46,7 @@ export * from "@component/render2d/VideoRenderer";
 export * from "@manager/AssetManager";
 export * from "@manager/InputManager";
 export { SceneManager, Scene, SceneType } from "@manager/SceneManager";
-export { TimeManager } from "@manager/TimeManager";
+export { TimeManager, IntervalOptions } from "@manager/TimeManager";
 
 export { CollisionMatrix } from "@system/physics2d/ResolveCollisionSystem";
 export * from "@system/GameSystem";
