@@ -12,16 +12,22 @@ export class NinjaSfxSystem extends GameSystem {
         const audioPlayer = this.entityManager.getComponent(entity, AudioPlayer);
 
         if (ninjaMovement.walking) {
-            ninjaSfx.stepTimer += this.timeManager.deltaTime;
-
-            if (ninjaSfx.stepTimer >= ninjaSfx.stepCooldown) {
-                ninjaSfx.stepTimer = 0;
-                audioPlayer.volume = sfxVolume;
-                audioPlayer.audioSource = this.assetManager.getAudio(ASSETS.audio.sfxStep);
-                audioPlayer.action = "play";
+            if (!ninjaSfx.intervalId) {
+                ninjaSfx.intervalId = this.timeManager.setInterval({
+                    callback: () => {
+                        audioPlayer.volume = sfxVolume;
+                        audioPlayer.audioSource = this.assetManager.getAudio(ASSETS.audio.sfxStep);
+                        audioPlayer.action = "play";
+                    },
+                    delay: ninjaSfx.stepCooldown,
+                    executeImmediately: true,
+                });
             }
         } else {
-            ninjaSfx.stepTimer = ninjaSfx.stepCooldown;
+            if (ninjaSfx.intervalId) {
+                this.timeManager.clearInterval(ninjaSfx.intervalId);
+                ninjaSfx.intervalId = undefined;
+            }
         }
 
         if (ninjaMovement.grounded && ninjaMovement.jumping) {

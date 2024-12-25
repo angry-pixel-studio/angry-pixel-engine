@@ -13,12 +13,14 @@ type Interval = {
     delay: number;
     timestamp: number;
     times?: number;
+    executeImmediately?: boolean;
 };
 
 export type IntervalOptions = {
     callback: () => void;
     delay: number;
     times?: number;
+    executeImmediately?: boolean;
 };
 
 /**
@@ -38,15 +40,22 @@ export type IntervalOptions = {
  *
  * // set an interval that will be cleared after being called 5 times
  * const intervalId = timeManager.setInterval({
- *    callback: () => console.log("Will be called 5 times!"),
- *    delay: 1000,
- *    times: 5,
+ *     callback: () => console.log("Will be called 5 times!"),
+ *     delay: 1000,
+ *     times: 5,
  * });
  *
  * // set an interval that will be called indefinitely
  * const intervalId = timeManager.setInterval({
- *   callback: () => console.log("Will be called indefinitely!"),
- *  delay: 1000,
+ *     callback: () => console.log("Will be called indefinitely!"),
+ *     delay: 1000,
+ * });
+ *
+ * // set an interval that will be called immediately and indefinitely
+ * const intervalId = timeManager.setInterval({
+ *     callback: () => console.log("Will be called immediately and indefinitely!"),
+ *     delay: 1000,
+ *     executeImmediately: true,
  * });
  *
  * // clear the interval with the given id
@@ -141,6 +150,11 @@ export class TimeManager {
         const now = performance.now();
 
         for (const [intervalId, interval] of this.intervals) {
+            if (interval.executeImmediately) {
+                interval.timestamp = now - interval.delay;
+                interval.executeImmediately = false;
+            }
+
             if (now - interval.timestamp >= interval.delay) {
                 interval.callback();
 
@@ -158,28 +172,37 @@ export class TimeManager {
      * Sets a timer which executes a function repeatedly at a fixed time interval.\
      * If `times` is provided, the interval will be cleared after the function has been called that many times.\
      * But if `times` is not provided, the interval will continue until it is cleared.\
+     * If `executeImmediately` is set to true, the function will be called immediately after the interval is set.\
      * Intervals are cleared when loading a new scene.
      * @param intervalOptions
      * @returns intervalId
      * @example
      * ```ts
      * const intervalId = timeManager.setInterval({
-     *    callback: () => console.log("Will be called 5 times!"),
-     *    delay: 1000,
-     *    times: 5,
+     *     callback: () => console.log("Will be called 5 times!"),
+     *     delay: 1000,
+     *     times: 5,
      * });
      * ```
      * @example
      * ```ts
      * const intervalId = timeManager.setInterval({
-     *   callback: () => console.log("Will be called indefinitely!"),
-     *  delay: 1000,
+     *     callback: () => console.log("Will be called indefinitely!"),
+     *     delay: 1000,
+     * });
+     * ```
+     * @example
+     * ```ts
+     * const intervalId = timeManager.setInterval({
+     *     callback: () => console.log("Will be called immediately and indefinitely!"),
+     *     delay: 1000,
+     *     executeImmediately: true,
      * });
      * ```
      */
-    public setInterval({ callback, delay, times }: IntervalOptions): number {
+    public setInterval({ callback, delay, times, executeImmediately }: IntervalOptions): number {
         const intervalId = ++this.lastIntervalId;
-        this.intervals.set(intervalId, { callback, delay, times, timestamp: performance.now() });
+        this.intervals.set(intervalId, { callback, delay, times, executeImmediately, timestamp: performance.now() });
         return intervalId;
     }
 
