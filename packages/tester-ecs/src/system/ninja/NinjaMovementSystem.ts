@@ -1,4 +1,4 @@
-import { BoxCollider, GameSystem, RigidBody, Transform } from "angry-pixel";
+import { BoxCollider, GameSystem, randomInt, RigidBody, Transform } from "angry-pixel";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";
 import { InputController } from "@component/InputController";
 import { COLLISION_LAYERS } from "@config/layers";
