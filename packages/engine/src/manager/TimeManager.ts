@@ -12,15 +12,13 @@ type Interval = {
     callback: () => void;
     delay: number;
     timestamp: number;
-    times: number;
-    loop: boolean;
+    times?: number;
 };
 
 export type IntervalOptions = {
     callback: () => void;
     delay: number;
     times?: number;
-    loop?: boolean;
 };
 
 /**
@@ -37,6 +35,22 @@ export type IntervalOptions = {
  *
  * // stop all time-related interactions by setting the scale to zero
  * this.timeManager.timeScale = 0;
+ *
+ * // set an interval that will be cleared after being called 5 times
+ * const intervalId = timeManager.setInterval({
+ *    callback: () => console.log("Will be called 5 times!"),
+ *    delay: 1000,
+ *    times: 5,
+ * });
+ *
+ * // set an interval that will be called indefinitely
+ * const intervalId = timeManager.setInterval({
+ *   callback: () => console.log("Will be called indefinitely!"),
+ *  delay: 1000,
+ * });
+ *
+ * // clear the interval with the given id
+ * this.timeManager.clearInterval(intervalId);
  * ```
  */
 @injectable(TYPES.TimeManager)
@@ -130,7 +144,7 @@ export class TimeManager {
             if (now - interval.timestamp >= interval.delay) {
                 interval.callback();
 
-                if ((!interval.times || --interval.times <= 0) && !interval.loop) {
+                if (interval.times && --interval.times <= 0) {
                     this.intervals.delete(intervalId);
                     if (this.intervals.size === 0) this.lastIntervalId = 0;
                 } else {
@@ -142,13 +156,30 @@ export class TimeManager {
 
     /**
      * Sets a timer which executes a function repeatedly at a fixed time interval.\
+     * If `times` is provided, the interval will be cleared after the function has been called that many times.\
+     * But if `times` is not provided, the interval will continue until it is cleared.\
      * Intervals are cleared when loading a new scene.
      * @param intervalOptions
      * @returns intervalId
+     * @example
+     * ```ts
+     * const intervalId = timeManager.setInterval({
+     *    callback: () => console.log("Will be called 5 times!"),
+     *    delay: 1000,
+     *    times: 5,
+     * });
+     * ```
+     * @example
+     * ```ts
+     * const intervalId = timeManager.setInterval({
+     *   callback: () => console.log("Will be called indefinitely!"),
+     *  delay: 1000,
+     * });
+     * ```
      */
-    public setInterval({ callback, delay, loop, times }: IntervalOptions): number {
+    public setInterval({ callback, delay, times }: IntervalOptions): number {
         const intervalId = ++this.lastIntervalId;
-        this.intervals.set(intervalId, { callback, delay, loop, times, timestamp: performance.now() });
+        this.intervals.set(intervalId, { callback, delay, times, timestamp: performance.now() });
         return intervalId;
     }
 
