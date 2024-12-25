@@ -51,6 +51,8 @@ export class GeometricRenderer implements Renderer {
     }
 
     public render(renderData: GeometricRenderData, cameraData: CameraData, lastRender: RenderDataType): boolean {
+        this.gl.disableVertexAttribArray(this.programManager.texCoordsAttr);
+
         switch (renderData.shape) {
             case GeometricShape.Polygon:
                 this.renderLines(renderData, cameraData, this.gl.LINE_LOOP);

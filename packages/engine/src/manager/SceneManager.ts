@@ -6,6 +6,7 @@ import { CreateSystemService } from "@system/CreateSystemService";
 import { AssetManager } from "./AssetManager";
 import { SystemGroup } from "@system/SystemGroup";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
+import { TimeManager } from "./TimeManager";
 
 /**
  * This type represents a scene class
@@ -79,6 +80,7 @@ export class SceneManager {
         @inject(TYPES.CreateSystemService) private readonly systemFactory: CreateSystemService,
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
     ) {}
 
     public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {
@@ -147,6 +149,9 @@ export class SceneManager {
             .systems.forEach((systemType) => this.systemManager.disableSystem(systemType));
 
         this.entityManager.removeAllEntities();
+
+        // intervals and timeouts are cleared to avoid any unwanted behavior
+        this.timeManager.clearAllIntervals();
 
         this.systemManager.enableSystem(AudioPlayerSystem);
         this.systemManager.enableSystem(VideoRendererSystem);

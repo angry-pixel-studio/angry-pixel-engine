@@ -75,6 +75,7 @@ export class LoopManager {
 
         this.systemManager.update(SystemGroup.PreGameLogic);
         this.systemManager.update(SystemGroup.GameLogic);
+        this.timeManager.updateIntervals();
         this.systemManager.update(SystemGroup.Transform);
     }
 

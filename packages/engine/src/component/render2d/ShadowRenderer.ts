@@ -1,5 +1,6 @@
 import { Rectangle } from "@math";
 import { RenderDataType, ShadowRenderData } from "@webgl";
+import { defaultRenderLayer } from "./Camera";
 
 /**
  * @public
@@ -27,7 +28,7 @@ export class ShadowRenderer {
     /** Shadow opacity between 0 and 1 */
     opacity: number = 1;
     /** The render layer */
-    layer: string = "";
+    layer: string = defaultRenderLayer;
 
     /** @internal */
     _boundingBox: Rectangle = new Rectangle();

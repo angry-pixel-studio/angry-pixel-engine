@@ -6,6 +6,7 @@ import { InputManager } from "@manager/InputManager";
 import { SceneManager } from "@manager/SceneManager";
 import { TimeManager } from "@manager/TimeManager";
 import { CollisionRepository } from "@collisions2d";
+import { GameConfig } from "@config/bootstrap";
 
 /**
  * Abstract class which can be used to create Systems.\
@@ -28,6 +29,15 @@ export abstract class GameSystem implements System {
     @inject(TYPES.TimeManager) protected readonly timeManager: TimeManager;
     @inject(TYPES.InputManager) protected readonly inputManager: InputManager;
     @inject(TYPES.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
+    @inject(TYPES.GameConfig) protected readonly gameConfig: GameConfig;
 
     public onUpdate(): void {}
+
+    public onCreate(): void {}
+
+    public onEnabled(): void {}
+
+    public onDisabled(): void {}
+
+    public onDestroy(): void {}
 }
