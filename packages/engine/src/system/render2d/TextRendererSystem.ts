@@ -42,14 +42,22 @@ export class TextRendererSystem implements System {
             textRenderer._renderData.text = this.crop(textRenderer);
             textRenderer._renderData.orientation = textRenderer.orientation;
             textRenderer._renderData.color = textRenderer.color;
-            textRenderer._renderData.lineSeparation = textRenderer.lineSeparation;
+            textRenderer._renderData.lineHeight = textRenderer.lineHeight ?? textRenderer.fontSize;
             textRenderer._renderData.letterSpacing = textRenderer.letterSpacing;
             textRenderer._renderData.smooth = textRenderer.smooth;
             textRenderer._renderData.rotation = transform.localRotation + textRenderer.rotation;
             textRenderer._renderData.opacity = textRenderer.opacity;
-            textRenderer._renderData.bitmap.charRanges = textRenderer.charRanges;
-            textRenderer._renderData.bitmap.margin = textRenderer.bitmapMargin;
-            textRenderer._renderData.bitmap.spacing = textRenderer.bitmapSpacing;
+
+            const { charRanges, fontSize, spacing } = textRenderer.textureAtlas;
+
+            if (charRanges) textRenderer._renderData.textureAtlas.charRanges = textRenderer.textureAtlas.charRanges;
+            if (fontSize) textRenderer._renderData.textureAtlas.fontSize = textRenderer.textureAtlas.fontSize;
+            if (spacing) textRenderer._renderData.textureAtlas.spacing = textRenderer.textureAtlas.spacing;
+
+            textRenderer._renderData.flipHorizontally = textRenderer.flipHorizontally;
+            textRenderer._renderData.flipVertically = textRenderer.flipVertically;
+
+            textRenderer._renderData.shadow = textRenderer.shadow;
 
             if (transform.localRotation !== 0 && this.scaledOffset.magnitude > 0) {
                 this.translateRenderPosition(textRenderer._renderData, transform);
@@ -68,7 +76,7 @@ export class TextRendererSystem implements System {
         );
     }
 
-    private crop({ fontSize, height, text, letterSpacing, width, lineSeparation }: TextRenderer): string {
+    private crop({ fontSize, height, width, text, letterSpacing, lineHeight }: TextRenderer): string {
         if (fontSize > height) return "";
 
         const croppedText: string[] = [];
@@ -87,7 +95,7 @@ export class TextRendererSystem implements System {
             );
 
             for (const newLine of newLines) {
-                croppedHeight += fontSize + lineSeparation;
+                croppedHeight += lineHeight;
                 if (croppedHeight > height) return croppedText.join("\n");
 
                 croppedText.push(newLine);

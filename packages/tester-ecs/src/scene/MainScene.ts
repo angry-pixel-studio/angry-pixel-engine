@@ -10,6 +10,8 @@ import {
     RigidBodyType,
     Scene,
     ShadowRenderer,
+    TextOrientation,
+    TextRenderer,
     Transform,
     Vector2,
     VideoRenderer,
@@ -153,6 +155,26 @@ export class MainScene extends Scene {
                 radius: 64,
                 color: "#597f1e",
                 layer: RENDER_LAYERS.Foreground,
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(0, 0) }),
+            new TextRenderer({
+                text: "Ranma ½: らんま½",
+                color: "#FF0000",
+                fontSize: 64,
+                width: 1920,
+                height: 400,
+                opacity: 1,
+                layer: RENDER_LAYERS.UI,
+                font: "Arial",
+                orientation: TextOrientation.Center,
+                textureAtlas: {
+                    charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
+                    fontSize: 64,
+                    spacing: 0,
+                },
             }),
         ]);
     }
