@@ -71,6 +71,49 @@ export interface TextRendererOptions {
  * The TextRenderer component allows to render text using font families, colors, and other configuration options.
  * @public
  * @category Components
+ *  @example
+ * ```typescript
+ * const textRenderer = new TextRenderer({
+ *   text: "Hello World!",
+ *   color: "#FFFFFF",
+ *   fontSize: 24,
+ *   font: "Arial",
+ *   width: 1920,
+ *   height: 32,
+ *   layer: "TextLayer",
+ * });
+ * ```
+ * @example
+ * ```typescript
+ * const textRenderer = new TextRenderer({
+ *   text: "Hello World!",
+ *   color: "#FFFFFF",
+ *   fontSize: 24,
+ *   width: 1920,
+ *   height: 32,
+ *   opacity: 1,
+ *   layer: "TextLayer",
+ *   orientation: TextOrientation.RightCenter,
+ *   shadow: {
+ *     color: "#00FF00",
+ *     offset: new Vector2(3, -3),
+ *     opacity: 0.5,
+ *   },
+ *   textureAtlas: {
+ *     charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
+ *     fontSize: 64,
+ *     spacing: 4,
+ *   },
+ *   font: "Arial",
+ *   flipHorizontally: false,
+ *   flipVertically: false,
+ *   letterSpacing: 0,
+ *   lineHeight: 24,
+ *   offset: new Vector2(0, 0),
+ *   rotation: 0,
+ *   smooth: false,
+ * });
+ * ```
  */
 export class TextRenderer {
     /** The text color */
