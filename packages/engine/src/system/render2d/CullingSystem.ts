@@ -111,19 +111,12 @@ export class CullingSystem implements System {
         this.object.y1 = position.y + rotatedHeight / 2;
     }
 
-    private setObjectForText({
-        position,
-        text,
-        fontSize,
-        lineSeparation,
-        letterSpacing,
-        rotation,
-    }: TextRenderData): void {
+    private setObjectForText({ position, text, fontSize, lineHeight, letterSpacing, rotation }: TextRenderData): void {
         const width =
             text.split("\n").reduce((max, line) => Math.max(max, line.length), 0) *
             (fontSize + (letterSpacing ?? 0)) *
             2;
-        const height = text.split("\n").length * (fontSize + (lineSeparation ?? 0));
+        const height = text.split("\n").length * (lineHeight ?? fontSize);
 
         this.setObjectForResizeable({
             position,

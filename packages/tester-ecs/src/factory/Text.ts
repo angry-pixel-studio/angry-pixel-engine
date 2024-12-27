@@ -17,5 +17,10 @@ export const textFactory = (
         height: 32,
         layer: RENDER_LAYERS.UI,
         orientation: TextOrientation.RightCenter,
+        shadow: {
+            color: "#00FF00",
+            offset: new Vector2(3, -3),
+            opacity: 0.5,
+        },
     }),
 ];

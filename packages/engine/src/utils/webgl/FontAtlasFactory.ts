@@ -1,22 +1,34 @@
+export type FontTextureAtlasOptions = {
+    font: FontFace | string;
+    charRanges: number[];
+    fontSize: number;
+    spacing: number;
+};
+
 export class FontAtlasFactory {
-    private bitmapSize: number;
+    private readonly fontAtlas: Map<string, FontAtlas> = new Map<string, FontAtlas>();
+
+    // cache
+    private id: string;
     private chars: string[];
-    private fontAtlas: Map<symbol, FontAtlas> = new Map<symbol, FontAtlas>();
+    private font: string;
+    private fontSize: number;
+    private spacing: number;
 
-    public hasFontAtlas(fontFace: FontFace | string): boolean {
-        return this.fontAtlas.has(this.symbol(fontFace));
+    public hasFontAtlas(options: FontTextureAtlasOptions): boolean {
+        return this.fontAtlas.has(this.getId(options));
     }
 
-    public getFontAtlas(fontFace: FontFace | string): FontAtlas {
-        return this.fontAtlas.get(this.symbol(fontFace));
+    public getFontAtlas(options: FontTextureAtlasOptions): FontAtlas {
+        return this.fontAtlas.get(this.getId(options));
     }
 
-    public getOrCreate(charRanges: number[], fontFace: FontFace | string, bitmapSize: number): FontAtlas {
-        return this.getFontAtlas(fontFace) ?? this.create(charRanges, fontFace, bitmapSize);
+    public getOrCreate(options: FontTextureAtlasOptions): FontAtlas {
+        return this.getFontAtlas(options) ?? this.create(options);
     }
 
-    public create(charRanges: number[], fontFace: FontFace | string, bitmapSize: number): FontAtlas {
-        this.bitmapSize = bitmapSize;
+    public create(options: FontTextureAtlasOptions): FontAtlas {
+        const { font, charRanges, fontSize, spacing } = options;
 
         this.chars = [];
         for (let i = 0; i < charRanges.length; i = i + 2) {
@@ -25,29 +37,39 @@ export class FontAtlasFactory {
             }
         }
 
-        const fontAtlas = this.renderAtlas(fontFace instanceof FontFace ? fontFace.family : fontFace);
-        this.fontAtlas.set(this.symbol(fontFace), fontAtlas);
+        this.font = font instanceof FontFace ? font.family : font;
+        this.fontSize = fontSize;
+        this.spacing = spacing;
+        this.id = this.getId(options);
+
+        const fontAtlas = this.renderAtlas();
+        this.fontAtlas.set(this.id, fontAtlas);
 
         return fontAtlas;
     }
 
-    private symbol(fontFace: FontFace | string): symbol {
-        return Symbol.for(fontFace instanceof FontFace ? fontFace.family : fontFace);
+    private getId({ font, charRanges, fontSize, spacing }: FontTextureAtlasOptions): string {
+        return JSON.stringify({
+            font: font instanceof FontFace ? font.family : font,
+            charRanges,
+            fontSize,
+            spacing,
+        });
     }
 
-    private renderAtlas(fontFaceFamily: string): FontAtlas {
+    private renderAtlas(): FontAtlas {
         const fontAtlas: FontAtlas = new FontAtlas(
-            fontFaceFamily,
-            this.bitmapSize,
+            this.id,
+            this.fontSize,
             Math.ceil(Math.sqrt(this.chars.length)),
+            this.spacing,
         );
-
         const ctx: CanvasRenderingContext2D = fontAtlas.canvas.getContext("2d");
 
         ctx.clearRect(0, 0, fontAtlas.canvas.width, fontAtlas.canvas.height);
         ctx.textBaseline = "top";
-        ctx.fillStyle = "#000";
-        ctx.font = `${this.bitmapSize}px ${fontFaceFamily}`;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = `${this.fontSize}px ${this.font}`;
 
         let x: number = 0;
         let y: number = 0;
@@ -55,15 +77,14 @@ export class FontAtlasFactory {
         for (let i = 0; i < this.chars.length; i++) {
             ctx.fillText(this.chars[i], x, y);
 
-            // TODO: improve the glyph data using the measureText data
             fontAtlas.glyphs.set(this.chars[i], {
                 id: i,
                 width: ctx.measureText(this.chars[i]).width,
             });
 
-            if ((x += this.bitmapSize) > fontAtlas.canvas.width - this.bitmapSize) {
+            if ((x += this.fontSize + this.spacing) > fontAtlas.canvas.width - this.fontSize) {
                 x = 0;
-                y += this.bitmapSize;
+                y += this.fontSize + this.spacing;
             }
         }
 
@@ -76,11 +97,12 @@ export class FontAtlas {
     public readonly glyphs: Map<string, Glyph> = new Map<string, Glyph>();
 
     constructor(
-        public readonly fontFaceFamily: string,
-        public readonly bitmapFontSize: number,
+        public readonly id: string,
+        public readonly fontSize: number,
         public readonly gridSize: number,
+        public readonly spacing: number,
     ) {
-        this.canvas.width = this.gridSize * this.bitmapFontSize;
+        this.canvas.width = this.gridSize * (this.fontSize + this.spacing);
         this.canvas.height = this.canvas.width;
     }
 }

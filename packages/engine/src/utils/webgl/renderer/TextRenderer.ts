@@ -18,24 +18,30 @@ export enum TextOrientation {
     RightCenter,
 }
 
-const TEXTURE_PREFIX = "FontFamily:";
+const TEXTURE_PREFIX = "FontTextureAtlas:";
 
 export interface TextRenderData extends RenderData {
-    font: FontFace | string;
-    text: string;
-    fontSize: number;
     color: string;
-    lineSeparation: number;
+    flipHorizontally: boolean;
+    flipVertically: boolean;
+    font: FontFace | string;
+    fontSize: number;
+    lineHeight: number;
     letterSpacing: number;
+    opacity: number;
     orientation: TextOrientation;
     rotation: number;
-    opacity: number;
+    shadow?: {
+        color: string;
+        offset: Vector2;
+        opacity: number;
+    };
     smooth: boolean;
-    bitmap: {
+    text: string;
+    textureAtlas: {
         charRanges: number[];
         fontSize: number;
-        margin: Vector2;
-        spacing: Vector2;
+        spacing: number;
     };
 }
 
@@ -54,6 +60,7 @@ export class TextRenderer implements Renderer {
     private lastTexture: WebGLTexture = null;
     private textSize: Vector2 = new Vector2();
     private modelPosition: Vector2 = new Vector2();
+    private shadowPosition: Vector2 = new Vector2();
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -68,33 +75,57 @@ export class TextRenderer implements Renderer {
         this.textureBuffer = this.gl.createBuffer();
     }
 
-    public render(renderData: TextRenderData, cameraData: CameraData, lastRender: RenderDataType): boolean {
+    public render(
+        renderData: TextRenderData,
+        cameraData: CameraData,
+        lastRender: RenderDataType,
+        shadow: boolean = false,
+    ): boolean {
         if (!renderData.text) return false;
 
-        const fontAtlas = this.fontAtlasFactory.getOrCreate(
-            renderData.bitmap.charRanges,
-            renderData.font,
-            renderData.bitmap.fontSize,
-        );
+        const fontAtlas = this.fontAtlasFactory.getOrCreate({
+            font: renderData.font,
+            ...renderData.textureAtlas,
+        });
 
-        this.generateTextVertices(fontAtlas, renderData);
+        // If we are render the shadow text, we dont need to recalculate the vertices or re-enable buffers
+        if (!shadow) {
+            this.generateTextVertices(fontAtlas, renderData);
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.DYNAMIC_DRAW);
-        this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
-        this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.DYNAMIC_DRAW);
+            this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
+            this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
-        this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
-        this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
+            this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
+            this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+        }
+
+        if (renderData.shadow) {
+            const { color, offset, opacity } = renderData.shadow;
+            const shadowRenderData = {
+                ...renderData,
+                color,
+                opacity,
+                position: Vector2.add(this.shadowPosition, renderData.position, offset),
+            };
+            shadowRenderData.shadow = undefined;
+            this.render(shadowRenderData, cameraData, lastRender, true);
+            lastRender = RenderDataType.Text;
+        }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
         this.setPositionFromOrientation(renderData);
 
         mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
-        mat4.scale(this.modelMatrix, this.modelMatrix, [renderData.fontSize, renderData.fontSize, 1]);
+        mat4.scale(this.modelMatrix, this.modelMatrix, [
+            renderData.fontSize * (renderData.flipHorizontally ? -1 : 1),
+            renderData.fontSize * (renderData.flipVertically ? -1 : 1),
+            1,
+        ]);
 
         this.textureMatrix = mat4.identity(this.textureMatrix);
 
@@ -104,14 +135,10 @@ export class TextRenderer implements Renderer {
         this.gl.uniformMatrix4fv(this.programManager.modelMatrixUniform, false, this.modelMatrix);
         this.gl.uniformMatrix4fv(this.programManager.textureMatrixUniform, false, this.textureMatrix);
 
-        if (renderData.opacity < 1) {
-            this.gl.enable(this.gl.BLEND);
-        } else {
-            this.gl.disable(this.gl.BLEND);
-        }
+        this.gl.enable(this.gl.BLEND);
 
         const texture = this.textureManager.getOrCreateTextureFromCanvas(
-            TEXTURE_PREFIX + fontAtlas.fontFaceFamily,
+            `${TEXTURE_PREFIX}${fontAtlas.id}${renderData.smooth ? ":smooth" : ""}`,
             fontAtlas.canvas,
             renderData.smooth,
         );
@@ -122,14 +149,13 @@ export class TextRenderer implements Renderer {
             this.lastTexture = texture;
         }
 
-        this.gl.uniform1i(this.programManager.useTintColorUniform, 0);
+        this.gl.uniform1i(this.programManager.useMaskColorUniform, 0);
         this.gl.uniform1i(this.programManager.renderTextureUniform, 1);
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.opacity);
 
         const { r, g, b, a } = hexToRgba(renderData.color);
-        this.gl.uniform4f(this.programManager.maskColorUniform, r, g, b, a);
-        this.gl.uniform1f(this.programManager.maskColorMixUniform, 1);
-        this.gl.uniform1i(this.programManager.useMaskColorUniform, 1);
+        this.gl.uniform1i(this.programManager.useTintColorUniform, 1);
+        this.gl.uniform4f(this.programManager.tintColorUniform, r, g, b, a);
 
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
 
@@ -138,7 +164,7 @@ export class TextRenderer implements Renderer {
 
     private generateTextVertices(
         fontAtlas: FontAtlas,
-        { text, fontSize, bitmap, letterSpacing, lineSeparation }: TextRenderData,
+        { text, fontSize, letterSpacing, lineHeight }: TextRenderData,
     ): void {
         this.posVertices = [];
         this.texVertices = [];
@@ -149,7 +175,7 @@ export class TextRenderer implements Renderer {
         let maxWidth = 0;
 
         letterSpacing /= fontSize;
-        lineSeparation /= fontSize;
+        lineHeight /= fontSize;
 
         for (let i = 0; i < text.length; i++) {
             const letter = text[i];
@@ -157,7 +183,7 @@ export class TextRenderer implements Renderer {
             if (letter === "\n") {
                 maxWidth = Math.max(maxWidth, x);
                 x = 0;
-                y -= 1 + lineSeparation;
+                y -= lineHeight;
 
                 continue;
             }
@@ -165,7 +191,7 @@ export class TextRenderer implements Renderer {
             const glyph = fontAtlas.glyphs.get(letter);
 
             if (glyph) {
-                const letterWidth = glyph.width / fontAtlas.bitmapFontSize;
+                const letterWidth = glyph.width / fontAtlas.fontSize;
 
                 // prettier-ignore
                 this.posVertices.push(
@@ -177,13 +203,13 @@ export class TextRenderer implements Renderer {
                     x + letterWidth, y
                 )
 
-                const gx = (glyph.id % fontAtlas.gridSize) * fontAtlas.bitmapFontSize;
-                const gy = ((glyph.id / fontAtlas.gridSize) | 0) * fontAtlas.bitmapFontSize;
+                const gx = (glyph.id % fontAtlas.gridSize) * (fontAtlas.fontSize + fontAtlas.spacing);
+                const gy = ((glyph.id / fontAtlas.gridSize) | 0) * (fontAtlas.fontSize + fontAtlas.spacing);
 
-                const u1 = (gx + bitmap.margin.x) / fontAtlas.canvas.width;
-                const v1 = (gy + bitmap.margin.y) / fontAtlas.canvas.width;
-                const u2 = (gx + glyph.width + bitmap.spacing.x) / fontAtlas.canvas.width;
-                const v2 = (gy + fontAtlas.bitmapFontSize + bitmap.spacing.y) / fontAtlas.canvas.width;
+                const u1 = gx / fontAtlas.canvas.width;
+                const v1 = gy / fontAtlas.canvas.height;
+                const u2 = (gx + glyph.width) / fontAtlas.canvas.width;
+                const v2 = (gy + fontAtlas.fontSize) / fontAtlas.canvas.height;
 
                 // prettier-ignore
                 this.texVertices.push( 
