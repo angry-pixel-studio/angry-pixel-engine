@@ -3,7 +3,7 @@ export class TextureFactory {
 
     public createFromImage(
         image: HTMLImageElement,
-        smooth: boolean = true,
+        smooth: boolean = false,
         texture: WebGLTexture = null,
     ): WebGLTexture {
         texture = texture ?? this.gl.createTexture();
@@ -19,7 +19,7 @@ export class TextureFactory {
 
     public createFromCanvas(
         canvas: HTMLCanvasElement,
-        smooth: boolean = true,
+        smooth: boolean = false,
         texture: WebGLTexture = null,
     ): WebGLTexture {
         texture = texture ?? this.gl.createTexture();
@@ -56,7 +56,7 @@ export class TextureFactory {
         return texture;
     }
 
-    private createFromSource(source: TexImageSource, texture: WebGLTexture, smooth: boolean = true): void {
+    private createFromSource(source: TexImageSource, texture: WebGLTexture, smooth: boolean = false): void {
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
         this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, source);
@@ -64,13 +64,13 @@ export class TextureFactory {
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
 
-        // NEAREST = crisp pixels, LINEAR = smooth pixels
-        if (smooth === false) {
-            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-        } else {
+        // LINEAR === smooth pixels, NEAREST === crisp pixels,
+        if (smooth) {
             this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
             this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
+        } else {
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
         }
 
         this.gl.bindTexture(this.gl.TEXTURE_2D, null);

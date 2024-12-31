@@ -258,9 +258,68 @@ export class Vector2 {
      * v2.x // 4
      * v2.y // 2
      * ```
+     * @example
+     * ```js
+     * const v1 = new Vector2(3.9, 2.2);
+     * Vector2.round(v1, v1);
+     * v1.x // 4
+     * v1.y // 2
+     * ```
      */
     public static round(out: Vector2, a: Vector2): Vector2 {
         out.set(Math.round(a.x), Math.round(a.y));
+
+        return out;
+    }
+
+    /**
+     * Floors a vector
+     *
+     * @param a The vector to floor
+     * @returns The output vector
+     * @example
+     * ```js
+     * const v1 = new Vector2(3.9, 2.2);
+     * const v2 = Vector2.floor(new Vector2(), v1);
+     * v2.x // 3
+     * v2.y // 2
+     * ```
+     * @example
+     * ```js
+     * const v1 = new Vector2(3.9, 2.2);
+     * Vector2.floor(v1, v1);
+     * v1.x // 3
+     * v1.y // 2
+     * ```
+     */
+    public static floor(out: Vector2, a: Vector2): Vector2 {
+        out.set(Math.floor(a.x), Math.floor(a.y));
+
+        return out;
+    }
+
+    /**
+     * Ceils a vector
+     *
+     * @param a The vector to ceil
+     * @returns The output vector
+     * @example
+     * ```js
+     * const v1 = new Vector2(3.9, 2.2);
+     * const v2 = Vector2.ceil(new Vector2(), v1);
+     * v2.x // 4
+     * v2.y // 3
+     * ```
+     * @example
+     * ```js
+     * const v1 = new Vector2(3.9, 2.2);
+     * Vector2.ceil(v1, v1);
+     * v1.x // 4
+     * v1.y // 3
+     * ```
+     */
+    public static ceil(out: Vector2, a: Vector2): Vector2 {
+        out.set(Math.ceil(a.x), Math.ceil(a.y));
 
         return out;
     }

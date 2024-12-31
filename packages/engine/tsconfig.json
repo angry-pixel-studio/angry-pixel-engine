@@ -16,7 +16,8 @@
             "@ioc": ["./src/utils/ioc"],
             "@math": ["./src/utils/math"],
             "@collisions2d": ["./src/utils/collisions2d"],
-            "@webgl": ["./src/utils/webgl"]
+            "@webgl": ["./src/utils/webgl"],
+            "@misc": ["./src/utils/misc"]
         }
     },
     "include": ["src"]

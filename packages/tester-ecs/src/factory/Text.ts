@@ -22,5 +22,6 @@ export const textFactory = (
             offset: new Vector2(3, -3),
             opacity: 0.5,
         },
+        smooth: true,
     }),
 ];

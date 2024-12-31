@@ -3,7 +3,7 @@ import { BoxCollider } from "@component/physics2d/BoxCollider";
 import { EdgeCollider } from "@component/physics2d/EdgeCollider";
 import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";
-import { defaultRenderLayer } from "@component/render2d/Camera";
+import { debugRenderLayer } from "@component/render2d/Camera";
 import { GameConfig } from "@config/bootstrap";
 import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
@@ -14,22 +14,16 @@ import { Vector2 } from "@math";
 import { Circumference, Collider, CollisionMethods, Polygon } from "@collisions2d";
 import { GeometricRenderData, GeometricShape, RenderDataType } from "@webgl";
 
-@injectable(SYSTEMS.ColliderRenderSystem)
-export class ColliderRenderSystem implements System {
-    private readonly collisionMethod: CollisionMethods;
-    private readonly debugEnabled: boolean;
-
+@injectable(SYSTEMS.DebugColliderRenderSystem)
+export class DebugColliderRenderSystem implements System {
     constructor(
-        @inject(TYPES.EntityManager) private entityManager: EntityManager,
-        @inject(TYPES.RenderManager) private renderManager: RenderManager,
-        @inject(TYPES.GameConfig) gameConfig: GameConfig,
-    ) {
-        this.collisionMethod = gameConfig.collisions.collisionMethod;
-        this.debugEnabled = gameConfig.debugEnabled;
-    }
+        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(TYPES.GameConfig) private readonly gameConfig: GameConfig,
+    ) {}
 
     public onUpdate(): void {
-        if (!this.debugEnabled) return;
+        if (!this.gameConfig.debugEnabled) return;
 
         [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
             this.entityManager.search<Collider>(type).forEach(({ component: collider }) =>
@@ -37,8 +31,8 @@ export class ColliderRenderSystem implements System {
                     const renderData: GeometricRenderData = {
                         type: RenderDataType.Geometric,
                         position: new Vector2(),
-                        layer: defaultRenderLayer,
-                        color: "#00FF00",
+                        layer: debugRenderLayer,
+                        color: this.gameConfig.debugColor,
                         shape: undefined,
                         radius: undefined,
                         rotation: undefined,
@@ -46,10 +40,10 @@ export class ColliderRenderSystem implements System {
                     };
 
                     if (shape instanceof Polygon) {
-                        if (this.collisionMethod === CollisionMethods.SAT) {
+                        if (this.gameConfig.collisions.collisionMethod === CollisionMethods.SAT) {
                             renderData.shape = shape.vertices.length > 2 ? GeometricShape.Polygon : GeometricShape.Line;
                             renderData.vertexModel = shape.vertices;
-                        } else if (this.collisionMethod === CollisionMethods.AABB) {
+                        } else if (this.gameConfig.collisions.collisionMethod === CollisionMethods.AABB) {
                             renderData.shape = GeometricShape.Polygon;
                             renderData.vertexModel = [
                                 new Vector2(shape.boundingBox.x, shape.boundingBox.y),

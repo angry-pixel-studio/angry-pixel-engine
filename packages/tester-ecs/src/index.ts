@@ -21,6 +21,7 @@ export const createAndStart = () => {
         },
         // @ts-ignore
         debugEnabled: Boolean(Number(params.debug)),
+        debugTextPosition: "top-left",
     });
 
     //  add scenes

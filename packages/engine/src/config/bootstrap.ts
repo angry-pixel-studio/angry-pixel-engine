@@ -62,7 +62,11 @@ export interface GameConfig {
     height: number;
     /** Enables the debug mode */
     debugEnabled?: boolean;
-    /** Background color of canvas */
+    /** Color of debug elements, default "#00FF00" (green) */
+    debugColor?: string;
+    /** Position of debug text, default "bottom-left" */
+    debugTextPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+    /** Background color of canvas, default "#000000" (black) */
     canvasColor?: string;
     /** Framerate for physics execution. The allowed values are 60, 120, 180, 240.
      * The higher the framerate, the more accurate the physics will be, but it will consume more processor resources.
@@ -106,7 +110,9 @@ const setDefaultValues = (gameConfig: GameConfig) => {
     if (typeof gameConfig.height !== "number") throw new Error("GameConfig Error: Invalid height");
 
     gameConfig.debugEnabled = gameConfig.debugEnabled ?? false;
+    gameConfig.debugColor = gameConfig.debugColor ?? "#00FF00";
     gameConfig.canvasColor = gameConfig.canvasColor ?? "#000000";
+    gameConfig.debugTextPosition = gameConfig.debugTextPosition ?? "bottom-left";
     gameConfig.physicsFramerate = gameConfig.physicsFramerate ?? defaultPhysicsFramerate;
     gameConfig.headless = gameConfig.headless ?? false;
 

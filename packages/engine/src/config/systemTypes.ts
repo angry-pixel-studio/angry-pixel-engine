@@ -26,7 +26,6 @@ export const SYSTEMS = {
     AnimatorSystem: Symbol.for("AnimatorSystem"),
     CameraSystem: Symbol.for("CameraSystem"),
     ClearScreenSystem: Symbol.for("ClearScreenSystem"),
-    ColliderRenderSystem: Symbol.for("ColliderRenderSystem"),
     CullingSystem: Symbol.for("CullingSystem"),
     MaskRendererSystem: Symbol.for("MaskRendererSystem"),
     RenderSystem: Symbol.for("RenderSystem"),
@@ -35,4 +34,7 @@ export const SYSTEMS = {
     TextRendererSystem: Symbol.for("TextRendererSystem"),
     TilemapRendererSystem: Symbol.for("TilemapRendererSystem"),
     VideoRendererSystem: Symbol.for("VideoRendererSystem"),
+    // debug
+    DebugColliderRenderSystem: Symbol.for("DebugColliderRenderSystem"),
+    DebugMousePositionSystem: Symbol.for("DebugMousePositionSystem"),
 };

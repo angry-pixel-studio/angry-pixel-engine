@@ -63,7 +63,7 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([InputController]);
         this.entityManager.createEntity(foregroundFactory(this.assetManager));
 
-        this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(-300, 0)));
+        this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(0, -40)));
         this.entityManager.createEntity(
             movingPlatformFactory(this.assetManager, [new Vector2(-112, -72), new Vector2(168, -72)]),
         );
@@ -115,13 +115,14 @@ export class MainScene extends Scene {
             defaultRenderLayer,
         ];
         camera.zoom = 4;
+        camera.debug = true;
 
         const shadowRenderer = new ShadowRenderer();
         shadowRenderer.color = "#000000";
         shadowRenderer.width = 1920 / camera.zoom;
         shadowRenderer.height = 1080 / camera.zoom;
         shadowRenderer.layer = RENDER_LAYERS.Shadow;
-        shadowRenderer.opacity = 0.8;
+        shadowRenderer.opacity = 0;
 
         this.entityManager.createEntity([Transform, camera, FollowPlayerCamera, shadowRenderer]);
     }

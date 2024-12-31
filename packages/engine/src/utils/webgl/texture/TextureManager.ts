@@ -7,11 +7,11 @@ export class TextureManager {
 
     constructor(private readonly textureFactory: TextureFactory) {}
 
-    public getOrCreateTextureFromImage(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
+    public getOrCreateTextureFromImage(image: HTMLImageElement, smooth: boolean = false): WebGLTexture {
         return this.textures.get(textureId(image.src, smooth)) ?? this.createTextureFromImage(image, smooth);
     }
 
-    public createTextureFromImage(image: HTMLImageElement, smooth: boolean = true): WebGLTexture {
+    public createTextureFromImage(image: HTMLImageElement, smooth: boolean = false): WebGLTexture {
         const texture: WebGLTexture = this.textureFactory.createFromImage(image, smooth);
 
         this.textures.set(textureId(image.src, smooth), texture);
@@ -19,11 +19,15 @@ export class TextureManager {
         return texture;
     }
 
-    public getOrCreateTextureFromCanvas(name: string, canvas: HTMLCanvasElement, smooth: boolean = true): WebGLTexture {
+    public getOrCreateTextureFromCanvas(
+        name: string,
+        canvas: HTMLCanvasElement,
+        smooth: boolean = false,
+    ): WebGLTexture {
         return this.textures.get(textureId(name, smooth)) ?? this.createTextureFromCanvas(name, canvas, smooth);
     }
 
-    public createTextureFromCanvas(name: string, canvas: HTMLCanvasElement, smooth: boolean = true): WebGLTexture {
+    public createTextureFromCanvas(name: string, canvas: HTMLCanvasElement, smooth: boolean = false): WebGLTexture {
         const texture: WebGLTexture = this.textureFactory.createFromCanvas(canvas, smooth);
 
         this.textures.set(textureId(name, smooth), texture);
@@ -32,13 +36,13 @@ export class TextureManager {
     }
 
     public getOrCreateTextureFromVideo(video: HTMLVideoElement): WebGLTexture {
-        return this.textures.get(textureId(video.src)) ?? this.createTextureFromVideo(video);
+        return this.textures.get(video.src) ?? this.createTextureFromVideo(video);
     }
 
     public createTextureFromVideo(video: HTMLVideoElement): WebGLTexture {
         const texture: WebGLTexture = this.textureFactory.createPixelTexture();
 
-        this.textures.set(textureId(video.src), texture);
+        this.textures.set(video.src, texture);
 
         return texture;
     }
