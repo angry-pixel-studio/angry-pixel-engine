@@ -22,6 +22,7 @@ export interface CameraOptions {
     layers: string[];
     zoom: number;
     depth: number;
+    debug: boolean;
 }
 
 /**
