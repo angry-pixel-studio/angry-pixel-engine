@@ -70,3 +70,19 @@ export const range = (start: number, end: number, steps: number = 1): number[] =
 export const between = (value: number, min: number, max: number): boolean => {
     return value >= min && value <= max;
 };
+
+/**
+ * Converts the given radians to degrees.
+ * @param radians
+ * @returns degrees
+ */
+export const radiansToDegrees = (radians: number): number => radians * (180 / Math.PI);
+
+/**
+ * Converts the given degrees to radians.
+ * @param degrees
+ * @returns radians
+ * @category Math
+ * @public
+ */
+export const degreesToRadians = (degrees: number): number => degrees * (Math.PI / 180);

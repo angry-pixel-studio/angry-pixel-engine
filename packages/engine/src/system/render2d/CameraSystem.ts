@@ -1,5 +1,5 @@
 import { Transform } from "@component/gameLogic/Transform";
-import { Camera } from "@component/render2d/Camera";
+import { Camera, debugRenderLayer } from "@component/render2d/Camera";
 import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
@@ -22,6 +22,8 @@ export class CameraSystem implements System {
             camera._renderData.layers = camera.layers;
             camera._renderData.depth = camera.depth;
             camera._renderData.zoom = camera.zoom;
+
+            if (camera.debug) camera._renderData.layers.push(debugRenderLayer);
 
             this.renderManager.addCameraData(camera._renderData);
         });

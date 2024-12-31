@@ -18,8 +18,6 @@ export enum TextOrientation {
     RightCenter,
 }
 
-const TEXTURE_PREFIX = "FontTextureAtlas:";
-
 export interface TextRenderData extends RenderData {
     color: string;
     flipHorizontally: boolean;
@@ -138,7 +136,7 @@ export class TextRenderer implements Renderer {
         this.gl.enable(this.gl.BLEND);
 
         const texture = this.textureManager.getOrCreateTextureFromCanvas(
-            `${TEXTURE_PREFIX}${fontAtlas.id}${renderData.smooth ? ":smooth" : ""}`,
+            fontAtlas.id,
             fontAtlas.canvas,
             renderData.smooth,
         );

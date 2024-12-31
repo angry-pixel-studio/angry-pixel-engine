@@ -9,6 +9,12 @@ import { CameraData } from "@webgl";
 export const defaultRenderLayer = "Default";
 
 /**
+ * Debug render layer
+ * @internal
+ */
+export const debugRenderLayer = "Debug";
+
+/**
  * @public
  * @category Components
  */
@@ -29,6 +35,9 @@ export class Camera {
     zoom: number = 1;
     /** In case you have more than one camera, the depth value determines which camera is rendered first. The lesser value, the first to render */
     depth: number = 0;
+    /** Set to TRUE to allow this camera to render debug data (default FALSE) */
+    debug: boolean = false;
+
     /** @internal */
     _renderData: CameraData = {
         position: new Vector2(),

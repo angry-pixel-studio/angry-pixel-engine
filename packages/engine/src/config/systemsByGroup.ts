@@ -13,7 +13,7 @@ import { TouchScreenSystem } from "@system/input/TouchScreenSystem";
 import { AnimatorSystem } from "@system/render2d/AnimatorSystem";
 import { CameraSystem } from "@system/render2d/CameraSystem";
 import { ClearScreenSystem } from "@system/render2d/ClearScreenSystem";
-import { ColliderRenderSystem } from "@system/render2d/ColliderRenderSystem";
+import { DebugColliderRenderSystem } from "@system/debug/DebugColliderRenderSystem";
 import { CullingSystem } from "@system/render2d/CullingSystem";
 import { MaskRendererSystem } from "@system/render2d/MaskRendererSystem";
 import { RenderSystem } from "@system/render2d/RenderSystem";
@@ -33,6 +33,7 @@ import { UpdateTilemapColliderShapeSystem } from "@system/physics2d/collider/Upd
 import { ResolveCollisionSystem } from "@system/physics2d/ResolveCollisionSystem";
 import { ApplyRepositionSystem } from "@system/physics2d/ApplyRepositionSystem";
 import { UpdateCollidersAfterRepositionSystem } from "@system/physics2d/collider/UpdateCollidersAfterRepositionSystem";
+import { DebugMousePositionSystem } from "@system/debug/DebugMousePositionSystem";
 
 export type SystemsByGroup = Map<SystemGroup, { name: symbol; type: SystemType }[]>;
 
@@ -78,7 +79,8 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEMS.ShadowLightRendererSystem, type: ShadowLightRendererSystem },
             { name: SYSTEMS.TextRendererSystem, type: TextRendererSystem },
             { name: SYSTEMS.VideoRendererSystem, type: VideoRendererSystem },
-            { name: SYSTEMS.ColliderRenderSystem, type: ColliderRenderSystem },
+            { name: SYSTEMS.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
+            { name: SYSTEMS.DebugMousePositionSystem, type: DebugMousePositionSystem },
             { name: SYSTEMS.CullingSystem, type: CullingSystem },
             { name: SYSTEMS.ClearScreenSystem, type: ClearScreenSystem },
             { name: SYSTEMS.RenderSystem, type: RenderSystem },

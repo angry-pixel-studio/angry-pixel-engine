@@ -100,7 +100,7 @@ export function injectable(name: DependencyName) {
  * ```
  */
 export function inject(name: DependencyName) {
-    return function (target: any, propertyKey: PropertyKey, parameterIndex?: number) {
+    return function (target: any, propertyKey?: PropertyKey, parameterIndex?: number) {
         if (parameterIndex !== undefined) {
             // constructor param
             if (!target.prototype.__ioc_inject_constructor) target.prototype.__ioc_inject_constructor = [];

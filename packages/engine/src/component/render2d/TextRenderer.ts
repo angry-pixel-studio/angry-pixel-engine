@@ -2,7 +2,10 @@ import { Vector2 } from "@math";
 import { defaultRenderLayer } from "./Camera";
 import { RenderDataType, TextOrientation, TextRenderData } from "@webgl";
 
-const defaultTextureAtlasOptions = {
+/**
+ * @internal
+ */
+export const defaultTextureAtlasOptions = {
     charRanges: [32, 126, 161, 255],
     fontSize: 64,
     spacing: 8,

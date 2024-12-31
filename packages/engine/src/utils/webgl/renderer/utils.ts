@@ -23,7 +23,7 @@ export const setProjectionMatrix = (
     mat4.translate(projectionMatrix, projectionMatrix, [-cameraPosition.x, -cameraPosition.y, 0]);
 };
 
-export type RGBA = { r: number; g: number; b: number; a: number };
+export type RGBA = { r: number; g: number; b: number; a?: number };
 
 export const hexToRgba = (hex: string): RGBA | null => {
     const result: string[] = /^#?([a-f\d]{2})?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -36,4 +36,24 @@ export const hexToRgba = (hex: string): RGBA | null => {
               a: result[1] !== undefined ? parseInt(result[1], 16) / 256 : 1,
           }
         : null;
+};
+
+/**
+ * Convert RGB to HEX as string (including #)
+ * @param rgb
+ * @returns string
+ * @public
+ * @category Math
+ * @example
+ * ```js
+ * rgbToHex({ r: 255, g: 255, b: 255 }); // #ffffff
+ * ```
+ * @example
+ * ```js
+ * rgbToHex({ r: 0, g: 0, b: 0 }); // #000000
+ * ```
+ */
+export const rgbToHex = ({ r, g, b }: RGBA): string => {
+    const hex = (x: number) => x.toString(16).padStart(2, "0");
+    return `#${hex(r)}${hex(g)}${hex(b)}`;
 };
