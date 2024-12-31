@@ -7,7 +7,19 @@
     "navigation": {
         "includeCategories": true
     },
-    "categoryOrder": ["Core", "Config", "Managers", "Components", "Collisions", "Input", "Math", "Decorators"],
+    "categoryOrder": [
+        "Core",
+        "Config",
+        "Managers",
+        "Entity-Component-System",
+        "Components",
+        "Collisions",
+        "Input",
+        "Math",
+        "Audio",
+        "Dependency Injection",
+        "Decorators"
+    ],
     "defaultCategory": "Core",
     "readme": "../../README.md"
 }

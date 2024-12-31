@@ -52,10 +52,10 @@ export { CollisionMatrix } from "@system/physics2d/ResolveCollisionSystem";
 export * from "@system/GameSystem";
 export { gameLogicSystem, gamePhysicsSystem, gamePreRenderSystem } from "@system/SystemGroup";
 
-export { decorate } from "@misc";
+export * from "@misc";
 export * from "@ecs";
 export * from "@input";
-export { inject, injectable, DependencyName, DependencyType } from "@ioc";
+export { inject, injectable, DependencyName, DependencyType, PropertyKey } from "@ioc";
 export * from "@math";
 export {
     BroadPhaseMethods,

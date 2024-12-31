@@ -2,9 +2,8 @@ import { BroadPhaseMethods, CollisionMethods, Game } from "angry-pixel";
 import { MainScene } from "@scene/MainScene";
 import { collisionMatrix } from "@config/collisionMatrix";
 
-const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop.toString()),
-});
+const params = new URLSearchParams(window.location.search);
+const debug = Boolean(Number(params.get("debug")));
 
 export const createAndStart = () => {
     // create game
@@ -19,9 +18,11 @@ export const createAndStart = () => {
             collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
             collisionMethod: CollisionMethods.SAT,
         },
-        // @ts-ignore
-        debugEnabled: Boolean(Number(params.debug)),
-        debugTextPosition: "top-left",
+        debug: {
+            mousePosition: debug,
+            textPosition: "top-left",
+            colliders: debug,
+        },
     });
 
     //  add scenes

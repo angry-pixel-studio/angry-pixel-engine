@@ -16,6 +16,11 @@ type Interval = {
     executeImmediately?: boolean;
 };
 
+/**
+ * Options for setting an interval.
+ * @public
+ * @category Managers
+ */
 export type IntervalOptions = {
     callback: () => void;
     delay: number;
