@@ -151,6 +151,11 @@ export class AssetManager {
      * @returns The HTML Audio element
      */
     public getAudio(url: string): HTMLAudioElement;
+    /**
+     * Retrieves an audio asset
+     * @param name The asset name
+     * @returns The HTML Audio element
+     */
     public getAudio(name: string): HTMLAudioElement;
     public getAudio(disc: string): HTMLAudioElement {
         return this.assets.find(
