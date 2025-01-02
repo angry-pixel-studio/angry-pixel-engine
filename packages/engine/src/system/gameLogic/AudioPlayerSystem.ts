@@ -68,16 +68,20 @@ export class AudioPlayerSystem implements System {
             if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
 
             // new audio source
-            if (audioPlayer.audioSource.src !== audioPlayer._currentAudioSrc) {
-                audioPlayer._currentAudioSrc = audioPlayer.audioSource.src;
-                audioPlayer.playing = false;
+            if (audioPlayer.audioSource !== audioPlayer._currentAudioSource) {
+                if (audioPlayer._currentAudioSource) {
+                    audioPlayer._currentAudioSource.pause();
+                    audioPlayer._currentAudioSource.currentTime = 0;
+                }
+                audioPlayer._currentAudioSource = audioPlayer.audioSource;
                 audioPlayer.audioSource.currentTime = 0;
+                audioPlayer.state = "stopped";
             }
 
             audioPlayer.audioSource.loop = audioPlayer.loop;
             audioPlayer.audioSource.volume = audioPlayer.volume;
 
-            if (audioPlayer.action === "play" && !audioPlayer.playing && !audioPlayer._playPromisePendind) {
+            if (audioPlayer.action === "play" && audioPlayer.state !== "playing" && !audioPlayer._playPromisePendind) {
                 // start playing
                 audioPlayer._playPromisePendind = true;
                 audioPlayer.audioSource.playbackRate = audioPlayer.fixedToTimeScale
@@ -89,16 +93,16 @@ export class AudioPlayerSystem implements System {
                     .play()
                     .then(() => {
                         audioPlayer._playPromisePendind = false;
-                        audioPlayer.playing = true;
+                        audioPlayer.state = "playing";
                     })
                     .catch(() => {
                         audioPlayer._playPromisePendind = false;
                         if (!this.userInputErrorCatched) this.catchUserInput();
                     });
-            } else if (audioPlayer.action === "pause" && audioPlayer.playing) {
+            } else if (audioPlayer.action === "pause" && audioPlayer.state === "playing") {
                 // set pause
                 audioPlayer.audioSource.pause();
-                audioPlayer.playing = false;
+                audioPlayer.state = "paused";
             } else if (
                 audioPlayer.action === "stop" &&
                 (!audioPlayer.audioSource.paused || audioPlayer.audioSource.currentTime !== 0)
@@ -106,12 +110,13 @@ export class AudioPlayerSystem implements System {
                 // force stop
                 audioPlayer.audioSource.pause();
                 audioPlayer.audioSource.currentTime = 0;
-                audioPlayer.playing = false;
-            } else if (audioPlayer.playing && audioPlayer.audioSource.paused) {
+                audioPlayer.state = "stopped";
+            } else if (audioPlayer.state === "playing" && audioPlayer.audioSource.paused) {
                 // track is ended
-                audioPlayer.action = "stop";
-                audioPlayer.playing = false;
+                audioPlayer.state = "stopped";
             }
+
+            audioPlayer.action = undefined;
         });
     }
 
