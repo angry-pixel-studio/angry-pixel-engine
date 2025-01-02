@@ -16,7 +16,7 @@ const defaultFontSize = 24;
 @injectable(SYSTEMS.DebugMousePositionSystem)
 export class DebugMousePositionSystem implements System {
     private readonly positionInViewport: Vector2 = new Vector2();
-    private readonly positionInViewportWithZoom: Vector2 = new Vector2();
+    private readonly positionInCameraViewport: Vector2 = new Vector2();
     private readonly positionInWorldspace: Vector2 = new Vector2();
     private readonly renderDataPerCamera: Map<number, TextRenderData> = new Map();
 
@@ -29,7 +29,7 @@ export class DebugMousePositionSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        if (!this.gameConfig.debugEnabled || !this.inputManager.mouse) return;
+        if (!this.gameConfig.debug?.mousePosition || !this.inputManager.mouse) return;
 
         const { positionInViewport } = this.inputManager.mouse;
 
@@ -48,14 +48,14 @@ export class DebugMousePositionSystem implements System {
             );
 
             Vector2.floor(
-                this.positionInViewportWithZoom,
-                Vector2.scale(this.positionInViewportWithZoom, positionInViewport, 1 / zoom),
+                this.positionInCameraViewport,
+                Vector2.scale(this.positionInCameraViewport, positionInViewport, 1 / zoom),
             );
 
             Vector2.round(this.positionInViewport, positionInViewport);
 
-            renderData.color = this.gameConfig.debugColor;
-            renderData.text = `Mouse Position: viewport=${this.positionInViewport}, viewport(with zoom)=${this.positionInViewportWithZoom}, world=${this.positionInWorldspace}`;
+            renderData.color = this.gameConfig.debug.textColor;
+            renderData.text = `mouse_position: canvas_viewport=${this.positionInViewport}, camera_viewport=${this.positionInCameraViewport}, world_space=${this.positionInWorldspace}`;
             renderData.fontSize = defaultFontSize / zoom;
             renderData.shadow.offset.x = 2 / zoom;
             renderData.shadow.offset.y = -2 / zoom;
@@ -65,7 +65,7 @@ export class DebugMousePositionSystem implements System {
     }
 
     private updateRenderDataPosition(renderData: TextRenderData, cameraPosition: Vector2, zoom: number): void {
-        switch (this.gameConfig.debugTextPosition) {
+        switch (this.gameConfig.debug.textPosition) {
             case "top-left":
                 renderData.position.set(
                     cameraPosition.x - (this.canvas.width / 2 - defaultFontSize) / zoom,

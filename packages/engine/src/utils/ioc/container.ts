@@ -1,17 +1,22 @@
 /**
  * This type represents a dependency class
  * @public
- * @category Core
+ * @category Dependency Injection
  */
 export type DependencyType = { new (...args: any[]): any };
 /**
  * This type represents a dependency name
  * @public
- * @category Core
+ * @category Dependency Injection
  */
 export type DependencyName = string | symbol;
 
-type PropertyKey = string | symbol;
+/**
+ * This type represents a property key of a decorator target
+ * @public
+ * @category Dependency Injection
+ */
+export type PropertyKey = string | symbol;
 
 export class Container {
     private instances: Map<DependencyName, any> = new Map();

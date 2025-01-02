@@ -4,7 +4,7 @@ import { injectable } from "@ioc";
 /**
  * This interface is used for the creation of system classes. You will have to inject the dependencies you need manully.
  * @public
- * @category Core
+ * @category Entity-Component-System
  * @example
  * ```typescript
  * class PlayerSystem implements System {
@@ -49,7 +49,7 @@ export interface System {
 /**
  * This type represents a system class
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 export type SystemType<T extends System = System> = { new (...args: any[]): T };
 /** @internal */
@@ -59,7 +59,7 @@ export type SystemGroup = string | number | symbol;
  * The SystemManager manages the systems.\
  * It provides the necessary methods for reading and writing systems.
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 @injectable(TYPES.SystemManager)
 export class SystemManager {

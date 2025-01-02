@@ -41,7 +41,6 @@ export const ninjaFactory = (assetManager: AssetManager, position: Vector2): Com
         }),
         new RigidBody({ type: RigidBodyType.Dynamic }),
         NinjaMovement,
-        AudioPlayer,
         NinjaSfx,
     ];
 

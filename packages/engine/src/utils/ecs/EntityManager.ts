@@ -4,31 +4,31 @@ import { injectable } from "@ioc";
 /**
  * This type an unique identifier of an Entity
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 export type Entity = number;
 /**
  * This type represents an instance of a component
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 export type Component = { [key: string]: any };
 /**
  * This type represents a component class
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 export type ComponentType<T extends Component = Component> = { new (...args: any[]): T };
 /**
  * This type represents a search result object
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 export type SearchResult<T extends Component> = { entity: Entity; component: T };
 /**
  * This type represents a search criteria object
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 export type SearchCriteria = { [key: string]: any };
 
@@ -36,7 +36,7 @@ export type SearchCriteria = { [key: string]: any };
  * The EntityManager manages the entities and components.\
  * It provides the necessary methods for reading and writing entities and components.
  * @public
- * @category Core
+ * @category Entity-Component-System
  */
 @injectable(TYPES.EntityManager)
 export class EntityManager {

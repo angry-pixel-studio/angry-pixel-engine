@@ -23,7 +23,7 @@ export class DebugColliderRenderSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        if (!this.gameConfig.debugEnabled) return;
+        if (!this.gameConfig.debug?.colliders) return;
 
         [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
             this.entityManager.search<Collider>(type).forEach(({ component: collider }) =>
@@ -32,7 +32,7 @@ export class DebugColliderRenderSystem implements System {
                         type: RenderDataType.Geometric,
                         position: new Vector2(),
                         layer: debugRenderLayer,
-                        color: this.gameConfig.debugColor,
+                        color: this.gameConfig.debug.collidersColor,
                         shape: undefined,
                         radius: undefined,
                         rotation: undefined,

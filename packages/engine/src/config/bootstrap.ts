@@ -60,12 +60,19 @@ export interface GameConfig {
     width: number;
     /** Game height */
     height: number;
-    /** Enables the debug mode */
-    debugEnabled?: boolean;
-    /** Color of debug elements, default "#00FF00" (green) */
-    debugColor?: string;
-    /** Position of debug text, default "bottom-left" */
-    debugTextPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+    /** Debug options */
+    debug?: {
+        /** Show colliders */
+        colliders: boolean;
+        /** Show mouse position */
+        mousePosition: boolean;
+        /** Color of the colliders, default "#00FF00" (green) */
+        collidersColor?: string;
+        /** Color of the text, default "#00FF00" (green) */
+        textColor?: string;
+        /** Position of debug text, default "bottom-left" */
+        textPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+    };
     /** Background color of canvas, default "#000000" (black) */
     canvasColor?: string;
     /** Framerate for physics execution. The allowed values are 60, 120, 180, 240.
@@ -109,12 +116,14 @@ const setDefaultValues = (gameConfig: GameConfig) => {
     if (typeof gameConfig.width !== "number") throw new Error("GameConfig Error: Invalid width");
     if (typeof gameConfig.height !== "number") throw new Error("GameConfig Error: Invalid height");
 
-    gameConfig.debugEnabled = gameConfig.debugEnabled ?? false;
-    gameConfig.debugColor = gameConfig.debugColor ?? "#00FF00";
     gameConfig.canvasColor = gameConfig.canvasColor ?? "#000000";
-    gameConfig.debugTextPosition = gameConfig.debugTextPosition ?? "bottom-left";
     gameConfig.physicsFramerate = gameConfig.physicsFramerate ?? defaultPhysicsFramerate;
     gameConfig.headless = gameConfig.headless ?? false;
+
+    gameConfig.debug = gameConfig.debug ?? { colliders: false, mousePosition: false };
+    gameConfig.debug.collidersColor = gameConfig.debug.collidersColor ?? "#00FF00";
+    gameConfig.debug.textColor = gameConfig.debug.textColor ?? "#00FF00";
+    gameConfig.debug.textPosition = gameConfig.debug.textPosition ?? "bottom-left";
 
     gameConfig.collisions = gameConfig.collisions ?? {};
     gameConfig.collisions.collisionBroadPhaseMethod =
