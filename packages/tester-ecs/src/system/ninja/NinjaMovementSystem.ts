@@ -1,10 +1,11 @@
-import { BoxCollider, GameSystem, RigidBody, Transform } from "angry-pixel";
+import { BoxCollider, Entity, GameSystem, RigidBody, Transform } from "angry-pixel";
 import { NinjaMovement } from "@component/ninja/NinjaMovement";
 import { InputController } from "@component/InputController";
 import { COLLISION_LAYERS } from "@config/layers";
 
 export class NinjaMovementSystem extends GameSystem {
     // We keep these references in memory because this system only works with a single entity.
+    private entity: Entity;
     private inputController: InputController;
     private ninjaMovement: NinjaMovement;
     private rigidBody: RigidBody;
@@ -13,15 +14,10 @@ export class NinjaMovementSystem extends GameSystem {
 
     public onEnabled(): void {
         this.inputController = this.entityManager.search(InputController)[0].component;
-
-        const { entity, component } = this.entityManager.search(NinjaMovement)[0];
-
-        this.ninjaMovement = component;
-        this.transform = this.entityManager.getComponent(entity, Transform);
-        this.rigidBody = this.entityManager.getComponent(entity, RigidBody);
-
-        const children = this.entityManager.search(Transform, { parent: this.transform });
-        this.collider = this.entityManager.getComponent(children[0].entity, BoxCollider);
+        ({ entity: this.entity, component: this.ninjaMovement } = this.entityManager.search(NinjaMovement)[0]);
+        this.transform = this.entityManager.getComponent(this.entity, Transform);
+        this.rigidBody = this.entityManager.getComponent(this.entity, RigidBody);
+        this.collider = this.entityManager.searchInChildren(this.entity, BoxCollider)[0].component;
     }
 
     public onUpdate(): void {
@@ -58,13 +54,11 @@ export class NinjaMovementSystem extends GameSystem {
     }
 
     private checkForMovingPlatform(): void {
-        if (this.ninjaMovement.platformCollision && !this.transform.parent) {
-            this.transform.parent = this.entityManager.getComponent(
-                this.ninjaMovement.platformCollision.remoteEntity,
-                Transform,
-            );
-        } else if (!this.ninjaMovement.platformCollision && this.transform.parent) {
-            this.transform.parent = undefined;
+        if (this.ninjaMovement.platformCollision && !this.transform._parent) {
+            const platformEntity = this.ninjaMovement.platformCollision.remoteEntity;
+            this.entityManager.setParent(this.entity, platformEntity);
+        } else if (!this.ninjaMovement.platformCollision && this.transform._parent) {
+            this.entityManager.removeParent(this.entity);
         }
     }
 }

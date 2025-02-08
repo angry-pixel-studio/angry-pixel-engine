@@ -1,8 +1,6 @@
 import { SystemType } from "@ecs";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 import { ButtonSystem } from "@system/gameLogic/ButtonSystem";
-import { ChildrenSystem } from "@system/gameLogic/ChildrenSystem";
-import { ParentSystem } from "@system/gameLogic/ParentSystem";
 import { TiledWrapperSystem } from "@system/gameLogic/TiledWrapperSystem";
 import { TilemapPreProcessingSystem } from "@system/gameLogic/TilemapPreProcessingSystem";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
@@ -49,8 +47,6 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEMS.AudioPlayerSystem, type: AudioPlayerSystem },
             { name: SYSTEMS.TiledWrapperSystem, type: TiledWrapperSystem },
             { name: SYSTEMS.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
-            { name: SYSTEMS.ChildrenSystem, type: ChildrenSystem },
-            { name: SYSTEMS.ParentSystem, type: ParentSystem },
         ],
     ],
     [SystemGroup.Transform, [{ name: SYSTEMS.TransformSystem, type: TransformSystem }]],

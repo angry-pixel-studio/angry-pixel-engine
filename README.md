@@ -14,12 +14,12 @@ Main features:
 -   [Entity-Component-System](https://github.com/SanderMertens/ecs-faq) based architecture
 -   WebGL rendering
 -   Sprite-based graphics and frame-by-frame animations
--   Text rendering based on bitmap fonts
+-   Text rendering, support for web safe fonts and imported fonts
 -   Basic 2D lightning system
 -   Polygonal collision detection and physical responses based on speed and acceleration.
 -   Keyboard, mouse, gamepad and touch screen input support
--   Ability to create desktop/mobile games using frameworks such as Electron.js
--   Tilemaps: rendering based on comma separated values, and automatic collider generation. Support for JSON files exported from Tiled.
+-   Ability to create desktop or mobile games using frameworks such as [Electron.js](https://www.electronjs.org/)
+-   Built-in tilemap and tileset components. Also has support for ortogonal maps exported from [Tiled](https://www.mapeditor.org/)
 -   Dependency Injection
 
 ## Getting Started

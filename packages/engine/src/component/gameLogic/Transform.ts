@@ -1,4 +1,3 @@
-import { Entity } from "@ecs";
 import { Vector2 } from "@math";
 
 /**
@@ -35,38 +34,11 @@ export class Transform {
     localRotation: number = 0;
 
     /** @internal */
-    _parentEntity: Entity;
+    _awake: boolean = false;
     /** @internal */
-    _childEntities: Entity[] = [];
-
-    private _parent: Transform = undefined;
-
-    /** The parent transform. The position property became relative to this transform */
-    get parent(): Transform {
-        return this._parent;
-    }
-
-    /** The parent transform. The position property became relative to this transform */
-    set parent(parent: Transform) {
-        if (this._parent === parent) return;
-
-        this._parent = parent;
-
-        if (this._parent) {
-            this.localPosition.copy(this.position);
-            Vector2.subtract(this.position, this.position, this._parent.position);
-        } else {
-            this.position.copy(this.localPosition);
-        }
-    }
+    _parent: Transform = undefined;
 
     constructor(options?: Partial<TransformOptions>) {
-        if (options && options.parent) {
-            this.position = options.parent.position.clone();
-            this.parent = options.parent;
-            delete options.parent;
-        }
-
         Object.assign(this, options);
     }
 }
