@@ -68,7 +68,7 @@ export class MainScene extends Scene {
             movingPlatformFactory(this.assetManager, [new Vector2(-112, -72), new Vector2(168, -72)]),
         );
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
             this.entityManager.createEntity(goblinFactory(this.assetManager, new Vector2(randomInt(-600, 192), 0)));
         }
 

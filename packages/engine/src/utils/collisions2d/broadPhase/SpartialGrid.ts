@@ -4,7 +4,7 @@ import { Shape } from "../Shape";
 import { injectable } from "@ioc";
 import { TYPES } from "@config/types";
 
-const MAX_COLLIDERS_PER_CELL = 10;
+const MAX_COLLIDERS_PER_CELL = 16;
 
 const cell = (value: number, min: number, width: number, subdivisions: number): number =>
     Math.min(((value - min) / width) | 0, subdivisions - 1);
@@ -14,7 +14,8 @@ type Coordinates = { x0: number; x1: number; y0: number; y1: number };
 @injectable(TYPES.CollisionBroadphaseResolver)
 export class SpartialGrid implements BroadPhaseResolver {
     private area: Rectangle = new Rectangle();
-    private colliders: number[][][] = [];
+    private grid: number[][][] = [];
+    private rects: Map<number, Rectangle> = new Map();
     private cellWidth: number;
     private cellHeight: number;
     private subdivisions: number = 0;
@@ -24,23 +25,21 @@ export class SpartialGrid implements BroadPhaseResolver {
     private minArea: Vector2 = new Vector2();
     private maxArea: Vector2 = new Vector2();
 
-    public clear(): void {
-        for (let x = 0; x < this.subdivisions; x++) {
-            for (let y = 0; y < this.subdivisions; y++) {
-                this.colliders[x][y] = [];
-            }
-        }
-    }
-
     public update(shapes: Shape[]): void {
-        this.resizeArea(shapes);
-        this.updateSubdivisions(shapes.length);
+        this.clear();
+        if (shapes.length === 0) return;
+        this.resize(shapes);
         shapes.forEach(({ id, boundingBox }) => this.insert(id, boundingBox));
     }
 
-    private resizeArea(shapes: Shape[]): void {
-        this.minArea.set(0, 0);
-        this.maxArea.set(0, 0);
+    private clear(): void {
+        this.grid = [];
+        this.rects.clear();
+    }
+
+    private resize(shapes: Shape[]): void {
+        this.minArea.set(Infinity, Infinity);
+        this.maxArea.set(-Infinity, -Infinity);
 
         shapes.forEach(({ boundingBox: box }) => {
             this.minArea.set(Math.min(box.x, this.minArea.x), Math.min(box.y, this.minArea.y));
@@ -48,6 +47,8 @@ export class SpartialGrid implements BroadPhaseResolver {
         });
 
         this.area.set(this.minArea.x, this.minArea.y, this.maxArea.x - this.minArea.x, this.maxArea.y - this.minArea.y);
+
+        this.updateSubdivisions(shapes.length);
     }
 
     private updateSubdivisions(length: number): void {
@@ -56,38 +57,44 @@ export class SpartialGrid implements BroadPhaseResolver {
         this.cellWidth = Math.ceil(this.area.width / this.subdivisions);
         this.cellHeight = Math.ceil(this.area.height / this.subdivisions);
 
-        this.colliders = [];
+        this.grid = [];
 
         for (let x = 0; x < this.subdivisions; x++) {
-            this.colliders[x] = [];
+            this.grid[x] = [];
 
             for (let y = 0; y < this.subdivisions; y++) {
-                this.colliders[x][y] = [];
+                this.grid[x][y] = [];
             }
         }
     }
 
-    public insert(id: number, box: Rectangle): void {
+    private insert(id: number, box: Rectangle): void {
         this.updateCoordinates(box);
 
         for (let x = this.coordinates.x0; x <= this.coordinates.x1; x++) {
             for (let y = this.coordinates.y0; y <= this.coordinates.y1; y++) {
-                this.colliders[x][y].push(id);
+                this.grid[x][y].push(id);
             }
         }
+
+        this.rects.set(id, box);
     }
 
     public retrieve(box: Rectangle): number[] {
-        const colliders: number[] = [];
+        const ids = new Set<number>();
         this.updateCoordinates(box);
 
         for (let x = this.coordinates.x0; x <= this.coordinates.x1; x++) {
             for (let y = this.coordinates.y0; y <= this.coordinates.y1; y++) {
-                this.colliders[x][y].forEach((id) => (!colliders.includes(id) ? colliders.push(id) : undefined));
+                this.grid[x][y].forEach((id) => {
+                    if (this.rects.get(id)!.intersects(box)) {
+                        ids.add(id);
+                    }
+                });
             }
         }
 
-        return colliders;
+        return Array.from(ids);
     }
 
     private updateCoordinates(area: Rectangle): void {

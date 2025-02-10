@@ -123,4 +123,8 @@ export class Rectangle {
 
         return false;
     }
+
+    public toString(): string {
+        return `(${this.position.x}, ${this.position.y}, ${this.width}, ${this.height})`;
+    }
 }
