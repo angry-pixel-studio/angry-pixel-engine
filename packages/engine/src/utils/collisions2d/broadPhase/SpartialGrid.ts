@@ -19,11 +19,11 @@ export class SpartialGrid implements BroadPhaseResolver {
     private cellWidth: number;
     private cellHeight: number;
     private subdivisions: number = 0;
-    private coordinates: Coordinates = { x0: 0, x1: 0, y0: 0, y1: 0 };
 
     // cache
     private minArea: Vector2 = new Vector2();
     private maxArea: Vector2 = new Vector2();
+    private coordinates: Coordinates = { x0: 0, x1: 0, y0: 0, y1: 0 };
 
     public update(shapes: Shape[]): void {
         this.clear();
