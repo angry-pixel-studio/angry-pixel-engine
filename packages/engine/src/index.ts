@@ -22,8 +22,6 @@ export { Game } from "./Game";
 export * from "@component/gameLogic/Animator";
 export * from "@component/gameLogic/AudioPlayer";
 export * from "@component/gameLogic/Button";
-export * from "@component/gameLogic/Children";
-export * from "@component/gameLogic/Parent";
 export * from "@component/gameLogic/TiledWrapper";
 export * from "@component/gameLogic/Transform";
 

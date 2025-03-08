@@ -4,115 +4,118 @@ import { Shape } from "../Shape";
 import { injectable } from "@ioc";
 import { TYPES } from "@config/types";
 
-const MAX_ITEMS = 16;
 const MAX_DEPTH = 8;
+const MAX_RECTS = 16;
 
 @injectable(TYPES.CollisionBroadphaseResolver)
 export class QuadTree implements BroadPhaseResolver {
-    private area: Rectangle;
+    private bounds: Rectangle;
     private depth: number;
-    private children: QuadTree[] = [];
-    private shapes: [number, Rectangle][] = [];
+    private rects: Map<number, Rectangle> = new Map();
+    private children: QuadTree[] = null;
 
     // cache
     private minArea: Vector2 = new Vector2();
     private maxArea: Vector2 = new Vector2();
 
-    constructor(area: Rectangle = new Rectangle(), depth: number = 0) {
-        this.area = area;
+    constructor(bounds: Rectangle = new Rectangle(), depth: number = 0) {
+        this.bounds = bounds;
         this.depth = depth;
-    }
-
-    public clear(): void {
-        this.shapes = [];
-        this.children = [];
     }
 
     public update(shapes: Shape[]): void {
         this.clear();
-        this.resizeArea(shapes);
+        if (shapes.length === 0) return;
+        this.resize(shapes);
         shapes.forEach(({ id, boundingBox }) => this.insert(id, boundingBox));
     }
 
-    private resizeArea(shapes: Shape[]): void {
-        this.minArea.set(0, 0);
-        this.maxArea.set(0, 0);
+    private clear(): void {
+        this.rects.clear();
+
+        if (this.children) {
+            this.children.forEach((child) => child.clear());
+            this.children = null;
+        }
+    }
+
+    private resize(shapes: Shape[]): void {
+        this.minArea.set(Infinity, Infinity);
+        this.maxArea.set(-Infinity, -Infinity);
 
         shapes.forEach(({ boundingBox: box }) => {
             this.minArea.set(Math.min(box.x, this.minArea.x), Math.min(box.y, this.minArea.y));
             this.maxArea.set(Math.max(box.x1, this.maxArea.x), Math.max(box.y1, this.maxArea.y));
         });
 
-        this.area.set(this.minArea.x, this.minArea.y, this.maxArea.x - this.minArea.x, this.maxArea.y - this.minArea.y);
+        this.bounds.set(
+            this.minArea.x,
+            this.minArea.y,
+            this.maxArea.x - this.minArea.x,
+            this.maxArea.y - this.minArea.y,
+        );
     }
 
-    public retrieve(box: Rectangle): number[] {
-        const items: number[] = [];
-
-        if (this.children.length > 0) {
-            this.getChildrenForBox(box).forEach((child) =>
-                items.push(...child.retrieve(box).filter((c) => !items.includes(c))),
+    private insert(id: number, rect: Rectangle): void {
+        if (!this.children && this.rects.size >= MAX_RECTS && this.depth < MAX_DEPTH) {
+            this.subdivide();
+            this.rects.forEach((value, key) =>
+                this.children.forEach((child) => {
+                    if (child.bounds.intersects(value)) {
+                        child.insert(key, value);
+                    }
+                }),
             );
+            this.rects.clear();
+        }
+
+        if (this.children) {
+            this.children.forEach((child) => {
+                if (child.bounds.intersects(rect)) {
+                    child.insert(id, rect);
+                }
+            });
         } else {
-            this.shapes.forEach((item) => items.push(item[0]));
+            this.rects.set(id, rect);
         }
-
-        return items;
     }
 
-    public insert(id: number, box: Rectangle): void {
-        if (this.children.length === 0 && this.shapes.length > MAX_ITEMS && this.depth < MAX_DEPTH) {
-            this.split();
-        }
+    private subdivide(): void {
+        const x = this.bounds.x;
+        const y = this.bounds.y;
+        const width = this.bounds.width;
+        const height = this.bounds.height;
 
-        if (this.children.length > 0) this.insertItemIntoChildren(id, box);
-        else this.shapes.push([id, box]);
-    }
-
-    private split(): void {
-        const childWidth = this.area.width / 2;
-        const childHeight = this.area.height / 2;
+        const halfWidth = width / 2;
+        const halfHeight = height / 2;
 
         this.children = [
-            // Bottom left
-            new Rectangle(this.area.x, this.area.y, childWidth, childHeight),
-            // Top left
-            new Rectangle(this.area.x, this.area.y + childHeight, childWidth, childHeight),
-            // Top right
-            new Rectangle(this.area.x + childWidth, this.area.y + childHeight, childWidth, childHeight),
-            // Bottom right
-            new Rectangle(this.area.x + childWidth, this.area.y, childWidth, childHeight),
-        ].map((area) => new QuadTree(area, this.depth + 1));
-
-        this.shapes.forEach((item) => this.insertItemIntoChildren(item[0], item[1]));
-
-        this.shapes = [];
+            new QuadTree(new Rectangle(x, y, halfWidth, halfHeight), this.depth + 1),
+            new QuadTree(new Rectangle(x + halfWidth, y, halfWidth, halfHeight), this.depth + 1),
+            new QuadTree(new Rectangle(x, y + halfHeight, halfWidth, halfHeight), this.depth + 1),
+            new QuadTree(new Rectangle(x + halfWidth, y + halfHeight, halfWidth, halfHeight), this.depth + 1),
+        ];
     }
 
-    private insertItemIntoChildren(id: number, box: Rectangle): void {
-        this.getChildrenForBox(box).forEach((quadrant) => quadrant.insert(id, box));
+    public retrieve(rect: Rectangle): number[] {
+        const neighbors: number[] = [];
+        this.retrieveFromNode(rect, neighbors);
+        return neighbors;
     }
 
-    private getChildrenForBox(box: Rectangle): QuadTree[] {
-        const children: QuadTree[] = [];
-
-        // Bottom left
-        if (box.x <= this.area.center.x && box.y <= this.area.center.y) {
-            children.push(this.children[0]);
+    private retrieveFromNode(rect: Rectangle, result: number[]): void {
+        if (this.children) {
+            this.children.forEach((child) => {
+                if (child.bounds.intersects(rect)) {
+                    child.retrieveFromNode(rect, result);
+                }
+            });
+        } else {
+            this.rects.forEach((value, key) => {
+                if (value.intersects(rect) && result.indexOf(key) === -1) {
+                    result.push(key);
+                }
+            });
         }
-        // Top Left
-        if (box.x <= this.area.center.x && box.y1 >= this.area.center.y) {
-            children.push(this.children[1]);
-        }
-        // Top right
-        if (box.x1 >= this.area.center.x && box.y1 >= this.area.center.y) {
-            children.push(this.children[2]);
-        }
-        // Bottom right
-        if (box.x1 >= this.area.center.x && box.y <= this.area.center.y) {
-            children.push(this.children[3]);
-        }
-
-        return children;
     }
 }

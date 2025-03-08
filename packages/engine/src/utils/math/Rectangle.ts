@@ -96,8 +96,8 @@ export class Rectangle {
      * @param rect The target rectangle
      * @returns TRUE or FALSE
      */
-    public overlaps(rect: Rectangle): boolean {
-        return this.x1 >= rect.x && this.x < rect.x1 && this.y1 >= rect.y && this.y < rect.y1;
+    public intersects(rect: Rectangle): boolean {
+        return !(this.x1 < rect.x || this.x > rect.x1 || this.y1 < rect.y || this.y > rect.y1);
     }
 
     /**
@@ -122,5 +122,9 @@ export class Rectangle {
         }
 
         return false;
+    }
+
+    public toString(): string {
+        return `(${this.position.x}, ${this.position.y}, ${this.width}, ${this.height})`;
     }
 }

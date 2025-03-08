@@ -14,8 +14,6 @@ export enum BroadPhaseMethods {
 }
 
 export interface BroadPhaseResolver {
-    clear(): void;
     update(shapes: Shape[]): void;
     retrieve(box: Rectangle): number[];
-    insert(id: number, box: Rectangle): void;
 }

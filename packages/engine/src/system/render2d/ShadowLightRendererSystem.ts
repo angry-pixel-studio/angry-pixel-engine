@@ -35,7 +35,7 @@ export class ShadowLightRendererSystem implements System {
                 .filter(
                     ({ component: lightRenderer }) =>
                         lightRenderer.layer === shadowRenderer.layer &&
-                        lightRenderer._boundingBox.overlaps(shadowRenderer._boundingBox),
+                        lightRenderer._boundingBox.intersects(shadowRenderer._boundingBox),
                 )
                 .map<Light>(({ component: { _boundingBox, smooth, intensity } }) => ({
                     position: _boundingBox.center,

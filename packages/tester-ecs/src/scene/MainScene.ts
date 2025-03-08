@@ -27,7 +27,7 @@ import { NinjaSfxSystem } from "@system/ninja/NinjaSfxSystem";
 import { ASSETS } from "@config/assets";
 import { InputController } from "@component/InputController";
 import { foregroundFactory } from "@factory/Foreground";
-import { ninjaFactory } from "@factory/Ninja";
+import { ninjaArchetype } from "@factory/Ninja";
 import { movingPlatformFactory } from "@factory/MovingPlatform";
 import { goblinFactory } from "@factory/Goblin";
 import { textFactory } from "@factory/Text";
@@ -63,12 +63,12 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([InputController]);
         this.entityManager.createEntity(foregroundFactory(this.assetManager));
 
-        this.entityManager.createEntities(ninjaFactory(this.assetManager, new Vector2(0, -40)));
+        this.entityManager.createEntity(ninjaArchetype(this.assetManager, new Vector2(0, -40)));
         this.entityManager.createEntity(
             movingPlatformFactory(this.assetManager, [new Vector2(-112, -72), new Vector2(168, -72)]),
         );
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
             this.entityManager.createEntity(goblinFactory(this.assetManager, new Vector2(randomInt(-600, 192), 0)));
         }
 
@@ -88,7 +88,7 @@ export class MainScene extends Scene {
             new MaskRenderer({
                 shape: MaskShape.Polygon,
                 vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 60), new Vector2(6, 0)],
-                color: "#597f1e",
+                color: "#82aa28",
                 layer: RENDER_LAYERS.Foreground,
             }),
         ]);

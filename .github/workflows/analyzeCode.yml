@@ -8,11 +8,11 @@ jobs:
         name: "[Analyze Code]"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
 
             - name: "[Restore node modules]"
               id: cache-node-modules
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: node_modules
                   key: ${{ runner.os }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
