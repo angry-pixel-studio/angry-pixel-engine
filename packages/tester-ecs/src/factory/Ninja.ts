@@ -1,9 +1,7 @@
 import {
     Animation,
     Animator,
-    AudioPlayer,
     BoxCollider,
-    Component,
     AssetManager,
     LightRenderer,
     RigidBody,
