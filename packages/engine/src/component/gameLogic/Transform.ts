@@ -8,10 +8,6 @@ export interface TransformOptions {
     position: Vector2;
     scale: Vector2;
     rotation: number;
-    parent: Transform;
-    localPosition: Vector2;
-    localScale: Vector2;
-    localRotation: number;
 }
 
 /**

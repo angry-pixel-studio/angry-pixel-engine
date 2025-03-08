@@ -1,57 +1,6 @@
 import { TYPES } from "@config/types";
 import { injectable } from "@ioc";
-
-/**
- * This type an unique identifier of an Entity
- * @public
- * @category Entity-Component-System
- */
-export type Entity = number;
-/**
- * This type represents an instance of a component
- * @public
- * @category Entity-Component-System
- */
-export type Component = { [key: string]: any };
-/**
- * This type represents a component class
- * @public
- * @category Entity-Component-System
- */
-export type ComponentType<T extends Component = Component> = { new (...args: any[]): T };
-/**
- * This type represents a search result object
- * @public
- * @category Entity-Component-System
- */
-export type SearchResult<T extends Component> = { entity: Entity; component: T };
-/**
- * This type represents a search criteria object
- * @public
- * @category Entity-Component-System
- */
-export type SearchCriteria = { [key: string]: any };
-
-/**
- * This type represents an Entity Archetype
- * @public
- * @category Entity-Component-System
- */
-export type Archetype = {
-    components: ArchetypeComponent[];
-    children?: Archetype[];
-    enabled?: boolean;
-};
-
-/**
- * This type represents an Entity Archetype Component
- * @public
- * @category Entity-Component-System
- */
-export type ArchetypeComponent<T extends Component = Component> = {
-    type: ComponentType<T>;
-    data?: Partial<T>;
-};
+import { Archetype, ArchetypeComponent, Component, ComponentType, Entity, SearchCriteria, SearchResult } from "./types";
 
 /**
  * The EntityManager manages the entities and components.\
@@ -88,25 +37,71 @@ export class EntityManager {
      * @public
      * @example
      * ```js
+     * // Using ArchetypeComponent to define components
      * const entity = entityManager.createEntity({
      *   components: [
      *     {type: Transform, data: {position: new Vector2(100, 100)}},
      *     {type: SpriteRenderer, data: {image: "images/player.png"}},
+     *     {type: Player},
      *   ],
      *   children: [
      *     {
      *       components: [
      *         {type: Transform, data: {position: new Vector2(8, 0)}},
      *         {type: SpriteRenderer, data: {image: "images/sword.png"}},
+     *         {type: Weapon, data: {damage: 10}},
      *       ],
      *     },
      *     {
      *       components: [
      *         {type: Transform, data: {position: new Vector2(-8, 0)}},
      *         {type: SpriteRenderer, data: {image: "images/shield.png"}},
+     *         {type: Shield, data: {defense: 5}, enabled: false},
+     *       ],
+     *     },
+     *     {
+     *       components: [
+     *         {type: Transform, data: {position: new Vector2(8, 0)}},
+     *         {type: SpriteRenderer, data: {image: "images/staf.png"}},
+     *         {type: Staff, data: {mana: 5}},
      *       ],
      *       enabled: false,
+     *     }
+     *   ]
+     * });
+     * ```
+     * @example
+     * ```js
+     * // Using Component instances as templates
+     * const entity = entityManager.createEntity({
+     *   components: [
+     *     new Transform({position: new Vector2(100, 100)}),
+     *     new SpriteRenderer({image: "images/player.png"}),
+     *     new Player(),
+     *   ],
+     *   children: [
+     *     {
+     *       components: [
+     *         new Transform({position: new Vector2(8, 0)}),
+     *         new SpriteRenderer({image: "images/sword.png"}),
+     *         new Weapon({damage: 10}),
+     *       ],
      *     },
+     *     {
+     *       components: [
+     *         new Transform({position: new Vector2(-8, 0)}),
+     *         new SpriteRenderer({image: "images/shield.png"}),
+     *         new Shield({defense: 5}),
+     *       ],
+     *     },
+     *     {
+     *       components: [
+     *         new Transform({position: new Vector2(8, 0)}),
+     *         new SpriteRenderer({image: "images/staf.png"}),
+     *         new Staff({mana: 5}),
+     *       ],
+     *       enabled: false,
+     *     }
      *   ]
      * });
      * ```
@@ -147,9 +142,18 @@ export class EntityManager {
         const entity = this.lastEntityId++;
         this.entities.add(entity);
 
-        components.forEach(({ type, data }) => {
-            const instance = this.addComponent(entity, type);
-            if (data) Object.assign(instance, data);
+        components.forEach((component) => {
+            let instance: Component;
+            if (component.type && typeof component.type === "function") {
+                const { type, data, enabled } = component as ArchetypeComponent;
+                instance = this.addComponent(entity, type);
+                if (data) Object.assign(instance, data);
+                if (enabled === false) this.disableComponent(instance);
+            } else {
+                instance = new (component.constructor as ComponentType)();
+                Object.assign(instance, component);
+                this.addComponent(entity, instance);
+            }
         });
 
         if (parent) this.setParent(entity, parent);
@@ -166,20 +170,22 @@ export class EntityManager {
      * @public
      * @example
      * ```js
-     * const parent =  [
+     * const player =  [
      *   new Transform({position: new Vector2(100, 100)}),
-     *   SpriteRenderer
+     *   SpriteRenderer,
+     *   Player
      * ];
      *
-     * const child =  [
-     *   new Transform({parent: parent[0]}),
-     *   SpriteRenderer
+     * const enemy =  [
+     *   new Transform({position: new Vector2(-100, 100)}),
+     *   SpriteRenderer,
+     *   Enemy
      * ];
      *
-     * const entity = entityManager.createEntities([parent, child]);
+     * const entities = entityManager.createEntities([player, enemy]);
      * ```
      */
-    public createEntities(componentsList: Component[][]): Entity[] {
+    public createEntities(componentsList: Array<ComponentType | Component>[]): Entity[] {
         const entities: Entity[] = [];
 
         componentsList.forEach((components) => entities.push(this.createEntity(components)));

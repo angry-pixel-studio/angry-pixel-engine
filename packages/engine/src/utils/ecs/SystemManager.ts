@@ -1,59 +1,6 @@
 import { TYPES } from "@config/types";
 import { injectable } from "@ioc";
-
-/**
- * This interface is used for the creation of system classes. You will have to inject the dependencies you need manully.
- * @public
- * @category Entity-Component-System
- * @example
- * ```typescript
- * class PlayerSystem implements System {
- *   @inject(Symbols.EntityManager) private readonly entityManager: EntityManager;
- *
- *   public onUpdate() {
- *     this.entityManager.search(Player).forEach(({component, entity}) => {
- *       // do somethng
- *     });
- *   }
- * }
- * ```
- */
-export interface System {
-    /**
-     * This method is called the first time the system is enabled
-     * @public
-     */
-    onCreate?(): void;
-    /**
-     * This method is called when the system is destroyed
-     * @public
-     */
-    onDestroy?(): void;
-    /**
-     * This method is called when the system is disabled
-     * @public
-     */
-    onDisabled?(): void;
-    /**
-     * This method is called when the system is enabled
-     * @public
-     */
-    onEnabled?(): void;
-    /**
-     * This method is called once every frame
-     * @public
-     */
-    onUpdate(): void;
-}
-
-/**
- * This type represents a system class
- * @public
- * @category Entity-Component-System
- */
-export type SystemType<T extends System = System> = { new (...args: any[]): T };
-/** @internal */
-export type SystemGroup = string | number | symbol;
+import { System, SystemGroup, SystemType } from "./types";
 
 /**
  * The SystemManager manages the systems.\
