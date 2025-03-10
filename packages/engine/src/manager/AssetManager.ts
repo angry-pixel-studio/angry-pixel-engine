@@ -6,9 +6,10 @@ enum AssetType {
     Audio,
     Font,
     Video,
+    Json,
 }
 
-type AssetElement = HTMLImageElement | HTMLAudioElement | FontFace;
+type AssetElement = HTMLImageElement | HTMLAudioElement | FontFace | HTMLVideoElement | Record<string, any>;
 
 interface Asset {
     type: AssetType;
@@ -128,6 +129,23 @@ export class AssetManager {
     }
 
     /**
+     * Loads a JSON asset
+     * @param url The asset URL
+     * @param name The asset name [optional]
+     * @returns Promise<Record<string, any>>
+     */
+    public async loadJson<T = Record<string, any>>(url: string, name?: string): Promise<T> {
+        const asset = this.createAsset(url, AssetType.Json, null, name);
+        const response = await fetch(url);
+        const json = await response.json();
+
+        asset.loaded = true;
+        asset.element = json;
+
+        return json;
+    }
+
+    /**
      * Retrieves an image asset
      * @param url The asset URL
      * @returns The HTML Image element
@@ -189,6 +207,23 @@ export class AssetManager {
         return this.assets.find(
             (asset) => asset.type === AssetType.Video && (asset.url === disc || asset.name === disc),
         )?.element as HTMLVideoElement;
+    }
+
+    /**
+     * Retrieves a json asset
+     * @param url The asset URL
+     * @returns The JSON object
+     */
+    public getJson<T = Record<string, any>>(url: string): T;
+    /**
+     * Retrieves a json asset
+     * @param name The asset name
+     * @returns The JSON object
+     */
+    public getJson<T = Record<string, any>>(name: string): T;
+    public getJson<T = Record<string, any>>(disc: string): T {
+        return this.assets.find((asset) => asset.type === AssetType.Json && (asset.url === disc || asset.name === disc))
+            ?.element as T;
     }
 
     private createAsset(url: string, type: AssetType, element: AssetElement, name?: string): Asset {
