@@ -52,6 +52,8 @@ export class AudioPlayer {
     _currentAudioSource: HTMLAudioElement = undefined;
     /* @internal */
     _playPromisePendind: boolean = false;
+    /* @internal */
+    _playAfterUserInput: boolean = false;
 
     constructor(options?: Partial<AudioPlayerOptions>) {
         Object.assign(this, options);

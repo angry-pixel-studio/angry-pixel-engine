@@ -20,6 +20,7 @@ export type CollisionMatrix = [string, string][];
 @injectable(SYSTEMS.ResolveCollisionSystem)
 export class ResolveCollisionSystem implements System {
     // auxiliars
+    private colliderTypes = [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider];
     private colliders: Collider[] = [];
     private collisions: Set<string> = new Set();
     private shapes: Shape[] = [];
@@ -38,7 +39,7 @@ export class ResolveCollisionSystem implements System {
         this.collisions.clear();
         this.shapes = [];
 
-        [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
+        this.colliderTypes.forEach((type) =>
             this.entityManager.search<Collider>(type).forEach(({ component: collider, entity }) => {
                 this.colliders.push(collider);
                 collider.shapes.forEach((shape) => {

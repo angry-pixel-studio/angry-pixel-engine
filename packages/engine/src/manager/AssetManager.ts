@@ -227,9 +227,17 @@ export class AssetManager {
     }
 
     private createAsset(url: string, type: AssetType, element: AssetElement, name?: string): Asset {
+        this.deleteAssetIfExists({ url, name });
         const asset: Asset = { type, url, element, loaded: false, name };
         this.assets.push(asset);
 
         return asset;
+    }
+
+    private deleteAssetIfExists({ url, name }: { url?: string; name?: string }): void {
+        const index = this.assets.findIndex(
+            (asset) => asset.url === url || (asset.name !== undefined && asset.name === name),
+        );
+        if (index !== -1) this.assets.splice(index, 1);
     }
 }

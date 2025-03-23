@@ -67,6 +67,11 @@ export class AudioPlayerSystem implements System {
         this.entityManager.search(AudioPlayer).forEach(({ component: audioPlayer }) => {
             if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
 
+            if (audioPlayer._playAfterUserInput) {
+                audioPlayer._playAfterUserInput = false;
+                audioPlayer.action = "play";
+            }
+
             // new audio source
             if (audioPlayer.audioSource !== audioPlayer._currentAudioSource) {
                 if (audioPlayer._currentAudioSource) {
@@ -96,6 +101,7 @@ export class AudioPlayerSystem implements System {
                         audioPlayer.state = "playing";
                     })
                     .catch(() => {
+                        audioPlayer._playAfterUserInput = true;
                         audioPlayer._playPromisePendind = false;
                         if (!this.userInputErrorCatched) this.catchUserInput();
                     });

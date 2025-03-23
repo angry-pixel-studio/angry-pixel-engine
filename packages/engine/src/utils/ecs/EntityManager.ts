@@ -1,6 +1,7 @@
 import { TYPES } from "@config/types";
 import { injectable } from "@ioc";
 import { Archetype, ArchetypeComponent, Component, ComponentType, Entity, SearchCriteria, SearchResult } from "./types";
+import { deepClone } from "./utils";
 
 /**
  * The EntityManager manages the entities and components.\
@@ -143,16 +144,13 @@ export class EntityManager {
         this.entities.add(entity);
 
         components.forEach((component) => {
-            let instance: Component;
             if (component.type && typeof component.type === "function") {
                 const { type, data, enabled } = component as ArchetypeComponent;
-                instance = this.addComponent(entity, type);
+                const instance = this.addComponent(entity, type);
                 if (data) Object.assign(instance, data);
                 if (enabled === false) this.disableComponent(instance);
             } else {
-                instance = new (component.constructor as ComponentType)();
-                Object.assign(instance, component);
-                this.addComponent(entity, instance);
+                this.addComponent(entity, deepClone<Component>(component));
             }
         });
 
