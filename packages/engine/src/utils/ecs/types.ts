@@ -9,7 +9,7 @@ export type Entity = number;
  * @public
  * @category Entity-Component-System
  */
-export type Component = { [key: string]: any };
+export type Component = Record<string, any>;
 /**
  * This type represents a component class
  * @public
@@ -27,7 +27,7 @@ export type SearchResult<T extends Component> = { entity: Entity; component: T }
  * @public
  * @category Entity-Component-System
  */
-export type SearchCriteria = { [key: string]: any };
+export type SearchCriteria = Record<string, any>;
 
 /**
  * This type represents an Entity Archetype
@@ -35,21 +35,17 @@ export type SearchCriteria = { [key: string]: any };
  * @category Entity-Component-System
  */
 export type Archetype = {
-    components: (ArchetypeComponent | Component)[];
+    components: (Component | ComponentType | DisabledComponent)[];
     children?: Archetype[];
     enabled?: boolean;
 };
 
 /**
- * This type represents an Entity Archetype Component
+ * This type represents a disabled component
  * @public
  * @category Entity-Component-System
  */
-export type ArchetypeComponent<T extends Component = Component> = {
-    type: ComponentType<T>;
-    data?: Partial<T>;
-    enabled?: boolean;
-};
+export type DisabledComponent = { enabled: false; component: Component | ComponentType };
 
 /**
  * This interface is used for the creation of system classes. You will have to inject the dependencies you need manully.

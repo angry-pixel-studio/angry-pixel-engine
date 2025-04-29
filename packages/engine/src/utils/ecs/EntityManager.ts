@@ -1,6 +1,6 @@
 import { TYPES } from "@config/types";
 import { injectable } from "@ioc";
-import { Archetype, ArchetypeComponent, Component, ComponentType, Entity, SearchCriteria, SearchResult } from "./types";
+import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchCriteria, SearchResult } from "./types";
 import { deepClone } from "./utils";
 
 /**
@@ -32,85 +32,10 @@ export class EntityManager {
      */
     public createEntity(): Entity;
     /**
-     * Creates an Entity based on an Archetype
-     * @param archetype The Archetype to create the Entity
-     * @return The created Entity
-     * @public
-     * @example
-     * ```js
-     * // Using ArchetypeComponent to define components
-     * const entity = entityManager.createEntity({
-     *   components: [
-     *     {type: Transform, data: {position: new Vector2(100, 100)}},
-     *     {type: SpriteRenderer, data: {image: "images/player.png"}},
-     *     {type: Player},
-     *   ],
-     *   children: [
-     *     {
-     *       components: [
-     *         {type: Transform, data: {position: new Vector2(8, 0)}},
-     *         {type: SpriteRenderer, data: {image: "images/sword.png"}},
-     *         {type: Weapon, data: {damage: 10}},
-     *       ],
-     *     },
-     *     {
-     *       components: [
-     *         {type: Transform, data: {position: new Vector2(-8, 0)}},
-     *         {type: SpriteRenderer, data: {image: "images/shield.png"}},
-     *         {type: Shield, data: {defense: 5}, enabled: false},
-     *       ],
-     *     },
-     *     {
-     *       components: [
-     *         {type: Transform, data: {position: new Vector2(8, 0)}},
-     *         {type: SpriteRenderer, data: {image: "images/staf.png"}},
-     *         {type: Staff, data: {mana: 5}},
-     *       ],
-     *       enabled: false,
-     *     }
-     *   ]
-     * });
-     * ```
-     * @example
-     * ```js
-     * // Using Component instances as templates
-     * const entity = entityManager.createEntity({
-     *   components: [
-     *     new Transform({position: new Vector2(100, 100)}),
-     *     new SpriteRenderer({image: "images/player.png"}),
-     *     new Player(),
-     *   ],
-     *   children: [
-     *     {
-     *       components: [
-     *         new Transform({position: new Vector2(8, 0)}),
-     *         new SpriteRenderer({image: "images/sword.png"}),
-     *         new Weapon({damage: 10}),
-     *       ],
-     *     },
-     *     {
-     *       components: [
-     *         new Transform({position: new Vector2(-8, 0)}),
-     *         new SpriteRenderer({image: "images/shield.png"}),
-     *         new Shield({defense: 5}),
-     *       ],
-     *     },
-     *     {
-     *       components: [
-     *         new Transform({position: new Vector2(8, 0)}),
-     *         new SpriteRenderer({image: "images/staf.png"}),
-     *         new Staff({mana: 5}),
-     *       ],
-     *       enabled: false,
-     *     }
-     *   ]
-     * });
-     * ```
-     */
-    public createEntity(archetype: Archetype): Entity;
-    /**
-     * Creates an Entity based on a collection of Component instances and ComponentTypes
+     * Creates an Entity with the given components.\
+     * Since the components are not cloned, the collection of components must not be reused.
      * @param components A collection of component instances and component classes
+     * @param parent The parent entity (optional)
      * @return The created Entity
      * @public
      * @example
@@ -121,38 +46,44 @@ export class EntityManager {
      * ]);
      * ```
      */
-    public createEntity(components: Array<ComponentType | Component>, parent?: Entity): Entity;
-    public createEntity(arg1?: Archetype | Array<ComponentType | Component>, parent?: Entity): Entity {
-        if (arg1 instanceof Array) return this.createEntityFromComponents(arg1, parent);
-        if (arg1 instanceof Object) return this.createEntityFromArchetype(arg1);
-        return ++this.lastEntityId;
-    }
-
-    private createEntityFromComponents(components: Array<ComponentType | Component>, parent?: Entity): Entity {
+    public createEntity(components: (ComponentType | Component)[], parent?: Entity): Entity;
+    public createEntity(components?: (ComponentType | Component)[], parent?: Entity): Entity {
         const entity = this.lastEntityId++;
-        this.entities.add(entity);
 
-        components.forEach((component) => this.addComponent(entity, component));
-
-        if (parent) this.setParent(entity, parent);
+        if (components) {
+            this.entities.add(entity);
+            components.forEach((component) => this.addComponent(entity, component));
+            if (parent) this.setParent(entity, parent);
+        }
 
         return entity;
     }
 
-    private createEntityFromArchetype({ components, children, enabled }: Archetype, parent?: Entity): Entity {
+    /**
+     * Creates an Entity based on an Archetype.\
+     * Since the components are cloned, the archetype can be reused to create multiple entities.
+     * @param archetype The archetype to create the entity from
+     * @param parent The parent entity (optional)
+     * @returns The created Entity
+     * @public
+     * @example
+     * ```js
+     * const archetype = {
+     *   components: [
+     *     new Transform({position: new Vector2(100, 100)}),
+     *     SpriteRenderer
+     *   ],
+     *   children: [childArchetype],
+     *   enabled: true
+     * }
+     * const entity = entityManager.createEntityFromArchetype(archetype);
+     * ```
+     */
+    public createEntityFromArchetype({ components, children, enabled }: Archetype, parent?: Entity): Entity {
         const entity = this.lastEntityId++;
         this.entities.add(entity);
 
-        components.forEach((component) => {
-            if (component.type && typeof component.type === "function") {
-                const { type, data, enabled } = component as ArchetypeComponent;
-                const instance = this.addComponent(entity, type);
-                if (data) Object.assign(instance, data);
-                if (enabled === false) this.disableComponent(instance);
-            } else {
-                this.addComponent(entity, deepClone<Component>(component));
-            }
-        });
+        this.createComponentsFromArchetype(components, entity);
 
         if (parent) this.setParent(entity, parent);
         if (children) children.forEach((child) => this.createEntityFromArchetype(child, entity));
@@ -162,33 +93,34 @@ export class EntityManager {
     }
 
     /**
-     * Creates multiple entities based on an array of component collections
-     * @param componentsList An array of collections of component instances and component classes
-     * @return An array with the created entities, in the same order of the collections of components
-     * @public
-     * @example
-     * ```js
-     * const player =  [
-     *   new Transform({position: new Vector2(100, 100)}),
-     *   SpriteRenderer,
-     *   Player
-     * ];
-     *
-     * const enemy =  [
-     *   new Transform({position: new Vector2(-100, 100)}),
-     *   SpriteRenderer,
-     *   Enemy
-     * ];
-     *
-     * const entities = entityManager.createEntities([player, enemy]);
-     * ```
+     * Creates components from an archetype
+     * @param components The components to create
+     * @param entity The entity to create the components for
+     * @private
      */
-    public createEntities(componentsList: Array<ComponentType | Component>[]): Entity[] {
-        const entities: Entity[] = [];
+    private createComponentsFromArchetype(
+        components: (Component | ComponentType | DisabledComponent)[],
+        entity: Entity,
+    ): void {
+        components.forEach((component) => {
+            let enabled = true;
+            let instance: Component;
 
-        componentsList.forEach((components) => entities.push(this.createEntity(components)));
+            if (typeof component === "object" && "enabled" in component && component.enabled === false) {
+                enabled = false;
+                component = component.component;
+            }
 
-        return entities;
+            if (typeof component === "object") {
+                instance = this.addComponent(entity, deepClone<Component>(component));
+            } else if (typeof component === "function") {
+                instance = this.addComponent(entity, component);
+            } else {
+                throw new Error("Invalid component type");
+            }
+
+            if (!enabled) this.disableComponent(instance);
+        });
     }
 
     /**
@@ -519,6 +451,26 @@ export class EntityManager {
         );
 
         return components;
+    }
+
+    /**
+     * Updates the data of a component instance
+     * @param entity The entity
+     * @param componentType The component type
+     * @param data The data to update
+     * @public
+     * @example
+     * ```js
+     * entityManager.updateComponentData(entity, Transform, { position: new Vector2(100, 100) });
+     * ```
+     */
+    public updateComponentData<T extends Component = Component>(
+        entity: Entity,
+        componentType: ComponentType<T>,
+        data: Partial<T>,
+    ): void {
+        const component = this.getComponent(entity, componentType);
+        if (component) Object.assign(component, data);
     }
 
     /**

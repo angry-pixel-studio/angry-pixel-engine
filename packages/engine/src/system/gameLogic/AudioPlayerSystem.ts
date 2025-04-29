@@ -34,8 +34,9 @@ export class AudioPlayerSystem implements System {
         // pauses audio when document is not visible
         document.addEventListener("visibilitychange", () => {
             this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource, playing } }) => {
-                if (document.hidden && audioSource) audioSource.pause();
-                else if (!document.hidden && audioSource && playing) audioSource.play();
+                if (!audioSource || typeof audioSource === "string") return;
+                if (document.hidden) audioSource.pause();
+                else if (!document.hidden && playing) audioSource.play();
             });
         });
     }
@@ -65,7 +66,13 @@ export class AudioPlayerSystem implements System {
         if (!this.canPlay) if (!this.checkGamepad()) return;
 
         this.entityManager.search(AudioPlayer).forEach(({ component: audioPlayer }) => {
-            if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
+            if (
+                !audioPlayer.audioSource ||
+                typeof audioPlayer.audioSource === "string" ||
+                !audioPlayer.audioSource.duration
+            ) {
+                return;
+            }
 
             if (audioPlayer._playAfterUserInput) {
                 audioPlayer._playAfterUserInput = false;
@@ -128,7 +135,7 @@ export class AudioPlayerSystem implements System {
 
     public onDisabled(): void {
         this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource } }) => {
-            if (audioSource) {
+            if (audioSource && typeof audioSource !== "string") {
                 audioSource.pause();
                 audioSource.currentTime = 0;
             }

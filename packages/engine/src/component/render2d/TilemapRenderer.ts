@@ -72,7 +72,7 @@ export class TilemapRenderer {
  */
 export type Tileset = {
     /** The tileset image element */
-    image: HTMLImageElement;
+    image: HTMLImageElement | string;
     /* The width of tileset (in tiles) */
     width: number;
     /* The width of the tile (in pixels) */

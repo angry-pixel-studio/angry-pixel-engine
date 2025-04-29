@@ -19,23 +19,8 @@ export enum TilemapOrientation {
 
 export interface TilemapRenderData extends RenderData {
     tiles: number[];
-    tilemap: {
-        width: number;
-        tileWidth: number;
-        tileHeight: number;
-        height: number;
-        realWidth: number;
-        realHeight: number;
-    };
-    tileset: {
-        image: HTMLImageElement;
-        width: number;
-        tileWidth: number;
-        tileHeight: number;
-        margin?: Vector2;
-        spacing?: Vector2;
-        correction?: Vector2;
-    };
+    tilemap: Tilemap;
+    tileset: Tileset;
     smooth?: boolean;
     flipHorizontal?: boolean;
     flipVertical?: boolean;
@@ -46,6 +31,25 @@ export interface TilemapRenderData extends RenderData {
     tintColor?: string;
     orientation?: TilemapOrientation;
 }
+
+export type Tileset = {
+    image: HTMLImageElement;
+    width: number;
+    tileWidth: number;
+    tileHeight: number;
+    margin?: Vector2;
+    spacing?: Vector2;
+    correction?: Vector2;
+};
+
+export type Tilemap = {
+    width: number;
+    tileWidth: number;
+    tileHeight: number;
+    height: number;
+    realWidth: number;
+    realHeight: number;
+};
 
 export class TilemapRenderer implements Renderer {
     public readonly type: RenderDataType.Tilemap;

@@ -4,6 +4,7 @@ import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
+import { AssetManager } from "@manager/AssetManager";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
 import { TextRenderData } from "@webgl";
@@ -16,12 +17,18 @@ export class TextRendererSystem implements System {
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {
         this.entityManager.search(TextRenderer).forEach(({ entity, component: textRenderer }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("TextRenderer component needs a Transform");
+
+            if (typeof textRenderer.font === "string") {
+                const font = this.assetManager.getFont(textRenderer.font);
+                if (font) textRenderer.font = font;
+            }
 
             if (
                 textRenderer.text.length === 0 ||

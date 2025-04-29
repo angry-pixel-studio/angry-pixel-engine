@@ -4,6 +4,7 @@ import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
+import { AssetManager } from "@manager/AssetManager";
 import { RenderManager } from "@manager/RenderManager";
 import { TimeManager } from "@manager/TimeManager";
 import { Vector2 } from "@math";
@@ -33,14 +34,16 @@ export class VideoRendererSystem implements System {
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
         @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onCreate(): void {
         // pauses video when document is not visible
         document.addEventListener("visibilitychange", () => {
             this.entityManager.search(VideoRenderer).forEach(({ component: { video, playing } }) => {
-                if (document.hidden && video) video.pause();
-                else if (!document.hidden && video && playing) video.play();
+                if (!video || typeof video === "string") return;
+                if (document.hidden) video.pause();
+                else if (!document.hidden && playing) video.play();
             });
         });
     }
@@ -65,6 +68,11 @@ export class VideoRendererSystem implements System {
         this.entityManager.search(VideoRenderer).forEach(({ entity, component: videoRenderer }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("VideoRenderer component needs a Transform");
+
+            if (typeof videoRenderer.video === "string") {
+                videoRenderer.video = this.assetManager.getVideo(videoRenderer.video);
+                if (!videoRenderer.video) throw new Error(`Asset ${videoRenderer.video} not found`);
+            }
 
             if (!videoRenderer.video || !videoRenderer.video.duration) return;
 
@@ -111,6 +119,8 @@ export class VideoRendererSystem implements System {
     private checkVideoState(videoRenderer: VideoRenderer): void {
         const { video, action, loop, volume } = videoRenderer;
 
+        if (typeof video === "string") return;
+
         // new video source
         if (video.src !== videoRenderer._currentVideoSrc) {
             videoRenderer._currentVideoSrc = video.src;
@@ -156,7 +166,7 @@ export class VideoRendererSystem implements System {
 
     public onDisabled(): void {
         this.entityManager.search(VideoRenderer).forEach(({ component: videoRenderer }) => {
-            if (videoRenderer.video) {
+            if (videoRenderer.video && typeof videoRenderer.video !== "string") {
                 videoRenderer.video.pause();
                 videoRenderer.video.currentTime = 0;
             }

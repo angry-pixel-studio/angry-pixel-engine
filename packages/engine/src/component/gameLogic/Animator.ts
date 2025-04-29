@@ -25,6 +25,8 @@ export class Animator {
     currentTime: number = 0;
     /**  @internal */
     _currentAnimation: string = undefined;
+    /**  @internal */
+    _assetsReady: boolean = false;
 
     constructor(options?: Partial<AnimatorOptions>) {
         Object.assign(this, options);
@@ -35,15 +37,38 @@ export class Animator {
  * @public
  * @category Components
  */
+export interface AnimationOptions {
+    image: HTMLImageElement | HTMLImageElement[] | string | string[];
+    slice?: { size: Vector2; offset?: Vector2; padding?: Vector2 };
+    frames?: number[];
+    fps?: number;
+    loop?: boolean;
+}
+
+/**
+ * @public
+ * @category Components
+ */
 export class Animation {
-    image: HTMLImageElement | HTMLImageElement[];
+    image: HTMLImageElement | HTMLImageElement[] | string | string[];
     slice: AnimationSlice = { size: new Vector2(), offset: new Vector2(), padding: new Vector2() };
     frames: number[] = [];
     fps: number = 12;
     loop: boolean = false;
 
-    constructor(options?: Partial<Animation>) {
-        Object.assign(this, options);
+    constructor(options?: AnimationOptions) {
+        if (options) {
+            this.image = options.image;
+            this.frames = options.frames ?? this.frames;
+            this.fps = options.fps ?? this.fps;
+            this.loop = options.loop ?? this.loop;
+
+            if (options.slice) {
+                this.slice.size.copy(options.slice.size);
+                options.slice.offset && this.slice.offset.copy(options.slice.offset);
+                options.slice.padding && this.slice.padding.copy(options.slice.padding);
+            }
+        }
     }
 }
 

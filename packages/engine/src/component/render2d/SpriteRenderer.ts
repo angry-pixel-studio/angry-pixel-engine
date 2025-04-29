@@ -7,7 +7,7 @@ import { RenderDataType, Slice, SpriteRenderData } from "@webgl";
  * @category Components
  */
 export interface SpriteRendererOptions {
-    image: HTMLImageElement;
+    image: HTMLImageElement | string;
     layer: string;
     slice: Slice;
     smooth: boolean;
@@ -52,7 +52,7 @@ export class SpriteRenderer {
     /** The render layer */
     layer: string = defaultRenderLayer;
     /** The image to render */
-    image: HTMLImageElement;
+    image: HTMLImageElement | string;
     /** Cut the image based on straight coordinates starting from the top left downward */
     slice?: Slice;
     /** TRUE for smooth pixels (not recommended for pixel art) */

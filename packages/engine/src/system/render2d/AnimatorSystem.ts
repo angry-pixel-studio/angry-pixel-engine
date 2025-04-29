@@ -4,6 +4,7 @@ import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
+import { AssetManager } from "@manager/AssetManager";
 import { TimeManager } from "@manager/TimeManager";
 
 @injectable(SYSTEMS.AnimatorSystem)
@@ -14,10 +15,13 @@ export class AnimatorSystem implements System {
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {
         this.entityManager.search(Animator).forEach(({ entity, component: animator }) => {
+            this.processAssets(animator);
+
             this.reset(animator);
 
             this.animation = animator.animations.get(animator.animation);
@@ -30,6 +34,27 @@ export class AnimatorSystem implements System {
             const spriteRenderer = this.entityManager.getComponent(entity, SpriteRenderer);
             if (spriteRenderer) this.renderSprite(animator, spriteRenderer);
         });
+    }
+
+    private processAssets(animator: Animator): void {
+        if (!animator._assetsReady) {
+            animator.animations.forEach((animation) => {
+                if (typeof animation.image === "string") {
+                    animation.image = this.assetManager.getImage(animation.image);
+                    if (!animation.image) throw new Error(`Asset ${animation.image} not found`);
+                } else if (Array.isArray(animation.image)) {
+                    animation.image = animation.image.map((image) => {
+                        if (typeof image === "string") {
+                            const asset = this.assetManager.getImage(image);
+                            if (!asset) throw new Error(`Asset ${image} not found`);
+                            return asset;
+                        }
+                        return image;
+                    });
+                }
+            });
+            animator._assetsReady = true;
+        }
     }
 
     private reset(animator: Animator): void {
@@ -71,6 +96,7 @@ export class AnimatorSystem implements System {
         if (Array.isArray(this.animation.image)) {
             spriteRenderer.image = this.animation.image[animator.currentFrame];
         } else {
+            if (typeof this.animation.image === "string") return;
             const frame = this.animation.frames[animator.currentFrame];
             const width = Math.floor(this.animation.image.naturalWidth / this.animation.slice.size.x);
 

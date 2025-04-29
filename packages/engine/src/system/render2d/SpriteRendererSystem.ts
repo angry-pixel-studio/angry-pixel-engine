@@ -4,6 +4,7 @@ import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
+import { AssetManager } from "@manager/AssetManager";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
 import { SpriteRenderData } from "@webgl";
@@ -16,12 +17,18 @@ export class SpriteRendererSystem implements System {
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {
         this.entityManager.search(SpriteRenderer).forEach(({ component: spriteRenderer, entity }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("SpriteRenderer component needs a Transform");
+
+            if (typeof spriteRenderer.image === "string") {
+                spriteRenderer.image = this.assetManager.getImage(spriteRenderer.image);
+                if (!spriteRenderer.image) throw new Error(`Asset ${spriteRenderer.image} not found`);
+            }
 
             // The complete property determines if the image was loaded
             if (!spriteRenderer.image || !spriteRenderer.image.complete) return;

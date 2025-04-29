@@ -6,7 +6,7 @@ export interface AudioPlayerOptions {
     /** The action to perform with the audio source. */
     action: AudioPlayerAction;
     /** The audio source to play. */
-    audioSource: HTMLAudioElement;
+    audioSource: HTMLAudioElement | string;
     /** TRUE If the playback rate is fixed to the TimeManager time scale, default FALSE */
     fixedToTimeScale: boolean;
     /** TRUE If the audio source should loop. */
@@ -23,7 +23,7 @@ export class AudioPlayer {
     /** The action to perform with the audio source. This action will be erased at the end of the frame */
     action: AudioPlayerAction = undefined;
     /** The audio source to play. */
-    audioSource: HTMLAudioElement;
+    audioSource: HTMLAudioElement | string;
     /** TRUE If the playback rate is fixed to the TimeManager time scale, default FALSE */
     fixedToTimeScale: boolean = false;
     /** TRUE If the audio source should loop. */

@@ -21,7 +21,7 @@ export interface VideoRendererOptions {
     rotation: number;
     slice: Slice;
     tintColor: string;
-    video: HTMLVideoElement;
+    video: HTMLVideoElement | string;
     volume: number;
     width: number;
 }
@@ -83,7 +83,7 @@ export class VideoRenderer {
     /** Define a color for tinting the video */
     tintColor: string;
     /**The video element to render */
-    video: HTMLVideoElement;
+    video: HTMLVideoElement | string;
     /** The volume of the video (between 1 and 0) */
     volume: number = 1;
     /** Overwrite the original video width */

@@ -2,8 +2,9 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "rootDir": "src",
+        "baseUrl": ".",
         "paths": {
-            "@factory/*": ["./src/factory/*"],
+            "@entity/*": ["src/entity/*"],
             "@component/*": ["./src/component/*"],
             "@config/*": ["./src/config/*"],
             "@scene/*": ["./src/scene/*"],

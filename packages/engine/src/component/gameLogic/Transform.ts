@@ -21,12 +21,18 @@ export class Transform {
     scale: Vector2 = new Vector2(1, 1);
     /** Rotation expressed in radians */
     rotation: number = 0;
+    /** If TRUE, the parent position will be ignored */
+    ignoreParentPosition: boolean = false;
+    /** If TRUE, the parent scale will be ignored */
+    ignoreParentScale: boolean = false;
+    /** If TRUE, the parent rotation will be ignored */
+    ignoreParentRotation: boolean = false;
 
-    /** The real position in the simulated world. It has the same value as `position` property if there is no parent */
+    /** READONLY: The real position in the simulated world. It has the same value as `position` property if there is no parent */
     localPosition: Vector2 = new Vector2();
-    /** The real scale in the simulated world. It has the same value as `scale` property if there is no parent */
+    /** READONLY: The real scale in the simulated world. It has the same value as `scale` property if there is no parent */
     localScale: Vector2 = new Vector2(1, 1);
-    /** The real rotation in the simulated world. It has the same value as `rotation` property if there is no parent */
+    /** READONLY: The real rotation in the simulated world. It has the same value as `rotation` property if there is no parent */
     localRotation: number = 0;
 
     /** @internal */

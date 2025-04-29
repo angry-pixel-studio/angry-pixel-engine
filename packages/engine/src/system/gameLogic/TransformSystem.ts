@@ -25,7 +25,7 @@ export class TransformSystem implements System {
                 } else {
                     if (!transform._parent) {
                         transform._parent = this.entityManager.getComponent<Transform>(parentEntity, Transform);
-                        if (transform._awake) {
+                        if (transform._awake && !transform.ignoreParentPosition) {
                             Vector2.subtract(transform.position, transform.localPosition, transform._parent.position);
                         }
                     }
@@ -56,15 +56,19 @@ export class TransformSystem implements System {
     }
 
     private translateChild(child: Transform): void {
-        child.localRotation = child.rotation + child._parent.localRotation;
-        child.localScale.x = child.scale.x * child._parent.scale.x;
-        child.localScale.y = child.scale.y * child._parent.scale.y;
+        child.localRotation = child.rotation + (child.ignoreParentRotation ? 0 : child._parent.localRotation);
+        child.localScale.x = child.scale.x * (child.ignoreParentScale ? 1 : child._parent.scale.x);
+        child.localScale.y = child.scale.y * (child.ignoreParentScale ? 1 : child._parent.scale.y);
 
-        const translatedAngle = Math.atan2(child.position.y, child.position.x) + child._parent.localRotation;
+        const translatedAngle =
+            Math.atan2(child.position.y, child.position.x) +
+            (child.ignoreParentRotation ? 0 : child._parent.localRotation);
 
         child.localPosition.set(
-            child._parent.localPosition.x + child.position.magnitude * Math.cos(translatedAngle),
-            child._parent.localPosition.y + child.position.magnitude * Math.sin(translatedAngle),
+            child.position.magnitude * Math.cos(translatedAngle) +
+                (child.ignoreParentPosition ? 0 : child._parent.localPosition.x),
+            child.position.magnitude * Math.sin(translatedAngle) +
+                (child.ignoreParentPosition ? 0 : child._parent.localPosition.y),
         );
     }
 }

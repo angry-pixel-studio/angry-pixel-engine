@@ -4,21 +4,28 @@ import { SYSTEMS } from "@config/systemTypes";
 import { TYPES } from "@config/types";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
+import { AssetManager } from "@manager/AssetManager";
 import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
-import { RenderDataType, TilemapOrientation, TilemapRenderData } from "@webgl";
+import { RenderDataType, TilemapOrientation, TilemapRenderData, Tileset } from "@webgl";
 
 @injectable(SYSTEMS.TilemapRendererSystem)
 export class TilemapRendererSystem implements System {
     constructor(
         @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
         @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer).forEach(({ entity, component: tilemapRenderer }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("TilemapRenderer component needs a Transform");
+
+            if (typeof tilemapRenderer.tileset.image === "string") {
+                tilemapRenderer.tileset.image = this.assetManager.getImage(tilemapRenderer.tileset.image);
+                if (!tilemapRenderer.tileset.image) throw new Error(`Asset ${tilemapRenderer.tileset.image} not found`);
+            }
 
             if (!tilemapRenderer._processed) return;
 
@@ -42,7 +49,7 @@ export class TilemapRendererSystem implements System {
                 renderData.tilemap.realHeight = renderData.tilemap.height * renderData.tilemap.tileHeight;
 
                 renderData.tiles = chunk.data;
-                renderData.tileset = tilemapRenderer.tileset;
+                renderData.tileset = tilemapRenderer.tileset as Tileset;
                 renderData.opacity = tilemapRenderer.opacity;
                 renderData.rotation = transform.localRotation;
                 renderData.tintColor = tilemapRenderer.tintColor;

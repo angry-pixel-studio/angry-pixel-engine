@@ -14,6 +14,8 @@ export class NinjaAnimationSystem extends GameSystem {
                     : transform.scale.x;
 
             if (rigidBody.velocity.x !== 0 && movements.grounded) animator.animation = "run";
+            else if (movements.jumping && rigidBody.velocity.y > 0) animator.animation = "jump";
+            else if (!movements.grounded && rigidBody.velocity.y < 0) animator.animation = "fall";
             else animator.animation = "idle";
         });
     }
