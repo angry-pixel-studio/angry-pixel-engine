@@ -2,8 +2,18 @@ import { Rectangle } from "@math";
 import { defaultRenderLayer } from "./Camera";
 
 /**
+ * LightRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const lightRenderer = new LightRenderer({
+ *   radius: 100,
+ *   smooth: true,
+ *   layer: "Default",
+ *   intensity: 0.8
+ * });
+ * ```
  */
 export interface LightRendererOptions {
     radius: number;
@@ -13,8 +23,22 @@ export interface LightRendererOptions {
 }
 
 /**
+ * The LightRenderer component is used to render a light effect on the screen.\
+ * It supports a circular light source with a specified radius and intensity.\
+ * The light can be optionally smoothed for a softer edge effect.\
+ * This component requires a ShadowRenderer component to be present in the scene to function properly,
+ * as it works by illuminating areas within the shadow map.\
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const lightRenderer = new LightRenderer({
+ *   radius: 100,
+ *   smooth: true,
+ *   layer: "Default",
+ *   intensity: 0.8
+ * });
+ * ```
  */
 export class LightRenderer {
     /** Light radius */

@@ -1,7 +1,7 @@
 import { Vector2 } from "@math";
 
 /**
- * The information about one interaction with the screen
+ * Represents a single touch or pointer interaction with the screen, including position and size information
  * @public
  * @category Input
  */
@@ -13,7 +13,8 @@ export interface TouchInteraction {
 }
 
 /**
- * Contains the information about the touch screen interaction
+ * Tracks and provides access to touch screen input state from the previous frame. Supports multi-touch
+ * by storing an array of active touch interactions, each containing position and size information.
  * @public
  * @category Input
  * @example

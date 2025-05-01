@@ -2,9 +2,9 @@ import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
 /**
- * Configuration object for PolygonCollider creation
+ * PolygonCollider component configuration
  * @public
- * @category Components
+ * @category Components Configuration
  * @example
  * ```js
  * const polygonCollider = new PolygonCollider({
@@ -33,7 +33,11 @@ export interface PolygonColliderOptions {
 }
 
 /**
- * Polygon shaped Collider for 2d collisions. Only convex polygons are allowed.
+ * The PolygonCollider component defines a convex polygon-shaped collision area for an entity.\
+ * It can be used for both physics interactions and collision detection.\
+ * The collider's shape is determined by a series of vertices that form a closed convex polygon.\
+ * Note that only convex polygons are supported - concave shapes must be broken into multiple convex polygons.\
+ * The shape can be offset and rotated, and collision layers allow controlling which objects can collide with each other.
  * @public
  * @category Components
  * @example

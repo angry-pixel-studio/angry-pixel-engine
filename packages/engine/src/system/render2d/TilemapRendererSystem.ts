@@ -1,7 +1,7 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
-import { SYSTEMS } from "@config/systemTypes";
-import { TYPES } from "@config/types";
+import { SYSTEM_TYPES } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { AssetManager } from "@manager/AssetManager";
@@ -9,12 +9,12 @@ import { RenderManager } from "@manager/RenderManager";
 import { Vector2 } from "@math";
 import { RenderDataType, TilemapOrientation, TilemapRenderData, Tileset } from "@webgl";
 
-@injectable(SYSTEMS.TilemapRendererSystem)
+@injectable(SYSTEM_TYPES.TilemapRendererSystem)
 export class TilemapRendererSystem implements System {
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {

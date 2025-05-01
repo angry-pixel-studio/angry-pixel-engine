@@ -2,9 +2,9 @@ import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
 /**
- * Configuration object for EdgeCollider creation
+ * EdgeCollider component configuration
  * @public
- * @category Components
+ * @category Components Configuration
  * @example
  * ```js
  * const edgeCollider = new EdgeCollider({
@@ -33,7 +33,10 @@ export interface EdgeColliderOptions {
 }
 
 /**
- * Collider composed of lines defined by its vertices, for 2d collisions.
+ * The EdgeCollider component defines a collision shape made up of connected line segments.\
+ * It can be used for both physics interactions and collision detection.\
+ * The collider's shape is determined by a series of vertices that form edges between them.\
+ * The shape can be offset and rotated, and collision layers allow controlling which objects can collide with each other.
  * @public
  * @category Components
  * @example

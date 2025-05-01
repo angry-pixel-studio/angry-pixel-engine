@@ -7,8 +7,7 @@ import { hexToRgba, setProjectionMatrix } from "./utils";
 
 /**
  * Direction in which the tilemap will be rendered.
- * @category Components
- * @public
+ * @internal
  */
 export enum TilemapOrientation {
     Center,

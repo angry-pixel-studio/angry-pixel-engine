@@ -15,16 +15,16 @@ import { TilemapRenderer } from "./renderer/TilemapRenderer";
 import { VideoRenderer } from "./renderer/VideoRenderer";
 import { TextureFactory } from "./texture/TextureFactory";
 import { TextureManager } from "./texture/TextureManager";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 
-@injectable(TYPES.WebGLManager)
+@injectable(DEPENDENCY_TYPES.WebGLManager)
 export class WebGLManager {
     private readonly renderers: Map<RenderDataType, Renderer> = new Map();
     private readonly canvasColorRenderer: CanvasColorRenderer;
 
     private lastRender: RenderDataType;
 
-    constructor(@inject(TYPES.CanvasElement) canvas: HTMLCanvasElement) {
+    constructor(@inject(DEPENDENCY_TYPES.CanvasElement) canvas: HTMLCanvasElement) {
         const contextManager = new ContextManager(canvas);
         const gl = contextManager.gl;
         const contextVersion = contextManager.contextVersion;

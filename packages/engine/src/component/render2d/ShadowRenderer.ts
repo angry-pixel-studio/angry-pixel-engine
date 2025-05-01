@@ -3,8 +3,19 @@ import { RenderDataType, ShadowRenderData } from "@webgl";
 import { defaultRenderLayer } from "./Camera";
 
 /**
+ * ShadowRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const shadowRenderer = new ShadowRenderer({
+ *   width: 100,
+ *   height: 50,
+ *   color: "#000000",
+ *   opacity: 0.5,
+ *   layer: "Default"
+ * });
+ * ```
  */
 export interface ShadowRendererOptions {
     width: number;
@@ -15,8 +26,22 @@ export interface ShadowRendererOptions {
 }
 
 /**
+ * The ShadowRenderer component is used to render a shadow effect on the screen.\
+ * It supports a rectangular shadow with configurable width, height, color, opacity, and render layer.\
+ * This component works in conjunction with LightRenderer components in the scene - the shadow will
+ * block and be affected by any lights that intersect with it.\
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const shadowRenderer = new ShadowRenderer({
+ *   width: 100,
+ *   height: 50,
+ *   color: "#000000",
+ *   opacity: 0.5,
+ *   layer: "Default"
+ * });
+ * ```
  */
 export class ShadowRenderer {
     /** Shadow width */

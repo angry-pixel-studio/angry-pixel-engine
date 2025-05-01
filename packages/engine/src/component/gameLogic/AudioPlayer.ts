@@ -1,6 +1,16 @@
 /**
+ * AudioPlayer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const audioPlayer = new AudioPlayer({
+ *   audioSource: "sound.mp3",
+ *   volume: 0.5,
+ *   loop: true,
+ *   fixedToTimeScale: false
+ * });
+ * ```
  */
 export interface AudioPlayerOptions {
     /** The action to perform with the audio source. */
@@ -16,8 +26,19 @@ export interface AudioPlayerOptions {
 }
 
 /**
+ * The AudioPlayer component handles audio playback in the game. It manages playing, pausing and stopping audio sources,
+ * controls volume and looping behavior, and can optionally sync playback speed with the game's time scale.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const audioPlayer = new AudioPlayer({
+ *   audioSource: "sound.mp3",
+ *   volume: 0.5,
+ *   loop: true,
+ *   fixedToTimeScale: false
+ * });
+ * ```
  */
 export class AudioPlayer {
     /** The action to perform with the audio source. This action will be erased at the end of the frame */
@@ -84,12 +105,12 @@ export class AudioPlayer {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export type AudioPlayerAction = "stop" | "play" | "pause";
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export type AudioPlayerState = "stopped" | "playing" | "paused";

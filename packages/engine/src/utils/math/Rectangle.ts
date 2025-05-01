@@ -1,9 +1,33 @@
 import { Vector2 } from "./Vector2";
 
 /**
- * Represents an axis aligned rectangle
+ * Represents an axis-aligned bounding rectangle (AABR) defined by position, width and height.
+ * The position represents the bottom-left corner of the rectangle.\
+ * Provides methods and properties for manipulating and querying the rectangle's geometry.
  * @category Math
  * @public
+ * @example
+ * ```js
+ * const rect = new Rectangle(0, 0, 100, 100);
+ * rect.width // 100
+ * rect.height // 100
+ *
+ * rect.x // 0
+ * rect.y // 0
+ *
+ * rect.x1 // 100
+ * rect.y1 // 100
+ *
+ * rect.center // { x: 50, y: 50 }
+ *
+ * rect.intersects(new Rectangle(50, 50, 100, 100)) // true
+ *
+ * rect.contains(new Vector2(50, 50)) // true
+ *
+ * rect.contains(new Rectangle(100, 100, 100, 100)) // false
+ *
+ * rect.toString() // "(0, 0, 100, 100)"
+ * ```
  */
 export class Rectangle {
     public width: number = 0;

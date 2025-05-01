@@ -21,7 +21,7 @@ import { TextRendererSystem } from "@system/render2d/TextRendererSystem";
 import { TilemapRendererSystem } from "@system/render2d/TilemapRendererSystem";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
 import { SystemGroup } from "@system/SystemGroup";
-import { SYSTEMS } from "./systemTypes";
+import { SYSTEM_TYPES } from "./systemTypes";
 import { ApplyVelocitySystem } from "@system/physics2d/ApplyVelocitySystem";
 import { UpdateBallColliderShapeSystem } from "@system/physics2d/collider/UpdateBallColliderShapeSystem";
 import { UpdateBoxColliderShapeSystem } from "@system/physics2d/collider/UpdateBoxColliderShapeSystem";
@@ -39,47 +39,47 @@ export const systemsByGroup: SystemsByGroup = new Map([
     [
         SystemGroup.PreGameLogic,
         [
-            { name: SYSTEMS.KeyboardSystem, type: KeyboardSystem },
-            { name: SYSTEMS.MouseSystem, type: MouseSystem },
-            { name: SYSTEMS.TouchScreenSystem, type: TouchScreenSystem },
-            { name: SYSTEMS.GamepadSystem, type: GamepadSystem },
-            { name: SYSTEMS.ButtonSystem, type: ButtonSystem },
-            { name: SYSTEMS.AudioPlayerSystem, type: AudioPlayerSystem },
-            { name: SYSTEMS.TiledWrapperSystem, type: TiledWrapperSystem },
-            { name: SYSTEMS.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
+            { name: SYSTEM_TYPES.KeyboardSystem, type: KeyboardSystem },
+            { name: SYSTEM_TYPES.MouseSystem, type: MouseSystem },
+            { name: SYSTEM_TYPES.TouchScreenSystem, type: TouchScreenSystem },
+            { name: SYSTEM_TYPES.GamepadSystem, type: GamepadSystem },
+            { name: SYSTEM_TYPES.ButtonSystem, type: ButtonSystem },
+            { name: SYSTEM_TYPES.AudioPlayerSystem, type: AudioPlayerSystem },
+            { name: SYSTEM_TYPES.TiledWrapperSystem, type: TiledWrapperSystem },
+            { name: SYSTEM_TYPES.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
         ],
     ],
-    [SystemGroup.Transform, [{ name: SYSTEMS.TransformSystem, type: TransformSystem }]],
+    [SystemGroup.Transform, [{ name: SYSTEM_TYPES.TransformSystem, type: TransformSystem }]],
     [
         SystemGroup.Physics,
         [
-            { name: SYSTEMS.ApplyVelocitySystem, type: ApplyVelocitySystem },
-            { name: SYSTEMS.UpdateBallColliderShapeSystem, type: UpdateBallColliderShapeSystem },
-            { name: SYSTEMS.UpdateBoxColliderShapeSystem, type: UpdateBoxColliderShapeSystem },
-            { name: SYSTEMS.UpdateEdgeColliderShapeSystem, type: UpdateEdgeColliderShapeSystem },
-            { name: SYSTEMS.UpdatePolygonColliderShapeSystem, type: UpdatePolygonColliderShapeSystem },
-            { name: SYSTEMS.UpdateTilemapColliderShapeSystem, type: UpdateTilemapColliderShapeSystem },
-            { name: SYSTEMS.ResolveCollisionSystem, type: ResolveCollisionSystem },
-            { name: SYSTEMS.ApplyRepositionSystem, type: ApplyRepositionSystem },
-            { name: SYSTEMS.UpdateCollidersAfterRepositionSystem, type: UpdateCollidersAfterRepositionSystem },
+            { name: SYSTEM_TYPES.ApplyVelocitySystem, type: ApplyVelocitySystem },
+            { name: SYSTEM_TYPES.UpdateBallColliderShapeSystem, type: UpdateBallColliderShapeSystem },
+            { name: SYSTEM_TYPES.UpdateBoxColliderShapeSystem, type: UpdateBoxColliderShapeSystem },
+            { name: SYSTEM_TYPES.UpdateEdgeColliderShapeSystem, type: UpdateEdgeColliderShapeSystem },
+            { name: SYSTEM_TYPES.UpdatePolygonColliderShapeSystem, type: UpdatePolygonColliderShapeSystem },
+            { name: SYSTEM_TYPES.UpdateTilemapColliderShapeSystem, type: UpdateTilemapColliderShapeSystem },
+            { name: SYSTEM_TYPES.ResolveCollisionSystem, type: ResolveCollisionSystem },
+            { name: SYSTEM_TYPES.ApplyRepositionSystem, type: ApplyRepositionSystem },
+            { name: SYSTEM_TYPES.UpdateCollidersAfterRepositionSystem, type: UpdateCollidersAfterRepositionSystem },
         ],
     ],
     [
         SystemGroup.Render,
         [
-            { name: SYSTEMS.AnimatorSystem, type: AnimatorSystem },
-            { name: SYSTEMS.CameraSystem, type: CameraSystem },
-            { name: SYSTEMS.TilemapRendererSystem, type: TilemapRendererSystem },
-            { name: SYSTEMS.SpriteRendererSystem, type: SpriteRendererSystem },
-            { name: SYSTEMS.MaskRendererSystem, type: MaskRendererSystem },
-            { name: SYSTEMS.ShadowLightRendererSystem, type: ShadowLightRendererSystem },
-            { name: SYSTEMS.TextRendererSystem, type: TextRendererSystem },
-            { name: SYSTEMS.VideoRendererSystem, type: VideoRendererSystem },
-            { name: SYSTEMS.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
-            { name: SYSTEMS.DebugMousePositionSystem, type: DebugMousePositionSystem },
-            { name: SYSTEMS.CullingSystem, type: CullingSystem },
-            { name: SYSTEMS.ClearScreenSystem, type: ClearScreenSystem },
-            { name: SYSTEMS.RenderSystem, type: RenderSystem },
+            { name: SYSTEM_TYPES.AnimatorSystem, type: AnimatorSystem },
+            { name: SYSTEM_TYPES.CameraSystem, type: CameraSystem },
+            { name: SYSTEM_TYPES.TilemapRendererSystem, type: TilemapRendererSystem },
+            { name: SYSTEM_TYPES.SpriteRendererSystem, type: SpriteRendererSystem },
+            { name: SYSTEM_TYPES.MaskRendererSystem, type: MaskRendererSystem },
+            { name: SYSTEM_TYPES.ShadowLightRendererSystem, type: ShadowLightRendererSystem },
+            { name: SYSTEM_TYPES.TextRendererSystem, type: TextRendererSystem },
+            { name: SYSTEM_TYPES.VideoRendererSystem, type: VideoRendererSystem },
+            { name: SYSTEM_TYPES.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
+            { name: SYSTEM_TYPES.DebugMousePositionSystem, type: DebugMousePositionSystem },
+            { name: SYSTEM_TYPES.CullingSystem, type: CullingSystem },
+            { name: SYSTEM_TYPES.ClearScreenSystem, type: ClearScreenSystem },
+            { name: SYSTEM_TYPES.RenderSystem, type: RenderSystem },
         ],
     ],
 ]);

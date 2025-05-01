@@ -2,7 +2,8 @@ import { Vector2 } from "@math";
 import { Shape } from "./Shape";
 
 /**
- * Interface implemented by the collider components
+ * Interface defining a collider component that handles collision detection and physics interactions.
+ * Colliders define shapes, layers, and physics properties for game objects that can collide.
  * @public
  * @category Collisions
  */

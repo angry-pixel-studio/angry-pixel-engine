@@ -1,18 +1,18 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { LightRenderer } from "@component/render2d/LightRenderer";
 import { ShadowRenderer } from "@component/render2d/ShadowRenderer";
-import { SYSTEMS } from "@config/systemTypes";
-import { TYPES } from "@config/types";
+import { SYSTEM_TYPES } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { Entity, EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
 import { Light } from "@webgl";
 
-@injectable(SYSTEMS.ShadowLightRendererSystem)
+@injectable(SYSTEM_TYPES.ShadowLightRendererSystem)
 export class ShadowLightRendererSystem implements System {
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
     ) {}
 
     public onUpdate(): void {

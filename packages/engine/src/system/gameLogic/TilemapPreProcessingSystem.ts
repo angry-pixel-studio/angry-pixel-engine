@@ -1,14 +1,14 @@
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Chunk, TilemapRenderer } from "@component/render2d/TilemapRenderer";
 
 const chunkSize = 16;
 
-@injectable(SYSTEMS.TilemapPreProcessingSystem)
+@injectable(SYSTEM_TYPES.TilemapPreProcessingSystem)
 export class TilemapPreProcessingSystem implements System {
-    constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {}
+    constructor(@inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer).forEach(({ component: tilemapRenderer }) => {

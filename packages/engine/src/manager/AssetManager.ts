@@ -1,5 +1,5 @@
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 
 enum AssetType {
     Image,
@@ -21,7 +21,9 @@ interface Asset {
 }
 
 /**
- * Manages the asset loading (images, fonts, audios, videos).
+ * Manages loading and retrieval of game assets including images, fonts, audio files, videos and JSON data.\
+ * Provides methods to load assets asynchronously and check their loading status.\
+ * Assets can be referenced by URL or optional name identifiers.
  * @public
  * @category Managers
  * @example
@@ -30,18 +32,20 @@ interface Asset {
  * this.assetManager.loadAudio("audio.ogg");
  * this.assetManager.loadVideo("video.mp4");
  * this.assetManager.loadFont("custom-font", "custom-font.ttf");
+ * this.assetManager.loadJson("data.json");
  *
  * const imageElement = this.assetManager.getImage("image.png");
  * const audioElement = this.assetManager.getAudio("audio.ogg");
  * const videoElement = this.assetManager.getVideo("video.mp4");
  * const fontFace = this.assetManager.getFont("custom-font");
- *
+ * const jsonData = this.assetManager.getJson("data.json");
+
  * if (this.assetManager.getAssetsLoaded()) {
  *   // do something when assets are loaded
  * }
  * ```
  */
-@injectable(TYPES.AssetManager)
+@injectable(DEPENDENCY_TYPES.AssetManager)
 export class AssetManager {
     private readonly assets: Asset[] = [];
 

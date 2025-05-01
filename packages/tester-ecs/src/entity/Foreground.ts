@@ -20,7 +20,7 @@ export const foregroundArchetype: Archetype = {
         new Transform(),
         new TiledWrapper({
             layerToRender: "Foreground",
-            tilemap: require("@tilemap/tilemap.json"),
+            tilemap: ASSETS.tilemap.main,
         }),
         new TilemapRenderer({
             tileset: {

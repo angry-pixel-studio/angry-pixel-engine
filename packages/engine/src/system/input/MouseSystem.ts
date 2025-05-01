@@ -1,11 +1,11 @@
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Mouse } from "@input";
 import { inject, injectable } from "@ioc";
 import { InputManager } from "@manager/InputManager";
 import { Vector2 } from "@math";
 
-@injectable(SYSTEMS.MouseSystem)
+@injectable(SYSTEM_TYPES.MouseSystem)
 export class MouseSystem {
     private readonly mouse: Mouse;
 
@@ -18,8 +18,8 @@ export class MouseSystem {
     private wheelEvent: WheelEvent;
 
     constructor(
-        @inject(TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
-        @inject(TYPES.InputManager) { mouse }: InputManager,
+        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(DEPENDENCY_TYPES.InputManager) { mouse }: InputManager,
     ) {
         this.mouse = mouse;
         this.canvas.addEventListener("mousemove", (e) => this.updatePosition(e));

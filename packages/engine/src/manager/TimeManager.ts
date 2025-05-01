@@ -1,5 +1,5 @@
 import { inject, injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { GameConfig } from "@config/bootstrap";
 
 const minGameFramerate = 30;
@@ -17,19 +17,38 @@ type Interval = {
 };
 
 /**
- * Options for setting an interval.
+ * Options for configuring an interval timer.
+ * @property {Function} callback - The function to execute at each interval
+ * @property {number} delay - The time in milliseconds between each execution
+ * @property {number} [times] - Optional number of times to execute before auto-clearing. Omit for infinite execution.
+ * @property {boolean} [executeImmediately] - Whether to execute the callback immediately before starting the interval timer
  * @public
  * @category Managers
+ * @example
+ * ```ts
+ * const intervalId = timeManager.setInterval({
+ *     callback: () => console.log("Will be called 5 times!"),
+ *     delay: 1000,
+ *     times: 5,
+ * });
+ * ```
  */
 export type IntervalOptions = {
+    /** The function to execute at each interval */
     callback: () => void;
+    /** The time in milliseconds between each execution */
     delay: number;
+    /** Optional number of times to execute before auto-clearing. Omit for infinite execution. */
     times?: number;
+    /** Whether to execute the callback immediately before starting the interval timer */
     executeImmediately?: boolean;
 };
 
 /**
- * Manages the properties associated with time.
+ * Manages the properties associated with time.\
+ * Provides methods to set intervals, clear intervals, and manage time scaling.\
+ * Manages the fixed game framerate and physics framerate.\
+ * Manages the fixed game delta time and physics delta time.
  * @public
  * @category Managers
  * @example
@@ -67,7 +86,7 @@ export type IntervalOptions = {
  * this.timeManager.clearInterval(intervalId);
  * ```
  */
-@injectable(TYPES.TimeManager)
+@injectable(DEPENDENCY_TYPES.TimeManager)
 export class TimeManager {
     /** @internal */
     public readonly fixedGameFramerate: number;
@@ -115,7 +134,7 @@ export class TimeManager {
         return this.browserDeltaTime * this.timeScale;
     }
 
-    constructor(@inject(TYPES.GameConfig) { physicsFramerate }: GameConfig) {
+    constructor(@inject(DEPENDENCY_TYPES.GameConfig) { physicsFramerate }: GameConfig) {
         if (physicsFramerate && !allowedPhysicsFramerates.includes(physicsFramerate)) {
             throw new Error(`Invalid Physics frame rate. Allowed: [${allowedPhysicsFramerates.join(", ")}]`);
         }

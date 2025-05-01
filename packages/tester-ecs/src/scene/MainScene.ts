@@ -44,6 +44,7 @@ export class MainScene extends Scene {
         Object.values(ASSETS.images).forEach((filename) => this.assetManager.loadImage(filename));
         Object.values(ASSETS.audio).forEach((filename) => this.assetManager.loadAudio(filename));
         Object.values(ASSETS.video).forEach((filename) => this.assetManager.loadVideo(filename));
+        Object.values(ASSETS.tilemap).forEach((filename) => this.assetManager.loadJson(filename));
     }
 
     public loadSystems(): void {

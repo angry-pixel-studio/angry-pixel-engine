@@ -1,13 +1,13 @@
 import { Entity, EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { Vector2 } from "@math";
 
-@injectable(SYSTEMS.TransformSystem)
+@injectable(SYSTEM_TYPES.TransformSystem)
 export class TransformSystem implements System {
-    constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {}
+    constructor(@inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
         this.entityManager

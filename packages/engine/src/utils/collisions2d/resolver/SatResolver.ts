@@ -1,5 +1,5 @@
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { Vector2 } from "@math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Circumference, Shape } from "../Shape";
@@ -9,7 +9,7 @@ type AxisProjection = {
     max: number;
 };
 
-@injectable(TYPES.CollisionSatResolver)
+@injectable(DEPENDENCY_TYPES.CollisionSatResolver)
 export class SatResolver implements CollisionResolver {
     private axes: Vector2[];
     private projA: AxisProjection = { min: 0, max: 0 };

@@ -1,15 +1,21 @@
 import { bootstrap, GameConfig } from "@config/bootstrap";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { Container, DependencyName, DependencyType } from "@ioc";
 import { LoopManager } from "@manager/LoopManager";
 import { SceneManager, SceneType } from "@manager/SceneManager";
 
 /**
- * Game is the main class that contains all the managers, scenes, entities and components. It allows to start and stop the execution of the game.
+ * The Game class is the core entry point for creating and managing a game instance.\
+ * It serves as a central hub that coordinates all game systems including scenes, entities,
+ * components, and various managers (rendering, physics, input, etc.).\
+ * The class provides methods to initialize the game with custom configuration, add scenes
+ * and dependencies, and control the game loop execution.\
+ * Through dependency injection, it ensures proper initialization and communication between all game systems.
  * @public
  * @category Core
  * @example
  * ```js
+ * // Basic game setup with minimal configuration
  * const game = new Game({
  *   containerNode: document.getElementById("app"),
  *   width: 1920,
@@ -20,6 +26,7 @@ import { SceneManager, SceneType } from "@manager/SceneManager";
  * ```
  * @example
  * ```js
+ * // Advanced game setup with custom physics and collision settings
  * const game = new Game({
  *   containerNode: document.getElementById("app"),
  *   width: 1920,
@@ -51,7 +58,7 @@ export class Game {
      * TRUE if the game is running
      */
     public get running(): boolean {
-        return this.container.get<LoopManager>(TYPES.LoopManager).running;
+        return this.container.get<LoopManager>(DEPENDENCY_TYPES.LoopManager).running;
     }
 
     /**
@@ -62,7 +69,7 @@ export class Game {
      * @param openingScene If this is the opening scene, set TRUE, FALSE instead (optional: default FALSE)
      */
     public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {
-        this.container.get<SceneManager>(TYPES.SceneManager).addScene(sceneType, name, openingScene);
+        this.container.get<SceneManager>(DEPENDENCY_TYPES.SceneManager).addScene(sceneType, name, openingScene);
     }
 
     /**
@@ -89,13 +96,13 @@ export class Game {
      * Start the game
      */
     public start(): void {
-        this.container.get<LoopManager>(TYPES.LoopManager).start();
+        this.container.get<LoopManager>(DEPENDENCY_TYPES.LoopManager).start();
     }
 
     /**
      * Stop the game
      */
     public stop(): void {
-        this.container.get<LoopManager>(TYPES.LoopManager).stop();
+        this.container.get<LoopManager>(DEPENDENCY_TYPES.LoopManager).stop();
     }
 }

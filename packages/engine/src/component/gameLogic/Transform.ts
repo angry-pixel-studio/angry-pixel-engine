@@ -1,8 +1,17 @@
 import { Vector2 } from "@math";
 
 /**
+ * Transform component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const transform = new Transform({
+ *   position: new Vector2(100, 100),
+ *   scale: new Vector2(2, 2),
+ *   rotation: Math.PI / 4
+ * });
+ * ```
  */
 export interface TransformOptions {
     position: Vector2;
@@ -11,8 +20,20 @@ export interface TransformOptions {
 }
 
 /**
+ * The Transform component defines an entity's position, scale and rotation in the game world.\
+ * It can be nested under a parent transform to create hierarchical relationships, where child
+ * transforms inherit and combine with their parent's transformations.\
+ * The component provides both local and world-space values, and allows selectively ignoring parent transformations.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const transform = new Transform({
+ *   position: new Vector2(100, 100),
+ *   scale: new Vector2(2, 2),
+ *   rotation: Math.PI / 4
+ * });
+ * ```
  */
 export class Transform {
     /** Position relative to the zero point of the simulated world, or relative to the parent if it has one */

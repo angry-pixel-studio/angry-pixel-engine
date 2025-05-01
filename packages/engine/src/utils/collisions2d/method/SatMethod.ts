@@ -1,14 +1,15 @@
 import { inject, injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { CollisionMethod } from "./CollisionMethod";
 import { CollisionResolution, CollisionResolver } from "../resolver/CollisionResolver";
 import { Circumference, Shape } from "../Shape";
 
-@injectable(TYPES.CollisionResolutionMethod)
+@injectable(DEPENDENCY_TYPES.CollisionResolutionMethod)
 export class SatMethod implements CollisionMethod {
     constructor(
-        @inject(TYPES.CollisionCircumferenceResolver) private readonly circumferenceResolver: CollisionResolver,
-        @inject(TYPES.CollisionSatResolver) private readonly satResolver: CollisionResolver,
+        @inject(DEPENDENCY_TYPES.CollisionCircumferenceResolver)
+        private readonly circumferenceResolver: CollisionResolver,
+        @inject(DEPENDENCY_TYPES.CollisionSatResolver) private readonly satResolver: CollisionResolver,
     ) {}
 
     public findCollision(shapeA: Shape, shapeB: Shape): CollisionResolution {

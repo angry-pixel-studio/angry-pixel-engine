@@ -1,4 +1,4 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { EntityManager, SystemManager, SystemType } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
@@ -11,12 +11,16 @@ import { TimeManager } from "./TimeManager";
 /**
  * This type represents a scene class
  * @public
- * @category Core
+ * @category Managers
  */
 export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityManager, assetManager: AssetManager): T };
 
 /**
- * Base class for all game scenes
+ * Base class for all game scenes.\
+ * Provides core functionality for loading assets, registering systems, and setting up entities.\
+ * Scenes are the main organizational unit for game states and levels.\
+ * Each scene has access to the EntityManager for creating/managing entities and the AssetManager
+ * for loading and accessing game resources.
  * @public
  * @category Core
  * @example
@@ -56,7 +60,9 @@ export abstract class Scene {
 }
 
 /**
- * Manges the loading of the scenes.
+ * Manages scene loading, transitions and lifecycle.\
+ * Provides methods to register scenes, load scenes by name, and handles the opening scene.\
+ * Ensures proper cleanup between scene transitions and maintains scene state.
  * @public
  * @category Managers
  * @example
@@ -64,7 +70,7 @@ export abstract class Scene {
  * this.sceneManager.loadScene("MainScene");
  * ```
  */
-@injectable(TYPES.SceneManager)
+@injectable(DEPENDENCY_TYPES.SceneManager)
 export class SceneManager {
     private readonly scenes: Map<string, Scene> = new Map();
 
@@ -76,11 +82,11 @@ export class SceneManager {
 
     /** @internal */
     constructor(
-        @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
-        @inject(TYPES.CreateSystemService) private readonly systemFactory: CreateSystemService,
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
-        @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(DEPENDENCY_TYPES.SystemManager) private readonly systemManager: SystemManager,
+        @inject(DEPENDENCY_TYPES.CreateSystemService) private readonly systemFactory: CreateSystemService,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
     ) {}
 
     public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {

@@ -2,16 +2,16 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { Vector2 } from "@math";
 import { Polygon } from "@collisions2d";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";
 import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";
 
-@injectable(SYSTEMS.UpdateTilemapColliderShapeSystem)
+@injectable(SYSTEM_TYPES.UpdateTilemapColliderShapeSystem)
 export class UpdateTilemapColliderShapeSystem extends BaseUpdateColliderShapeSystem implements System {
-    constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {
+    constructor(@inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager) {
         super();
     }
 

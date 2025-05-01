@@ -23,7 +23,7 @@ export interface SpriteRenderData extends RenderData {
 
 /**
  * Cut the image based on straight coordinates starting from the top left downward.
- * @category Components
+ * @category Components Configuration
  * @public
  */
 export interface Slice {

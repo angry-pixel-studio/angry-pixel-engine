@@ -2,9 +2,9 @@ import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
 /**
- * Configuration object for BallCollider creation
+ * BallCollider component configuration
  * @public
- * @category Components
+ * @category Components Configuration
  * @example
  * ```js
  * const ballCollider = new BallCollider({
@@ -30,7 +30,10 @@ export interface BallColliderOptions {
 }
 
 /**
- * Circumference shaped collider for 2d collisions.
+ * The BallCollider component defines a circular collision shape for an entity.\
+ * It can be used for both physics interactions and collision detection.\
+ * The collider's size is determined by its radius, and it can be offset from the entity's position.\
+ * Collision layers allow controlling which objects can collide with each other.
  * @public
  * @category Components
  * @example

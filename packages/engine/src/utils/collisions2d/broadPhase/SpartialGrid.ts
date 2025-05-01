@@ -2,7 +2,7 @@ import { Rectangle, Vector2 } from "@math";
 import { BroadPhaseResolver } from "./IBroadPhaseResolver";
 import { Shape } from "../Shape";
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 
 const MAX_COLLIDERS_PER_CELL = 16;
 
@@ -11,7 +11,7 @@ const cell = (value: number, min: number, width: number, subdivisions: number): 
 
 type Coordinates = { x0: number; x1: number; y0: number; y1: number };
 
-@injectable(TYPES.CollisionBroadphaseResolver)
+@injectable(DEPENDENCY_TYPES.CollisionBroadphaseResolver)
 export class SpartialGrid implements BroadPhaseResolver {
     private area: Rectangle = new Rectangle();
     private grid: number[][][] = [];

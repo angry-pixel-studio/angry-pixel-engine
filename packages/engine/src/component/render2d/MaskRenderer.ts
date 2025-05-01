@@ -3,8 +3,44 @@ import { defaultRenderLayer } from "./Camera";
 import { MaskRenderData, MaskShape, RenderDataType } from "@webgl";
 
 /**
+ * MaskRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const maskRenderer = new MaskRenderer({
+ *   shape: MaskShape.Rectangle,
+ *   width: 32,
+ *   height: 32,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   rotation: 0,
+ *   opacity: 1,
+ *   layer: "Default"
+ * });
+ * ```
+ * @example
+ * ```js
+ * const maskRenderer = new MaskRenderer({
+ *   shape: MaskShape.Circumference,
+ *   radius: 16,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   opacity: 1,
+ *   layer: "Default"
+ * });
+ * ```
+ * @example
+ * ```js
+ * const maskRenderer = new MaskRenderer({
+ *   shape: MaskShape.Polygon,
+ *   vertexModel: [new Vector2(0, 0), new Vector2(32, 0), new Vector2(32, 32), new Vector2(0, 32)],
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   opacity: 1,
+ *   layer: "Default"
+ * });
+ * ```
  */
 export interface MaskRendererOptions {
     shape: MaskShape;
@@ -20,37 +56,46 @@ export interface MaskRendererOptions {
 }
 
 /**
- * Renders a filled shape (rectangle, circumference or polygon)
+ * The MaskRenderer component renders filled shapes like rectangles, circles, or polygons.\
+ * It supports different shape types with configurable dimensions, colors, positioning and rotation.\
+ * Shapes can be rendered with variable opacity and assigned to specific render layers.\
+ * This component is useful for creating UI elements, visual effects, or masking other rendered content.
  * @public
  * @category Components
  * @example
  * ```js
- * maskRenderer.shape    = MaskShape.Rectangle;
- * maskRenderer.width    = 32;
- * maskRenderer.height   = 32;
- * maskRenderer.color    = "#000000";
- * maskRenderer.offset   = new Vector2(0, 0);
- * maskRenderer.rotation = 0;
- * maskRenderer.opacity  = 1;
- * maskRenderer.layer    = "Default";
+ * const maskRenderer = new MaskRenderer({
+ *   shape: MaskShape.Rectangle,
+ *   width: 32,
+ *   height: 32,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   rotation: 0,
+ *   opacity: 1,
+ *   layer: "Default"
+ * });
  * ```
  * @example
  * ```js
- * maskRenderer.shape    = MaskShape.Circumference;
- * maskRenderer.radius   = 16;
- * maskRenderer.color    = "#000000";
- * maskRenderer.offset   = new Vector2(0, 0);
- * maskRenderer.opacity  = 1;
- * maskRenderer.layer    = "Default";
+ * const maskRenderer = new MaskRenderer({
+ *   shape: MaskShape.Circumference,
+ *   radius: 16,
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   opacity: 1,
+ *   layer: "Default"
+ * });
  * ```
  * @example
  * ```js
- * maskRenderer.shape       = MaskShape.Polygon;
- * maskRenderer.vertexModel = [new Vector2(0, 0), new Vector2(32, 0), new Vector2(32, 32), new Vector2(0, 32)];
- * maskRenderer.color       = "#000000";
- * maskRenderer.offset      = new Vector2(0, 0);
- * maskRenderer.opacity     = 1;
- * maskRenderer.layer       = "Default";
+ * const maskRenderer = new MaskRenderer({
+ *   shape: MaskShape.Polygon,
+ *   vertexModel: [new Vector2(0, 0), new Vector2(32, 0), new Vector2(32, 32), new Vector2(0, 32)],
+ *   color: "#000000",
+ *   offset: new Vector2(0, 0),
+ *   opacity: 1,
+ *   layer: "Default"
+ * });
  * ```
  */
 export class MaskRenderer {

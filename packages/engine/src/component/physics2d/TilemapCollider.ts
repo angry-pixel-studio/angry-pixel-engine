@@ -2,9 +2,9 @@ import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
 /**
- * Configuration object for TilemapCollider creation
+ * TilemapCollider component configuration
  * @public
- * @category Components
+ * @category Components Configuration
  * @example
  * ```js
  * const tilemapCollider = new TilemapCollider({
@@ -30,8 +30,12 @@ export interface TilemapColliderOptions {
 }
 
 /**
- * Generates rectangle colliders for the map edge tiles (or lines if composite is TRUE).\
- * **Limitations:** At the moment, it is not possible to modify the shape of the collider once it has been generated.
+ * The TilemapCollider component automatically generates collision shapes for tilemap edges.\
+ * When composite is FALSE, it creates individual rectangle colliders for each edge tile.\
+ * When composite is TRUE, it optimizes by generating connected line segments that follow the tilemap's outer edges.\
+ * This is useful for efficiently handling collision detection with tilemap boundaries.\
+ * **Limitations:** The collider shapes are generated once and cannot be modified after creation.
+ * To update the collision shapes, you must create a new TilemapCollider instance.
  * @public
  * @category Components
  * @example

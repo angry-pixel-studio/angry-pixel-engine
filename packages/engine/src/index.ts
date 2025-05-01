@@ -1,19 +1,19 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 /**
  * Symbols to be used as dependency identifiers
  * @public
- * @category Config
+ * @category Decorators
  */
-export const Symbols = {
-    AssetManager: TYPES.AssetManager,
-    CanvasElement: TYPES.CanvasElement,
-    CollisionRepository: TYPES.CollisionRepository,
-    EntityManager: TYPES.EntityManager,
-    GameConfig: TYPES.GameConfig,
-    InputManager: TYPES.InputManager,
-    SceneManager: TYPES.SceneManager,
-    SystemManager: TYPES.SystemManager,
-    TimeManager: TYPES.TimeManager,
+export const BuiltInDependencyIdentifiers = {
+    AssetManager: DEPENDENCY_TYPES.AssetManager,
+    CanvasElement: DEPENDENCY_TYPES.CanvasElement,
+    CollisionRepository: DEPENDENCY_TYPES.CollisionRepository,
+    EntityManager: DEPENDENCY_TYPES.EntityManager,
+    GameConfig: DEPENDENCY_TYPES.GameConfig,
+    InputManager: DEPENDENCY_TYPES.InputManager,
+    SceneManager: DEPENDENCY_TYPES.SceneManager,
+    SystemManager: DEPENDENCY_TYPES.SystemManager,
+    TimeManager: DEPENDENCY_TYPES.TimeManager,
 };
 
 export { GameConfig } from "@config/bootstrap";

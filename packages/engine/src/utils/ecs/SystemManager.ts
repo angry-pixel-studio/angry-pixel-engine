@@ -1,14 +1,16 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { injectable } from "@ioc";
 import { System, SystemGroup, SystemType } from "./types";
 
 /**
- * The SystemManager manages the systems.\
- * It provides the necessary methods for reading and writing systems.
+ * The SystemManager is responsible for managing the lifecycle and execution of game systems.\
+ * It provides methods for adding, enabling, disabling and retrieving systems that operate on entities and components.\
+ * Systems are organized into groups to control their execution order and update frequency.\
+ * Acts as the central orchestrator for all game logic and behavior processing.
  * @public
  * @category Entity-Component-System
  */
-@injectable(TYPES.SystemManager)
+@injectable(DEPENDENCY_TYPES.SystemManager)
 export class SystemManager {
     private systems: [System, SystemGroup, boolean, boolean][] = []; // [system, group, enabled, created]
 

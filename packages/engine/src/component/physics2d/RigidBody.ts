@@ -5,7 +5,7 @@ import { Vector2 } from "@math";
  * - **Dynamic:** This type of body is affected by gravity and velocity and can be moved by other rigid bodies.
  * - **Kinematic:** This type of body is not affected by gravity and cannot be moved by other rigid bodies, but can be velocity applied.
  * - **Static:** This type of body is immobile, is not affected by velocity or gravity and cannot be moved by other rigid bodies.
- * @category Components
+ * @category Components Configuration
  * @public
  */
 export enum RigidBodyType {
@@ -17,7 +17,7 @@ export enum RigidBodyType {
 /**
  * RigidBody configuration options
  * @public
- * @category Components
+ * @category Components Configuration
  * @example
  * ```js
   const rigidBody = new RigidBody({
@@ -69,13 +69,19 @@ export interface RigidBodyOptions {
 }
 
 /**
- * The RigidBody component puts the entity under simulation of the physics engine, where it will interact with other objects that have a RigidBody.\
- * There are three types of bodies:
- * - **Dynamic:** This type of body is affected by gravity and velocity and can be moved by other rigid bodies.
- * - **Kinematic:** This type of body is not affected by gravity and cannot be moved by other rigid bodies, but can be velocity applied.\
- *   This type of body consumes less processing resources than the Dynamic.
- * - **Static:** This type of body is immobile, is not affected by velocity or gravity and cannot be moved by other rigid bodies.\
- *   This is the body type that consumes the least processing resources.
+ * The RigidBody component enables physics simulation for an entity, allowing it to interact with other physics-enabled objects in the game world.\
+ * It defines how the entity behaves under forces like gravity, collisions, and applied velocities. The component supports three types of bodies:
+ * 
+ * - **Dynamic:** Fully physics-simulated bodies that respond to forces, collisions, gravity, and can be moved by other rigid bodies.
+ *   Best for objects that need realistic physical behavior like players, projectiles, or items.
+ * 
+ * - **Kinematic:** Bodies that can move with applied velocities but are not affected by gravity or collisions from other bodies.
+ *   Ideal for moving platforms, enemies with predefined paths, or objects that need controlled movement without full physics simulation.
+ *   More performance efficient than Dynamic bodies.
+ * 
+ * - **Static:** Immobile bodies that act as solid, unmovable obstacles. They don't respond to any forces or collisions.
+ *   Perfect for level geometry, walls, or any unchanging collision objects.
+ *   The most performance efficient option as they require minimal physics calculations.
  * @public
  * @category Components
  * @example
@@ -106,6 +112,7 @@ export class RigidBody {
     /**
      * The type of the rigid body to create:
      * - Dynamic: This type of body is affected by gravity and velocity.
+     * - Kinematic: This type of body is not affected by gravity and cannot be moved by other rigid bodies, but can be velocity applied.
      * - Static: This type of body is immovable, is unaffected by velocity and gravity.
      * @public
      */

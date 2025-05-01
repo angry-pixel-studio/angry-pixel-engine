@@ -1,15 +1,15 @@
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { Polygon } from "@collisions2d";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";
 
-@injectable(SYSTEMS.UpdatePolygonColliderShapeSystem)
+@injectable(SYSTEM_TYPES.UpdatePolygonColliderShapeSystem)
 export class UpdatePolygonColliderShapeSystem extends BaseUpdateColliderShapeSystem implements System {
-    constructor(@inject(TYPES.EntityManager) private readonly entityManager: EntityManager) {
+    constructor(@inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager) {
         super();
     }
 

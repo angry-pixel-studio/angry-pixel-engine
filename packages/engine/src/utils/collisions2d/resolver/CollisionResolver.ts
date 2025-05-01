@@ -2,7 +2,16 @@ import { Vector2 } from "@math";
 import { Shape } from "../Shape";
 
 /**
- * Contains information about the collision
+ * Contains detailed information about a collision between two shapes, including the penetration depth
+ * and direction vector. Used to determine how to resolve and separate colliding objects.
+ * @example
+ * ```typescript
+ * // Example collision resolution between two shapes
+ * const resolution: CollisionResolution = {
+ *   penetration: 5, // Shapes overlap by 5 pixels
+ *   direction: new Vector2(1, 0) // Collision along X axis
+ * };
+ * ```
  * @public
  * @category Collisions
  */

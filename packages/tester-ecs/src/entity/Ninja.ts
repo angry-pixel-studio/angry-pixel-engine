@@ -36,7 +36,7 @@ const jumpAnimation = new Animation({
     fps: 10,
     loop: true,
     slice: { size: new Vector2(16, 16) },
-    frames: [32, 33, 34, 35],
+    frames: [48, 49, 50],
 });
 
 const fallAnimation = new Animation({

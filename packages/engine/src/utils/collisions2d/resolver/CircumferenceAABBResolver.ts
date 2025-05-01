@@ -1,10 +1,10 @@
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { clamp, Vector2 } from "@math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Circumference, Polygon } from "../Shape";
 
-@injectable(TYPES.CollisionCircumferenceAABBResolver)
+@injectable(DEPENDENCY_TYPES.CollisionCircumferenceAABBResolver)
 export class CircumferenceAABBResolver implements CollisionResolver {
     private closestPoint: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();

@@ -3,8 +3,7 @@ import { CameraData } from "@webgl";
 
 /**
  * Default render layer
- * @public
- * @category Components
+ * @internal
  */
 export const defaultRenderLayer = "Default";
 
@@ -15,8 +14,18 @@ export const defaultRenderLayer = "Default";
 export const debugRenderLayer = "Debug";
 
 /**
+ * Camera component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const camera = new Camera({
+ *   layers: ["Default", "UI", "Background"],
+ *   zoom: 1.5,
+ *   depth: 0,
+ *   debug: true
+ * });
+ * ```
  */
 export interface CameraOptions {
     layers: string[];
@@ -26,8 +35,20 @@ export interface CameraOptions {
 }
 
 /**
+ * The Camera component controls what layers and objects are rendered to the screen.\
+ * It supports multiple render layers, zoom level control, and depth ordering when using multiple cameras.\
+ * Each camera can also optionally render debug information for development purposes.\
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const camera = new Camera({
+ *   layers: ["Default", "UI", "Background"],
+ *   zoom: 1.5,
+ *   depth: 0,
+ *   debug: true
+ * });
+ * ```
  */
 export class Camera {
     /** Layers to be rendered by this camera. Layers are rendered in ascending order */

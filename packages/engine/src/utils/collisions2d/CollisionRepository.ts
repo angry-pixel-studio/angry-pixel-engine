@@ -1,14 +1,30 @@
 import { injectable } from "@ioc";
 import { Collider } from "./Collider";
 import { Collision } from "./Collision";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 
 /**
- * The CollisionRepository has the necessary methods to perform queries on the current collisions
+ * The CollisionRepository stores and manages collision data between colliders.
+ * It provides methods for querying collisions by collider and layer,
+ * and handles persisting/removing collision records.
  * @public
  * @category Collisions
+ * @example
+ * ```typescript
+ * // Get all collisions for a collider
+ * const collisions = collisionRepository.findCollisionsForCollider(playerCollider);
+ *
+ * // Get collisions between player and enemies
+ * const enemyCollisions = collisionRepository.findCollisionsForColliderAndLayer(
+ *   playerCollider,
+ *   "enemy"
+ * );
+ *
+ * // Get all current collisions
+ * const allCollisions = collisionRepository.findAll();
+ * ```
  */
-@injectable(TYPES.CollisionRepository)
+@injectable(DEPENDENCY_TYPES.CollisionRepository)
 export class CollisionRepository {
     private collisions: Collision[] = [];
 

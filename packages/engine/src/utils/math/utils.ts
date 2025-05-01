@@ -1,5 +1,7 @@
 /**
- * Clamps the given value between the given minimum and maximum values.
+ * Constrains a number to be within a specified range by clamping it between a minimum and maximum value.\
+ * If the value is less than the minimum, returns the minimum. If greater than the maximum, returns the maximum.\
+ * Otherwise returns the original value unchanged.
  * @category Math
  * @public
  * @param value number to clamp
@@ -15,7 +17,8 @@
 export const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
 /**
- * Returns a random integer number between the given minimum and maximum values.
+ * Returns a random integer number between the given minimum (inclusive) and maximum (inclusive) values.\
+ * Uses Math.random() internally to generate the random number, then rounds and scales it to fit the desired range.
  * @category Math
  * @public
  * @param min min value
@@ -29,7 +32,8 @@ export const clamp = (value: number, min: number, max: number): number => Math.m
 export const randomInt = (min: number, max: number): number => Math.round(Math.random() * (max - min)) + min;
 
 /**
- * Returns a random float number between the given minimum and maximum values.
+ * Returns a random floating point number between the given minimum (inclusive) and maximum (inclusive) values.\
+ * Uses Math.random() internally to generate the random number and can be rounded to a specified number of decimal places.
  * @category Math
  * @public
  * @param min min value
@@ -45,7 +49,9 @@ export const randomFloat = (min: number, max: number, decimals: number = 2): num
     fixedRound(Math.random() * (max - min) + min, decimals);
 
 /**
- * Corrects a floating number to a given number of decimal places.
+ * Rounds a floating point number to a specified number of decimal places.\
+ * Uses Math.round() internally to avoid floating point precision errors that can occur with direct decimal arithmetic.\
+ * For example, 5.2345 rounded to 2 decimal places becomes 5.23.
  * @category Math
  * @public
  * @param value the value to round
@@ -60,7 +66,9 @@ export const fixedRound = (value: number, decimals: number): number =>
     Math.round(value * 10 ** decimals) / 10 ** decimals;
 
 /**
- * Generate an array with a range of numbers.
+ * Generates an array containing a sequence of numbers from start to end (inclusive) with optional step size.\
+ * For example, range(0,5) produces [0,1,2,3,4,5] and range(0,10,2) produces [0,2,4,6,8,10].\
+ * Useful for creating numeric sequences and iteration ranges.
  * @category Math
  * @public
  * @param start the starting value
@@ -82,7 +90,9 @@ export const range = (start: number, end: number, steps: number = 1): number[] =
 };
 
 /**
- * Evaluates whether the given value is between the minimum and the maximum (both inclusive).
+ * Checks if a number falls within a specified range (inclusive of both minimum and maximum bounds).\
+ * Returns true if the value is greater than or equal to the minimum and less than or equal to the maximum.\
+ * Useful for range checking, input validation, and boundary testing.
  * @category Math
  * @public
  * @param value number to compare
@@ -100,7 +110,8 @@ export const between = (value: number, min: number, max: number): boolean => {
 };
 
 /**
- * Converts the given radians to degrees.
+ * Converts an angle from radians to degrees by multiplying by (180/π).\
+ * Useful for converting between angular measurement systems and displaying angles in a more human-readable format.
  * @param radians
  * @returns degrees
  * @category Math
@@ -113,7 +124,8 @@ export const between = (value: number, min: number, max: number): boolean => {
 export const radiansToDegrees = (radians: number): number => radians * (180 / Math.PI);
 
 /**
- * Converts the given degrees to radians.
+ * Converts an angle from degrees to radians by multiplying by (π/180).\
+ * Useful for converting between angular measurement systems and performing trigonometric calculations.
  * @param degrees
  * @returns radians
  * @category Math
@@ -126,7 +138,9 @@ export const radiansToDegrees = (radians: number): number => radians * (180 / Ma
 export const degreesToRadians = (degrees: number): number => degrees * (Math.PI / 180);
 
 /**
- * Convert RGB to HEX as string
+ * Converts RGB color values to a hexadecimal color string.\
+ * Takes red, green and blue color components (0-255) and returns a hex color code.\
+ * Useful for converting between color formats and generating color strings for CSS/HTML.
  * @param rgb
  * @param prefix default is "#"
  * @returns string

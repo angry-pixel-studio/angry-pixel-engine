@@ -1,4 +1,4 @@
-export const TYPES = {
+export const DEPENDENCY_TYPES = {
     AssetManager: Symbol.for("AssetManager"),
     CanvasElement: Symbol.for("CanvasElement"),
     CollisionRepository: Symbol.for("CollisionRepository"),

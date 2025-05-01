@@ -15,4 +15,7 @@ export const ASSETS = {
         sfxJump: "audio/sfx_jump4.wav",
         mainSong: "audio/main_song.ogg",
     },
+    tilemap: {
+        main: "tilemap/tilemap.json",
+    },
 };

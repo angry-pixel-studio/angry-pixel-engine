@@ -5,8 +5,8 @@ import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";
 import { debugRenderLayer } from "@component/render2d/Camera";
 import { GameConfig } from "@config/bootstrap";
-import { SYSTEMS } from "@config/systemTypes";
-import { TYPES } from "@config/types";
+import { SYSTEM_TYPES } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
@@ -14,12 +14,12 @@ import { Vector2 } from "@math";
 import { Circumference, Collider, CollisionMethods, Polygon } from "@collisions2d";
 import { GeometricRenderData, GeometricShape, RenderDataType } from "@webgl";
 
-@injectable(SYSTEMS.DebugColliderRenderSystem)
+@injectable(SYSTEM_TYPES.DebugColliderRenderSystem)
 export class DebugColliderRenderSystem implements System {
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(TYPES.GameConfig) private readonly gameConfig: GameConfig,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(DEPENDENCY_TYPES.GameConfig) private readonly gameConfig: GameConfig,
     ) {}
 
     public onUpdate(): void {

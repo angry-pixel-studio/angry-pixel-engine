@@ -3,8 +3,34 @@ import { defaultRenderLayer } from "./Camera";
 import { TilemapRenderData } from "@webgl";
 
 /**
+ * TilemapRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const tilemapRenderer = new TilemapRenderer({
+ *   layer: "Default",
+ *   tileset: {
+ *     image: this.assetManager.getImage("tileset.png"),
+ *     width: 10,
+ *     tileWidth: 32,
+ *     tileHeight: 32,
+ *     margin: new Vector2(0, 0),
+ *     spacing: new Vector2(0, 0)
+ *   },
+ *   data: [1, 2, 3, 4],
+ *   chunks: [],
+ *   width: 2,
+ *   height: 2,
+ *   tileWidth: 32,
+ *   tileHeight: 32,
+ *   tintColor: "#FFFFFF",
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   opacity: 1,
+ *   smooth: false
+ * });
+ * ```
  */
 export interface TilemapRendererOptions {
     layer: string;
@@ -23,9 +49,38 @@ export interface TilemapRendererOptions {
 }
 
 /**
- * The TilemapRenderer component allows you to render a tile map defined by an array of tile ids, using an instance of the TileSet object.
+ * The TilemapRenderer component renders 2D tile-based maps to the screen.\
+ * It uses a tileset image as a source for individual tiles, which are arranged according to a provided array of tile IDs.\
+ * The component supports features like tinting, masking, opacity control, and custom tile dimensions.\
+ * Maps can be rendered in chunks for improved performance with large tilemaps, and tiles can be assigned to specific render layers.\
+ * Each tile is referenced by an ID, with 0 representing empty space.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const tilemapRenderer = new TilemapRenderer({
+ *   layer: "Default",
+ *   tileset: {
+ *     image: this.assetManager.getImage("tileset.png"),
+ *     width: 10,
+ *     tileWidth: 32,
+ *     tileHeight: 32,
+ *     margin: new Vector2(0, 0),
+ *     spacing: new Vector2(0, 0)
+ *   },
+ *   data: [1, 2, 3, 4],
+ *   chunks: [],
+ *   width: 2,
+ *   height: 2,
+ *   tileWidth: 32,
+ *   tileHeight: 32,
+ *   tintColor: "#FFFFFF",
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   opacity: 1,
+ *   smooth: false
+ * });
+ * ```
  */
 export class TilemapRenderer {
     /** The render layer */
@@ -66,9 +121,12 @@ export class TilemapRenderer {
 }
 
 /**
- * Tileset configuration to be used with the TilemapRenderer
+ * The Tileset configuration defines the properties of a tileset used by the TilemapRenderer.\
+ * It specifies the source image containing the tiles, the dimensions of the tileset and individual tiles,\
+ * and optional margin and spacing between tiles. This configuration is essential for properly\
+ * slicing and rendering tiles from the tileset image.
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export type Tileset = {
     /** The tileset image element */
@@ -88,7 +146,7 @@ export type Tileset = {
 /**
  * Chunk of tile data
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export type Chunk = {
     /** Array of tiles. ID 0 (zero) represents empty space.*/

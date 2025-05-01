@@ -1,7 +1,7 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { VideoRenderer } from "@component/render2d/VideoRenderer";
-import { SYSTEMS } from "@config/systemTypes";
-import { TYPES } from "@config/types";
+import { SYSTEM_TYPES } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { AssetManager } from "@manager/AssetManager";
@@ -23,7 +23,7 @@ const userInputEventNames = [
     "keyup",
 ];
 
-@injectable(SYSTEMS.VideoRendererSystem)
+@injectable(SYSTEM_TYPES.VideoRendererSystem)
 export class VideoRendererSystem implements System {
     // auxiliars
     private scaledOffset: Vector2 = new Vector2();
@@ -31,10 +31,10 @@ export class VideoRendererSystem implements System {
     private userInputErrorCatched: boolean = false;
 
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
-        @inject(TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onCreate(): void {

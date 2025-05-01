@@ -3,8 +3,30 @@ import { defaultRenderLayer } from "./Camera";
 import { RenderDataType, Slice, SpriteRenderData } from "@webgl";
 
 /**
+ * SpriteRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const spriteRenderer = new SpriteRenderer({
+ *   image: this.assetManager.getImage("image.png"),
+ *   width: 1920,
+ *   height: 1080,
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontally: false,
+ *   flipVertically: false,
+ *   rotation: 0,
+ *   opacity: 1,
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Default",
+ *   slice: {x: 0, y: 0, width: 1920, height: 1080},
+ *   scale: new Vector2(1, 1),
+ *   tiled: new Vector2(1, 1),
+ *   smooth: false
+ * });
+ * ```
  */
 export interface SpriteRendererOptions {
     image: HTMLImageElement | string;
@@ -26,26 +48,32 @@ export interface SpriteRendererOptions {
 }
 
 /**
+ * The SpriteRenderer component renders 2D images (sprites) to the screen.\
+ * It supports features like image slicing, scaling, rotation, flipping, opacity, color masking and tinting.\
+ * Images can be rendered with custom dimensions, positioned with offsets, and even tiled across an area.\
+ * The component allows control over pixel smoothing and can be assigned to specific render layers.
  * @public
  * @category Components
  * @example
  * ```js
- * spriteRenderer.image = this.assetManager.getImage("image.png");
- * spriteRenderer.width = 1920;
- * spriteRenderer.height = 1080;
- * spriteRenderer.offset = new Vector2(0, 0);
- * spriteRenderer.flipHorizontally =  false;
- * spriteRenderer.flipVertically = false;
- * spriteRenderer.rotation = 0;
- * spriteRenderer.opacity = 1;
- * spriteRenderer.maskColor = "#FF0000";
- * spriteRenderer.maskColorMix = 0;
- * spriteRenderer.tintColor = "#00FF00";
- * spriteRenderer.layer = "Default";
- * spriteRenderer.slice = {x: 0, y:0, width: 1920, height: 1080};
- * spriteRenderer.scale = new Vector2(1, 1);
- * spriteRenderer.tiled = new Vector2(1, 1);
- * spriteRenderer.smooth = false;
+ * const spriteRenderer = new SpriteRenderer({
+ *   image: this.assetManager.getImage("image.png"),
+ *   width: 1920,
+ *   height: 1080,
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontally: false,
+ *   flipVertically: false,
+ *   rotation: 0,
+ *   opacity: 1,
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Default",
+ *   slice: {x: 0, y: 0, width: 1920, height: 1080},
+ *   scale: new Vector2(1, 1),
+ *   tiled: new Vector2(1, 1),
+ *   smooth: false
+ * });
  * ```
  */
 export class SpriteRenderer {

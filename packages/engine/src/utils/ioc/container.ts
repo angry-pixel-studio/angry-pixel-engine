@@ -64,7 +64,9 @@ export class Container {
 }
 
 /**
- * Decorator to identify a class as an injectable dependency
+ * Decorator to mark a class as an injectable dependency that can be managed by the IoC container.\
+ * Injectable classes can be automatically instantiated and have their dependencies resolved when requested through the container.\
+ * This enables dependency injection and inversion of control.
  * @param name the name to identify the dependency
  * @public
  * @category Decorators
@@ -83,7 +85,8 @@ export function injectable(name: DependencyName) {
 }
 
 /**
- * Decorator to identify a property, or constructor argument, as a dependency to be injected
+ * Decorator to mark a property or constructor parameter as a dependency that should be automatically injected by the IoC container.\
+ * When applied to a property or constructor parameter, the container will resolve and inject the specified dependency at runtime.
  * @param name the name to identify the dependency
  * @public
  * @category Decorators

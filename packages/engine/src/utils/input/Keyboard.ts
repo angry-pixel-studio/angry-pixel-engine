@@ -1,6 +1,7 @@
 /**
- * Contains the keyboard information in the last frame.
- * It uses the **code** property of the **js keyboard event**.
+ * Tracks and provides access to keyboard input state from the previous frame.
+ * Uses the standardized `code` property from JavaScript KeyboardEvents to identify keys.
+ * Provides methods to check if individual keys or combinations of keys are pressed.
  * @see [KeyboardEvent: code property](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code)
  * @public
  * @category Input

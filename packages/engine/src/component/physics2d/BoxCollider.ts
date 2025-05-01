@@ -2,9 +2,9 @@ import { Vector2 } from "@math";
 import { Collider, Shape } from "@collisions2d";
 
 /**
- * Configuration object for BoxCollider creation
+ * BoxCollider component configuration
  * @public
- * @category Components
+ * @category Components Configuration
  * @example
  * ```js
  * const boxCollider = new BoxCollider({
@@ -36,7 +36,10 @@ export interface BoxColliderOptions {
 }
 
 /**
- * Rectangle shaped collider for 2d collisions.
+ * The BoxCollider component defines a rectangular collision shape for an entity.\
+ * It can be used for both physics interactions and collision detection.\
+ * The collider's size is determined by its width and height, and it can be offset and rotated.\
+ * Collision layers allow controlling which objects can collide with each other.
  * @public
  * @category Components
  * @example

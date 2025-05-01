@@ -1,15 +1,17 @@
 import { inject, injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { CollisionMethod } from "./CollisionMethod";
 import { CollisionResolution, CollisionResolver } from "../resolver/CollisionResolver";
 import { Circumference, Polygon, Shape } from "../Shape";
 
-@injectable(TYPES.CollisionResolutionMethod)
+@injectable(DEPENDENCY_TYPES.CollisionResolutionMethod)
 export class AABBMethod implements CollisionMethod {
     constructor(
-        @inject(TYPES.CollisionAABBResolver) private readonly AABBResolver: CollisionResolver,
-        @inject(TYPES.CollisionCircumferenceAABBResolver) private readonly circumferenceAABBResolver: CollisionResolver,
-        @inject(TYPES.CollisionCircumferenceResolver) private readonly circumferenceResolver: CollisionResolver,
+        @inject(DEPENDENCY_TYPES.CollisionAABBResolver) private readonly AABBResolver: CollisionResolver,
+        @inject(DEPENDENCY_TYPES.CollisionCircumferenceAABBResolver)
+        private readonly circumferenceAABBResolver: CollisionResolver,
+        @inject(DEPENDENCY_TYPES.CollisionCircumferenceResolver)
+        private readonly circumferenceResolver: CollisionResolver,
     ) {}
 
     findCollision(shapeA: Shape, shapeB: Shape): CollisionResolution {

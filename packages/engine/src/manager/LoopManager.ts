@@ -1,4 +1,4 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { inject, injectable } from "@ioc";
 import { TimeManager } from "./TimeManager";
 import { SystemManager } from "@ecs";
@@ -9,7 +9,7 @@ import { systemsByGroup } from "@config/systemsByGroup";
 /** @internal */
 export const nowInSeconds = (): number => window.performance.now() * 0.001;
 
-@injectable(TYPES.LoopManager)
+@injectable(DEPENDENCY_TYPES.LoopManager)
 export class LoopManager {
     public running: boolean = false;
 
@@ -17,9 +17,9 @@ export class LoopManager {
     private physicsIntervalId: number;
 
     constructor(
-        @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
-        @inject(TYPES.SystemManager) private readonly systemManager: SystemManager,
-        @inject(TYPES.SceneManager) private readonly sceneManager: SceneManager,
+        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(DEPENDENCY_TYPES.SystemManager) private readonly systemManager: SystemManager,
+        @inject(DEPENDENCY_TYPES.SceneManager) private readonly sceneManager: SceneManager,
     ) {}
 
     public start(): void {

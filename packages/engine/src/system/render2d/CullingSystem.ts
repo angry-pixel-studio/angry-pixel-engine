@@ -1,4 +1,4 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { RenderManager } from "@manager/RenderManager";
@@ -11,7 +11,7 @@ import {
     TextRenderData,
     TilemapRenderData,
 } from "@webgl";
-import { SYSTEMS } from "@config/systemTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Vector2 } from "@math";
 
 type BoundingBox = { x: number; x1: number; y: number; y1: number };
@@ -23,7 +23,7 @@ interface ResizeableRenderData extends RenderData {
     tiled?: Vector2;
 }
 
-@injectable(SYSTEMS.CullingSystem)
+@injectable(SYSTEM_TYPES.CullingSystem)
 export class CullingSystem implements System {
     // auxiliars
     private readonly viewport: BoundingBox = { x: 0, x1: 0, y: 0, y1: 0 };
@@ -31,8 +31,8 @@ export class CullingSystem implements System {
     private culledRenderData: RenderData[] = [];
 
     constructor(
-        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
     ) {}
 
     public onUpdate(): void {

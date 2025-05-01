@@ -55,6 +55,7 @@ export const deepClone = <T>(value: T): T => {
  * Creates a disabled component
  * @param component The component to disable
  * @returns The disabled component
+ * @category Entity-Component-System
  * @public
  * @example
  * ```js

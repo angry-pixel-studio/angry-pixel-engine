@@ -1,5 +1,7 @@
 /**
- * Applies a decorator manually.
+ * Applies a decorator manually to a target (class, property, or constructor parameter).\
+ * This utility function simplifies the process of programmatically applying decorators without using the @ syntax.\
+ * This is primarily useful in JavaScript where decorator syntax is not yet standardized.
  * @param decorator The decorator function to be applied.
  * @param target The target to which the decorator is applied (class, prototype, or constructor argument).
  * @param propertyKey The property name or constructor argument index (optional).

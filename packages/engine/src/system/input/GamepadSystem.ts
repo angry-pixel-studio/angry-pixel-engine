@@ -1,15 +1,15 @@
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { System } from "@ecs";
 import { GamepadController } from "@input";
 import { inject, injectable } from "@ioc";
 import { InputManager } from "@manager/InputManager";
 
-@injectable(SYSTEMS.GamepadSystem)
+@injectable(SYSTEM_TYPES.GamepadSystem)
 export class GamepadSystem implements System {
     private readonly gamepads: Map<number, Gamepad> = new Map();
 
-    constructor(@inject(TYPES.InputManager) private readonly inputManager: InputManager) {
+    constructor(@inject(DEPENDENCY_TYPES.InputManager) private readonly inputManager: InputManager) {
         window.addEventListener("gamepadconnected", this.eventHandler);
         window.addEventListener("gamepaddisconnected", this.eventHandler);
     }

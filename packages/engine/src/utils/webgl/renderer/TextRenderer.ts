@@ -8,7 +8,7 @@ import { hexToRgba, setProjectionMatrix } from "./utils";
 
 /**
  * Direction in which the text will be rendered.
- * @category Components
+ * @category Components Configuration
  * @public
  */
 export enum TextOrientation {

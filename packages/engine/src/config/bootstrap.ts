@@ -13,7 +13,7 @@ import {
     SpartialGrid,
 } from "@collisions2d";
 import { CollisionMatrix } from "@system/physics2d/ResolveCollisionSystem";
-import { TYPES } from "./types";
+import { DEPENDENCY_TYPES } from "./dependencyTypes";
 import { EntityManager, System, SystemManager } from "@ecs";
 import { InputManager } from "@manager/InputManager";
 import { defaultPhysicsFramerate, TimeManager } from "@manager/TimeManager";
@@ -25,10 +25,13 @@ import { CreateSystemService } from "@system/CreateSystemService";
 import { WebGLManager } from "@webgl";
 import { RenderManager } from "@manager/RenderManager";
 import { SystemGroup } from "@system/SystemGroup";
-import { SYSTEMS } from "./systemTypes";
+import { SYSTEM_TYPES } from "./systemTypes";
 
 /**
- * Game configuration options
+ * Configuration options for initializing and customizing game behavior.
+ * Includes settings for canvas dimensions, debug visualization, physics simulation,
+ * collision detection, and dependency injection.\
+ * Required for creating a new Game instance.
  * @public
  * @category Config
  *  @example
@@ -100,8 +103,8 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
 
     const container = new Container();
 
-    container.set(TYPES.GameConfig, gameConfig);
-    container.set(TYPES.CanvasElement, createCanvas(gameConfig));
+    container.set(DEPENDENCY_TYPES.GameConfig, gameConfig);
+    container.set(DEPENDENCY_TYPES.CanvasElement, createCanvas(gameConfig));
 
     setupPhysicsDependencies(container);
     setupManagers(container);
@@ -150,8 +153,8 @@ const setupManagers = (container: Container): void => {
     container.add(EntityManager);
     container.add(SystemManager);
     container.set(
-        TYPES.CreateSystemService,
-        new CreateSystemService(container, container.get<SystemManager>(TYPES.SystemManager)),
+        DEPENDENCY_TYPES.CreateSystemService,
+        new CreateSystemService(container, container.get<SystemManager>(DEPENDENCY_TYPES.SystemManager)),
     );
     container.add(TimeManager);
     container.add(AssetManager);
@@ -166,12 +169,12 @@ const setupManagers = (container: Container): void => {
 const setupEngineSystems = (container: Container): void => {
     // headless means that the engine will run without rendering, audio and input systems
     // this mode is ideal for game server development
-    if (container.get<GameConfig>(TYPES.GameConfig).headless) headlessFilter(systemsByGroup);
+    if (container.get<GameConfig>(DEPENDENCY_TYPES.GameConfig).headless) headlessFilter(systemsByGroup);
 
     systemsByGroup.forEach((systems, group) =>
         systems.forEach(({ type, name }) => {
             container.add(type);
-            container.get<SystemManager>(TYPES.SystemManager).addSystem(container.get<System>(name), group);
+            container.get<SystemManager>(DEPENDENCY_TYPES.SystemManager).addSystem(container.get<System>(name), group);
         }),
     );
 };
@@ -188,12 +191,12 @@ const headlessFilter = (systemsByGroup: SystemsByGroup): void => {
             .filter(
                 ({ name }) =>
                     ![
-                        SYSTEMS.AudioPlayerSystem,
-                        SYSTEMS.ButtonSystem,
-                        SYSTEMS.GamepadSystem,
-                        SYSTEMS.KeyboardSystem,
-                        SYSTEMS.MouseSystem,
-                        SYSTEMS.TouchScreenSystem,
+                        SYSTEM_TYPES.AudioPlayerSystem,
+                        SYSTEM_TYPES.ButtonSystem,
+                        SYSTEM_TYPES.GamepadSystem,
+                        SYSTEM_TYPES.KeyboardSystem,
+                        SYSTEM_TYPES.MouseSystem,
+                        SYSTEM_TYPES.TouchScreenSystem,
                     ].includes(name),
             ),
     );
@@ -202,7 +205,7 @@ const headlessFilter = (systemsByGroup: SystemsByGroup): void => {
 const setupPhysicsDependencies = (container: Container): void => {
     const {
         collisions: { collisionBroadPhaseMethod, collisionMatrix, collisionMethod },
-    } = container.get<GameConfig>(TYPES.GameConfig);
+    } = container.get<GameConfig>(DEPENDENCY_TYPES.GameConfig);
 
     container.add(CollisionRepository);
     container.add(CircumferenceResolver);
@@ -217,11 +220,11 @@ const setupPhysicsDependencies = (container: Container): void => {
     container.add(collisionBroadPhaseMethod === BroadPhaseMethods.QuadTree ? QuadTree : SpartialGrid);
     container.add(collisionMethod === CollisionMethods.AABB ? AABBMethod : SatMethod);
 
-    container.set(TYPES.CollisionMatrix, collisionMatrix);
+    container.set(DEPENDENCY_TYPES.CollisionMatrix, collisionMatrix);
 };
 
 const setupExternalDependencies = (container: Container): void => {
-    const config = container.get<GameConfig>(TYPES.GameConfig);
+    const config = container.get<GameConfig>(DEPENDENCY_TYPES.GameConfig);
     if (!config.dependencies) return;
 
     config.dependencies.forEach(([name, dependency]) => {

@@ -6,7 +6,7 @@ import { Vector2 } from "@math";
 
 /**
  * Mask shape: Rectangle or Circumference.
- * @category Components
+ * @category Components Configuration
  * @public
  */
 export enum MaskShape {

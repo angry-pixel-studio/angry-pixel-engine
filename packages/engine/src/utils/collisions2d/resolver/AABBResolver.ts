@@ -1,10 +1,10 @@
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { Rectangle, Vector2 } from "@math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Shape } from "../Shape";
 
-@injectable(TYPES.CollisionAABBResolver)
+@injectable(DEPENDENCY_TYPES.CollisionAABBResolver)
 export class AABBResolver implements CollisionResolver {
     private overlapX: number;
     private overlapY: number;

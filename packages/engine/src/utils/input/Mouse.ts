@@ -1,7 +1,8 @@
 import { Vector2 } from "@math";
 
 /**
- * Contains the mouse information in the last frame
+ * Stores the mouse state from the previous frame, including button states, cursor position,
+ * movement status, and scroll wheel information
  * @public
  * @category Input
  * @example

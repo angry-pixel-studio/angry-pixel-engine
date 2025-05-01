@@ -1,18 +1,49 @@
 /**
+ * TiledWrapper component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const tiledWrapper = new TiledWrapper({
+ *   tilemap: "tilemap.json",
+ *   layerToRender: "Ground"
+ * });
+ *
+ * const tiledWrapper = new TiledWrapper({
+ *   tilemap: assetManager.getJson("tilemap.json"),
+ *   layerToRender: "Ground"
+ * });
+ * ```
  */
 export interface TiledWrapperOptions {
-    tilemap: TiledTilemap;
+    tilemap: TiledTilemap | string;
     layerToRender: string;
 }
 
 /**
+ * The TiledWrapper component wraps a Tiled map editor tilemap and handles rendering a specific layer.\
+ * It provides an interface between Tiled's map format and the engine's tilemap rendering system.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const tiledWrapper = new TiledWrapper({
+ *   tilemap: {
+ *     width: 10,
+ *     height: 10,
+ *     infinite: false,
+ *     layers: [],
+ *     renderorder: "right-down",
+ *     tilesets: [{ firstgid: 1 }],
+ *     tilewidth: 32,
+ *     tileheight: 32
+ *   },
+ *   layerToRender: "Ground"
+ * });
+ * ```
  */
 export class TiledWrapper {
-    tilemap: TiledTilemap;
+    tilemap: TiledTilemap | string;
     layerToRender: string;
 
     constructor(options?: Partial<TiledWrapperOptions>) {
@@ -22,7 +53,7 @@ export class TiledWrapper {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export interface TiledTilemap {
     width: number;
@@ -38,7 +69,7 @@ export interface TiledTilemap {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export interface TiledChunk {
     data: number[];
@@ -51,7 +82,7 @@ export interface TiledChunk {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export interface TiledLayer {
     name: string;
@@ -75,7 +106,7 @@ export interface TiledLayer {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export interface TiledObjectLayer {
     draworder: string;
@@ -92,7 +123,7 @@ export interface TiledObjectLayer {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export interface TiledObject {
     gid: number;
@@ -112,7 +143,7 @@ export interface TiledObject {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export interface TiledProperty {
     name: string;

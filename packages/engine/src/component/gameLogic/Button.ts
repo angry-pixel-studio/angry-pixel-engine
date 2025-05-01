@@ -1,8 +1,21 @@
 import { Vector2 } from "@math";
 
 /**
+ * Button component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const button = new Button({
+ *   shape: ButtonShape.Rectangle,
+ *   width: 100,
+ *   height: 50,
+ *   offset: new Vector2(0, 0),
+ *   touchEnabled: true,
+ *   onClick: () => console.log("Button clicked!"),
+ *   onPressed: () => console.log("Button pressed!")
+ * });
+ * ```
  */
 export interface ButtonOptions {
     shape: ButtonShape;
@@ -16,8 +29,23 @@ export interface ButtonOptions {
 }
 
 /**
+ * The Button component creates an interactive button that can be clicked or pressed.\
+ * It supports rectangular or circular shapes and can be configured with dimensions,
+ * position offset, touch input, and click/press event handlers.
  * @public
  * @category Components
+ * @example
+ * ```js
+ * const button = new Button({
+ *   shape: ButtonShape.Rectangle,
+ *   width: 100,
+ *   height: 50,
+ *   offset: new Vector2(0, 0),
+ *   touchEnabled: true,
+ *   onClick: () => console.log("Button clicked!"),
+ *   onPressed: () => console.log("Button pressed!")
+ * });
+ * ```
  */
 export class Button {
     /** The shape of the button */
@@ -48,7 +76,7 @@ export class Button {
 
 /**
  * @public
- * @category Components
+ * @category Components Configuration
  */
 export enum ButtonShape {
     Rectangle,

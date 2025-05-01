@@ -2,12 +2,12 @@ import { Rectangle, Vector2 } from "@math";
 import { BroadPhaseResolver } from "./IBroadPhaseResolver";
 import { Shape } from "../Shape";
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 
 const MAX_DEPTH = 8;
 const MAX_RECTS = 16;
 
-@injectable(TYPES.CollisionBroadphaseResolver)
+@injectable(DEPENDENCY_TYPES.CollisionBroadphaseResolver)
 export class QuadTree implements BroadPhaseResolver {
     private bounds: Rectangle;
     private depth: number;

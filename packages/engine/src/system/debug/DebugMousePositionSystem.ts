@@ -2,8 +2,8 @@ import { Transform } from "@component/gameLogic/Transform";
 import { Camera, debugRenderLayer } from "@component/render2d/Camera";
 import { defaultTextureAtlasOptions } from "@component/render2d/TextRenderer";
 import { GameConfig } from "@config/bootstrap";
-import { SYSTEMS } from "@config/systemTypes";
-import { TYPES } from "@config/types";
+import { SYSTEM_TYPES } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { InputManager } from "@manager/InputManager";
@@ -13,7 +13,7 @@ import { RenderDataType, TextOrientation, TextRenderData } from "@webgl";
 
 const defaultFontSize = 24;
 
-@injectable(SYSTEMS.DebugMousePositionSystem)
+@injectable(SYSTEM_TYPES.DebugMousePositionSystem)
 export class DebugMousePositionSystem implements System {
     private readonly positionInViewport: Vector2 = new Vector2();
     private readonly positionInCameraViewport: Vector2 = new Vector2();
@@ -21,11 +21,11 @@ export class DebugMousePositionSystem implements System {
     private readonly renderDataPerCamera: Map<number, TextRenderData> = new Map();
 
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(TYPES.InputManager) private readonly inputManager: InputManager,
-        @inject(TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
-        @inject(TYPES.GameConfig) private readonly gameConfig: GameConfig,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(DEPENDENCY_TYPES.InputManager) private readonly inputManager: InputManager,
+        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(DEPENDENCY_TYPES.GameConfig) private readonly gameConfig: GameConfig,
     ) {}
 
     public onUpdate(): void {

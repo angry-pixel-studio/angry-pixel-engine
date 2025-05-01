@@ -1,7 +1,7 @@
 import { Button, ButtonShape } from "@component/gameLogic/Button";
 import { Transform } from "@component/gameLogic/Transform";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { EntityManager, System } from "@ecs";
 import { Mouse, TouchScreen } from "@input";
 import { inject, injectable } from "@ioc";
@@ -10,7 +10,7 @@ import { between, Vector2 } from "@math";
 
 type ScaledButton = { width: number; height: number; radius: number; position: Vector2 };
 
-@injectable(SYSTEMS.ButtonSystem)
+@injectable(SYSTEM_TYPES.ButtonSystem)
 export class ButtonSystem implements System {
     private readonly mouse: Mouse;
     private readonly touchScreen: TouchScreen;
@@ -21,8 +21,8 @@ export class ButtonSystem implements System {
     private pressedLastFrame: boolean = false;
 
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.InputManager) inputManager: InputManager,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.InputManager) inputManager: InputManager,
     ) {
         this.mouse = inputManager.mouse;
         this.touchScreen = inputManager.touchScreen;

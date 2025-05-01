@@ -12,8 +12,40 @@ export const defaultTextureAtlasOptions = {
 };
 
 /**
+ * TextRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const textRenderer = new TextRenderer({
+ *   text: "Hello World!",
+ *   color: "#FFFFFF",
+ *   fontSize: 24,
+ *   width: 1920,
+ *   height: 32,
+ *   opacity: 1,
+ *   layer: "TextLayer",
+ *   orientation: TextOrientation.RightCenter,
+ *   shadow: {
+ *     color: "#00FF00",
+ *     offset: new Vector2(3, -3),
+ *     opacity: 0.5,
+ *   },
+ *   textureAtlas: {
+ *     charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
+ *     fontSize: 64,
+ *     spacing: 4,
+ *   },
+ *   font: "Arial",
+ *   flipHorizontally: false,
+ *   flipVertically: false,
+ *   letterSpacing: 0,
+ *   lineHeight: 24,
+ *   offset: new Vector2(0, 0),
+ *   rotation: 0,
+ *   smooth: false,
+ * });
+ * ```
  */
 export interface TextRendererOptions {
     /** The text color */
@@ -71,7 +103,13 @@ export interface TextRendererOptions {
 }
 
 /**
- * The TextRenderer component allows to render text using font families, colors, and other configuration options.
+ * The TextRenderer component renders text to the screen with extensive customization options.\
+ * It supports both web-safe and imported fonts, but works optimally with bitmap fonts.\
+ * Under the hood, it generates a texture atlas containing all the characters needed for rendering.\
+ * The atlas generation can be configured with custom character ranges, font sizes, and spacing.\
+ * Text can be customized with font families, colors, sizing, orientation, shadows, letter spacing,\
+ * line height, opacity, smoothing, and positioning. The component allows text to be rotated,\
+ * flipped, and assigned to specific render layers.
  * @public
  * @category Components
  *  @example

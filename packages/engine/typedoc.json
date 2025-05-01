@@ -13,6 +13,7 @@
         "Managers",
         "Entity-Component-System",
         "Components",
+        "Components Configuration",
         "Collisions",
         "Input",
         "Math",

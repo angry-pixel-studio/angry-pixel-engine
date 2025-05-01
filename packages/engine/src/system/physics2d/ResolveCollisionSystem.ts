@@ -2,8 +2,8 @@ import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { Vector2 } from "@math";
 import { BroadPhaseResolver, Collider, CollisionRepository, CollisionMethod, Shape } from "@collisions2d";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { BallCollider } from "@component/physics2d/BallCollider";
 import { BoxCollider } from "@component/physics2d/BoxCollider";
 import { EdgeCollider } from "@component/physics2d/EdgeCollider";
@@ -17,7 +17,7 @@ import { TilemapCollider } from "@component/physics2d/TilemapCollider";
  */
 export type CollisionMatrix = [string, string][];
 
-@injectable(SYSTEMS.ResolveCollisionSystem)
+@injectable(SYSTEM_TYPES.ResolveCollisionSystem)
 export class ResolveCollisionSystem implements System {
     // auxiliars
     private colliderTypes = [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider];
@@ -26,11 +26,11 @@ export class ResolveCollisionSystem implements System {
     private shapes: Shape[] = [];
 
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.CollisionBroadphaseResolver) private broadPhaseResolver: BroadPhaseResolver,
-        @inject(TYPES.CollisionMatrix) private collisionMatrix: CollisionMatrix,
-        @inject(TYPES.CollisionResolutionMethod) private collisionResolutionMethod: CollisionMethod,
-        @inject(TYPES.CollisionRepository) private collisionRepository: CollisionRepository,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.CollisionBroadphaseResolver) private broadPhaseResolver: BroadPhaseResolver,
+        @inject(DEPENDENCY_TYPES.CollisionMatrix) private collisionMatrix: CollisionMatrix,
+        @inject(DEPENDENCY_TYPES.CollisionResolutionMethod) private collisionResolutionMethod: CollisionMethod,
+        @inject(DEPENDENCY_TYPES.CollisionRepository) private collisionRepository: CollisionRepository,
     ) {}
 
     public onUpdate(): void {

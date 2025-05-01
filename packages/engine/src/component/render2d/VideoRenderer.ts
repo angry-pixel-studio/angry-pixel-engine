@@ -3,8 +3,30 @@ import { defaultRenderLayer } from "./Camera";
 import { RenderDataType, Slice, VideoRenderData } from "@webgl";
 
 /**
+ * VideoRenderer component configuration
  * @public
- * @category Components
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const videoRenderer = new VideoRenderer({
+ *   video: this.assetManager.getVideo("video.mp4"),
+ *   width: 1920,
+ *   height: 1080,
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontally: false,
+ *   flipVertically: false,
+ *   rotation: 0,
+ *   opacity: 1,
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Default",
+ *   slice: {x: 0, y: 0, width: 1920, height: 1080},
+ *   volume: 1,
+ *   loop: false,
+ *   fixedToTimeScale: false
+ * });
+ * ```
  */
 export interface VideoRendererOptions {
     action: "play" | "pause" | "stop";
@@ -27,27 +49,33 @@ export interface VideoRendererOptions {
 }
 
 /**
- * The VideoRenderer component plays and renders a video element,
- * and allows configuring options such as its dimensions, coloring, etc.
+ * The VideoRenderer component renders video content to the screen.\
+ * It supports features like video playback control, scaling, rotation, flipping, opacity, color masking and tinting.\
+ * Videos can be rendered with custom dimensions, positioned with offsets, and sliced to show specific regions.\
+ * The component provides control over looping, volume, time scaling, and can be assigned to specific render layers.\
+ * Videos can be paused, played, and stopped programmatically.
  * @public
  * @category Components
  * @example
  * ```js
- * videoRenderer.video = this.assetManager.getVideo("video.mp4");
- * videoRenderer.width = 1920;
- * videoRenderer.height = 1080;
- * videoRenderer.offset = new Vector2(0, 0);
- * videoRenderer.flipHorizontally =  false;
- * videoRenderer.flipVertically = false;
- * videoRenderer.rotation = 0;
- * videoRenderer.opacity = 1;
- * videoRenderer.maskColor = "#FF0000";
- * videoRenderer.maskColorMix = 0;
- * videoRenderer.tintColor = "#00FF00";
- * videoRenderer.layer = "Default";
- * videoRenderer.slice = {x: 0, y:0, width: 1920, height: 1080};
- * videoRenderer.volume = 1;
- * videoRenderer.loop = false;
+ * const videoRenderer = new VideoRenderer({
+ *   video: this.assetManager.getVideo("video.mp4"),
+ *   width: 1920,
+ *   height: 1080,
+ *   offset: new Vector2(0, 0),
+ *   flipHorizontally: false,
+ *   flipVertically: false,
+ *   rotation: 0,
+ *   opacity: 1,
+ *   maskColor: "#FF0000",
+ *   maskColorMix: 0,
+ *   tintColor: "#00FF00",
+ *   layer: "Default",
+ *   slice: {x: 0, y: 0, width: 1920, height: 1080},
+ *   volume: 1,
+ *   loop: false,
+ *   fixedToTimeScale: false
+ * });
  * videoRenderer.play();
  * ```
  */

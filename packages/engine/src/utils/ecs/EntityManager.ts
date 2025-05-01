@@ -1,15 +1,63 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { injectable } from "@ioc";
 import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchCriteria, SearchResult } from "./types";
 import { deepClone } from "./utils";
 
 /**
- * The EntityManager manages the entities and components.\
- * It provides the necessary methods for reading and writing entities and components.
+ * The EntityManager is responsible for managing the lifecycle and relationships of entities and components.\
+ * It provides methods for creating, reading, updating and deleting entities and their associated components.\
+ * Handles parent-child relationships between entities and enables/disables entities and components.\
+ * Acts as the central registry for all game objects and their behaviors.
  * @public
  * @category Entity-Component-System
+ * @example
+ * ```js
+ * // Create an entity with components
+ * const entity = entityManager.createEntity([
+ *   new Transform({position: new Vector2(100, 100)}),
+ *   new SpriteRenderer({sprite: "player.png"})
+ * ]);
+ *
+ * // Get a component from an entity
+ * const transform = entityManager.getComponent(entity, Transform);
+ *
+ * // Get all components from an entity
+ * const components = entityManager.getComponents(entity);
+ *
+ * // Find entity by component
+ * const entityWithSprite = entityManager.getEntityForComponent(spriteRenderer);
+ *
+ * // Update component data
+ * entityManager.updateComponentData(entity, Transform, {
+ *   position: new Vector2(200, 200)
+ * });
+ *
+ * // Create parent-child relationship
+ * const child = entityManager.createEntity([Transform], parent);
+ * // or if you already have the child entity
+ * entityManager.setParent(child, parent);
+ *
+ * // Enable/disable entities
+ * entityManager.disableEntity(entity);
+ * entityManager.enableEntity(entity);
+ *
+ * // Remove components
+ * entityManager.removeComponent(entity, SpriteRenderer);
+ * entityManager.removeComponent(spriteRenderer);
+ *
+ * // Search for entities with specific components
+ * const searchResult = entityManager.search(SpriteRenderer);
+ * searchResult.forEach(({component, entity}) => {
+ *   // do something with the component and entity
+ * })
+ *
+ * const searchResult = entityManager.search(Enemy, {status: "alive"});
+ * searchResult.forEach(({component, entity}) => {
+ *   // do something with the component and entity
+ * })
+ * ```
  */
-@injectable(TYPES.EntityManager)
+@injectable(DEPENDENCY_TYPES.EntityManager)
 export class EntityManager {
     private lastEntityId: number = 0;
     private lastComponentTypeId: number = 0;

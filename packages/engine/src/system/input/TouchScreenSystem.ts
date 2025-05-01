@@ -1,19 +1,19 @@
 import { inject, injectable } from "@ioc";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { TouchInteraction, TouchScreen } from "@input";
 import { InputManager } from "@manager/InputManager";
 import { Vector2 } from "@math";
 
-@injectable(SYSTEMS.TouchScreenSystem)
+@injectable(SYSTEM_TYPES.TouchScreenSystem)
 export class TouchScreenSystem {
     private readonly touchScreen: TouchScreen;
     private touching: boolean = false;
     private interactions: TouchInteraction[] = [];
 
     constructor(
-        @inject(TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
-        @inject(TYPES.InputManager) { touchScreen }: InputManager,
+        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(DEPENDENCY_TYPES.InputManager) { touchScreen }: InputManager,
     ) {
         this.touchScreen = touchScreen;
         this.canvas.addEventListener("touchstart", this.eventHandler);

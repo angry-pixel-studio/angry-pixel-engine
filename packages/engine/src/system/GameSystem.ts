@@ -1,4 +1,4 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { EntityManager, System } from "@ecs";
 import { inject } from "@ioc";
 import { AssetManager } from "@manager/AssetManager";
@@ -9,8 +9,15 @@ import { CollisionRepository } from "@collisions2d";
 import { GameConfig } from "@config/bootstrap";
 
 /**
- * Abstract class which can be used to create Systems.\
- * It includes the following dependencies: EntityManager, AssetManager, SceneManager, TimeManager, InputManager, CollisionRepository.
+ * Abstract base class for creating game systems with commonly needed dependencies injected.\
+ * Provides access to the following core managers and services:\
+ * - EntityManager: For managing game entities and components\
+ * - AssetManager: For loading and managing game resources\
+ * - SceneManager: For controlling scene transitions and state\
+ * - TimeManager: For handling game timing and delta time\
+ * - InputManager: For processing keyboard, mouse and touch input\
+ * - CollisionRepository: For physics and collision detection\
+ * - GameConfig: For accessing game configuration settings
  * @public
  * @category Core
  * @example
@@ -23,13 +30,13 @@ import { GameConfig } from "@config/bootstrap";
  * ```
  */
 export abstract class GameSystem implements System {
-    @inject(TYPES.EntityManager) protected readonly entityManager: EntityManager;
-    @inject(TYPES.AssetManager) protected readonly assetManager: AssetManager;
-    @inject(TYPES.SceneManager) protected readonly sceneManager: SceneManager;
-    @inject(TYPES.TimeManager) protected readonly timeManager: TimeManager;
-    @inject(TYPES.InputManager) protected readonly inputManager: InputManager;
-    @inject(TYPES.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
-    @inject(TYPES.GameConfig) protected readonly gameConfig: GameConfig;
+    @inject(DEPENDENCY_TYPES.EntityManager) protected readonly entityManager: EntityManager;
+    @inject(DEPENDENCY_TYPES.AssetManager) protected readonly assetManager: AssetManager;
+    @inject(DEPENDENCY_TYPES.SceneManager) protected readonly sceneManager: SceneManager;
+    @inject(DEPENDENCY_TYPES.TimeManager) protected readonly timeManager: TimeManager;
+    @inject(DEPENDENCY_TYPES.InputManager) protected readonly inputManager: InputManager;
+    @inject(DEPENDENCY_TYPES.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
+    @inject(DEPENDENCY_TYPES.GameConfig) protected readonly gameConfig: GameConfig;
 
     public onUpdate(): void {}
 

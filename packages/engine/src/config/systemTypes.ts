@@ -1,4 +1,4 @@
-export const SYSTEMS = {
+export const SYSTEM_TYPES = {
     // game logic
     AudioPlayerSystem: Symbol.for("AudioPlayerSystem"),
     ButtonSystem: Symbol.for("ButtonSystem"),

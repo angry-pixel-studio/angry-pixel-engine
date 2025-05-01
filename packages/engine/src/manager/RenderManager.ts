@@ -1,15 +1,15 @@
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { inject, injectable } from "@ioc";
 import { WebGLManager } from "@webgl";
 import { CameraData, RenderData } from "../utils/webgl/renderer/Renderer";
 
 /** @internal */
-@injectable(TYPES.RenderManager)
+@injectable(DEPENDENCY_TYPES.RenderManager)
 export class RenderManager {
     private renderData: RenderData[] = [];
     private cameraData: CameraData[] = [];
 
-    constructor(@inject(TYPES.WebGLManager) private readonly webGLManager: WebGLManager) {}
+    constructor(@inject(DEPENDENCY_TYPES.WebGLManager) private readonly webGLManager: WebGLManager) {}
 
     public addCameraData(cameraData: CameraData): void {
         this.cameraData.push(cameraData);

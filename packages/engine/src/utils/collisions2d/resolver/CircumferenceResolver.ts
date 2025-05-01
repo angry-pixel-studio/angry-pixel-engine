@@ -1,10 +1,10 @@
 import { injectable } from "@ioc";
-import { TYPES } from "@config/types";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { Vector2 } from "@math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Circumference } from "../Shape";
 
-@injectable(TYPES.CollisionCircumferenceResolver)
+@injectable(DEPENDENCY_TYPES.CollisionCircumferenceResolver)
 export class CircumferenceResolver implements CollisionResolver {
     private distance: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();

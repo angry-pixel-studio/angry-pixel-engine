@@ -2,22 +2,22 @@ import { inject, injectable } from "@ioc";
 import { EntityManager, System } from "@ecs";
 import { Vector2 } from "@math";
 import { CollisionRepository } from "@collisions2d";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { Transform } from "@component/gameLogic/Transform";
 import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
 
-@injectable(SYSTEMS.ApplyRepositionSystem)
+@injectable(SYSTEM_TYPES.ApplyRepositionSystem)
 export class ApplyRepositionSystem implements System {
     // auxiliars
     private correction: Vector2 = new Vector2();
     private maxCorrection: Vector2 = new Vector2();
 
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.CollisionRepository) private collisionRepository: CollisionRepository,
-        @inject(SYSTEMS.TransformSystem) private readonly transformSystem: TransformSystem,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.CollisionRepository) private collisionRepository: CollisionRepository,
+        @inject(SYSTEM_TYPES.TransformSystem) private readonly transformSystem: TransformSystem,
     ) {}
 
     public onUpdate(): void {

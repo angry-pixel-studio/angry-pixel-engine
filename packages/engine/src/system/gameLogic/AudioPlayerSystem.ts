@@ -1,6 +1,6 @@
 import { AudioPlayer } from "@component/gameLogic/AudioPlayer";
-import { TYPES } from "@config/types";
-import { SYSTEMS } from "@config/systemTypes";
+import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYSTEM_TYPES } from "@config/systemTypes";
 import { EntityManager, System } from "@ecs";
 import { inject, injectable } from "@ioc";
 import { InputManager } from "@manager/InputManager";
@@ -19,15 +19,15 @@ const userInputEventNames = [
     "keyup",
 ];
 
-@injectable(SYSTEMS.AudioPlayerSystem)
+@injectable(SYSTEM_TYPES.AudioPlayerSystem)
 export class AudioPlayerSystem implements System {
     private canPlay: boolean = true;
     private userInputErrorCatched: boolean = false;
 
     constructor(
-        @inject(TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(TYPES.InputManager) private readonly inputManager: InputManager,
-        @inject(TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(DEPENDENCY_TYPES.InputManager) private readonly inputManager: InputManager,
+        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
     ) {}
 
     public onCreate(): void {

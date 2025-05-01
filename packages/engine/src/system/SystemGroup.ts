@@ -12,7 +12,9 @@ export enum SystemGroup {
 }
 
 /**
- * Decorator to indicate that the target system will run in the game logic loop.
+ * Decorator to indicate that the target system will run in the game logic loop.\
+ * Game logic systems handle core gameplay mechanics, AI behavior, input processing,\
+ * and other non-physics, non-rendering game state updates that occur each frame.
  * @public
  * @category Decorators
  * @example
@@ -29,7 +31,9 @@ export function gameLogicSystem() {
 }
 
 /**
- * Decorator to indicate that the target system will run in the physics loop.
+ * Decorator to indicate that the target system will run in the physics loop.\
+ * Physics systems handle physics calculations, collisions, and other physics-related updates.\
+ * They typically run at a lower frequency than game logic systems to ensure accurate physics simulations.
  * @public
  * @category Decorators
  * @example
@@ -46,7 +50,10 @@ export function gamePhysicsSystem() {
 }
 
 /**
- * Decorator to indicate that the target system will be executed at the begining of the render loop.
+ * Decorator to indicate that the target system will be executed at the begining of the render loop.\
+ * Pre-render systems handle tasks that need to be completed before the final rendering step.\
+ * They are useful for tasks like sorting sprites, updating UI elements, and positioning the camera before rendering,
+ * along with other preparatory operations.
  * @public
  * @category Decorators
  * @example

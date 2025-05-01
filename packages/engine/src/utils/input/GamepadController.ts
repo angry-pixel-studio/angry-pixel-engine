@@ -1,7 +1,8 @@
 import { Vector2 } from "@math";
 
 /**
- * It represents a connected gamepad and has the information of all its buttons and axes..
+ * Represents a connected gamepad controller and provides access to its button states and analog axes values.
+ * Tracks digital button presses, analog stick positions, and d-pad inputs in a normalized format.
  * @public
  * @category Input
  * @example
@@ -9,11 +10,11 @@ import { Vector2 } from "@math";
  * const gamepad = this.inputManager.gamepads[0];
  *
  * if (gamepad.dpadAxes.x > 1) {
- *   // if the depad x-axis is pressed to the right, do some action
+ *   // if the d-pad x-axis is pressed to the right, do some action
  * }
  *
  * if (gamepad.rightFace) {
- *   // if the right face button is pressed, do some action
+ *   // if the right face button is pressed (Dual Shock: Square. Xbox: X. Nintendo: Y), do some action
  * }
  * ```
  */

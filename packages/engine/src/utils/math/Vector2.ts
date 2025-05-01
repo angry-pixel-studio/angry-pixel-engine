@@ -1,5 +1,8 @@
 /**
- * Represents a 2D vector and provides static methods for vector calculations.
+ * Represents a two-dimensional vector with x and y components.\
+ * Provides static methods for common vector operations
+ * like addition, subtraction, scaling, dot product, cross product, normalization and more.\
+ * Used throughout the engine for storing 2D positions, directions, velocities and other vector quantities.
  * @category Math
  * @public
  * @example
