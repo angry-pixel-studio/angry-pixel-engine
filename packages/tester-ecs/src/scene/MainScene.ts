@@ -1,15 +1,9 @@
 import {
     AudioPlayer,
-    Camera,
-    defaultRenderLayer,
     MaskRenderer,
     MaskShape,
-    PolygonCollider,
     randomInt,
-    RigidBody,
-    RigidBodyType,
     Scene,
-    ShadowRenderer,
     TextOrientation,
     TextRenderer,
     Transform,
@@ -31,8 +25,7 @@ import { ninjaArchetype } from "@entity/Ninja";
 import { movingPlatformArchetype } from "@entity/MovingPlatform";
 import { textArchetype } from "@entity/Text";
 import { FpsMetter } from "@component/FpsMetter";
-import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
-import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
+import { RENDER_LAYERS } from "@config/layers";
 import { goblinArchetype } from "@entity/Goblin";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
 import { MovingPlatform } from "@component/MovingPlatform";

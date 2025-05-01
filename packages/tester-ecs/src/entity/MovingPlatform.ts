@@ -1,4 +1,4 @@
-import { BoxCollider, RigidBody, RigidBodyType, SpriteRenderer, Transform, Vector2, Archetype } from "angry-pixel";
+import { BoxCollider, RigidBody, RigidBodyType, SpriteRenderer, Transform, Archetype } from "angry-pixel";
 import { MovingPlatform } from "@component/MovingPlatform";
 import { ASSETS } from "@config/assets";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";

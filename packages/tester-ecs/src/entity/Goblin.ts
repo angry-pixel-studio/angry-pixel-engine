@@ -9,7 +9,6 @@ import {
     SpriteRenderer,
     Transform,
     Vector2,
-    randomInt,
     Archetype,
 } from "angry-pixel";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
