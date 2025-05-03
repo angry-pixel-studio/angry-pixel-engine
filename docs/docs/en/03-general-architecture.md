@@ -15,22 +15,20 @@ Components do not contain logic.
 
 Example of a custom component:
 
-"""typescript
+```typescript
 class Player {
-health = 100;
-mana = 50;
+    health = 100;
+    mana = 50;
 }
-"""
+```
 
 ## Creating an entity
 
 To create an entity with the `Player` component:
 
-"""typescript
-entityManager.createEntity([
-new Player()
-]);
-"""
+```typescript
+entityManager.createEntity([new Player()]);
+```
 
 ## Systems
 
@@ -41,19 +39,19 @@ Inside this method, you can search for entities with specific components and app
 
 Example of a system that processes all entities with the `Player` component:
 
-"""typescript
-import { GameSystem } from 'angry-pixel';
+```typescript
+import { GameSystem } from "angry-pixel";
 
 class PlayerSystem extends GameSystem {
-onUpdate() {
-this.entityManager.search(Player).forEach(({ entity, component }) => {
-// Logic for each player
-// Example: regenerate mana
-component.mana = Math.min(component.mana + 1, 50);
-});
+    onUpdate() {
+        this.entityManager.search(Player).forEach(({ entity, component }) => {
+            // Logic for each player
+            // Example: regenerate mana
+            component.mana = Math.min(component.mana + 1, 50);
+        });
+    }
 }
-}
-"""
+```
 
 > **Note**: Custom systems like `PlayerSystem` run by default in the [Game Logic Loop](#game-logic-loop).
 

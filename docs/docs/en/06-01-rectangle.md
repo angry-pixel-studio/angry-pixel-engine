@@ -19,14 +19,14 @@ It provides methods and properties for manipulating and querying the rectangle's
 
 ### Instance methods
 
-| Method                     | Returns   | Description                                               |
-| -------------------------- | --------- | --------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `set(x, y, width, height)` | `void`    | Sets the position and dimensions of the rectangle.        |
-| `equals(rectangle)`        | `boolean` | Compares if two rectangles are equal.                     |
-| `copy(rect)`               | `void`    | Copies the properties from another rectangle.             |
-| `intersects(rect)`         | `boolean` | Checks if this rectangle overlaps with another rectangle. |
-| `contains(rect             | vector)`  | `boolean`                                                 | Checks if the rectangle fully contains another rectangle or a point (`Vector2`). |
-| `toString()`               | `string`  | Returns a string representation of the rectangle.         |
+| Method                     | Returns   | Description                                                                      |
+| -------------------------- | --------- | -------------------------------------------------------------------------------- |
+| `set(x, y, width, height)` | `void`    | Sets the position and dimensions of the rectangle.                               |
+| `equals(rectangle)`        | `boolean` | Compares if two rectangles are equal.                                            |
+| `copy(rect)`               | `void`    | Copies the properties from another rectangle.                                    |
+| `intersects(rect)`         | `boolean` | Checks if this rectangle overlaps with another rectangle.                        |
+| `contains(rect or vector)` | `boolean` | Checks if the rectangle fully contains another rectangle or a point (`Vector2`). |
+| `toString()`               | `string`  | Returns a string representation of the rectangle.                                |
 
 ### Basic example
 

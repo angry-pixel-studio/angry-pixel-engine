@@ -14,7 +14,7 @@ It provides convenient methods to asynchronously load assets and retrieve them b
 
 ## Usage Example
 
-"""typescript
+```typescript
 // Load assets
 this.assetManager.loadImage("player.png");
 this.assetManager.loadAudio("explosion.ogg");
@@ -29,9 +29,9 @@ const data = this.assetManager.getJson("level-data.json");
 
 // Check if all assets are loaded
 if (this.assetManager.getAssetsLoaded()) {
-// All assets are ready
+    // All assets are ready
 }
-"""
+```
 
 ## Supported Asset Types
 

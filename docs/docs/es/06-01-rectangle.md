@@ -19,14 +19,14 @@ Proporciona métodos y propiedades para manipular y consultar la geometría del 
 
 ### Métodos de instancia
 
-| Método                     | Retorno   | Descripción                                          |
-| -------------------------- | --------- | ---------------------------------------------------- | --------------------------------------------------------------------------- |
-| `set(x, y, width, height)` | `void`    | Asigna posición y dimensiones al rectángulo.         |
-| `equals(rectangle)`        | `boolean` | Compara si dos rectángulos son iguales.              |
-| `copy(rect)`               | `void`    | Copia las propiedades de otro rectángulo.            |
-| `intersects(rect)`         | `boolean` | Comprueba si este rectángulo se solapa con otro.     |
-| `contains(rect             | vector)`  | `boolean`                                            | Comprueba si contiene completamente otro rectángulo o un punto (`Vector2`). |
-| `toString()`               | `string`  | Devuelve una representación en texto del rectángulo. |
+| Método                     | Retorno   | Descripción                                                                 |
+| -------------------------- | --------- | --------------------------------------------------------------------------- |
+| `set(x, y, width, height)` | `void`    | Asigna posición y dimensiones al rectángulo.                                |
+| `equals(rectangle)`        | `boolean` | Compara si dos rectángulos son iguales.                                     |
+| `copy(rect)`               | `void`    | Copia las propiedades de otro rectángulo.                                   |
+| `intersects(rect)`         | `boolean` | Comprueba si este rectángulo se solapa con otro.                            |
+| `contains(rect or vector)` | `boolean` | Comprueba si contiene completamente otro rectángulo o un punto (`Vector2`). |
+| `toString()`               | `string`  | Devuelve una representación en texto del rectángulo.                        |
 
 ### Ejemplo básico
 
