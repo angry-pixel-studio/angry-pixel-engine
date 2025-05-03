@@ -9,6 +9,7 @@ import { Vector2 } from "@math";
  * const walkAnimation = new Animation({
  *   image: "walk.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [0, 1, 2, 3, 4, 5],
  *   fps: 12,
  *   loop: true
  * });
@@ -16,6 +17,7 @@ import { Vector2 } from "@math";
  * const idleAnimation = new Animation({
  *   image: "idle.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [6, 7, 8, 9]
  *   fps: 8,
  *   loop: true
  * });
@@ -48,6 +50,7 @@ export interface AnimatorOptions {
  * const walkAnimation = new Animation({
  *   image: "walk.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [0, 1, 2, 3, 4, 5],
  *   fps: 12,
  *   loop: true
  * });
@@ -55,6 +58,7 @@ export interface AnimatorOptions {
  * const idleAnimation = new Animation({
  *   image: "idle.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [6, 7, 8, 9],
  *   fps: 8,
  *   loop: true
  * });
@@ -97,6 +101,7 @@ export class Animator {
  * const walkAnimation = new Animation({
  *   image: "walk.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [0, 1, 2, 3, 4, 5],
  *   fps: 12,
  *   loop: true
  * });
@@ -104,6 +109,7 @@ export class Animator {
  * const idleAnimation = new Animation({
  *   image: "idle.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [6, 7, 8, 9],
  *   fps: 8,
  *   loop: true
  * });
@@ -136,6 +142,7 @@ export interface AnimationOptions {
  * const walkAnimation = new Animation({
  *   image: "walk.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [0, 1, 2, 3, 4, 5],
  *   fps: 12,
  *   loop: true
  * });
@@ -143,6 +150,7 @@ export interface AnimationOptions {
  * const idleAnimation = new Animation({
  *   image: "idle.png",
  *   slice: { size: new Vector2(32, 32) },
+ *   frames: [6, 7, 8, 9],
  *   fps: 8,
  *   loop: true
  * });

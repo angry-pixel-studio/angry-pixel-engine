@@ -1,0 +1,109 @@
+site_name: Angry Pixel Engine Documentation
+
+repo_url: https://github.com/angry-pixel-studio/angry-pixel-engine
+
+theme:
+    name: material
+    logo: assets/logo.png
+    favicon: assets/favicon.ico
+    palette:
+        # Palette toggle for light mode
+        - scheme: default
+          toggle:
+              icon: material/brightness-7
+              name: Switch to dark mode
+
+        # Palette toggle for dark mode
+        - scheme: slate
+          toggle:
+              icon: material/brightness-4
+              name: Switch to light mode
+    code:
+        highlight_theme: github-light
+        highlight_theme_dark: github-dark
+
+markdown_extensions:
+    - pymdownx.highlight
+    - pymdownx.superfences
+
+plugins:
+    - search
+    - i18n:
+          docs_structure: folder
+          languages:
+              - locale: en
+                default: true
+                name: English
+                build: true
+              - locale: es
+                name: Español
+                build: true
+                site_name: Documentación de Angry Pixel Engine
+                nav_translations:
+                    Introduction and Setup: Introducción y configuración
+                    Introduction: Introducción
+                    Requirements: Requisitos
+                    Getting Started: Primeros pasos
+                    General Architecture: Arquitectura general
+                    Core Game Structure: Estructura central del juego
+                    The Game Class: La clase Game
+                    Overview: Visión general
+                    Entities: Entidades
+                    Components: Componentes
+                    Systems: Sistemas
+                    Scene: Escena
+                    Built-in Components: Componentes integrados
+                    Math and Geometry: Matemáticas y geometría
+                    Math Functions: Funciones matemáticas
+                    Additional Documentation: Documentación adicional
+                    API Docs Reference: Referencia de API
+                    Best Practices: Buenas prácticas
+
+nav:
+    - Introduction and Setup:
+          - Introduction: index.md
+          - Requirements: 01-requirements.md
+          - Getting Started:
+                - Overview: 02-getting-started.md
+                - Setup Vite JavaScript: 02-00-setup-vite-js.md
+                - Setup Vite TypeScript: 02-01-setup-vite.ts.md
+          - General Architecture: 03-general-architecture.md
+    - Core Game Structure:
+          - The Game Class: 04-00-game.md
+          - Entities: 04-01-entities.md
+          - Components: 04-02-components.md
+          - Systems: 04-03-systems.md
+          - Scene: 04-04-scene.md
+          - Managers:
+                - Overview: 04-05-managers.md
+                - Asset Manager: 04-05-00-asset-manager.md
+                - Scene Manager: 04-05-01-scene-manager.md
+                - Time Manager: 04-05-02-time-manager.md
+                - Input Manager: 04-05-03-input-manager.md
+                - Entity Manager: 04-05-04-entity-manager.md
+    - Built-in Components:
+          - Transform: 05-00-transform.md
+          - Audio Player: 05-01-audio-player.md
+          - Button: 05-02-button.md
+          - Tiled Wrapper: 05-03-tiled-wrapper.md
+          - Camera: 05-04-camera.md
+          - Sprite Renderer: 05-05-sprite-renderer.md
+          - Text Renderer: 05-06-text-renderer.md
+          - Tilemap Renderer: 05-07-tilemap-renderer.md
+          - Mask Renderer: 05-08-mask-renderer.md
+          - Darkness Light Renderer: 05-09-darkness-light-renderer.md
+          - Video Renderer: 05-10-video-renderer.md
+          - Animator: 05-11-animator.md
+          - Box Collider: 05-12-box-collider.md
+          - Ball Collider: 05-13-ball-collider.md
+          - Polygon Collider: 05-14-polygon-collider.md
+          - Edge Collider: 05-15-edge-collider.md
+          - Tilemap Collider: 05-16-tilemap-collider.md
+          - Rigid Body: 05-17-rigid-body.md
+    - Math and Geometry:
+          - Vector2: 06-00-vector2.md
+          - Rectangle: 06-01-rectangle.md
+          - Math Functions: 06-02-math-functions.md
+    - Additional Documentation:
+          - API Docs Reference: 07-api-docs-reference.md
+          - Best Practices: 08-best-practices.md
