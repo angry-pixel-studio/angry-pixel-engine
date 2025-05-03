@@ -80,7 +80,7 @@ result.forEach(({ entity, component }) => {
 También puedes buscar por atributos específicos:
 
 ```typescript
-const alivePlayers = entityManager.search(Player, { status: "alive" });
+const alivePlayers = entityManager.search(Player, (component) => component.status === "alive");
 ```
 
 ## Modificar componentes de una entidad
@@ -88,7 +88,9 @@ const alivePlayers = entityManager.search(Player, { status: "alive" });
 Para modificar los datos de un componente de una entidad:
 
 ```typescript
-entityManager.updateComponentData(entity, Player, { health: 80 });
+entityManager.updateComponentData(entity, Player, (component) => {
+    component.health = 80;
+});
 ```
 
 ## Eliminar entidades y componentes

@@ -51,7 +51,7 @@ const entities = entityManager.searchEntitiesByComponents([Player, Transform]);
 ### Buscar entidades con criterios (SearchCriteria)
 
 ```typescript
-const injuredPlayers = entityManager.search(Player, { injured: true });
+const injuredPlayers = entityManager.search(Player, (component) => component.status === "injured");
 ```
 
 ### Buscar dentro de los hijos (SearchInChildren)
@@ -87,7 +87,9 @@ entityManager.enableComponent(player, SpriteRenderer);
 ### Modificar los atributos de un componente
 
 ```typescript
-entityManager.updateComponentData(player, Player, { health: 50 });
+entityManager.updateComponentData(player, Player, (player) => {
+    player.health = 50;
+});
 ```
 
 ### Establecer o cambiar la relación padre-hijo
