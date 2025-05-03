@@ -3,7 +3,7 @@ export const RENDER_LAYERS = {
     Goblin: "Goblin",
     Ninja: "Ninja",
     Overlayer: "Overlayer",
-    Shadow: "Shadow",
+    Darkness: "Darkness",
     UI: "UI",
 };
 

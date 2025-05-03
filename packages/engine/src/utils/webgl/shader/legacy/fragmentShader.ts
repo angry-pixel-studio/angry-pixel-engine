@@ -2,7 +2,7 @@ export const legacyFragmentShader = `precision mediump float;
 
 varying vec2 texCoords;
 
-// texture, mask and shadow
+// texture, mask and darkness
 uniform int u_renderTexture;
 uniform sampler2D u_texImage;
 uniform vec4 u_solidColor;

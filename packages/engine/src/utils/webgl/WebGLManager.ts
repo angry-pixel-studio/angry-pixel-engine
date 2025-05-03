@@ -8,7 +8,7 @@ import { CanvasColorRenderer } from "./renderer/CanvasColorRenderer";
 import { GeometricRenderer } from "./renderer/GeometricRenderer";
 import { MaskRenderer } from "./renderer/MaskRenderer";
 import { CameraData, RenderData, RenderDataType, Renderer } from "./renderer/Renderer";
-import { ShadowRenderer } from "./renderer/ShadowRenderer";
+import { DarknessRenderer } from "./renderer/DarknessRenderer";
 import { SpriteRenderer } from "./renderer/SpriteRenderer";
 import { TextRenderer } from "./renderer/TextRenderer";
 import { TilemapRenderer } from "./renderer/TilemapRenderer";
@@ -38,7 +38,7 @@ export class WebGLManager {
         this.renderers.set(RenderDataType.Geometric, new GeometricRenderer(gl, programManager));
         this.renderers.set(RenderDataType.Mask, new MaskRenderer(gl, programManager));
         this.renderers.set(RenderDataType.Video, new VideoRenderer(gl, programManager, textureManager));
-        this.renderers.set(RenderDataType.Shadow, new ShadowRenderer(gl, programManager));
+        this.renderers.set(RenderDataType.Darkness, new DarknessRenderer(gl, programManager));
 
         this.canvasColorRenderer = new CanvasColorRenderer(gl);
 

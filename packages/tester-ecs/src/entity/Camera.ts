@@ -1,6 +1,6 @@
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
 import { RENDER_LAYERS } from "@config/layers";
-import { Camera, Component, defaultRenderLayer, ShadowRenderer, Transform } from "angry-pixel";
+import { Camera, Component, defaultRenderLayer, DarknessRenderer, Transform } from "angry-pixel";
 
 export const mainCamera: Component[] = [
     new Camera({
@@ -8,7 +8,7 @@ export const mainCamera: Component[] = [
             RENDER_LAYERS.Foreground,
             RENDER_LAYERS.Goblin,
             RENDER_LAYERS.Ninja,
-            RENDER_LAYERS.Shadow,
+            RENDER_LAYERS.Darkness,
             defaultRenderLayer,
         ],
         zoom: 4,
@@ -16,12 +16,12 @@ export const mainCamera: Component[] = [
     }),
     new Transform(),
     new FollowPlayerCamera(),
-    new ShadowRenderer({
+    new DarknessRenderer({
         color: "#000000",
         width: 1920,
         height: 1080,
-        layer: RENDER_LAYERS.Shadow,
-        opacity: 0,
+        layer: RENDER_LAYERS.Darkness,
+        opacity: 1,
     }),
 ];
 

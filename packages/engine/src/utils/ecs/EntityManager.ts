@@ -1,6 +1,6 @@
 import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { injectable } from "@ioc";
-import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchCriteria, SearchResult } from "./types";
+import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchResult } from "./types";
 import { deepClone } from "./utils";
 
 /**
@@ -28,8 +28,8 @@ import { deepClone } from "./utils";
  * const entityWithSprite = entityManager.getEntityForComponent(spriteRenderer);
  *
  * // Update component data
- * entityManager.updateComponentData(entity, Transform, {
- *   position: new Vector2(200, 200)
+ * entityManager.updateComponentData(entity, Transform, (component) => {
+ *   component.position = new Vector2(200, 200);
  * });
  *
  * // Create parent-child relationship
@@ -51,7 +51,7 @@ import { deepClone } from "./utils";
  *   // do something with the component and entity
  * })
  *
- * const searchResult = entityManager.search(Enemy, {status: "alive"});
+ * const searchResult = entityManager.search(Enemy, (component) => component.status === "alive");
  * searchResult.forEach(({component, entity}) => {
  *   // do something with the component and entity
  * })
@@ -505,20 +505,22 @@ export class EntityManager {
      * Updates the data of a component instance
      * @param entity The entity
      * @param componentType The component type
-     * @param data The data to update
+     * @param updateCallback The callback to update the component
      * @public
      * @example
      * ```js
-     * entityManager.updateComponentData(entity, Transform, { position: new Vector2(100, 100) });
+     * entityManager.updateComponentData(entity, Transform, (component) => {
+     *   component.position = new Vector2(100, 100);
+     * });
      * ```
      */
     public updateComponentData<T extends Component = Component>(
         entity: Entity,
         componentType: ComponentType<T>,
-        data: Partial<T>,
+        updateCallback: (component: T) => void,
     ): void {
         const component = this.getComponent(entity, componentType);
-        if (component) Object.assign(component, data);
+        if (component) updateCallback(component);
     }
 
     /**
@@ -687,10 +689,10 @@ export class EntityManager {
     /**
      * Performs a search for entities given a component type.\
      * This method returns a collection of objects of type SearchResult, which has the entity found, and the instance of the component.\
-     * This search can be filtered by passing as a second argument an instance of SearchCriteria, which performs a match between the attributes of the component and the given value.\
+     * This search can be filtered by passing as a second argument a filter function.\
      * The third argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
      * @param componentType The component class
-     * @param criteria The search criteria
+     * @param filter The filter function
      * @param includeDisabled TRUE to incluide disabled entities and components, FALSE otherwise
      * @returns SearchResult
      * @public
@@ -703,14 +705,15 @@ export class EntityManager {
      * ```
      * @example
      * ```js
-     * const searchResult = entityManager.search(Enemy, {status: "alive"});
+     * const searchResult = entityManager.search(Enemy, (component) => component.status === "alive");
      * searchResult.forEach(({component, entity}) => {
      *   // do something with the component and entity
      * })
      * ```
      * @example
      * ```js
-     * const searchResult = entityManager.search(Enemy, {status: "dead"}, true);
+     * // include disabled entities and components
+     * const searchResult = entityManager.search(Enemy, (component) => component.status === "dead", true);
      * searchResult.forEach(({component, entity}) => {
      *   // do something with the component and entity
      * })
@@ -718,7 +721,7 @@ export class EntityManager {
      */
     public search<T extends Component>(
         componentType: ComponentType<T>,
-        criteria?: SearchCriteria,
+        filter?: (component: T, entity?: Entity) => boolean,
         includeDisabled?: boolean,
     ): SearchResult<T>[];
     /**
@@ -738,6 +741,7 @@ export class EntityManager {
      * ```
      * @example
      * ```js
+     * // include disabled entities and components
      * const searchResult = entityManager.search(Enemy, true);
      * searchResult.forEach(({component, entity}) => {
      *   // do something with the component and entity
@@ -747,18 +751,18 @@ export class EntityManager {
     public search<T extends Component>(componentType: ComponentType<T>, includeDisabled?: boolean): SearchResult<T>[];
     public search<T extends Component>(
         componentType: ComponentType<T>,
-        arg1?: SearchCriteria | boolean,
+        arg1?: ((component: T, entity?: Entity) => boolean) | boolean,
         arg2: boolean = false,
     ): SearchResult<T>[] {
         const result: SearchResult<T>[] = [];
         const id = this.getComponentTypeId(componentType);
         const includeDisabled = typeof arg1 === "boolean" ? arg1 : arg2;
-        const criteria = typeof arg1 === "object" ? arg1 : undefined;
+        const filter = typeof arg1 === "function" ? arg1 : undefined;
 
         if (this.components.has(id)) {
             this.components.get(id).forEach((component, entity) => {
                 if (
-                    (!criteria || Object.keys(criteria).every((key) => component[key] === criteria[key])) &&
+                    (!filter || filter(component as T, entity)) &&
                     (includeDisabled ||
                         (this.isEntityEnabled(entity) && this.isComponentEnabled(entity, componentType)))
                 )

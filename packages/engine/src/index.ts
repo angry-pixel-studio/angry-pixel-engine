@@ -35,7 +35,7 @@ export * from "@component/physics2d/TilemapCollider";
 export * from "@component/render2d/Camera";
 export * from "@component/render2d/LightRenderer";
 export * from "@component/render2d/MaskRenderer";
-export * from "@component/render2d/ShadowRenderer";
+export * from "@component/render2d/DarknessRenderer";
 export * from "@component/render2d/SpriteRenderer";
 export * from "@component/render2d/TextRenderer";
 export * from "@component/render2d/TilemapRenderer";
