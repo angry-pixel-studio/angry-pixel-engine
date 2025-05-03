@@ -52,7 +52,7 @@ export const goblinArchetype: Archetype = {
         new GoblinMovement(),
         new LightRenderer({
             radius: 64,
-            layer: RENDER_LAYERS.Shadow,
+            layer: RENDER_LAYERS.Darkness,
             smooth: true,
             intensity: 0.5,
         }),

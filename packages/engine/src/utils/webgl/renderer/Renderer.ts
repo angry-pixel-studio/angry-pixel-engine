@@ -7,7 +7,7 @@ export enum RenderDataType {
     Mask,
     Geometric,
     Video,
-    Shadow,
+    Darkness,
 }
 
 export interface CameraData {

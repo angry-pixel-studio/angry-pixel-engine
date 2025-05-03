@@ -76,31 +76,33 @@ export class MainScene extends Scene {
         this.entityManager.createEntityFromArchetype(ninjaArchetype);
 
         const movingPlatform = this.entityManager.createEntityFromArchetype(movingPlatformArchetype);
-        this.entityManager.updateComponentData(movingPlatform, MovingPlatform, {
-            spots: [new Vector2(-112, -72), new Vector2(168, -72)],
+        this.entityManager.updateComponentData(movingPlatform, MovingPlatform, (component) => {
+            component.spots = [new Vector2(-112, -72), new Vector2(168, -72)];
         });
 
         for (let i = 0; i < 50; i++) {
             const goblin = this.entityManager.createEntityFromArchetype(goblinArchetype);
-            this.entityManager.updateComponentData(goblin, Transform, {
-                position: new Vector2(randomInt(-600, 192), 0),
+            this.entityManager.updateComponentData(goblin, Transform, (component) => {
+                component.position.x = randomInt(-600, 192);
             });
-            this.entityManager.updateComponentData(goblin, GoblinMovement, { walkSpeed: randomInt(20, 60) });
+            this.entityManager.updateComponentData(goblin, GoblinMovement, (component) => {
+                component.walkSpeed = randomInt(20, 60);
+            });
         }
     }
 
     private setupUIText(): void {
         const instructionText = this.entityManager.createEntityFromArchetype(textArchetype);
-        this.entityManager.updateComponentData(instructionText, Transform, {
-            position: new Vector2(-940, -450),
+        this.entityManager.updateComponentData(instructionText, Transform, (component) => {
+            component.position.set(-940, -450);
         });
-        this.entityManager.updateComponentData(instructionText, TextRenderer, {
-            text: "USE WASD TO MOVE AND SPACE BAR TO JUMP.",
+        this.entityManager.updateComponentData(instructionText, TextRenderer, (component) => {
+            component.text = "USE WASD TO MOVE AND SPACE BAR TO JUMP.";
         });
 
         const fpsText = this.entityManager.createEntityFromArchetype(textArchetype);
-        this.entityManager.updateComponentData(fpsText, Transform, {
-            position: new Vector2(-940, -500),
+        this.entityManager.updateComponentData(fpsText, Transform, (component) => {
+            component.position.set(-940, -500);
         });
         this.entityManager.addComponent(fpsText, FpsMetter);
     }

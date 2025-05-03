@@ -43,14 +43,6 @@ export type ComponentType<T extends Component = Component> = { new (...args: any
  * @category Entity-Component-System
  */
 export type SearchResult<T extends Component> = { entity: Entity; component: T };
-/**
- * This type represents a search criteria object used to filter components when searching for entities.\
- * It defines a set of key-value pairs where the keys correspond to component properties\
- * and the values are the criteria to match against those properties.
- * @public
- * @category Entity-Component-System
- */
-export type SearchCriteria = Record<string, any>;
 
 /**
  * This type represents an Entity Archetype, which defines a template for creating entities with a specific set of components.\
