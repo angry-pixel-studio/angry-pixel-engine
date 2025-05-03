@@ -10,6 +10,7 @@ import { EdgeCollider } from "@component/physics2d/EdgeCollider";
 import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";
 import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";
+import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
 
 @injectable(SYSTEM_TYPES.UpdateCollidersAfterRepositionSystem)
 export class UpdateCollidersAfterRepositionSystem extends BaseUpdateColliderShapeSystem implements System {
@@ -18,9 +19,13 @@ export class UpdateCollidersAfterRepositionSystem extends BaseUpdateColliderShap
     }
 
     public onUpdate(): void {
+        const dynamicBodies = this.entityManager
+            .search(RigidBody, (rigidBody) => rigidBody.type === RigidBodyType.Dynamic)
+            .map(({ entity }) => entity);
+
         [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
             this.entityManager
-                .search<Collider>(type, { updateCollisions: true })
+                .search<Collider>(type, (collider, entity) => dynamicBodies.includes(entity))
                 .forEach(({ component: collider, entity }) =>
                     collider.shapes.forEach((shape) => {
                         this.updatePositionAndVertices(

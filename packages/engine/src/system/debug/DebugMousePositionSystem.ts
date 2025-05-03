@@ -33,35 +33,37 @@ export class DebugMousePositionSystem implements System {
 
         const { positionInViewport } = this.inputManager.mouse;
 
-        this.entityManager.search(Camera, { debug: true }).forEach(({ entity, component: camera }, index) => {
-            const { zoom } = camera;
-            const cameraPosition = this.entityManager.getComponent(entity, Transform).position;
-            const renderData = this.renderDataPerCamera.get(index) ?? createRenderData();
+        this.entityManager
+            .search(Camera, (camera) => camera.debug)
+            .forEach(({ entity, component: camera }, index) => {
+                const { zoom } = camera;
+                const cameraPosition = this.entityManager.getComponent(entity, Transform).position;
+                const renderData = this.renderDataPerCamera.get(index) ?? createRenderData();
 
-            Vector2.floor(
-                this.positionInWorldspace,
-                Vector2.add(
+                Vector2.floor(
                     this.positionInWorldspace,
-                    cameraPosition,
-                    Vector2.scale(this.positionInWorldspace, positionInViewport, 1 / zoom),
-                ),
-            );
+                    Vector2.add(
+                        this.positionInWorldspace,
+                        cameraPosition,
+                        Vector2.scale(this.positionInWorldspace, positionInViewport, 1 / zoom),
+                    ),
+                );
 
-            Vector2.floor(
-                this.positionInCameraViewport,
-                Vector2.scale(this.positionInCameraViewport, positionInViewport, 1 / zoom),
-            );
+                Vector2.floor(
+                    this.positionInCameraViewport,
+                    Vector2.scale(this.positionInCameraViewport, positionInViewport, 1 / zoom),
+                );
 
-            Vector2.round(this.positionInViewport, positionInViewport);
+                Vector2.round(this.positionInViewport, positionInViewport);
 
-            renderData.color = this.gameConfig.debug.textColor;
-            renderData.text = `mouse_position: canvas_viewport=${this.positionInViewport}, camera_viewport=${this.positionInCameraViewport}, world_space=${this.positionInWorldspace}`;
-            renderData.fontSize = defaultFontSize / zoom;
-            renderData.shadow.offset.x = 2 / zoom;
-            renderData.shadow.offset.y = -2 / zoom;
-            this.updateRenderDataPosition(renderData, cameraPosition, zoom);
-            this.renderManager.addRenderData(renderData);
-        });
+                renderData.color = this.gameConfig.debug.textColor;
+                renderData.text = `mouse_position: canvas_viewport=${this.positionInViewport}, camera_viewport=${this.positionInCameraViewport}, world_space=${this.positionInWorldspace}`;
+                renderData.fontSize = defaultFontSize / zoom;
+                renderData.shadow.offset.x = 2 / zoom;
+                renderData.shadow.offset.y = -2 / zoom;
+                this.updateRenderDataPosition(renderData, cameraPosition, zoom);
+                this.renderManager.addRenderData(renderData);
+            });
     }
 
     private updateRenderDataPosition(renderData: TextRenderData, cameraPosition: Vector2, zoom: number): void {

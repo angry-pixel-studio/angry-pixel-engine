@@ -34,7 +34,7 @@ export class ApplyRepositionSystem implements System {
         if (collisions.length === 0) return;
 
         this.entityManager
-            .search(RigidBody, { type: RigidBodyType.Dynamic })
+            .search(RigidBody, (rigidBody) => rigidBody.type === RigidBodyType.Dynamic)
             .forEach(({ component: rigidBody, entity }) => {
                 this.maxCorrection.set(0, 0);
 
