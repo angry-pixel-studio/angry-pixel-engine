@@ -1,14 +1,14 @@
 import { Rectangle } from "@math";
-import { RenderDataType, ShadowRenderData } from "@webgl";
+import { RenderDataType, DarknessRenderData } from "@webgl";
 import { defaultRenderLayer } from "./Camera";
 
 /**
- * ShadowRenderer component configuration
+ * DarknessRenderer component configuration
  * @public
  * @category Components Configuration
  * @example
  * ```js
- * const shadowRenderer = new ShadowRenderer({
+ * const darknessRenderer = new DarknessRenderer({
  *   width: 100,
  *   height: 50,
  *   color: "#000000",
@@ -17,7 +17,7 @@ import { defaultRenderLayer } from "./Camera";
  * });
  * ```
  */
-export interface ShadowRendererOptions {
+export interface DarknessRendererOptions {
     width: number;
     height: number;
     color: string;
@@ -26,15 +26,15 @@ export interface ShadowRendererOptions {
 }
 
 /**
- * The ShadowRenderer component is used to render a shadow effect on the screen.\
- * It supports a rectangular shadow with configurable width, height, color, opacity, and render layer.\
- * This component works in conjunction with LightRenderer components in the scene - the shadow will
- * block and be affected by any lights that intersect with it.\
+ * The DarknessRenderer component is used to render a darkness effect on the screen.\
+ * It supports a rectangular darkness mask with configurable width, height, color, opacity, and render layer.\
+ * This component works in conjunction with LightRenderer components in the scene - the darkness will
+ * block and be affected by any lights that intersect with it.
  * @public
  * @category Components
  * @example
  * ```js
- * const shadowRenderer = new ShadowRenderer({
+ * const darknessRenderer = new DarknessRenderer({
  *   width: 100,
  *   height: 50,
  *   color: "#000000",
@@ -43,14 +43,14 @@ export interface ShadowRendererOptions {
  * });
  * ```
  */
-export class ShadowRenderer {
-    /** Shadow width */
+export class DarknessRenderer {
+    /** Darkness rectangle width */
     width: number = 0;
-    /** Shadow height */
+    /** Darkness height */
     height: number = 0;
-    /** Shadow color */
+    /** Darkness color */
     color: string = "#000000";
-    /** Shadow opacity between 0 and 1 */
+    /** Darkness opacity between 0 and 1 */
     opacity: number = 1;
     /** The render layer */
     layer: string = defaultRenderLayer;
@@ -58,8 +58,8 @@ export class ShadowRenderer {
     /** @internal */
     _boundingBox: Rectangle = new Rectangle();
     /** @internal */
-    _renderData: ShadowRenderData = {
-        type: RenderDataType.Shadow,
+    _renderData: DarknessRenderData = {
+        type: RenderDataType.Darkness,
         layer: undefined,
         color: undefined,
         opacity: undefined,
@@ -70,7 +70,7 @@ export class ShadowRenderer {
         lights: [],
     };
 
-    constructor(options?: Partial<ShadowRendererOptions>) {
+    constructor(options?: Partial<DarknessRendererOptions>) {
         Object.assign(this, options);
     }
 }

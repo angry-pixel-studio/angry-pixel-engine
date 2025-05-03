@@ -27,7 +27,7 @@ export const SYSTEM_TYPES = {
     CullingSystem: Symbol.for("CullingSystem"),
     MaskRendererSystem: Symbol.for("MaskRendererSystem"),
     RenderSystem: Symbol.for("RenderSystem"),
-    ShadowLightRendererSystem: Symbol.for("ShadowLightRendererSystem"),
+    DarknessLightRendererSystem: Symbol.for("DarknessLightRendererSystem"),
     SpriteRendererSystem: Symbol.for("SpriteRendererSystem"),
     TextRendererSystem: Symbol.for("TextRendererSystem"),
     TilemapRendererSystem: Symbol.for("TilemapRendererSystem"),

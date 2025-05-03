@@ -26,8 +26,8 @@ export interface LightRendererOptions {
  * The LightRenderer component is used to render a light effect on the screen.\
  * It supports a circular light source with a specified radius and intensity.\
  * The light can be optionally smoothed for a softer edge effect.\
- * This component requires a ShadowRenderer component to be present in the scene to function properly,
- * as it works by illuminating areas within the shadow map.\
+ * This component requires a DarknessRenderer component to be present in the scene to function properly,
+ * as it works by illuminating areas within the darkness mask.\
  * @public
  * @category Components
  * @example
@@ -45,7 +45,7 @@ export class LightRenderer {
     radius: number = 0;
     /** Smooth */
     smooth: boolean = false;
-    /** Shadow render layer */
+    /** Darkness render layer */
     layer: string = defaultRenderLayer;
     /** Light intensitry between 0 and 1 */
     intensity: number = 1;

@@ -60,7 +60,7 @@ export class CullingSystem implements System {
     private isInViewPort(renderData: RenderData): boolean {
         switch (renderData.type) {
             case RenderDataType.Video:
-            case RenderDataType.Shadow:
+            case RenderDataType.Darkness:
             case RenderDataType.Sprite:
                 this.setObjectForResizeable(renderData as ResizeableRenderData);
                 break;

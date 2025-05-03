@@ -4,7 +4,7 @@ import { Vector2 } from "@math";
 import { ProgramManager } from "../program/ProgramManager";
 import { hexToRgba, setProjectionMatrix } from "./utils";
 
-export interface ShadowRenderData extends RenderData {
+export interface DarknessRenderData extends RenderData {
     color: string;
     height: number;
     opacity: number;
@@ -37,8 +37,8 @@ export interface Light {
     intensity: number;
 }
 
-export class ShadowRenderer implements Renderer {
-    public readonly type: RenderDataType.Shadow;
+export class DarknessRenderer implements Renderer {
+    public readonly type: RenderDataType.Darkness;
 
     // matrices
     private projectionMatrix: mat4;
@@ -63,8 +63,8 @@ export class ShadowRenderer implements Renderer {
         );
     }
 
-    public render(renderData: ShadowRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
-        if (lastRender !== RenderDataType.Shadow) {
+    public render(renderData: DarknessRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
+        if (lastRender !== RenderDataType.Darkness) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);

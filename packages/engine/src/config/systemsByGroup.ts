@@ -15,7 +15,7 @@ import { DebugColliderRenderSystem } from "@system/debug/DebugColliderRenderSyst
 import { CullingSystem } from "@system/render2d/CullingSystem";
 import { MaskRendererSystem } from "@system/render2d/MaskRendererSystem";
 import { RenderSystem } from "@system/render2d/RenderSystem";
-import { ShadowLightRendererSystem } from "@system/render2d/ShadowLightRendererSystem";
+import { DarknessLightRendererSystem } from "@system/render2d/DarknessLightRendererSystem";
 import { SpriteRendererSystem } from "@system/render2d/SpriteRendererSystem";
 import { TextRendererSystem } from "@system/render2d/TextRendererSystem";
 import { TilemapRendererSystem } from "@system/render2d/TilemapRendererSystem";
@@ -72,7 +72,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEM_TYPES.TilemapRendererSystem, type: TilemapRendererSystem },
             { name: SYSTEM_TYPES.SpriteRendererSystem, type: SpriteRendererSystem },
             { name: SYSTEM_TYPES.MaskRendererSystem, type: MaskRendererSystem },
-            { name: SYSTEM_TYPES.ShadowLightRendererSystem, type: ShadowLightRendererSystem },
+            { name: SYSTEM_TYPES.DarknessLightRendererSystem, type: DarknessLightRendererSystem },
             { name: SYSTEM_TYPES.TextRendererSystem, type: TextRendererSystem },
             { name: SYSTEM_TYPES.VideoRendererSystem, type: VideoRendererSystem },
             { name: SYSTEM_TYPES.DebugColliderRenderSystem, type: DebugColliderRenderSystem },

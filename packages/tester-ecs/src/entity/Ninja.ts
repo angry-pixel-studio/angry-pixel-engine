@@ -53,7 +53,7 @@ export const ninjaArchetype: Archetype = {
         new SpriteRenderer({ layer: RENDER_LAYERS.Ninja }),
         new LightRenderer({
             radius: 64,
-            layer: RENDER_LAYERS.Shadow,
+            layer: RENDER_LAYERS.Darkness,
             smooth: true,
             intensity: 0.7,
         }),
