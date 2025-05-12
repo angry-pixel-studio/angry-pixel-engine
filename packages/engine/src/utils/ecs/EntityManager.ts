@@ -65,7 +65,7 @@ export class EntityManager {
     private components: Map<number, Map<Entity, Component>> = new Map(); // componen type id -> entity id -> component
     private disabledEntities: Set<Entity> = new Set();
     private manuallyDisabledEntities: Set<Entity> = new Set();
-    private disabledComponents: Map<Entity, Set<number>> = new Map(); // entity -> set of componen type id
+    private disabledComponents: Map<Entity, Set<number>> = new Map(); // entity -> set of component type id
     private parentEntities: Map<Entity, Entity> = new Map(); // child entity -> parent entity
     private childEntities: Map<Entity, Set<Entity>> = new Map(); // parent entity -> set of child entities
 
@@ -154,7 +154,12 @@ export class EntityManager {
             let enabled = true;
             let instance: Component;
 
-            if (typeof component === "object" && "enabled" in component && component.enabled === false) {
+            if (
+                typeof component === "object" &&
+                "component" in component &&
+                "enabled" in component &&
+                component.enabled === false
+            ) {
                 enabled = false;
                 component = component.component;
             }
@@ -203,21 +208,35 @@ export class EntityManager {
 
     /**
      * Removes all Entities and all their Components
+     * @param preserveComponentType Optional component type to preserve entities that have this component
      * @public
      * @example
      * ```js
+     * // Remove all entities
      * entityManager.removeAllEntities();
+     *
+     * // Remove all entities except those that have a SpriteRenderer component
+     * entityManager.removeAllEntities(SpriteRenderer);
      * ```
      */
-    public removeAllEntities(): void {
-        this.components.clear();
-        this.disabledComponents.clear();
-        this.disabledEntities.clear();
-        this.manuallyDisabledEntities.clear();
-        this.lastEntityId = 0;
-        this.entities.clear();
-        this.parentEntities.clear();
-        this.childEntities.clear();
+    public removeAllEntities(preserveComponentType?: ComponentType): void {
+        const result = preserveComponentType ? this.search(preserveComponentType) : [];
+
+        if (result.length > 0) {
+            const entitiesToPreserve = new Set(result.map(({ entity }) => entity));
+            for (const entity of this.entities) {
+                if (!entitiesToPreserve.has(entity)) this.removeEntity(entity);
+            }
+        } else {
+            this.components.clear();
+            this.disabledComponents.clear();
+            this.disabledEntities.clear();
+            this.manuallyDisabledEntities.clear();
+            this.lastEntityId = 0;
+            this.entities.clear();
+            this.parentEntities.clear();
+            this.childEntities.clear();
+        }
     }
 
     /**
@@ -693,7 +712,7 @@ export class EntityManager {
      * The third argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
      * @param componentType The component class
      * @param filter The filter function
-     * @param includeDisabled TRUE to incluide disabled entities and components, FALSE otherwise
+     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
      * @returns SearchResult
      * @public
      * @example
@@ -729,7 +748,7 @@ export class EntityManager {
      * This method returns a collection of objects of type SearchResult, which has the entity found, and the instance of the component.\
      * The second argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
      * @param componentType The component class
-     * @param includeDisabled TRUE to incluide disabled entities and components, FALSE otherwise
+     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
      * @returns SearchResult
      * @public
      * @example
@@ -815,7 +834,7 @@ export class EntityManager {
      * The third argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
      * @param parent The parent entity
      * @param componentType The component class
-     * @param includeDisabled TRUE to incluide disabled entities and components, FALSE otherwise
+     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
      * @returns SearchResult
      * @public
      * @example

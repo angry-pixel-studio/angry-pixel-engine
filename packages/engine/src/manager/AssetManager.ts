@@ -64,6 +64,8 @@ export class AssetManager {
      * @returns The HTML Image element created
      */
     public loadImage(url: string, name?: string): HTMLImageElement {
+        if (this.getImage(url)) return this.getImage(url);
+
         const image = new Image();
         image.crossOrigin = "";
         image.src = url;
@@ -84,6 +86,8 @@ export class AssetManager {
      * @returns The HTML Audio element created
      */
     public loadAudio(url: string, name?: string): HTMLAudioElement {
+        if (this.getAudio(url)) return this.getAudio(url);
+
         const audio = new Audio();
         audio.src = url;
 
@@ -102,6 +106,8 @@ export class AssetManager {
      * @returns The FontFace object created
      */
     public loadFont(family: string, url: string): FontFace {
+        if (this.getFont(family)) return this.getFont(family);
+
         const font: FontFace = new FontFace(family, `url(${url})`);
         const asset = this.createAsset(url, AssetType.Font, font);
         asset.family = family;
@@ -120,6 +126,8 @@ export class AssetManager {
      * @returns The HTML Video element created
      */
     public loadVideo(url: string, name?: string): HTMLVideoElement {
+        if (this.getVideo(url)) return this.getVideo(url);
+
         const video = document.createElement("video");
         video.playsInline = true;
         video.src = url;
@@ -139,6 +147,8 @@ export class AssetManager {
      * @returns Promise<Record<string, any>>
      */
     public async loadJson<T = Record<string, any>>(url: string, name?: string): Promise<T> {
+        if (this.getJson(url)) return this.getJson(url);
+
         const asset = this.createAsset(url, AssetType.Json, null, name);
         const response = await fetch(url);
         const json = await response.json();

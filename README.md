@@ -135,9 +135,9 @@ class MainScene extends Scene {
         this.assetManager.loadImage("logo.png");
     }
 
-    // within this method we load the systems of the scene
-    loadSystems(): void {
-        this.systems.push(MoveAndBounceSystem);
+    // within this method we register the systems of the scene
+    registerSystems(): void {
+        this.addSystem(MoveAndBounceSystem);
     }
 }
 ```
@@ -154,12 +154,12 @@ class MainScene extends Scene {
         this.assetManager.loadImage("logo.png");
     }
 
-    loadSystems(): void {
-        this.systems.push(MoveAndBounceSystem);
+    registerSystems(): void {
+        this.addSystem(MoveAndBounceSystem);
     }
 
     // within this method we create the entities
-    setup(): void {
+    createEntities(): void {
         // camera
         this.entityManager.createEntity([new Transform(), new Camera({ layers: ["Logo"] })]);
 

@@ -134,8 +134,8 @@ export class AudioPlayerSystem implements System {
     }
 
     public onDisabled(): void {
-        this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource } }) => {
-            if (audioSource && typeof audioSource !== "string") {
+        this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource, stopOnSceneTransition } }) => {
+            if (audioSource && typeof audioSource !== "string" && stopOnSceneTransition) {
                 audioSource.pause();
                 audioSource.currentTime = 0;
             }

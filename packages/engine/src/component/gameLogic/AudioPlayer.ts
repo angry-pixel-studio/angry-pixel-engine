@@ -17,6 +17,8 @@ export interface AudioPlayerOptions {
     action: AudioPlayerAction;
     /** The audio source to play. */
     audioSource: HTMLAudioElement | string;
+    /** TRUE If the audio source should stop on scene transition, FALSE otherwise. Default is TRUE. */
+    stopOnSceneTransition: boolean;
     /** TRUE If the playback rate is fixed to the TimeManager time scale, default FALSE */
     fixedToTimeScale: boolean;
     /** TRUE If the audio source should loop. */
@@ -45,6 +47,8 @@ export class AudioPlayer {
     action: AudioPlayerAction = undefined;
     /** The audio source to play. */
     audioSource: HTMLAudioElement | string;
+    /** TRUE If the audio source should stop on scene transition, FALSE otherwise. Default is TRUE. */
+    stopOnSceneTransition: boolean = true;
     /** TRUE If the playback rate is fixed to the TimeManager time scale, default FALSE */
     fixedToTimeScale: boolean = false;
     /** TRUE If the audio source should loop. */
