@@ -25,7 +25,15 @@ El motor incluye sus propios tipos, por lo que no es necesario instalar módulos
 Si prefieres comenzar con una estructura de proyecto base ya configurada, puedes usar el _skeleton_ oficial:
 
 ```bash
-npx degit angry-pixel-studio/angry-pixel-skeleton mi-juego
+// typescript
+npx degit angry-pixel-studio/angry-pixel-skeleton-ts mi-juego
+cd mi-juego
+npm install
+```
+
+```bash
+// javascript
+npx degit angry-pixel-studio/angry-pixel-skeleton-js mi-juego
 cd mi-juego
 npm install
 ```
@@ -44,4 +52,5 @@ Esto creará un nuevo proyecto con una estructura recomendada y una configuraci�
 ## Código fuente
 
 -   Repositorio del motor: [GitHub - angry-pixel-engine](https://github.com/angry-pixel-studio/angry-pixel-engine)
--   Skeleton oficial: [GitHub - angry-pixel-skeleton](https://github.com/angry-pixel-studio/angry-pixel-skeleton)
+-   Skeleton oficial TypeScript: [GitHub - angry-pixel-skeleton-ts](https://github.com/angry-pixel-studio/angry-pixel-skeleton-ts)
+-   Skeleton oficial JavaScript: [GitHub - angry-pixel-skeleton-js](https://github.com/angry-pixel-studio/angry-pixel-skeleton-js)

@@ -11,8 +11,9 @@ Permite reproducir, pausar y detener fuentes de audio, controlar el volumen, def
 | `audioSource`              | `HTMLAudioElement` \| `string` | Fuente de audio que se reproducirá.                                                                              |
 | `fixedToTimeScale`         | `boolean`                      | Si es `true`, la velocidad de reproducción se fija a la escala de tiempo del `TimeManager`. Por defecto `false`. |
 | `loop`                     | `boolean`                      | Si es `true`, la fuente de audio se reproducirá en bucle.                                                        |
-| `state` _(solo lectura)_   | `AudioPlayerState`             | Estado actual de la fuente de audio: `"stopped"`, `"playing"` o `"paused"`.                                      |
 | `volume`                   | `number`                       | Volumen de la fuente de audio.                                                                                   |
+| `stopOnSceneTransition`    | `boolean`                      | Si es `true`, la fuente de audio se detendrá al cambiar de escena. Por defecto `true`.                           |
+| `state` _(solo lectura)_   | `AudioPlayerState`             | Estado actual de la fuente de audio: `"stopped"`, `"playing"` o `"paused"`.                                      |
 | `playing` _(solo lectura)_ | `boolean`                      | Devuelve `true` si la fuente de audio se está reproduciendo.                                                     |
 | `paused` _(solo lectura)_  | `boolean`                      | Devuelve `true` si la fuente de audio está pausada.                                                              |
 | `stopped` _(solo lectura)_ | `boolean`                      | Devuelve `true` si la fuente de audio está detenida.                                                             |
@@ -52,4 +53,5 @@ audioPlayer.stop();
 -   El `AudioPlayer` soporta fuentes de audio tanto como elementos `HTMLAudioElement` ya existentes como rutas de archivos de audio.
 -   La acción (`action`) se usa para indicar qué debe hacer el componente en el próximo fotograma y luego se limpia automáticamente.
 -   La opción `fixedToTimeScale` es útil para sincronizar efectos de sonido o música con la velocidad de juego modificada (por ejemplo, cámara lenta o aceleración).
+-   La opción `stopOnSceneTransition` es útil para elegir si se debe detener la reproducción de audio al cambiar de escena.
 -   El uso de este componente cumple con las políticas de reproducción automática de los navegadores modernos. El audio no se reproducirá automáticamente: comenzará una vez que haya habido al menos una interacción humana en la página (por ejemplo, un clic o una pulsación de tecla).

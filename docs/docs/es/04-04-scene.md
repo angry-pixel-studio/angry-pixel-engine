@@ -9,8 +9,8 @@ El `SceneManager` se encarga de instanciar y administrar las escenas durante el 
 ## Responsabilidades
 
 -   Definir qué recursos deben cargarse (`loadAssets()`).
--   Declarar los sistemas que se utilizarán en la escena (`systems` y `loadSystems()`).
--   Crear y configurar entidades cuando la escena esté lista (`setup()`).
+-   Declarar los sistemas que se utilizarán en la escena (`registerSystems()`).
+-   Crear y configurar entidades cuando la escena esté lista (`createEntities()`).
 
 ## Ejemplo de una escena personalizada
 
@@ -21,11 +21,11 @@ class MainScene extends Scene {
         this.assetManager.loadAudio("background-music.ogg");
     }
 
-    loadSystems() {
-        this.systems.push(PlayerControllerSystem, ScoreSystem, EnemyAISystem, PauseMenuSystem);
+    registerSystems() {
+        this.addSystems([PlayerControllerSystem, ScoreSystem, EnemyAISystem, PauseMenuSystem]);
     }
 
-    setup() {
+    createEntities() {
         const player = this.entityManager.createEntity([
             new Transform({ position: new Vector2(100, 100) }),
             new Player({ health: 100 }),
@@ -53,11 +53,11 @@ sceneManager.loadScene("GameOverScene");
 ## Métodos disponibles en Scene
 
 -   `loadAssets()` — Sobrescribir para cargar los recursos.
--   `loadSystems()` — Sobrescribir para declarar sistemas.
--   `setup()` — Sobrescribir para crear entidades cuando la escena esté lista.
+-   `registerSystems()` — Sobrescribir para declarar sistemas.
+-   `createEntities()` — Sobrescribir para crear entidades cuando la escena esté lista.
 
 ## Notas importantes
 
 -   Todas las escenas comparten las mismas instancias de `EntityManager` y `AssetManager`.
--   Los sistemas declarados en `systems` serán habilitados automáticamente cuando la escena se cargue.
--   Las entidades creadas durante `setup()` estarán disponibles una vez que todos los recursos hayan sido cargados.
+-   Los sistemas declarados en `registerSystems()` serán habilitados automáticamente cuando la escena se cargue.
+-   Las entidades creadas durante `createEntities()` estarán disponibles una vez que todos los recursos hayan sido cargados.

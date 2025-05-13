@@ -24,14 +24,17 @@ this.sceneManager.loadOpeningScene();
 
 // Switch to another scene at any time
 this.sceneManager.loadScene("Gameplay");
+
+// As a second argument, you can pass a component to keep the entities that have that component, for example, we keep the entity that has the AudioPlayer component so that the music does not stop when changing scenes
+this.sceneManager.loadScene("OptionsMenu", AudioPlayer);
 ```
 
 ## Scene Loading Flow
 
 1. Calls the scene’s `loadAssets()` to load resources.
-2. Calls `loadSystems()` to register the systems the scene will use.
+2. Calls `registerSystems()` to register the systems the scene will use.
 3. Waits until all assets are fully loaded.
-4. Calls `setup()` to create entities and configure the scene’s initial state.
+4. Calls `createEntities()` to create entities and configure the scene’s initial state.
 5. Activates the systems and executes them in the defined order.
 
 ## Notes

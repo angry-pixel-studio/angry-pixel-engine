@@ -48,8 +48,8 @@ Overridea el método `loadSystems` de tu clase escena:
 
 ```typescript
 class MainScene extends Scene {
-    loadSystems() {
-        this.systems = [PlayerSystem];
+    registerSystems() {
+        this.addSystems([PlayerSystem]);
     }
 }
 ```
