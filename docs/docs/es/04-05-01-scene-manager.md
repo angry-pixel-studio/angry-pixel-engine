@@ -24,14 +24,17 @@ this.sceneManager.loadOpeningScene();
 
 // Cambiar a otra escena en cualquier momento
 this.sceneManager.loadScene("Gameplay");
+
+// Como segundo argumento se puede pasar un componente para mantener las entidades que posean ese componente, por ejemplo, mantenemos la entidad que posee el componente AudioPlayer para que no se detenga la musica al cambiar de escena
+this.sceneManager.loadScene("OptionsMenu", AudioPlayer);
 ```
 
 ## Flujo de carga de una escena
 
 1. Se llama a `loadAssets()` de la escena para cargar recursos.
-2. Se llama a `loadSystems()` para registrar los sistemas que usará la escena.
+2. Se llama a `registerSystems()` para registrar los sistemas que usará la escena.
 3. Se espera a que todos los recursos estén completamente cargados.
-4. Se llama a `setup()` para crear entidades y configurar el estado inicial de la escena.
+4. Se llama a `createEntities()` para crear entidades y configurar el estado inicial de la escena.
 5. Los sistemas son activados y ejecutados en el orden definido.
 
 ## Notas

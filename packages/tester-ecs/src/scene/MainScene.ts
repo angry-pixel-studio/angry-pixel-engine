@@ -29,7 +29,7 @@ import { RENDER_LAYERS } from "@config/layers";
 import { goblinArchetype } from "@entity/Goblin";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
 import { MovingPlatform } from "@component/MovingPlatform";
-import { mainCamera, uiCamera } from "@entity/Camera";
+import { mainCameraArchetype, uiCameraArchetype } from "@entity/Camera";
 
 export class MainScene extends Scene {
     public loadAssets(): void {
@@ -40,8 +40,8 @@ export class MainScene extends Scene {
         Object.values(ASSETS.tilemap).forEach((filename) => this.assetManager.loadJson(filename));
     }
 
-    public loadSystems(): void {
-        this.systems.push(
+    public registerSystems(): void {
+        this.addSystems([
             InputControllerSystem,
             MovingPlatformSystem,
             NinjaMovementSystem,
@@ -50,10 +50,10 @@ export class MainScene extends Scene {
             GoblinMovementSystem,
             FollowPlayerCameraSystem,
             FpsMetterSystem,
-        );
+        ]);
     }
 
-    public setup(): void {
+    public createEntities(): void {
         this.setupCameras();
         this.setupGameObjects();
         this.setupUIText();
@@ -62,8 +62,8 @@ export class MainScene extends Scene {
     }
 
     private setupCameras(): void {
-        this.entityManager.createEntity(mainCamera);
-        this.entityManager.createEntity(uiCamera);
+        this.entityManager.createEntityFromArchetype(mainCameraArchetype);
+        this.entityManager.createEntityFromArchetype(uiCameraArchetype);
     }
 
     private setupGameObjects(): void {

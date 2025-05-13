@@ -25,8 +25,16 @@ The engine includes its own type definitions, so no additional type packages are
 If you prefer to start with a pre-configured project structure, you can use the official skeleton:
 
 ```bash
-npx degit angry-pixel-studio/angry-pixel-skeleton my-game
-cd my-game
+// typescript
+npx degit angry-pixel-studio/angry-pixel-skeleton-ts mi-juego
+cd mi-juego
+npm install
+```
+
+```bash
+// javascript
+npx degit angry-pixel-studio/angry-pixel-skeleton-js mi-juego
+cd mi-juego
 npm install
 ```
 
@@ -44,4 +52,5 @@ This will create a new project with a recommended structure and an initial setup
 ## Source Code
 
 -   Engine repository: [GitHub - angry-pixel-engine](https://github.com/angry-pixel-studio/angry-pixel-engine)
--   Official skeleton: [GitHub - angry-pixel-skeleton](https://github.com/angry-pixel-studio/angry-pixel-skeleton)
+-   Official TypeScript skeleton: [GitHub - angry-pixel-skeleton-ts](https://github.com/angry-pixel-studio/angry-pixel-skeleton-ts)
+-   Official JavaScript skeleton: [GitHub - angry-pixel-skeleton-js](https://github.com/angry-pixel-studio/angry-pixel-skeleton-js)

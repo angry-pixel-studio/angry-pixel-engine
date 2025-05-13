@@ -11,8 +11,9 @@ It allows playing, pausing, and stopping audio sources, controlling volume, enab
 | `audioSource`           | `HTMLAudioElement` \| `string` | The audio source to be played.                                                                   |
 | `fixedToTimeScale`      | `boolean`                      | If `true`, playback speed will be locked to the `TimeManager`’s time scale. Defaults to `false`. |
 | `loop`                  | `boolean`                      | If `true`, the audio source will loop playback.                                                  |
-| `state` _(read-only)_   | `AudioPlayerState`             | The current state of the audio source: `"stopped"`, `"playing"`, or `"paused"`.                  |
 | `volume`                | `number`                       | The volume of the audio source.                                                                  |
+| `stopOnSceneTransition` | `boolean`                      | If `true`, the audio source will stop on scene transition. Defaults to `true`.                   |
+| `state` _(read-only)_   | `AudioPlayerState`             | The current state of the audio source: `"stopped"`, `"playing"`, or `"paused"`.                  |
 | `playing` _(read-only)_ | `boolean`                      | Returns `true` if the audio source is currently playing.                                         |
 | `paused` _(read-only)_  | `boolean`                      | Returns `true` if the audio source is currently paused.                                          |
 | `stopped` _(read-only)_ | `boolean`                      | Returns `true` if the audio source is currently stopped.                                         |
@@ -52,4 +53,5 @@ audioPlayer.stop();
 -   The `AudioPlayer` supports both existing `HTMLAudioElement` sources and file path strings.
 -   The `action` property signals the intended behavior for the next frame and is automatically cleared afterward.
 -   The `fixedToTimeScale` option is useful for syncing sound effects or music with modified game speeds (e.g., slow motion or acceleration).
+-   The `stopOnSceneTransition` option is useful for choosing whether the audio source should stop on scene transition.
 -   This component is designed to comply with modern browsers' autoplay policies. Audio playback will not start automatically — it will begin only after at least one user interaction has occurred on the page (such as a click or keypress).
