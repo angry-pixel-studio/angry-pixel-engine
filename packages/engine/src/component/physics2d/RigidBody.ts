@@ -132,6 +132,8 @@ export class RigidBody {
      * @public
      */
     acceleration: Vector2 = new Vector2();
+    /** @internal */
+    static componentName: string = "RigidBody";
 
     constructor(options?: Partial<RigidBodyOptions>) {
         Object.assign(this, options);

@@ -1,6 +1,7 @@
 import { inject, injectable } from "@ioc";
 import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
 import { GameConfig } from "@config/bootstrap";
+import { Component, Entity, EntityManager } from "@ecs";
 
 const minGameFramerate = 30;
 const defaultGameFramerate = 60;
@@ -11,9 +12,12 @@ export const defaultPhysicsFramerate = 180;
 type Interval = {
     callback: () => void;
     delay: number;
-    timestamp: number;
+    timer: number;
     times?: number;
     executeImmediately?: boolean;
+    entityRef?: Entity;
+    componentRef?: Component;
+    useTimeScale?: boolean;
 };
 
 /**
@@ -42,6 +46,12 @@ export type IntervalOptions = {
     times?: number;
     /** Whether to execute the callback immediately before starting the interval timer */
     executeImmediately?: boolean;
+    /** Entity reference to cancel the interval when the entity is disabled or destroyed */
+    entityRef?: Entity;
+    /** Component reference to cancel the interval when the component is disabled or destroyed */
+    componentRef?: Component;
+    /** Whether to use the time scale for the interval, default is TRUE */
+    useTimeScale?: boolean;
 };
 
 /**
@@ -80,6 +90,20 @@ export type IntervalOptions = {
  *     callback: () => console.log("Will be called immediately and indefinitely!"),
  *     delay: 1000,
  *     executeImmediately: true,
+ * });
+ *
+ * // set an interval that will be cleared when the entity is destroyed
+ * const intervalId = timeManager.setInterval({
+ *     callback: () => console.log("Will be called indefinitely!"),
+ *     delay: 1000,
+ *     entityRef: entity,
+ * });
+ *
+ * // set an interval that will be cleared when the component is destroyed
+ * const intervalId = timeManager.setInterval({
+ *     callback: () => console.log("Will be called indefinitely!"),
+ *     delay: 1000,
+ *     componentRef: component,
  * });
  *
  * // clear the interval with the given id
@@ -134,7 +158,10 @@ export class TimeManager {
         return this.browserDeltaTime * this.timeScale;
     }
 
-    constructor(@inject(DEPENDENCY_TYPES.GameConfig) { physicsFramerate }: GameConfig) {
+    constructor(
+        @inject(DEPENDENCY_TYPES.GameConfig) { physicsFramerate }: GameConfig,
+        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+    ) {
         if (physicsFramerate && !allowedPhysicsFramerates.includes(physicsFramerate)) {
             throw new Error(`Invalid Physics frame rate. Allowed: [${allowedPhysicsFramerates.join(", ")}]`);
         }
@@ -171,25 +198,32 @@ export class TimeManager {
     public updateIntervals(): void {
         if (this.intervals.size === 0) return;
 
-        const now = performance.now();
-
         for (const [intervalId, interval] of this.intervals) {
-            if (interval.executeImmediately) {
-                interval.timestamp = now - interval.delay;
-                interval.executeImmediately = false;
+            if (!this.intervalHealthCheck(interval)) {
+                this.clearInterval(intervalId);
+                continue;
             }
 
-            if (now - interval.timestamp >= interval.delay) {
+            if (interval.executeImmediately) {
+                interval.timer = interval.delay;
+                interval.executeImmediately = false;
+            } else {
+                interval.timer += (interval.useTimeScale ? this.deltaTime : this.unscaledDeltaTime) * 1000;
+            }
+
+            if (interval.timer >= interval.delay) {
                 interval.callback();
 
-                if (interval.times && --interval.times <= 0) {
-                    this.intervals.delete(intervalId);
-                    if (this.intervals.size === 0) this.lastIntervalId = 0;
-                } else {
-                    interval.timestamp = now;
-                }
+                if (interval.times && --interval.times <= 0) this.clearInterval(intervalId);
+                else interval.timer -= interval.delay;
             }
         }
+    }
+
+    private intervalHealthCheck(interval: Interval): boolean {
+        if (interval.entityRef && !this.entityManager.isEntityEnabled(interval.entityRef)) return false;
+        if (interval.componentRef && !this.entityManager.isComponentEnabled(interval.componentRef)) return false;
+        return true;
     }
 
     /**
@@ -197,6 +231,7 @@ export class TimeManager {
      * If `times` is provided, the interval will be cleared after the function has been called that many times.\
      * But if `times` is not provided, the interval will continue until it is cleared.\
      * If `executeImmediately` is set to true, the function will be called immediately after the interval is set.\
+     * If `useTimeScale` is set to false, the interval will use the unscaled delta time.\
      * Intervals are cleared when loading a new scene.
      * @param intervalOptions
      * @returns intervalId
@@ -224,9 +259,26 @@ export class TimeManager {
      * });
      * ```
      */
-    public setInterval({ callback, delay, times, executeImmediately }: IntervalOptions): number {
+    public setInterval({
+        callback,
+        delay,
+        times,
+        executeImmediately,
+        entityRef,
+        componentRef,
+        useTimeScale = true,
+    }: IntervalOptions): number {
         const intervalId = ++this.lastIntervalId;
-        this.intervals.set(intervalId, { callback, delay, times, executeImmediately, timestamp: performance.now() });
+        this.intervals.set(intervalId, {
+            callback,
+            delay,
+            times,
+            executeImmediately,
+            entityRef,
+            componentRef,
+            timer: 0,
+            useTimeScale,
+        });
         return intervalId;
     }
 

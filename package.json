@@ -17,7 +17,8 @@
         "prettier-format": "prettier --write \"packages/*/src/**/*.ts\"",
         "prettier-check": "prettier --check \"packages/*/src/**/*.ts\"",
         "publish": "yarn run build && yarn workspace angry-pixel publish",
-        "docs": "yarn workspace @angry-pixel/engine typedoc"
+        "api-docs": "yarn workspace @angry-pixel/engine typedoc",
+        "docs": "cd docs && python -m mkdocs build"
     },
     "devDependencies": {
         "eslint": "^9.2.0",

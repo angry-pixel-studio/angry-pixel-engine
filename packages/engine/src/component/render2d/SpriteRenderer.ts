@@ -119,6 +119,9 @@ export class SpriteRenderer {
         height: undefined,
     };
 
+    /** @internal */
+    static componentName: string = "SpriteRenderer";
+
     constructor(options?: Partial<SpriteRendererOptions>) {
         Object.assign(this, options);
     }

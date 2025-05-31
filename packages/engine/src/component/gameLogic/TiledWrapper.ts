@@ -43,8 +43,12 @@ export interface TiledWrapperOptions {
  * ```
  */
 export class TiledWrapper {
+    /** The tilemap to render. */
     tilemap: TiledTilemap | string;
+    /** The layer to render. */
     layerToRender: string;
+    /** @internal */
+    static componentName: string = "TiledWrapper";
 
     constructor(options?: Partial<TiledWrapperOptions>) {
         Object.assign(this, options);

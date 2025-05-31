@@ -60,6 +60,8 @@ export class BallCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
+    /** @internal */
+    static componentName: string = "BallCollider";
 
     constructor(options?: Partial<BallColliderOptions>) {
         Object.assign(this, options);

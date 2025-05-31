@@ -114,6 +114,8 @@ export class TilemapRenderer {
     _processed: boolean = false;
     /** @internal */
     _renderData: TilemapRenderData[] = [];
+    /** @internal */
+    static componentName: string = "TilemapRenderer";
 
     constructor(options?: Partial<TilemapRendererOptions>) {
         Object.assign(this, options);

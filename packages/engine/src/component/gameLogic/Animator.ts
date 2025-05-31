@@ -75,17 +75,26 @@ export interface AnimatorOptions {
  * ```
  */
 export class Animator {
+    /** The animations to play. */
     animations: Map<string, Animation> = new Map();
+    /** The animation to play. */
     animation: string;
+    /** The speed of the animation. */
     speed: number = 1;
+    /** TRUE If the animation should reset to the first frame when the animation is stopped, FALSE otherwise. */
     reset: boolean = false;
+    /** TRUE If the animation is playing, FALSE otherwise. */
     playing: boolean = false;
+    /** The current frame of the animation. */
     currentFrame: number = 0;
+    /** The current time of the animation. */
     currentTime: number = 0;
     /**  @internal */
     _currentAnimation: string = undefined;
     /**  @internal */
     _assetsReady: boolean = false;
+    /** @internal */
+    static componentName: string = "Animator";
 
     constructor(options?: Partial<AnimatorOptions>) {
         Object.assign(this, options);

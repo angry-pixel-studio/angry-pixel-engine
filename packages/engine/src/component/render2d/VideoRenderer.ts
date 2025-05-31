@@ -141,6 +141,9 @@ export class VideoRenderer {
         tintColor: undefined,
     };
 
+    /** @internal */
+    static componentName: string = "VideoRenderer";
+
     constructor(options?: Partial<VideoRendererOptions>) {
         Object.assign(this, options);
     }

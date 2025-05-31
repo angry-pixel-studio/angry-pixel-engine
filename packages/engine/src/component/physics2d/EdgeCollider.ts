@@ -65,6 +65,8 @@ export class EdgeCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
+    /** @internal */
+    static componentName: string = "EdgeCollider";
 
     constructor(options?: Partial<EdgeColliderOptions>) {
         Object.assign(this, options);

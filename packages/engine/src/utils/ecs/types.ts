@@ -34,7 +34,7 @@ export type Component = Record<string, any>;
  * }
  * ```
  */
-export type ComponentType<T extends Component = Component> = { new (...args: any[]): T };
+export type ComponentType<T extends Component = Component> = { new (...args: any[]): T; componentName?: string };
 /**
  * This type represents a search result object containing an entity and its matching component.\
  * Used when searching for entities with specific components and criteria.\

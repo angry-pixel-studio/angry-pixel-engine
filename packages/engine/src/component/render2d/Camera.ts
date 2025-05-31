@@ -68,6 +68,9 @@ export class Camera {
         layers: [],
     };
 
+    /** @internal */
+    static componentName: string = "Camera";
+
     constructor(options?: Partial<CameraOptions>) {
         Object.assign(this, options);
     }

@@ -460,7 +460,9 @@ export class EntityManager {
         if (!this.components.has(id)) this.components.set(id, new Map());
 
         if (this.components.get(id).has(entity)) {
-            throw new Error(`Entity ${entity} already has a component of type ${id}`);
+            const componentName =
+                (instance.constructor as ComponentType).componentName ?? (instance.constructor as ComponentType).name;
+            throw new Error(`Entity ${entity} already has a component of type ${componentName}`);
         }
 
         this.components.get(id).set(entity, instance);

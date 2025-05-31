@@ -60,6 +60,8 @@ export class Transform {
     _awake: boolean = false;
     /** @internal */
     _parent: Transform = undefined;
+    /** @internal */
+    static componentName: string = "Transform";
 
     constructor(options?: Partial<TransformOptions>) {
         Object.assign(this, options);

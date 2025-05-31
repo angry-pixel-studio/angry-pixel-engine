@@ -68,6 +68,8 @@ export class Button {
     onClick: () => void;
     /** Function executed when the button is pressed */
     onPressed: () => void;
+    /** @internal */
+    static componentName: string = "Button";
 
     constructor(options?: Partial<ButtonOptions>) {
         Object.assign(this, options);

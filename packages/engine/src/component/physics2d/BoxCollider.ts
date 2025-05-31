@@ -72,6 +72,8 @@ export class BoxCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
+    /** @internal */
+    static componentName: string = "BoxCollider";
 
     constructor(options?: Partial<BoxColliderOptions>) {
         Object.assign(this, options);
