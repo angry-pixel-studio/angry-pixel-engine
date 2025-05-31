@@ -1,0 +1,27 @@
+name: Publish to NPM via Yarn (on Release)
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Node.js and Yarn
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18" # Cambia si usas otra versión
+                  registry-url: "https://registry.npmjs.org/"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Authenticate with NPM
+              run: |
+                  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+            - name: Run publish script
+              run: yarn run publish
