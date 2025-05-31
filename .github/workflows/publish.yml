@@ -5,21 +5,26 @@ on:
         types: [published]
 
 jobs:
-    publish:
+    Setup:
+        uses: ./.github/workflows/setupNode.yml
+
+    Publish:
+        needs: Setup
+        name: "[Publish]"
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
 
-            - name: Set up Node.js and Yarn
-              uses: actions/setup-node@v4
+            - name: "[Restore node modules]"
+              id: cache-node-modules
+              uses: actions/cache@v4
               with:
-                  node-version: "18" # Cambia si usas otra versión
-                  registry-url: "https://registry.npmjs.org/"
+                  path: node_modules
+                  key: ${{ runner.os }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nodemodules-
 
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile
-
-            - name: Authenticate with NPM
+            - name: "[Authenticate with NPM]"
               run: |
                   echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
