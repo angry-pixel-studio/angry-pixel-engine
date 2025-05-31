@@ -53,6 +53,9 @@ export class LightRenderer {
     /** @internal */
     _boundingBox: Rectangle = new Rectangle();
 
+    /** @internal */
+    static componentName: string = "LightRenderer";
+
     constructor(options?: Partial<LightRendererOptions>) {
         Object.assign(this, options);
     }

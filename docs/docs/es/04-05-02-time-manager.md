@@ -24,7 +24,13 @@ this.transform.position.x += velocidad * this.timeManager.physicsDeltaTime;
 // Detener todas las interacciones relacionadas al tiempo
 this.timeManager.timeScale = 0;
 
-// Crear un intervalo que se ejecuta 5 veces
+// Reducir la velocidad del tiempo
+this.timeManager.timeScale = 0.5;
+
+// Aumentar la velocidad del tiempo
+this.timeManager.timeScale = 2;
+
+// Crear un intervalo que se ejecutará hasta que la entidad sea destruida o deshabilitada
 const intervaloId = timeManager.setInterval({
     callback: () => console.log("¡Se llamó 5 veces!"),
     delay: 1000,
@@ -43,6 +49,27 @@ const inmediato = timeManager.setInterval({
     delay: 1000,
     executeImmediately: true,
 });
+
+// Crear un intervalo que se ejecutará hasta que la entidad sea destruida o deshabilitada
+const intervaloId = timeManager.setInterval({
+    callback: () => console.log("¡Ejecutando en una entidad!"),
+    delay: 1000,
+    entityRef: entity,
+});
+
+// Crear un intervalo que se ejecutará hasta que el componente sea destruido o deshabilitado
+const intervaloId = timeManager.setInterval({
+    callback: () => console.log("¡Ejecutando en un componente!"),
+    delay: 1000,
+    componentRef: component,
+});
+
+// Crear un intervalo que se ejecutará usando delta time sin escala
+const intervaloId = timeManager.setInterval({
+    callback: () => console.log("¡Ejecutando usando delta time sin escala!"),
+    delay: 1000,
+    useTimeScale: false,
+});
 ```
 
 ## Cómo detener un intervalo
@@ -59,4 +86,6 @@ timeManager.clearAllIntervals();
 
 -   Los `deltaTime` son valores en segundos.
 -   Los intervalos configurados con `setInterval` se eliminan automáticamente al cambiar de escena.
+-   Los intervalos configurados con `entityRef` o `componentRef` se eliminan automáticamente si la entidad o el componente referenciado se destruye o se deshabilita. Esto es muy útil para casos donde un elemento del juego deja de existir, por ejemplo, un enemigo que es eliminado.
+-   Los intervalos configurados con `useTimeScale` establecido en `false` usarán el delta time sin escala.
 -   La física y el render pueden tener tasas de framerate diferentes, ajustables en la configuración del juego (`GameConfig`).

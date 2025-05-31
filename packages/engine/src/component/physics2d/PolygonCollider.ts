@@ -67,6 +67,8 @@ export class PolygonCollider implements Collider {
     ignoreCollisionsWithLayers: string[] = [];
     /** @internal */
     shapes: Shape[] = [];
+    /** @internal */
+    static componentName: string = "PolygonCollider";
 
     constructor(options?: Partial<PolygonColliderOptions>) {
         Object.assign(this, options);

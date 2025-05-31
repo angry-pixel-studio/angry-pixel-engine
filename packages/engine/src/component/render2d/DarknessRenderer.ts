@@ -70,6 +70,9 @@ export class DarknessRenderer {
         lights: [],
     };
 
+    /** @internal */
+    static componentName: string = "DarknessRenderer";
+
     constructor(options?: Partial<DarknessRendererOptions>) {
         Object.assign(this, options);
     }

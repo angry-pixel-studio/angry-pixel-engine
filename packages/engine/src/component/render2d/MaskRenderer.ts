@@ -135,6 +135,9 @@ export class MaskRenderer {
         width: undefined,
     };
 
+    /** @internal */
+    static componentName: string = "MaskRenderer";
+
     constructor(options?: Partial<MaskRendererOptions>) {
         Object.assign(this, options);
     }

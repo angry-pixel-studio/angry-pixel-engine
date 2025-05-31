@@ -62,6 +62,8 @@ export class TilemapCollider implements Collider {
     physics: boolean = true;
     /** @internal */
     shapes: Shape[] = [];
+    /** @internal */
+    static componentName: string = "TilemapCollider";
 
     constructor(options?: Partial<TilemapColliderOptions>) {
         Object.assign(this, options);

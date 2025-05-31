@@ -231,6 +231,9 @@ export class TextRenderer {
         type: RenderDataType.Text,
     };
 
+    /** @internal */
+    static componentName: string = "TextRenderer";
+
     constructor(options?: Partial<TextRendererOptions>) {
         Object.assign(this, options);
     }

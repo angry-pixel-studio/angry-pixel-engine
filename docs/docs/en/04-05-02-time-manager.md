@@ -24,6 +24,12 @@ this.transform.position.x += speed * this.timeManager.physicsDeltaTime;
 // Stop all time-related actions
 this.timeManager.timeScale = 0;
 
+// Slow down time
+this.timeManager.timeScale = 0.5;
+
+// Speed up time
+this.timeManager.timeScale = 2;
+
 // Create an interval that runs 5 times
 const intervalId = timeManager.setInterval({
     callback: () => console.log("Will be called 5 times!"),
@@ -43,6 +49,27 @@ const immediate = timeManager.setInterval({
     delay: 1000,
     executeImmediately: true,
 });
+
+// Create an interval that runs until the entity is disabled or destroyed
+const intervalId = timeManager.setInterval({
+    callback: () => console.log("Will be called until the entity is disabled or destroyed!"),
+    delay: 1000,
+    entityRef: entity,
+});
+
+// Create an interval that runs until the component is disabled or destroyed
+const intervalId = timeManager.setInterval({
+    callback: () => console.log("Will be called until the component is disabled or destroyed!"),
+    delay: 1000,
+    componentRef: component,
+});
+
+// Create an interval that runs using unscaled delta time
+const intervalId = timeManager.setInterval({
+    callback: () => console.log("Will be called using unscaled delta time!"),
+    delay: 1000,
+    useTimeScale: false,
+});
 ```
 
 ## How to stop an interval
@@ -59,4 +86,6 @@ timeManager.clearAllIntervals();
 
 -   `deltaTime` values are measured in seconds.
 -   Intervals set with `setInterval` are automatically cleared when switching scenes.
+-   Intervals set with `entityRef` or `componentRef` are automatically cleared when the entity or component is disabled or destroyed. This is very useful for cases where an element of the game ceases to exist, for example, an enemy that is deleted.
+-   Intervals set with `useTimeScale` set to false will use the unscaled delta time.
 -   Physics and render may have different framerate settings, configurable via `GameConfig`.

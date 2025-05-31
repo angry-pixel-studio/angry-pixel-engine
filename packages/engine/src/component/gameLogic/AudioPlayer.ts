@@ -79,6 +79,8 @@ export class AudioPlayer {
     _playPromisePendind: boolean = false;
     /* @internal */
     _playAfterUserInput: boolean = false;
+    /** @internal */
+    static componentName: string = "AudioPlayer";
 
     constructor(options?: Partial<AudioPlayerOptions>) {
         Object.assign(this, options);
