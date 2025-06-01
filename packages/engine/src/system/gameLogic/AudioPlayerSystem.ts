@@ -35,8 +35,11 @@ export class AudioPlayerSystem implements System {
         document.addEventListener("visibilitychange", () => {
             this.entityManager.search(AudioPlayer).forEach(({ component: { audioSource, playing } }) => {
                 if (!audioSource || typeof audioSource === "string") return;
+
                 if (document.hidden) audioSource.pause();
                 else if (!document.hidden && playing) audioSource.play();
+
+                this.canPlay = !document.hidden;
             });
         });
     }
@@ -63,7 +66,7 @@ export class AudioPlayerSystem implements System {
     }
 
     public onUpdate(): void {
-        if (!this.canPlay) if (!this.checkGamepad()) return;
+        if (!this.canPlay && !this.checkGamepad()) return;
 
         this.entityManager.search(AudioPlayer).forEach(({ component: audioPlayer }) => {
             if (

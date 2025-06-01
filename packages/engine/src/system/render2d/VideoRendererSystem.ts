@@ -9,6 +9,7 @@ import { RenderManager } from "@manager/RenderManager";
 import { TimeManager } from "@manager/TimeManager";
 import { Vector2 } from "@math";
 import { VideoRenderData } from "@webgl";
+import { InputManager } from "@manager/InputManager";
 
 const userInputEventNames = [
     "click",
@@ -35,6 +36,7 @@ export class VideoRendererSystem implements System {
         @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
         @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
         @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(DEPENDENCY_TYPES.InputManager) private readonly inputManager: InputManager,
     ) {}
 
     public onCreate(): void {
@@ -42,8 +44,11 @@ export class VideoRendererSystem implements System {
         document.addEventListener("visibilitychange", () => {
             this.entityManager.search(VideoRenderer).forEach(({ component: { video, playing } }) => {
                 if (!video || typeof video === "string") return;
+
                 if (document.hidden) video.pause();
                 else if (!document.hidden && playing) video.play();
+
+                this.canPlay = !document.hidden;
             });
         });
     }
@@ -64,7 +69,14 @@ export class VideoRendererSystem implements System {
         this.canPlay = true;
     };
 
+    private checkGamepad(): boolean {
+        this.canPlay = this.inputManager.gamepads.some((gp) => gp.anyButtonPressed);
+        return this.canPlay;
+    }
+
     public onUpdate(): void {
+        if (!this.canPlay && !this.checkGamepad()) return;
+
         this.entityManager.search(VideoRenderer).forEach(({ entity, component: videoRenderer }) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("VideoRenderer component needs a Transform");
