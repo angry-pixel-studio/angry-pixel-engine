@@ -15,18 +15,9 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: "[Restore node modules]"
-              id: cache-node-modules
-              uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-nodemodules-
-
             - name: "[Authenticate with NPM]"
               run: |
                   echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-            - name: Run publish script
+            - name: "[Run publish script]"
               run: yarn run publish
