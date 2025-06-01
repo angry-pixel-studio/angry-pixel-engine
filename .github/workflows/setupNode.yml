@@ -17,4 +17,4 @@ jobs:
                   cache: "yarn"
 
             - name: "[Install dependencies]"
-              run: yarn workspace @angry-pixel/engine install
+              run: yarn install
