@@ -288,7 +288,6 @@ export class TimeManager {
      */
     public clearInterval(intervalId: number): void {
         this.intervals.delete(intervalId);
-        if (this.intervals.size === 0) this.lastIntervalId = 0;
     }
 
     /**
@@ -296,6 +295,5 @@ export class TimeManager {
      */
     public clearAllIntervals(): void {
         this.intervals.clear();
-        this.lastIntervalId = 0;
     }
 }

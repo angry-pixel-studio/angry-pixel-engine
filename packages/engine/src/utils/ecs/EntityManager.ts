@@ -361,6 +361,12 @@ export class EntityManager {
             throw new Error("Both entities must exist to set a parent-child relationship.");
         }
 
+        if (this.parentEntities.has(child)) {
+            const oldParent = this.parentEntities.get(child);
+            if (oldParent === parent) return;
+            this.childEntities.get(oldParent).delete(child);
+        }
+
         this.parentEntities.set(child, parent);
         if (!this.childEntities.has(parent)) this.childEntities.set(parent, new Set());
         this.childEntities.get(parent).add(child);
