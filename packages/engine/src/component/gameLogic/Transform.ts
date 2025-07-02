@@ -10,6 +10,9 @@ import { Vector2 } from "@math";
  *   position: new Vector2(100, 100),
  *   scale: new Vector2(2, 2),
  *   rotation: Math.PI / 4
+ *   ignoreParentPosition: false,
+ *   ignoreParentScale: false,
+ *   ignoreParentRotation: false
  * });
  * ```
  */
@@ -17,6 +20,9 @@ export interface TransformOptions {
     position: Vector2;
     scale: Vector2;
     rotation: number;
+    ignoreParentPosition: boolean;
+    ignoreParentScale: boolean;
+    ignoreParentRotation: boolean;
 }
 
 /**
