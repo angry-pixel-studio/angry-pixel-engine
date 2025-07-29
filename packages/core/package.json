@@ -3,9 +3,10 @@
     "version": "1.0.0",
     "description": "Core package for Angry Pixel Engine",
     "main": "src/index.ts",
+    "types": "dist/index.d.ts",
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "scripts": {
-        "build": "tsc && rollup -c",
+        "build": "tsc -b",
         "clean": "tsc --build --clean"
     },
     "devDependencies": {

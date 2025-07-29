@@ -16,16 +16,6 @@ const builderECS = (format, filename) => ({
 const main = () => {
     return [
         // this generates one file containing all the type declarations
-        /*{
-            input: "../../bundles/angry-pixel/types/index.d.ts",
-            output: [
-                {
-                    file: "../../bundles/angry-pixel/lib/index.d.ts",
-                    format: "es",
-                },
-            ],
-            plugins: [dts(), del({ dest: "../../bundles/angry-pixel/types" })],
-        },*/
         {
             input: "dist/index.d.ts",
             output: {
@@ -43,10 +33,15 @@ const main = () => {
                     },
                 }),
                 del({ dest: "dist" }),
+                del({ dest: "tsconfig.tsbuildinfo" }),
                 del({ dest: "../../packages/math/dist" }),
+                del({ dest: "../../packages/math/tsconfig.tsbuildinfo" }),
                 del({ dest: "../../packages/input/dist" }),
+                del({ dest: "../../packages/input/tsconfig.tsbuildinfo" }),
                 del({ dest: "../../packages/2d-physics/dist" }),
+                del({ dest: "../../packages/2d-physics/tsconfig.tsbuildinfo" }),
                 del({ dest: "../../packages/2d-renderer/dist" }),
+                del({ dest: "../../packages/2d-renderer/tsconfig.tsbuildinfo" }),
             ],
         },
         // this generates the modules
