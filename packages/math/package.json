@@ -3,6 +3,5 @@
     "version": "1.0.0",
     "description": "Angry Pixel math tools.",
     "main": "src/index.ts",
-    "types": "dist/index.d.ts",
     "author": "Mauro Cristy <maurocristy@gmail.com>"
 }
