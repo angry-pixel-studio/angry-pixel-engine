@@ -1,6 +1,8 @@
 name: Continuous Integration App
 
-on: push
+on:
+    - push
+    - pull_request
 
 jobs:
     Setup:
