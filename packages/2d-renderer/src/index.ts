@@ -46,7 +46,7 @@ export const renderManagerFactory = (canvas: HTMLCanvasElement): IRenderManager 
             [RenderDataType.Geometric, new GeometricRenderer(gl, programManager)],
             [RenderDataType.Mask, new MaskRenderer(gl, programManager)],
             [RenderDataType.Video, new VideoRenderer(gl, programManager, textureManager)],
-        ])
+        ]),
     );
 
     return new RenderManager(webglManager, new CullingManager(gl));

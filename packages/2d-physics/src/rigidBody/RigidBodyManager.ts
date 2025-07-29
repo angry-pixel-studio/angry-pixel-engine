@@ -138,8 +138,9 @@ export class RigidBodyManager implements IRigidBodyManager {
                         .getCollisionsForCollider(collider)
                         .filter(
                             (collision) =>
-                                collision.remoteCollider.physics && this.colliders.includes(collision.remoteCollider.id)
-                        )
+                                collision.remoteCollider.physics &&
+                                this.colliders.includes(collision.remoteCollider.id),
+                        ),
                 );
                 return collisions;
             }, []);

@@ -57,7 +57,7 @@ export class IterationManager implements IIterationManager {
         private readonly inputManager: IInputManager,
         private readonly gameObjectManager: IGameObjectManager,
         private readonly sceneManager: ISceneManager,
-        private readonly canvasColor: string
+        private readonly canvasColor: string,
     ) {}
 
     public start(): void {
@@ -187,7 +187,7 @@ export class IterationManager implements IIterationManager {
             gameObject
                 .getComponents()
                 .filter((component) => component.active)
-                .forEach((c) => this.components.push(c))
+                .forEach((c) => this.components.push(c)),
         );
     }
 

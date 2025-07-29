@@ -24,7 +24,7 @@ export class ContextManager implements IContextManager {
         return this.canvas.getContext(WebGLContextVersion.WebGL2) !== null
             ? WebGLContextVersion.WebGL2
             : this.canvas.getContext(WebGLContextVersion.LegacyWebGL) !== null
-            ? WebGLContextVersion.LegacyWebGL
-            : undefined;
+              ? WebGLContextVersion.LegacyWebGL
+              : undefined;
     }
 }

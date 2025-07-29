@@ -12,7 +12,7 @@ export class CircumferenceAABBResolver implements ICollisionResolver {
     public resolve(shapeA: Circumference, shapeB: Rectangle, invert: boolean = false): ICollisionResolution {
         this.closestPoint.set(
             clamp(shapeA.position.x, shapeB.boundingBox.x, shapeB.boundingBox.x1),
-            clamp(shapeA.position.y, shapeB.boundingBox.y, shapeB.boundingBox.y1)
+            clamp(shapeA.position.y, shapeB.boundingBox.y, shapeB.boundingBox.y1),
         );
 
         Vector2.subtract(this.distance, this.closestPoint, shapeA.position);

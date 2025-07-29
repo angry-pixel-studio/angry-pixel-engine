@@ -7,7 +7,7 @@ export class AABBMethod implements ICollisionMethod {
     constructor(
         private readonly AABBResolver: ICollisionResolver,
         private readonly circumferenceAABBResolver: ICollisionResolver,
-        private readonly circumferenceResolver: ICollisionResolver
+        private readonly circumferenceResolver: ICollisionResolver,
     ) {}
 
     getCollisionResolution(shapeA: IShape, shapeB: IShape): ICollisionResolution | null {

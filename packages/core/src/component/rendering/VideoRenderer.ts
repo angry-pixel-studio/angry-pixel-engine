@@ -229,7 +229,7 @@ export class VideoRenderer extends RenderComponent {
         if (promise !== undefined) {
             promise.catch(() => {
                 userInputEventNames.forEach((eventName) =>
-                    window.addEventListener(eventName, this.userInputEventHandler)
+                    window.addEventListener(eventName, this.userInputEventHandler),
                 );
             });
         }
@@ -299,7 +299,7 @@ export class VideoRenderer extends RenderComponent {
     private calculateRenderPosition(): void {
         this.scaledOffset.set(
             this.offset.x * this.gameObject.transform.scale.x,
-            this.offset.y * this.gameObject.transform.scale.y
+            this.offset.y * this.gameObject.transform.scale.y,
         );
         Vector2.add(this.renderData.position, this.gameObject.transform.position, this.scaledOffset);
 
@@ -315,7 +315,7 @@ export class VideoRenderer extends RenderComponent {
 
         this.renderData.position.set(
             this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
-            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
+            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle),
         );
     }
 

@@ -27,7 +27,10 @@ export class MaskRenderer implements IRenderer {
     private readonly circumferenceVertices: Float32Array;
     private lastShape: MaskShape;
 
-    constructor(private readonly gl: WebGL2RenderingContext, private readonly programManager: IProgramManager) {
+    constructor(
+        private readonly gl: WebGL2RenderingContext,
+        private readonly programManager: IProgramManager,
+    ) {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
@@ -48,7 +51,7 @@ export class MaskRenderer implements IRenderer {
             this.gl.bufferData(
                 this.gl.ARRAY_BUFFER,
                 renderData.shape === MaskShape.Rectangle ? this.rectangleVertices : this.circumferenceVertices,
-                this.gl.STATIC_DRAW
+                this.gl.STATIC_DRAW,
             );
         }
 
@@ -61,7 +64,7 @@ export class MaskRenderer implements IRenderer {
             this.modelMatrix,
             renderData.shape === MaskShape.Rectangle
                 ? [renderData.width, renderData.height, 1]
-                : [renderData.radius, renderData.radius, 1]
+                : [renderData.radius, renderData.radius, 1],
         );
 
         setProjectionMatrix(this.projectionMatrix, this.gl, cameraData, renderData.location);

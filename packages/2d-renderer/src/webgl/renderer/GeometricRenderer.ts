@@ -21,14 +21,17 @@ export class GeometricRenderer implements IRenderer {
     private readonly circumferenceVertices: Float32Array;
     private lastVertices: symbol = null;
 
-    constructor(private readonly gl: WebGL2RenderingContext, private readonly programManager: IProgramManager) {
+    constructor(
+        private readonly gl: WebGL2RenderingContext,
+        private readonly programManager: IProgramManager,
+    ) {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
 
         const a = (2 * Math.PI) / 60;
         this.circumferenceVertices = new Float32Array(
-            range(1, 60, 1).reduce((v, i) => [...v, Math.cos(i * a), Math.sin(i * a)], [])
+            range(1, 60, 1).reduce((v, i) => [...v, Math.cos(i * a), Math.sin(i * a)], []),
         );
     }
 
@@ -50,7 +53,7 @@ export class GeometricRenderer implements IRenderer {
         renderData: IGeometricRenderData,
         cameraData: ICameraData,
         mode: number,
-        lastRender?: RenderDataType
+        lastRender?: RenderDataType,
     ): void {
         const verticesKey: symbol = this.generateVerticesKey(renderData.vertexModel);
 

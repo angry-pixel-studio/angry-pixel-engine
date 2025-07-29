@@ -56,7 +56,7 @@ export class ProgramManager implements IProgramManager {
     constructor(
         private readonly gl: WebGL2RenderingContext,
         private readonly contextVersion: WebGLContextVersion,
-        private readonly programFactory: IProgramFactory
+        private readonly programFactory: IProgramFactory,
     ) {}
 
     public loadProgram(): void {

@@ -18,7 +18,7 @@ export class WebGLManager implements IWebGLManager {
         public readonly gl: WebGL2RenderingContext,
         programManager: IProgramManager,
         private readonly textureManager: ITextureManager,
-        private readonly renderers: Map<RenderDataType, IRenderer>
+        private readonly renderers: Map<RenderDataType, IRenderer>,
     ) {
         programManager.loadProgram();
     }

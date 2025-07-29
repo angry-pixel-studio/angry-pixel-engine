@@ -25,8 +25,8 @@ export class SpacePointer extends GameObject {
                 Vector2.add(
                     this.position,
                     this.camera.transform.position,
-                    Vector2.scale(this.position, this.inputManager.mouse.positionInViewport, 1 / this.camera.zoom)
-                )
+                    Vector2.scale(this.position, this.inputManager.mouse.positionInViewport, 1 / this.camera.zoom),
+                ),
             );
 
             console.log(`Space position: {x: ${this.position.x}, y: ${this.position.y}}`);

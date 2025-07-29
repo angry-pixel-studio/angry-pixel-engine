@@ -141,7 +141,7 @@ export class Transform extends TransformComponent {
     private updateScaledInnerPosition(): void {
         this.scaledInnerPosition.set(
             this._innerPosition.x * this._parent.scale.x,
-            this._innerPosition.y * this._parent.scale.y
+            this._innerPosition.y * this._parent.scale.y,
         );
     }
 }

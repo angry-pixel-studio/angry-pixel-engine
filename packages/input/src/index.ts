@@ -15,5 +15,5 @@ export const inputManagerFactory = (canvas: HTMLCanvasElement): IInputManager =>
         new MouseController(canvas),
         new KeyboardController(canvas),
         new GamepadController(),
-        new TouchController(canvas)
+        new TouchController(canvas),
     );

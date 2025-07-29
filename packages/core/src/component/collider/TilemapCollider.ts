@@ -81,7 +81,7 @@ export class TilemapCollider extends BaseCollider {
 
         this.position.set(
             this.gameObject.transform.position.x - this.scaledWidth / 2,
-            this.gameObject.transform.position.y + this.scaledHeight / 2
+            this.gameObject.transform.position.y + this.scaledHeight / 2,
         );
 
         this.composite ? this.useLineColliders() : this.useBoxColliders();
@@ -100,13 +100,14 @@ export class TilemapCollider extends BaseCollider {
                     layer: this.layer ?? this.gameObject.layer,
                     position: new Vector2(
                         this.position.x + ((index % this.tilemapRenderer.width) + 0.5) * this.scaledTileWidth,
-                        this.position.y - (Math.floor(index / this.tilemapRenderer.width) + 0.5) * this.scaledTileHeight
+                        this.position.y -
+                            (Math.floor(index / this.tilemapRenderer.width) + 0.5) * this.scaledTileHeight,
                     ),
                     shape: new Rectangle(this.scaledTileWidth, this.scaledTileHeight),
                     updateCollisions: false,
                     physics: this.physics,
                     group: this.gameObject.id.toString(),
-                })
+                }),
             );
         });
     }
@@ -116,7 +117,7 @@ export class TilemapCollider extends BaseCollider {
             tile !== 0 &&
             this.getNeighbors(index).some(
                 (neighbor) =>
-                    !neighbor || !this.tilemapRenderer.tiles[neighbor] || this.tilemapRenderer.tiles[neighbor] === 0
+                    !neighbor || !this.tilemapRenderer.tiles[neighbor] || this.tilemapRenderer.tiles[neighbor] === 0,
             )
         );
     }

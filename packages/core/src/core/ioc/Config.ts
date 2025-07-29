@@ -23,7 +23,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
     if (!gameConfig.headless) {
         container.add(
             "DomManager",
-            () => new DomManager(gameConfig.containerNode, gameConfig.gameWidth, gameConfig.gameHeight)
+            () => new DomManager(gameConfig.containerNode, gameConfig.gameWidth, gameConfig.gameHeight),
         );
 
         const canvas: HTMLCanvasElement = container.getSingleton<IDomManager>("DomManager").canvas;
@@ -42,8 +42,8 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
                     container.getSingleton<IInputManager>("InputManager"),
                     container.getSingleton<IGameObjectManager>("GameObjectManager"),
                     container.getSingleton<ISceneManager>("SceneManager"),
-                    gameConfig.canvasColor
-                )
+                    gameConfig.canvasColor,
+                ),
         );
     } else {
         container.add(
@@ -53,8 +53,8 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
                     container.getSingleton<ITimeManager>("TimeManager"),
                     container.getSingleton<IPhysicsManager>("PhysicsManager"),
                     container.getSingleton<IGameObjectManager>("GameObjectManager"),
-                    container.getSingleton<ISceneManager>("SceneManager")
-                )
+                    container.getSingleton<ISceneManager>("SceneManager"),
+                ),
         );
     }
 
@@ -63,7 +63,7 @@ export const loadDependencies = (container: Container, gameConfig: GameConfig): 
         () =>
             new SceneManager(
                 container,
-                !gameConfig.headless ? container.getSingleton<IRenderManager>("RenderManager") : undefined
-            )
+                !gameConfig.headless ? container.getSingleton<IRenderManager>("RenderManager") : undefined,
+            ),
     );
 };

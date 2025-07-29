@@ -46,7 +46,7 @@ export class FontAtlasFactory implements IFontAtlasFactory {
         const fontAtlas: FontAtlas = new FontAtlas(
             fontFaceFamily,
             this.bitmapSize,
-            Math.ceil(Math.sqrt(this.chars.length))
+            Math.ceil(Math.sqrt(this.chars.length)),
         );
 
         const ctx: CanvasRenderingContext2D = fontAtlas.canvas.getContext("2d");
@@ -85,7 +85,7 @@ export class FontAtlas {
     constructor(
         public readonly fontFaceFamily: string,
         public readonly bitmapFontSize: number,
-        public readonly gridSize: number
+        public readonly gridSize: number,
     ) {
         this.canvas.width = this.gridSize * this.bitmapFontSize;
         this.canvas.height = this.canvas.width;

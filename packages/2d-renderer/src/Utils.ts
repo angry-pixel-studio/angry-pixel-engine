@@ -28,7 +28,7 @@ const setRenderPosition = (renderData: IProcessedTilemapData) => {
             (renderData.orientation === TilemapOrientation.RightDown
                 ? -renderData.tilemap.realHeight / 2
                 : renderData.orientation === TilemapOrientation.RightUp
-                ? renderData.tilemap.realHeight / 2
-                : 0)
+                  ? renderData.tilemap.realHeight / 2
+                  : 0),
     );
 };

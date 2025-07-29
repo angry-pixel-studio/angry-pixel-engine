@@ -112,7 +112,7 @@ export class EdgeCollider extends BaseCollider {
                     updateCollisions: true,
                     physics: this.physics,
                     group: this.gameObject.id.toString(),
-                })
+                }),
             );
         }
 
@@ -125,8 +125,8 @@ export class EdgeCollider extends BaseCollider {
         this.vertexModel.forEach((vertex, index) =>
             this.scaledVertexModel[index].set(
                 vertex.x * this.gameObject.transform.scale.x,
-                vertex.y * this.gameObject.transform.scale.y
-            )
+                vertex.y * this.gameObject.transform.scale.y,
+            ),
         );
 
         this.scaledOffset.x = this.offsetX * this.gameObject.transform.scale.x;
@@ -149,7 +149,7 @@ export class EdgeCollider extends BaseCollider {
 
         this.scaledPosition.set(
             this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
-            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
+            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle),
         );
     }
 

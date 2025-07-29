@@ -15,7 +15,7 @@ export type GameObjectClass<T extends GameObject = GameObject> = new (
     container: Container,
     id: number,
     name?: string,
-    parent?: GameObject
+    parent?: GameObject,
 ) => T;
 
 /**
@@ -166,7 +166,7 @@ export class GameObject extends GameActor {
      * @returns The added component
      */
     public addComponent<ComponentType extends Component = Component>(
-        componentClass: ComponentClass<ComponentType>
+        componentClass: ComponentClass<ComponentType>,
     ): ComponentType;
     /**
      * Add a component to the game obejct
@@ -176,7 +176,7 @@ export class GameObject extends GameActor {
      */
     public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
         componentClass: ComponentClass<ComponentType>,
-        options: OptionsType
+        options: OptionsType,
     ): ComponentType;
     /**
      * Add a component to the game obejct
@@ -186,7 +186,7 @@ export class GameObject extends GameActor {
      */
     public addComponent<ComponentType extends Component = Component>(
         componentClass: ComponentClass<ComponentType>,
-        name: string
+        name: string,
     ): ComponentType;
     /**
      * Add a component to the game obejct
@@ -198,12 +198,12 @@ export class GameObject extends GameActor {
     public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
         componentClass: ComponentClass<ComponentType>,
         options: OptionsType,
-        name: string
+        name: string,
     ): ComponentType;
     public addComponent<ComponentType extends Component = Component, OptionsType extends InitOptions = InitOptions>(
         componentClass: ComponentClass<ComponentType>,
         arg2?: OptionsType | string,
-        arg3?: string
+        arg3?: string,
     ): ComponentType {
         const options = typeof arg2 === "string" ? undefined : arg2;
         const name = typeof arg2 === "string" ? arg2 : arg3;
@@ -239,7 +239,7 @@ export class GameObject extends GameActor {
         return (
             componentClass
                 ? this.components.filter<T>(
-                      (component: Component): component is T => component instanceof componentClass
+                      (component: Component): component is T => component instanceof componentClass,
                   )
                 : this.components
         ) as T[];
@@ -301,7 +301,7 @@ export class GameObject extends GameActor {
     public addChild<T extends GameObject>(
         gameObjectClass: GameObjectClass<T>,
         options?: InitOptions,
-        name?: string
+        name?: string,
     ): T {
         const child = this.gameObjectManager.addGameObject<T>(gameObjectClass, options, this, name);
 

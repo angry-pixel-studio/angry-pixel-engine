@@ -152,7 +152,7 @@ export class Game {
             sceneClass,
             name,
             typeof arg1 === "object" ? arg1 : undefined,
-            typeof arg1 === "boolean" ? arg1 : arg2 ?? false
+            typeof arg1 === "boolean" ? arg1 : (arg2 ?? false),
         );
     }
 

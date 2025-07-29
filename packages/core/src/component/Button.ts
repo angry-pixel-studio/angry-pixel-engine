@@ -169,12 +169,12 @@ export class Button extends EngineComponent {
                 between(
                     this.mouse.positionInViewport.x,
                     this.position.x - this.scaled.width / 2,
-                    this.position.x + this.scaled.width / 2
+                    this.position.x + this.scaled.width / 2,
                 ) &&
                 between(
                     this.mouse.positionInViewport.y,
                     this.position.y - this.scaled.height / 2,
-                    this.position.y + this.scaled.height / 2
+                    this.position.y + this.scaled.height / 2,
                 );
         }
     }

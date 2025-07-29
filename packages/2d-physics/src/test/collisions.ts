@@ -61,7 +61,7 @@ const run = () => {
     console.log(
         physicsManager
             .getCollisionsForCollider(box1)
-            .map((c) => ({ local: c.localCollider.id, remote: c.remoteCollider.id, resolution: c.resolution }))
+            .map((c) => ({ local: c.localCollider.id, remote: c.remoteCollider.id, resolution: c.resolution })),
     );
     console.log("------------------------");
 
@@ -73,13 +73,13 @@ const run = () => {
     console.log(
         physicsManager
             .getCollisionsForCollider(box1)
-            .map((c) => ({ local: c.localCollider.id, remote: c.remoteCollider.id, resolution: c.resolution }))
+            .map((c) => ({ local: c.localCollider.id, remote: c.remoteCollider.id, resolution: c.resolution })),
     );
 
     console.log(
         physicsManager
             .getCollisionsForCollider(box2)
-            .map((c) => ({ local: c.localCollider.id, remote: c.remoteCollider.id, resolution: c.resolution }))
+            .map((c) => ({ local: c.localCollider.id, remote: c.remoteCollider.id, resolution: c.resolution })),
     );
     console.log("------------------------");
 

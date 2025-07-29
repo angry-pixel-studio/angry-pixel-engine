@@ -30,7 +30,7 @@ export class Circumference implements IShape {
             this.position.x - this.radius,
             this.position.y - this.radius,
             this.radius * 2,
-            this.radius * 2
+            this.radius * 2,
         );
     }
 }

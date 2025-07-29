@@ -130,7 +130,7 @@ export class MouseController {
 
         this._positionInViewport.set(
             event.offsetX / (this.canvas.clientWidth / this.canvas.width) - this.canvas.width / 2,
-            -event.offsetY / (this.canvas.clientHeight / this.canvas.height) + this.canvas.height / 2
+            -event.offsetY / (this.canvas.clientHeight / this.canvas.height) + this.canvas.height / 2,
         );
     }
 

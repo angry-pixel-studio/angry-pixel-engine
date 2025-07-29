@@ -25,7 +25,7 @@ export class VideoRenderer implements IRenderer {
     constructor(
         private readonly gl: WebGL2RenderingContext,
         private readonly programManager: IProgramManager,
-        private readonly textureManager: ITextureManager
+        private readonly textureManager: ITextureManager,
     ) {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();

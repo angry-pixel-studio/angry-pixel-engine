@@ -158,7 +158,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         this.smooth = smooth ?? false;
 
         this.tiledLayer = this.tiledData.layers.find(
-            (layer) => layer.type === "tilelayer" && layer.name === tilemapLayer
+            (layer) => layer.type === "tilelayer" && layer.name === tilemapLayer,
         ) as TiledLayer;
         if (!this.tiledLayer) throw new Exception("Invalid tilemap layer");
 
@@ -250,7 +250,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
         if (!this.tilesetTileIds[tile]) {
             this.tilesetTileIds[tile] = this.tiledData.tilesets.reduce(
                 (id, tileset) => (tile >= tileset.firstgid ? tile - tileset.firstgid + 1 : id),
-                0
+                0,
             );
         }
 
@@ -275,7 +275,7 @@ export class TiledTilemapRenderer extends RenderComponent implements ITilemapRen
                         (chunk.x + chunk.width / 2) * this.scaledTileWidth,
                     this.gameObject.transform.position.y +
                         this.realHeight / 2 -
-                        (chunk.y + chunk.height / 2) * this.scaledTileHeight
+                        (chunk.y + chunk.height / 2) * this.scaledTileHeight,
                 );
             } else {
                 renderData.position.copy(this.gameObject.transform.position);

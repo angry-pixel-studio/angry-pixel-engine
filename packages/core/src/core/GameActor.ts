@@ -134,12 +134,12 @@ export abstract class GameActor {
     protected addGameObject<T extends GameObject>(
         gameObjectClass: GameObjectClass<T>,
         options?: InitOptions | string,
-        name?: string
+        name?: string,
     ): T;
     protected addGameObject<T extends GameObject>(
         gameObjectClass: GameObjectClass<T>,
         arg2?: InitOptions | string,
-        arg3?: string
+        arg3?: string,
     ): T {
         if (typeof arg2 === "string") {
             arg3 = arg2;

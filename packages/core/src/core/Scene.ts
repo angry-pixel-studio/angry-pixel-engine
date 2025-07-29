@@ -33,7 +33,11 @@ export type SceneClass = new (container: Container, name: string, game: Game) =>
  */
 export class Scene extends GameActor {
     /** @internal */
-    constructor(container: Container, public readonly name: string, public readonly game: Game) {
+    constructor(
+        container: Container,
+        public readonly name: string,
+        public readonly game: Game,
+    ) {
         super(container);
 
         if (!this.game.config.headless) {

@@ -44,7 +44,7 @@ export class TextRenderer implements IRenderer {
         private readonly gl: WebGL2RenderingContext,
         private readonly programManager: IProgramManager,
         private readonly textureManager: ITextureManager,
-        private readonly fontAtlasFactory: IFontAtlasFactory
+        private readonly fontAtlasFactory: IFontAtlasFactory,
     ) {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
@@ -59,7 +59,7 @@ export class TextRenderer implements IRenderer {
         const fontAtlas = this.fontAtlasFactory.getOrCreate(
             renderData.bitmap.charRanges,
             renderData.font,
-            renderData.bitmap.fontSize
+            renderData.bitmap.fontSize,
         );
 
         this.generateTextVertices(fontAtlas, renderData);
@@ -94,7 +94,7 @@ export class TextRenderer implements IRenderer {
         const texture = this.textureManager.getOrCreateTextureFromCanvas(
             TEXTURE_PREFIX + fontAtlas.fontFaceFamily,
             fontAtlas.canvas,
-            renderData.smooth
+            renderData.smooth,
         );
 
         if (this.lastTexture !== texture || lastRender !== RenderDataType.Text) {
@@ -140,7 +140,7 @@ export class TextRenderer implements IRenderer {
 
     private generateTextVertices(
         fontAtlas: FontAtlas,
-        { text, fontSize, bitmap, letterSpacing, lineSeparation }: ITextRenderData
+        { text, fontSize, bitmap, letterSpacing, lineSeparation }: ITextRenderData,
     ): void {
         this.posVertices = [];
         this.texVertices = [];
@@ -212,8 +212,8 @@ export class TextRenderer implements IRenderer {
                 renderData.orientation === TextOrientation.RightCenter
                     ? this.textSize.y / 2
                     : renderData.orientation === TextOrientation.RightUp
-                    ? this.textSize.y
-                    : 0)
+                      ? this.textSize.y
+                      : 0),
         );
     }
 }

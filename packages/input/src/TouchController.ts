@@ -88,7 +88,7 @@ export class TouchController {
                         this.canvas.width / 2,
                     -(event.targetTouches[i].clientY - this.canvas.offsetTop) /
                         (this.canvas.clientHeight / this.canvas.height) +
-                        this.canvas.height / 2
+                        this.canvas.height / 2,
                 ),
                 radius: new Vector2(event.targetTouches[i].radiusX, event.targetTouches[i].radiusY),
             };

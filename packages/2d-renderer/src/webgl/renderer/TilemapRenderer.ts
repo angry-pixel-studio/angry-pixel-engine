@@ -37,7 +37,7 @@ export class TilemapRenderer implements IRenderer {
     constructor(
         private readonly gl: WebGL2RenderingContext,
         private readonly programManager: IProgramManager,
-        private readonly textureManager: ITextureManager
+        private readonly textureManager: ITextureManager,
     ) {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
@@ -125,15 +125,15 @@ export class TilemapRenderer implements IRenderer {
 
         this.tileset.texMargin.set(
             tileset.margin.x / this.tileset.tileWidth,
-            tileset.margin.y / this.tileset.tileHeight
+            tileset.margin.y / this.tileset.tileHeight,
         );
         this.tileset.texSpacing.set(
             tileset.spacing.x / this.tileset.tileWidth,
-            tileset.spacing.y / this.tileset.tileHeight
+            tileset.spacing.y / this.tileset.tileHeight,
         );
         this.tileset.texCorrection.set(
             tileset.correction.x / this.tileset.tileWidth,
-            tileset.correction.y / this.tileset.tileHeight
+            tileset.correction.y / this.tileset.tileHeight,
         );
 
         this.tileset.texWidth =

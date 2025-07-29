@@ -48,7 +48,7 @@ export class Polygon implements IShape {
                     this._position.x,
                 this.vertexModel[i].x * Math.sin(this.rotation) +
                     this.vertexModel[i].y * Math.cos(this.rotation) +
-                    this._position.y
+                    this._position.y,
             );
         }
     }
@@ -74,7 +74,7 @@ export class Polygon implements IShape {
         for (let i = 0; i < this.vertices.length; i++) {
             Vector2.normal(
                 this._projectionAxes[i],
-                Vector2.subtract(this._projectionAxes[i], this.vertices[i + 1] ?? this.vertices[0], this.vertices[i])
+                Vector2.subtract(this._projectionAxes[i], this.vertices[i + 1] ?? this.vertices[0], this.vertices[i]),
             );
         }
     }

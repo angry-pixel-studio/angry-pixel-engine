@@ -10,7 +10,7 @@ export class TextureFactory implements ITextureFactory {
     public createFromImage(
         image: HTMLImageElement,
         smooth: boolean = true,
-        texture: WebGLTexture = null
+        texture: WebGLTexture = null,
     ): WebGLTexture {
         texture = texture ?? this.gl.createTexture();
 
@@ -26,7 +26,7 @@ export class TextureFactory implements ITextureFactory {
     public createFromCanvas(
         canvas: HTMLCanvasElement,
         smooth: boolean = true,
-        texture: WebGLTexture = null
+        texture: WebGLTexture = null,
     ): WebGLTexture {
         texture = texture ?? this.gl.createTexture();
 
@@ -49,7 +49,7 @@ export class TextureFactory implements ITextureFactory {
             0,
             this.gl.RGBA,
             this.gl.UNSIGNED_BYTE,
-            new Uint8Array([0, 0, 0, 255])
+            new Uint8Array([0, 0, 0, 255]),
         );
 
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);

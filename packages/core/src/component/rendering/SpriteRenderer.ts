@@ -163,7 +163,7 @@ export class SpriteRenderer extends RenderComponent {
         if (this.sprite && this.sprite.loaded === true) {
             this.cacheScale.set(
                 this.scale.x * this.gameObject.transform.scale.x,
-                this.scale.y * this.gameObject.transform.scale.y
+                this.scale.y * this.gameObject.transform.scale.y,
             );
 
             this.updateRenderDataArray();
@@ -218,13 +218,13 @@ export class SpriteRenderer extends RenderComponent {
     private calculateRenderPosition(index: number, tileX: number, tileY: number): void {
         this.scaledOffset.set(
             this.offset.x * this.gameObject.transform.scale.x,
-            this.offset.y * this.gameObject.transform.scale.y
+            this.offset.y * this.gameObject.transform.scale.y,
         );
         Vector2.add(this.cachePosition, this.gameObject.transform.position, this.scaledOffset);
 
         this.cacheRenderPosition.set(
             (this.renderData[index].width / 2) * (this._tiled.x - 1),
-            (this.renderData[index].height / 2) * (this._tiled.y - 1)
+            (this.renderData[index].height / 2) * (this._tiled.y - 1),
         );
         Vector2.subtract(this.cachePosition, this.cachePosition, this.cacheRenderPosition);
 
@@ -243,7 +243,7 @@ export class SpriteRenderer extends RenderComponent {
 
         this.renderData[index].position.set(
             this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
-            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
+            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle),
         );
     }
 }

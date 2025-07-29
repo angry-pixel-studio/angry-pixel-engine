@@ -23,7 +23,7 @@ export class RenderManager implements IRenderManager {
 
     public constructor(
         private readonly webglManager: IWebGLManager,
-        private readonly cullingManager: ICullingManager
+        private readonly cullingManager: ICullingManager,
     ) {}
 
     public addRenderData<T extends IRenderData>(data: T): void {
@@ -48,8 +48,8 @@ export class RenderManager implements IRenderManager {
                     .map((renderData) =>
                         renderData.type === RenderDataType.Tilemap
                             ? processTilemapRenderData(renderData as ITilemapRenderData)
-                            : renderData
-                    )
+                            : renderData,
+                    ),
             )
             .forEach((renderData) => this.webglManager.render(renderData, cameraData));
     }

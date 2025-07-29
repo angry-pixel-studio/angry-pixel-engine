@@ -38,7 +38,7 @@ export interface IGameObjectManager {
         gameObjectClass: GameObjectClass<T>,
         options?: InitOptions,
         parent?: GameObject,
-        name?: string
+        name?: string,
     ): T;
     /**
      * Returns a collection of found game objects for the given class, or all the game objects if there is no class.
@@ -115,7 +115,7 @@ export class GameObjectManager implements IGameObjectManager {
         gameObjectClass: GameObjectClass<T>,
         options?: InitOptions,
         parent?: GameObject,
-        name?: string
+        name?: string,
     ): T {
         const gameObject = new gameObjectClass(this.container, ++this.lastId, name, parent);
         this.gameObjects.push(gameObject);

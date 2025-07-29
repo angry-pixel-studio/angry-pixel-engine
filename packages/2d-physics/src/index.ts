@@ -52,7 +52,7 @@ export const physicsManagerFactory = ({
         selectedMethod,
         collisionBroadPhaseMethod,
         collisionArea,
-        collisionMatrix
+        collisionMatrix,
     );
     const colliderFactory = new ColliderFactory();
     const rigidBodyManager = new RigidBodyManager(collisionManager);

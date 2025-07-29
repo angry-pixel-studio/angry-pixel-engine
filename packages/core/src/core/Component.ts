@@ -8,7 +8,7 @@ import { Container } from "../utils/Container";
 export type ComponentClass<T extends Component = Component> = new (
     container: Container,
     gameObject: GameObject,
-    name?: string
+    name?: string,
 ) => T;
 
 /**

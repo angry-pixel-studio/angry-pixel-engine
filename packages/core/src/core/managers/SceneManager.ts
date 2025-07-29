@@ -67,7 +67,10 @@ export class SceneManager implements ISceneManager {
     private openingSceneName: string;
     private sceneNamePendingToLoad: string = null;
 
-    constructor(private readonly container: Container, private renderManager?: IRenderManager) {}
+    constructor(
+        private readonly container: Container,
+        private renderManager?: IRenderManager,
+    ) {}
 
     /**
      * @inheritdoc

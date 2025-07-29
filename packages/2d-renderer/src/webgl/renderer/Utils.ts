@@ -6,7 +6,7 @@ export const setProjectionMatrix = (
     projectionMatrix: mat4,
     gl: WebGL2RenderingContext,
     cameraData: ICameraData,
-    renderLocation: RenderLocation
+    renderLocation: RenderLocation,
 ): void => {
     projectionMatrix = mat4.identity(projectionMatrix);
     mat4.ortho(
@@ -16,7 +16,7 @@ export const setProjectionMatrix = (
         -gl.canvas.height / 2,
         gl.canvas.height / 2,
         -1,
-        1
+        1,
     );
 
     if (renderLocation === RenderLocation.WorldSpace) {

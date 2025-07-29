@@ -39,7 +39,7 @@ export class InputManager implements IInputManager {
         mouse: MouseController,
         keyboard: KeyboardController,
         gamepad: GamepadController,
-        touch: TouchController
+        touch: TouchController,
     ) {
         this.mouse = mouse;
         this.keyboard = keyboard;

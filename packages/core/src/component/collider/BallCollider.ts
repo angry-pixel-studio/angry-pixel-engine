@@ -90,7 +90,7 @@ export class BallCollider extends BaseCollider {
                 updateCollisions: true,
                 physics: this.physics,
                 group: this.gameObject.id.toString(),
-            })
+            }),
         );
 
         if (this.debug) {
@@ -122,7 +122,7 @@ export class BallCollider extends BaseCollider {
 
         this.realPosition.set(
             this.gameObject.transform.position.x + this.innerPosition.magnitude * Math.cos(translatedAngle),
-            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle)
+            this.gameObject.transform.position.y + this.innerPosition.magnitude * Math.sin(translatedAngle),
         );
     }
 

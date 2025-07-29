@@ -34,7 +34,7 @@ export class Line implements IShape {
                     this._position.x,
                 this.vertexModel[i].x * Math.sin(this.rotation) +
                     this.vertexModel[i].y * Math.cos(this.rotation) +
-                    this._position.y
+                    this._position.y,
             );
         }
     }
@@ -49,7 +49,7 @@ export class Line implements IShape {
     private updateProjectionAxes(): void {
         Vector2.normal(
             this.projectionAxes[0],
-            Vector2.subtract(this.projectionAxes[0], this.vertices[1], this.vertices[0])
+            Vector2.subtract(this.projectionAxes[0], this.vertices[1], this.vertices[0]),
         );
     }
 }

@@ -46,7 +46,7 @@ export class CollisionManager implements ICollisionManager {
         method: ICollisionMethod,
         broadPhaseMethod?: BroadPhaseMethods,
         collisionArea?: Rectangle,
-        collisionMatrix?: CollisionMatrix
+        collisionMatrix?: CollisionMatrix,
     ) {
         this.method = method;
         this.colliders = [];
@@ -99,7 +99,7 @@ export class CollisionManager implements ICollisionManager {
         if (!this.colliders[collider.id] || !collider.active) return;
 
         this.collisions = this.collisions.filter(
-            (c) => c.localCollider.id !== collider.id && c.remoteCollider.id !== collider.id
+            (c) => c.localCollider.id !== collider.id && c.remoteCollider.id !== collider.id,
         );
 
         this.updateShape(collider);
@@ -133,7 +133,7 @@ export class CollisionManager implements ICollisionManager {
         this.checkForSpartialGridResize();
 
         this.activeColliders.forEach(({ id, shape: { boundingBox } }) =>
-            this.broadPhaseResolver.insert(id, boundingBox)
+            this.broadPhaseResolver.insert(id, boundingBox),
         );
 
         this.updateCollisions();
@@ -156,7 +156,7 @@ export class CollisionManager implements ICollisionManager {
             this.minArea.x,
             this.minArea.y,
             this.maxArea.x - this.minArea.x,
-            this.maxArea.y - this.minArea.y
+            this.maxArea.y - this.minArea.y,
         );
     }
 
@@ -188,8 +188,8 @@ export class CollisionManager implements ICollisionManager {
                     this.collisionMatrix.some(
                         (row) =>
                             (row[0] === collider.layer && row[1] === remoteCollider.layer) ||
-                            (row[1] === collider.layer && row[0] === remoteCollider.layer)
-                    )
+                            (row[1] === collider.layer && row[0] === remoteCollider.layer),
+                    ),
                 );
         }
 
@@ -205,7 +205,7 @@ export class CollisionManager implements ICollisionManager {
             .filter(
                 (remoteCollider: ICollider) =>
                     (!collider.group || !remoteCollider.group || remoteCollider.group !== collider.group) &&
-                    collider.id !== remoteCollider.id
+                    collider.id !== remoteCollider.id,
             )
             .forEach((remoteCollider: ICollider) => {
                 if (this.isResolved(collider, remoteCollider)) return;
@@ -226,7 +226,7 @@ export class CollisionManager implements ICollisionManager {
                                 displacementDirection: resolution.direction,
                                 penetration: resolution.penetration,
                             },
-                        }
+                        },
                     );
 
                     if (collider.onCollision) collider.onCollision(resolution);

@@ -6,7 +6,7 @@ import { ICollisionResolver } from "../resolver/ICollisionResolver";
 export class SatMethod implements ICollisionMethod {
     constructor(
         private readonly circumferenceResolver: ICollisionResolver,
-        private readonly satResolver: ICollisionResolver
+        private readonly satResolver: ICollisionResolver,
     ) {}
 
     public getCollisionResolution(shapeA: IShape, shapeB: IShape): ICollisionResolution | null {

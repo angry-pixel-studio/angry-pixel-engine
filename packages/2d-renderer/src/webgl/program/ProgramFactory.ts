@@ -5,7 +5,10 @@ export interface IProgramFactory {
 }
 
 export class ProgramFactory implements IProgramFactory {
-    constructor(private readonly gl: WebGL2RenderingContext, private readonly shaderLoader: IShaderLoader) {}
+    constructor(
+        private readonly gl: WebGL2RenderingContext,
+        private readonly shaderLoader: IShaderLoader,
+    ) {}
 
     public create(vertexShaderSource: string, fragmentShaderSource: string): WebGLProgram {
         const program: WebGLProgram = this.gl.createProgram();

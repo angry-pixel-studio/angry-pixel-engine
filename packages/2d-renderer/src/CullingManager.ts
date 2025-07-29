@@ -120,7 +120,7 @@ export class CullingManager implements ICullingManager {
             this.viewport.y1 >= this.object.y1 - (((tile / width) | 0) * tileHeight + tileHeight) &&
             this.viewport.y <= this.object.y1 - ((tile / width) | 0) * tileHeight
                 ? data
-                : 0
+                : 0,
         );
     }
 

@@ -25,7 +25,7 @@ export class PhysicsManager implements IPhysicsManager {
         private readonly collisionManager: ICollisionManager,
         private readonly colliderFactory: IColliderFactory,
         private readonly rigidBodyManager: IRigidBodyManager,
-        private readonly rigidBodyFactory: IRigidBodyFactory
+        private readonly rigidBodyFactory: IRigidBodyFactory,
     ) {}
 
     public addCollider(colliderDto: IColliderDto): ICollider {
