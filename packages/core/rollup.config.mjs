@@ -4,6 +4,8 @@ import typescript from "@rollup/plugin-typescript";
 import { terser } from "rollup-plugin-terser";
 import dts from "rollup-plugin-dts";
 import del from "rollup-plugin-del";
+import alias from "@rollup/plugin-alias";
+import path from "path";
 
 const builderECS = (format, filename) => ({
     exports: "named",
@@ -15,6 +17,50 @@ const builderECS = (format, filename) => ({
 
 const main = () => {
     return [
+        // this generates the modules
+        {
+            input: "src/index.ts",
+            output: [
+                builderECS("umd", "index.js"),
+                builderECS("esm", "index.esm.js"),
+                builderECS("cjs", "index.cjs.js"),
+            ],
+            plugins: [
+                alias({
+                    entries: [
+                        {
+                            find: "@angry-pixel/math",
+                            replacement: path.resolve("../../packages/math/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/input",
+                            replacement: path.resolve("../../packages/input/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/2d-physics",
+                            replacement: path.resolve("../../packages/2d-physics/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/2d-renderer",
+                            replacement: path.resolve("../../packages/2d-renderer/dist/index.js"),
+                        },
+                    ],
+                }),
+                typescript({
+                    compilerOptions: {
+                        declaration: false,
+                        emitDeclarationOnly: false,
+                        declarationDir: undefined,
+                    },
+                }),
+                nodeResolve({
+                    extensions: [".ts"],
+                    preferBuiltins: false,
+                }),
+                commonjs({ extensions: [".js"] }),
+                terser(),
+            ],
+        },
         // this generates one file containing all the type declarations
         {
             input: "dist/index.d.ts",
@@ -42,36 +88,6 @@ const main = () => {
                 del({ dest: "../../packages/2d-physics/tsconfig.tsbuildinfo" }),
                 del({ dest: "../../packages/2d-renderer/dist" }),
                 del({ dest: "../../packages/2d-renderer/tsconfig.tsbuildinfo" }),
-            ],
-        },
-        // this generates the modules
-        {
-            input: "src/index.ts",
-            output: [
-                builderECS("umd", "index.js"),
-                builderECS("esm", "index.esm.js"),
-                builderECS("cjs", "index.cjs.js"),
-            ],
-            external: [
-                "@angry-pixel/math",
-                "@angry-pixel/input",
-                "@angry-pixel/2d-physics",
-                "@angry-pixel/2d-renderer",
-            ],
-            plugins: [
-                typescript({
-                    tsconfig: "./tsconfig.json",
-                    compilerOptions: {
-                        declaration: false,
-                        emitDeclarationOnly: false,
-                    },
-                }),
-                nodeResolve({
-                    extensions: [".ts", ".js"],
-                    preferBuiltins: false,
-                }),
-                commonjs({ extensions: [".js"] }),
-                terser(),
             ],
         },
     ];
