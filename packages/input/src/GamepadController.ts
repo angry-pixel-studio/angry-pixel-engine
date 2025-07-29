@@ -77,10 +77,10 @@ export class GamepadController {
         return navigator.getGamepads
             ? navigator.getGamepads()
             : // @ts-ignore
-            navigator.webkitGetGamepads
-            ? // @ts-ignore
               navigator.webkitGetGamepads
-            : [];
+              ? // @ts-ignore
+                navigator.webkitGetGamepads
+              : [];
     }
 }
 
@@ -327,7 +327,7 @@ export class GamepadData {
      * @readonly
      */
     public get leftStickVertical(): number {
-        return -this.axes.get(1) ?? 0;
+        return -(this.axes.get(1) ?? 0);
     }
 
     /**
@@ -343,7 +343,7 @@ export class GamepadData {
      * @readonly
      */
     public get rightStickVertical(): number {
-        return -this.axes.get(3) ?? 0;
+        return -(this.axes.get(3) ?? 0);
     }
 
     /**
@@ -373,7 +373,7 @@ export class GamepadData {
         duration: number = 200,
         weakMagnitude: number = 0.2,
         strongMagnitude: number = 0.2,
-        startDelay: number = 0
+        startDelay: number = 0,
     ): void {
         if (this._gamepad.vibrationActuator) {
             this._vibrating = true;

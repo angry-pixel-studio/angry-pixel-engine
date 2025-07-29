@@ -1,6 +1,6 @@
 {
     "name": "angry-pixel",
-    "version": "1.2.17",
+    "version": "1.2.18",
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -11,10 +11,8 @@
     },
     "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
     "keywords": [
-        "angry pixel",
+        "video game engine",
         "game engine",
-        "video games",
-        "engine",
         "2d engine",
         "webgl",
         "canvas",
@@ -25,8 +23,5 @@
     "license": "MIT",
     "publishConfig": {
         "access": "public"
-    },
-    "dependencies": {
-        "@angry-pixel/core": "1.0.9"
     }
 }

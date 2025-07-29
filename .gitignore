@@ -1,8 +1,7 @@
 **/node_modules
 .vscode
 .vs
-angry-pixel-*.tgz
 **/lib
-yarn-error.log
+**/yarn-error.log
 /api-docs
-local.bat
+/docs/site

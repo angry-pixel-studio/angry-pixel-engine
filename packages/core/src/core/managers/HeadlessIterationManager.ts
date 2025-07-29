@@ -15,8 +15,8 @@ export class HeadlessIterationManager implements IIterationManager {
     private loadedScene: Scene;
     private gameObjects: GameObject[] = [];
     private components: Component[] = [];
-    private gameInterval: NodeJS.Timer | number;
-    private physicsInterval: NodeJS.Timer | number;
+    private gameInterval: NodeJS.Timeout | number;
+    private physicsInterval: NodeJS.Timeout | number;
     private changingScene: boolean = false;
 
     private readonly sceneEvents: FrameEvent[] = [FrameEvent.Start, FrameEvent.Update, FrameEvent.StopGame];
@@ -26,7 +26,7 @@ export class HeadlessIterationManager implements IIterationManager {
         private readonly timeManager: ITimeManager,
         private readonly physicsManager: IPhysicsManager,
         private readonly gameObjectManager: IGameObjectManager,
-        private readonly sceneManager: ISceneManager
+        private readonly sceneManager: ISceneManager,
     ) {}
 
     public start(): void {
@@ -131,7 +131,7 @@ export class HeadlessIterationManager implements IIterationManager {
             gameObject
                 .getComponents()
                 .filter((component) => component.active)
-                .forEach((c) => this.components.push(c))
+                .forEach((c) => this.components.push(c)),
         );
     }
 

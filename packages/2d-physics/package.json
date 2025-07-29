@@ -1,29 +1,7 @@
 {
     "name": "@angry-pixel/2d-physics",
-    "version": "1.0.3",
+    "version": "1.0.0",
     "description": "2D physics for Angry Pixel Engine",
-    "main": "lib/index.js",
-    "types": "lib/index.d.ts",
-    "module": "lib/index.esm.js",
-    "scripts": {
-        "build": "rollup -c",
-        "clean": "tsc --build --clean",
-        "prepare": "npm run build",
-        "test-collisions": "ts-node src/test/collisions.ts",
-        "test-rigidbody": "ts-node src/test/rigidBody.ts",
-        "test-containment": "ts-node src/test/containment.ts"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine.git"
-    },
-    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
-    "author": "Mauro Cristy <maurocristy@gmail.com>",
-    "license": "MIT",
-    "publishConfig": {
-        "access": "public"
-    },
-    "dependencies": {
-        "@angry-pixel/math": "1.0.1"
-    }
+    "main": "src/index.ts",
+    "author": "Mauro Cristy <maurocristy@gmail.com>"
 }

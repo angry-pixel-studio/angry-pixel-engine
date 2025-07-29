@@ -2,7 +2,17 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "rootDir": "src",
-        "paths": {}
+        "composite": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "declarationDir": "dist",
+        "outDir": "dist"
     },
+    "references": [
+        { "path": "../math" },
+        { "path": "../input" },
+        { "path": "../2d-physics" },
+        { "path": "../2d-renderer" }
+    ],
     "include": ["src"]
 }

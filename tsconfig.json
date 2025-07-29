@@ -1,21 +1,14 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ES6",
         "module": "ES2015",
-        "lib": ["ES2020", "dom"],
-        "declaration": true,
-        "declarationDir": "./types",
+        "lib": ["DOM", "ESNext"],
         "strict": true,
         "strictNullChecks": false,
         "sourceMap": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
         "resolveJsonModule": true,
-        "baseUrl": "./",
-        "paths": {
-            "@angry-pixel/*": ["packages/*/src"],
-            "angry-pixel": ["bundles/angry-pixel/src"]
-        }
     },
     "exclude": ["node_modules", "**/dist/**", "**/lib/**"]
 }
