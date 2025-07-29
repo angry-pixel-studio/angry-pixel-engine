@@ -11,6 +11,7 @@
     "scripts": {
         "start": "yarn workspace @angry-pixel/demo start",
         "build": "yarn workspace @angry-pixel/core build",
+        "clean": "yarn workspace @angry-pixel/core clean",
         "lint": "eslint .",
         "lint-and-fix": "eslint . --fix",
         "prettier-format": "prettier --write \"packages/*/src/**/*.ts\"",

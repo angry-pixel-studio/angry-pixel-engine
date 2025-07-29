@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "WebGL rendering for Angry Pixel Engine",
     "main": "src/index.ts",
+    "types": "dist/index.d.ts",
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "dependencies": {
         "gl-matrix": "^3.4.3"

@@ -5,3 +5,5 @@
 **/yarn-error.log
 /api-docs
 /docs/site
+**/dist
+**/tsconfig.tsbuildinfo

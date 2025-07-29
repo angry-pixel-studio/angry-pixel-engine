@@ -3,5 +3,6 @@
     "version": "1.0.0",
     "description": "2D physics for Angry Pixel Engine",
     "main": "src/index.ts",
+    "types": "dist/index.d.ts",
     "author": "Mauro Cristy <maurocristy@gmail.com>"
 }
