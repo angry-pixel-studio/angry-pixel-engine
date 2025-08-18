@@ -4,6 +4,8 @@ import typescript from "@rollup/plugin-typescript";
 import { terser } from "rollup-plugin-terser";
 import dts from "rollup-plugin-dts";
 import del from "rollup-plugin-del";
+import alias from "@rollup/plugin-alias";
+import path from "path";
 
 const builderECS = (format, filename) => ({
     exports: "named",
@@ -15,17 +17,6 @@ const builderECS = (format, filename) => ({
 
 const main = () => {
     return [
-        // this generates one file containing all the type declarations
-        {
-            input: "../../bundles/angry-pixel/types/index.d.ts",
-            output: [
-                {
-                    file: "../../bundles/angry-pixel/lib/index.d.ts",
-                    format: "es",
-                },
-            ],
-            plugins: [dts(), del({ dest: "../../bundles/angry-pixel/types" })],
-        },
         // this generates the modules
         {
             input: "src/index.ts",
@@ -35,7 +26,30 @@ const main = () => {
                 builderECS("cjs", "index.cjs.js"),
             ],
             plugins: [
-                nodeResolve(),
+                alias({
+                    entries: [
+                        {
+                            find: "@angry-pixel/collisions",
+                            replacement: path.resolve("../collisions/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/ecs",
+                            replacement: path.resolve("../ecs/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/ioc",
+                            replacement: path.resolve("../ioc/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/math",
+                            replacement: path.resolve("../math/dist/index.js"),
+                        },
+                        {
+                            find: "@angry-pixel/webgl",
+                            replacement: path.resolve("../webgl/dist/index.js"),
+                        },
+                    ],
+                }),
                 typescript({
                     compilerOptions: {
                         declaration: false,
@@ -43,8 +57,33 @@ const main = () => {
                         declarationDir: undefined,
                     },
                 }),
-                commonjs({ extensions: [".ts", ".js"] }),
+                nodeResolve({
+                    extensions: [".ts"],
+                    preferBuiltins: false,
+                }),
+                commonjs({ extensions: [".js"] }),
                 terser(),
+            ],
+        },
+        // this generates one file containing all the type declarations
+        {
+            input: "dist/index.d.ts",
+            output: {
+                file: "../../bundles/angry-pixel/lib/index.d.ts",
+                format: "es",
+            },
+            plugins: [
+                dts({
+                    respectExternal: false,
+                    compilerOptions: {
+                        baseUrl: ".",
+                        paths: {
+                            "@angry-pixel/*": ["../../packages/*/dist"],
+                        },
+                    },
+                }),
+                del({ dest: "../../packages/**/dist" }),
+                del({ dest: "../../packages/**/tsconfig.tsbuildinfo" }),
             ],
         },
     ];

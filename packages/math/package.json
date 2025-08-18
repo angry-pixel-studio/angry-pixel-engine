@@ -1,0 +1,9 @@
+{
+    "name": "@angry-pixel/math",
+    "version": "1.0.0",
+    "description": "Angry Pixel math library.",
+    "author": "Mauro Cristy <maurocristy@gmail.com>",
+    "license": "MIT",
+    "private": true,
+    "main": "src/index.ts"
+}

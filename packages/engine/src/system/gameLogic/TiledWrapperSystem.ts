@@ -1,16 +1,16 @@
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { TiledLayer, TiledTilemap, TiledWrapper } from "@component/gameLogic/TiledWrapper";
 import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
 import { AssetManager } from "@manager/AssetManager";
 
-@injectable(SYSTEM_TYPES.TiledWrapperSystem)
+@injectable(SYSTEM_SYMBOLS.TiledWrapperSystem)
 export class TiledWrapperSystem implements System {
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {

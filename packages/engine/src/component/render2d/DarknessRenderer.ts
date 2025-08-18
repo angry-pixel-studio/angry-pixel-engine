@@ -1,5 +1,5 @@
-import { Rectangle } from "@math";
-import { RenderDataType, DarknessRenderData } from "@webgl";
+import { Rectangle } from "@angry-pixel/math";
+import { RenderDataType, DarknessRenderData } from "@angry-pixel/webgl";
 import { defaultRenderLayer } from "./Camera";
 
 /**

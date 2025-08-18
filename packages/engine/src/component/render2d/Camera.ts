@@ -1,5 +1,5 @@
-import { Vector2 } from "@math";
-import { CameraData } from "@webgl";
+import { Vector2 } from "@angry-pixel/math";
+import { CameraData } from "@angry-pixel/webgl";
 
 /**
  * Default render layer

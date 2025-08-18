@@ -1,6 +1,6 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
-import { MaskRenderData, MaskShape, RenderDataType } from "@webgl";
+import { MaskRenderData, MaskShape, RenderDataType } from "@angry-pixel/webgl";
 
 /**
  * MaskRenderer component configuration

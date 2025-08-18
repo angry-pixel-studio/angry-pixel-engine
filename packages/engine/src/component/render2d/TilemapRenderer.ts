@@ -1,6 +1,6 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
-import { TilemapRenderData } from "@webgl";
+import { TilemapRenderData } from "@angry-pixel/webgl";
 
 /**
  * TilemapRenderer component configuration

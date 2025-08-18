@@ -1,8 +1,8 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { RenderManager } from "@manager/RenderManager";
-import { CameraData, RenderData, RenderDataType } from "../../utils/webgl/renderer/Renderer";
+import { CameraData, RenderData, RenderDataType } from "@angry-pixel/webgl";
 import {
     GeometricRenderData,
     GeometricShape,
@@ -10,9 +10,9 @@ import {
     MaskShape,
     TextRenderData,
     TilemapRenderData,
-} from "@webgl";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { Vector2 } from "@math";
+} from "@angry-pixel/webgl";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { Vector2 } from "@angry-pixel/math";
 
 type BoundingBox = { x: number; x1: number; y: number; y1: number };
 
@@ -23,7 +23,7 @@ interface ResizeableRenderData extends RenderData {
     tiled?: Vector2;
 }
 
-@injectable(SYSTEM_TYPES.CullingSystem)
+@injectable(SYSTEM_SYMBOLS.CullingSystem)
 export class CullingSystem implements System {
     // auxiliars
     private readonly viewport: BoundingBox = { x: 0, x1: 0, y: 0, y1: 0 };
@@ -31,8 +31,8 @@ export class CullingSystem implements System {
     private culledRenderData: RenderData[] = [];
 
     constructor(
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.CanvasElement) private readonly canvas: HTMLCanvasElement,
     ) {}
 
     public onUpdate(): void {

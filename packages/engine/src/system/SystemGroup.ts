@@ -1,4 +1,4 @@
-import { SystemType } from "@ecs";
+import { SystemType } from "@angry-pixel/ecs";
 
 /** @internal */
 export enum SystemGroup {

@@ -1,4 +1,4 @@
-import { SystemType } from "@ecs";
+import { SystemType } from "@angry-pixel/ecs";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 import { ButtonSystem } from "@system/gameLogic/ButtonSystem";
 import { TiledWrapperSystem } from "@system/gameLogic/TiledWrapperSystem";
@@ -21,7 +21,7 @@ import { TextRendererSystem } from "@system/render2d/TextRendererSystem";
 import { TilemapRendererSystem } from "@system/render2d/TilemapRendererSystem";
 import { VideoRendererSystem } from "@system/render2d/VideoRendererSystem";
 import { SystemGroup } from "@system/SystemGroup";
-import { SYSTEM_TYPES } from "./systemTypes";
+import { SYSTEM_SYMBOLS } from "./systemSymbols";
 import { ApplyVelocitySystem } from "@system/physics2d/ApplyVelocitySystem";
 import { UpdateBallColliderShapeSystem } from "@system/physics2d/collider/UpdateBallColliderShapeSystem";
 import { UpdateBoxColliderShapeSystem } from "@system/physics2d/collider/UpdateBoxColliderShapeSystem";
@@ -39,47 +39,47 @@ export const systemsByGroup: SystemsByGroup = new Map([
     [
         SystemGroup.PreGameLogic,
         [
-            { name: SYSTEM_TYPES.KeyboardSystem, type: KeyboardSystem },
-            { name: SYSTEM_TYPES.MouseSystem, type: MouseSystem },
-            { name: SYSTEM_TYPES.TouchScreenSystem, type: TouchScreenSystem },
-            { name: SYSTEM_TYPES.GamepadSystem, type: GamepadSystem },
-            { name: SYSTEM_TYPES.ButtonSystem, type: ButtonSystem },
-            { name: SYSTEM_TYPES.AudioPlayerSystem, type: AudioPlayerSystem },
-            { name: SYSTEM_TYPES.TiledWrapperSystem, type: TiledWrapperSystem },
-            { name: SYSTEM_TYPES.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
+            { name: SYSTEM_SYMBOLS.KeyboardSystem, type: KeyboardSystem },
+            { name: SYSTEM_SYMBOLS.MouseSystem, type: MouseSystem },
+            { name: SYSTEM_SYMBOLS.TouchScreenSystem, type: TouchScreenSystem },
+            { name: SYSTEM_SYMBOLS.GamepadSystem, type: GamepadSystem },
+            { name: SYSTEM_SYMBOLS.ButtonSystem, type: ButtonSystem },
+            { name: SYSTEM_SYMBOLS.AudioPlayerSystem, type: AudioPlayerSystem },
+            { name: SYSTEM_SYMBOLS.TiledWrapperSystem, type: TiledWrapperSystem },
+            { name: SYSTEM_SYMBOLS.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
         ],
     ],
-    [SystemGroup.Transform, [{ name: SYSTEM_TYPES.TransformSystem, type: TransformSystem }]],
+    [SystemGroup.Transform, [{ name: SYSTEM_SYMBOLS.TransformSystem, type: TransformSystem }]],
     [
         SystemGroup.Physics,
         [
-            { name: SYSTEM_TYPES.ApplyVelocitySystem, type: ApplyVelocitySystem },
-            { name: SYSTEM_TYPES.UpdateBallColliderShapeSystem, type: UpdateBallColliderShapeSystem },
-            { name: SYSTEM_TYPES.UpdateBoxColliderShapeSystem, type: UpdateBoxColliderShapeSystem },
-            { name: SYSTEM_TYPES.UpdateEdgeColliderShapeSystem, type: UpdateEdgeColliderShapeSystem },
-            { name: SYSTEM_TYPES.UpdatePolygonColliderShapeSystem, type: UpdatePolygonColliderShapeSystem },
-            { name: SYSTEM_TYPES.UpdateTilemapColliderShapeSystem, type: UpdateTilemapColliderShapeSystem },
-            { name: SYSTEM_TYPES.ResolveCollisionSystem, type: ResolveCollisionSystem },
-            { name: SYSTEM_TYPES.ApplyRepositionSystem, type: ApplyRepositionSystem },
-            { name: SYSTEM_TYPES.UpdateCollidersAfterRepositionSystem, type: UpdateCollidersAfterRepositionSystem },
+            { name: SYSTEM_SYMBOLS.ApplyVelocitySystem, type: ApplyVelocitySystem },
+            { name: SYSTEM_SYMBOLS.UpdateBallColliderShapeSystem, type: UpdateBallColliderShapeSystem },
+            { name: SYSTEM_SYMBOLS.UpdateBoxColliderShapeSystem, type: UpdateBoxColliderShapeSystem },
+            { name: SYSTEM_SYMBOLS.UpdateEdgeColliderShapeSystem, type: UpdateEdgeColliderShapeSystem },
+            { name: SYSTEM_SYMBOLS.UpdatePolygonColliderShapeSystem, type: UpdatePolygonColliderShapeSystem },
+            { name: SYSTEM_SYMBOLS.UpdateTilemapColliderShapeSystem, type: UpdateTilemapColliderShapeSystem },
+            { name: SYSTEM_SYMBOLS.ResolveCollisionSystem, type: ResolveCollisionSystem },
+            { name: SYSTEM_SYMBOLS.ApplyRepositionSystem, type: ApplyRepositionSystem },
+            { name: SYSTEM_SYMBOLS.UpdateCollidersAfterRepositionSystem, type: UpdateCollidersAfterRepositionSystem },
         ],
     ],
     [
         SystemGroup.Render,
         [
-            { name: SYSTEM_TYPES.AnimatorSystem, type: AnimatorSystem },
-            { name: SYSTEM_TYPES.CameraSystem, type: CameraSystem },
-            { name: SYSTEM_TYPES.TilemapRendererSystem, type: TilemapRendererSystem },
-            { name: SYSTEM_TYPES.SpriteRendererSystem, type: SpriteRendererSystem },
-            { name: SYSTEM_TYPES.MaskRendererSystem, type: MaskRendererSystem },
-            { name: SYSTEM_TYPES.DarknessLightRendererSystem, type: DarknessLightRendererSystem },
-            { name: SYSTEM_TYPES.TextRendererSystem, type: TextRendererSystem },
-            { name: SYSTEM_TYPES.VideoRendererSystem, type: VideoRendererSystem },
-            { name: SYSTEM_TYPES.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
-            { name: SYSTEM_TYPES.DebugMousePositionSystem, type: DebugMousePositionSystem },
-            { name: SYSTEM_TYPES.CullingSystem, type: CullingSystem },
-            { name: SYSTEM_TYPES.ClearScreenSystem, type: ClearScreenSystem },
-            { name: SYSTEM_TYPES.RenderSystem, type: RenderSystem },
+            { name: SYSTEM_SYMBOLS.AnimatorSystem, type: AnimatorSystem },
+            { name: SYSTEM_SYMBOLS.CameraSystem, type: CameraSystem },
+            { name: SYSTEM_SYMBOLS.TilemapRendererSystem, type: TilemapRendererSystem },
+            { name: SYSTEM_SYMBOLS.SpriteRendererSystem, type: SpriteRendererSystem },
+            { name: SYSTEM_SYMBOLS.MaskRendererSystem, type: MaskRendererSystem },
+            { name: SYSTEM_SYMBOLS.DarknessLightRendererSystem, type: DarknessLightRendererSystem },
+            { name: SYSTEM_SYMBOLS.TextRendererSystem, type: TextRendererSystem },
+            { name: SYSTEM_SYMBOLS.VideoRendererSystem, type: VideoRendererSystem },
+            { name: SYSTEM_SYMBOLS.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
+            { name: SYSTEM_SYMBOLS.DebugMousePositionSystem, type: DebugMousePositionSystem },
+            { name: SYSTEM_SYMBOLS.CullingSystem, type: CullingSystem },
+            { name: SYSTEM_SYMBOLS.ClearScreenSystem, type: ClearScreenSystem },
+            { name: SYSTEM_SYMBOLS.RenderSystem, type: RenderSystem },
         ],
     ],
 ]);

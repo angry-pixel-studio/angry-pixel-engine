@@ -1,16 +1,16 @@
 import { Button, ButtonShape } from "@component/gameLogic/Button";
 import { Transform } from "@component/gameLogic/Transform";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { EntityManager, System } from "@ecs";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
 import { Mouse, TouchScreen } from "@input";
-import { inject, injectable } from "@ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
-import { between, Vector2 } from "@math";
+import { between, Vector2 } from "@angry-pixel/math";
 
 type ScaledButton = { width: number; height: number; radius: number; position: Vector2 };
 
-@injectable(SYSTEM_TYPES.ButtonSystem)
+@injectable(SYSTEM_SYMBOLS.ButtonSystem)
 export class ButtonSystem implements System {
     private readonly mouse: Mouse;
     private readonly touchScreen: TouchScreen;
@@ -21,8 +21,8 @@ export class ButtonSystem implements System {
     private pressedLastFrame: boolean = false;
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.InputManager) inputManager: InputManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.InputManager) inputManager: InputManager,
     ) {
         this.mouse = inputManager.mouse;
         this.touchScreen = inputManager.touchScreen;

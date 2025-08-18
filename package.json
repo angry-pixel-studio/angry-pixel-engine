@@ -7,17 +7,19 @@
     "license": "MIT",
     "workspaces": [
         "packages/*",
-        "bundles/*"
+        "bundles/*",
+        "apps/*"
     ],
     "scripts": {
-        "start": "yarn workspace @angry-pixel/tester-ecs start",
+        "start": "yarn workspace @angry-pixel/demo start",
         "build": "yarn workspace @angry-pixel/engine build",
+        "build:types": "yarn workspace @angry-pixel/engine build:types",
         "lint": "eslint .",
         "lint-and-fix": "eslint . --fix",
         "prettier-format": "prettier --write \"packages/*/src/**/*.ts\"",
         "prettier-check": "prettier --check \"packages/*/src/**/*.ts\"",
         "publish": "yarn run build && yarn workspace angry-pixel publish",
-        "api-docs": "yarn workspace @angry-pixel/engine typedoc",
+        "api-docs": "yarn run build:types && yarn workspace @angry-pixel/engine typedoc",
         "docs": "cd docs && python -m mkdocs build"
     },
     "devDependencies": {

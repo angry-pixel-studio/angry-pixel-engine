@@ -1,6 +1,6 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
-import { RenderDataType, Slice, SpriteRenderData } from "@webgl";
+import { RenderDataType, Slice, SpriteRenderData } from "@angry-pixel/webgl";
 
 /**
  * SpriteRenderer component configuration

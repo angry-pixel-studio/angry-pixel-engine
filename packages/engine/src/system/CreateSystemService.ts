@@ -1,5 +1,5 @@
-import { System, SystemManager, SystemType } from "@ecs";
-import { Container } from "@ioc";
+import { System, SystemManager, SystemType } from "@angry-pixel/ecs";
+import { Container } from "@angry-pixel/ioc";
 import { getSystemGroup } from "./SystemGroup";
 
 export class CreateSystemService {

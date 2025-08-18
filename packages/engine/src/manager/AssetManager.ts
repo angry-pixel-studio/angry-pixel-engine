@@ -1,5 +1,5 @@
-import { injectable } from "@ioc";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { injectable } from "@angry-pixel/ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
 
 enum AssetType {
     Image,
@@ -45,7 +45,7 @@ interface Asset {
  * }
  * ```
  */
-@injectable(DEPENDENCY_TYPES.AssetManager)
+@injectable(SYMBOLS.AssetManager)
 export class AssetManager {
     private readonly assets: Asset[] = [];
 

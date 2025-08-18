@@ -1,21 +1,21 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { MaskRenderer } from "@component/render2d/MaskRenderer";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { RenderManager } from "@manager/RenderManager";
-import { Vector2 } from "@math";
-import { MaskRenderData, MaskShape } from "@webgl";
+import { Vector2 } from "@angry-pixel/math";
+import { MaskRenderData, MaskShape } from "@angry-pixel/webgl";
 
-@injectable(SYSTEM_TYPES.MaskRendererSystem)
+@injectable(SYSTEM_SYMBOLS.MaskRendererSystem)
 export class MaskRendererSystem implements System {
     // auxiliar
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
     ) {}
 
     public onUpdate(): void {

@@ -5,21 +5,21 @@ import { PolygonCollider } from "@component/physics2d/PolygonCollider";
 import { TilemapCollider } from "@component/physics2d/TilemapCollider";
 import { debugRenderLayer } from "@component/render2d/Camera";
 import { GameConfig } from "@config/bootstrap";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { RenderManager } from "@manager/RenderManager";
-import { Vector2 } from "@math";
-import { Circumference, Collider, CollisionMethods, Polygon } from "@collisions2d";
-import { GeometricRenderData, GeometricShape, RenderDataType } from "@webgl";
+import { Vector2 } from "@angry-pixel/math";
+import { Circumference, Collider, CollisionMethods, Polygon } from "@angry-pixel/collisions";
+import { GeometricRenderData, GeometricShape, RenderDataType } from "@angry-pixel/webgl";
 
-@injectable(SYSTEM_TYPES.DebugColliderRenderSystem)
+@injectable(SYSTEM_SYMBOLS.DebugColliderRenderSystem)
 export class DebugColliderRenderSystem implements System {
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(DEPENDENCY_TYPES.GameConfig) private readonly gameConfig: GameConfig,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.GameConfig) private readonly gameConfig: GameConfig,
     ) {}
 
     public onUpdate(): void {

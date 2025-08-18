@@ -1,14 +1,14 @@
-import { inject, injectable } from "@ioc";
-import { EntityManager, System } from "@ecs";
-import { Vector2 } from "@math";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { Vector2 } from "@angry-pixel/math";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { TimeManager } from "@manager/TimeManager";
 import { Transform } from "@component/gameLogic/Transform";
 import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
 
-@injectable(SYSTEM_TYPES.ApplyVelocitySystem)
+@injectable(SYSTEM_SYMBOLS.ApplyVelocitySystem)
 export class ApplyVelocitySystem implements System {
     // auxiliars
     private types = new Set([RigidBodyType.Dynamic, RigidBodyType.Kinematic]);
@@ -18,9 +18,9 @@ export class ApplyVelocitySystem implements System {
     private scaledVelocity: Vector2 = new Vector2();
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
-        @inject(SYSTEM_TYPES.TransformSystem) private readonly transformSystem: TransformSystem,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
+        @inject(SYSTEM_SYMBOLS.TransformSystem) private readonly transformSystem: TransformSystem,
     ) {}
 
     public onUpdate(): void {

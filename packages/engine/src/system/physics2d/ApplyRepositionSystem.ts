@@ -1,23 +1,23 @@
-import { inject, injectable } from "@ioc";
-import { EntityManager, System } from "@ecs";
-import { Vector2 } from "@math";
-import { CollisionRepository } from "@collisions2d";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { Vector2 } from "@angry-pixel/math";
+import { CollisionRepository } from "@angry-pixel/collisions";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { Transform } from "@component/gameLogic/Transform";
 import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
 
-@injectable(SYSTEM_TYPES.ApplyRepositionSystem)
+@injectable(SYSTEM_SYMBOLS.ApplyRepositionSystem)
 export class ApplyRepositionSystem implements System {
     // auxiliars
     private correction: Vector2 = new Vector2();
     private maxCorrection: Vector2 = new Vector2();
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.CollisionRepository) private collisionRepository: CollisionRepository,
-        @inject(SYSTEM_TYPES.TransformSystem) private readonly transformSystem: TransformSystem,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.CollisionRepository) private collisionRepository: CollisionRepository,
+        @inject(SYSTEM_SYMBOLS.TransformSystem) private readonly transformSystem: TransformSystem,
     ) {}
 
     public onUpdate(): void {

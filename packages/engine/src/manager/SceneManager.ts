@@ -1,6 +1,6 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { ComponentType, EntityManager, SystemManager, SystemType } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { ComponentType, EntityManager, SystemManager, SystemType } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 import { CreateSystemService } from "@system/CreateSystemService";
 import { AssetManager } from "./AssetManager";
@@ -19,7 +19,7 @@ import { TimeManager } from "./TimeManager";
  * this.sceneManager.loadScene("MainScene");
  * ```
  */
-@injectable(DEPENDENCY_TYPES.SceneManager)
+@injectable(SYMBOLS.SceneManager)
 export class SceneManager {
     private readonly scenes: Map<string, Scene> = new Map();
 
@@ -32,11 +32,11 @@ export class SceneManager {
 
     /** @internal */
     constructor(
-        @inject(DEPENDENCY_TYPES.SystemManager) private readonly systemManager: SystemManager,
-        @inject(DEPENDENCY_TYPES.CreateSystemService) private readonly systemFactory: CreateSystemService,
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
-        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(SYMBOLS.SystemManager) private readonly systemManager: SystemManager,
+        @inject(SYMBOLS.CreateSystemService) private readonly systemFactory: CreateSystemService,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
+        @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
     ) {}
 
     /**

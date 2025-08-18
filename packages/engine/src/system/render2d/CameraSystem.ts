@@ -1,16 +1,16 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { Camera, debugRenderLayer } from "@component/render2d/Camera";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { RenderManager } from "@manager/RenderManager";
 
-@injectable(SYSTEM_TYPES.CameraSystem)
+@injectable(SYSTEM_SYMBOLS.CameraSystem)
 export class CameraSystem implements System {
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
     ) {}
 
     public onUpdate(): void {

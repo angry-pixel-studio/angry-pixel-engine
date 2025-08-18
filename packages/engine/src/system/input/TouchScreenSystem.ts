@@ -1,19 +1,19 @@
-import { inject, injectable } from "@ioc";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { TouchInteraction, TouchScreen } from "@input";
 import { InputManager } from "@manager/InputManager";
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 
-@injectable(SYSTEM_TYPES.TouchScreenSystem)
+@injectable(SYSTEM_SYMBOLS.TouchScreenSystem)
 export class TouchScreenSystem {
     private readonly touchScreen: TouchScreen;
     private touching: boolean = false;
     private interactions: TouchInteraction[] = [];
 
     constructor(
-        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
-        @inject(DEPENDENCY_TYPES.InputManager) { touchScreen }: InputManager,
+        @inject(SYMBOLS.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(SYMBOLS.InputManager) { touchScreen }: InputManager,
     ) {
         this.touchScreen = touchScreen;
         this.canvas.addEventListener("touchstart", this.eventHandler);

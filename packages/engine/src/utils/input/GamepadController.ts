@@ -1,4 +1,4 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 
 /**
  * Represents a connected gamepad controller and provides access to its button states and analog axes values.

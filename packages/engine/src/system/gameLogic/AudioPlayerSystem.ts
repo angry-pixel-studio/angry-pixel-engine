@@ -1,8 +1,8 @@
 import { AudioPlayer } from "@component/gameLogic/AudioPlayer";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
 import { TimeManager } from "@manager/TimeManager";
 
@@ -19,15 +19,15 @@ const userInputEventNames = [
     "keyup",
 ];
 
-@injectable(SYSTEM_TYPES.AudioPlayerSystem)
+@injectable(SYSTEM_SYMBOLS.AudioPlayerSystem)
 export class AudioPlayerSystem implements System {
     private canPlay: boolean = true;
     private userInputErrorCatched: boolean = false;
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.InputManager) private readonly inputManager: InputManager,
-        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.InputManager) private readonly inputManager: InputManager,
+        @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
     ) {}
 
     public onCreate(): void {

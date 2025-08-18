@@ -2,18 +2,18 @@ import { Transform } from "@component/gameLogic/Transform";
 import { Camera, debugRenderLayer } from "@component/render2d/Camera";
 import { defaultTextureAtlasOptions } from "@component/render2d/TextRenderer";
 import { GameConfig } from "@config/bootstrap";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
 import { RenderManager } from "@manager/RenderManager";
-import { Vector2 } from "@math";
-import { RenderDataType, TextOrientation, TextRenderData } from "@webgl";
+import { Vector2 } from "@angry-pixel/math";
+import { RenderDataType, TextOrientation, TextRenderData } from "@angry-pixel/webgl";
 
 const defaultFontSize = 24;
 
-@injectable(SYSTEM_TYPES.DebugMousePositionSystem)
+@injectable(SYSTEM_SYMBOLS.DebugMousePositionSystem)
 export class DebugMousePositionSystem implements System {
     private readonly positionInViewport: Vector2 = new Vector2();
     private readonly positionInCameraViewport: Vector2 = new Vector2();
@@ -21,11 +21,11 @@ export class DebugMousePositionSystem implements System {
     private readonly renderDataPerCamera: Map<number, TextRenderData> = new Map();
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(DEPENDENCY_TYPES.InputManager) private readonly inputManager: InputManager,
-        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
-        @inject(DEPENDENCY_TYPES.GameConfig) private readonly gameConfig: GameConfig,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.InputManager) private readonly inputManager: InputManager,
+        @inject(SYMBOLS.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(SYMBOLS.GameConfig) private readonly gameConfig: GameConfig,
     ) {}
 
     public onUpdate(): void {

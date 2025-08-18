@@ -1,7 +1,7 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { inject, injectable } from "@ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { TimeManager } from "./TimeManager";
-import { SystemManager } from "@ecs";
+import { SystemManager } from "@angry-pixel/ecs";
 import { SystemGroup } from "@system/SystemGroup";
 import { SceneManager } from "./SceneManager";
 import { systemsByGroup } from "@config/systemsByGroup";
@@ -9,7 +9,7 @@ import { systemsByGroup } from "@config/systemsByGroup";
 /** @internal */
 export const nowInSeconds = (): number => window.performance.now() * 0.001;
 
-@injectable(DEPENDENCY_TYPES.LoopManager)
+@injectable(SYMBOLS.LoopManager)
 export class LoopManager {
     public running: boolean = false;
 
@@ -17,9 +17,9 @@ export class LoopManager {
     private physicsIntervalId: number;
 
     constructor(
-        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
-        @inject(DEPENDENCY_TYPES.SystemManager) private readonly systemManager: SystemManager,
-        @inject(DEPENDENCY_TYPES.SceneManager) private readonly sceneManager: SceneManager,
+        @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
+        @inject(SYMBOLS.SystemManager) private readonly systemManager: SystemManager,
+        @inject(SYMBOLS.SceneManager) private readonly sceneManager: SceneManager,
     ) {}
 
     public start(): void {

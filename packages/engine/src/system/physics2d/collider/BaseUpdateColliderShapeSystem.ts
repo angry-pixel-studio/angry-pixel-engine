@@ -1,6 +1,6 @@
 import { Transform } from "@component/gameLogic/Transform";
-import { Vector2 } from "@math";
-import { Circumference, Polygon, Shape } from "@collisions2d";
+import { Vector2 } from "@angry-pixel/math";
+import { Circumference, Polygon, Shape } from "@angry-pixel/collisions";
 
 export abstract class BaseUpdateColliderShapeSystem {
     private auxMin: Vector2 = new Vector2();

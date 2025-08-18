@@ -1,6 +1,6 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
-import { RenderDataType, TextOrientation, TextRenderData } from "@webgl";
+import { RenderDataType, TextOrientation, TextRenderData } from "@angry-pixel/webgl";
 
 /**
  * @internal

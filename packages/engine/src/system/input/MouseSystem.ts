@@ -1,11 +1,11 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { Mouse } from "@input";
-import { inject, injectable } from "@ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 
-@injectable(SYSTEM_TYPES.MouseSystem)
+@injectable(SYSTEM_SYMBOLS.MouseSystem)
 export class MouseSystem {
     private readonly mouse: Mouse;
 
@@ -18,8 +18,8 @@ export class MouseSystem {
     private wheelEvent: WheelEvent;
 
     constructor(
-        @inject(DEPENDENCY_TYPES.CanvasElement) private readonly canvas: HTMLCanvasElement,
-        @inject(DEPENDENCY_TYPES.InputManager) { mouse }: InputManager,
+        @inject(SYMBOLS.CanvasElement) private readonly canvas: HTMLCanvasElement,
+        @inject(SYMBOLS.InputManager) { mouse }: InputManager,
     ) {
         this.mouse = mouse;
         this.canvas.addEventListener("mousemove", (e) => this.updatePosition(e));

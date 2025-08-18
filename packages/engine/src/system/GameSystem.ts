@@ -1,11 +1,11 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject } from "@ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject } from "@angry-pixel/ioc";
 import { AssetManager } from "@manager/AssetManager";
 import { InputManager } from "@manager/InputManager";
 import { SceneManager } from "@manager/SceneManager";
 import { TimeManager } from "@manager/TimeManager";
-import { CollisionRepository } from "@collisions2d";
+import { CollisionRepository } from "@angry-pixel/collisions";
 import { GameConfig } from "@config/bootstrap";
 
 /**
@@ -30,13 +30,13 @@ import { GameConfig } from "@config/bootstrap";
  * ```
  */
 export abstract class GameSystem implements System {
-    @inject(DEPENDENCY_TYPES.EntityManager) protected readonly entityManager: EntityManager;
-    @inject(DEPENDENCY_TYPES.AssetManager) protected readonly assetManager: AssetManager;
-    @inject(DEPENDENCY_TYPES.SceneManager) protected readonly sceneManager: SceneManager;
-    @inject(DEPENDENCY_TYPES.TimeManager) protected readonly timeManager: TimeManager;
-    @inject(DEPENDENCY_TYPES.InputManager) protected readonly inputManager: InputManager;
-    @inject(DEPENDENCY_TYPES.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
-    @inject(DEPENDENCY_TYPES.GameConfig) protected readonly gameConfig: GameConfig;
+    @inject(SYMBOLS.EntityManager) protected readonly entityManager: EntityManager;
+    @inject(SYMBOLS.AssetManager) protected readonly assetManager: AssetManager;
+    @inject(SYMBOLS.SceneManager) protected readonly sceneManager: SceneManager;
+    @inject(SYMBOLS.TimeManager) protected readonly timeManager: TimeManager;
+    @inject(SYMBOLS.InputManager) protected readonly inputManager: InputManager;
+    @inject(SYMBOLS.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
+    @inject(SYMBOLS.GameConfig) protected readonly gameConfig: GameConfig;
 
     public onUpdate(): void {}
 

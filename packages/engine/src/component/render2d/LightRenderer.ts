@@ -1,4 +1,4 @@
-import { Rectangle } from "@math";
+import { Rectangle } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
 
 /**

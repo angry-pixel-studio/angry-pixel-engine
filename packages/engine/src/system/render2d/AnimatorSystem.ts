@@ -1,21 +1,21 @@
 import { Animation, Animator } from "@component/gameLogic/Animator";
 import { SpriteRenderer } from "@component/render2d/SpriteRenderer";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { AssetManager } from "@manager/AssetManager";
 import { TimeManager } from "@manager/TimeManager";
 
-@injectable(SYSTEM_TYPES.AnimatorSystem)
+@injectable(SYSTEM_SYMBOLS.AnimatorSystem)
 export class AnimatorSystem implements System {
     // auxiliar
     private animation: Animation;
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.TimeManager) private readonly timeManager: TimeManager,
-        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {

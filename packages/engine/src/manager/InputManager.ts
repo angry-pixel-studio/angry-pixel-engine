@@ -1,6 +1,6 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYMBOLS } from "@config/dependencySymbols";
 import { GamepadController, Keyboard, Mouse, TouchScreen } from "@input";
-import { injectable } from "@ioc";
+import { injectable } from "@angry-pixel/ioc";
 
 /**
  * Manages input sources including keyboard, mouse, gamepad and touch screen interactions.\
@@ -52,7 +52,7 @@ import { injectable } from "@ioc";
  * @public
  * @category Managers
  */
-@injectable(DEPENDENCY_TYPES.InputManager)
+@injectable(SYMBOLS.InputManager)
 export class InputManager {
     /** Manages mouse information. */
     public readonly keyboard: Keyboard;

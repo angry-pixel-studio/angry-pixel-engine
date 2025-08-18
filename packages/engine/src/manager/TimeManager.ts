@@ -1,7 +1,7 @@
-import { inject, injectable } from "@ioc";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
 import { GameConfig } from "@config/bootstrap";
-import { Component, Entity, EntityManager } from "@ecs";
+import { Component, Entity, EntityManager } from "@angry-pixel/ecs";
 
 const minGameFramerate = 30;
 const defaultGameFramerate = 60;
@@ -110,7 +110,7 @@ export type IntervalOptions = {
  * this.timeManager.clearInterval(intervalId);
  * ```
  */
-@injectable(DEPENDENCY_TYPES.TimeManager)
+@injectable(SYMBOLS.TimeManager)
 export class TimeManager {
     /** @internal */
     public readonly fixedGameFramerate: number;
@@ -159,8 +159,8 @@ export class TimeManager {
     }
 
     constructor(
-        @inject(DEPENDENCY_TYPES.GameConfig) { physicsFramerate }: GameConfig,
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.GameConfig) { physicsFramerate }: GameConfig,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
     ) {
         if (physicsFramerate && !allowedPhysicsFramerates.includes(physicsFramerate)) {
             throw new Error(`Invalid Physics frame rate. Allowed: [${allowedPhysicsFramerates.join(", ")}]`);

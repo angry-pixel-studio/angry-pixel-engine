@@ -1,18 +1,18 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { System } from "@ecs";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { System } from "@angry-pixel/ecs";
 import { Keyboard } from "@input";
-import { inject, injectable } from "@ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
 
-@injectable(SYSTEM_TYPES.KeyboardSystem)
+@injectable(SYSTEM_SYMBOLS.KeyboardSystem)
 export class KeyboardSystem implements System {
     private readonly keyboard: Keyboard;
     private pressedKeys: string[] = [];
 
     constructor(
-        @inject(DEPENDENCY_TYPES.CanvasElement) canvas: HTMLCanvasElement,
-        @inject(DEPENDENCY_TYPES.InputManager) { keyboard }: InputManager,
+        @inject(SYMBOLS.CanvasElement) canvas: HTMLCanvasElement,
+        @inject(SYMBOLS.InputManager) { keyboard }: InputManager,
     ) {
         this.keyboard = keyboard;
         canvas.addEventListener("keydown", this.eventHandler);

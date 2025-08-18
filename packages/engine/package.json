@@ -4,7 +4,8 @@
     "description": "Angry Pixel Engine private module.",
     "main": "src/index.ts",
     "scripts": {
-        "build": "tsc && tsc-alias && rollup -c",
+        "build": "tsc -b && tsc-alias && rollup -c",
+        "build:types": "tsc -b --emitDeclarationOnly",
         "prepare": "yarn run build",
         "clean": "tsc --build --clean"
     },
@@ -15,6 +16,7 @@
         "gl-matrix": "^3.4.3"
     },
     "devDependencies": {
+        "@rollup/plugin-alias": "^5.1.1",
         "@rollup/plugin-commonjs": "^26.0.1",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-typescript": "^11.1.6",

@@ -1,20 +1,20 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { AssetManager } from "@manager/AssetManager";
 import { RenderManager } from "@manager/RenderManager";
-import { Vector2 } from "@math";
-import { RenderDataType, TilemapOrientation, TilemapRenderData, Tileset } from "@webgl";
+import { Vector2 } from "@angry-pixel/math";
+import { RenderDataType, TilemapOrientation, TilemapRenderData, Tileset } from "@angry-pixel/webgl";
 
-@injectable(SYSTEM_TYPES.TilemapRendererSystem)
+@injectable(SYSTEM_SYMBOLS.TilemapRendererSystem)
 export class TilemapRendererSystem implements System {
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {

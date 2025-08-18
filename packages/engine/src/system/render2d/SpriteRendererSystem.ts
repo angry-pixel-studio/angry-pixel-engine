@@ -1,23 +1,23 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { SpriteRenderer } from "@component/render2d/SpriteRenderer";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { AssetManager } from "@manager/AssetManager";
 import { RenderManager } from "@manager/RenderManager";
-import { Vector2 } from "@math";
-import { SpriteRenderData } from "@webgl";
+import { Vector2 } from "@angry-pixel/math";
+import { SpriteRenderData } from "@angry-pixel/webgl";
 
-@injectable(SYSTEM_TYPES.SpriteRendererSystem)
+@injectable(SYSTEM_SYMBOLS.SpriteRendererSystem)
 export class SpriteRendererSystem implements System {
     // auxiliar
     private scaledOffset: Vector2 = new Vector2();
 
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
-        @inject(DEPENDENCY_TYPES.AssetManager) private readonly assetManager: AssetManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onUpdate(): void {

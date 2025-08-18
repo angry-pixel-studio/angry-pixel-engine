@@ -1,15 +1,14 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { inject, injectable } from "@ioc";
-import { WebGLManager } from "@webgl";
-import { CameraData, RenderData } from "../utils/webgl/renderer/Renderer";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { WebGLManager, CameraData, RenderData } from "@angry-pixel/webgl";
 
 /** @internal */
-@injectable(DEPENDENCY_TYPES.RenderManager)
+@injectable(SYMBOLS.RenderManager)
 export class RenderManager {
     private renderData: RenderData[] = [];
     private cameraData: CameraData[] = [];
 
-    constructor(@inject(DEPENDENCY_TYPES.WebGLManager) private readonly webGLManager: WebGLManager) {}
+    constructor(@inject(SYMBOLS.WebGLManager) private readonly webGLManager: WebGLManager) {}
 
     public addCameraData(cameraData: CameraData): void {
         this.cameraData.push(cameraData);

@@ -1,18 +1,18 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { LightRenderer } from "@component/render2d/LightRenderer";
 import { DarknessRenderer } from "@component/render2d/DarknessRenderer";
-import { SYSTEM_TYPES } from "@config/systemTypes";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { Entity, EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { Entity, EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { RenderManager } from "@manager/RenderManager";
-import { Light } from "@webgl";
+import { Light } from "@angry-pixel/webgl";
 
-@injectable(SYSTEM_TYPES.DarknessLightRendererSystem)
+@injectable(SYSTEM_SYMBOLS.DarknessLightRendererSystem)
 export class DarknessLightRendererSystem implements System {
     constructor(
-        @inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager,
-        @inject(DEPENDENCY_TYPES.RenderManager) private readonly renderManager: RenderManager,
+        @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
+        @inject(SYMBOLS.RenderManager) private readonly renderManager: RenderManager,
     ) {}
 
     public onUpdate(): void {

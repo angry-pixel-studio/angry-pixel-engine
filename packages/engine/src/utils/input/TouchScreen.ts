@@ -1,4 +1,4 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 
 /**
  * Represents a single touch or pointer interaction with the screen, including position and size information

@@ -1,4 +1,4 @@
-import { Container, DependencyName } from "@ioc";
+import { Container, DependencyName } from "@angry-pixel/ioc";
 import {
     AABBMethod,
     AABBResolver,
@@ -11,10 +11,10 @@ import {
     SatMethod,
     SatResolver,
     SpartialGrid,
-} from "@collisions2d";
+} from "@angry-pixel/collisions";
 import { CollisionMatrix } from "@system/physics2d/ResolveCollisionSystem";
-import { DEPENDENCY_TYPES } from "./dependencyTypes";
-import { EntityManager, System, SystemManager } from "@ecs";
+import { SYMBOLS } from "./dependencySymbols";
+import { EntityManager, System, SystemManager } from "@angry-pixel/ecs";
 import { InputManager } from "@manager/InputManager";
 import { defaultPhysicsFramerate, TimeManager } from "@manager/TimeManager";
 import { AssetManager } from "@manager/AssetManager";
@@ -22,10 +22,10 @@ import { SceneManager } from "@manager/SceneManager";
 import { LoopManager } from "@manager/LoopManager";
 import { SystemsByGroup, systemsByGroup } from "./systemsByGroup";
 import { CreateSystemService } from "@system/CreateSystemService";
-import { WebGLManager } from "@webgl";
+import { WebGLManager } from "@angry-pixel/webgl";
 import { RenderManager } from "@manager/RenderManager";
 import { SystemGroup } from "@system/SystemGroup";
-import { SYSTEM_TYPES } from "./systemTypes";
+import { SYSTEM_SYMBOLS } from "./systemSymbols";
 
 /**
  * Configuration options for initializing and customizing game behavior.
@@ -103,8 +103,8 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
 
     const container = new Container();
 
-    container.set(DEPENDENCY_TYPES.GameConfig, gameConfig);
-    container.set(DEPENDENCY_TYPES.CanvasElement, createCanvas(gameConfig));
+    container.set(SYMBOLS.GameConfig, gameConfig);
+    container.set(SYMBOLS.CanvasElement, createCanvas(gameConfig));
 
     setupPhysicsDependencies(container);
     setupManagers(container);
@@ -153,8 +153,8 @@ const setupManagers = (container: Container): void => {
     container.add(EntityManager);
     container.add(SystemManager);
     container.set(
-        DEPENDENCY_TYPES.CreateSystemService,
-        new CreateSystemService(container, container.get<SystemManager>(DEPENDENCY_TYPES.SystemManager)),
+        SYMBOLS.CreateSystemService,
+        new CreateSystemService(container, container.get<SystemManager>(SYMBOLS.SystemManager)),
     );
     container.add(TimeManager);
     container.add(AssetManager);
@@ -169,12 +169,12 @@ const setupManagers = (container: Container): void => {
 const setupEngineSystems = (container: Container): void => {
     // headless means that the engine will run without rendering, audio and input systems
     // this mode is ideal for game server development
-    if (container.get<GameConfig>(DEPENDENCY_TYPES.GameConfig).headless) headlessFilter(systemsByGroup);
+    if (container.get<GameConfig>(SYMBOLS.GameConfig).headless) headlessFilter(systemsByGroup);
 
     systemsByGroup.forEach((systems, group) =>
         systems.forEach(({ type, name }) => {
             container.add(type);
-            container.get<SystemManager>(DEPENDENCY_TYPES.SystemManager).addSystem(container.get<System>(name), group);
+            container.get<SystemManager>(SYMBOLS.SystemManager).addSystem(container.get<System>(name), group);
         }),
     );
 };
@@ -191,12 +191,12 @@ const headlessFilter = (systemsByGroup: SystemsByGroup): void => {
             .filter(
                 ({ name }) =>
                     ![
-                        SYSTEM_TYPES.AudioPlayerSystem,
-                        SYSTEM_TYPES.ButtonSystem,
-                        SYSTEM_TYPES.GamepadSystem,
-                        SYSTEM_TYPES.KeyboardSystem,
-                        SYSTEM_TYPES.MouseSystem,
-                        SYSTEM_TYPES.TouchScreenSystem,
+                        SYSTEM_SYMBOLS.AudioPlayerSystem,
+                        SYSTEM_SYMBOLS.ButtonSystem,
+                        SYSTEM_SYMBOLS.GamepadSystem,
+                        SYSTEM_SYMBOLS.KeyboardSystem,
+                        SYSTEM_SYMBOLS.MouseSystem,
+                        SYSTEM_SYMBOLS.TouchScreenSystem,
                     ].includes(name),
             ),
     );
@@ -205,7 +205,7 @@ const headlessFilter = (systemsByGroup: SystemsByGroup): void => {
 const setupPhysicsDependencies = (container: Container): void => {
     const {
         collisions: { collisionBroadPhaseMethod, collisionMatrix, collisionMethod },
-    } = container.get<GameConfig>(DEPENDENCY_TYPES.GameConfig);
+    } = container.get<GameConfig>(SYMBOLS.GameConfig);
 
     container.add(CollisionRepository);
     container.add(CircumferenceResolver);
@@ -220,11 +220,11 @@ const setupPhysicsDependencies = (container: Container): void => {
     container.add(collisionBroadPhaseMethod === BroadPhaseMethods.QuadTree ? QuadTree : SpartialGrid);
     container.add(collisionMethod === CollisionMethods.AABB ? AABBMethod : SatMethod);
 
-    container.set(DEPENDENCY_TYPES.CollisionMatrix, collisionMatrix);
+    container.set(SYMBOLS.CollisionMatrix, collisionMatrix);
 };
 
 const setupExternalDependencies = (container: Container): void => {
-    const config = container.get<GameConfig>(DEPENDENCY_TYPES.GameConfig);
+    const config = container.get<GameConfig>(SYMBOLS.GameConfig);
     if (!config.dependencies) return;
 
     config.dependencies.forEach(([name, dependency]) => {

@@ -1,5 +1,5 @@
-import { Vector2 } from "@math";
-import { Collider, Shape } from "@collisions2d";
+import { Vector2 } from "@angry-pixel/math";
+import { Collider, Shape } from "@angry-pixel/collisions";
 
 /**
  * BoxCollider component configuration

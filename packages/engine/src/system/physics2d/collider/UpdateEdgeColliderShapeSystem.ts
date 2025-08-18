@@ -1,16 +1,16 @@
-import { EntityManager, System } from "@ecs";
-import { inject, injectable } from "@ioc";
-import { Vector2 } from "@math";
-import { Polygon } from "@collisions2d";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { SYSTEM_TYPES } from "@config/systemTypes";
+import { EntityManager, System } from "@angry-pixel/ecs";
+import { inject, injectable } from "@angry-pixel/ioc";
+import { Vector2 } from "@angry-pixel/math";
+import { Polygon } from "@angry-pixel/collisions";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { Transform } from "@component/gameLogic/Transform";
 import { EdgeCollider } from "@component/physics2d/EdgeCollider";
 import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";
 
-@injectable(SYSTEM_TYPES.UpdateEdgeColliderShapeSystem)
+@injectable(SYSTEM_SYMBOLS.UpdateEdgeColliderShapeSystem)
 export class UpdateEdgeColliderShapeSystem extends BaseUpdateColliderShapeSystem implements System {
-    constructor(@inject(DEPENDENCY_TYPES.EntityManager) private readonly entityManager: EntityManager) {
+    constructor(@inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager) {
         super();
     }
 

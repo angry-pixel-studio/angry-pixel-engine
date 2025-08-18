@@ -1,19 +1,23 @@
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { SYMBOLS as COLLISION_SYMBOLS } from "@angry-pixel/collisions";
+import { SYMBOLS as ECS_SYMBOLS } from "@angry-pixel/ecs";
+import { SYMBOLS as WEBGL_SYMBOLS } from "@angry-pixel/webgl";
+
 /**
  * Symbols to be used as dependency identifiers
  * @public
  * @category Decorators
  */
 export const BuiltInDependencyIdentifiers = {
-    AssetManager: DEPENDENCY_TYPES.AssetManager,
-    CanvasElement: DEPENDENCY_TYPES.CanvasElement,
-    CollisionRepository: DEPENDENCY_TYPES.CollisionRepository,
-    EntityManager: DEPENDENCY_TYPES.EntityManager,
-    GameConfig: DEPENDENCY_TYPES.GameConfig,
-    InputManager: DEPENDENCY_TYPES.InputManager,
-    SceneManager: DEPENDENCY_TYPES.SceneManager,
-    SystemManager: DEPENDENCY_TYPES.SystemManager,
-    TimeManager: DEPENDENCY_TYPES.TimeManager,
+    AssetManager: SYMBOLS.AssetManager,
+    CanvasElement: WEBGL_SYMBOLS.CanvasElement,
+    CollisionRepository: COLLISION_SYMBOLS.CollisionRepository,
+    EntityManager: ECS_SYMBOLS.EntityManager,
+    GameConfig: SYMBOLS.GameConfig,
+    InputManager: SYMBOLS.InputManager,
+    SceneManager: SYMBOLS.SceneManager,
+    SystemManager: ECS_SYMBOLS.SystemManager,
+    TimeManager: SYMBOLS.TimeManager,
 };
 
 export { GameConfig } from "@config/bootstrap";
@@ -51,10 +55,10 @@ export * from "@system/GameSystem";
 export { gameLogicSystem, gamePhysicsSystem, gamePreRenderSystem } from "@system/SystemGroup";
 
 export * from "@misc";
-export * from "@ecs";
+export * from "@angry-pixel/ecs";
 export * from "@input";
-export { inject, injectable, DependencyName, DependencyType, PropertyKey } from "@ioc";
-export * from "@math";
+export { inject, injectable, DependencyName, DependencyType, PropertyKey } from "@angry-pixel/ioc";
+export * from "@angry-pixel/math";
 export {
     BroadPhaseMethods,
     Circumference,
@@ -65,5 +69,5 @@ export {
     CollisionResolution,
     Polygon,
     Shape,
-} from "@collisions2d";
-export { MaskShape, Slice, TextOrientation, TilemapOrientation } from "@webgl";
+} from "@angry-pixel/collisions";
+export { MaskShape, Slice, TextOrientation, TilemapOrientation } from "@angry-pixel/webgl";

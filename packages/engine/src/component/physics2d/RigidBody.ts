@@ -1,4 +1,4 @@
-import { Vector2 } from "@math";
+import { Vector2 } from "@angry-pixel/math";
 
 /**
  * The type of the rigid body to create:

@@ -1,6 +1,6 @@
 import { bootstrap, GameConfig } from "@config/bootstrap";
-import { DEPENDENCY_TYPES } from "@config/dependencyTypes";
-import { Container, DependencyName, DependencyType } from "@ioc";
+import { SYMBOLS } from "@config/dependencySymbols";
+import { Container, DependencyName, DependencyType } from "@angry-pixel/ioc";
 import { LoopManager } from "@manager/LoopManager";
 import { SceneManager, SceneType } from "@manager/SceneManager";
 
@@ -58,7 +58,7 @@ export class Game {
      * TRUE if the game is running
      */
     public get running(): boolean {
-        return this.container.get<LoopManager>(DEPENDENCY_TYPES.LoopManager).running;
+        return this.container.get<LoopManager>(SYMBOLS.LoopManager).running;
     }
 
     /**
@@ -69,7 +69,7 @@ export class Game {
      * @param openingScene If this is the opening scene, set TRUE, FALSE instead (optional: default FALSE)
      */
     public addScene(sceneType: SceneType, name: string, openingScene: boolean = false): void {
-        this.container.get<SceneManager>(DEPENDENCY_TYPES.SceneManager).addScene(sceneType, name, openingScene);
+        this.container.get<SceneManager>(SYMBOLS.SceneManager).addScene(sceneType, name, openingScene);
     }
 
     /**
@@ -96,13 +96,13 @@ export class Game {
      * Start the game
      */
     public start(): void {
-        this.container.get<LoopManager>(DEPENDENCY_TYPES.LoopManager).start();
+        this.container.get<LoopManager>(SYMBOLS.LoopManager).start();
     }
 
     /**
      * Stop the game
      */
     public stop(): void {
-        this.container.get<LoopManager>(DEPENDENCY_TYPES.LoopManager).stop();
+        this.container.get<LoopManager>(SYMBOLS.LoopManager).stop();
     }
 }

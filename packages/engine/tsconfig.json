@@ -1,24 +1,26 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+        "rootDir": "src",
         "declaration": true,
         "emitDeclarationOnly": true,
-        "declarationDir": "../../bundles/angry-pixel/types",
-        "outDir": "../../bundles/angry-pixel/types",
-        "rootDir": "src",
+        "declarationDir": "dist",
+        "outDir": "dist",
         "paths": {
             "@config/*": ["./src/config/*"],
             "@component/*": ["./src/component/*"],
+            "@input": ["./src/utils/input"],
             "@manager/*": ["./src/manager/*"],
             "@system/*": ["./src/system/*"],
-            "@ecs": ["./src/utils/ecs"],
-            "@input": ["./src/utils/input"],
-            "@ioc": ["./src/utils/ioc"],
-            "@math": ["./src/utils/math"],
-            "@collisions2d": ["./src/utils/collisions2d"],
-            "@webgl": ["./src/utils/webgl"],
             "@misc": ["./src/utils/misc"]
         }
     },
+    "references": [
+        { "path": "../collisions" },
+        { "path": "../ecs" },
+        { "path": "../ioc" },
+        { "path": "../math" },
+        { "path": "../webgl" }
+    ],
     "include": ["src"]
 }
