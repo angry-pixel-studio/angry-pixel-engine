@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useTheme } from "../hooks/useTheme";
 import { Sun, Moon, Monitor } from "lucide-react";
-import Icon from "./icons/Icon";
+import Icon from "./Icon";
 
 const ThemeToggle = () => {
     const { theme, changeTheme, isDark, isLight, isSystem } = useTheme();

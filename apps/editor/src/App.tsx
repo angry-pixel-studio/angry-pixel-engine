@@ -1,10 +1,11 @@
 import { useEditorStore } from "./stores/editorStore";
 import ResizablePanel from "./components/ResizablePanel";
-import SceneTreeTabs from "./components/SceneTreeTabs";
-import EntityInspectorTabs from "./components/EntityInspectorTabs";
+import SceneTreeTabs from "./components/sceneTree/SceneTreeTabs";
+import InspectorTabs from "./components/inspector/InspectorTabs";
 import ThemeToggle from "./components/ThemeToggle";
-import { Layout, Folder, Search } from "lucide-react";
-import Icon from "./components/icons/Icon";
+import { Layout, Folder } from "lucide-react";
+import Icon from "./components/Icon";
+import SaveSceneButton from "./components/SaveSceneButton";
 
 function App() {
     const { panelSizes, setPanelSize } = useEditorStore();
@@ -21,7 +22,7 @@ function App() {
                         <h1 className="text-xl font-semibold text-text-primary">Angry Pixel Editor</h1>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <button className="btn-primary">Save Scene</button>
+                        <SaveSceneButton />
                         <button className="btn-secondary">Export</button>
                         <ThemeToggle />
                     </div>
@@ -38,7 +39,7 @@ function App() {
                         <ResizablePanel
                             direction="horizontal"
                             initialSize={panelSizes.sceneTree}
-                            minSize={150}
+                            minSize={256}
                             maxSize={400}
                             resizeHandlePosition="right"
                             className="bg-surface-primary border-r border-border-primary flex flex-col"
@@ -87,13 +88,13 @@ function App() {
                 <ResizablePanel
                     direction="horizontal"
                     initialSize={panelSizes.entityInspector}
-                    minSize={200}
+                    minSize={320}
                     maxSize={600}
                     resizeHandlePosition="left"
                     className="bg-surface-primary border-l border-border-primary flex flex-col"
                     onResize={(size) => setPanelSize("entityInspector", size)}
                 >
-                    <EntityInspectorTabs />
+                    <InspectorTabs />
                 </ResizablePanel>
             </div>
 
