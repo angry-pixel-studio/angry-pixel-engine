@@ -1,6 +1,4 @@
 **/node_modules
-.vscode
-.vs
 **/lib
 **/yarn-error.log
 /api-docs
@@ -8,3 +6,14 @@
 **/dist
 !apps/demo/dist
 
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

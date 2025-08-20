@@ -1,0 +1,113 @@
+/* Color System for Angry Pixel Editor */
+:root {
+    /* Light Mode Colors */
+
+    /* Primary Colors - Blue */
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
+
+    /* Background Colors */
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f8fafc;
+    --color-background-tertiary: #f1f5f9;
+    --color-background-elevated: #ffffff;
+
+    /* Surface Colors */
+    --color-surface-primary: #ffffff;
+    --color-surface-secondary: #f8fafc;
+    --color-surface-tertiary: #f1f5f9;
+    --color-surface-elevated: #ffffff;
+
+    /* Text Colors */
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-tertiary: #64748b;
+    --color-text-inverse: #ffffff;
+
+    /* Border Colors */
+    --color-border-primary: #e2e8f0;
+    --color-border-secondary: #cbd5e1;
+    --color-border-tertiary: #94a3b8;
+
+    /* Accent Colors */
+    --color-accent-success: #10b981;
+    --color-accent-warning: #f59e0b;
+    --color-accent-error: #ef4444;
+    --color-accent-info: #3b82f6;
+}
+
+/* Dark Mode Colors */
+.dark {
+    /* Primary Colors - Blue (slightly adjusted for dark mode) */
+    --color-primary-50: #1e3a8a;
+    --color-primary-100: #1e40af;
+    --color-primary-200: #1d4ed8;
+    --color-primary-300: #2563eb;
+    --color-primary-400: #3b82f6;
+    --color-primary-500: #60a5fa;
+    --color-primary-600: #93c5fd;
+    --color-primary-700: #bfdbfe;
+    --color-primary-800: #dbeafe;
+    --color-primary-900: #eff6ff;
+
+    /* Background Colors */
+    --color-background-primary: #0f172a;
+    --color-background-secondary: #1e293b;
+    --color-background-tertiary: #334155;
+    --color-background-elevated: #1e293b;
+
+    /* Surface Colors */
+    --color-surface-primary: #1e293b;
+    --color-surface-secondary: #334155;
+    --color-surface-tertiary: #475569;
+    --color-surface-elevated: #334155;
+
+    /* Text Colors */
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-text-tertiary: #94a3b8;
+    --color-text-inverse: #0f172a;
+
+    /* Border Colors */
+    --color-border-primary: #334155;
+    --color-border-secondary: #475569;
+    --color-border-tertiary: #64748b;
+
+    /* Accent Colors */
+    --color-accent-success: #22c55e;
+    --color-accent-warning: #fbbf24;
+    --color-accent-error: #f87171;
+    --color-accent-info: #60a5fa;
+}
+
+/* High Contrast Mode (optional) */
+@media (prefers-contrast: high) {
+    :root {
+        --color-border-primary: #000000;
+        --color-border-secondary: #000000;
+        --color-text-secondary: #000000;
+    }
+
+    .dark {
+        --color-border-primary: #ffffff;
+        --color-border-secondary: #ffffff;
+        --color-text-secondary: #ffffff;
+    }
+}
+
+/* Reduced Motion (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,47 @@
+@import "./styles/colors.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom component styles */
+.btn-primary {
+    @apply bg-primary-600 text-text-inverse px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none;
+}
+
+.btn-secondary {
+    @apply bg-surface-secondary text-text-primary px-4 py-2 rounded-lg hover:bg-surface-tertiary transition-colors focus:outline-none;
+}
+
+.card {
+    @apply bg-surface-primary rounded-lg shadow-soft border border-border-primary p-6;
+}
+
+/* Hide scrollbars for tabs */
+.scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+/* Smooth scrolling for tabs */
+.tabs-scroll {
+    scroll-behavior: smooth;
+}
+
+/* Remove all outlines from tab buttons */
+.tabs-scroll button {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tabs-scroll button:focus {
+    outline: none !important;
+}
+
+.tabs-scroll button:active {
+    outline: none !important;
+}
