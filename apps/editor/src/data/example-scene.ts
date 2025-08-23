@@ -33,6 +33,7 @@ export const exampleScene: Scene = {
                     },
                 },
             ],
+            children: [],
         },
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c91",
@@ -61,6 +62,7 @@ export const exampleScene: Scene = {
                     },
                 },
             ],
+            children: [],
         },
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c94",
@@ -107,6 +109,7 @@ export const exampleScene: Scene = {
                             },
                         },
                     ],
+                    children: [],
                 },
                 {
                     id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c99",
@@ -135,6 +138,7 @@ export const exampleScene: Scene = {
                             },
                         },
                     ],
+                    children: [],
                 },
             ],
         },

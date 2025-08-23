@@ -1,55 +1,118 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { Scene, Entity, EntityComponent } from "../types/scene";
+import { enableMapSet } from "immer";
+import { Scene, Entity, EntityComponent, EntityWithComponentsAndChildren, System } from "../types/scene";
 import { exampleScene } from "../data/example-scene";
+
+// Enable MapSet support for Immer
+enableMapSet();
 
 interface SceneState {
     // Scene data
     scene: Scene;
 
+    // Internal Maps for better performance
+    entitiesMap: Map<string, EntityWithComponentsAndChildren>;
+    componentsMap: Map<string, EntityComponent[]>;
+    systemsMap: Map<string, System>;
+
     // Scene actions
     updateEntity: (entityId: string, updates: Partial<Entity>) => void;
     updateComponent: (entityId: string, componentId: string, updates: Partial<EntityComponent>) => void;
-    addEntity: (entity: Entity, parentId?: string) => void;
+    addEntity: (entity: EntityWithComponentsAndChildren, parentId?: string) => void;
     removeEntity: (entityId: string) => void;
     duplicateEntity: (entityId: string) => void;
     updateScene: (updates: Partial<Scene>) => void;
 
+    // System actions
+    addSystem: (system: System) => void;
+    removeSystem: (systemId: string) => void;
+    updateSystem: (systemId: string, updates: Partial<System>) => void;
+
     // Utility functions
     getSceneJson: () => string;
-    getEntityById: (id: string) => Entity | null;
+    getEntityById: (id: string) => EntityWithComponentsAndChildren | null;
     getComponentById: (entityId: string, componentId: string) => EntityComponent | null;
+    getSystemById: (id: string) => System | null;
+
+    // Helper to sync Maps with scene data
+    syncMapsWithScene: () => void;
 }
+
+// Helper function to create Maps from scene data
+const createMapsFromScene = (scene: Scene) => {
+    const entitiesMap = new Map<string, EntityWithComponentsAndChildren>();
+    const componentsMap = new Map<string, EntityComponent[]>();
+    const systemsMap = new Map<string, System>();
+
+    const processEntity = (entity: EntityWithComponentsAndChildren) => {
+        entitiesMap.set(entity.id, entity);
+        componentsMap.set(entity.id, entity.components);
+
+        if (entity.children) {
+            entity.children.forEach(processEntity);
+        }
+    };
+
+    scene.entities.forEach(processEntity);
+
+    // Process systems
+    scene.systems.forEach((system) => {
+        systemsMap.set(system.id, system);
+    });
+
+    return { entitiesMap, componentsMap, systemsMap };
+};
 
 export const useSceneStore = create<SceneState>()(
     devtools(
         immer((set, get) => ({
             // Initial state
             scene: exampleScene,
+            entitiesMap: createMapsFromScene(exampleScene).entitiesMap,
+            componentsMap: createMapsFromScene(exampleScene).componentsMap,
+            systemsMap: createMapsFromScene(exampleScene).systemsMap,
+
+            // Initialize Maps
+            syncMapsWithScene: () => {
+                set((state) => {
+                    const { entitiesMap, componentsMap } = createMapsFromScene(state.scene);
+                    state.entitiesMap = entitiesMap;
+                    state.componentsMap = componentsMap;
+                });
+            },
 
             // Scene actions
             updateEntity: (entityId, updates) => {
                 set((state) => {
-                    const updateEntityRecursive = (entities: Entity[]) => {
+                    // Update in scene
+                    const updateEntityRecursive = (entities: EntityWithComponentsAndChildren[]) => {
                         for (const entity of entities) {
                             if (entity.id === entityId) {
                                 Object.assign(entity, updates);
                                 return;
                             }
-                            if (entity.children && entity.children.length > 0) {
+                            if (entity.children) {
                                 updateEntityRecursive(entity.children);
                             }
                         }
                     };
 
                     updateEntityRecursive(state.scene.entities);
+
+                    // Update in Maps
+                    const entity = state.entitiesMap.get(entityId);
+                    if (entity) {
+                        Object.assign(entity, updates);
+                    }
                 });
             },
 
             updateComponent: (entityId, componentId, updates) => {
                 set((state) => {
-                    const updateComponentRecursive = (entities: Entity[]) => {
+                    // Update in scene
+                    const updateComponentRecursive = (entities: EntityWithComponentsAndChildren[]) => {
                         for (const entity of entities) {
                             if (entity.id === entityId) {
                                 const component = entity.components.find((comp) => comp.id === componentId);
@@ -58,13 +121,22 @@ export const useSceneStore = create<SceneState>()(
                                 }
                                 return;
                             }
-                            if (entity.children && entity.children.length > 0) {
+                            if (entity.children) {
                                 updateComponentRecursive(entity.children);
                             }
                         }
                     };
 
                     updateComponentRecursive(state.scene.entities);
+
+                    // Update in Maps
+                    const entityComponents = state.componentsMap.get(entityId);
+                    if (entityComponents) {
+                        const component = entityComponents.find((comp) => comp.id === componentId);
+                        if (component) {
+                            Object.assign(component, updates);
+                        }
+                    }
                 });
             },
 
@@ -72,50 +144,58 @@ export const useSceneStore = create<SceneState>()(
                 set((state) => {
                     if (!parentId) {
                         state.scene.entities.push(entity);
-                        return;
+                    } else {
+                        const addEntityRecursive = (entities: EntityWithComponentsAndChildren[]) => {
+                            for (const e of entities) {
+                                if (e.id === parentId) {
+                                    if (!e.children) {
+                                        e.children = [];
+                                    }
+                                    e.children.push(entity);
+                                    return;
+                                }
+                                if (e.children) {
+                                    addEntityRecursive(e.children);
+                                }
+                            }
+                        };
+
+                        addEntityRecursive(state.scene.entities);
                     }
 
-                    const addEntityRecursive = (entities: Entity[]) => {
-                        for (const e of entities) {
-                            if (e.id === parentId) {
-                                if (!e.children) {
-                                    e.children = [];
-                                }
-                                e.children.push(entity);
-                                return;
-                            }
-                            if (e.children && e.children.length > 0) {
-                                addEntityRecursive(e.children);
-                            }
-                        }
-                    };
-
-                    addEntityRecursive(state.scene.entities);
+                    // Update Maps
+                    state.entitiesMap.set(entity.id, entity);
+                    state.componentsMap.set(entity.id, entity.components);
                 });
             },
 
             removeEntity: (entityId) => {
                 set((state) => {
-                    const removeEntityRecursive = (entities: Entity[]) => {
+                    // Remove from scene
+                    const removeEntityRecursive = (entities: EntityWithComponentsAndChildren[]) => {
                         for (let i = entities.length - 1; i >= 0; i--) {
-                            const entity = entities[i];
-                            if (entity.id === entityId) {
+                            if (entities[i].id === entityId) {
                                 entities.splice(i, 1);
                                 return;
                             }
-                            if (entity.children && entity.children.length > 0) {
-                                removeEntityRecursive(entity.children);
+                            if (entities[i].children) {
+                                removeEntityRecursive(entities[i].children);
                             }
                         }
                     };
 
                     removeEntityRecursive(state.scene.entities);
+
+                    // Remove from Maps
+                    state.entitiesMap.delete(entityId);
+                    state.componentsMap.delete(entityId);
                 });
             },
 
             duplicateEntity: (entityId) => {
                 set((state) => {
-                    const duplicateEntityRecursive = (entities: Entity[]) => {
+                    // Duplicate in scene
+                    const duplicateEntityRecursive = (entities: EntityWithComponentsAndChildren[]) => {
                         for (const entity of entities) {
                             if (entity.id === entityId) {
                                 const duplicated = {
@@ -127,10 +207,10 @@ export const useSceneStore = create<SceneState>()(
 
                                 // Update children IDs recursively
                                 if (duplicated.children) {
-                                    const updateChildrenIds = (children: Entity[]) => {
+                                    const updateChildrenIds = (children: EntityWithComponentsAndChildren[]) => {
                                         for (const child of children) {
                                             child.id = crypto.randomUUID();
-                                            if (child.children && child.children.length > 0) {
+                                            if (child.children) {
                                                 updateChildrenIds(child.children);
                                             }
                                         }
@@ -141,19 +221,58 @@ export const useSceneStore = create<SceneState>()(
                                 entities.push(duplicated);
                                 return;
                             }
-                            if (entity.children && entity.children.length > 0) {
+                            if (entity.children) {
                                 duplicateEntityRecursive(entity.children);
                             }
                         }
                     };
 
                     duplicateEntityRecursive(state.scene.entities);
+
+                    // Update Maps
+                    get().syncMapsWithScene();
                 });
             },
 
             updateScene: (updates) => {
                 set((state) => {
                     Object.assign(state.scene, updates);
+                    // Update Maps after scene changes
+                    get().syncMapsWithScene();
+                });
+            },
+
+            // System actions
+            addSystem: (system) => {
+                set((state) => {
+                    state.scene.systems.push(system);
+                    state.systemsMap.set(system.id, system);
+                });
+            },
+
+            removeSystem: (systemId) => {
+                set((state) => {
+                    const index = state.scene.systems.findIndex((sys) => sys.id === systemId);
+                    if (index !== -1) {
+                        state.scene.systems.splice(index, 1);
+                    }
+                    state.systemsMap.delete(systemId);
+                });
+            },
+
+            updateSystem: (systemId, updates) => {
+                set((state) => {
+                    // Update in scene
+                    const system = state.scene.systems.find((sys) => sys.id === systemId);
+                    if (system) {
+                        Object.assign(system, updates);
+                    }
+
+                    // Update in Map
+                    const mapSystem = state.systemsMap.get(systemId);
+                    if (mapSystem) {
+                        Object.assign(mapSystem, updates);
+                    }
                 });
             },
 
@@ -165,27 +284,19 @@ export const useSceneStore = create<SceneState>()(
 
             getEntityById: (id) => {
                 const state = get();
-                const findEntity = (entities: Entity[]): Entity | null => {
-                    for (const entity of entities) {
-                        if (entity.id === id) {
-                            return entity;
-                        }
-                        if (entity.children && entity.children.length > 0) {
-                            const found = findEntity(entity.children);
-                            if (found) return found;
-                        }
-                    }
-                    return null;
-                };
-
-                return findEntity(state.scene.entities);
+                return state.entitiesMap.get(id) || null;
             },
 
             getComponentById: (entityId, componentId) => {
-                const entity = get().getEntityById(entityId);
-                if (!entity) return null;
+                const entityComponents = get().componentsMap.get(entityId);
+                if (!entityComponents) return null;
 
-                return entity.components.find((comp) => comp.id === componentId) || null;
+                return entityComponents.find((comp) => comp.id === componentId) || null;
+            },
+
+            getSystemById: (id) => {
+                const state = get();
+                return state.systemsMap.get(id) || null;
             },
         })),
         {

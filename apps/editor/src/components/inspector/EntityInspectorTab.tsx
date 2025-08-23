@@ -5,7 +5,7 @@ import EntityName from "./EntityName";
 import ComponentItem from "./ComponentItem";
 
 const EntityInspectorTab = () => {
-    const { selectedEntity } = useEditor();
+    const { selectedEntity, entityInspector } = useEditor();
 
     if (!selectedEntity) {
         return (
@@ -28,8 +28,8 @@ const EntityInspectorTab = () => {
             </div>
 
             <div className="space-y-3">
-                {selectedEntity.components.map((component) => (
-                    <ComponentItem key={component.id} component={component} entityId={selectedEntity.id} />
+                {Array.from(entityInspector.components.values()).map((component) => (
+                    <ComponentItem key={component.id} component={component} />
                 ))}
             </div>
         </div>

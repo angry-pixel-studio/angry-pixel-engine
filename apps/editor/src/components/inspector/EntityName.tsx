@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Edit2, Check, X } from "lucide-react";
 import Icon from "../Icon";
 import { useEditor } from "../../hooks/useEditor";
-import { Entity } from "../../types/scene";
+import { EntityWithComponentsAndChildren } from "../../types/scene";
 
-const EntityName = ({ entity }: { entity: Entity }) => {
+const EntityName = ({ entity }: { entity: EntityWithComponentsAndChildren }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(entity.name);
-    const { entityInspector, setEntityName, setEntityEnabled, updateEntity } = useEditor();
+    const { entityInspector, setEntityName, setEntityEnabled } = useEditor();
 
     // Sync local state with store state
     useEffect(() => {
@@ -22,7 +22,6 @@ const EntityName = ({ entity }: { entity: Entity }) => {
     const handleSave = () => {
         if (editValue.trim() !== "" && editValue !== entityInspector.entityName) {
             setEntityName(editValue.trim());
-            updateEntity(entity.id, { name: editValue.trim() });
         }
         setIsEditing(false);
     };
@@ -42,7 +41,6 @@ const EntityName = ({ entity }: { entity: Entity }) => {
 
     const handleEnabledChange = (enabled: boolean) => {
         setEntityEnabled(enabled);
-        updateEntity(entity.id, { enabled });
     };
 
     if (isEditing) {

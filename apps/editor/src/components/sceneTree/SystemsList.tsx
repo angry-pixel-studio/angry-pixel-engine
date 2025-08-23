@@ -103,7 +103,8 @@ const SystemsList = () => {
 
     const canMoveUp = selectedSystemId && scene.systems.findIndex((s: System) => s.id === selectedSystemId) > 0;
     const canMoveDown =
-        selectedSystemId && scene.systems.findIndex((s: System) => s.id === selectedSystemId) < scene.systems.length - 1;
+        selectedSystemId &&
+        scene.systems.findIndex((s: System) => s.id === selectedSystemId) < scene.systems.length - 1;
 
     return (
         <div className="p-2">

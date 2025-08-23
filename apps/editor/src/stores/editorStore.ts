@@ -1,22 +1,26 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { Entity, EntityComponent } from "../types/scene";
+import { enableMapSet } from "immer";
+import { EntityWithComponentsAndChildren, EntityComponent } from "../types/scene";
+import { useSceneStore } from "./sceneStore";
+
+// Enable MapSet support for Immer
+enableMapSet();
 
 export interface EditorState {
     // Selection state
-    selectedEntity: Entity | null;
-    selectedComponent: EntityComponent | null;
+    selectedEntityId: string | null;
 
     // Entity inspector state
     entityInspector: {
         entityName: string;
         entityEnabled: boolean;
-        expandedComponents: Set<string>;
-        expandedProperties: Set<string>;
+        collapsedComponents: Set<string>;
+        components: Map<string, EntityComponent>;
     };
 
-    // Panel sizes for resizable panels
+    // Panel sizes
     panelSizes: {
         sceneTree: number;
         filesystemNav: number;
@@ -26,14 +30,14 @@ export interface EditorState {
 
 interface EditorActions {
     // Selection actions
-    selectEntity: (entity: Entity | null) => void;
-    selectComponent: (component: EntityComponent | null) => void;
+    selectEntity: (entity: EntityWithComponentsAndChildren | null) => void;
 
     // Entity inspector actions
     setEntityName: (name: string) => void;
     setEntityEnabled: (enabled: boolean) => void;
-    toggleComponentExpanded: (componentId: string) => void;
-    togglePropertyExpanded: (propertyId: string) => void;
+    toggleComponentCollapsed: (componentId: string) => void;
+    setComponentEnabled: (componentId: string, enabled: boolean) => void;
+    updateComponentProperty: (componentId: string, propertyName: string, value: unknown) => void;
 
     // Panel size management
     setPanelSize: (panel: keyof EditorState["panelSizes"], size: number) => void;
@@ -43,13 +47,12 @@ export const useEditorStore = create<EditorState & EditorActions>()(
     devtools(
         immer((set) => ({
             // Initial state
-            selectedEntity: null,
-            selectedComponent: null,
+            selectedEntityId: null,
             entityInspector: {
                 entityName: "",
                 entityEnabled: true,
-                expandedComponents: new Set(),
-                expandedProperties: new Set(),
+                collapsedComponents: new Set(),
+                components: new Map(),
             },
             panelSizes: {
                 sceneTree: 256,
@@ -61,23 +64,18 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             // Selection actions
             selectEntity: (entity) => {
                 set((state) => {
-                    state.selectedEntity = entity;
-                    state.selectedComponent = null;
+                    state.selectedEntityId = entity?.id || null;
 
                     // Update entity inspector state
                     if (entity) {
                         state.entityInspector.entityName = entity.name;
                         state.entityInspector.entityEnabled = entity.enabled;
+                        state.entityInspector.components = new Map(entity.components.map((c) => [c.id, c]));
                     } else {
                         state.entityInspector.entityName = "";
                         state.entityInspector.entityEnabled = true;
+                        state.entityInspector.components = new Map();
                     }
-                });
-            },
-
-            selectComponent: (component) => {
-                set((state) => {
-                    state.selectedComponent = component;
                 });
             },
 
@@ -85,8 +83,9 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             setEntityName: (name) => {
                 set((state) => {
                     state.entityInspector.entityName = name;
-                    if (state.selectedEntity) {
-                        state.selectedEntity.name = name;
+                    if (state.selectedEntityId) {
+                        const sceneStore = useSceneStore.getState();
+                        sceneStore.updateEntity(state.selectedEntityId, { name });
                     }
                 });
             },
@@ -94,28 +93,59 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             setEntityEnabled: (enabled) => {
                 set((state) => {
                     state.entityInspector.entityEnabled = enabled;
-                    if (state.selectedEntity) {
-                        state.selectedEntity.enabled = enabled;
+                    if (state.selectedEntityId) {
+                        const sceneStore = useSceneStore.getState();
+                        sceneStore.updateEntity(state.selectedEntityId, { enabled });
                     }
                 });
             },
 
-            toggleComponentExpanded: (componentId) => {
+            setComponentEnabled: (componentId, enabled) => {
                 set((state) => {
-                    if (state.entityInspector.expandedComponents.has(componentId)) {
-                        state.entityInspector.expandedComponents.delete(componentId);
-                    } else {
-                        state.entityInspector.expandedComponents.add(componentId);
+                    const component = state.entityInspector.components.get(componentId);
+                    if (component) {
+                        component.enabled = enabled;
+                        if (state.selectedEntityId) {
+                            const sceneStore = useSceneStore.getState();
+                            sceneStore.updateComponent(state.selectedEntityId, componentId, { enabled });
+                        }
                     }
                 });
             },
 
-            togglePropertyExpanded: (propertyId) => {
+            toggleComponentCollapsed: (componentId) => {
                 set((state) => {
-                    if (state.entityInspector.expandedProperties.has(propertyId)) {
-                        state.entityInspector.expandedProperties.delete(propertyId);
+                    if (state.entityInspector.collapsedComponents.has(componentId)) {
+                        state.entityInspector.collapsedComponents.delete(componentId);
                     } else {
-                        state.entityInspector.expandedProperties.add(propertyId);
+                        state.entityInspector.collapsedComponents.add(componentId);
+                    }
+                });
+            },
+
+            updateComponentProperty: (componentId, propertyName, value) => {
+                set((state) => {
+                    const component = state.entityInspector.components.get(componentId);
+                    if (component && component.data) {
+                        // Create a new component object to avoid proxy conflicts
+                        const updatedComponent = {
+                            ...component,
+                            data: {
+                                ...component.data,
+                                [propertyName]: value,
+                            },
+                        };
+
+                        // Replace the component in the array
+                        state.entityInspector.components.set(componentId, updatedComponent);
+
+                        // Update the scene store automatically
+                        if (state.selectedEntityId) {
+                            const sceneStore = useSceneStore.getState();
+                            sceneStore.updateComponent(state.selectedEntityId, componentId, {
+                                data: updatedComponent.data,
+                            });
+                        }
                     }
                 });
             },

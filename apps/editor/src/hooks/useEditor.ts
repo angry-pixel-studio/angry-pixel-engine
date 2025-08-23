@@ -9,28 +9,29 @@ export const useEditor = () => {
     const editorStore = useEditorStore();
     const sceneStore = useSceneStore();
 
+    // Get the selected entity from scene store using the ID
+    const selectedEntity = editorStore.selectedEntityId ? sceneStore.getEntityById(editorStore.selectedEntityId) : null;
+
     return {
         // Editor state (selection and inspector)
-        selectedEntity: editorStore.selectedEntity,
-        selectedComponent: editorStore.selectedComponent,
+        selectedEntityId: editorStore.selectedEntityId,
+        selectedEntity,
         entityInspector: editorStore.entityInspector,
         panelSizes: editorStore.panelSizes,
 
-        // Editor actions (selection and inspector)
+        // Editor actions
         selectEntity: editorStore.selectEntity,
-        selectComponent: editorStore.selectComponent,
         setEntityName: editorStore.setEntityName,
         setEntityEnabled: editorStore.setEntityEnabled,
-        toggleComponentExpanded: editorStore.toggleComponentExpanded,
-        togglePropertyExpanded: editorStore.togglePropertyExpanded,
+        toggleComponentCollapsed: editorStore.toggleComponentCollapsed,
+        setComponentEnabled: editorStore.setComponentEnabled,
+        updateComponentProperty: editorStore.updateComponentProperty,
         setPanelSize: editorStore.setPanelSize,
 
         // Scene state
         scene: sceneStore.scene,
 
-        // Scene actions
-        updateEntity: sceneStore.updateEntity,
-        updateComponent: sceneStore.updateComponent,
+        // Scene actions (for operations que no involucran la entidad seleccionada)
         addEntity: sceneStore.addEntity,
         removeEntity: sceneStore.removeEntity,
         duplicateEntity: sceneStore.duplicateEntity,
@@ -40,5 +41,6 @@ export const useEditor = () => {
         getSceneJson: sceneStore.getSceneJson,
         getEntityById: sceneStore.getEntityById,
         getComponentById: sceneStore.getComponentById,
+        getSystemById: sceneStore.getSystemById,
     };
 };

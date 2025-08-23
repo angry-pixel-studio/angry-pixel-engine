@@ -2,10 +2,10 @@ import { useState } from "react";
 import { ChevronRight, ChevronDown, Box } from "lucide-react";
 import Icon from "../Icon";
 import { useEditor } from "../../hooks/useEditor";
-import { Entity } from "../../types/scene";
+import { EntityWithComponentsAndChildren } from "../../types/scene";
 
 // Component to render a single entity in the tree
-const EntityTreeItem = ({ entity, level = 0 }: { entity: Entity; level?: number }) => {
+const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithComponentsAndChildren; level?: number }) => {
     const { selectedEntity, selectEntity } = useEditor();
     const [isExpanded, setIsExpanded] = useState(false);
     const hasChildren = entity.children && entity.children.length > 0;
