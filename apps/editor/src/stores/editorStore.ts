@@ -57,7 +57,7 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             panelSizes: {
                 sceneTree: 256,
                 filesystemNav: 192,
-                entityInspector: 320,
+                entityInspector: 380,
             },
 
             // Actions

@@ -88,7 +88,7 @@ function App() {
                 <ResizablePanel
                     direction="horizontal"
                     initialSize={panelSizes.entityInspector}
-                    minSize={320}
+                    minSize={380}
                     maxSize={600}
                     resizeHandlePosition="left"
                     className="bg-surface-primary border-l border-border-primary flex flex-col"

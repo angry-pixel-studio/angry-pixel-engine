@@ -45,3 +45,44 @@
 .tabs-scroll button:active {
     outline: none !important;
 }
+
+/* Custom scrollbar styles for inspector */
+.inspector-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.inspector-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.inspector-scroll::-webkit-scrollbar-thumb {
+    background: hsl(var(--color-border-primary));
+    border-radius: 4px;
+}
+
+.inspector-scroll::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--color-primary-400));
+}
+
+/* Firefox scrollbar styles */
+.inspector-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--color-border-primary)) transparent;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+/* Ensure inspector content doesn't cause horizontal overflow */
+.inspector-scroll > * {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Prevent horizontal scrolling in inspector components */
+.inspector-scroll .border,
+.inspector-scroll input,
+.inspector-scroll button {
+    max-width: 100%;
+    overflow-x: hidden;
+}

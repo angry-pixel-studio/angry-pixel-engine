@@ -70,8 +70,7 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
             {/* Component Properties (only for built-in components) */}
             {!isCollapsed && isBuiltIn && component.data && (
                 <div className="px-3 pb-3 border-t border-border-primary">
-                    <div className="text-xs text-text-tertiary mb-2 mt-2">Properties:</div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 mt-2">
                         {Object.entries(component.data).map(([key, value]) => (
                             <PropertyFieldFactory
                                 key={key}

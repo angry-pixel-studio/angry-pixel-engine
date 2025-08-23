@@ -21,16 +21,30 @@ const EntityInspectorTab = () => {
         );
     }
 
+    const components = Array.from(entityInspector.components.values());
+    const hasComponents = components.length > 0;
+
     return (
-        <div className="p-4">
-            <div className="mb-4">
+        <div className="h-full flex flex-col">
+            {/* Fixed header with entity name */}
+            <div className="p-4 border-b border-border-primary flex-shrink-0 bg-surface-primary min-w-0 overflow-x-hidden">
                 <EntityName entity={selectedEntity} />
             </div>
 
-            <div className="space-y-3">
-                {Array.from(entityInspector.components.values()).map((component) => (
-                    <ComponentItem key={component.id} component={component} />
-                ))}
+            {/* Scrollable content area */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden inspector-scroll min-w-0">
+                {hasComponents ? (
+                    <div className="p-4 space-y-3 min-w-0">
+                        {components.map((component) => (
+                            <ComponentItem key={component.id} component={component} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="p-4 text-center text-text-secondary min-w-0">
+                        <div className="text-sm">No components found</div>
+                        <div className="text-xs">This entity has no components</div>
+                    </div>
+                )}
             </div>
         </div>
     );

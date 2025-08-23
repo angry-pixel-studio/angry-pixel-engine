@@ -26,6 +26,7 @@ export enum PropertyType {
 }
 
 export enum BuiltInComponent {
+    TypeTest = "TypeTest",
     Transform = "Transform",
     Camera = "Camera",
     SpriteRenderer = "SpriteRenderer",
