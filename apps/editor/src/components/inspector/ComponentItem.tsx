@@ -1,7 +1,7 @@
 import { useEditor } from "../../hooks/useEditor";
 import { EntityComponent } from "../../types/scene";
 import { builtInComponents } from "../../data/built-in-components";
-import { PropertyType } from "../../types/component";
+import { Component, PropertyType } from "../../types/component";
 import PropertyFieldFactory from "./propertyField/PropertyFieldFactory";
 
 interface ComponentItemProps {
@@ -13,17 +13,9 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
 
     const isBuiltIn = component.builtIn;
     const isCollapsed = entityInspector.collapsedComponents.has(component.id);
-
-    // Helper function to get property type from built-in components
-    const getPropertyType = (propertyName: string): PropertyType => {
-        if (!isBuiltIn) return PropertyType.String; // Default for non-built-in components
-
-        const builtInComponent = builtInComponents.find((c) => c.name === component.name);
-        if (!builtInComponent) return PropertyType.String;
-
-        const property = builtInComponent.properties.find((p) => p.name === propertyName);
-        return property ? property.type : PropertyType.String;
-    };
+    const builtInComponent: Component | undefined = isBuiltIn
+        ? builtInComponents.find((c) => c.name === component.name)
+        : undefined;
 
     const handleToggleEnabled = () => {
         setComponentEnabled(component.id, !component.enabled);
@@ -36,7 +28,6 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
 
     return (
         <div className="border rounded-lg transition-colors border-border-primary hover:border-primary-200">
-            {/* Component Header */}
             <div className="flex items-center justify-between p-3 cursor-pointer">
                 <div className="flex items-center space-x-2">
                     <button
@@ -67,39 +58,37 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
                 </label>
             </div>
 
-            {/* Component Properties (only for built-in components) */}
-            {!isCollapsed && isBuiltIn && component.data && (
+            {!isCollapsed && (
                 <div className="px-3 pb-3 border-t border-border-primary">
                     <div className="space-y-2 mt-2">
-                        {Object.entries(component.data).map(([key, value]) => (
-                            <PropertyFieldFactory
-                                key={key}
-                                propertyName={key}
-                                value={value}
-                                componentId={component.id}
-                                propertyType={getPropertyType(key)}
-                                onUpdate={(newValue: unknown) => {
-                                    updateComponentProperty(component.id, key, newValue);
-                                }}
-                            />
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Raw Data (for non-built-in components) */}
-            {!isCollapsed && !isBuiltIn && component.data && Object.keys(component.data).length > 0 && (
-                <div className="px-3 pb-3 border-t border-border-primary">
-                    <div className="text-xs text-text-tertiary mb-1">Data:</div>
-                    <div className="space-y-1">
-                        {Object.entries(component.data).map(([key, value]) => (
-                            <div key={key} className="flex justify-between text-xs">
-                                <span className="text-text-secondary">{key}:</span>
-                                <span className="text-text-primary font-mono">
-                                    {typeof value === "object" ? JSON.stringify(value) : String(value)}
-                                </span>
-                            </div>
-                        ))}
+                        {builtInComponent &&
+                            builtInComponent.properties.map((property) => (
+                                <PropertyFieldFactory
+                                    key={property.name}
+                                    propertyName={property.displayName}
+                                    value={component.data?.[property.name]}
+                                    componentId={component.id}
+                                    propertyType={property.type}
+                                    onUpdate={(newValue: unknown) => {
+                                        updateComponentProperty(component.id, property.name, newValue);
+                                    }}
+                                />
+                            ))}
+                        {!isBuiltIn &&
+                            component.data &&
+                            Object.keys(component.data).length > 0 &&
+                            Object.entries(component.data).map(([key, value]) => (
+                                <PropertyFieldFactory
+                                    key={key}
+                                    propertyName={key}
+                                    value={typeof value === "object" ? JSON.stringify(value) : String(value)}
+                                    componentId={component.id}
+                                    propertyType={PropertyType.String}
+                                    onUpdate={(newValue: unknown) => {
+                                        updateComponentProperty(component.id, key, newValue);
+                                    }}
+                                />
+                            ))}
                     </div>
                 </div>
             )}

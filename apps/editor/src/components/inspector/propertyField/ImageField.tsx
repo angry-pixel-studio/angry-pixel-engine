@@ -8,8 +8,8 @@ const ImageField = ({ propertyName, value, onUpdate }: ImageFieldProps) => {
     const imageValue = (value as string) || "";
 
     return (
-        <div className="space-y-2">
-            <div className="text-xs text-text-secondary font-medium">{propertyName}:</div>
+        <div className="component-property">
+            <span className="property-name">{propertyName}:</span>
             <div className="flex items-center space-x-2">
                 <input
                     type="text"

@@ -53,8 +53,8 @@ const Tabs = ({ tabs, defaultTab, className = "", onTabChange, variant = "defaul
         const baseClasses = "flex";
 
         const variantClasses = {
-            default: "px-2 pt-2 bg-background-tertiary overflow-hidden",
-            compact: "px-2 pt-2 bg-background-tertiary overflow-hidden",
+            default: "px-2 pt-1 bg-background-tertiary overflow-hidden",
+            compact: "px-2 pt-1 bg-background-tertiary overflow-hidden",
             pills: "space-x-2 p-1 bg-background-tertiary rounded-lg overflow-hidden",
         };
 

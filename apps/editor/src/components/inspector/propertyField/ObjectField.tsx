@@ -10,7 +10,7 @@ const ObjectField = ({ propertyName, value, onUpdate }: ObjectFieldProps) => {
 
     return (
         <div className="space-y-2">
-            <div className="text-xs text-text-secondary font-medium">{propertyName}:</div>
+            <div className="property-name">{propertyName}:</div>
             <textarea
                 value={jsonString}
                 onChange={(e) => {

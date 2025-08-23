@@ -8,8 +8,8 @@ const StringField = ({ propertyName, value, onUpdate }: StringFieldProps) => {
     const stringValue = (value as string) || "";
 
     return (
-        <div className="flex items-center space-x-2">
-            <span className="text-xs text-text-secondary min-w-[60px]">{propertyName}:</span>
+        <div className="component-property">
+            <span className="property-name">{propertyName}:</span>
             <input
                 type="text"
                 value={stringValue}

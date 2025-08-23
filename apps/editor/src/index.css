@@ -9,6 +9,14 @@
     @apply bg-primary-600 text-text-inverse px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none;
 }
 
+.component-property {
+    @apply flex items-center space-x-2;
+}
+
+.property-name {
+    @apply text-xs text-text-secondary w-[80px] text-left font-medium;
+}
+
 .btn-secondary {
     @apply bg-surface-secondary text-text-primary px-4 py-2 rounded-lg hover:bg-surface-tertiary transition-colors focus:outline-none;
 }

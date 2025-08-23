@@ -58,6 +58,76 @@ export const builtInComponents: Component[] = [
                 displayName: "Layer",
                 type: PropertyType.String,
             },
+            {
+                name: "slice",
+                displayName: "Slice",
+                type: PropertyType.Rect,
+            },
+            {
+                name: "smooth",
+                displayName: "Smooth",
+                type: PropertyType.Boolean,
+            },
+            {
+                name: "offset",
+                displayName: "Offset",
+                type: PropertyType.Vector2,
+            },
+            {
+                name: "flipHorizontally",
+                displayName: "Flip Horizontally",
+                type: PropertyType.Boolean,
+            },
+            {
+                name: "flipVertically",
+                displayName: "Flip Vertically",
+                type: PropertyType.Boolean,
+            },
+            {
+                name: "rotation",
+                displayName: "Rotation",
+                type: PropertyType.Number,
+            },
+            {
+                name: "opacity",
+                displayName: "Opacity",
+                type: PropertyType.Number,
+            },
+            {
+                name: "maskColor",
+                displayName: "Mask Color",
+                type: PropertyType.Color,
+            },
+            {
+                name: "maskColorMix",
+                displayName: "Mask Color Mix",
+                type: PropertyType.Number,
+            },
+            {
+                name: "tintColor",
+                displayName: "Tint Color",
+                type: PropertyType.Color,
+            },
+            {
+                name: "scale",
+                displayName: "Scale",
+                type: PropertyType.Vector2,
+            },
+            {
+                name: "width",
+                displayName: "Width",
+                type: PropertyType.Number,
+            },
+            {
+                name: "height",
+                displayName: "Height",
+                type: PropertyType.Number,
+            },
+            {
+                name: "tiled",
+                displayName: "Tiled",
+                type: PropertyType.Vector2,
+            },
         ],
     },
     {

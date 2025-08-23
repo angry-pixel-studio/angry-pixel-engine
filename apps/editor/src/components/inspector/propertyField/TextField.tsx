@@ -9,7 +9,7 @@ const TextField = ({ propertyName, value, onUpdate }: TextFieldProps) => {
 
     return (
         <div className="space-y-2">
-            <div className="text-xs text-text-secondary font-medium">{propertyName}:</div>
+            <span className="property-name">{propertyName}:</span>
             <textarea
                 value={textValue}
                 onChange={(e) => onUpdate(e.target.value)}

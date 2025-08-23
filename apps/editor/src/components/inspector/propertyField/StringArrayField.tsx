@@ -26,8 +26,8 @@ const StringArrayField = ({ propertyName, value, onUpdate }: StringArrayFieldPro
     };
 
     return (
-        <div className="space-y-2">
-            <div className="text-xs text-text-secondary font-medium">{propertyName}:</div>
+        <div className="component-property">
+            <span className="property-name">{propertyName}:</span>
             <div className="space-y-1">
                 {arrayValue.map((item, index) => (
                     <div key={index} className="flex items-center space-x-2">

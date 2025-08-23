@@ -12,6 +12,7 @@ import {
     AudioField,
     VideoField,
     ObjectField,
+    RectField,
 } from "./index";
 
 interface PropertyFieldFactoryProps {
@@ -54,6 +55,8 @@ const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate }: P
             return <VideoField {...commonProps} />;
         case PropertyType.Object:
             return <ObjectField {...commonProps} />;
+        case PropertyType.Rect:
+            return <RectField {...commonProps} />;
         default:
             // Default case - generic text input for unknown types
             const stringValue = String(value || "");

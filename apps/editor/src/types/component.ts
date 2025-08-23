@@ -23,6 +23,7 @@ export enum PropertyType {
     Video = "Video",
     Object = "Object",
     StringArray = "StringArray",
+    Rect = "Rect",
 }
 
 export enum BuiltInComponent {
