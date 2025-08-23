@@ -1,31 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Edit2, Check, X } from "lucide-react";
 import Icon from "../Icon";
-import { useEditorStore } from "../../stores/editorStore";
+import { useEditor } from "../../hooks/useEditor";
 import { Entity } from "../../types/scene";
 
 const EntityName = ({ entity }: { entity: Entity }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(entity.name);
-    const { updateEntity } = useEditorStore();
-    const [isEnabled, setIsEnabled] = useState(entity.enabled);
-    const [entityName, setEntityName] = useState(entity.name);
+    const { entityInspector, setEntityName, setEntityEnabled, updateEntity } = useEditor();
+
+    // Sync local state with store state
+    useEffect(() => {
+        setEditValue(entityInspector.entityName);
+    }, [entityInspector.entityName]);
 
     const handleEdit = () => {
         setIsEditing(true);
-        setEditValue(entityName);
+        setEditValue(entityInspector.entityName);
     };
 
     const handleSave = () => {
-        if (editValue.trim() !== "" && editValue !== entityName) {
-            updateEntity(entity.id, { name: editValue.trim() });
+        if (editValue.trim() !== "" && editValue !== entityInspector.entityName) {
             setEntityName(editValue.trim());
+            updateEntity(entity.id, { name: editValue.trim() });
         }
         setIsEditing(false);
     };
 
     const handleCancel = () => {
-        setEditValue(entityName);
+        setEditValue(entityInspector.entityName);
         setIsEditing(false);
     };
 
@@ -35,6 +38,11 @@ const EntityName = ({ entity }: { entity: Entity }) => {
         } else if (e.key === "Escape") {
             handleCancel();
         }
+    };
+
+    const handleEnabledChange = (enabled: boolean) => {
+        setEntityEnabled(enabled);
+        updateEntity(entity.id, { enabled });
     };
 
     if (isEditing) {
@@ -69,7 +77,7 @@ const EntityName = ({ entity }: { entity: Entity }) => {
     return (
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 ml-2">
-                <span className="text-base font-medium text-text-primary">{entityName}</span>
+                <span className="text-base font-medium text-text-primary">{entityInspector.entityName}</span>
 
                 <button
                     onClick={handleEdit}
@@ -83,11 +91,8 @@ const EntityName = ({ entity }: { entity: Entity }) => {
             <label className="flex items-center space-x-2 cursor-pointer mr-2">
                 <input
                     type="checkbox"
-                    checked={isEnabled}
-                    onChange={(e) => {
-                        setIsEnabled(e.target.checked);
-                        updateEntity(entity.id, { enabled: e.target.checked });
-                    }}
+                    checked={entityInspector.entityEnabled}
+                    onChange={(e) => handleEnabledChange(e.target.checked)}
                     className="w-4 h-4 text-primary-600 bg-surface-secondary border-border-primary rounded focus:ring-primary-500 focus:ring-2"
                 />
                 <span className="text-sm text-text-secondary">Enabled</span>

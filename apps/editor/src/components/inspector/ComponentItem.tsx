@@ -1,4 +1,4 @@
-import { useEditorStore } from "../../stores/editorStore";
+import { useEditor } from "../../hooks/useEditor";
 import { EntityComponent } from "../../types/scene";
 import { builtInComponents } from "../../data/built-in-components";
 import { PropertyType } from "../../types/component";
@@ -10,7 +10,7 @@ interface ComponentItemProps {
 }
 
 const ComponentItem = ({ component, entityId }: ComponentItemProps) => {
-    const { selectedComponent, selectComponent, updateComponent } = useEditorStore();
+    const { selectedComponent, selectComponent, updateComponent } = useEditor();
     const isSelected = selectedComponent?.id === component.id;
     const isBuiltIn = component.builtIn;
 

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ChevronRight, ChevronDown, Box } from "lucide-react";
 import Icon from "../Icon";
-import { useEditorStore } from "../../stores/editorStore";
+import { useEditor } from "../../hooks/useEditor";
 import { Entity } from "../../types/scene";
 
 // Component to render a single entity in the tree
 const EntityTreeItem = ({ entity, level = 0 }: { entity: Entity; level?: number }) => {
-    const { selectedEntity, selectEntity, updateEntity } = useEditorStore();
+    const { selectedEntity, selectEntity } = useEditor();
     const [isExpanded, setIsExpanded] = useState(false);
     const hasChildren = entity.children && entity.children.length > 0;
     const isSelected = selectedEntity?.id === entity.id;
@@ -21,10 +21,6 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: Entity; level?: number 
         selectEntity(entity);
     };
 
-    const handleToggleVisibility = () => {
-        updateEntity(entity.id, { enabled: !entity.enabled });
-    };
-
     return (
         <div className="w-full">
             <div
@@ -33,7 +29,6 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: Entity; level?: number 
                 } ${!entity.enabled ? "opacity-50 text-text-tertiary" : ""}`}
                 style={{ paddingLeft: `${level * 16 + 8}px` }}
             >
-                {/* Expand/Collapse arrow */}
                 {hasChildren && (
                     <button onClick={handleToggle} className="mr-1 p-1 hover:bg-surface-tertiary rounded">
                         <Icon
@@ -45,22 +40,17 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: Entity; level?: number 
                 )}
                 {!hasChildren && <div className="w-6 mr-1" />}
 
-                {/* Visibility toggle with cube icon */}
-                <button onClick={handleToggleVisibility} className="mr-2 p-1 hover:bg-surface-tertiary rounded">
+                <div onClick={handleSelect} className="flex items-center">
                     <Icon
                         icon={Box}
                         size="sm"
-                        className={entity.enabled ? "text-text-primary" : "text-text-tertiary"}
+                        className={`mr-1 ${entity.enabled ? "text-text-primary" : "text-text-tertiary"}`}
                     />
-                </button>
 
-                {/* Entity name with lighter text */}
-                <span className="flex-1 text-sm truncate text-text-secondary" onClick={handleSelect}>
-                    {entity.name}
-                </span>
+                    <span className="flex-1 text-sm truncate text-text-secondary">{entity.name}</span>
+                </div>
             </div>
 
-            {/* Render children recursively for infinite hierarchy */}
             {hasChildren && isExpanded && (
                 <div className="w-full">
                     {entity.children!.map((child) => (
@@ -73,7 +63,7 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: Entity; level?: number 
 };
 
 const EntityTree = () => {
-    const { scene } = useEditorStore();
+    const { scene } = useEditor();
 
     return (
         <div className="p-2 my-2">

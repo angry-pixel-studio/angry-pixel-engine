@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Cpu, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
 import Icon from "../Icon";
-import { useEditorStore } from "../../stores/editorStore";
+import { useEditor } from "../../hooks/useEditor";
 import { System } from "../../types/scene";
 
 interface DragItem {
@@ -11,7 +11,7 @@ interface DragItem {
 }
 
 const SystemsList = () => {
-    const { scene, updateScene } = useEditorStore();
+    const { scene, updateScene } = useEditor();
     const [draggedItem, setDraggedItem] = useState<DragItem | null>(null);
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
     const [selectedSystemId, setSelectedSystemId] = useState<string | null>(null);
@@ -79,7 +79,7 @@ const SystemsList = () => {
         if (!selectedSystemId) return;
 
         const systems = [...scene.systems];
-        const currentIndex = systems.findIndex((s) => s.id === selectedSystemId);
+        const currentIndex = systems.findIndex((s: System) => s.id === selectedSystemId);
 
         if (currentIndex > 0) {
             // Swap with previous system
@@ -92,7 +92,7 @@ const SystemsList = () => {
         if (!selectedSystemId) return;
 
         const systems = [...scene.systems];
-        const currentIndex = systems.findIndex((s) => s.id === selectedSystemId);
+        const currentIndex = systems.findIndex((s: System) => s.id === selectedSystemId);
 
         if (currentIndex < systems.length - 1) {
             // Swap with next system
@@ -101,9 +101,9 @@ const SystemsList = () => {
         }
     };
 
-    const canMoveUp = selectedSystemId && scene.systems.findIndex((s) => s.id === selectedSystemId) > 0;
+    const canMoveUp = selectedSystemId && scene.systems.findIndex((s: System) => s.id === selectedSystemId) > 0;
     const canMoveDown =
-        selectedSystemId && scene.systems.findIndex((s) => s.id === selectedSystemId) < scene.systems.length - 1;
+        selectedSystemId && scene.systems.findIndex((s: System) => s.id === selectedSystemId) < scene.systems.length - 1;
 
     return (
         <div className="p-2">
@@ -139,7 +139,7 @@ const SystemsList = () => {
             <div className="border-t border-border-primary mb-3"></div>
 
             <div className="space-y-0.5">
-                {scene.systems.map((system, index) => (
+                {scene.systems.map((system: System, index: number) => (
                     <div
                         key={system.id}
                         draggable

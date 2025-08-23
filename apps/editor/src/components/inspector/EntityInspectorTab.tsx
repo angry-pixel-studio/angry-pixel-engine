@@ -1,11 +1,11 @@
 import { FileText } from "lucide-react";
 import Icon from "../Icon";
-import { useEditorStore } from "../../stores/editorStore";
+import { useEditor } from "../../hooks/useEditor";
 import EntityName from "./EntityName";
 import ComponentItem from "./ComponentItem";
 
 const EntityInspectorTab = () => {
-    const { selectedEntity } = useEditorStore();
+    const { selectedEntity } = useEditor();
 
     if (!selectedEntity) {
         return (

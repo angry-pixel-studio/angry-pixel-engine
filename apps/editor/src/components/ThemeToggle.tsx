@@ -4,7 +4,7 @@ import { Sun, Moon, Monitor } from "lucide-react";
 import Icon from "./Icon";
 
 const ThemeToggle = () => {
-    const { theme, changeTheme, isDark, isLight, isSystem } = useTheme();
+    const { changeTheme, isDark, isLight, isSystem } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
