@@ -8,6 +8,7 @@ export interface ComponentProperty {
     name: string;
     displayName: string;
     type: PropertyType;
+    options?: PropertyOption;
 }
 
 export enum PropertyType {
@@ -32,3 +33,5 @@ export enum BuiltInComponent {
     Camera = "Camera",
     SpriteRenderer = "SpriteRenderer",
 }
+
+export type PropertyOption = Record<string, unknown>;

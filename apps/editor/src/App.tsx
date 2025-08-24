@@ -3,17 +3,18 @@ import ResizablePanel from "./components/ResizablePanel";
 import SceneTreeTabs from "./components/sceneTree/SceneTreeTabs";
 import InspectorTabs from "./components/inspector/InspectorTabs";
 import ThemeToggle from "./components/ThemeToggle";
-import { Layout, Folder } from "lucide-react";
+import { Folder } from "lucide-react";
 import Icon from "./components/Icon";
 import SaveSceneButton from "./components/SaveSceneButton";
+import SceneEditor from "./components/sceneEditor";
 
 function App() {
     const { panelSizes, setPanelSize } = useEditorStore();
 
     return (
-        <div className="h-screen bg-background-primary flex flex-col">
+        <div className="h-screen bg-background-primary flex flex-col relative">
             {/* Header */}
-            <header className="bg-surface-primary border-b border-border-primary px-6 py-4">
+            <header className="bg-surface-primary border-b border-border-primary px-6 py-4 relative z-10">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
@@ -29,8 +30,13 @@ function App() {
                 </div>
             </header>
 
+            {/* Scene Editor - Fondo completo por debajo de todo */}
+            <div className="absolute inset-0 bottom-8 z-0">
+                <SceneEditor />
+            </div>
+
             {/* Main Content - 2 columnas principales */}
-            <div className="flex-1 flex overflow-hidden">
+            <div className="flex-1 flex overflow-hidden relative z-10">
                 {/* Columna Izquierda - Scene Tree + Scene Preview + Filesystem Navigator */}
                 <div className="flex-1 flex flex-col">
                     {/* Fila Superior - Scene Tree + Scene Preview */}
@@ -47,27 +53,14 @@ function App() {
                         >
                             <SceneTreeTabs />
                         </ResizablePanel>
-
-                        {/* Scene Preview + Editor - Resizable desde ambos bordes */}
-                        <div className="flex-1 flex flex-col">
-                            <div className="flex-1 flex items-center justify-center bg-background-secondary">
-                                <div className="text-center text-text-secondary">
-                                    <div className="mb-3 flex justify-center">
-                                        <Icon icon={Layout} size="2xl" variant="primary" />
-                                    </div>
-                                    <div className="text-lg font-medium">Scene Preview + Editor</div>
-                                    <div className="text-sm">Main editing area</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Fila Inferior - Filesystem Navigator - Resizable desde el borde superior */}
                     <ResizablePanel
                         direction="vertical"
                         initialSize={panelSizes.filesystemNav}
-                        minSize={120}
-                        maxSize={400}
+                        minSize={200}
+                        maxSize={320}
                         resizeHandlePosition="top"
                         className="bg-surface-primary border-t border-border-primary"
                         onResize={(size) => setPanelSize("filesystemNav", size)}
@@ -99,7 +92,7 @@ function App() {
             </div>
 
             {/* Status Bar */}
-            <footer className="bg-surface-primary border-t border-border-primary px-6 py-2">
+            <footer className="bg-surface-primary border-t border-border-primary px-6 py-2 relative z-10">
                 <div className="flex items-center justify-between text-sm text-text-secondary">
                     <span>Ready</span>
                     <span>Starting fresh...</span>

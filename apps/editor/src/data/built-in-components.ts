@@ -19,6 +19,7 @@ export const builtInComponents: Component[] = [
                 name: "rotation",
                 displayName: "Rotation",
                 type: PropertyType.Number,
+                options: { min: -2 * Math.PI, max: 2 * Math.PI, step: 0.03 },
             },
         ],
     },
@@ -41,6 +42,7 @@ export const builtInComponents: Component[] = [
                 name: "zoom",
                 displayName: "Zoom",
                 type: PropertyType.Number,
+                options: { min: 0, step: 0.1 },
             },
         ],
     },
@@ -87,11 +89,13 @@ export const builtInComponents: Component[] = [
                 name: "rotation",
                 displayName: "Rotation",
                 type: PropertyType.Number,
+                options: { min: -2 * Math.PI, max: 2 * Math.PI, step: 0.03 },
             },
             {
                 name: "opacity",
                 displayName: "Opacity",
                 type: PropertyType.Number,
+                options: { min: 0, max: 1, step: 0.01 },
             },
             {
                 name: "maskColor",
@@ -102,6 +106,7 @@ export const builtInComponents: Component[] = [
                 name: "maskColorMix",
                 displayName: "Mask Color Mix",
                 type: PropertyType.Number,
+                options: { min: 0, max: 1, step: 0.01 },
             },
             {
                 name: "tintColor",

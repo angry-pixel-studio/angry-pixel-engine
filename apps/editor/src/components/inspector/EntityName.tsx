@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { Edit2, Check, X } from "lucide-react";
 import Icon from "../Icon";
 import { useEditor } from "../../hooks/useEditor";
-import { EntityWithComponentsAndChildren } from "../../types/scene";
+import { Entity } from "../../types/scene";
 
-const EntityName = ({ entity }: { entity: EntityWithComponentsAndChildren }) => {
+const EntityName = ({ entity }: { entity: Entity }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(entity.name);
     const { entityInspector, setEntityName, setEntityEnabled } = useEditor();

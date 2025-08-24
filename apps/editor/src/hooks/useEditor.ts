@@ -29,15 +29,13 @@ export const useEditor = () => {
         setPanelSize: editorStore.setPanelSize,
 
         // Scene state
-        scene: sceneStore.scene,
+        // scene: sceneStore.scene,
+        systemsMap: sceneStore.systemsMap,
+        entitiesMap: sceneStore.entitiesMap,
+        componentsMap: sceneStore.componentsMap,
 
-        // Scene actions (for operations que no involucran la entidad seleccionada)
-        addEntity: sceneStore.addEntity,
-        removeEntity: sceneStore.removeEntity,
-        duplicateEntity: sceneStore.duplicateEntity,
-        updateScene: sceneStore.updateScene,
-
-        // Scene utilities
+        // Scene actions
+        updateSystems: sceneStore.updateSystems,
         getSceneJson: sceneStore.getSceneJson,
         getEntityById: sceneStore.getEntityById,
         getComponentById: sceneStore.getComponentById,

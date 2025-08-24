@@ -1,4 +1,4 @@
-import { PropertyType } from "../../../types/component";
+import { PropertyOption, PropertyType } from "../../../types/component";
 import {
     Vector2Field,
     StringArrayField,
@@ -21,13 +21,15 @@ interface PropertyFieldFactoryProps {
     componentId: string;
     propertyType: PropertyType;
     onUpdate: (value: unknown) => void;
+    options?: PropertyOption;
 }
 
-const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate }: PropertyFieldFactoryProps) => {
+const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate, options }: PropertyFieldFactoryProps) => {
     const commonProps = {
         propertyName,
         value,
         onUpdate,
+        options,
     };
 
     switch (propertyType) {

@@ -6,6 +6,7 @@ export interface Scene {
     components: Component[];
     entities: EntityWithComponentsAndChildren[];
     systems: System[];
+    assets: Asset[];
 }
 
 export interface Entity {
@@ -14,17 +15,20 @@ export interface Entity {
     enabled: boolean;
 }
 
-export interface EntityWithChildren<T extends Entity> extends Entity {
-    children: T[];
+export interface EntityWithParent extends Entity {
+    parent: string | null;
+    level: number;
+}
+
+export interface EntityWithChildren extends Entity {
+    children: (EntityWithChildren | EntityWithComponents | EntityWithComponentsAndChildren)[];
 }
 
 export interface EntityWithComponents extends Entity {
     components: EntityComponent[];
 }
 
-export interface EntityWithComponentsAndChildren
-    extends EntityWithComponents,
-        EntityWithChildren<EntityWithComponentsAndChildren> {}
+export interface EntityWithComponentsAndChildren extends EntityWithComponents, EntityWithChildren {}
 
 export interface EntityComponent {
     id: string;
@@ -39,4 +43,19 @@ export interface System {
     name: string;
     enabled: boolean;
     url: string;
+}
+
+export interface Asset {
+    id: string;
+    name: string;
+    url: string;
+    type: AssetType;
+}
+
+export enum AssetType {
+    Image = "image",
+    Audio = "audio",
+    Video = "video",
+    Font = "font",
+    Json = "json",
 }

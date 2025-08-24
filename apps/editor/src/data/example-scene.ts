@@ -1,9 +1,17 @@
 import { BuiltInComponent } from "../types/component";
-import { Scene } from "../types/scene";
+import { AssetType, Scene } from "../types/scene";
 
 export const exampleScene: Scene = {
     id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8d",
     name: "Example Scene",
+    assets: [
+        {
+            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8f",
+            name: "Player Spritesheet",
+            url: "assets/image/player-spritesheet.png",
+            type: AssetType.Image,
+        },
+    ],
     entities: [
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8e",
@@ -15,11 +23,6 @@ export const exampleScene: Scene = {
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
-                    data: {
-                        position: { x: 0, y: 0 },
-                        scale: { x: 0, y: 0 },
-                        rotation: 0,
-                    },
                 },
                 {
                     id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c90",
@@ -27,9 +30,9 @@ export const exampleScene: Scene = {
                     enabled: true,
                     builtIn: true,
                     data: {
-                        layers: ["Default", "Player", "Background", "Foreground"],
+                        layers: ["Background", "Foreground", "Player"],
                         depth: 0,
-                        zoom: 1,
+                        zoom: 4,
                     },
                 },
             ],
@@ -47,7 +50,7 @@ export const exampleScene: Scene = {
                     builtIn: true,
                     data: {
                         position: { x: 0, y: 0 },
-                        scale: { x: 0, y: 0 },
+                        scale: { x: 1, y: 1 },
                         rotation: 0,
                     },
                 },
@@ -57,26 +60,14 @@ export const exampleScene: Scene = {
                     enabled: true,
                     builtIn: true,
                     data: {
-                        image: "assets/images/player.png",
+                        image: "assets/image/player-spritesheet.png",
                         layer: "Player",
-                    },
-                },
-                {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-3f1e5d6b7c93",
-                    name: BuiltInComponent.TypeTest,
-                    enabled: true,
-                    builtIn: true,
-                },
-                {
-                    id: "b8f4d3e2-5a1b-4c7d-8e9f-1a2b3c4d5e6f",
-                    name: "Custom Component",
-                    enabled: true,
-                    builtIn: false,
-                    data: {
-                        numberProp: 1,
-                        stringProp: "Hello",
-                        booleanProp: true,
-                        vector2Prop: { x: 1, y: 2 },
+                        slice: {
+                            x: 0,
+                            y: 64,
+                            width: 16,
+                            height: 16,
+                        },
                     },
                 },
             ],
@@ -84,7 +75,7 @@ export const exampleScene: Scene = {
         },
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c94",
-            name: "Stage",
+            name: "Test Parent",
             enabled: true,
             components: [
                 {
@@ -102,57 +93,33 @@ export const exampleScene: Scene = {
             children: [
                 {
                     id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c96",
-                    name: "Background",
+                    name: "Test Child 01",
                     enabled: true,
                     components: [
                         {
-                            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c97",
-                            name: BuiltInComponent.Transform,
+                            id: "b7e3c2a1-4f2d-4e8a-9c3a-3f1e5d6b7c93",
+                            name: BuiltInComponent.TypeTest,
                             enabled: true,
                             builtIn: true,
-                            data: {
-                                position: { x: 0, y: 0 },
-                                scale: { x: 0, y: 0 },
-                                rotation: 0,
-                            },
-                        },
-                        {
-                            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c98",
-                            name: BuiltInComponent.SpriteRenderer,
-                            enabled: true,
-                            builtIn: true,
-                            data: {
-                                image: "assets/images/background.png",
-                                layer: "Background",
-                            },
                         },
                     ],
                     children: [],
                 },
                 {
                     id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c99",
-                    name: "Foreground",
+                    name: "Test Child 02",
                     enabled: true,
                     components: [
                         {
-                            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9a",
-                            name: BuiltInComponent.Transform,
+                            id: "b8f4d3e2-5a1b-4c7d-8e9f-1a2b3c4d5e6f",
+                            name: "Custom Component",
                             enabled: true,
-                            builtIn: true,
+                            builtIn: false,
                             data: {
-                                position: { x: 0, y: 0 },
-                                scale: { x: 0, y: 0 },
-                                rotation: 0,
-                            },
-                        },
-                        {
-                            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9b",
-                            name: BuiltInComponent.SpriteRenderer,
-                            enabled: true,
-                            builtIn: true,
-                            data: {
-                                image: "assets/images/foreground.png",
-                                layer: "Foreground",
+                                numberProp: 1,
+                                stringProp: "Hello",
+                                booleanProp: true,
+                                vector2Prop: { x: 1, y: 2 },
                             },
                         },
                     ],

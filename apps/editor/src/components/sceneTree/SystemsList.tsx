@@ -11,10 +11,12 @@ interface DragItem {
 }
 
 const SystemsList = () => {
-    const { scene, updateScene } = useEditor();
+    const { systemsMap, updateSystems } = useEditor();
     const [draggedItem, setDraggedItem] = useState<DragItem | null>(null);
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
     const [selectedSystemId, setSelectedSystemId] = useState<string | null>(null);
+
+    const systemsArray = Array.from(systemsMap.values());
 
     const handleDragStart = (e: React.DragEvent, index: number, system: System) => {
         setDraggedItem({ index, id: system.id, type: "system" });
@@ -44,7 +46,7 @@ const SystemsList = () => {
 
         if (!draggedItem || draggedItem.type !== "system") return;
 
-        const systems = [...scene.systems];
+        const systems = [...systemsArray];
         const draggedSystem = systems[draggedItem.index];
 
         // Remove from original position
@@ -54,7 +56,7 @@ const SystemsList = () => {
         systems.splice(dropIndex, 0, draggedSystem);
 
         // Update the scene with reordered systems
-        updateScene({ systems });
+        updateSystems(systems);
 
         setDragOverIndex(null);
     };
@@ -78,33 +80,32 @@ const SystemsList = () => {
     const moveSystemUp = () => {
         if (!selectedSystemId) return;
 
-        const systems = [...scene.systems];
+        const systems = [...systemsArray];
         const currentIndex = systems.findIndex((s: System) => s.id === selectedSystemId);
 
         if (currentIndex > 0) {
             // Swap with previous system
             [systems[currentIndex], systems[currentIndex - 1]] = [systems[currentIndex - 1], systems[currentIndex]];
-            updateScene({ systems });
+            updateSystems(systems);
         }
     };
 
     const moveSystemDown = () => {
         if (!selectedSystemId) return;
 
-        const systems = [...scene.systems];
+        const systems = [...systemsArray];
         const currentIndex = systems.findIndex((s: System) => s.id === selectedSystemId);
 
         if (currentIndex < systems.length - 1) {
             // Swap with next system
             [systems[currentIndex], systems[currentIndex + 1]] = [systems[currentIndex + 1], systems[currentIndex]];
-            updateScene({ systems });
+            updateSystems(systems);
         }
     };
 
-    const canMoveUp = selectedSystemId && scene.systems.findIndex((s: System) => s.id === selectedSystemId) > 0;
+    const canMoveUp = selectedSystemId && systemsArray.findIndex((s: System) => s.id === selectedSystemId) > 0;
     const canMoveDown =
-        selectedSystemId &&
-        scene.systems.findIndex((s: System) => s.id === selectedSystemId) < scene.systems.length - 1;
+        selectedSystemId && systemsArray.findIndex((s: System) => s.id === selectedSystemId) < systemsArray.length - 1;
 
     return (
         <div className="p-2">
@@ -140,7 +141,7 @@ const SystemsList = () => {
             <div className="border-t border-border-primary mb-3"></div>
 
             <div className="space-y-0.5">
-                {scene.systems.map((system: System, index: number) => (
+                {systemsArray.map((system: System, index: number) => (
                     <div
                         key={system.id}
                         draggable
@@ -175,7 +176,7 @@ const SystemsList = () => {
                 ))}
             </div>
 
-            {scene.systems.length === 0 && (
+            {systemsArray.length === 0 && (
                 <div className="text-center text-text-tertiary py-4">
                     <div className="text-sm">No systems defined</div>
                     <div className="text-xs">Add systems to control game behavior</div>

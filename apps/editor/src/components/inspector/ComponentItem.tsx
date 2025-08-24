@@ -72,6 +72,7 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
                                     onUpdate={(newValue: unknown) => {
                                         updateComponentProperty(component.id, property.name, newValue);
                                     }}
+                                    options={property.options}
                                 />
                             ))}
                         {!isBuiltIn &&
@@ -87,6 +88,7 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
                                     onUpdate={(newValue: unknown) => {
                                         updateComponentProperty(component.id, key, newValue);
                                     }}
+                                    options={undefined}
                                 />
                             ))}
                     </div>

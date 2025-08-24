@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronRight, ChevronDown, Box } from "lucide-react";
 import Icon from "../Icon";
 import { useEditor } from "../../hooks/useEditor";
-import { EntityWithComponentsAndChildren } from "../../types/scene";
+import { EntityWithChildren } from "../../types/scene";
 
-// Component to render a single entity in the tree
-const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithComponentsAndChildren; level?: number }) => {
+const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; level?: number }) => {
     const { selectedEntity, selectEntity } = useEditor();
     const [isExpanded, setIsExpanded] = useState(false);
     const hasChildren = entity.children && entity.children.length > 0;
@@ -54,7 +53,7 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithComponentsAnd
             {hasChildren && isExpanded && (
                 <div className="w-full">
                     {entity.children!.map((child) => (
-                        <EntityTreeItem key={child.id} entity={child} level={level + 1} />
+                        <EntityTreeItem key={child.id} entity={child as EntityWithChildren} level={level + 1} />
                     ))}
                 </div>
             )}
@@ -63,12 +62,45 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithComponentsAnd
 };
 
 const EntityTree = () => {
-    const { scene } = useEditor();
+    const { entitiesMap } = useEditor();
+    const [tree, setTree] = useState<EntityWithChildren[]>([]);
+
+    const buildTree = useCallback(() => {
+        const tree = Array.from(entitiesMap.values())
+            .sort((a, b) => a.level - b.level)
+            .reduce((acc, entity) => {
+                if (entity.parent === null) {
+                    acc.push({
+                        id: entity.id,
+                        name: entity.name,
+                        enabled: entity.enabled,
+                        children: [],
+                    });
+                } else {
+                    const parent = acc.find((e) => e.id === entity.parent);
+                    if (parent) {
+                        parent.children.push({
+                            id: entity.id,
+                            name: entity.name,
+                            enabled: entity.enabled,
+                            children: [],
+                        });
+                    }
+                }
+                return acc;
+            }, [] as EntityWithChildren[]);
+
+        setTree(tree);
+    }, [entitiesMap]);
+
+    useEffect(() => {
+        buildTree();
+    }, [buildTree]);
 
     return (
         <div className="p-2 my-2">
             <div className="space-y-0.5">
-                {scene.entities.map((entity) => (
+                {tree.map((entity) => (
                     <EntityTreeItem key={entity.id} entity={entity} />
                 ))}
             </div>

@@ -94,3 +94,15 @@
     max-width: 100%;
     overflow-x: hidden;
 }
+
+.scene-editor {
+    margin-left: auto;
+    margin-right: auto;
+    height: 100vh;
+    aspect-ratio: 16 / 9;
+}
+
+.scene-editor canvas {
+    width: 100%;
+    height: 100%;
+}

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { enableMapSet } from "immer";
-import { EntityWithComponentsAndChildren, EntityComponent } from "../types/scene";
+import { EntityWithChildren, EntityComponent } from "../types/scene";
 import { useSceneStore } from "./sceneStore";
 
 // Enable MapSet support for Immer
@@ -30,7 +30,7 @@ export interface EditorState {
 
 interface EditorActions {
     // Selection actions
-    selectEntity: (entity: EntityWithComponentsAndChildren | null) => void;
+    selectEntity: (entity: EntityWithChildren | null) => void;
 
     // Entity inspector actions
     setEntityName: (name: string) => void;
@@ -56,7 +56,7 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             },
             panelSizes: {
                 sceneTree: 256,
-                filesystemNav: 192,
+                filesystemNav: 220,
                 entityInspector: 380,
             },
 
@@ -66,11 +66,14 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                 set((state) => {
                     state.selectedEntityId = entity?.id || null;
 
-                    // Update entity inspector state
                     if (entity) {
                         state.entityInspector.entityName = entity.name;
                         state.entityInspector.entityEnabled = entity.enabled;
-                        state.entityInspector.components = new Map(entity.components.map((c) => [c.id, c]));
+
+                        const components = useSceneStore.getState().componentsMap.get(entity.id);
+                        state.entityInspector.components = components
+                            ? new Map(components.map((c) => [c.id, c]))
+                            : new Map();
                     } else {
                         state.entityInspector.entityName = "";
                         state.entityInspector.entityEnabled = true;
