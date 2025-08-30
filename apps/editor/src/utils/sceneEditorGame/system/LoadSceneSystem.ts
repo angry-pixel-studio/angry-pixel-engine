@@ -1,5 +1,5 @@
 import { EntityIdentifier } from "../component/EntityIdentifier";
-import { AssetType, Scene } from "../../../../types/scene";
+import { AssetType, Scene } from "../../../types/scene";
 import {
     AssetManager,
     Camera,
@@ -12,7 +12,7 @@ import {
     TimeManager,
     Transform,
 } from "angry-pixel";
-import { SceneState } from "../../../../stores/sceneStore";
+import { SceneState } from "../../../stores/sceneStore";
 import { StoreApi, UseBoundStore } from "zustand";
 
 export class LoadSceneSystem implements System {
@@ -56,24 +56,23 @@ export class LoadSceneSystem implements System {
 
     private createEntities(): void {
         this.sceneData?.entities.forEach(({ id, name, components }) => {
-            const entity: Component[] = components
-                .map((component) => {
-                    switch (component.name) {
-                        case "Transform":
-                            return new Transform(component.data);
-                        case "Camera":
-                            return new Camera(component.data);
-                        case "SpriteRenderer":
-                            return new SpriteRenderer(component.data);
-                        default:
-                            return undefined;
-                    }
-                })
-                .filter((component) => component !== undefined);
-
-            entity.push(new EntityIdentifier({ id, name }));
-            console.log("entity", entity);
-            this.entityManager.createEntity(entity);
+            this.entityManager.createEntity([
+                new EntityIdentifier({ id, name }),
+                ...components
+                    .map((component) => {
+                        switch (component.name) {
+                            case "Transform":
+                                return new Transform(component.data);
+                            case "Camera":
+                                return new Camera(component.data);
+                            case "SpriteRenderer":
+                                return new SpriteRenderer(component.data);
+                            default:
+                                return undefined;
+                        }
+                    })
+                    .filter((component) => component !== undefined),
+            ]);
         });
     }
 

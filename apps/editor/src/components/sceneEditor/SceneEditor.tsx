@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { createGame } from "./game";
+import { createGame } from "../../utils/sceneEditorGame";
 import { Game } from "angry-pixel";
 import { useSceneStore } from "../../stores/sceneStore";
 
@@ -9,7 +9,12 @@ const SceneEditor = () => {
 
     useEffect(() => {
         if (divRef.current) {
-            gameRef.current = createGame(divRef.current);
+            gameRef.current = createGame({
+                containerNode: divRef.current,
+                width: 1600 / 3,
+                height: 900 / 3,
+                canvasColor: "#334155",
+            });
             gameRef.current.addDependencyInstance(useSceneStore, "useSceneStore");
             gameRef.current.start();
         }

@@ -12,9 +12,9 @@ function App() {
     const { panelSizes, setPanelSize } = useEditorStore();
 
     return (
-        <div className="h-screen bg-background-primary flex flex-col relative">
+        <div className="h-screen bg-background-primary flex flex-col">
             {/* Header */}
-            <header className="bg-surface-primary border-b border-border-primary px-6 py-4 relative z-10">
+            <header className="bg-surface-primary border-b border-border-primary px-6 py-4 z-20">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
@@ -30,13 +30,8 @@ function App() {
                 </div>
             </header>
 
-            {/* Scene Editor - Fondo completo por debajo de todo */}
-            <div className="absolute inset-0 bottom-8 z-0">
-                <SceneEditor />
-            </div>
-
             {/* Main Content - 2 columnas principales */}
-            <div className="flex-1 flex overflow-hidden relative z-10">
+            <div className="flex-1 flex overflow-hidden">
                 {/* Columna Izquierda - Scene Tree + Scene Preview + Filesystem Navigator */}
                 <div className="flex-1 flex flex-col">
                     {/* Fila Superior - Scene Tree + Scene Preview */}
@@ -53,6 +48,10 @@ function App() {
                         >
                             <SceneTreeTabs />
                         </ResizablePanel>
+
+                        <div className="flex flex-col">
+                            <SceneEditor />
+                        </div>
                     </div>
 
                     {/* Fila Inferior - Filesystem Navigator - Resizable desde el borde superior */}
@@ -77,7 +76,6 @@ function App() {
                     </ResizablePanel>
                 </div>
 
-                {/* Columna Derecha - Entity Inspector - Resizable desde el borde izquierdo */}
                 <ResizablePanel
                     direction="horizontal"
                     initialSize={panelSizes.entityInspector}
@@ -92,7 +90,7 @@ function App() {
             </div>
 
             {/* Status Bar */}
-            <footer className="bg-surface-primary border-t border-border-primary px-6 py-2 relative z-10">
+            <footer className="bg-surface-primary border-t border-border-primary px-6 py-2">
                 <div className="flex items-center justify-between text-sm text-text-secondary">
                     <span>Ready</span>
                     <span>Starting fresh...</span>

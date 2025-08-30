@@ -98,8 +98,7 @@
 .scene-editor {
     margin-left: auto;
     margin-right: auto;
-    height: 100vh;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
 }
 
 .scene-editor canvas {
