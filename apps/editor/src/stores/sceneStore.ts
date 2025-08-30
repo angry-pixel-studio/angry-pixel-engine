@@ -8,7 +8,6 @@ import {
     EntityComponent,
     EntityWithComponentsAndChildren,
     System,
-    EntityWithChildren,
     EntityWithParent,
 } from "../types/scene";
 import { exampleScene } from "../data/example-scene";
@@ -24,6 +23,10 @@ export interface SceneState {
     entitiesMap: Map<string, EntityWithParent>;
     componentsMap: Map<string, EntityComponent[]>;
     systemsMap: Map<string, System>;
+
+    // what has been changed
+    entityUpdated?: string;
+    componentUpdated?: [string, string];
 
     // Scene actions
     updateEntity: (entityId: string, updates: Partial<Entity>) => void;
@@ -48,9 +51,9 @@ export interface SceneState {
 
 // Helper function to create Maps from scene data
 const createMapsFromScene = (scene: Scene) => {
-    const entitiesMap = new Map<string, EntityWithParent>();
-    const componentsMap = new Map<string, EntityComponent[]>();
-    const systemsMap = new Map<string, System>();
+    const entitiesMap = new Map<string, EntityWithParent>(); // entity id -> entity
+    const componentsMap = new Map<string, EntityComponent[]>(); // entity -> array of components
+    const systemsMap = new Map<string, System>(); // system id -> system
 
     const processEntity = (
         entity: EntityWithComponentsAndChildren,
@@ -82,11 +85,16 @@ export const useSceneStore = create<SceneState>()(
         immer((set, get) => {
             const { entitiesMap, componentsMap, systemsMap } = createMapsFromScene(exampleScene);
 
+            const entityUpdated: string | undefined = undefined;
+            const componentUpdated: [string, string] | undefined = undefined;
+
             return {
                 scene: exampleScene,
                 entitiesMap,
                 componentsMap,
                 systemsMap,
+                entityUpdated,
+                componentUpdated,
 
                 syncMapsWithScene: () => {
                     set((state) => {
@@ -101,6 +109,8 @@ export const useSceneStore = create<SceneState>()(
                     set((state) => {
                         const entity = state.entitiesMap.get(entityId);
                         if (entity) Object.assign(entity, updates);
+                        state.entityUpdated = entityId;
+                        state.componentUpdated = undefined;
                     });
                 },
 
@@ -110,6 +120,9 @@ export const useSceneStore = create<SceneState>()(
                         if (entityComponents) {
                             const component = entityComponents.find((comp) => comp.id === componentId);
                             if (component) Object.assign(component, updates);
+
+                            state.entityUpdated = undefined;
+                            state.componentUpdated = [entityId, componentId];
                         }
                     });
                 },

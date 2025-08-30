@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    overflow: hidden;
+}
+
 /* Custom component styles */
 .btn-primary {
     @apply bg-primary-600 text-text-inverse px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none;
@@ -98,7 +102,6 @@
 .scene-editor {
     margin-left: auto;
     margin-right: auto;
-    aspect-ratio: 16 / 10;
 }
 
 .scene-editor canvas {

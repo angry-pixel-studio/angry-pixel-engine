@@ -5,14 +5,14 @@ import InspectorTabs from "./components/inspector/InspectorTabs";
 import ThemeToggle from "./components/ThemeToggle";
 import { Folder } from "lucide-react";
 import Icon from "./components/Icon";
-import SaveSceneButton from "./components/SaveSceneButton";
+// import SaveSceneButton from "./components/SaveSceneButton";
 import SceneEditor from "./components/sceneEditor";
 
 function App() {
     const { panelSizes, setPanelSize } = useEditorStore();
 
     return (
-        <div className="h-screen bg-background-primary flex flex-col">
+        <div className="h-screen bg-background-primary flex flex-col relative">
             {/* Header */}
             <header className="bg-surface-primary border-b border-border-primary px-6 py-4 z-20">
                 <div className="flex items-center justify-between">
@@ -23,18 +23,17 @@ function App() {
                         <h1 className="text-xl font-semibold text-text-primary">Angry Pixel Editor</h1>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <SaveSceneButton />
-                        <button className="btn-secondary">Export</button>
+                        {/* <SaveSceneButton /> */}
                         <ThemeToggle />
                     </div>
                 </div>
             </header>
 
             {/* Main Content - 2 columnas principales */}
-            <div className="flex-1 flex overflow-hidden">
-                {/* Columna Izquierda - Scene Tree + Scene Preview + Filesystem Navigator */}
+            <div className="flex-1 flex overflow-hidden relative">
+                {/* Columna Izquierda - Scene Tree + Filesystem Navigator */}
                 <div className="flex-1 flex flex-col">
-                    {/* Fila Superior - Scene Tree + Scene Preview */}
+                    {/* Fila Superior - Scene Tree */}
                     <div className="flex-1 flex">
                         {/* Scene Tree - Resizable desde el borde derecho */}
                         <ResizablePanel
@@ -43,15 +42,11 @@ function App() {
                             minSize={256}
                             maxSize={400}
                             resizeHandlePosition="right"
-                            className="bg-surface-primary border-r border-border-primary flex flex-col"
+                            className="bg-surface-primary border-r border-border-primary flex flex-col z-10"
                             onResize={(size) => setPanelSize("sceneTree", size)}
                         >
                             <SceneTreeTabs />
                         </ResizablePanel>
-
-                        <div className="flex flex-col">
-                            <SceneEditor />
-                        </div>
                     </div>
 
                     {/* Fila Inferior - Filesystem Navigator - Resizable desde el borde superior */}
@@ -61,7 +56,7 @@ function App() {
                         minSize={200}
                         maxSize={320}
                         resizeHandlePosition="top"
-                        className="bg-surface-primary border-t border-border-primary"
+                        className="bg-surface-primary border-t border-border-primary z-10"
                         onResize={(size) => setPanelSize("filesystemNav", size)}
                     >
                         <div className="h-full flex items-center justify-center">
@@ -76,21 +71,34 @@ function App() {
                     </ResizablePanel>
                 </div>
 
+                {/* Columna Derecha - Entity Inspector */}
                 <ResizablePanel
                     direction="horizontal"
                     initialSize={panelSizes.entityInspector}
                     minSize={380}
                     maxSize={600}
                     resizeHandlePosition="left"
-                    className="bg-surface-primary border-l border-border-primary flex flex-col"
+                    className="bg-surface-primary border-l border-border-primary flex flex-col z-10"
                     onResize={(size) => setPanelSize("entityInspector", size)}
                 >
                     <InspectorTabs />
                 </ResizablePanel>
             </div>
 
+            {/* SceneEditor - Posicionado absolutamente por debajo de todo, centrado con 16:9 */}
+            <div className="absolute inset-0 z-0">
+                <div className="flex items-center justify-center">
+                    <div
+                        className="relative w-full h-full translate-y-[-15%] translate-x-[-5%]"
+                        style={{ aspectRatio: "16/9" }}
+                    >
+                        <SceneEditor />
+                    </div>
+                </div>
+            </div>
+
             {/* Status Bar */}
-            <footer className="bg-surface-primary border-t border-border-primary px-6 py-2">
+            <footer className="bg-surface-primary border-t border-border-primary px-6 py-2 z-20">
                 <div className="flex items-center justify-between text-sm text-text-secondary">
                     <span>Ready</span>
                     <span>Starting fresh...</span>

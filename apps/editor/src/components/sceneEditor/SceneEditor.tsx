@@ -11,8 +11,8 @@ const SceneEditor = () => {
         if (divRef.current) {
             gameRef.current = createGame({
                 containerNode: divRef.current,
-                width: 1600 / 3,
-                height: 900 / 3,
+                width: 1920,
+                height: 1080,
                 canvasColor: "#334155",
             });
             gameRef.current.addDependencyInstance(useSceneStore, "useSceneStore");

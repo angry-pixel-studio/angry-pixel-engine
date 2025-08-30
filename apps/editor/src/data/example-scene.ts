@@ -8,7 +8,13 @@ export const exampleScene: Scene = {
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8f",
             name: "Player Spritesheet",
-            url: "assets/image/player-spritesheet.png",
+            url: "assets/example-scene/image/player-spritesheet.png",
+            type: AssetType.Image,
+        },
+        {
+            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6d",
+            name: "Tileset",
+            url: "assets/example-scene/image/tileset.png",
             type: AssetType.Image,
         },
     ],
@@ -39,12 +45,12 @@ export const exampleScene: Scene = {
             children: [],
         },
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c91",
-            name: "Player",
+            id: "e2a4b8c7-9d1f-4e3b-8a2c-5f6d7e8c9b01",
+            name: "Foreground",
             enabled: true,
             components: [
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c92",
+                    id: "f8c1e7b2-3d4a-4b6e-8c2f-7a9e5d3c1b24",
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
@@ -55,12 +61,58 @@ export const exampleScene: Scene = {
                     },
                 },
                 {
+                    id: "b2f7c1e4-8a3d-4b2e-9c1f-7e5d3a2b1c45",
+                    name: BuiltInComponent.TilemapRenderer,
+                    enabled: true,
+                    builtIn: false,
+                    data: {
+                        layer: "Foreground",
+                        tileset: {
+                            image: "assets/example-scene/image/tileset.png",
+                            tileWidth: 16,
+                            tileHeight: 16,
+                            width: 12,
+                            margin: { x: 0, y: 0 },
+                            spacing: { x: 0, y: 0 },
+                        },
+                        // prettier-ignore
+                        data: [
+                            3, 0, 0, 0, 0, 0, 0, 1, 
+                            15, 0, 0, 0, 0, 0, 0, 13, 
+                            15, 0, 0, 0, 0, 0, 0, 13, 
+                            15, 0, 0, 0, 0, 0, 0, 13,
+                            28, 2, 2, 2, 2, 2, 2, 30,
+                        ],
+                        width: 8,
+                        height: 8,
+                    },
+                },
+            ],
+            children: [],
+        },
+        {
+            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c91",
+            name: "Player",
+            enabled: true,
+            components: [
+                {
+                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c92",
+                    name: BuiltInComponent.Transform,
+                    enabled: true,
+                    builtIn: true,
+                    data: {
+                        position: { x: 0, y: -16 },
+                        scale: { x: 1, y: 1 },
+                        rotation: 0,
+                    },
+                },
+                {
                     id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c93",
                     name: BuiltInComponent.SpriteRenderer,
                     enabled: true,
                     builtIn: true,
                     data: {
-                        image: "assets/image/player-spritesheet.png",
+                        image: "assets/example-scene/image/player-spritesheet.png",
                         layer: "Player",
                         slice: {
                             x: 0,
@@ -133,19 +185,19 @@ export const exampleScene: Scene = {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9c",
             name: "PlayerControllerSystem",
             enabled: true,
-            url: "assets/systems/playerControllerSystem.ts",
+            url: "assets/example-scene/systems/playerControllerSystem.ts",
         },
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9d",
             name: "EnemyControllerSystem",
             enabled: true,
-            url: "assets/systems/enemyControllerSystem.ts",
+            url: "assets/example-scene/systems/enemyControllerSystem.ts",
         },
         {
             id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9e",
             name: "SomeSystem",
             enabled: true,
-            url: "assets/systems/SomeSystem.ts",
+            url: "assets/example-scene/systems/SomeSystem.ts",
         },
     ],
     components: [],

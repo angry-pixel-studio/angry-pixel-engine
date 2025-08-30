@@ -32,6 +32,7 @@ export enum BuiltInComponent {
     Transform = "Transform",
     Camera = "Camera",
     SpriteRenderer = "SpriteRenderer",
+    TilemapRenderer = "TilemapRenderer",
 }
 
 export type PropertyOption = Record<string, unknown>;
