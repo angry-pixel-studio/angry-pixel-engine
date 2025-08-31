@@ -2,7 +2,7 @@ import { AssetManager, EntityManager, inject, SYMBOLS, System, Transform } from 
 import { SceneState } from "../../../stores/sceneStore";
 import { UseBoundStore, StoreApi } from "zustand";
 import { EntityIdentifier } from "../component/EntityIdentifier";
-import { getComponentType } from "../utils/components";
+import { getComponentType, mapComponentData } from "../utils/components";
 import { BuiltInComponent } from "../../../types/component";
 
 export class UpdateSceneSystem implements System {
@@ -35,7 +35,7 @@ export class UpdateSceneSystem implements System {
                     const componentType = getComponentType(componentData.name as BuiltInComponent);
                     if (componentType) {
                         this.entityManager.updateComponentData(entity, componentType, (component) => {
-                            Object.assign(component, componentData.data);
+                            Object.assign(component, mapComponentData(componentData.data ?? {}));
                         });
                     }
                 }

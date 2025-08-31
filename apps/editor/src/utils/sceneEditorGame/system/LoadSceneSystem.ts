@@ -16,6 +16,8 @@ import {
 } from "angry-pixel";
 import { SceneState } from "../../../stores/sceneStore";
 import { StoreApi, UseBoundStore } from "zustand";
+import { getComponentType, mapComponentData } from "../utils/components";
+import { BuiltInComponent } from "../../../types/component";
 
 export class LoadSceneSystem implements System {
     private sceneData: Scene | undefined;
@@ -82,22 +84,12 @@ export class LoadSceneSystem implements System {
             this.entityManager.createEntity([
                 new EntityIdentifier({ id, name }),
                 ...components
-                    .map((component) => {
-                        switch (component.name) {
-                            case "Transform":
-                                return new Transform(component.data);
-                            case "Camera":
-                                return new Camera(component.data);
-                            case "SpriteRenderer":
-                                return new SpriteRenderer(component.data);
-                            case "TilemapRenderer":
-                                return new TilemapRenderer({
-                                    ...component.data,
-                                    tileset: { ...(component.data?.tileset as Tileset) },
-                                });
-                            default:
-                                return undefined;
+                    .map((componentData) => {
+                        const componentType = getComponentType(componentData.name as BuiltInComponent);
+                        if (componentType) {
+                            return new componentType(mapComponentData(componentData.data ?? {}));
                         }
+                        return undefined;
                     })
                     .filter((component) => component !== undefined),
             ]);

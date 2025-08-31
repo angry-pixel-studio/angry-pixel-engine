@@ -53,6 +53,7 @@ export class SpriteRenderer implements Renderer {
 
     private lastTexture: WebGLTexture = null;
     private lastDrawMode: "sprite" | "tiled";
+    private isTiled: boolean = false;
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -85,10 +86,9 @@ export class SpriteRenderer implements Renderer {
     }
 
     public render(renderData: SpriteRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
-        if (
-            (lastRender !== RenderDataType.Sprite && !renderData.tiled) ||
-            (!renderData.tiled && this.lastDrawMode !== "sprite")
-        ) {
+        this.isTiled = renderData.tiled && (renderData.tiled.x > 1 || renderData.tiled.y > 1);
+
+        if (!this.isTiled && (lastRender !== RenderDataType.Sprite || this.lastDrawMode !== "sprite")) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
@@ -96,12 +96,12 @@ export class SpriteRenderer implements Renderer {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
             this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
-        } else if (renderData.tiled) {
+        } else if (this.isTiled) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tiledPositionBuffer);
             this.gl.bufferData(
                 this.gl.ARRAY_BUFFER,
                 this.getTiledPositionVertices(renderData.tiled),
-                this.gl.STATIC_DRAW,
+                this.gl.DYNAMIC_DRAW,
             );
             this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
@@ -110,13 +110,13 @@ export class SpriteRenderer implements Renderer {
             this.gl.bufferData(
                 this.gl.ARRAY_BUFFER,
                 this.getTiledTextureVertices(renderData.tiled),
-                this.gl.STATIC_DRAW,
+                this.gl.DYNAMIC_DRAW,
             );
             this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
         }
 
-        this.lastDrawMode = renderData.tiled ? "tiled" : "sprite";
+        this.lastDrawMode = this.isTiled ? "tiled" : "sprite";
         this.modelMatrix = mat4.identity(this.modelMatrix);
 
         mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
@@ -172,7 +172,7 @@ export class SpriteRenderer implements Renderer {
             this.gl.uniform1f(this.programManager.maskColorMixUniform, renderData.maskColorMix ?? 1);
         }
 
-        if (renderData.tiled) {
+        if (this.isTiled) {
             this.gl.drawArrays(this.gl.TRIANGLES, 0, renderData.tiled.x * renderData.tiled.y * 6);
         } else {
             this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
