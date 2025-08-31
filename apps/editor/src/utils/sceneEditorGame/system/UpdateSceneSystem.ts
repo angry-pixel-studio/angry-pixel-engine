@@ -1,22 +1,22 @@
 import { AssetManager, EntityManager, inject, SYMBOLS, System, Transform } from "angry-pixel";
-import { SceneState } from "../../../stores/sceneStore";
+import { AppState } from "../../../stores";
 import { UseBoundStore, StoreApi } from "zustand";
 import { EntityIdentifier } from "../component/EntityIdentifier";
 
 export class UpdateSceneSystem implements System {
     private unsubscribe: () => void = () => {};
     private stateHasChanged: boolean = false;
-    private currentState: SceneState | undefined;
-    private prevState: SceneState | undefined;
+    private currentState: AppState | undefined;
+    private prevState: AppState | undefined;
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
-        @inject("useSceneStore") private readonly useSceneStore: UseBoundStore<StoreApi<SceneState>>,
+        @inject("useAppStore") private readonly useAppStore: UseBoundStore<StoreApi<AppState>>,
     ) {}
 
     onEnabled(): void {
-        this.unsubscribe = this.useSceneStore.subscribe((state: SceneState, prevState: SceneState) => {
+        this.unsubscribe = this.useAppStore.subscribe((state: AppState, prevState: AppState) => {
             this.stateHasChanged = true;
             this.currentState = state;
             this.prevState = prevState;
