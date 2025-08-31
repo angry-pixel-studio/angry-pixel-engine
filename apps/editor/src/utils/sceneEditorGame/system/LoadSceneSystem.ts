@@ -14,7 +14,7 @@ import {
     TimeManager,
     Transform,
 } from "angry-pixel";
-import { AppState } from "../../../stores";
+import { SceneState } from "../../../stores/sceneStore";
 import { StoreApi, UseBoundStore } from "zustand";
 import { getComponentType, mapComponentData } from "../utils/components";
 import { BuiltInComponent } from "../../../types/component";
@@ -29,7 +29,7 @@ export class LoadSceneSystem implements System {
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
         @inject(SYMBOLS.SystemManager) private readonly systemManager: SystemManager,
-        @inject("useAppStore") private readonly useAppStore: UseBoundStore<StoreApi<AppState>>,
+        @inject("useSceneStore") private readonly useSceneStore: UseBoundStore<StoreApi<SceneState>>,
     ) {}
 
     onCreate(): void {
@@ -38,7 +38,7 @@ export class LoadSceneSystem implements System {
 
     onUpdate(): void {
         if (!this.sceneData) {
-            this.sceneData = this.useAppStore.getState().scene;
+            this.sceneData = this.useSceneStore.getState().scene;
             if (!this.sceneData) return;
         }
 

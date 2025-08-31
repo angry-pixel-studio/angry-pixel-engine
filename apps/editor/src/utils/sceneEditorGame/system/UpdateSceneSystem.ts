@@ -1,5 +1,5 @@
-import { EntityManager, inject, SYMBOLS, System } from "angry-pixel";
-import { AppState } from "../../../stores";
+import { AssetManager, EntityManager, inject, SYMBOLS, System, Transform } from "angry-pixel";
+import { SceneState } from "../../../stores/sceneStore";
 import { UseBoundStore, StoreApi } from "zustand";
 import { EntityIdentifier } from "../component/EntityIdentifier";
 import { getComponentType, mapComponentData } from "../utils/components";
@@ -8,16 +8,16 @@ import { BuiltInComponent } from "../../../types/component";
 export class UpdateSceneSystem implements System {
     private unsubscribe: () => void = () => {};
     private stateHasChanged: boolean = false;
-    private currentState: AppState | undefined;
+    private currentState: SceneState | undefined;
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
-        // @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
-        @inject("useAppStore") private readonly useAppStore: UseBoundStore<StoreApi<AppState>>,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
+        @inject("useSceneStore") private readonly useSceneStore: UseBoundStore<StoreApi<SceneState>>,
     ) {}
 
     onEnabled(): void {
-        this.unsubscribe = this.useAppStore.subscribe((state: AppState) => {
+        this.unsubscribe = this.useSceneStore.subscribe((state: SceneState) => {
             this.stateHasChanged = true;
             this.currentState = state;
         });
