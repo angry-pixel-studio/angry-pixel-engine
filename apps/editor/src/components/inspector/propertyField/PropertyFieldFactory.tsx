@@ -59,7 +59,7 @@ const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate, opt
             return <ObjectField {...commonProps} />;
         case PropertyType.Rect:
             return <RectField {...commonProps} />;
-        default: {
+        default:
             // Default case - generic text input for unknown types
             const stringValue = String(value || "");
             return (
@@ -73,7 +73,6 @@ const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate, opt
                     />
                 </div>
             );
-        }
     }
 };
 
