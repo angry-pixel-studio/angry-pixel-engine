@@ -35,7 +35,3 @@ export {
     usePanelSizes,
     useSetPanelSize,
 } from './appStore';
-
-// Legacy stores (for backward compatibility during migration)
-export { useEditorStore } from './editorStore';
-export { useSceneStore } from './sceneStore';
