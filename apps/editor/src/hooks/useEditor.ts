@@ -1,41 +1,44 @@
-import { useAppStore } from "../stores";
+import { useEditorStore } from "../stores/editorStore";
+import { useSceneStore } from "../stores/sceneStore";
 
 /**
- * Custom hook that provides access to the consolidated app store
- * This provides a unified interface for components that need multiple store slices
+ * Custom hook that combines both editor and scene stores
+ * This provides a unified interface for components that need both stores
  */
 export const useEditor = () => {
-    const store = useAppStore();
+    const editorStore = useEditorStore();
+    const sceneStore = useSceneStore();
 
     // Get the selected entity from scene store using the ID
-    const selectedEntity = store.selectedEntityId ? store.getEntityById(store.selectedEntityId) : null;
+    const selectedEntity = editorStore.selectedEntityId ? sceneStore.getEntityById(editorStore.selectedEntityId) : null;
 
     return {
         // Editor state (selection and inspector)
-        selectedEntityId: store.selectedEntityId,
+        selectedEntityId: editorStore.selectedEntityId,
         selectedEntity,
-        entityInspector: store.entityInspector,
-        panelSizes: store.panelSizes,
+        entityInspector: editorStore.entityInspector,
+        panelSizes: editorStore.panelSizes,
 
         // Editor actions
-        selectEntity: store.selectEntity,
-        setEntityName: store.setEntityName,
-        setEntityEnabled: store.setEntityEnabled,
-        toggleComponentCollapsed: store.toggleComponentCollapsed,
-        setComponentEnabled: store.setComponentEnabled,
-        updateComponentProperty: store.updateComponentProperty,
-        setPanelSize: store.setPanelSize,
+        selectEntity: editorStore.selectEntity,
+        setEntityName: editorStore.setEntityName,
+        setEntityEnabled: editorStore.setEntityEnabled,
+        toggleComponentCollapsed: editorStore.toggleComponentCollapsed,
+        setComponentEnabled: editorStore.setComponentEnabled,
+        updateComponentProperty: editorStore.updateComponentProperty,
+        setPanelSize: editorStore.setPanelSize,
 
         // Scene state
-        systemsMap: store.systemsMap,
-        entitiesMap: store.entitiesMap,
-        componentsMap: store.componentsMap,
+        // scene: sceneStore.scene,
+        systemsMap: sceneStore.systemsMap,
+        entitiesMap: sceneStore.entitiesMap,
+        componentsMap: sceneStore.componentsMap,
 
         // Scene actions
-        updateSystems: store.updateSystems,
-        getSceneJson: store.getSceneJson,
-        getEntityById: store.getEntityById,
-        getComponentById: store.getComponentById,
-        getSystemById: store.getSystemById,
+        updateSystems: sceneStore.updateSystems,
+        getSceneJson: sceneStore.getSceneJson,
+        getEntityById: sceneStore.getEntityById,
+        getComponentById: sceneStore.getComponentById,
+        getSystemById: sceneStore.getSystemById,
     };
 };
