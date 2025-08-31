@@ -1,4 +1,4 @@
-import { AssetManager, EntityManager, inject, SYMBOLS, System, Transform } from "angry-pixel";
+import { EntityManager, inject, SYMBOLS, System } from "angry-pixel";
 import { AppState } from "../../../stores";
 import { UseBoundStore, StoreApi } from "zustand";
 import { EntityIdentifier } from "../component/EntityIdentifier";
@@ -9,16 +9,15 @@ export class UpdateSceneSystem implements System {
     private unsubscribe: () => void = () => {};
     private stateHasChanged: boolean = false;
     private currentState: AppState | undefined;
-    private prevState: AppState | undefined;
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
-        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
+        // @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
         @inject("useAppStore") private readonly useAppStore: UseBoundStore<StoreApi<AppState>>,
     ) {}
 
     onEnabled(): void {
-        this.unsubscribe = this.useAppStore.subscribe((state: AppState, prevState: AppState) => {
+        this.unsubscribe = this.useAppStore.subscribe((state: AppState) => {
             this.stateHasChanged = true;
             this.currentState = state;
         });
