@@ -1,4 +1,3 @@
-import { useEditorStore } from "./stores/editorStore";
 import ResizablePanel from "./components/ResizablePanel";
 import SceneTreeTabs from "./components/sceneTree/SceneTreeTabs";
 import InspectorTabs from "./components/inspector/InspectorTabs";
@@ -7,9 +6,10 @@ import { Folder } from "lucide-react";
 import Icon from "./components/Icon";
 // import SaveSceneButton from "./components/SaveSceneButton";
 import SceneEditor from "./components/sceneEditor";
+import { useEditor } from "./hooks/useEditor";
 
 function App() {
-    const { panelSizes, setPanelSize } = useEditorStore();
+    const { panelSizes, setPanelSize } = useEditor();
 
     return (
         <div className="h-screen bg-background-primary flex flex-col relative">

@@ -1,80 +1,126 @@
 # Editor Stores Architecture
 
-Este documento explica la nueva arquitectura de stores del editor, que separa las responsabilidades entre el estado del editor y el estado de la escena.
+Este documento explica la nueva arquitectura de stores del editor, que consolida todas las responsabilidades en un solo store principal con slices organizados en archivos separados para mejor mantenibilidad.
 
-## Estructura de Stores
+## Nueva Arquitectura: Store Consolidado con Slices Separados
 
-### 1. SceneStore (`sceneStore.ts`)
+### 1. AppStore (`appStore.ts`) - Store Principal
 
 **Responsabilidades:**
 
--   Maneja el estado de la escena (entidades, componentes, sistemas)
--   Proporciona acciones para modificar la escena
--   Genera el JSON de la escena para exportar
+- **Store único** que consolida toda la funcionalidad
+- **Slices organizados** importados desde archivos separados
+- **Mejor rendimiento** con un solo store y selectores optimizados
+- **Debugging simplificado** con devtools unificados
 
-**Estado:**
+**Estructura:**
 
 ```typescript
-interface SceneState {
-    scene: Scene;
-}
+interface AppState extends EditorSlice, SceneSlice, UISlice {}
 ```
 
-**Acciones principales:**
-
--   `updateEntity()` - Actualiza una entidad
--   `updateComponent()` - Actualiza un componente
--   `addEntity()` - Añade una nueva entidad
--   `removeEntity()` - Elimina una entidad
--   `duplicateEntity()` - Duplica una entidad
--   `getSceneJson()` - Genera JSON de la escena
--   `getEntityById()` - Busca entidad por ID
--   `getComponentById()` - Busca componente por ID
-
-### 2. EditorStore (`editorStore.ts`)
+### 2. EditorSlice (`slices/editorSlice.ts`) - Estado del Editor
 
 **Responsabilidades:**
 
--   Maneja el estado del editor (herramientas, cámara, paneles)
--   Gestiona la selección de entidades y componentes
--   Controla el estado del inspector de entidades
+- Maneja el estado del editor (herramientas, selección, inspector)
+- Gestiona la selección de entidades y componentes
+- Controla el estado del inspector de entidades
 
 **Estado:**
 
 ```typescript
-interface EditorState {
-    selectedEntity: Entity | null;
-    selectedComponent: EntityComponent | null;
+interface EditorSlice {
+    selectedEntityId: string | null;
     entityInspector: {
         entityName: string;
         entityEnabled: boolean;
-        expandedComponents: Set<string>;
-        expandedProperties: Set<string>;
+        collapsedComponents: Set<string>;
+        components: Map<string, EntityComponent>;
     };
-    camera: { position: { x: number; y: number }; zoom: number };
-    tool: "select" | "move" | "create" | "delete";
-    grid: { enabled: boolean; size: number; snap: boolean };
-    panelSizes: { sceneTree: number; filesystemNav: number; entityInspector: number };
-    history: { operations: any[]; currentIndex: number; maxSize: number };
 }
 ```
 
 **Acciones principales:**
 
--   `selectEntity()` - Selecciona una entidad
--   `selectComponent()` - Selecciona un componente
--   `setEntityName()` - Establece el nombre de la entidad
--   `setEntityEnabled()` - Habilita/deshabilita la entidad
--   `toggleComponentExpanded()` - Expande/colapsa un componente
--   `setTool()` - Cambia la herramienta activa
--   `setCameraPosition()` - Mueve la cámara
--   `setCameraZoom()` - Cambia el zoom de la cámara
+- `selectEntity()` - Selecciona una entidad
+- `setEntityName()` - Establece el nombre de la entidad
+- `setEntityEnabled()` - Habilita/deshabilita la entidad
+- `toggleComponentCollapsed()` - Expande/colapsa un componente
+- `updateComponentProperty()` - Actualiza propiedades de componentes
+
+### 3. SceneSlice (`slices/sceneSlice.ts`) - Datos de la Escena
+
+**Responsabilidades:**
+
+- Maneja el estado de la escena (entidades, componentes, sistemas)
+- Proporciona acciones para modificar la escena
+- Genera el JSON de la escena para exportar
+
+**Estado:**
+
+```typescript
+interface SceneSlice {
+    scene: Scene;
+    entitiesMap: Map<string, EntityWithParent>;
+    componentsMap: Map<string, EntityComponent[]>;
+    systemsMap: Map<string, System>;
+    entityUpdated?: string;
+    componentUpdated?: [string, string];
+}
+```
+
+**Acciones principales:**
+
+- `updateEntity()` - Actualiza una entidad
+- `updateComponent()` - Actualiza un componente
+- `addSystem()` - Añade un nuevo sistema
+- `removeSystem()` - Elimina un sistema
+- `getSceneJson()` - Genera JSON de la escena
+
+### 4. UISlice (`slices/uiSlice.ts`) - Interfaz de Usuario
+
+**Responsabilidades:**
+
+- Maneja el estado de la interfaz (tamaños de paneles, layout)
+- Controla las preferencias de visualización
+
+**Estado:**
+
+```typescript
+interface UISlice {
+    panelSizes: {
+        sceneTree: number;
+        filesystemNav: number;
+        entityInspector: number;
+    };
+}
+```
+
+**Acciones principales:**
+
+- `setPanelSize()` - Cambia el tamaño de un panel
+
+## Estructura de Archivos
+
+```
+src/stores/
+├── index.ts                 # Exporta todo desde stores
+├── appStore.ts             # Store principal consolidado
+├── slices/                 # Directorio de slices
+│   ├── index.ts           # Exporta todos los slices
+│   ├── editorSlice.ts     # EditorSlice interface y creator
+│   ├── sceneSlice.ts      # SceneSlice interface y creator
+│   └── uiSlice.ts         # UISlice interface y creator
+├── editorStore.ts          # Store legacy (durante migración)
+└── sceneStore.ts           # Store legacy (durante migración)
+```
 
 ## Uso en Componentes
 
 ### Hook Unificado (`useEditor`)
 
-Para facilitar el uso, se proporciona un hook que combina ambos stores:
+Para facilitar el uso, se proporciona un hook que combina todos los slices:
 
 ```typescript
 import { useEditor } from "../hooks/useEditor";
@@ -84,22 +130,21 @@ const MyComponent = () => {
         // Editor state
         selectedEntity,
         entityInspector,
-        camera,
-        tool,
+        panelSizes,
 
         // Editor actions
         selectEntity,
         setEntityName,
-        setTool,
+        setPanelSize,
 
         // Scene state
-        scene,
+        entitiesMap,
+        componentsMap,
+        systemsMap,
 
         // Scene actions
         updateEntity,
-        addEntity,
-
-        // Scene utilities
+        updateComponent,
         getSceneJson,
     } = useEditor();
 
@@ -107,65 +152,95 @@ const MyComponent = () => {
 };
 ```
 
-### Uso Directo de Stores
+### Uso Directo del Store Principal
 
-Si prefieres usar los stores por separado:
+Si prefieres usar el store principal directamente:
 
 ```typescript
-import { useEditorStore } from "../stores/editorStore";
-import { useSceneStore } from "../stores/sceneStore";
+import { useAppStore } from "../stores";
 
 const MyComponent = () => {
-    const { selectedEntity, selectEntity } = useEditorStore();
-    const { scene, updateEntity } = useSceneStore();
+    const { selectedEntityId, selectEntity, updateEntity } = useAppStore();
 
-    // Usar los stores por separado...
+    // Usar el store directamente...
+};
+```
+
+### Selectores Optimizados para Mejor Rendimiento
+
+Para componentes que solo necesitan partes específicas del estado:
+
+```typescript
+import { 
+    useSelectedEntity, 
+    useEntityInspector, 
+    usePanelSizes 
+} from "../stores";
+
+const MyComponent = () => {
+    const selectedEntity = useSelectedEntity();
+    const entityInspector = useEntityInspector();
+    const panelSizes = usePanelSizes();
+
+    // Solo se re-renderiza cuando cambian estos valores específicos
 };
 ```
 
 ## Ventajas de la Nueva Arquitectura
 
-### 1. Separación de Responsabilidades
+### 1. **Consolidación de Estado**
 
--   **SceneStore**: Solo maneja datos de la escena
--   **EditorStore**: Solo maneja estado del editor
+- **Un solo store** en lugar de múltiples stores
+- **Mejor coordinación** entre diferentes partes del estado
+- **Debugging simplificado** con devtools unificados
 
-### 2. Mejor Reactividad
+### 2. **Mejor Organización**
 
--   Los componentes del inspector se actualizan automáticamente
--   Estados más granulares (ej: `entityName`, `entityEnabled`)
--   Uso de Immer para mutaciones inmutables
+- **Slices claros** para cada responsabilidad
+- **Archivos separados** para mejor mantenibilidad
+- **Separación de responsabilidades** sin duplicación
+- **Fácil navegación** del código
 
-### 3. Mantenibilidad
+### 3. **Rendimiento Optimizado**
 
--   Código más organizado y fácil de entender
--   Cada store tiene una responsabilidad clara
--   Fácil de testear y debuggear
+- **Selectores granulares** para evitar re-renders innecesarios
+- **Un solo store** reduce la complejidad de suscripciones
+- **Immer** optimiza las actualizaciones de estado
 
-### 4. Performance
+### 4. **Mantenibilidad**
 
--   Solo se re-renderizan los componentes que dependen de estados específicos
--   Immer optimiza las actualizaciones de estado
+- **Código más organizado** y fácil de entender
+- **Cada slice tiene su propio archivo** con responsabilidad clara
+- **Fácil de testear y debuggear**
+- **Imports limpios** desde el índice principal
 
 ## Migración de Código Existente
 
-### Antes (EditorStore único):
+### Antes (Stores separados):
 
 ```typescript
-const { scene, selectedEntity, updateEntity } = useEditorStore();
-```
+import { useEditorStore } from "../stores/editorStore";
+import { useSceneStore } from "../stores/sceneStore";
 
-### Después (Stores separados):
-
-```typescript
-const { scene, selectedEntity, updateEntity } = useEditor();
-```
-
-### O por separado:
-
-```typescript
 const { selectedEntity } = useEditorStore();
 const { scene, updateEntity } = useSceneStore();
+```
+
+### Después (Store consolidado):
+
+```typescript
+import { useEditor } from "../hooks/useEditor";
+
+const { selectedEntity, scene, updateEntity } = useEditor();
+```
+
+### O con selectores optimizados:
+
+```typescript
+import { useSelectedEntity, useScene } from "../stores";
+
+const selectedEntity = useSelectedEntity();
+const scene = useScene();
 ```
 
 ## Ejemplos de Uso
@@ -191,19 +266,19 @@ const handleSave = () => {
 };
 ```
 
-### Cambiar herramienta del editor:
+### Cambiar tamaño de panel:
 
 ```typescript
-const { setTool, tool } = useEditor();
+const { setPanelSize, panelSizes } = useEditor();
 
-const handleToolChange = (newTool: "select" | "move" | "create" | "delete") => {
-    setTool(newTool);
+const handleResize = (newSize: number) => {
+    setPanelSize("entityInspector", newSize);
 };
 ```
 
 ## Uso de Immer
 
-Los stores usan Immer para permitir mutaciones directas del estado. Esto simplifica enormemente el código:
+El store usa Immer para permitir mutaciones directas del estado. Esto simplifica enormemente el código:
 
 ### Sin Immer (modo tradicional):
 
@@ -225,7 +300,7 @@ updateEntity: (entityId, updates) => {
 ```typescript
 updateEntity: (entityId, updates) => {
     set((state) => {
-        const entity = state.scene.entities.find((e) => e.id === entityId);
+        const entity = state.entitiesMap.get(entityId);
         if (entity) {
             Object.assign(entity, updates);
         }
@@ -235,16 +310,50 @@ updateEntity: (entityId, updates) => {
 
 **Ventajas de Immer:**
 
--   Código más legible y directo
--   Menos propenso a errores de inmutabilidad
--   Mejor performance en actualizaciones complejas
--   Sintaxis intuitiva similar a mutación directa
+- Código más legible y directo
+- Menos propenso a errores de inmutabilidad
+- Mejor performance en actualizaciones complejas
+- Sintaxis intuitiva similar a mutación directa
 
 ## Consideraciones de Diseño
 
-1. **Immer**: Todos los stores usan Immer para mutaciones inmutables y mejor performance
-2. **DevTools**: Los stores incluyen middleware de devtools para debugging
+1. **Immer**: Todos los slices usan Immer para mutaciones inmutables y mejor performance
+2. **DevTools**: El store incluye middleware de devtools para debugging
 3. **TypeScript**: Tipado completo para mejor DX y seguridad
 4. **Hooks**: API consistente basada en hooks de React
 5. **Performance**: Estados granulares para evitar re-renders innecesarios
-6. **Sintaxis simplificada**: Con Immer puedes mutar directamente el estado draft sin crear nuevos objetos
+6. **Selectores**: Hooks optimizados para acceso específico al estado
+7. **Slices**: Organización clara por responsabilidad funcional
+8. **Archivos separados**: Mejor mantenibilidad y navegación del código
+
+## Migración Gradual
+
+La nueva arquitectura permite migración gradual:
+
+1. **Fase 1**: Usar `useEditor()` hook (ya implementado)
+2. **Fase 2**: Migrar componentes a selectores específicos
+3. **Fase 3**: Eliminar stores antiguos (opcional)
+
+Los stores antiguos pueden mantenerse durante la transición para compatibilidad.
+
+## Imports Recomendados
+
+### Para la mayoría de casos:
+```typescript
+import { useEditor } from "../hooks/useEditor";
+```
+
+### Para selectores específicos:
+```typescript
+import { useSelectedEntity, usePanelSizes } from "../stores";
+```
+
+### Para acceso directo al store:
+```typescript
+import { useAppStore } from "../stores";
+```
+
+### Para tipos y interfaces:
+```typescript
+import type { EditorSlice, SceneSlice, UISlice } from "../stores";
+```
