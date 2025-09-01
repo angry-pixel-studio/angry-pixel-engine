@@ -3,6 +3,7 @@ export { default as StringArrayField } from "./StringArrayField";
 export { default as NumberField } from "./NumberField";
 export { default as StringField } from "./StringField";
 export { default as BooleanField } from "./BooleanField";
+export { default as ButtonField, type ButtonFieldOptions } from "./ButtonField";
 export { default as ColorField } from "./ColorField";
 export { default as ImageField } from "./ImageField";
 export { default as FontField } from "./FontField";

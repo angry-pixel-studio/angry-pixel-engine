@@ -2,10 +2,11 @@ interface ImageFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string;
 }
 
-const ImageField = ({ propertyName, value, onUpdate }: ImageFieldProps) => {
-    const imageValue = (value as string) || "";
+const ImageField = ({ propertyName, value, onUpdate, defaultValue }: ImageFieldProps) => {
+    const imageValue = (value as string) ?? defaultValue ?? "";
 
     return (
         <div className="component-property">

@@ -2,10 +2,11 @@ interface BooleanFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: boolean;
 }
 
-const BooleanField = ({ propertyName, value, onUpdate }: BooleanFieldProps) => {
-    const boolValue = (value as boolean) || false;
+const BooleanField = ({ propertyName, value, onUpdate, defaultValue }: BooleanFieldProps) => {
+    const boolValue = (value as boolean) ?? defaultValue ?? false;
 
     return (
         <div className="component-property">

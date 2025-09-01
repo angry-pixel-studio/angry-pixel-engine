@@ -2,13 +2,14 @@ interface TextFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string;
 }
 
-const TextField = ({ propertyName, value, onUpdate }: TextFieldProps) => {
-    const textValue = (value as string) || "";
+const TextField = ({ propertyName, value, onUpdate, defaultValue }: TextFieldProps) => {
+    const textValue = (value as string) ?? defaultValue ?? "";
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-2 border-b border-border-primary pb-2">
             <span className="property-name">{propertyName}:</span>
             <textarea
                 value={textValue}

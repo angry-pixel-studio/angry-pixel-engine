@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Edit2, Check, X } from "lucide-react";
-import Icon from "../Icon";
+import Icon from "../ui/Icon";
 import { useEditor } from "../../hooks/useEditor";
 import { Entity } from "../../types/scene";
 

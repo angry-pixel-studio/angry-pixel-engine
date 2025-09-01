@@ -2,10 +2,11 @@ interface FontFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string;
 }
 
-const FontField = ({ propertyName, value, onUpdate }: FontFieldProps) => {
-    const fontValue = (value as string) || "";
+const FontField = ({ propertyName, value, onUpdate, defaultValue }: FontFieldProps) => {
+    const fontValue = (value as string) ?? defaultValue ?? "";
 
     return (
         <div className="component-property">

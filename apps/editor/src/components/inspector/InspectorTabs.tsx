@@ -1,4 +1,4 @@
-import Tabs, { Tab } from "../Tabs";
+import Tabs, { Tab } from "../ui/Tabs";
 import { FileText } from "lucide-react";
 import EntityInspectorTab from "./EntityInspectorTab";
 

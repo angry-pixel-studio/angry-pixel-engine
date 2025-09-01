@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronRight, ChevronDown, Box } from "lucide-react";
-import Icon from "../Icon";
+import Icon from "../ui/Icon";
 import { useEditor } from "../../hooks/useEditor";
 import { EntityWithChildren } from "../../types/scene";
 

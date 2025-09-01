@@ -2,14 +2,15 @@ interface ObjectFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: object;
 }
 
-const ObjectField = ({ propertyName, value, onUpdate }: ObjectFieldProps) => {
-    const objectValue = (value as object) || {};
+const ObjectField = ({ propertyName, value, onUpdate, defaultValue }: ObjectFieldProps) => {
+    const objectValue = (value as object) ?? defaultValue ?? {};
     const jsonString = JSON.stringify(objectValue, null, 2);
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-2 border-b border-border-primary pb-2">
             <div className="property-name">{propertyName}:</div>
             <textarea
                 value={jsonString}

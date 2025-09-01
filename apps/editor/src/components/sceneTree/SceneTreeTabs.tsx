@@ -1,4 +1,4 @@
-import Tabs, { Tab } from "../Tabs";
+import Tabs, { Tab } from "../ui/Tabs";
 import { Box, Cpu } from "lucide-react";
 import EntityTree from "./EntityTree";
 import SystemsList from "./SystemsList";

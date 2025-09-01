@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Cpu, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
-import Icon from "../Icon";
+import Icon from "../ui/Icon";
 import { useEditor } from "../../hooks/useEditor";
 import { System } from "../../types/scene";
 

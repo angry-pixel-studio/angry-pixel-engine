@@ -1,11 +1,10 @@
 import { useEditorStore } from "./stores/editorStore";
-import ResizablePanel from "./components/ResizablePanel";
+import ResizablePanel from "./components/ui/ResizablePanel";
 import SceneTreeTabs from "./components/sceneTree/SceneTreeTabs";
 import InspectorTabs from "./components/inspector/InspectorTabs";
-import ThemeToggle from "./components/ThemeToggle";
+import ThemeToggle from "./components/ui/ThemeToggle";
 import { Folder } from "lucide-react";
-import Icon from "./components/Icon";
-// import SaveSceneButton from "./components/SaveSceneButton";
+import Icon from "./components/ui/Icon";
 import SceneEditor from "./components/sceneEditor";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
                         <h1 className="text-xl font-semibold text-text-primary">Angry Pixel Editor</h1>
                     </div>
                     <div className="flex items-center space-x-4">
-                        {/* <SaveSceneButton /> */}
                         <ThemeToggle />
                     </div>
                 </div>

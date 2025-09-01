@@ -2,10 +2,11 @@ interface VideoFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string;
 }
 
-const VideoField = ({ propertyName, value, onUpdate }: VideoFieldProps) => {
-    const videoValue = (value as string) || "";
+const VideoField = ({ propertyName, value, onUpdate, defaultValue }: VideoFieldProps) => {
+    const videoValue = (value as string) ?? defaultValue ?? "";
 
     return (
         <div className="component-property">

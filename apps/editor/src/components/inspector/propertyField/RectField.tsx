@@ -2,23 +2,39 @@ interface RectFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: { x: number; y: number; width: number; height: number };
+    options?: RectFieldOptions;
 }
 
-const RectField = ({ propertyName, value, onUpdate }: RectFieldProps) => {
-    const rectValue = (value as { x: number; y: number; width: number; height: number }) || {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-    };
+export interface RectFieldOptions {
+    setUndefinedWhenZero?: boolean;
+}
+
+const isRectZero = (rect: { x: number; y: number; width: number; height: number }): boolean => {
+    return rect.x === 0 && rect.y === 0 && rect.width === 0 && rect.height === 0;
+};
+
+const RectField = ({ propertyName, value, onUpdate, defaultValue, options }: RectFieldProps) => {
+    const rectValue = (value as { x: number; y: number; width: number; height: number }) ??
+        defaultValue ?? {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+        };
 
     const handleRectChange = (property: "x" | "y" | "width" | "height", newValue: string) => {
         const numValue = parseFloat(newValue) || 0;
-        onUpdate({ ...rectValue, [property]: numValue });
+        const newRectValue = { ...rectValue, [property]: numValue };
+        if (options?.setUndefinedWhenZero && isRectZero(newRectValue)) {
+            onUpdate(undefined);
+        } else {
+            onUpdate({ ...rectValue, [property]: numValue });
+        }
     };
 
     return (
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 border-b border-border-primary pb-2">
             <div className="flex items-center space-x-2">
                 <span className="property-name font-medium">{propertyName}:</span>
                 <div className="flex items-center space-x-2">

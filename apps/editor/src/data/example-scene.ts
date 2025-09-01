@@ -54,17 +54,12 @@ export const exampleScene: Scene = {
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
-                    data: {
-                        position: { x: 0, y: 0 },
-                        scale: { x: 1, y: 1 },
-                        rotation: 0,
-                    },
                 },
                 {
                     id: "b2f7c1e4-8a3d-4b2e-9c1f-7e5d3a2b1c45",
                     name: BuiltInComponent.TilemapRenderer,
                     enabled: true,
-                    builtIn: false,
+                    builtIn: true,
                     data: {
                         layer: "Foreground",
                         tileset: {
@@ -84,7 +79,7 @@ export const exampleScene: Scene = {
                             28, 2, 2, 2, 2, 2, 2, 30,
                         ],
                         width: 8,
-                        height: 8,
+                        height: 5,
                     },
                 },
             ],
@@ -102,8 +97,6 @@ export const exampleScene: Scene = {
                     builtIn: true,
                     data: {
                         position: { x: 0, y: -16 },
-                        scale: { x: 1, y: 1 },
-                        rotation: 0,
                     },
                 },
                 {
@@ -135,11 +128,6 @@ export const exampleScene: Scene = {
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
-                    data: {
-                        position: { x: 0, y: 0 },
-                        scale: { x: 0, y: 0 },
-                        rotation: 0,
-                    },
                 },
             ],
             children: [

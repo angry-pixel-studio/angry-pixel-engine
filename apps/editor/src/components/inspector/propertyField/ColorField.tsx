@@ -2,10 +2,11 @@ interface ColorFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string;
 }
 
-const ColorField = ({ propertyName, value, onUpdate }: ColorFieldProps) => {
-    const colorValue = (value as string) || "#000000";
+const ColorField = ({ propertyName, value, onUpdate, defaultValue }: ColorFieldProps) => {
+    const colorValue = (value as string) ?? defaultValue ?? "#FFFFFF";
 
     return (
         <div className="component-property">

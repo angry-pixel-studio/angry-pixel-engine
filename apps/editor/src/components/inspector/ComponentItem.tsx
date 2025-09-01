@@ -1,6 +1,6 @@
 import { useEditor } from "../../hooks/useEditor";
 import { EntityComponent } from "../../types/scene";
-import { builtInComponents } from "../../data/built-in-components";
+import { builtInComponents } from "../../data/builtInComponents";
 import { Component, PropertyType } from "../../types/component";
 import PropertyFieldFactory from "./propertyField/PropertyFieldFactory";
 
@@ -73,6 +73,7 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
                                         updateComponentProperty(component.id, property.name, newValue);
                                     }}
                                     options={property.options}
+                                    defaultValue={property.defaultValue}
                                 />
                             ))}
                         {!isBuiltIn &&

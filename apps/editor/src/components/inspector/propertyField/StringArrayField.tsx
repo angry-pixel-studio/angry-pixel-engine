@@ -1,14 +1,15 @@
 import { X } from "lucide-react";
-import Icon from "../../Icon";
+import Icon from "../../ui/Icon";
 
 interface StringArrayFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string[];
 }
 
-const StringArrayField = ({ propertyName, value, onUpdate }: StringArrayFieldProps) => {
-    const arrayValue = (value as string[]) || [];
+const StringArrayField = ({ propertyName, value, onUpdate, defaultValue }: StringArrayFieldProps) => {
+    const arrayValue = (value as string[]) ?? defaultValue ?? [];
 
     const handleAddItem = () => {
         onUpdate([...arrayValue, "New Item"]);

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "../../hooks/useTheme";
 import { Sun, Moon, Monitor } from "lucide-react";
 import Icon from "./Icon";
 

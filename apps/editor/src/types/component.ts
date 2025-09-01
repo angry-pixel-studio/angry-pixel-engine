@@ -8,10 +8,13 @@ export interface ComponentProperty {
     name: string;
     displayName: string;
     type: PropertyType;
+    defaultValue?: unknown;
     options?: PropertyOption;
+    enabled?: boolean;
 }
 
 export enum PropertyType {
+    Button = "Button",
     Number = "Number",
     String = "String",
     Boolean = "Boolean",
@@ -28,11 +31,24 @@ export enum PropertyType {
 }
 
 export enum BuiltInComponent {
-    TypeTest = "TypeTest",
     Transform = "Transform",
     Camera = "Camera",
     SpriteRenderer = "SpriteRenderer",
     TilemapRenderer = "TilemapRenderer",
+    TextRenderer = "TextRenderer",
+    VideoRenderer = "VideoRenderer",
+    MaskRenderer = "MaskRenderer",
+    LightRenderer = "LightRenderer",
+    DarknessRenderer = "DarknessRenderer",
+    Button = "Button",
+    TiledWrapper = "TiledWrapper",
+    TilemapCollider = "TilemapCollider",
+    EdgeCollider = "EdgeCollider",
+    BoxCollider = "BoxCollider",
+    BallCollider = "BallCollider",
+    PolygonCollider = "PolygonCollider",
+    // test component
+    TypeTest = "TypeTest",
 }
 
 export type PropertyOption = Record<string, unknown>;

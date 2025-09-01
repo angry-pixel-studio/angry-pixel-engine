@@ -2,10 +2,11 @@ interface AudioFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: string;
 }
 
-const AudioField = ({ propertyName, value, onUpdate }: AudioFieldProps) => {
-    const audioValue = (value as string) || "";
+const AudioField = ({ propertyName, value, onUpdate, defaultValue }: AudioFieldProps) => {
+    const audioValue = (value as string) ?? defaultValue ?? "";
 
     return (
         <div className="component-property">

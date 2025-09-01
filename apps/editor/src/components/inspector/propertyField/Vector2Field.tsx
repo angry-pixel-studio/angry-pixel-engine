@@ -2,10 +2,11 @@ interface Vector2FieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
+    defaultValue?: { x: number; y: number };
 }
 
-const Vector2Field = ({ propertyName, value, onUpdate }: Vector2FieldProps) => {
-    const vectorValue = (value as { x: number; y: number }) || { x: 0, y: 0 };
+const Vector2Field = ({ propertyName, value, onUpdate, defaultValue }: Vector2FieldProps) => {
+    const vectorValue = (value as { x: number; y: number }) ?? defaultValue ?? { x: 0, y: 0 };
 
     const handleVectorChange = (axis: "x" | "y", newValue: string) => {
         const numValue = parseFloat(newValue) || 0;

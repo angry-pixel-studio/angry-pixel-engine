@@ -129,12 +129,12 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             updateComponentProperty: (componentId, propertyName, value) => {
                 set((state) => {
                     const component = state.entityInspector.components.get(componentId);
-                    if (component && component.data) {
+                    if (component) {
                         // Create a new component object to avoid proxy conflicts
                         const updatedComponent = {
                             ...component,
                             data: {
-                                ...component.data,
+                                ...(component.data ?? {}),
                                 [propertyName]: value,
                             },
                         };

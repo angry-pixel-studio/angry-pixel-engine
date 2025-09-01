@@ -5,6 +5,7 @@ import {
     NumberField,
     StringField,
     BooleanField,
+    ButtonField,
     ColorField,
     ImageField,
     FontField,
@@ -13,6 +14,7 @@ import {
     VideoField,
     ObjectField,
     RectField,
+    ButtonFieldOptions,
 } from "./index";
 
 interface PropertyFieldFactoryProps {
@@ -22,9 +24,17 @@ interface PropertyFieldFactoryProps {
     propertyType: PropertyType;
     onUpdate: (value: unknown) => void;
     options?: PropertyOption;
+    defaultValue?: unknown;
 }
 
-const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate, options }: PropertyFieldFactoryProps) => {
+const PropertyFieldFactory = ({
+    propertyName,
+    value,
+    propertyType,
+    onUpdate,
+    options,
+    defaultValue,
+}: PropertyFieldFactoryProps) => {
     const commonProps = {
         propertyName,
         value,
@@ -34,36 +44,49 @@ const PropertyFieldFactory = ({ propertyName, value, propertyType, onUpdate, opt
 
     switch (propertyType) {
         case PropertyType.Vector2:
-            return <Vector2Field {...commonProps} />;
+            return <Vector2Field {...commonProps} defaultValue={defaultValue as { x: number; y: number }} />;
         case PropertyType.StringArray:
-            return <StringArrayField {...commonProps} />;
+            return <StringArrayField {...commonProps} defaultValue={defaultValue as string[]} />;
         case PropertyType.Number:
-            return <NumberField {...commonProps} />;
+            return <NumberField {...commonProps} defaultValue={defaultValue as number} />;
         case PropertyType.String:
-            return <StringField {...commonProps} />;
+            return <StringField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Boolean:
-            return <BooleanField {...commonProps} />;
+            return <BooleanField {...commonProps} defaultValue={defaultValue as boolean} />;
+        case PropertyType.Button:
+            return (
+                <ButtonField
+                    {...commonProps}
+                    defaultValue={defaultValue as unknown}
+                    options={options as unknown as ButtonFieldOptions}
+                />
+            );
         case PropertyType.Color:
-            return <ColorField {...commonProps} />;
+            return <ColorField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Image:
-            return <ImageField {...commonProps} />;
+            return <ImageField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Font:
-            return <FontField {...commonProps} />;
+            return <FontField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Text:
-            return <TextField {...commonProps} />;
+            return <TextField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Audio:
-            return <AudioField {...commonProps} />;
+            return <AudioField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Video:
-            return <VideoField {...commonProps} />;
+            return <VideoField {...commonProps} defaultValue={defaultValue as string} />;
         case PropertyType.Object:
-            return <ObjectField {...commonProps} />;
+            return <ObjectField {...commonProps} defaultValue={defaultValue as object} />;
         case PropertyType.Rect:
-            return <RectField {...commonProps} />;
+            return (
+                <RectField
+                    {...commonProps}
+                    defaultValue={defaultValue as { x: number; y: number; width: number; height: number }}
+                />
+            );
         default:
             // Default case - generic text input for unknown types
             const stringValue = String(value || "");
             return (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 border-t border-border-primary pt-2">
                     <span className="text-xs text-text-secondary min-w-[60px]">{propertyName}:</span>
                     <input
                         type="text"

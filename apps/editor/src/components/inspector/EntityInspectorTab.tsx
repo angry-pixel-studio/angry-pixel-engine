@@ -1,5 +1,5 @@
 import { FileText } from "lucide-react";
-import Icon from "../Icon";
+import Icon from "../ui/Icon";
 import { useEditor } from "../../hooks/useEditor";
 import EntityName from "./EntityName";
 import ComponentItem from "./ComponentItem";

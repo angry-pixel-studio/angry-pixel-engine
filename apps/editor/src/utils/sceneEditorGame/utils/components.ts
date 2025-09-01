@@ -1,4 +1,22 @@
-import { Camera, Component, ComponentType, SpriteRenderer, TilemapRenderer, Transform } from "angry-pixel";
+import {
+    BallCollider,
+    BoxCollider,
+    Camera,
+    Component,
+    ComponentType,
+    DarknessRenderer,
+    EdgeCollider,
+    LightRenderer,
+    MaskRenderer,
+    PolygonCollider,
+    Slice,
+    SpriteRenderer,
+    TextRenderer,
+    TilemapCollider,
+    TilemapRenderer,
+    Transform,
+    VideoRenderer,
+} from "angry-pixel";
 import { BuiltInComponent } from "../../../types/component";
 import { Vector2 } from "@angry-pixel/math";
 
@@ -12,6 +30,26 @@ export const getComponentType = (componentName: BuiltInComponent): ComponentType
             return SpriteRenderer;
         case BuiltInComponent.TilemapRenderer:
             return TilemapRenderer;
+        case BuiltInComponent.TextRenderer:
+            return TextRenderer;
+        case BuiltInComponent.VideoRenderer:
+            return VideoRenderer;
+        case BuiltInComponent.MaskRenderer:
+            return MaskRenderer;
+        case BuiltInComponent.LightRenderer:
+            return LightRenderer;
+        case BuiltInComponent.DarknessRenderer:
+            return DarknessRenderer;
+        case BuiltInComponent.TilemapCollider:
+            return TilemapCollider;
+        case BuiltInComponent.EdgeCollider:
+            return EdgeCollider;
+        case BuiltInComponent.BoxCollider:
+            return BoxCollider;
+        case BuiltInComponent.BallCollider:
+            return BallCollider;
+        case BuiltInComponent.PolygonCollider:
+            return PolygonCollider;
     }
 };
 
