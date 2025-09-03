@@ -1,6 +1,7 @@
 import { PropertyOption, PropertyType } from "../../../types/component";
 import {
     Vector2Field,
+    Vector2ArrayField,
     StringArrayField,
     NumberField,
     StringField,
@@ -14,7 +15,9 @@ import {
     VideoField,
     ObjectField,
     RectField,
+    ListField,
     ButtonFieldOptions,
+    ListFieldOptions,
 } from "./index";
 
 interface PropertyFieldFactoryProps {
@@ -45,6 +48,8 @@ const PropertyFieldFactory = ({
     switch (propertyType) {
         case PropertyType.Vector2:
             return <Vector2Field {...commonProps} defaultValue={defaultValue as { x: number; y: number }} />;
+        case PropertyType.Vector2Array:
+            return <Vector2ArrayField {...commonProps} defaultValue={defaultValue as { x: number; y: number }[]} />;
         case PropertyType.StringArray:
             return <StringArrayField {...commonProps} defaultValue={defaultValue as string[]} />;
         case PropertyType.Number:
@@ -80,6 +85,14 @@ const PropertyFieldFactory = ({
                 <RectField
                     {...commonProps}
                     defaultValue={defaultValue as { x: number; y: number; width: number; height: number }}
+                />
+            );
+        case PropertyType.List:
+            return (
+                <ListField
+                    {...commonProps}
+                    defaultValue={defaultValue as string}
+                    options={options as unknown as ListFieldOptions}
                 />
             );
         default:

@@ -1,4 +1,4 @@
-import { BuiltInComponent, Component, PropertyType } from "../../types/component";
+import { BuiltInComponent, Component, PropertyType } from "../../../types/component";
 
 export const spriteRenderer: Component = {
     name: BuiltInComponent.SpriteRenderer,
@@ -27,6 +27,7 @@ export const spriteRenderer: Component = {
             displayName: "Tiled",
             type: PropertyType.Vector2,
             defaultValue: { x: 1, y: 1 },
+            options: { minX: 1, minY: 1, step: 1 },
         },
         {
             name: "flipHorizontally",
@@ -51,17 +52,21 @@ export const spriteRenderer: Component = {
             defaultValue: 1,
         },
         {
+            name: "tintColor",
+            displayName: "Tint Color",
+            type: PropertyType.Color,
+        },
+        {
             name: "maskColor",
             displayName: "Mask Color",
             type: PropertyType.Color,
-            defaultValue: "#FFFFFF",
         },
         {
             name: "maskColorMix",
             displayName: "Mask Color Mix",
             type: PropertyType.Number,
             options: { min: 0, max: 1, step: 0.01 },
-            defaultValue: 0,
+            defaultValue: 1,
         },
         {
             name: "offset",

@@ -31,6 +31,7 @@ export class UpdateSceneSystem implements System {
                     ?.find((comp) => comp.id === componentId);
 
                 if (componentData) {
+                    console.log("componentData", componentData);
                     const { entity } = this.entityManager.search(EntityIdentifier, (comp) => comp.id === entityId)[0];
                     const componentType = getComponentType(componentData.name as BuiltInComponent);
                     if (componentType) {

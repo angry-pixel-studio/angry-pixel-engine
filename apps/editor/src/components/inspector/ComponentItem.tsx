@@ -1,6 +1,6 @@
 import { useEditor } from "../../hooks/useEditor";
 import { EntityComponent } from "../../types/scene";
-import { builtInComponents } from "../../data/builtInComponents";
+import { builtInComponents } from "./builtInComponents";
 import { Component, PropertyType } from "../../types/component";
 import PropertyFieldFactory from "./propertyField/PropertyFieldFactory";
 

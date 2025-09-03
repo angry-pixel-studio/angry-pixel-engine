@@ -1,4 +1,4 @@
-import { BuiltInComponent, Component, PropertyType } from "../../types/component";
+import { BuiltInComponent, Component, PropertyType } from "../../../types/component";
 
 export const transform: Component = {
     name: BuiltInComponent.Transform,

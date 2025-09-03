@@ -19,6 +19,7 @@ export enum PropertyType {
     String = "String",
     Boolean = "Boolean",
     Vector2 = "Vector2",
+    Vector2Array = "Vector2Array",
     Color = "Color",
     Font = "Font",
     Text = "Text",
@@ -28,6 +29,7 @@ export enum PropertyType {
     Object = "Object",
     StringArray = "StringArray",
     Rect = "Rect",
+    List = "List",
 }
 
 export enum BuiltInComponent {

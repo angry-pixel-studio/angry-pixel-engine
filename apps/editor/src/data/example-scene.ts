@@ -36,7 +36,7 @@ export const exampleScene: Scene = {
                     enabled: true,
                     builtIn: true,
                     data: {
-                        layers: ["Background", "Foreground", "Player"],
+                        layers: ["Background", "Player", "Foreground", "Default"],
                         depth: 0,
                         zoom: 4,
                     },
@@ -114,6 +114,46 @@ export const exampleScene: Scene = {
                             height: 16,
                         },
                     },
+                },
+            ],
+            children: [],
+        },
+        {
+            id: "b7e3c2a1-4f2d-4e8a-9c3a-7e1f2d3c4b5a",
+            name: "Text",
+            enabled: true,
+            components: [
+                {
+                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c98",
+                    name: BuiltInComponent.Transform,
+                    enabled: true,
+                    builtIn: true,
+                },
+                {
+                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c97",
+                    name: BuiltInComponent.TextRenderer,
+                    enabled: true,
+                    builtIn: true,
+                },
+            ],
+            children: [],
+        },
+        {
+            id: "e2a4b7c1-5d3f-4e9a-8c2b-1f3e6d7a8b91",
+            name: "Mask",
+            enabled: true,
+            components: [
+                {
+                    id: "e8c1f7a2-3b4d-4e6a-9c2b-5d7f8a9b0c12",
+                    name: BuiltInComponent.Transform,
+                    enabled: true,
+                    builtIn: true,
+                },
+                {
+                    id: "e4a7b2c3-9d1f-4e6a-8c2b-7f3e5d6a8b91",
+                    name: BuiltInComponent.MaskRenderer,
+                    enabled: true,
+                    builtIn: true,
                 },
             ],
             children: [],

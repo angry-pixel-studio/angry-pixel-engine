@@ -1,4 +1,5 @@
 export { default as Vector2Field } from "./Vector2Field";
+export { default as Vector2ArrayField } from "./Vector2ArrayField";
 export { default as StringArrayField } from "./StringArrayField";
 export { default as NumberField } from "./NumberField";
 export { default as StringField } from "./StringField";
@@ -12,4 +13,5 @@ export { default as AudioField } from "./AudioField";
 export { default as VideoField } from "./VideoField";
 export { default as ObjectField } from "./ObjectField";
 export { default as RectField } from "./RectField";
+export { default as ListField, type ListFieldOptions } from "./ListField";
 export { default as PropertyFieldFactory } from "./PropertyFieldFactory";

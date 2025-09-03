@@ -1,4 +1,4 @@
-import { BuiltInComponent, Component, PropertyType } from "../../types/component";
+import { BuiltInComponent, Component, PropertyType } from "../../../types/component";
 
 export const tilemapRenderer: Component = {
     name: BuiltInComponent.TilemapRenderer,

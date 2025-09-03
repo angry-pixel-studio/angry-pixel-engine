@@ -1,4 +1,4 @@
-import { BuiltInComponent, Component, PropertyType } from "../../types/component";
+import { BuiltInComponent, Component, PropertyType } from "../../../types/component";
 
 export const typeTest: Component = {
     name: BuiltInComponent.TypeTest,
