@@ -68,6 +68,7 @@ export const textRenderer: Component = {
                     { value: TextOrientation.RightUp, label: "Right Up" },
                     { value: TextOrientation.RightDown, label: "Right Down" },
                 ],
+                castValue: (value: string) => value !== undefined && Number(value),
             },
             defaultValue: TextOrientation.Center,
         },

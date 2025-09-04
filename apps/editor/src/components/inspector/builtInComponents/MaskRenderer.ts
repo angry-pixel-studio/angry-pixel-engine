@@ -16,7 +16,7 @@ export const maskRenderer: Component = {
                     { value: MaskShape.Circumference, label: "Circumference" },
                     { value: MaskShape.Polygon, label: "Polygon" },
                 ],
-                castValue: (value: string) => value && Number(value),
+                castValue: (value: string) => value !== undefined && Number(value),
             },
             defaultValue: undefined,
         },
