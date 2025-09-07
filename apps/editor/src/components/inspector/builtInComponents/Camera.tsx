@@ -25,18 +25,18 @@ const Camera: React.FC<CameraProps> = ({ component }) => {
             />
 
             <NumberField
-                propertyName="Depth"
-                value={component.data?.depth}
-                onUpdate={handleUpdate("depth")}
-                defaultValue={0}
-            />
-
-            <NumberField
                 propertyName="Zoom"
                 value={component.data?.zoom}
                 onUpdate={handleUpdate("zoom")}
                 defaultValue={1}
                 options={{ min: 0, step: 0.1 }}
+            />
+
+            <NumberField
+                propertyName="Depth"
+                value={component.data?.depth}
+                onUpdate={handleUpdate("depth")}
+                defaultValue={0}
             />
         </>
     );

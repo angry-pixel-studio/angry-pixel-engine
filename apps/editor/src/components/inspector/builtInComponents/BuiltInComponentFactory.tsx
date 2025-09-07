@@ -10,7 +10,6 @@ import VideoRenderer from "./VideoRenderer";
 import MaskRenderer from "./MaskRenderer";
 import LightRenderer from "./LightRenderer";
 import DarknessRenderer from "./DarknessRenderer";
-import TypeTest from "./TypeTest";
 
 interface BuiltInComponentFactoryProps {
     component: EntityComponent;
@@ -46,9 +45,6 @@ const BuiltInComponentFactory: React.FC<BuiltInComponentFactoryProps> = ({ compo
 
         case BuiltInComponent.DarknessRenderer:
             return <DarknessRenderer component={component} />;
-
-        case BuiltInComponent.TypeTest:
-            return <TypeTest component={component} />;
 
         default:
             // Fallback for unknown component types

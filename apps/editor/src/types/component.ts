@@ -36,21 +36,19 @@ export enum BuiltInComponent {
     Transform = "Transform",
     Camera = "Camera",
     SpriteRenderer = "SpriteRenderer",
-    TilemapRenderer = "TilemapRenderer",
     TextRenderer = "TextRenderer",
-    VideoRenderer = "VideoRenderer",
+    TilemapRenderer = "TilemapRenderer",
     MaskRenderer = "MaskRenderer",
-    LightRenderer = "LightRenderer",
     DarknessRenderer = "DarknessRenderer",
+    LightRenderer = "LightRenderer",
+    VideoRenderer = "VideoRenderer",
     Button = "Button",
     TiledWrapper = "TiledWrapper",
-    TilemapCollider = "TilemapCollider",
-    EdgeCollider = "EdgeCollider",
     BoxCollider = "BoxCollider",
     BallCollider = "BallCollider",
     PolygonCollider = "PolygonCollider",
-    // test component
-    TypeTest = "TypeTest",
+    EdgeCollider = "EdgeCollider",
+    TilemapCollider = "TilemapCollider",
 }
 
 export type PropertyOption = Record<string, unknown>;

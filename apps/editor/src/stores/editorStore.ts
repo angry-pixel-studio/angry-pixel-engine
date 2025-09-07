@@ -6,6 +6,7 @@ import { EntityWithChildren, EntityComponent } from "../types/scene";
 import { useSceneStore } from "./sceneStore";
 import { BuiltInComponent } from "../types/component";
 import { v4 as uuid } from "uuid";
+import { exampleScene } from "../data/example-scene";
 
 // Enable MapSet support for Immer
 enableMapSet();
@@ -28,6 +29,14 @@ export interface EditorState {
         filesystemNav: number;
         entityInspector: number;
     };
+
+    // Inspector tabs
+    activeInspectorTab: string;
+
+    layers: {
+        renderLayers: string[];
+        collisionLayers: string[];
+    };
 }
 
 interface EditorActions {
@@ -44,6 +53,13 @@ interface EditorActions {
 
     // Panel size management
     setPanelSize: (panel: keyof EditorState["panelSizes"], size: number) => void;
+
+    // Inspector tab management
+    setActiveInspectorTab: (tabId: string) => void;
+
+    // Layers actions
+    setRenderLayers: (layers: string[]) => void;
+    setCollisionLayers: (layers: string[]) => void;
 }
 
 export const useEditorStore = create<EditorState & EditorActions>()(
@@ -62,9 +78,15 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                 filesystemNav: 220,
                 entityInspector: 380,
             },
+            activeInspectorTab: "entityInspector",
+            layers: {
+                renderLayers:
+                    (exampleScene.entities
+                        .find((e) => e.components.some((c) => c.name === BuiltInComponent.Camera))
+                        ?.components?.find((c) => c.name === BuiltInComponent.Camera)?.data?.layers as string[]) ?? [],
+                collisionLayers: [],
+            },
 
-            // Actions
-            // Selection actions
             selectEntity: (entity) => {
                 set((state) => {
                     state.selectedEntityId = entity?.id || null;
@@ -77,6 +99,9 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                         state.entityInspector.components = components
                             ? new Map(components.map((c) => [c.id, c]))
                             : new Map();
+
+                        // Automatically switch to entity inspector tab when an entity is selected
+                        state.activeInspectorTab = "entityInspector";
                     } else {
                         state.entityInspector.entityName = "";
                         state.entityInspector.entityEnabled = true;
@@ -85,7 +110,6 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                 });
             },
 
-            // Entity inspector actions
             setEntityName: (name) => {
                 set((state) => {
                     state.entityInspector.entityName = name;
@@ -150,7 +174,6 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                 set((state) => {
                     const component = state.entityInspector.components.get(componentId);
                     if (component) {
-                        // Create a new component object to avoid proxy conflicts
                         const updatedComponent = {
                             ...component,
                             data: {
@@ -159,10 +182,8 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                             },
                         };
 
-                        // Replace the component in the array
                         state.entityInspector.components.set(componentId, updatedComponent);
 
-                        // Update the scene store automatically
                         if (state.selectedEntityId) {
                             const sceneStore = useSceneStore.getState();
                             sceneStore.updateComponent(state.selectedEntityId, componentId, {
@@ -173,10 +194,27 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                 });
             },
 
-            // Panel size management
             setPanelSize: (panel, size) => {
                 set((state) => {
                     state.panelSizes[panel] = size;
+                });
+            },
+
+            setActiveInspectorTab: (tabId) => {
+                set((state) => {
+                    state.activeInspectorTab = tabId;
+                });
+            },
+
+            setRenderLayers: (layers) => {
+                set((state) => {
+                    state.layers.renderLayers = layers;
+                });
+            },
+
+            setCollisionLayers: (layers) => {
+                set((state) => {
+                    state.layers.collisionLayers = layers;
                 });
             },
         })),

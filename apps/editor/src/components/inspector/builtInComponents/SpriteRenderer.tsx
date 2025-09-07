@@ -8,13 +8,14 @@ import Vector2Field from "../propertyField/Vector2Field";
 import BooleanField from "../propertyField/BooleanField";
 import NumberField from "../propertyField/NumberField";
 import ColorField from "../propertyField/ColorField";
+import ListField from "../propertyField/ListField";
 
 interface SpriteRendererProps {
     component: EntityComponent;
 }
 
 const SpriteRenderer: React.FC<SpriteRendererProps> = ({ component }) => {
-    const { updateComponentProperty } = useEditor();
+    const { updateComponentProperty, layers } = useEditor();
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
         updateComponentProperty(component.id, propertyName, newValue);
@@ -22,14 +23,20 @@ const SpriteRenderer: React.FC<SpriteRendererProps> = ({ component }) => {
 
     return (
         <>
-            <ImageField propertyName="Image" value={component.data?.image} onUpdate={handleUpdate("image")} />
-
-            <StringField
+            <ListField
                 propertyName="Layer"
                 value={component.data?.layer}
                 onUpdate={handleUpdate("layer")}
                 defaultValue="Default"
+                options={{
+                    items: [
+                        { value: "Default", label: "Default" },
+                        ...layers.renderLayers.map((layer) => ({ value: layer, label: layer })),
+                    ],
+                }}
             />
+
+            <ImageField propertyName="Image" value={component.data?.image} onUpdate={handleUpdate("image")} />
 
             <RectField
                 propertyName="Slice"

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
     X,
     Plus,
-    Camera,
+    Minus,
     Image,
     Type,
     Video,
@@ -10,11 +10,13 @@ import {
     Lightbulb,
     Moon,
     MousePointer,
+    Move,
     Map,
-    Shield,
+    LayoutGrid,
     Circle,
-    Triangle,
-    Layers,
+    Hexagon,
+    Film,
+    Grid2X2,
 } from "lucide-react";
 import { BuiltInComponent } from "../../types/component";
 
@@ -32,41 +34,39 @@ const ComponentDialog: React.FC<ComponentDialogProps> = ({ isOpen, onClose, onSe
     const getComponentIcon = (componentName: BuiltInComponent) => {
         switch (componentName) {
             case BuiltInComponent.Transform:
-                return <MousePointer className="w-5 h-5" />;
+                return <Move className="w-5 h-5" />;
             case BuiltInComponent.Camera:
-                return <Camera className="w-5 h-5" />;
+                return <Video className="w-5 h-5" />;
             case BuiltInComponent.SpriteRenderer:
                 return <Image className="w-5 h-5" />;
-            case BuiltInComponent.TilemapRenderer:
-                return <Map className="w-5 h-5" />;
             case BuiltInComponent.TextRenderer:
                 return <Type className="w-5 h-5" />;
-            case BuiltInComponent.VideoRenderer:
-                return <Video className="w-5 h-5" />;
+            case BuiltInComponent.TilemapRenderer:
+                return <LayoutGrid className="w-5 h-5" />;
             case BuiltInComponent.MaskRenderer:
-                return <Square className="w-5 h-5" />;
-            case BuiltInComponent.LightRenderer:
-                return <Lightbulb className="w-5 h-5" />;
+                return <Square fill="currentColor" className="w-5 h-5" />;
             case BuiltInComponent.DarknessRenderer:
                 return <Moon className="w-5 h-5" />;
+            case BuiltInComponent.LightRenderer:
+                return <Lightbulb className="w-5 h-5" />;
+            case BuiltInComponent.VideoRenderer:
+                return <Film className="w-5 h-5" />;
             case BuiltInComponent.Button:
                 return <MousePointer className="w-5 h-5" />;
             case BuiltInComponent.TiledWrapper:
                 return <Map className="w-5 h-5" />;
-            case BuiltInComponent.TilemapCollider:
-                return <Shield className="w-5 h-5" />;
-            case BuiltInComponent.EdgeCollider:
-                return <Square className="w-5 h-5" />;
             case BuiltInComponent.BoxCollider:
                 return <Square className="w-5 h-5" />;
             case BuiltInComponent.BallCollider:
                 return <Circle className="w-5 h-5" />;
             case BuiltInComponent.PolygonCollider:
-                return <Triangle className="w-5 h-5" />;
-            case BuiltInComponent.TypeTest:
-                return <Layers className="w-5 h-5" />;
+                return <Hexagon className="w-5 h-5" />;
+            case BuiltInComponent.EdgeCollider:
+                return <Minus className="w-5 h-5" />;
+            case BuiltInComponent.TilemapCollider:
+                return <Grid2X2 className="w-5 h-5" />;
             default:
-                return <Layers className="w-5 h-5" />;
+                return null;
         }
     };
 
@@ -75,25 +75,25 @@ const ComponentDialog: React.FC<ComponentDialogProps> = ({ isOpen, onClose, onSe
             case BuiltInComponent.Transform:
                 return "Position, rotation, and scale of the entity";
             case BuiltInComponent.Camera:
-                return "Controls the viewport and rendering perspective";
+                return "Manages which layer is visible, zoom level and depth";
             case BuiltInComponent.SpriteRenderer:
-                return "Renders 2D sprites and images";
+                return "Renders a 2D sprite";
             case BuiltInComponent.TilemapRenderer:
-                return "Renders tile-based maps and levels";
+                return "Renders tile-based maps";
             case BuiltInComponent.TextRenderer:
-                return "Renders text and fonts";
+                return "Renders text";
             case BuiltInComponent.VideoRenderer:
-                return "Renders video content";
+                return "Renders video files";
             case BuiltInComponent.MaskRenderer:
-                return "Creates masking effects";
-            case BuiltInComponent.LightRenderer:
-                return "Renders lighting effects";
+                return "Renders a solid color shape";
             case BuiltInComponent.DarknessRenderer:
-                return "Renders darkness and shadow effects";
+                return "Renders a darkness rectangle that can be illuminated by LightRenderer";
+            case BuiltInComponent.LightRenderer:
+                return "Renders a light source that can illuminate DarknessRenderer";
             case BuiltInComponent.Button:
-                return "Interactive button component";
+                return "Creates a clickable area";
             case BuiltInComponent.TiledWrapper:
-                return "Wrapper for Tiled map editor integration";
+                return "Wrapper for Tiled map editor JSON export";
             case BuiltInComponent.TilemapCollider:
                 return "Collision detection for tilemaps";
             case BuiltInComponent.EdgeCollider:
@@ -104,16 +104,12 @@ const ComponentDialog: React.FC<ComponentDialogProps> = ({ isOpen, onClose, onSe
                 return "Circular collision detection";
             case BuiltInComponent.PolygonCollider:
                 return "Polygon-based collision detection";
-            case BuiltInComponent.TypeTest:
-                return "Test component for type validation";
             default:
-                return "Built-in component";
+                return "";
         }
     };
 
-    const builtInComponents = Object.values(BuiltInComponent).filter(
-        (component) => component !== BuiltInComponent.TypeTest, // Filter out test component
-    );
+    const builtInComponents = Object.values(BuiltInComponent);
 
     const handleComponentSelect = (componentName: BuiltInComponent) => {
         onSelect(componentName);
@@ -150,7 +146,7 @@ const ComponentDialog: React.FC<ComponentDialogProps> = ({ isOpen, onClose, onSe
                             <button
                                 key={componentName}
                                 onClick={() => setSelectedComponent(componentName)}
-                                className={`w-full flex items-center space-x-3 p-3 rounded transition-colors text-left ${
+                                className={`w-full flex items-center space-x-3 p-1 rounded transition-colors text-left ${
                                     selectedComponent === componentName
                                         ? "bg-primary-100 dark:bg-primary-900 border border-primary-300 dark:border-primary-700"
                                         : "hover:bg-surface-tertiary border border-transparent"

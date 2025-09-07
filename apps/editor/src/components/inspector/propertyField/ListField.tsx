@@ -14,7 +14,7 @@ export interface ListFieldOptions {
 }
 
 const ListField = ({ propertyName, value, onUpdate, defaultValue, options }: ListFieldProps) => {
-    const currentValue = ((value !== undefined ? value : defaultValue) as ListValue) || "";
+    const currentValue: string = ((value !== undefined ? value : defaultValue ?? "") as ListValue).toString();
     const items = options?.items || [];
 
     return (

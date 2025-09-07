@@ -7,5 +7,4 @@ export { default as VideoRenderer } from "./VideoRenderer";
 export { default as MaskRenderer } from "./MaskRenderer";
 export { default as LightRenderer } from "./LightRenderer";
 export { default as DarknessRenderer } from "./DarknessRenderer";
-export { default as TypeTest } from "./TypeTest";
 export { default as BuiltInComponentFactory } from "./BuiltInComponentFactory";

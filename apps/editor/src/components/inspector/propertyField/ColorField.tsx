@@ -5,9 +5,10 @@ interface ColorFieldProps {
     value: unknown;
     onUpdate: (value: unknown) => void;
     defaultValue?: string;
+    allowClear?: boolean;
 }
 
-const ColorField = ({ propertyName, value, onUpdate, defaultValue }: ColorFieldProps) => {
+const ColorField = ({ propertyName, value, onUpdate, defaultValue, allowClear = true }: ColorFieldProps) => {
     const [colorValue, setColorValue] = useState((value as string) ?? defaultValue ?? "#000000");
     const [textValue, setTextValue] = useState((value as string) ?? defaultValue ?? "");
 
@@ -42,12 +43,14 @@ const ColorField = ({ propertyName, value, onUpdate, defaultValue }: ColorFieldP
                     className="w-20 text-xs bg-white dark:bg-surface-secondary border border-border-primary rounded px-2 py-1 focus:outline-none focus:border-primary-300 text-text-primary font-mono"
                     placeholder="#000000"
                 />
-                <button
-                    onClick={() => onUpdate(undefined)}
-                    className="px-2 py-1 text-xs bg-white dark:bg-surface-secondary border border-border-primary rounded hover:bg-surface-tertiary transition-colors"
-                >
-                    Clear
-                </button>
+                {allowClear && (
+                    <button
+                        onClick={() => onUpdate(undefined)}
+                        className="px-2 py-1 text-xs bg-white dark:bg-surface-secondary border border-border-primary rounded hover:bg-surface-tertiary transition-colors"
+                    >
+                        Clear
+                    </button>
+                )}
             </div>
         </div>
     );

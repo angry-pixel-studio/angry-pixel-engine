@@ -2,7 +2,7 @@ import React from "react";
 import { EntityComponent } from "../../../types/scene";
 import { useEditor } from "../../../hooks/useEditor";
 import ButtonField from "../propertyField/ButtonField";
-import StringField from "../propertyField/StringField";
+import ListField from "../propertyField/ListField";
 import NumberField from "../propertyField/NumberField";
 import ColorField from "../propertyField/ColorField";
 import BooleanField from "../propertyField/BooleanField";
@@ -12,7 +12,7 @@ interface TilemapRendererProps {
 }
 
 const TilemapRenderer: React.FC<TilemapRendererProps> = ({ component }) => {
-    const { updateComponentProperty } = useEditor();
+    const { updateComponentProperty, layers } = useEditor();
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
         updateComponentProperty(component.id, propertyName, newValue);
@@ -20,6 +20,19 @@ const TilemapRenderer: React.FC<TilemapRendererProps> = ({ component }) => {
 
     return (
         <>
+            <ListField
+                propertyName="Layer"
+                value={component.data?.layer}
+                onUpdate={handleUpdate("layer")}
+                defaultValue="Default"
+                options={{
+                    items: [
+                        { value: "Default", label: "Default" },
+                        ...layers.renderLayers.map((layer) => ({ value: layer, label: layer })),
+                    ],
+                }}
+            />
+
             <ButtonField
                 propertyName="Tileset"
                 value={component.data?.tileset}
@@ -32,13 +45,6 @@ const TilemapRenderer: React.FC<TilemapRendererProps> = ({ component }) => {
                 value={component.data?.data}
                 onUpdate={handleUpdate("data")}
                 options={{ buttonLabel: "Edit" }}
-            />
-
-            <StringField
-                propertyName="Layer"
-                value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
-                defaultValue="Default"
             />
 
             <NumberField

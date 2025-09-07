@@ -10,17 +10,31 @@ export interface Tab {
 interface TabsProps {
     tabs: Tab[];
     defaultTab?: string;
+    activeTab?: string;
     className?: string;
     onTabChange?: (tabId: string) => void;
     variant?: "default" | "compact" | "pills";
     size?: "sm" | "md" | "lg";
 }
 
-const Tabs = ({ tabs, defaultTab, className = "", onTabChange, variant = "default", size = "md" }: TabsProps) => {
-    const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id || "");
+const Tabs = ({
+    tabs,
+    defaultTab,
+    activeTab: controlledActiveTab,
+    className = "",
+    onTabChange,
+    variant = "default",
+    size = "md",
+}: TabsProps) => {
+    const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.id || "");
+
+    // Use controlled activeTab if provided, otherwise use internal state
+    const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalActiveTab;
 
     const handleTabClick = (tabId: string) => {
-        setActiveTab(tabId);
+        if (controlledActiveTab === undefined) {
+            setInternalActiveTab(tabId);
+        }
         onTabChange?.(tabId);
     };
 

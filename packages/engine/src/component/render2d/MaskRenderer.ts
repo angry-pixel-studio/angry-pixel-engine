@@ -110,7 +110,7 @@ export class MaskRenderer {
     /** Polygon vertices (only for polygon) */
     vertexModel: Vector2[] = [];
     /** The color of the mask */
-    color: string;
+    color: string = "#000000";
     /** X-axis and Y-axis offset */
     offset: Vector2 = new Vector2();
     /** Mask rotation in radians */

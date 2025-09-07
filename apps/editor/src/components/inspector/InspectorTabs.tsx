@@ -1,8 +1,12 @@
 import Tabs, { Tab } from "../ui/Tabs";
-import { FileText } from "lucide-react";
+import { FileText, Layers } from "lucide-react";
 import EntityInspectorTab from "./EntityInspectorTab";
+import LayersTab from "./LayersTab";
+import { useEditor } from "../../hooks/useEditor";
 
 const InspectorTabs = () => {
+    const { activeInspectorTab, setActiveInspectorTab } = useEditor();
+
     const tabs: Tab[] = [
         {
             id: "entityInspector",
@@ -10,17 +14,22 @@ const InspectorTabs = () => {
             icon: FileText,
             content: <EntityInspectorTab />,
         },
+        {
+            id: "layers",
+            label: "Layers",
+            icon: Layers,
+            content: <LayersTab />,
+        },
     ];
 
     const handleTabChange = (tabId: string) => {
-        console.log(`Tab changed to: ${tabId}`);
-        // Aquí puedes agregar lógica adicional cuando cambie la pestaña
+        setActiveInspectorTab(tabId);
     };
 
     return (
         <Tabs
             tabs={tabs}
-            defaultTab="entityInspector"
+            activeTab={activeInspectorTab}
             onTabChange={handleTabChange}
             variant="compact"
             size="md"

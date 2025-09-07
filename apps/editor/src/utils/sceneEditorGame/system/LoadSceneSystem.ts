@@ -85,7 +85,7 @@ export class LoadSceneSystem implements System {
             if (parent) {
                 this.entityManager.setParent(entity, parent);
             }
-            if (children) {
+            if (children && children.length > 0) {
                 this.createEntities(entity, children as EntityWithComponentsAndChildren[]);
             }
         });

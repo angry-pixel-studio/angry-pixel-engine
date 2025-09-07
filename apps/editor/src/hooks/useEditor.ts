@@ -18,6 +18,8 @@ export const useEditor = () => {
         selectedEntity,
         entityInspector: editorStore.entityInspector,
         panelSizes: editorStore.panelSizes,
+        activeInspectorTab: editorStore.activeInspectorTab,
+        layers: editorStore.layers,
 
         // Editor actions
         selectEntity: editorStore.selectEntity,
@@ -28,6 +30,9 @@ export const useEditor = () => {
         updateComponentProperty: editorStore.updateComponentProperty,
         addComponent: editorStore.addComponent,
         setPanelSize: editorStore.setPanelSize,
+        setActiveInspectorTab: editorStore.setActiveInspectorTab,
+        setRenderLayers: editorStore.setRenderLayers,
+        setCollisionLayers: editorStore.setCollisionLayers,
 
         // Scene state
         // scene: sceneStore.scene,

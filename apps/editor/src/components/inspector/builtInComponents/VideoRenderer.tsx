@@ -8,13 +8,14 @@ import BooleanField from "../propertyField/BooleanField";
 import ColorField from "../propertyField/ColorField";
 import StringField from "../propertyField/StringField";
 import RectField from "../propertyField/RectField";
+import ListField from "../propertyField/ListField";
 
 interface VideoRendererProps {
     component: EntityComponent;
 }
 
 const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
-    const { updateComponentProperty } = useEditor();
+    const { updateComponentProperty, layers } = useEditor();
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
         updateComponentProperty(component.id, propertyName, newValue);
@@ -22,6 +23,19 @@ const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
 
     return (
         <>
+            <ListField
+                propertyName="Layer"
+                value={component.data?.layer}
+                onUpdate={handleUpdate("layer")}
+                defaultValue="Default"
+                options={{
+                    items: [
+                        { value: "Default", label: "Default" },
+                        ...layers.renderLayers.map((layer) => ({ value: layer, label: layer })),
+                    ],
+                }}
+            />
+
             <VideoField propertyName="Video" value={component.data?.video} onUpdate={handleUpdate("video")} />
 
             <NumberField
@@ -95,13 +109,6 @@ const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
                 onUpdate={handleUpdate("tintColor")}
             />
 
-            <StringField
-                propertyName="Layer"
-                value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
-                defaultValue="Default"
-            />
-
             <RectField
                 propertyName="Slice"
                 value={component.data?.slice}
@@ -131,11 +138,18 @@ const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
                 defaultValue={false}
             />
 
-            <StringField
+            <ListField
                 propertyName="Action"
                 value={component.data?.action}
                 onUpdate={handleUpdate("action")}
                 defaultValue="play"
+                options={{
+                    items: [
+                        { value: "play", label: "Play" },
+                        { value: "pause", label: "Pause" },
+                        { value: "stop", label: "Stop" },
+                    ],
+                }}
             />
         </>
     );

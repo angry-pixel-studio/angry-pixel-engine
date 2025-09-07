@@ -5,7 +5,6 @@ import TextField from "../propertyField/TextField";
 import ColorField from "../propertyField/ColorField";
 import FontField from "../propertyField/FontField";
 import NumberField from "../propertyField/NumberField";
-import StringField from "../propertyField/StringField";
 import ListField from "../propertyField/ListField";
 import Vector2Field from "../propertyField/Vector2Field";
 import BooleanField from "../propertyField/BooleanField";
@@ -15,7 +14,7 @@ interface TextRendererProps {
 }
 
 const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
-    const { updateComponentProperty } = useEditor();
+    const { updateComponentProperty, layers } = useEditor();
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
         updateComponentProperty(component.id, propertyName, newValue);
@@ -23,6 +22,19 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
 
     return (
         <>
+            <ListField
+                propertyName="Layer"
+                value={component.data?.layer}
+                onUpdate={handleUpdate("layer")}
+                defaultValue="Default"
+                options={{
+                    items: [
+                        { value: "Default", label: "Default" },
+                        ...layers.renderLayers.map((layer) => ({ value: layer, label: layer })),
+                    ],
+                }}
+            />
+
             <TextField
                 propertyName="Text"
                 value={component.data?.text}
@@ -35,6 +47,7 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 value={component.data?.color}
                 onUpdate={handleUpdate("color")}
                 defaultValue="#000000"
+                allowClear={false}
             />
 
             <FontField
@@ -66,13 +79,6 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 onUpdate={handleUpdate("height")}
                 defaultValue={16}
                 options={{ min: 0 }}
-            />
-
-            <StringField
-                propertyName="Layer"
-                value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
-                defaultValue="Default"
             />
 
             <NumberField

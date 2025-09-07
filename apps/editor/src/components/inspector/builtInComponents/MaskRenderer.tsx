@@ -6,7 +6,6 @@ import ColorField from "../propertyField/ColorField";
 import NumberField from "../propertyField/NumberField";
 import Vector2ArrayField from "../propertyField/Vector2ArrayField";
 import Vector2Field from "../propertyField/Vector2Field";
-import StringField from "../propertyField/StringField";
 import { MaskShape } from "angry-pixel";
 
 interface MaskRendererProps {
@@ -14,7 +13,7 @@ interface MaskRendererProps {
 }
 
 const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
-    const { updateComponentProperty } = useEditor();
+    const { updateComponentProperty, layers } = useEditor();
     const [shape, setShape] = useState<MaskShape>(component.data?.shape as MaskShape);
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
@@ -23,25 +22,37 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
 
     const handleShapeChange = (newValue: unknown) => {
         setShape(newValue as MaskShape);
-        handleUpdate("shape")(newValue === -1 ? undefined : newValue);
+        handleUpdate("shape")(newValue === "" ? undefined : newValue);
     };
 
     return (
         <>
+            <ListField
+                propertyName="Layer"
+                value={component.data?.layer}
+                onUpdate={handleUpdate("layer")}
+                defaultValue="Default"
+                options={{
+                    items: [
+                        { value: "Default", label: "Default" },
+                        ...layers.renderLayers.map((layer) => ({ value: layer, label: layer })),
+                    ],
+                }}
+            />
+
             <ListField
                 propertyName="Shape"
                 value={component.data?.shape}
                 onUpdate={handleShapeChange}
                 options={{
                     items: [
-                        { value: -1, label: "Select Shape" },
+                        { value: "", label: "Select Shape" },
                         { value: MaskShape.Rectangle, label: "Rectangle" },
                         { value: MaskShape.Circumference, label: "Circumference" },
                         { value: MaskShape.Polygon, label: "Polygon" },
                     ],
                     castValue: (value: string) => value !== undefined && Number(value),
                 }}
-                defaultValue={-1}
             />
 
             <ColorField
@@ -49,6 +60,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 value={component.data?.color}
                 onUpdate={handleUpdate("color")}
                 defaultValue="#000000"
+                allowClear={false}
             />
 
             {shape === MaskShape.Rectangle && (
@@ -108,13 +120,6 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 onUpdate={handleUpdate("opacity")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
-            />
-
-            <StringField
-                propertyName="Layer"
-                value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
-                defaultValue="Default"
             />
         </>
     );
