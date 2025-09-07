@@ -6,7 +6,6 @@ import NumberField from "../propertyField/NumberField";
 import Vector2Field from "../propertyField/Vector2Field";
 import BooleanField from "../propertyField/BooleanField";
 import ColorField from "../propertyField/ColorField";
-import StringField from "../propertyField/StringField";
 import RectField from "../propertyField/RectField";
 import ListField from "../propertyField/ListField";
 

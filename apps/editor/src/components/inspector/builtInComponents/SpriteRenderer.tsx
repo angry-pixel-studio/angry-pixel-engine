@@ -2,7 +2,6 @@ import React from "react";
 import { EntityComponent } from "../../../types/scene";
 import { useEditor } from "../../../hooks/useEditor";
 import ImageField from "../propertyField/ImageField";
-import StringField from "../propertyField/StringField";
 import RectField from "../propertyField/RectField";
 import Vector2Field from "../propertyField/Vector2Field";
 import BooleanField from "../propertyField/BooleanField";
