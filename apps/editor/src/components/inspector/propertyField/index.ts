@@ -11,6 +11,7 @@ export { default as FontField } from "./FontField";
 export { default as TextField } from "./TextField";
 export { default as AudioField } from "./AudioField";
 export { default as VideoField } from "./VideoField";
+export { default as JsonField } from "./JsonField";
 export { default as ObjectField } from "./ObjectField";
 export { default as RectField } from "./RectField";
 export { default as ListField, type ListFieldOptions } from "./ListField";

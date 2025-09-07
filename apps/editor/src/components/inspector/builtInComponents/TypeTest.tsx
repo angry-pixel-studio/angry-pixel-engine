@@ -15,6 +15,7 @@ import ObjectField from "../propertyField/ObjectField";
 import StringArrayField from "../propertyField/StringArrayField";
 import RectField from "../propertyField/RectField";
 import ButtonField from "../propertyField/ButtonField";
+import JsonField from "../propertyField/JsonField";
 
 interface TypeTestProps {
     component: EntityComponent;
@@ -64,6 +65,8 @@ const TypeTest: React.FC<TypeTestProps> = ({ component }) => {
             <AudioField propertyName="Audio" value={component.data?.audioProp} onUpdate={handleUpdate("audioProp")} />
 
             <VideoField propertyName="Video" value={component.data?.videoProp} onUpdate={handleUpdate("videoProp")} />
+
+            <JsonField propertyName="Json" value={component.data?.jsonProp} onUpdate={handleUpdate("jsonProp")} />
 
             <ObjectField
                 propertyName="Object"

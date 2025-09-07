@@ -23,6 +23,30 @@ export const exampleScene: Scene = {
             url: "assets/example-scene/font/PressStart2P-Regular.ttf",
             type: AssetType.Font,
         },
+        {
+            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6f",
+            name: "Main Song",
+            url: "assets/example-scene/audio/main_song.ogg",
+            type: AssetType.Audio,
+        },
+        {
+            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6g",
+            name: "Jump SFX",
+            url: "assets/example-scene/audio/sfx_jump4.wav",
+            type: AssetType.Audio,
+        },
+        {
+            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6h",
+            name: "Tiled Tilemap",
+            url: "assets/example-scene/tilemap/tilemap.json",
+            type: AssetType.Json,
+        },
+        {
+            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6i",
+            name: "Example Video",
+            url: "assets/example-scene/video/example.mp4",
+            type: AssetType.Video,
+        },
     ],
     entities: [
         {

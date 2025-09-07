@@ -47,7 +47,7 @@ export interface SceneState {
     getEntityById: (id: string) => EntityWithParent | null;
     getComponentById: (entityId: string, componentId: string) => EntityComponent | null;
     getSystemById: (id: string) => System | null;
-    getFontAssets: () => Asset[];
+    getAssetsByType: (type: AssetType) => Asset[];
 
     // Helper to sync Maps with scene data
     syncMapsWithScene: () => void;
@@ -191,9 +191,9 @@ export const useSceneStore = create<SceneState>()(
                     return state.systemsMap.get(id) || null;
                 },
 
-                getFontAssets: () => {
+                getAssetsByType: (type) => {
                     const state = get();
-                    return Array.from(state.assetsMap.values()).filter((asset) => asset.type === AssetType.Font);
+                    return Array.from(state.assetsMap.values()).filter((asset) => asset.type === type);
                 },
             };
         }),
