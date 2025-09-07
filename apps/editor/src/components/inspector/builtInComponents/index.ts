@@ -1,24 +1,11 @@
-import { Component } from "../../../types/component";
-import { camera } from "./Camera";
-import { darknessRenderer } from "./DarknessRenderer";
-import { lightRenderer } from "./LightRenderer";
-import { maskRenderer } from "./MaskRenderer";
-import { spriteRenderer } from "./SpriteRenderer";
-import { textRenderer } from "./TextRenderer";
-import { tilemapRenderer } from "./TilemapRenderer";
-import { transform } from "./Transform";
-import { typeTest } from "./TypeTest";
-import { videoRenderer } from "./VideoRenderer";
-
-export const builtInComponents: Component[] = [
-    transform,
-    camera,
-    spriteRenderer,
-    textRenderer,
-    tilemapRenderer,
-    videoRenderer,
-    maskRenderer,
-    lightRenderer,
-    darknessRenderer,
-    typeTest,
-];
+export { default as Transform } from "./Transform";
+export { default as Camera } from "./Camera";
+export { default as SpriteRenderer } from "./SpriteRenderer";
+export { default as TextRenderer } from "./TextRenderer";
+export { default as TilemapRenderer } from "./TilemapRenderer";
+export { default as VideoRenderer } from "./VideoRenderer";
+export { default as MaskRenderer } from "./MaskRenderer";
+export { default as LightRenderer } from "./LightRenderer";
+export { default as DarknessRenderer } from "./DarknessRenderer";
+export { default as TypeTest } from "./TypeTest";
+export { default as BuiltInComponentFactory } from "./BuiltInComponentFactory";

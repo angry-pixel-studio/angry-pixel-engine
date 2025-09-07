@@ -1,8 +1,7 @@
 import { useEditor } from "../../hooks/useEditor";
 import { EntityComponent } from "../../types/scene";
-import { builtInComponents } from "./builtInComponents";
-import { Component, PropertyType } from "../../types/component";
-import PropertyFieldFactory from "./propertyField/PropertyFieldFactory";
+import { BuiltInComponentFactory } from "./builtInComponents";
+import { StringField } from "./propertyField";
 
 interface ComponentItemProps {
     component: EntityComponent;
@@ -13,9 +12,6 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
 
     const isBuiltIn = component.builtIn;
     const isCollapsed = entityInspector.collapsedComponents.has(component.id);
-    const builtInComponent: Component | undefined = isBuiltIn
-        ? builtInComponents.find((c) => c.name === component.name)
-        : undefined;
 
     const handleToggleEnabled = () => {
         setComponentEnabled(component.id, !component.enabled);
@@ -61,37 +57,22 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
             {!isCollapsed && (
                 <div className="px-3 pb-3 border-t border-border-primary">
                     <div className="space-y-2 mt-2">
-                        {builtInComponent &&
-                            builtInComponent.properties.map((property) => (
-                                <PropertyFieldFactory
-                                    key={property.name}
-                                    propertyName={property.displayName}
-                                    value={component.data?.[property.name]}
-                                    componentId={component.id}
-                                    propertyType={property.type}
-                                    onUpdate={(newValue: unknown) => {
-                                        updateComponentProperty(component.id, property.name, newValue);
-                                    }}
-                                    options={property.options}
-                                    defaultValue={property.defaultValue}
-                                />
-                            ))}
-                        {!isBuiltIn &&
+                        {isBuiltIn ? (
+                            <BuiltInComponentFactory component={component} />
+                        ) : (
                             component.data &&
                             Object.keys(component.data).length > 0 &&
                             Object.entries(component.data).map(([key, value]) => (
-                                <PropertyFieldFactory
+                                <StringField
                                     key={key}
                                     propertyName={key}
                                     value={typeof value === "object" ? JSON.stringify(value) : String(value)}
-                                    componentId={component.id}
-                                    propertyType={PropertyType.String}
                                     onUpdate={(newValue: unknown) => {
                                         updateComponentProperty(component.id, key, newValue);
                                     }}
-                                    options={undefined}
                                 />
-                            ))}
+                            ))
+                        )}
                     </div>
                 </div>
             )}

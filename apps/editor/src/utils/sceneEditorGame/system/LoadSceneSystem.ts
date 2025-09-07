@@ -1,19 +1,6 @@
 import { EntityIdentifier } from "../component/EntityIdentifier";
 import { AssetType, Scene } from "../../../types/scene";
-import {
-    AssetManager,
-    Camera,
-    EntityManager,
-    inject,
-    SpriteRenderer,
-    SYMBOLS,
-    System,
-    SystemManager,
-    TilemapRenderer,
-    Tileset,
-    TimeManager,
-    Transform,
-} from "angry-pixel";
+import { AssetManager, EntityManager, inject, SYMBOLS, System, SystemManager, TimeManager } from "angry-pixel";
 import { SceneState } from "../../../stores/sceneStore";
 import { StoreApi, UseBoundStore } from "zustand";
 import { getComponentType, mapComponentData } from "../utils/components";

@@ -9,6 +9,8 @@ import {
     EntityWithComponentsAndChildren,
     System,
     EntityWithParent,
+    Asset,
+    AssetType,
 } from "../types/scene";
 import { exampleScene } from "../data/example-scene";
 
@@ -20,6 +22,7 @@ export interface SceneState {
     scene: Scene;
 
     // Internal Maps for better performance
+    assetsMap: Map<string, Asset>;
     entitiesMap: Map<string, EntityWithParent>;
     componentsMap: Map<string, EntityComponent[]>;
     systemsMap: Map<string, System>;
@@ -44,6 +47,7 @@ export interface SceneState {
     getEntityById: (id: string) => EntityWithParent | null;
     getComponentById: (entityId: string, componentId: string) => EntityComponent | null;
     getSystemById: (id: string) => System | null;
+    getFontAssets: () => Asset[];
 
     // Helper to sync Maps with scene data
     syncMapsWithScene: () => void;
@@ -51,6 +55,7 @@ export interface SceneState {
 
 // Helper function to create Maps from scene data
 const createMapsFromScene = (scene: Scene) => {
+    const assetsMap = new Map<string, Asset>(); // asset id -> asset
     const entitiesMap = new Map<string, EntityWithParent>(); // entity id -> entity
     const componentsMap = new Map<string, EntityComponent[]>(); // entity -> array of components
     const systemsMap = new Map<string, System>(); // system id -> system
@@ -76,14 +81,15 @@ const createMapsFromScene = (scene: Scene) => {
 
     scene.entities.forEach((entity) => processEntity(entity));
     scene.systems.forEach((system) => systemsMap.set(system.id, system));
+    scene.assets.forEach((asset) => assetsMap.set(asset.id, asset));
 
-    return { entitiesMap, componentsMap, systemsMap };
+    return { entitiesMap, componentsMap, systemsMap, assetsMap };
 };
 
 export const useSceneStore = create<SceneState>()(
     devtools(
         immer((set, get) => {
-            const { entitiesMap, componentsMap, systemsMap } = createMapsFromScene(exampleScene);
+            const { entitiesMap, componentsMap, systemsMap, assetsMap } = createMapsFromScene(exampleScene);
 
             const entityUpdated: string | undefined = undefined;
             const componentUpdated: [string, string] | undefined = undefined;
@@ -93,6 +99,7 @@ export const useSceneStore = create<SceneState>()(
                 entitiesMap,
                 componentsMap,
                 systemsMap,
+                assetsMap,
                 entityUpdated,
                 componentUpdated,
 
@@ -182,6 +189,11 @@ export const useSceneStore = create<SceneState>()(
                 getSystemById: (id) => {
                     const state = get();
                     return state.systemsMap.get(id) || null;
+                },
+
+                getFontAssets: () => {
+                    const state = get();
+                    return Array.from(state.assetsMap.values()).filter((asset) => asset.type === AssetType.Font);
                 },
             };
         }),

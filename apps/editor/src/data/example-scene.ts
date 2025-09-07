@@ -17,6 +17,12 @@ export const exampleScene: Scene = {
             url: "assets/example-scene/image/tileset.png",
             type: AssetType.Image,
         },
+        {
+            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6e",
+            name: "PressStart2P-Regular",
+            url: "assets/example-scene/font/PressStart2P-Regular.ttf",
+            type: AssetType.Font,
+        },
     ],
     entities: [
         {

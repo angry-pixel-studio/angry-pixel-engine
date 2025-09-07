@@ -1,18 +1,20 @@
+type ListValue = string | number;
+
 interface ListFieldProps {
     propertyName: string;
     value: unknown;
     onUpdate: (value: unknown) => void;
-    defaultValue?: string;
+    defaultValue?: ListValue;
     options?: ListFieldOptions;
 }
 
 export interface ListFieldOptions {
-    items: Array<{ value: string; label: string }>;
+    items: Array<{ value: ListValue; label: string }>;
     castValue?: (value: string) => unknown;
 }
 
 const ListField = ({ propertyName, value, onUpdate, defaultValue, options }: ListFieldProps) => {
-    const currentValue = (value as string) || defaultValue || "";
+    const currentValue = ((value !== undefined ? value : defaultValue) as ListValue) || "";
     const items = options?.items || [];
 
     return (
