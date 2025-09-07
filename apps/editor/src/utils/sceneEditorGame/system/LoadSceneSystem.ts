@@ -1,6 +1,6 @@
 import { EntityIdentifier } from "../component/EntityIdentifier";
-import { AssetType, Scene } from "../../../types/scene";
-import { AssetManager, EntityManager, inject, SYMBOLS, System, SystemManager, TimeManager } from "angry-pixel";
+import { AssetType, EntityWithComponentsAndChildren, Scene } from "../../../types/scene";
+import { AssetManager, Entity, EntityManager, inject, SYMBOLS, System, SystemManager, TimeManager } from "angry-pixel";
 import { SceneState } from "../../../stores/sceneStore";
 import { StoreApi, UseBoundStore } from "zustand";
 import { getComponentType, mapComponentData } from "../utils/components";
@@ -66,9 +66,11 @@ export class LoadSceneSystem implements System {
         });
     }
 
-    private createEntities(): void {
-        this.sceneData?.entities.forEach(({ id, name, components }) => {
-            this.entityManager.createEntity([
+    private createEntities(parent?: Entity, children?: EntityWithComponentsAndChildren[]): void {
+        const entities = parent ? children : this.sceneData?.entities;
+
+        entities?.forEach(({ id, name, components, children }) => {
+            const entity = this.entityManager.createEntity([
                 new EntityIdentifier({ id, name }),
                 ...components
                     .map((componentData) => {
@@ -80,6 +82,12 @@ export class LoadSceneSystem implements System {
                     })
                     .filter((component) => component !== undefined),
             ]);
+            if (parent) {
+                this.entityManager.setParent(entity, parent);
+            }
+            if (children) {
+                this.createEntities(entity, children as EntityWithComponentsAndChildren[]);
+            }
         });
     }
 }

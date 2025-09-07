@@ -1,4 +1,4 @@
-import { useEditorStore } from "./stores/editorStore";
+import { useEditor } from "./hooks/useEditor";
 import ResizablePanel from "./components/ui/ResizablePanel";
 import SceneTreeTabs from "./components/sceneTree/SceneTreeTabs";
 import InspectorTabs from "./components/inspector/InspectorTabs";
@@ -8,7 +8,7 @@ import Icon from "./components/ui/Icon";
 import SceneEditor from "./components/sceneEditor";
 
 function App() {
-    const { panelSizes, setPanelSize } = useEditorStore();
+    const { panelSizes, setPanelSize } = useEditor();
 
     return (
         <div className="h-screen bg-background-primary flex flex-col relative">

@@ -17,6 +17,15 @@ import { exampleScene } from "../data/example-scene";
 // Enable MapSet support for Immer
 enableMapSet();
 
+export enum SceneStateAction {
+    EntityCreated,
+    EntityUpdated,
+    EntityDeleted,
+    ComponentCreated,
+    ComponentUpdated,
+    ComponentDeleted,
+}
+
 export interface SceneState {
     // Scene data
     scene: Scene;
@@ -28,14 +37,20 @@ export interface SceneState {
     systemsMap: Map<string, System>;
 
     // what has been changed
+    action?: SceneStateAction;
     entityUpdated?: string;
     componentUpdated?: [string, string];
 
     // Scene actions
     updateEntity: (entityId: string, updates: Partial<Entity>) => void;
-    updateComponent: (entityId: string, componentId: string, updates: Partial<EntityComponent>) => void;
     updateScene: (updates: Partial<Scene>) => void;
 
+    // Component actions
+    addComponent: (entityId: string, component: EntityComponent) => void;
+    removeComponent: (entityId: string, componentId: string) => void;
+    updateComponent: (entityId: string, componentId: string, updates: Partial<EntityComponent>) => void;
+
+    // Asset actions
     // System actions
     addSystem: (system: System) => void;
     removeSystem: (systemId: string) => void;
@@ -91,6 +106,7 @@ export const useSceneStore = create<SceneState>()(
         immer((set, get) => {
             const { entitiesMap, componentsMap, systemsMap, assetsMap } = createMapsFromScene(exampleScene);
 
+            const action: SceneStateAction | undefined = undefined;
             const entityUpdated: string | undefined = undefined;
             const componentUpdated: [string, string] | undefined = undefined;
 
@@ -100,6 +116,7 @@ export const useSceneStore = create<SceneState>()(
                 componentsMap,
                 systemsMap,
                 assetsMap,
+                action,
                 entityUpdated,
                 componentUpdated,
 
@@ -116,8 +133,9 @@ export const useSceneStore = create<SceneState>()(
                     set((state) => {
                         const entity = state.entitiesMap.get(entityId);
                         if (entity) Object.assign(entity, updates);
+
+                        state.action = SceneStateAction.EntityUpdated;
                         state.entityUpdated = entityId;
-                        state.componentUpdated = undefined;
                     });
                 },
 
@@ -128,8 +146,35 @@ export const useSceneStore = create<SceneState>()(
                             const component = entityComponents.find((comp) => comp.id === componentId);
                             if (component) Object.assign(component, updates);
 
-                            state.entityUpdated = undefined;
+                            state.action = SceneStateAction.ComponentUpdated;
                             state.componentUpdated = [entityId, componentId];
+                        }
+                    });
+                },
+
+                addComponent: (entityId, component) => {
+                    set((state) => {
+                        const entityComponents = state.componentsMap.get(entityId);
+                        if (entityComponents) {
+                            entityComponents.push(component);
+
+                            state.action = SceneStateAction.ComponentCreated;
+                            state.componentUpdated = [entityId, component.id];
+                        }
+                    });
+                },
+
+                removeComponent: (entityId, componentId) => {
+                    set((state) => {
+                        const entityComponents = state.componentsMap.get(entityId);
+                        if (entityComponents) {
+                            const comopnentId = entityComponents.find((comp) => comp.id === componentId);
+                            if (comopnentId) {
+                                entityComponents.splice(entityComponents.indexOf(comopnentId), 1);
+
+                                state.action = SceneStateAction.ComponentDeleted;
+                                state.componentUpdated = [entityId, componentId];
+                            }
                         }
                     });
                 },

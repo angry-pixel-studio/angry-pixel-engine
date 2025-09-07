@@ -1,11 +1,24 @@
-import { FileText } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import Icon from "../ui/Icon";
 import { useEditor } from "../../hooks/useEditor";
 import EntityName from "./EntityName";
 import ComponentItem from "./ComponentItem";
+import ComponentDialog from "../ui/ComponentDialog";
+import { useState } from "react";
+import { BuiltInComponent } from "../../types/component";
 
 const EntityInspectorTab = () => {
-    const { selectedEntity, entityInspector } = useEditor();
+    const { selectedEntity, entityInspector, addComponent } = useEditor();
+    const [isComponentDialogOpen, setIsComponentDialogOpen] = useState(false);
+
+    const handleAddComponent = () => {
+        setIsComponentDialogOpen(true);
+    };
+
+    const handleComponentSelect = (componentName: BuiltInComponent) => {
+        addComponent(componentName);
+        setIsComponentDialogOpen(false);
+    };
 
     if (!selectedEntity) {
         return (
@@ -46,6 +59,24 @@ const EntityInspectorTab = () => {
                     </div>
                 )}
             </div>
+
+            {/* Add Component Button */}
+            <div className="p-4 border-t border-border-primary flex-shrink-0">
+                <button
+                    onClick={handleAddComponent}
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded transition-colors"
+                >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Component</span>
+                </button>
+            </div>
+
+            {/* Component Dialog */}
+            <ComponentDialog
+                isOpen={isComponentDialogOpen}
+                onClose={() => setIsComponentDialogOpen(false)}
+                onSelect={handleComponentSelect}
+            />
         </div>
     );
 };

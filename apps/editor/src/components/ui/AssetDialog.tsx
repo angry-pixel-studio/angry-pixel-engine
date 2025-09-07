@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { X, Image as ImageIcon, Video, Music, FileText, FileJson, Play, Pause } from "lucide-react";
-import { useSceneStore } from "../../stores/sceneStore";
 import { AssetType, Asset } from "../../types/scene";
+import { useEditor } from "../../hooks/useEditor";
 
 interface AssetDialogProps {
     isOpen: boolean;
@@ -12,7 +12,7 @@ interface AssetDialogProps {
 }
 
 const AssetDialog: React.FC<AssetDialogProps> = ({ isOpen, onClose, onSelect, assetType, title }) => {
-    const { getAssetsByType } = useSceneStore();
+    const { getAssetsByType } = useEditor();
     const assets = getAssetsByType(assetType);
     const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);

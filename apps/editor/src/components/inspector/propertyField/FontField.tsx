@@ -1,4 +1,4 @@
-import { useSceneStore } from "../../../stores/sceneStore";
+import { useEditor } from "../../../hooks/useEditor";
 import { AssetType } from "../../../types/scene";
 
 interface FontFieldProps {
@@ -10,8 +10,9 @@ interface FontFieldProps {
 
 const FontField = ({ propertyName, value, onUpdate, defaultValue }: FontFieldProps) => {
     const fontValue = (value as string) ?? defaultValue ?? "";
+    const { getAssetsByType } = useEditor();
+    const fontAssets = getAssetsByType(AssetType.Font);
 
-    const fontAssets = useSceneStore.getState().getAssetsByType(AssetType.Font);
     return (
         <div className="component-property">
             <span className="property-name">{propertyName}:</span>

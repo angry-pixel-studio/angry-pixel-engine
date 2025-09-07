@@ -1,48 +1,49 @@
 import { BuiltInComponent } from "../types/component";
 import { AssetType, Scene } from "../types/scene";
+import { v4 as uuid } from "uuid";
 
 export const exampleScene: Scene = {
-    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8d",
+    id: uuid(),
     name: "Example Scene",
     assets: [
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8f",
+            id: uuid(),
             name: "Player Spritesheet",
             url: "assets/example-scene/image/player-spritesheet.png",
             type: AssetType.Image,
         },
         {
-            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6d",
+            id: uuid(),
             name: "Tileset",
             url: "assets/example-scene/image/tileset.png",
             type: AssetType.Image,
         },
         {
-            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6e",
+            id: uuid(),
             name: "PressStart2P-Regular",
             url: "assets/example-scene/font/PressStart2P-Regular.ttf",
             type: AssetType.Font,
         },
         {
-            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6f",
+            id: uuid(),
             name: "Main Song",
             url: "assets/example-scene/audio/main_song.ogg",
             type: AssetType.Audio,
         },
         {
-            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6g",
+            id: uuid(),
             name: "Jump SFX",
             url: "assets/example-scene/audio/sfx_jump4.wav",
             type: AssetType.Audio,
         },
         {
-            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6h",
+            id: uuid(),
             name: "Tiled Tilemap",
             url: "assets/example-scene/tilemap/tilemap.json",
             type: AssetType.Json,
         },
         {
-            id: "e2a4b1c3-5d6f-4a7b-8c9d-1e2f3a4b5c6i",
+            id: uuid(),
             name: "Example Video",
             url: "assets/example-scene/video/example.mp4",
             type: AssetType.Video,
@@ -50,18 +51,18 @@ export const exampleScene: Scene = {
     ],
     entities: [
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8e",
+            id: uuid(),
             name: "Main Camera",
             enabled: true,
             components: [
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c8f",
+                    id: uuid(),
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
                 },
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c90",
+                    id: uuid(),
                     name: BuiltInComponent.Camera,
                     enabled: true,
                     builtIn: true,
@@ -75,18 +76,18 @@ export const exampleScene: Scene = {
             children: [],
         },
         {
-            id: "e2a4b8c7-9d1f-4e3b-8a2c-5f6d7e8c9b01",
+            id: uuid(),
             name: "Foreground",
             enabled: true,
             components: [
                 {
-                    id: "f8c1e7b2-3d4a-4b6e-8c2f-7a9e5d3c1b24",
+                    id: uuid(),
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
                 },
                 {
-                    id: "b2f7c1e4-8a3d-4b2e-9c1f-7e5d3a2b1c45",
+                    id: uuid(),
                     name: BuiltInComponent.TilemapRenderer,
                     enabled: true,
                     builtIn: true,
@@ -116,12 +117,12 @@ export const exampleScene: Scene = {
             children: [],
         },
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c91",
+            id: uuid(),
             name: "Player",
             enabled: true,
             components: [
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c92",
+                    id: uuid(),
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
@@ -130,7 +131,7 @@ export const exampleScene: Scene = {
                     },
                 },
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c93",
+                    id: uuid(),
                     name: BuiltInComponent.SpriteRenderer,
                     enabled: true,
                     builtIn: true,
@@ -149,18 +150,18 @@ export const exampleScene: Scene = {
             children: [],
         },
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-7e1f2d3c4b5a",
+            id: uuid(),
             name: "Text",
             enabled: true,
             components: [
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c98",
+                    id: uuid(),
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
                 },
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c97",
+                    id: uuid(),
                     name: BuiltInComponent.TextRenderer,
                     enabled: true,
                     builtIn: true,
@@ -169,18 +170,18 @@ export const exampleScene: Scene = {
             children: [],
         },
         {
-            id: "e2a4b7c1-5d3f-4e9a-8c2b-1f3e6d7a8b91",
+            id: uuid(),
             name: "Mask",
             enabled: true,
             components: [
                 {
-                    id: "e8c1f7a2-3b4d-4e6a-9c2b-5d7f8a9b0c12",
+                    id: uuid(),
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
                 },
                 {
-                    id: "e4a7b2c3-9d1f-4e6a-8c2b-7f3e5d6a8b91",
+                    id: uuid(),
                     name: BuiltInComponent.MaskRenderer,
                     enabled: true,
                     builtIn: true,
@@ -189,12 +190,12 @@ export const exampleScene: Scene = {
             children: [],
         },
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c94",
+            id: uuid(),
             name: "Test Parent",
             enabled: true,
             components: [
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c95",
+                    id: uuid(),
                     name: BuiltInComponent.Transform,
                     enabled: true,
                     builtIn: true,
@@ -202,13 +203,13 @@ export const exampleScene: Scene = {
             ],
             children: [
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c96",
+                    id: uuid(),
                     name: "Test Child 01",
                     enabled: true,
                     components: [
                         {
-                            id: "b7e3c2a1-4f2d-4e8a-9c3a-3f1e5d6b7c93",
-                            name: BuiltInComponent.TypeTest,
+                            id: uuid(),
+                            name: BuiltInComponent.Transform,
                             enabled: true,
                             builtIn: true,
                         },
@@ -216,12 +217,18 @@ export const exampleScene: Scene = {
                     children: [],
                 },
                 {
-                    id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c99",
+                    id: uuid(),
                     name: "Test Child 02",
                     enabled: true,
                     components: [
                         {
-                            id: "b8f4d3e2-5a1b-4c7d-8e9f-1a2b3c4d5e6f",
+                            id: uuid(),
+                            name: BuiltInComponent.Transform,
+                            enabled: true,
+                            builtIn: true,
+                        },
+                        {
+                            id: uuid(),
                             name: "Custom Component",
                             enabled: true,
                             builtIn: false,
@@ -240,19 +247,19 @@ export const exampleScene: Scene = {
     ],
     systems: [
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9c",
+            id: uuid(),
             name: "PlayerControllerSystem",
             enabled: true,
             url: "assets/example-scene/systems/playerControllerSystem.ts",
         },
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9d",
+            id: uuid(),
             name: "EnemyControllerSystem",
             enabled: true,
             url: "assets/example-scene/systems/enemyControllerSystem.ts",
         },
         {
-            id: "b7e3c2a1-4f2d-4e8a-9c3a-2f1e5d6b7c9e",
+            id: uuid(),
             name: "SomeSystem",
             enabled: true,
             url: "assets/example-scene/systems/SomeSystem.ts",

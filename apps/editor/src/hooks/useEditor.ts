@@ -26,6 +26,7 @@ export const useEditor = () => {
         toggleComponentCollapsed: editorStore.toggleComponentCollapsed,
         setComponentEnabled: editorStore.setComponentEnabled,
         updateComponentProperty: editorStore.updateComponentProperty,
+        addComponent: editorStore.addComponent,
         setPanelSize: editorStore.setPanelSize,
 
         // Scene state
@@ -33,6 +34,7 @@ export const useEditor = () => {
         systemsMap: sceneStore.systemsMap,
         entitiesMap: sceneStore.entitiesMap,
         componentsMap: sceneStore.componentsMap,
+        assetsMap: sceneStore.assetsMap,
 
         // Scene actions
         updateSystems: sceneStore.updateSystems,
@@ -40,5 +42,6 @@ export const useEditor = () => {
         getEntityById: sceneStore.getEntityById,
         getComponentById: sceneStore.getComponentById,
         getSystemById: sceneStore.getSystemById,
+        getAssetsByType: sceneStore.getAssetsByType,
     };
 };

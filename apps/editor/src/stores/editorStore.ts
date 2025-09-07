@@ -4,6 +4,8 @@ import { immer } from "zustand/middleware/immer";
 import { enableMapSet } from "immer";
 import { EntityWithChildren, EntityComponent } from "../types/scene";
 import { useSceneStore } from "./sceneStore";
+import { BuiltInComponent } from "../types/component";
+import { v4 as uuid } from "uuid";
 
 // Enable MapSet support for Immer
 enableMapSet();
@@ -38,6 +40,7 @@ interface EditorActions {
     toggleComponentCollapsed: (componentId: string) => void;
     setComponentEnabled: (componentId: string, enabled: boolean) => void;
     updateComponentProperty: (componentId: string, propertyName: string, value: unknown) => void;
+    addComponent: (componentName: BuiltInComponent) => void;
 
     // Panel size management
     setPanelSize: (panel: keyof EditorState["panelSizes"], size: number) => void;
@@ -122,6 +125,23 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                         state.entityInspector.collapsedComponents.delete(componentId);
                     } else {
                         state.entityInspector.collapsedComponents.add(componentId);
+                    }
+                });
+            },
+
+            addComponent: (componentName: BuiltInComponent) => {
+                set((state) => {
+                    const sceneStore = useSceneStore.getState();
+                    const component = {
+                        enabled: true,
+                        id: uuid(),
+                        name: componentName,
+                        data: {},
+                        builtIn: true,
+                    };
+                    if (state.selectedEntityId) {
+                        state.entityInspector.components.set(component.id, component);
+                        sceneStore.addComponent(state.selectedEntityId, component);
                     }
                 });
             },
