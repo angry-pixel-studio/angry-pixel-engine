@@ -11,7 +11,7 @@
         "apps/*"
     ],
     "scripts": {
-        "start": "yarn workspace @angry-pixel/demo start",
+        "demo:start": "yarn workspace @angry-pixel/demo start",
         "build": "yarn workspace @angry-pixel/engine build",
         "build:types": "yarn workspace @angry-pixel/engine build:types",
         "lint": "eslint .",

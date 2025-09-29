@@ -1,4 +1,4 @@
-import { SYMBOLS } from "@config/dependencySymbols";
+import { SYMBOLS as ENGINE_SYMBOLS } from "@config/dependencySymbols";
 import { SYMBOLS as COLLISION_SYMBOLS } from "@angry-pixel/collisions";
 import { SYMBOLS as ECS_SYMBOLS } from "@angry-pixel/ecs";
 import { SYMBOLS as WEBGL_SYMBOLS } from "@angry-pixel/webgl";
@@ -8,16 +8,16 @@ import { SYMBOLS as WEBGL_SYMBOLS } from "@angry-pixel/webgl";
  * @public
  * @category Decorators
  */
-export const BuiltInDependencyIdentifiers = {
-    AssetManager: SYMBOLS.AssetManager,
+export const SYMBOLS = {
+    AssetManager: ENGINE_SYMBOLS.AssetManager,
     CanvasElement: WEBGL_SYMBOLS.CanvasElement,
     CollisionRepository: COLLISION_SYMBOLS.CollisionRepository,
     EntityManager: ECS_SYMBOLS.EntityManager,
-    GameConfig: SYMBOLS.GameConfig,
-    InputManager: SYMBOLS.InputManager,
-    SceneManager: SYMBOLS.SceneManager,
+    GameConfig: ENGINE_SYMBOLS.GameConfig,
+    InputManager: ENGINE_SYMBOLS.InputManager,
+    SceneManager: ENGINE_SYMBOLS.SceneManager,
     SystemManager: ECS_SYMBOLS.SystemManager,
-    TimeManager: SYMBOLS.TimeManager,
+    TimeManager: ENGINE_SYMBOLS.TimeManager,
 };
 
 export { GameConfig } from "@config/bootstrap";
@@ -55,7 +55,20 @@ export * from "@system/GameSystem";
 export { gameLogicSystem, gamePhysicsSystem, gamePreRenderSystem } from "@system/SystemGroup";
 
 export * from "@misc";
-export * from "@angry-pixel/ecs";
+export {
+    Archetype,
+    Component,
+    ComponentType,
+    DisabledComponent,
+    Entity,
+    EntityManager,
+    SearchResult,
+    System,
+    SystemGroup,
+    SystemManager,
+    SystemType,
+    disableComponent,
+} from "@angry-pixel/ecs";
 export * from "@input";
 export { inject, injectable, DependencyName, DependencyType, PropertyKey } from "@angry-pixel/ioc";
 export * from "@angry-pixel/math";

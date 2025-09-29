@@ -208,7 +208,7 @@ export class TextRenderer {
         spacing?: number;
     } = { ...defaultTextureAtlasOptions };
     /** The width of the invisible box where the text is rendered */
-    width: number = 160;
+    width: number = 192;
 
     /** @internal */
     _renderData: TextRenderData = {
