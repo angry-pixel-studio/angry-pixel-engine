@@ -1,5 +1,6 @@
-import { Camera, GameSystem, Transform, Vector2 } from "angry-pixel";
+import { Camera, gamePreRenderSystem, GameSystem, Transform, Vector2 } from "angry-pixel";
 
+@gamePreRenderSystem()
 export class CameraMovementSystem extends GameSystem {
     private lastPosition: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();

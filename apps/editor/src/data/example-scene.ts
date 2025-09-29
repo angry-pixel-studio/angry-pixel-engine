@@ -151,46 +151,6 @@ export const exampleScene: Scene = {
         },
         {
             id: uuid(),
-            name: "Text",
-            enabled: true,
-            components: [
-                {
-                    id: uuid(),
-                    name: BuiltInComponent.Transform,
-                    enabled: true,
-                    builtIn: true,
-                },
-                {
-                    id: uuid(),
-                    name: BuiltInComponent.TextRenderer,
-                    enabled: true,
-                    builtIn: true,
-                },
-            ],
-            children: [],
-        },
-        {
-            id: uuid(),
-            name: "Mask",
-            enabled: true,
-            components: [
-                {
-                    id: uuid(),
-                    name: BuiltInComponent.Transform,
-                    enabled: true,
-                    builtIn: true,
-                },
-                {
-                    id: uuid(),
-                    name: BuiltInComponent.MaskRenderer,
-                    enabled: true,
-                    builtIn: true,
-                },
-            ],
-            children: [],
-        },
-        {
-            id: uuid(),
             name: "Test Parent",
             enabled: true,
             components: [

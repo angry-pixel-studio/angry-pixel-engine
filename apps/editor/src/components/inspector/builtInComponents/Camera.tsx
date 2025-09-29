@@ -1,7 +1,8 @@
 import React from "react";
 import { EntityComponent } from "../../../types/scene";
 import { useEditor } from "../../../hooks/useEditor";
-import StringArrayField from "../propertyField/StringArrayField";
+import { useEditorStore } from "../../../stores/editorStore";
+import { PredefinedStringArrayField } from "../propertyField";
 import NumberField from "../propertyField/NumberField";
 
 interface CameraProps {
@@ -10,6 +11,7 @@ interface CameraProps {
 
 const Camera: React.FC<CameraProps> = ({ component }) => {
     const { updateComponentProperty } = useEditor();
+    const { layers } = useEditorStore();
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
         updateComponentProperty(component.id, propertyName, newValue);
@@ -17,11 +19,12 @@ const Camera: React.FC<CameraProps> = ({ component }) => {
 
     return (
         <>
-            <StringArrayField
+            <PredefinedStringArrayField
                 propertyName="Layers"
-                value={component.data?.layers}
+                value={component.data?.layers as string[]}
                 onUpdate={handleUpdate("layers")}
                 defaultValue={["Default"]}
+                availableOptions={layers.renderLayers}
             />
 
             <NumberField

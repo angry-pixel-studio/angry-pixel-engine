@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GripVertical, Plus, X, Eye, Shield, LucideIcon } from "lucide-react";
 import Icon from "../ui/Icon";
+import ConfirmationDialog from "../ui/ConfirmationDialog";
 import { useEditorStore } from "../../stores/editorStore";
 
 interface DragItem {
@@ -15,6 +16,11 @@ const LayersTab = () => {
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
     const [editingIndex, setEditingIndex] = useState<{ type: "render" | "collision"; index: number } | null>(null);
     const [editingValue, setEditingValue] = useState("");
+    const [deleteConfirm, setDeleteConfirm] = useState<{
+        type: "render" | "collision";
+        index: number;
+        layerName: string;
+    } | null>(null);
 
     const handleDragStart = (e: React.DragEvent, index: number, type: "render" | "collision") => {
         setDraggedItem({ index, id: `${type}-${index}`, type });
@@ -79,6 +85,15 @@ const LayersTab = () => {
     };
 
     const handleRemoveLayer = (index: number, type: "render" | "collision") => {
+        const currentLayers = type === "render" ? layers.renderLayers : layers.collisionLayers;
+        const layerName = currentLayers[index];
+        setDeleteConfirm({ type, index, layerName });
+    };
+
+    const confirmRemoveLayer = () => {
+        if (!deleteConfirm) return;
+
+        const { type, index } = deleteConfirm;
         if (type === "render") {
             const newLayers = layers.renderLayers.filter((_, i) => i !== index);
             setRenderLayers(newLayers);
@@ -86,6 +101,7 @@ const LayersTab = () => {
             const newLayers = layers.collisionLayers.filter((_, i) => i !== index);
             setCollisionLayers(newLayers);
         }
+        setDeleteConfirm(null);
     };
 
     const handleStartEdit = (index: number, type: "render" | "collision") => {
@@ -206,11 +222,24 @@ const LayersTab = () => {
     };
 
     return (
-        <div className="p-4 space-y-6 h-full overflow-y-auto">
-            {renderLayerList("render", layers.renderLayers, Eye)}
-            <div className="border-t border-border-primary"></div>
-            {renderLayerList("collision", layers.collisionLayers, Shield)}
-        </div>
+        <>
+            <div className="p-4 space-y-6 h-full overflow-y-auto">
+                {renderLayerList("render", layers.renderLayers, Eye)}
+                <div className="border-t border-border-primary"></div>
+                {renderLayerList("collision", layers.collisionLayers, Shield)}
+            </div>
+
+            <ConfirmationDialog
+                isOpen={deleteConfirm !== null}
+                onClose={() => setDeleteConfirm(null)}
+                onConfirm={confirmRemoveLayer}
+                title="Delete Layer"
+                message={`Are you sure you want to delete the "${deleteConfirm?.layerName}" layer? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger"
+            />
+        </>
     );
 };
 

@@ -1,5 +1,6 @@
-import { Camera, GameSystem } from "angry-pixel";
+import { Camera, gamePreRenderSystem, GameSystem } from "angry-pixel";
 
+@gamePreRenderSystem()
 export class CameraZoomSystem extends GameSystem {
     private zoom: number = 1;
 

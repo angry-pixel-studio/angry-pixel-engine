@@ -1,6 +1,7 @@
 export { default as Vector2Field } from "./Vector2Field";
 export { default as Vector2ArrayField } from "./Vector2ArrayField";
 export { default as StringArrayField } from "./StringArrayField";
+export { default as PredefinedStringArrayField } from "./PredefinedStringArrayField";
 export { default as NumberField } from "./NumberField";
 export { default as StringField } from "./StringField";
 export { default as BooleanField } from "./BooleanField";
