@@ -46,14 +46,15 @@ export class TextRendererSystem implements System {
             textRenderer._renderData.layer = textRenderer.layer;
             textRenderer._renderData.font = textRenderer.font;
             textRenderer._renderData.fontSize = textRenderer.fontSize;
-            textRenderer._renderData.text = this.crop(textRenderer);
-            textRenderer._renderData.orientation = textRenderer.orientation;
+            textRenderer._renderData.text = textRenderer.text;
             textRenderer._renderData.color = textRenderer.color;
             textRenderer._renderData.lineHeight = textRenderer.lineHeight ?? textRenderer.fontSize;
             textRenderer._renderData.letterSpacing = textRenderer.letterSpacing;
             textRenderer._renderData.smooth = textRenderer.smooth;
             textRenderer._renderData.rotation = transform.localRotation + textRenderer.rotation;
             textRenderer._renderData.opacity = textRenderer.opacity;
+            textRenderer._renderData.boundingBox = { width: textRenderer.width, height: textRenderer.height };
+            textRenderer._renderData.alignment = textRenderer.alignment;
 
             const { charRanges, fontSize, spacing } = textRenderer.textureAtlas;
 
@@ -81,34 +82,5 @@ export class TextRendererSystem implements System {
             transform.localPosition.x + this.scaledOffset.magnitude * Math.cos(translatedAngle),
             transform.localPosition.y + this.scaledOffset.magnitude * Math.sin(translatedAngle),
         );
-    }
-
-    private crop({ fontSize, height, width, text, letterSpacing, lineHeight }: TextRenderer): string {
-        if (fontSize > height) return "";
-
-        const croppedText: string[] = [];
-        let croppedHeight = 0;
-
-        for (const line of text.split("\n")) {
-            const newLines = line.split(/(\s+)/).reduce(
-                (lines, word) => {
-                    const i = lines.length - 1;
-                    const currentLine = lines[i] + word;
-                    if (currentLine.length * (fontSize + letterSpacing) > width) lines.push(word);
-                    else lines[i] = currentLine;
-                    return lines;
-                },
-                [""],
-            );
-
-            for (const newLine of newLines) {
-                croppedHeight += lineHeight;
-                if (croppedHeight > height) return croppedText.join("\n");
-
-                croppedText.push(newLine);
-            }
-        }
-
-        return croppedText.join("\n");
     }
 }

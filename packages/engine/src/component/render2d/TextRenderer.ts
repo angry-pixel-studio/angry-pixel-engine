@@ -1,6 +1,6 @@
 import { Vector2 } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
-import { RenderDataType, TextOrientation, TextRenderData } from "@angry-pixel/webgl";
+import { RenderDataType, TextRenderData, TextAlignment } from "@angry-pixel/webgl";
 
 /**
  * @internal
@@ -25,7 +25,7 @@ export const defaultTextureAtlasOptions = {
  *   height: 32,
  *   opacity: 1,
  *   layer: "TextLayer",
- *   orientation: TextOrientation.RightCenter,
+ *   alignment: TextAlignment.Center,
  *   shadow: {
  *     color: "#00FF00",
  *     offset: new Vector2(3, -3),
@@ -70,8 +70,6 @@ export interface TextRendererOptions {
     offset: Vector2;
     /** Change the opacity between 1 and 0 */
     opacity: number;
-    /** Direction in which the text will be rendered. */
-    orientation: TextOrientation;
     /** Text rotation in radians */
     rotation: number;
     /** Smoothing pixels (not recommended for bitmap fonts) */
@@ -100,6 +98,8 @@ export interface TextRendererOptions {
     };
     /** The width of the invisible box where the text is rendered */
     width: number;
+    /** The alignment of the text */
+    alignment: TextAlignment;
 }
 
 /**
@@ -134,7 +134,7 @@ export interface TextRendererOptions {
  *   height: 32,
  *   opacity: 1,
  *   layer: "TextLayer",
- *   orientation: TextOrientation.RightCenter,
+ *   alignment: TextAlignment.Center,
  *   shadow: {
  *     color: "#00FF00",
  *     offset: new Vector2(3, -3),
@@ -179,8 +179,8 @@ export class TextRenderer {
     offset: Vector2 = new Vector2();
     /** Change the opacity between 1 and 0 */
     opacity: number = 1;
-    /** Direction in which the text will be rendered. */
-    orientation: TextOrientation = TextOrientation.Center;
+    /** Alignment of the text. */
+    alignment: TextAlignment = TextAlignment.Center;
     /** Text rotation in radians */
     rotation: number = 0;
     /** Shadow text configuration */
@@ -221,7 +221,6 @@ export class TextRenderer {
         letterSpacing: undefined,
         lineHeight: undefined,
         opacity: undefined,
-        orientation: undefined,
         position: new Vector2(),
         rotation: undefined,
         shadow: undefined,
@@ -229,6 +228,8 @@ export class TextRenderer {
         text: undefined,
         textureAtlas: { ...defaultTextureAtlasOptions },
         type: RenderDataType.Text,
+        boundingBox: { width: 0, height: 0 },
+        alignment: undefined,
     };
 
     /** @internal */

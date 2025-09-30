@@ -32,6 +32,7 @@ import { ResolveCollisionSystem } from "@system/physics2d/ResolveCollisionSystem
 import { ApplyRepositionSystem } from "@system/physics2d/ApplyRepositionSystem";
 import { UpdateCollidersAfterRepositionSystem } from "@system/physics2d/collider/UpdateCollidersAfterRepositionSystem";
 import { DebugMousePositionSystem } from "@system/debug/DebugMousePositionSystem";
+import { DebugTextRendererSystem } from "@system/debug/DebugTextRendererSystem";
 
 export type SystemsByGroup = Map<SystemGroup, { name: symbol; type: SystemType }[]>;
 
@@ -76,6 +77,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEM_SYMBOLS.TextRendererSystem, type: TextRendererSystem },
             { name: SYSTEM_SYMBOLS.VideoRendererSystem, type: VideoRendererSystem },
             { name: SYSTEM_SYMBOLS.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
+            { name: SYSTEM_SYMBOLS.DebugTextRendererSystem, type: DebugTextRendererSystem },
             { name: SYSTEM_SYMBOLS.DebugMousePositionSystem, type: DebugMousePositionSystem },
             { name: SYSTEM_SYMBOLS.CullingSystem, type: CullingSystem },
             { name: SYSTEM_SYMBOLS.ClearScreenSystem, type: ClearScreenSystem },

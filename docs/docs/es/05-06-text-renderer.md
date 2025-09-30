@@ -5,7 +5,7 @@ Admite tanto fuentes web estándar como fuentes importadas, aunque funciona de f
 Internamente, genera un _texture atlas_ que contiene todos los caracteres necesarios para el renderizado.  
 El atlas puede configurarse con rangos de caracteres personalizados, tamaños de fuente y espaciado.
 
-El texto puede personalizarse en cuanto a fuente, color, tamaño, orientación, sombras, espaciado entre letras, altura de línea, opacidad, suavizado y posición. Además, el texto puede rotarse, voltearse y asignarse a capas de renderizado específicas.
+El texto puede personalizarse en cuanto a fuente, color, tamaño, alineación, sombras, espaciado entre letras, altura de línea, opacidad, suavizado y posición. Además, el texto puede rotarse, voltearse y asignarse a capas de renderizado específicas.
 
 ### Propiedades
 
@@ -22,7 +22,7 @@ El texto puede personalizarse en cuanto a fuente, color, tamaño, orientación, 
 | `lineHeight`       | `number`                                                      | Altura de la línea en píxeles. Valor por defecto igual al tamaño de fuente. |
 | `offset`           | `Vector2`                                                     | Desplazamiento en los ejes X e Y respecto al centro de la entidad.          |
 | `opacity`          | `number`                                                      | Opacidad del texto (valor entre 0 y 1).                                     |
-| `orientation`      | `TextOrientation`                                             | Dirección en la que se renderizará el texto.                                |
+| `alignment`        | `TextAlignment`                                               | Alineación del texto dentro de su caja delimitadora.                        |
 | `rotation`         | `number`                                                      | Rotación del texto en radianes.                                             |
 | `smooth`           | `boolean`                                                     | Suavizado de píxeles (no recomendado para fuentes bitmap).                  |
 | `shadow`           | `{ color: string, offset: Vector2, opacity: number }`         | Configuración de sombra para el texto.                                      |
@@ -51,7 +51,7 @@ const textRenderer = new TextRenderer({
     height: 32,
     opacity: 1,
     layer: "TextLayer",
-    orientation: TextOrientation.RightCenter,
+    alignment: TextAlignment.Center,
     shadow: {
         color: "#00FF00",
         offset: new Vector2(3, -3),

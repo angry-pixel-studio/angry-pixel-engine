@@ -4,7 +4,7 @@ export { MaskRenderData, MaskShape } from "./renderer/MaskRenderer";
 export { CameraData, RenderDataType, RenderData } from "./renderer/Renderer";
 export { Light, DarknessRenderData } from "./renderer/DarknessRenderer";
 export { Slice, SpriteRenderData } from "./renderer/SpriteRenderer";
-export { TextOrientation, TextRenderData } from "./renderer/TextRenderer";
+export { TextRenderData, TextAlignment } from "./renderer/TextRenderer";
 export { TilemapOrientation, TilemapRenderData, Tilemap, Tileset } from "./renderer/TilemapRenderer";
 export { VideoRenderData } from "./renderer/VideoRenderer";
 export * from "./symbols";

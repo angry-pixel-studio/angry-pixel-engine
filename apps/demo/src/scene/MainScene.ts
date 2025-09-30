@@ -4,7 +4,7 @@ import {
     MaskShape,
     randomInt,
     Scene,
-    TextOrientation,
+    TextAlignment,
     TextRenderer,
     Transform,
     Vector2,
@@ -94,7 +94,7 @@ export class MainScene extends Scene {
     private setupUIText(): void {
         const instructionText = this.entityManager.createEntityFromArchetype(textArchetype);
         this.entityManager.updateComponentData(instructionText, Transform, (component) => {
-            component.position.set(-940, -450);
+            component.position.set(0, -450);
         });
         this.entityManager.updateComponentData(instructionText, TextRenderer, (component) => {
             component.text = "USE WASD TO MOVE AND SPACE BAR TO JUMP.";
@@ -102,7 +102,7 @@ export class MainScene extends Scene {
 
         const fpsText = this.entityManager.createEntityFromArchetype(textArchetype);
         this.entityManager.updateComponentData(fpsText, Transform, (component) => {
-            component.position.set(-940, -500);
+            component.position.set(0, -500);
         });
         this.entityManager.addComponent(fpsText, FpsMetter);
     }
@@ -126,7 +126,7 @@ export class MainScene extends Scene {
                 loop: true,
                 volume: 0.3,
                 action: "play",
-                layer: RENDER_LAYERS.Foreground,
+                layer: RENDER_LAYERS.Darkness,
                 width: 1920 / 9,
                 height: 1080 / 9,
             }),
@@ -145,20 +145,21 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([
             new Transform({ position: new Vector2(0, 0) }),
             new TextRenderer({
-                text: "Ranma ½: らんま½",
+                text: "Ranma½ らんま½",
                 color: "#FF0000",
                 fontSize: 64,
-                width: 1920,
+                width: 400,
                 height: 400,
                 opacity: 1,
                 layer: RENDER_LAYERS.UI,
                 font: "Arial",
-                orientation: TextOrientation.Center,
                 textureAtlas: {
                     charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
                     fontSize: 64,
                     spacing: 0,
                 },
+                letterSpacing: 0,
+                alignment: TextAlignment.Left,
             }),
         ]);
     }

@@ -19,7 +19,7 @@ export class CameraSystem implements System {
             if (!transform) throw new Error("Camera component needs a Transform");
 
             camera._renderData.position.copy(transform.localPosition);
-            camera._renderData.layers = camera.layers;
+            camera._renderData.layers = [...camera.layers];
             camera._renderData.depth = camera.depth;
             camera._renderData.zoom = camera.zoom;
 

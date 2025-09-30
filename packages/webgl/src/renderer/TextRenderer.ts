@@ -7,15 +7,14 @@ import { ProgramManager } from "../program/ProgramManager";
 import { hexToRgba, setProjectionMatrix } from "./utils";
 
 /**
- * Direction in which the text will be rendered.
+ * Alignment of the text.
  * @category Components Configuration
  * @public
  */
-export enum TextOrientation {
+export enum TextAlignment {
     Center,
-    RightUp,
-    RightDown,
-    RightCenter,
+    Right,
+    Left,
 }
 
 export interface TextRenderData extends RenderData {
@@ -27,7 +26,6 @@ export interface TextRenderData extends RenderData {
     lineHeight: number;
     letterSpacing: number;
     opacity: number;
-    orientation: TextOrientation;
     rotation: number;
     shadow?: {
         color: string;
@@ -41,6 +39,8 @@ export interface TextRenderData extends RenderData {
         fontSize: number;
         spacing: number;
     };
+    boundingBox: { width: number; height: number };
+    alignment: TextAlignment;
 }
 
 export class TextRenderer implements Renderer {
@@ -56,8 +56,6 @@ export class TextRenderer implements Renderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private textSize: Vector2 = new Vector2();
-    private modelPosition: Vector2 = new Vector2();
     private shadowPosition: Vector2 = new Vector2();
 
     constructor(
@@ -115,9 +113,8 @@ export class TextRenderer implements Renderer {
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        this.setPositionFromOrientation(renderData);
 
-        mat4.translate(this.modelMatrix, this.modelMatrix, [this.modelPosition.x, this.modelPosition.y, 0]);
+        mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
         mat4.scale(this.modelMatrix, this.modelMatrix, [
             renderData.fontSize * (renderData.flipHorizontally ? -1 : 1),
@@ -160,82 +157,126 @@ export class TextRenderer implements Renderer {
         return true;
     }
 
-    private generateTextVertices(
-        fontAtlas: FontAtlas,
-        { text, fontSize, letterSpacing, lineHeight }: TextRenderData,
-    ): void {
+    private generateTextVertices(fontAtlas: FontAtlas, renderData: TextRenderData): void {
         this.posVertices = [];
         this.texVertices = [];
 
-        let x = 0;
-        let y = 0;
+        const processedText = this.preProcessText(fontAtlas, renderData);
 
-        let maxWidth = 0;
+        const letterSpacing = renderData.letterSpacing / renderData.fontSize;
+        const lineHeight = renderData.lineHeight / renderData.fontSize;
+        const height = renderData.boundingBox.height / renderData.fontSize;
+        const width = renderData.boundingBox.width / renderData.fontSize;
 
-        letterSpacing /= fontSize;
-        lineHeight /= fontSize;
+        let y = height / 2;
 
-        for (let i = 0; i < text.length; i++) {
-            const letter = text[i];
+        for (const line of processedText) {
+            const { text, width: lineWidth } = line;
+            let x =
+                renderData.alignment === TextAlignment.Center
+                    ? -lineWidth / 2
+                    : renderData.alignment === TextAlignment.Left
+                      ? -width / 2
+                      : width / 2 - lineWidth;
 
-            if (letter === "\n") {
-                maxWidth = Math.max(maxWidth, x);
-                x = 0;
-                y -= lineHeight;
+            for (const letter of text) {
+                const glyph = fontAtlas.glyphs.get(letter);
+                if (glyph) {
+                    const letterWidth = glyph.width / fontAtlas.fontSize;
 
-                continue;
+                    // prettier-ignore
+                    this.posVertices.push(
+                        x, y - 1,
+                        x + letterWidth, y - 1,
+                        x, y,
+                        x, y,
+                        x + letterWidth, y - 1,
+                        x + letterWidth, y
+                    )
+
+                    const gx = (glyph.id % fontAtlas.gridSize) * (fontAtlas.fontSize + fontAtlas.spacing);
+                    const gy = ((glyph.id / fontAtlas.gridSize) | 0) * (fontAtlas.fontSize + fontAtlas.spacing);
+
+                    const u1 = gx / fontAtlas.canvas.width;
+                    const v1 = gy / fontAtlas.canvas.height;
+                    const u2 = (gx + glyph.width) / fontAtlas.canvas.width;
+                    const v2 = (gy + fontAtlas.fontSize) / fontAtlas.canvas.height;
+
+                    // prettier-ignore
+                    this.texVertices.push(
+                        u1, v2,
+                        u2, v2,
+                        u1, v1,
+                        u1, v1,
+                        u2, v2,
+                        u2, v1
+                    );
+
+                    x += letterWidth + letterSpacing;
+                }
             }
 
-            const glyph = fontAtlas.glyphs.get(letter);
+            x = -width / 2;
+            y -= lineHeight;
+        }
+    }
 
-            if (glyph) {
-                const letterWidth = glyph.width / fontAtlas.fontSize;
+    private preProcessText(
+        fontAtlas: FontAtlas,
+        { text, fontSize, letterSpacing, lineHeight, boundingBox: { width, height } }: TextRenderData,
+    ): { width: number; text: string }[] {
+        const result: { width: number; text: string }[] = [];
 
-                // prettier-ignore
-                this.posVertices.push(
-                    x, y - 1,
-                    x + letterWidth, y - 1,
-                    x, y,
-                    x, y,
-                    x + letterWidth, y - 1,
-                    x + letterWidth, y
-                )
+        // Normalize
+        letterSpacing /= fontSize;
+        lineHeight /= fontSize;
+        width /= fontSize;
+        height /= fontSize;
+        const spaceWidth = fontAtlas.glyphs.get(" ").width / fontAtlas.fontSize + letterSpacing;
 
-                const gx = (glyph.id % fontAtlas.gridSize) * (fontAtlas.fontSize + fontAtlas.spacing);
-                const gy = ((glyph.id / fontAtlas.gridSize) | 0) * (fontAtlas.fontSize + fontAtlas.spacing);
+        let currentHeight = 0;
 
-                const u1 = gx / fontAtlas.canvas.width;
-                const v1 = gy / fontAtlas.canvas.height;
-                const u2 = (gx + glyph.width) / fontAtlas.canvas.width;
-                const v2 = (gy + fontAtlas.fontSize) / fontAtlas.canvas.height;
+        const lines = text.split("\n");
 
-                // prettier-ignore
-                this.texVertices.push( 
-                    u1, v2,
-                    u2, v2,
-                    u1, v1,
-                    u1, v1,
-                    u2, v2,
-                    u2, v1
-                );
+        for (const line of lines) {
+            let newLine: string[] = [];
+            let lineWidth = 0;
+            currentHeight += lineHeight;
 
-                x += letterWidth + letterSpacing;
+            const words = line.split(" ");
+            for (const word of words) {
+                if (currentHeight > height) return result;
+
+                let wordWidth = 0;
+                for (const letter of word) {
+                    const glyph = fontAtlas.glyphs.get(letter);
+                    if (glyph) wordWidth += glyph.width / fontAtlas.fontSize + letterSpacing;
+                }
+                wordWidth -= letterSpacing;
+
+                if (lineWidth + wordWidth === width) {
+                    lineWidth += wordWidth;
+                    newLine.push(word);
+                    result.push({ width: lineWidth, text: newLine.join(" ") });
+                    newLine = [];
+                    lineWidth = 0;
+                    currentHeight += lineHeight;
+                } else if (lineWidth + wordWidth > width) {
+                    result.push({ width: lineWidth, text: newLine.join(" ") });
+                    newLine = [word];
+                    lineWidth = wordWidth + spaceWidth;
+                    currentHeight += lineHeight;
+                } else {
+                    lineWidth += wordWidth + spaceWidth;
+                    newLine.push(word);
+                }
+            }
+
+            if (newLine.length > 0) {
+                result.push({ width: lineWidth, text: newLine.join(" ") });
             }
         }
 
-        this.textSize.set(Math.max(maxWidth, x) * fontSize, Math.abs(y - 1) * fontSize);
-    }
-
-    private setPositionFromOrientation(renderData: TextRenderData): void {
-        this.modelPosition.set(
-            renderData.position.x + (renderData.orientation === TextOrientation.Center ? -this.textSize.x / 2 : 0),
-            renderData.position.y +
-                (renderData.orientation === TextOrientation.Center ||
-                renderData.orientation === TextOrientation.RightCenter
-                    ? this.textSize.y / 2
-                    : renderData.orientation === TextOrientation.RightUp
-                      ? this.textSize.y
-                      : 0),
-        );
+        return result;
     }
 }
