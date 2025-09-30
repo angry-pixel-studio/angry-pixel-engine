@@ -113,7 +113,6 @@ export class TextRenderer implements Renderer {
         }
 
         this.modelMatrix = mat4.identity(this.modelMatrix);
-        // this.setPositionFromOrientation(renderData);
 
         mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
         mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
@@ -229,11 +228,11 @@ export class TextRenderer implements Renderer {
         const result: { width: number; text: string }[] = [];
 
         // Normalize
-        const spaceWidth = fontAtlas.glyphs.get(" ").width / fontAtlas.fontSize + letterSpacing;
         letterSpacing /= fontSize;
         lineHeight /= fontSize;
         width /= fontSize;
         height /= fontSize;
+        const spaceWidth = fontAtlas.glyphs.get(" ").width / fontAtlas.fontSize + letterSpacing;
 
         let currentHeight = 0;
 
@@ -253,6 +252,7 @@ export class TextRenderer implements Renderer {
                     const glyph = fontAtlas.glyphs.get(letter);
                     if (glyph) wordWidth += glyph.width / fontAtlas.fontSize + letterSpacing;
                 }
+                wordWidth -= letterSpacing;
 
                 if (lineWidth + wordWidth === width) {
                     lineWidth += wordWidth;

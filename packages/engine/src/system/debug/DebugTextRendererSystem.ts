@@ -21,27 +21,29 @@ export class DebugTextRendererSystem implements System {
     public onUpdate(): void {
         if (!this.gameConfig.debug?.textRendererBoundingBoxes) return;
 
-        this.entityManager.search(TextRenderer).forEach(({ entity, component: { width, height, rotation, layer } }) => {
-            const transform = this.entityManager.getComponent(entity, Transform);
-            if (!transform) return;
+        this.entityManager
+            .search(TextRenderer)
+            .forEach(({ entity, component: { width, height, rotation, layer, offset } }) => {
+                const transform = this.entityManager.getComponent(entity, Transform);
+                if (!transform) return;
 
-            const renderData: GeometricRenderData = {
-                type: RenderDataType.Geometric,
-                shape: GeometricShape.Polygon,
-                position: transform.localPosition.clone(),
-                layer,
-                color: this.gameConfig.debug.textBoxColor,
-                radius: undefined,
-                rotation: rotation + transform.localRotation,
-                vertexModel: [
-                    new Vector2(-width / 2, -height / 2),
-                    new Vector2(-width / 2, height / 2),
-                    new Vector2(width / 2, height / 2),
-                    new Vector2(width / 2, -height / 2),
-                ],
-            };
+                const renderData: GeometricRenderData = {
+                    type: RenderDataType.Geometric,
+                    shape: GeometricShape.Polygon,
+                    position: Vector2.add(new Vector2(), transform.localPosition, offset),
+                    layer,
+                    color: this.gameConfig.debug.textBoxColor,
+                    radius: undefined,
+                    rotation: rotation + transform.localRotation,
+                    vertexModel: [
+                        new Vector2(-width / 2, -height / 2),
+                        new Vector2(-width / 2, height / 2),
+                        new Vector2(width / 2, height / 2),
+                        new Vector2(width / 2, -height / 2),
+                    ],
+                };
 
-            this.renderManager.addRenderData(renderData);
-        });
+                this.renderManager.addRenderData(renderData);
+            });
     }
 }

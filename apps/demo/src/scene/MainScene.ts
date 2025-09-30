@@ -145,10 +145,10 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([
             new Transform({ position: new Vector2(0, 0) }),
             new TextRenderer({
-                text: "Ranma ½: らんま½",
+                text: "Ranma½ らんま½",
                 color: "#FF0000",
                 fontSize: 64,
-                width: 1920,
+                width: 400,
                 height: 400,
                 opacity: 1,
                 layer: RENDER_LAYERS.UI,
@@ -158,6 +158,8 @@ export class MainScene extends Scene {
                     fontSize: 64,
                     spacing: 0,
                 },
+                letterSpacing: 0,
+                alignment: TextAlignment.Left,
             }),
         ]);
     }
