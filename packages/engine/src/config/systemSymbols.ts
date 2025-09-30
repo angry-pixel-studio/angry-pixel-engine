@@ -35,4 +35,5 @@ export const SYSTEM_SYMBOLS = {
     // debug
     DebugColliderRenderSystem: Symbol.for("DebugColliderRenderSystem"),
     DebugMousePositionSystem: Symbol.for("DebugMousePositionSystem"),
+    DebugTextRendererSystem: Symbol.for("DebugTextRendererSystem"),
 };
