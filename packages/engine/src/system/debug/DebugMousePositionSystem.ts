@@ -35,10 +35,11 @@ export class DebugMousePositionSystem implements System {
 
         this.entityManager
             .search(Camera, (camera) => camera.debug)
-            .forEach(({ entity, component: camera }, index) => {
+            .forEach(({ entity, component: camera }) => {
                 const { zoom } = camera;
                 const cameraPosition = this.entityManager.getComponent(entity, Transform).position;
-                const renderData = this.renderDataPerCamera.get(index) ?? createRenderData();
+                if (!this.renderDataPerCamera.has(entity)) this.renderDataPerCamera.set(entity, createRenderData());
+                const renderData = this.renderDataPerCamera.get(entity);
 
                 Vector2.floor(
                     this.positionInWorldspace,
@@ -59,6 +60,7 @@ export class DebugMousePositionSystem implements System {
                 renderData.color = this.gameConfig.debug.textColor;
                 renderData.text = `mouse_position: canvas_viewport=${this.positionInViewport}, camera_viewport=${this.positionInCameraViewport}, world_space=${this.positionInWorldspace}`;
                 renderData.fontSize = defaultFontSize / zoom;
+                renderData.lineHeight = renderData.fontSize;
                 renderData.shadow.offset.x = 2 / zoom;
                 renderData.shadow.offset.y = -2 / zoom;
                 renderData.boundingBox = { width: this.canvas.width / zoom, height: renderData.fontSize };
@@ -86,6 +88,7 @@ export class DebugMousePositionSystem implements System {
             case "bottom-right":
                 renderData.alignment = TextAlignment.Right;
                 renderData.position.y = cameraPosition.y - (this.canvas.height / 2 - defaultFontSize) / zoom;
+                break;
         }
     }
 }
