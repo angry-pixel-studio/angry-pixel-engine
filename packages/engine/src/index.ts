@@ -83,4 +83,4 @@ export {
     Polygon,
     Shape,
 } from "@angry-pixel/collisions";
-export { MaskShape, Slice, TextOrientation, TilemapOrientation } from "@angry-pixel/webgl";
+export { MaskShape, Slice, TilemapOrientation, TextAlignment } from "@angry-pixel/webgl";

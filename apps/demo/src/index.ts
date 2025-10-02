@@ -22,6 +22,7 @@ export const createAndStart = () => {
             mousePosition: debug,
             textPosition: "top-left",
             colliders: debug,
+            textRendererBoundingBoxes: debug,
         },
     });
 

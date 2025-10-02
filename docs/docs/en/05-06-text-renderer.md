@@ -5,7 +5,7 @@ It supports both web-safe and imported fonts but works optimally with bitmap fon
 Under the hood, it generates a _texture atlas_ containing all the characters needed for rendering.  
 The atlas can be configured with custom character ranges, font sizes, and spacing.
 
-Text can be customized with font family, color, size, orientation, shadows, letter spacing, line height, opacity, smoothing, and positioning. The text can also be rotated, flipped, and assigned to specific render layers.
+Text can be customized with font family, color, size, alignment, shadows, letter spacing, line height, opacity, smoothing, and positioning. The text can also be rotated, flipped, and assigned to specific render layers.
 
 ### Properties
 
@@ -22,7 +22,7 @@ Text can be customized with font family, color, size, orientation, shadows, lett
 | `lineHeight`       | `number`                                                      | Line height in pixels. Default value equals the font size.    |
 | `offset`           | `Vector2`                                                     | Offset on the X and Y axes relative to the entity’s center.   |
 | `opacity`          | `number`                                                      | Text opacity (value between 0 and 1).                         |
-| `orientation`      | `TextOrientation`                                             | Direction in which the text will be rendered.                 |
+| `alignment`        | `TextAlignment`                                               | Alignment of the text within its bounding box.                |
 | `rotation`         | `number`                                                      | Text rotation in radians.                                     |
 | `smooth`           | `boolean`                                                     | Pixel smoothing (not recommended for bitmap fonts).           |
 | `shadow`           | `{ color: string, offset: Vector2, opacity: number }`         | Text shadow configuration.                                    |
@@ -51,7 +51,7 @@ const textRenderer = new TextRenderer({
     height: 32,
     opacity: 1,
     layer: "TextLayer",
-    orientation: TextOrientation.RightCenter,
+    alignment: TextAlignment.Center,
     shadow: {
         color: "#00FF00",
         offset: new Vector2(3, -3),

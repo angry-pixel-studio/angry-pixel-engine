@@ -871,8 +871,9 @@ export class EntityManager {
 
     private getComponentTypeId<T extends Component>(component: ComponentType<T> | T): number {
         const prototype = typeof component === "object" ? component.constructor.prototype : component.prototype;
-        if (prototype.__ecs_type_id === undefined)
+        if (prototype.__ecs_type_id === undefined) {
             prototype.__ecs_type_id = Number(`${++this.lastComponentTypeId}${(performance.now() * 1e5).toFixed(0)}`);
+        }
         return prototype.__ecs_type_id;
     }
 }
