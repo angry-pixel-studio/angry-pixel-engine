@@ -38,6 +38,7 @@ export interface AnimatorOptions {
     animation: string;
     speed: number;
     playing: boolean;
+    ignoreTimeScale: boolean;
 }
 
 /**
@@ -89,6 +90,8 @@ export class Animator {
     currentFrame: number = 0;
     /** The current time of the animation. */
     currentTime: number = 0;
+    /** TRUE If the animation should ignore the time scale, FALSE otherwise. */
+    ignoreTimeScale: boolean = false;
     /**  @internal */
     _currentAnimation: string = undefined;
     /**  @internal */

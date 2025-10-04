@@ -28,15 +28,16 @@ El componente `Animator` administra múltiples animaciones y permite cambiar ent
 
 #### Propiedades
 
-| Propiedad      | Tipo                     | Descripción                                                               |
-| -------------- | ------------------------ | ------------------------------------------------------------------------- |
-| `animations`   | `Map<string, Animation>` | Mapa de animaciones donde cada clave es un nombre de animación.           |
-| `animation`    | `string`                 | Nombre de la animación actualmente seleccionada.                          |
-| `speed`        | `number`                 | Multiplicador de velocidad de reproducción (por defecto `1`).             |
-| `reset`        | `boolean`                | Si es `true`, reinicia la animación al primer cuadro en el próximo ciclo. |
-| `playing`      | `boolean`                | `true` si la animación está reproduciéndose.                              |
-| `currentFrame` | `number`                 | Cuadro actual (solo lectura).                                             |
-| `currentTime`  | `number`                 | Tiempo acumulado de reproducción (solo lectura).                          |
+| Propiedad         | Tipo                     | Descripción                                                                 |
+| ----------------- | ------------------------ | --------------------------------------------------------------------------- |
+| `animations`      | `Map<string, Animation>` | Mapa de animaciones donde cada clave es un nombre de animación.             |
+| `animation`       | `string`                 | Nombre de la animación actualmente seleccionada.                            |
+| `speed`           | `number`                 | Multiplicador de velocidad de reproducción (por defecto `1`).               |
+| `reset`           | `boolean`                | Si es `true`, reinicia la animación al primer cuadro en el próximo ciclo.   |
+| `playing`         | `boolean`                | `true` si la animación está reproduciéndose.                                |
+| `currentFrame`    | `number`                 | Cuadro actual (solo lectura).                                               |
+| `currentTime`     | `number`                 | Tiempo acumulado de reproducción (solo lectura).                            |
+| `ignoreTimeScale` | `boolean`                | Si es `true`, la animación no se verá afectada por `TimeManager.timeScale`. |
 
 ---
 

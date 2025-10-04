@@ -28,15 +28,16 @@ The `Animator` component manages multiple animations and allows switching betwee
 
 #### Properties
 
-| Property       | Type                     | Description                                                               |
-| -------------- | ------------------------ | ------------------------------------------------------------------------- |
-| `animations`   | `Map<string, Animation>` | A map of animations where each key is the name of the animation.          |
-| `animation`    | `string`                 | The name of the currently selected animation.                             |
-| `speed`        | `number`                 | Playback speed multiplier (default is `1`).                               |
-| `reset`        | `boolean`                | If `true`, the animation will reset to the first frame on the next cycle. |
-| `playing`      | `boolean`                | `true` if the animation is currently playing.                             |
-| `currentFrame` | `number`                 | The current frame (read-only).                                            |
-| `currentTime`  | `number`                 | The accumulated playback time (read-only).                                |
+| Property          | Type                     | Description                                                               |
+| ----------------- | ------------------------ | ------------------------------------------------------------------------- |
+| `animations`      | `Map<string, Animation>` | A map of animations where each key is the name of the animation.          |
+| `animation`       | `string`                 | The name of the currently selected animation.                             |
+| `speed`           | `number`                 | Playback speed multiplier (default is `1`).                               |
+| `reset`           | `boolean`                | If `true`, the animation will reset to the first frame on the next cycle. |
+| `playing`         | `boolean`                | `true` if the animation is currently playing.                             |
+| `currentFrame`    | `number`                 | The current frame (read-only).                                            |
+| `currentTime`     | `number`                 | The accumulated playback time (read-only).                                |
+| `ignoreTimeScale` | `boolean`                | If `true`, the animation won't be affected by `TimeManager.timeScale`     |
 
 ---
 
