@@ -158,6 +158,7 @@ export class TimeManager {
         return this.browserDeltaTime * this.timeScale;
     }
 
+    /** The render delta time unaffected by time scale. */
     public get unscaledRenderDeltaTime(): number {
         return this.browserDeltaTime;
     }
