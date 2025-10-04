@@ -90,15 +90,14 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
             />
 
             <ListField
-                propertyName="Orientation"
-                value={component.data?.orientation}
-                onUpdate={handleUpdate("orientation")}
+                propertyName="Alignment"
+                value={component.data?.alignment}
+                onUpdate={handleUpdate("alignment")}
                 options={{
                     items: [
                         { value: 0, label: "Center" },
-                        { value: 1, label: "Right Center" },
-                        { value: 2, label: "Right Up" },
-                        { value: 3, label: "Right Down" },
+                        { value: 1, label: "Right" },
+                        { value: 2, label: "Left" },
                     ],
                     castValue: (value: string) => value !== undefined && Number(value),
                 }}
