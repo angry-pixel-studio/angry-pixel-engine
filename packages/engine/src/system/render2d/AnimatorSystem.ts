@@ -89,7 +89,9 @@ export class AnimatorSystem implements System {
             }
         }
 
-        animator.currentTime += this.timeManager.renderDeltaTime * animator.speed;
+        animator.currentTime +=
+            (animator.ignoreTimeScale ? this.timeManager.unscaledRenderDeltaTime : this.timeManager.renderDeltaTime) *
+            animator.speed;
     }
 
     private renderSprite(animator: Animator, spriteRenderer: SpriteRenderer): void {

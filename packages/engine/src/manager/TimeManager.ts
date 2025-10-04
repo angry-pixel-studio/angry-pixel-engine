@@ -158,6 +158,10 @@ export class TimeManager {
         return this.browserDeltaTime * this.timeScale;
     }
 
+    public get unscaledRenderDeltaTime(): number {
+        return this.browserDeltaTime;
+    }
+
     constructor(
         @inject(SYMBOLS.GameConfig) { physicsFramerate }: GameConfig,
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
