@@ -161,6 +161,7 @@ export class TextRenderer implements Renderer {
         this.posVertices = [];
         this.texVertices = [];
 
+        // TODO: cache this
         const processedText = this.preProcessText(fontAtlas, renderData);
 
         const letterSpacing = renderData.letterSpacing / renderData.fontSize;
@@ -246,6 +247,7 @@ export class TextRenderer implements Renderer {
             const words = line.split(" ");
             for (const word of words) {
                 if (currentHeight > height) return result;
+                const firstWord = newLine.length === 0;
 
                 let wordWidth = 0;
                 for (const letter of word) {
@@ -253,21 +255,24 @@ export class TextRenderer implements Renderer {
                     if (glyph) wordWidth += glyph.width / fontAtlas.fontSize + letterSpacing;
                 }
                 wordWidth -= letterSpacing;
+                if (!firstWord) wordWidth += spaceWidth;
 
-                if (lineWidth + wordWidth === width) {
-                    lineWidth += wordWidth;
+                if (firstWord && wordWidth >= width) {
+                    result.push({ width: wordWidth, text: word });
+                    currentHeight += lineHeight;
+                } else if (lineWidth + wordWidth === width) {
                     newLine.push(word);
-                    result.push({ width: lineWidth, text: newLine.join(" ") });
+                    result.push({ width: lineWidth + wordWidth, text: newLine.join(" ") });
                     newLine = [];
                     lineWidth = 0;
                     currentHeight += lineHeight;
                 } else if (lineWidth + wordWidth > width) {
                     result.push({ width: lineWidth, text: newLine.join(" ") });
                     newLine = [word];
-                    lineWidth = wordWidth + spaceWidth;
+                    lineWidth = wordWidth - spaceWidth;
                     currentHeight += lineHeight;
                 } else {
-                    lineWidth += wordWidth + spaceWidth;
+                    lineWidth += wordWidth;
                     newLine.push(word);
                 }
             }

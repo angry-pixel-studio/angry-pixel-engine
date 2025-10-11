@@ -5,13 +5,7 @@ import { Archetype, Camera, defaultRenderLayer, DarknessRenderer, Transform } fr
 export const mainCameraArchetype: Archetype = {
     components: [
         new Camera({
-            layers: [
-                RENDER_LAYERS.Foreground,
-                RENDER_LAYERS.Goblin,
-                RENDER_LAYERS.Ninja,
-                RENDER_LAYERS.Darkness,
-                defaultRenderLayer,
-            ],
+            layers: [RENDER_LAYERS.Foreground, RENDER_LAYERS.Goblin, RENDER_LAYERS.Ninja, RENDER_LAYERS.Darkness],
             zoom: 4,
             debug: true,
         }),
@@ -32,6 +26,7 @@ export const uiCameraArchetype: Archetype = {
         new Camera({
             depth: 1,
             layers: [RENDER_LAYERS.UI],
+            debug: false,
         }),
         new Transform(),
     ],
