@@ -49,7 +49,7 @@ interface EditorActions {
     toggleComponentCollapsed: (componentId: string) => void;
     setComponentEnabled: (componentId: string, enabled: boolean) => void;
     updateComponentProperty: (componentId: string, propertyName: string, value: unknown) => void;
-    addComponent: (componentName: BuiltInComponent) => void;
+    addComponent: (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => void;
 
     // Panel size management
     setPanelSize: (panel: keyof EditorState["panelSizes"], size: number) => void;
@@ -153,14 +153,14 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                 });
             },
 
-            addComponent: (componentName: BuiltInComponent) => {
+            addComponent: (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => {
                 set((state) => {
                     const sceneStore = useSceneStore.getState();
                     const component = {
                         enabled: true,
                         id: uuid(),
                         name: componentName,
-                        data: {},
+                        data: defaultValues ?? {},
                         builtIn: true,
                     };
                     if (state.selectedEntityId) {

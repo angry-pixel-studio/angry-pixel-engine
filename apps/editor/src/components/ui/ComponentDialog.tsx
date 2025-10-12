@@ -19,11 +19,12 @@ import {
     Grid2X2,
 } from "lucide-react";
 import { BuiltInComponent } from "../../types/component";
+import { defaultValues } from "../../utils/builtInComponent/defaultValues";
 
 interface ComponentDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelect: (componentName: BuiltInComponent) => void;
+    onSelect: (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => void;
 }
 
 const ComponentDialog: React.FC<ComponentDialogProps> = ({ isOpen, onClose, onSelect }) => {
@@ -112,7 +113,7 @@ const ComponentDialog: React.FC<ComponentDialogProps> = ({ isOpen, onClose, onSe
     const builtInComponents = Object.values(BuiltInComponent);
 
     const handleComponentSelect = (componentName: BuiltInComponent) => {
-        onSelect(componentName);
+        onSelect(componentName, defaultValues[componentName] as Record<string, unknown>);
         onClose();
     };
 

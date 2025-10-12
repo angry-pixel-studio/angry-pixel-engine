@@ -8,6 +8,9 @@ import NumberField from "../propertyField/NumberField";
 import ListField from "../propertyField/ListField";
 import Vector2Field from "../propertyField/Vector2Field";
 import BooleanField from "../propertyField/BooleanField";
+import TextShadowField from "../propertyField/TextShadowField";
+import { BuiltInComponent } from "../../../types/component";
+import { defaultValues, TextRendererDefaultValues } from "../../../utils/builtInComponent/defaultValues";
 
 interface TextRendererProps {
     component: EntityComponent;
@@ -15,6 +18,7 @@ interface TextRendererProps {
 
 const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
     const { updateComponentProperty, layers } = useEditor();
+    const defaultValue = defaultValues[BuiltInComponent.TextRenderer] as TextRendererDefaultValues;
 
     const handleUpdate = (propertyName: string) => (newValue: unknown) => {
         updateComponentProperty(component.id, propertyName, newValue);
@@ -26,7 +30,7 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 propertyName="Layer"
                 value={component.data?.layer}
                 onUpdate={handleUpdate("layer")}
-                defaultValue="Default"
+                defaultValue={defaultValue.layer}
                 options={{
                     items: [
                         { value: "Default", label: "Default" },
@@ -35,33 +39,33 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 }}
             />
 
+            <FontField
+                propertyName="Font"
+                value={component.data?.font}
+                onUpdate={handleUpdate("font")}
+                defaultValue={defaultValue.font as string}
+            />
+
             <TextField
                 propertyName="Text"
                 value={component.data?.text}
                 onUpdate={handleUpdate("text")}
-                defaultValue="Hello World!"
+                defaultValue={defaultValue.text}
             />
 
             <ColorField
                 propertyName="Color"
                 value={component.data?.color}
                 onUpdate={handleUpdate("color")}
-                defaultValue="#000000"
+                defaultValue={defaultValue.color}
                 allowClear={false}
-            />
-
-            <FontField
-                propertyName="Font"
-                value={component.data?.font}
-                onUpdate={handleUpdate("font")}
-                defaultValue="Arial"
             />
 
             <NumberField
                 propertyName="Font Size"
                 value={component.data?.fontSize}
                 onUpdate={handleUpdate("fontSize")}
-                defaultValue={16}
+                defaultValue={defaultValue.fontSize}
                 options={{ min: 1 }}
             />
 
@@ -69,7 +73,7 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 propertyName="Width"
                 value={component.data?.width}
                 onUpdate={handleUpdate("width")}
-                defaultValue={192}
+                defaultValue={defaultValue.width}
                 options={{ min: 0 }}
             />
 
@@ -77,7 +81,7 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 propertyName="Height"
                 value={component.data?.height}
                 onUpdate={handleUpdate("height")}
-                defaultValue={16}
+                defaultValue={defaultValue.height}
                 options={{ min: 0 }}
             />
 
@@ -85,7 +89,7 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 propertyName="Opacity"
                 value={component.data?.opacity}
                 onUpdate={handleUpdate("opacity")}
-                defaultValue={1}
+                defaultValue={defaultValue.opacity}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
 
@@ -101,14 +105,14 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                     ],
                     castValue: (value: string) => value !== undefined && Number(value),
                 }}
-                defaultValue={0}
+                defaultValue={defaultValue.alignment}
             />
 
             <NumberField
                 propertyName="Rotation"
                 value={component.data?.rotation}
                 onUpdate={handleUpdate("rotation")}
-                defaultValue={0}
+                defaultValue={defaultValue.rotation}
                 options={{ min: -2 * Math.PI, max: 2 * Math.PI, step: 0.03 }}
             />
 
@@ -116,35 +120,35 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 propertyName="Offset"
                 value={component.data?.offset}
                 onUpdate={handleUpdate("offset")}
-                defaultValue={{ x: 0, y: 0 }}
+                defaultValue={defaultValue.offset}
             />
 
             <BooleanField
                 propertyName="Flip Horizontally"
                 value={component.data?.flipHorizontally}
                 onUpdate={handleUpdate("flipHorizontally")}
-                defaultValue={false}
+                defaultValue={defaultValue.flipHorizontally}
             />
 
             <BooleanField
                 propertyName="Flip Vertically"
                 value={component.data?.flipVertically}
                 onUpdate={handleUpdate("flipVertically")}
-                defaultValue={false}
+                defaultValue={defaultValue.flipVertically}
             />
 
             <BooleanField
                 propertyName="Smooth"
                 value={component.data?.smooth}
                 onUpdate={handleUpdate("smooth")}
-                defaultValue={false}
+                defaultValue={defaultValue.smooth}
             />
 
             <NumberField
                 propertyName="Letter Spacing"
                 value={component.data?.letterSpacing}
                 onUpdate={handleUpdate("letterSpacing")}
-                defaultValue={0}
+                defaultValue={defaultValue.letterSpacing}
             />
 
             <NumberField
@@ -152,6 +156,14 @@ const TextRenderer: React.FC<TextRendererProps> = ({ component }) => {
                 value={component.data?.lineHeight}
                 onUpdate={handleUpdate("lineHeight")}
                 options={{ min: 0 }}
+                defaultValue={defaultValue.lineHeight ?? 0}
+            />
+
+            <TextShadowField
+                propertyName="Shadow"
+                value={component.data?.shadow}
+                onUpdate={handleUpdate("shadow")}
+                defaultValue={defaultValue.shadow}
             />
         </>
     );

@@ -29,15 +29,10 @@ const FontField = ({ propertyName, value, onUpdate, defaultValue }: FontFieldPro
                 ))}
                 <option value="Arial">Arial</option>
                 <option value="Arial Black">Arial Black</option>
-                <option value="Comic Sans MS">Comic Sans MS</option>
                 <option value="Courier New">Courier New</option>
+                <option value="Garamond">Garamond</option>
                 <option value="Georgia">Georgia</option>
-                <option value="Helvetica">Helvetica</option>
                 <option value="Impact">Impact</option>
-                <option value="Lucida Console">Lucida Console</option>
-                <option value="Luminari">Luminari</option>
-                <option value="Optima">Optima</option>
-                <option value="Papyrus">Papyrus</option>
                 <option value="Tahoma">Tahoma</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Trebuchet MS">Trebuchet MS</option>

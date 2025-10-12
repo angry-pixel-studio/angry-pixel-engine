@@ -14,6 +14,11 @@ const SceneEditor = () => {
                 width: 1920,
                 height: 1080,
                 canvasColor: "#334155",
+                debug: {
+                    colliders: true,
+                    mousePosition: false,
+                    textRendererBoundingBoxes: true,
+                },
             });
             gameRef.current.addDependencyInstance(useSceneStore, "useSceneStore");
             gameRef.current.start();

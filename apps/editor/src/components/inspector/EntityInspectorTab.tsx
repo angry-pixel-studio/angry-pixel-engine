@@ -15,8 +15,8 @@ const EntityInspectorTab = () => {
         setIsComponentDialogOpen(true);
     };
 
-    const handleComponentSelect = (componentName: BuiltInComponent) => {
-        addComponent(componentName);
+    const handleComponentSelect = (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => {
+        addComponent(componentName, defaultValues);
         setIsComponentDialogOpen(false);
     };
 

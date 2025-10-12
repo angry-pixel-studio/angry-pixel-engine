@@ -47,7 +47,7 @@ const BuiltInComponentFactory: React.FC<BuiltInComponentFactoryProps> = ({ compo
             return <DarknessRenderer component={component} />;
 
         default:
-            // Fallback for unknown component types
+            // TODO: remove when all components are implemented
             console.warn(`Unknown built-in component: ${componentName}`);
             return (
                 <div className="p-2 text-sm text-text-secondary bg-surface-secondary rounded">

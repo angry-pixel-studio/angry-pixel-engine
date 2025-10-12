@@ -9,7 +9,6 @@ import {
     LightRenderer,
     MaskRenderer,
     PolygonCollider,
-    Slice,
     SpriteRenderer,
     TextRenderer,
     TilemapCollider,
