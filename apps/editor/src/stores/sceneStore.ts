@@ -11,6 +11,7 @@ import {
     EntityWithParent,
     Asset,
     AssetType,
+    EntityWithComponents,
 } from "../types/scene";
 import { exampleScene } from "../data/example-scene";
 
@@ -42,8 +43,12 @@ export interface SceneState {
     componentUpdated?: [string, string];
 
     // Scene actions
-    updateEntity: (entityId: string, updates: Partial<Entity>) => void;
     updateScene: (updates: Partial<Scene>) => void;
+
+    // Entity actions
+    addEntity: (entity: EntityWithComponents) => void;
+    updateEntity: (entityId: string, updates: Partial<Entity>) => void;
+    deleteEntity: (entityId: string) => void;
 
     // Component actions
     addComponent: (entityId: string, component: EntityComponent) => void;
@@ -129,6 +134,21 @@ export const useSceneStore = create<SceneState>()(
                     });
                 },
 
+                addEntity: (entity) => {
+                    set((state) => {
+                        state.entitiesMap.set(entity.id, {
+                            id: entity.id,
+                            name: entity.name,
+                            enabled: entity.enabled,
+                            parent: null,
+                            level: 0,
+                        });
+                        state.action = SceneStateAction.EntityCreated;
+                        state.entityUpdated = entity.id;
+                        state.componentsMap.set(entity.id, entity.components);
+                    });
+                },
+
                 updateEntity: (entityId, updates) => {
                     set((state) => {
                         const entity = state.entitiesMap.get(entityId);
@@ -136,6 +156,15 @@ export const useSceneStore = create<SceneState>()(
 
                         state.action = SceneStateAction.EntityUpdated;
                         state.entityUpdated = entityId;
+                    });
+                },
+
+                deleteEntity: (entityId) => {
+                    set((state) => {
+                        state.entitiesMap.delete(entityId);
+                        state.action = SceneStateAction.EntityDeleted;
+                        state.entityUpdated = entityId;
+                        state.componentsMap.delete(entityId);
                     });
                 },
 

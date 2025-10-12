@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { ChevronRight, ChevronDown, Box } from "lucide-react";
+import { ChevronRight, ChevronDown, Box, Copy, Trash2, Plus, FileBox } from "lucide-react";
 import Icon from "../ui/Icon";
 import { useEditor } from "../../hooks/useEditor";
+import { useContextMenu } from "../../hooks/useContextMenu";
 import { EntityWithChildren } from "../../types/scene";
+import { ContextMenuItem } from "../../types/contextMenu";
+import { v4 as uuid } from "uuid";
 
 const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; level?: number }) => {
-    const { selectedEntity, selectEntity } = useEditor();
+    const { selectedEntity, selectEntity, deleteEntity } = useEditor();
+    const { showContextMenu } = useContextMenu();
     const [isExpanded, setIsExpanded] = useState(false);
     const hasChildren = entity.children && entity.children.length > 0;
     const isSelected = selectedEntity?.id === entity.id;
@@ -20,6 +24,56 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
         selectEntity(entity);
     };
 
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        selectEntity(entity);
+
+        const contextMenuItems: ContextMenuItem[] = [
+            {
+                id: "duplicate",
+                label: "Duplicate",
+                icon: <Icon icon={Copy} size="sm" />,
+                onClick: () => {},
+            },
+            {
+                id: "separator1",
+                separator: true,
+            },
+            {
+                id: "add-child",
+                label: "Add Child",
+                icon: <Icon icon={Plus} size="sm" />,
+                onClick: () => {},
+            },
+            {
+                id: "separator2",
+                separator: true,
+            },
+            {
+                id: "create-archetype",
+                label: "Create Archetype",
+                icon: <Icon icon={FileBox} size="sm" />,
+                onClick: () => {},
+            },
+            {
+                id: "separator3",
+                separator: true,
+            },
+            {
+                id: "delete",
+                label: "Delete",
+                icon: <Icon icon={Trash2} size="sm" />,
+                onClick: () => {
+                    deleteEntity(entity.id);
+                },
+            },
+        ];
+
+        showContextMenu(contextMenuItems, { x: e.clientX, y: e.clientY });
+    };
+
     return (
         <div className="w-full">
             <div
@@ -27,6 +81,8 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
                     isSelected ? "bg-primary-100 text-primary-700" : ""
                 } ${!entity.enabled ? "opacity-50 text-text-tertiary" : ""}`}
                 style={{ paddingLeft: `${level * 16 + 8}px` }}
+                onContextMenu={handleContextMenu}
+                onClick={handleSelect}
             >
                 {hasChildren && (
                     <button onClick={handleToggle} className="mr-1 p-1 hover:bg-surface-tertiary rounded">
@@ -39,7 +95,7 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
                 )}
                 {!hasChildren && <div className="w-6 mr-1" />}
 
-                <div onClick={handleSelect} className="flex items-center">
+                <div className="flex items-center">
                     <Icon
                         icon={Box}
                         size="sm"
@@ -62,8 +118,9 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
 };
 
 const EntityTree = () => {
-    const { entitiesMap } = useEditor();
+    const { entitiesMap, addEntity } = useEditor();
     const [tree, setTree] = useState<EntityWithChildren[]>([]);
+    const { showContextMenu } = useContextMenu();
 
     const buildTree = useCallback(() => {
         const tree = Array.from(entitiesMap.values())
@@ -97,8 +154,32 @@ const EntityTree = () => {
         buildTree();
     }, [buildTree]);
 
+    const handleAddEntity = () => {
+        addEntity({
+            id: uuid(),
+            name: "New Entity",
+            enabled: true,
+        });
+    };
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const contextMenuItems: ContextMenuItem[] = [
+            {
+                id: "add-entity",
+                label: "Add Entity",
+                icon: <Icon icon={Plus} size="sm" />,
+                onClick: handleAddEntity,
+            },
+        ];
+
+        showContextMenu(contextMenuItems, { x: e.clientX, y: e.clientY });
+    };
+
     return (
-        <div className="p-2 my-2">
+        <div className="p-2 my-2 h-full" onContextMenu={handleContextMenu}>
             <div className="space-y-0.5">
                 {tree.map((entity) => (
                     <EntityTreeItem key={entity.id} entity={entity} />

@@ -1,4 +1,11 @@
-import { MaskRendererOptions, MaskShape, TextAlignment, TextRendererOptions, defaultRenderLayer } from "angry-pixel";
+import {
+    MaskRendererOptions,
+    MaskShape,
+    TextAlignment,
+    TextRendererOptions,
+    TransformOptions,
+    defaultRenderLayer,
+} from "angry-pixel";
 import { BuiltInComponent } from "../../types/component";
 
 export interface Vector2DefaultValues {
@@ -14,6 +21,17 @@ export interface MaskRendererDefaultValues extends Omit<MaskRendererOptions, "of
 export interface TextRendererDefaultValues extends Omit<Partial<TextRendererOptions>, "offset"> {
     offset: Vector2DefaultValues;
 }
+
+export interface TransformDefaultValues extends Omit<Partial<TransformOptions>, "position" | "scale"> {
+    position: Vector2DefaultValues;
+    scale: Vector2DefaultValues;
+}
+
+const transformDefaultValues: TransformDefaultValues = {
+    position: { x: 0, y: 0 },
+    rotation: 0,
+    scale: { x: 1, y: 1 },
+};
 
 const maskRendererDefaultValues: MaskRendererDefaultValues = {
     shape: MaskShape.Rectangle,
@@ -56,7 +74,7 @@ const textRendererDefaultValues: TextRendererDefaultValues = {
 
 export const defaultValues: Record<BuiltInComponent, unknown> = {
     [BuiltInComponent.MaskRenderer]: maskRendererDefaultValues,
-    [BuiltInComponent.Transform]: undefined,
+    [BuiltInComponent.Transform]: transformDefaultValues,
     [BuiltInComponent.Camera]: undefined,
     [BuiltInComponent.SpriteRenderer]: undefined,
     [BuiltInComponent.TextRenderer]: textRendererDefaultValues,

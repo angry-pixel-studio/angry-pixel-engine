@@ -2,11 +2,12 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { enableMapSet } from "immer";
-import { EntityWithChildren, EntityComponent } from "../types/scene";
+import { EntityComponent, Entity } from "../types/scene";
 import { useSceneStore } from "./sceneStore";
 import { BuiltInComponent } from "../types/component";
 import { v4 as uuid } from "uuid";
 import { exampleScene } from "../data/example-scene";
+import { defaultValues } from "../utils/builtInComponent/defaultValues";
 
 // Enable MapSet support for Immer
 enableMapSet();
@@ -41,11 +42,13 @@ export interface EditorState {
 
 interface EditorActions {
     // Selection actions
-    selectEntity: (entity: EntityWithChildren | null) => void;
+    selectEntity: (entity: Entity | null) => void;
 
     // Entity inspector actions
     setEntityName: (name: string) => void;
     setEntityEnabled: (enabled: boolean) => void;
+    addEntity: (entity: Entity) => void;
+    deleteEntity: (entityId: string) => void;
     toggleComponentCollapsed: (componentId: string) => void;
     setComponentEnabled: (componentId: string, enabled: boolean) => void;
     updateComponentProperty: (componentId: string, propertyName: string, value: unknown) => void;
@@ -127,6 +130,36 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                         const sceneStore = useSceneStore.getState();
                         sceneStore.updateEntity(state.selectedEntityId, { enabled });
                     }
+                });
+            },
+
+            addEntity: (entity) => {
+                set((state) => {
+                    const entityWithTransform = {
+                        ...entity,
+                        components: [
+                            {
+                                enabled: true,
+                                id: uuid(),
+                                name: BuiltInComponent.Transform,
+                                data: defaultValues[BuiltInComponent.Transform] as Record<string, unknown>,
+                                builtIn: true,
+                            },
+                        ],
+                    };
+                    const sceneStore = useSceneStore.getState();
+                    sceneStore.addEntity(entityWithTransform);
+                    state.selectEntity(entityWithTransform);
+                });
+            },
+
+            deleteEntity: (entityId) => {
+                set((state) => {
+                    if (state.selectedEntityId === entityId) {
+                        state.selectedEntityId = null;
+                    }
+                    const sceneStore = useSceneStore.getState();
+                    sceneStore.deleteEntity(entityId);
                 });
             },
 

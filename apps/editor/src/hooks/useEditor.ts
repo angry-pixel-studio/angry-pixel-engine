@@ -25,6 +25,8 @@ export const useEditor = () => {
         selectEntity: editorStore.selectEntity,
         setEntityName: editorStore.setEntityName,
         setEntityEnabled: editorStore.setEntityEnabled,
+        deleteEntity: editorStore.deleteEntity,
+        addEntity: editorStore.addEntity,
         toggleComponentCollapsed: editorStore.toggleComponentCollapsed,
         setComponentEnabled: editorStore.setComponentEnabled,
         updateComponentProperty: editorStore.updateComponentProperty,

@@ -25,6 +25,12 @@ export class UpdateSceneSystem implements System {
     onUpdate(): void {
         if (this.stateHasChanged && this.currentState) {
             switch (this.currentState.action) {
+                case SceneStateAction.EntityDeleted:
+                    this.deleteEntity();
+                    break;
+                case SceneStateAction.EntityCreated:
+                    this.createEntity();
+                    break;
                 case SceneStateAction.ComponentCreated:
                     this.createComponent();
                     break;
@@ -34,6 +40,32 @@ export class UpdateSceneSystem implements System {
             }
             this.stateHasChanged = false;
         }
+    }
+
+    private deleteEntity(): void {
+        if (!this.currentState || !this.currentState.entityUpdated) return;
+        const entityId = this.currentState.entityUpdated;
+        const { entity } = this.entityManager.search(EntityIdentifier, (comp) => comp.id === entityId)[0];
+        this.entityManager.removeEntity(entity);
+    }
+
+    private createEntity(): void {
+        if (!this.currentState || !this.currentState.entityUpdated) return;
+        const entityId = this.currentState.entityUpdated;
+        const name = this.currentState.entitiesMap.get(entityId)?.name;
+
+        const components = this.currentState.componentsMap
+            .get(entityId)
+            ?.map((componentData) => {
+                const componentType = getComponentType(componentData.name as BuiltInComponent);
+                if (componentType) {
+                    return new componentType(mapComponentData(componentData.data ?? {}));
+                }
+                return undefined;
+            })
+            .filter((component) => component !== undefined);
+
+        this.entityManager.createEntity([new EntityIdentifier({ id: entityId, name }), ...(components ?? [])]);
     }
 
     private createComponent(): void {
