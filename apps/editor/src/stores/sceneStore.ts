@@ -46,7 +46,7 @@ export interface SceneState {
     updateScene: (updates: Partial<Scene>) => void;
 
     // Entity actions
-    addEntity: (entity: EntityWithComponents) => void;
+    addEntity: (entity: EntityWithComponents, parentId?: string) => void;
     updateEntity: (entityId: string, updates: Partial<Entity>) => void;
     deleteEntity: (entityId: string) => void;
 
@@ -136,15 +136,18 @@ export const useSceneStore = create<SceneState>()(
                     });
                 },
 
-                addEntity: (entity) => {
+                addEntity: (entity, parentId) => {
                     set((state) => {
+                        const parent = parentId ? state.entitiesMap.get(parentId) : undefined;
+
                         state.entitiesMap.set(entity.id, {
                             id: entity.id,
                             name: entity.name,
                             enabled: entity.enabled,
-                            parent: null,
-                            level: 0,
+                            parent: parent?.id ?? null,
+                            level: parent ? parent.level + 1 : 0,
                         });
+
                         state.action = SceneStateAction.EntityCreated;
                         state.entityUpdated = entity.id;
                         state.componentsMap.set(entity.id, entity.components);

@@ -53,6 +53,7 @@ export class UpdateSceneSystem implements System {
         if (!this.currentState || !this.currentState.entityUpdated) return;
         const entityId = this.currentState.entityUpdated;
         const name = this.currentState.entitiesMap.get(entityId)?.name;
+        const parentId = this.currentState.entitiesMap.get(entityId)?.parent;
 
         const components = this.currentState.componentsMap
             .get(entityId)
@@ -65,7 +66,15 @@ export class UpdateSceneSystem implements System {
             })
             .filter((component) => component !== undefined);
 
-        this.entityManager.createEntity([new EntityIdentifier({ id: entityId, name }), ...(components ?? [])]);
+        const entity = this.entityManager.createEntity([
+            new EntityIdentifier({ id: entityId, name }),
+            ...(components ?? []),
+        ]);
+
+        if (parentId) {
+            const parentEntity = this.entityManager.search(EntityIdentifier, (comp) => comp.id === parentId)[0]?.entity;
+            if (parentEntity) this.entityManager.setParent(entity, parentEntity);
+        }
     }
 
     private createComponent(): void {

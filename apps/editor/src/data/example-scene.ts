@@ -155,61 +155,6 @@ export const exampleScene: Scene = {
             ],
             children: [],
         },
-        {
-            id: uuid(),
-            name: "Test Parent",
-            enabled: true,
-            components: [
-                {
-                    id: uuid(),
-                    name: BuiltInComponent.Transform,
-                    enabled: true,
-                    builtIn: true,
-                },
-                {
-                    id: uuid(),
-                    name: "Custom Component",
-                    enabled: true,
-                    builtIn: false,
-                    data: {
-                        numberProp: 1,
-                        stringProp: "Hello",
-                        booleanProp: true,
-                        vector2Prop: { x: 1, y: 2 },
-                    },
-                },
-            ],
-            children: [
-                {
-                    id: uuid(),
-                    name: "Test Child 01",
-                    enabled: true,
-                    components: [
-                        {
-                            id: uuid(),
-                            name: BuiltInComponent.Transform,
-                            enabled: true,
-                            builtIn: true,
-                        },
-                    ],
-                    children: [],
-                },
-                {
-                    id: uuid(),
-                    name: "Test Child 02",
-                    enabled: true,
-                    components: [
-                        {
-                            id: uuid(),
-                            name: BuiltInComponent.Transform,
-                            enabled: true,
-                            builtIn: true,
-                        },
-                    ],
-                    children: [],
-                },
-            ],
-        },
     ],
     systems: [
         {

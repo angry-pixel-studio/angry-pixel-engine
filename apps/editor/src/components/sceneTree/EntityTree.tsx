@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ChevronRight, ChevronDown, Box, Copy, Trash2, Plus, FileBox } from "lucide-react";
 import Icon from "../ui/Icon";
 import { useContextMenu } from "../../hooks/useContextMenu";
-import { EntityWithChildren } from "../../types/scene";
+import { EntityWithChildren, EntityWithParent } from "../../types/scene";
 import { ContextMenuItem } from "../../types/contextMenu";
 import { v4 as uuid } from "uuid";
 import { useSceneStore } from "../../stores/sceneStore";
@@ -10,7 +10,14 @@ import { BuiltInComponent } from "../../types/component";
 import { defaultValues } from "../../utils/builtInComponent/defaultValues";
 import { useEditorStore } from "../../stores/editorStore";
 
-const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; level?: number }) => {
+type EntityTreeItemProps = {
+    entity: EntityWithChildren;
+    level?: number;
+    onAddChild: (parentId?: string) => () => void;
+    onDuplicate: (entityId: string) => () => void;
+};
+
+const EntityTreeItem = ({ entity, level = 0, onAddChild, onDuplicate }: EntityTreeItemProps) => {
     const { selectedEntityId, selectEntity } = useEditorStore();
     const { deleteEntity } = useSceneStore();
     const { showContextMenu } = useContextMenu();
@@ -39,7 +46,7 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
                 id: "duplicate",
                 label: "Duplicate",
                 icon: <Icon icon={Copy} size="sm" />,
-                onClick: () => {},
+                onClick: onDuplicate(entity.id),
             },
             {
                 id: "separator1",
@@ -49,7 +56,7 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
                 id: "add-child",
                 label: "Add Child",
                 icon: <Icon icon={Plus} size="sm" />,
-                onClick: () => {},
+                onClick: onAddChild(entity.id),
             },
             {
                 id: "separator2",
@@ -113,7 +120,13 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
             {hasChildren && isExpanded && (
                 <div className="w-full">
                     {entity.children!.map((child) => (
-                        <EntityTreeItem key={child.id} entity={child as EntityWithChildren} level={level + 1} />
+                        <EntityTreeItem
+                            key={child.id}
+                            entity={child as EntityWithChildren}
+                            level={level + 1}
+                            onAddChild={onAddChild}
+                            onDuplicate={onDuplicate}
+                        />
                     ))}
                 </div>
             )}
@@ -122,57 +135,78 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
 };
 
 const EntityTree = () => {
-    const { entitiesMap, addEntity } = useSceneStore();
+    const { entitiesMap, addEntity, componentsMap } = useSceneStore();
     const [tree, setTree] = useState<EntityWithChildren[]>([]);
     const { showContextMenu } = useContextMenu();
 
     const buildTree = useCallback(() => {
-        const tree = Array.from(entitiesMap.values())
-            .sort((a, b) => a.level - b.level)
-            .reduce((acc, entity) => {
-                if (entity.parent === null) {
-                    acc.push({
-                        id: entity.id,
-                        name: entity.name,
-                        enabled: entity.enabled,
-                        children: [],
-                    });
-                } else {
-                    const parent = acc.find((e) => e.id === entity.parent);
-                    if (parent) {
-                        parent.children.push({
-                            id: entity.id,
-                            name: entity.name,
-                            enabled: entity.enabled,
-                            children: [],
-                        });
-                    }
-                }
-                return acc;
-            }, [] as EntityWithChildren[]);
+        const entities = Array.from(entitiesMap.values());
 
-        setTree(tree);
+        const buildEntityTree = (parentId: string | null): EntityWithChildren[] => {
+            return entities
+                .filter((entity) => entity.parent === parentId)
+                .map((entity) => ({
+                    id: entity.id,
+                    name: entity.name,
+                    enabled: entity.enabled,
+                    children: buildEntityTree(entity.id),
+                }));
+        };
+
+        setTree(buildEntityTree(null));
     }, [entitiesMap]);
 
     useEffect(() => {
         buildTree();
-    }, [buildTree]);
+    }, [buildTree, entitiesMap]);
 
-    const handleAddEntity = () => {
-        addEntity({
-            id: uuid(),
-            name: "New Entity",
-            enabled: true,
-            components: [
+    const handleAddEntity = (parentId?: string) => () => {
+        addEntity(
+            {
+                id: uuid(),
+                name: "New Entity",
+                enabled: true,
+                components: [
+                    {
+                        enabled: true,
+                        id: uuid(),
+                        name: BuiltInComponent.Transform,
+                        data: defaultValues[BuiltInComponent.Transform] as Record<string, unknown>,
+                        builtIn: true,
+                    },
+                ],
+            },
+            parentId,
+        );
+    };
+
+    const handleDuplicateEntity = (entityId: string) => () => {
+        const entity = entitiesMap.get(entityId);
+        if (!entity) return;
+
+        const entities = Array.from(entitiesMap.values());
+        // TODO: allow duplicate entities with children
+        if (entities.filter((e) => e.parent === entity.id).length > 0) return;
+
+        const createCopy = (entity: EntityWithParent, parentId?: string) => {
+            const id = uuid();
+
+            addEntity(
                 {
-                    enabled: true,
-                    id: uuid(),
-                    name: BuiltInComponent.Transform,
-                    data: defaultValues[BuiltInComponent.Transform] as Record<string, unknown>,
-                    builtIn: true,
+                    id,
+                    name: `${entity.name} (Copy)`,
+                    enabled: entity.enabled,
+                    components: (componentsMap.get(entity.id) ?? []).map((component) => ({
+                        ...component,
+                        id: uuid(),
+                        data: { ...component.data },
+                    })),
                 },
-            ],
-        });
+                parentId,
+            );
+        };
+
+        createCopy(entity, entity.parent ?? undefined);
     };
 
     const handleContextMenu = (e: React.MouseEvent) => {
@@ -184,7 +218,7 @@ const EntityTree = () => {
                 id: "add-entity",
                 label: "Add Entity",
                 icon: <Icon icon={Plus} size="sm" />,
-                onClick: handleAddEntity,
+                onClick: handleAddEntity(),
             },
         ];
 
@@ -195,7 +229,12 @@ const EntityTree = () => {
         <div className="p-2 my-2 h-full" onContextMenu={handleContextMenu}>
             <div className="space-y-0.5">
                 {tree.map((entity) => (
-                    <EntityTreeItem key={entity.id} entity={entity} />
+                    <EntityTreeItem
+                        key={entity.id}
+                        entity={entity}
+                        onAddChild={handleAddEntity}
+                        onDuplicate={handleDuplicateEntity}
+                    />
                 ))}
             </div>
         </div>
