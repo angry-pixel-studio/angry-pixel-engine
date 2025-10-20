@@ -1,4 +1,4 @@
-import { useEditor } from "../../../hooks/useEditor";
+import { useSceneStore } from "../../../stores/sceneStore";
 import { AssetType } from "../../../types/scene";
 
 interface FontFieldProps {
@@ -10,7 +10,7 @@ interface FontFieldProps {
 
 const FontField = ({ propertyName, value, onUpdate, defaultValue }: FontFieldProps) => {
     const fontValue = (value as string) ?? defaultValue ?? "";
-    const { getAssetsByType } = useEditor();
+    const { getAssetsByType } = useSceneStore();
     const fontAssets = getAssetsByType(AssetType.Font);
 
     return (

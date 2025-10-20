@@ -1,3 +1,5 @@
+import { EntityComponent } from "./scene";
+
 export interface Component {
     name: string;
     displayName: string;
@@ -52,3 +54,8 @@ export enum BuiltInComponent {
 }
 
 export type PropertyOption = Record<string, unknown>;
+
+export type BuiltInComponentProps = {
+    component: EntityComponent;
+    onUpdate: (propertyName: string) => (newValue: unknown) => void;
+};

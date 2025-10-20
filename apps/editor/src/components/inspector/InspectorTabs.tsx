@@ -2,10 +2,10 @@ import Tabs, { Tab } from "../ui/Tabs";
 import { FileText, Layers } from "lucide-react";
 import EntityInspectorTab from "./EntityInspectorTab";
 import LayersTab from "./LayersTab";
-import { useEditor } from "../../hooks/useEditor";
+import { useEditorStore } from "../../stores/editorStore";
 
 const InspectorTabs = () => {
-    const { activeInspectorTab, setActiveInspectorTab } = useEditor();
+    const { activeInspectorTab, setActiveInspectorTab } = useEditorStore();
 
     const tabs: Tab[] = [
         {

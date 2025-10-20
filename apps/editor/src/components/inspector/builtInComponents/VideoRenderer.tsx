@@ -1,6 +1,5 @@
 import React from "react";
-import { EntityComponent } from "../../../types/scene";
-import { useEditor } from "../../../hooks/useEditor";
+import { BuiltInComponentProps } from "../../../types/component";
 import VideoField from "../propertyField/VideoField";
 import NumberField from "../propertyField/NumberField";
 import Vector2Field from "../propertyField/Vector2Field";
@@ -8,24 +7,17 @@ import BooleanField from "../propertyField/BooleanField";
 import ColorField from "../propertyField/ColorField";
 import RectField from "../propertyField/RectField";
 import ListField from "../propertyField/ListField";
+import { useEditorStore } from "../../../stores/editorStore";
 
-interface VideoRendererProps {
-    component: EntityComponent;
-}
-
-const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
-    const { updateComponentProperty, layers } = useEditor();
-
-    const handleUpdate = (propertyName: string) => (newValue: unknown) => {
-        updateComponentProperty(component.id, propertyName, newValue);
-    };
+const VideoRenderer: React.FC<BuiltInComponentProps> = ({ component, onUpdate }) => {
+    const { layers } = useEditorStore();
 
     return (
         <>
             <ListField
                 propertyName="Layer"
                 value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
+                onUpdate={onUpdate("layer")}
                 defaultValue="Default"
                 options={{
                     items: [
@@ -35,47 +27,47 @@ const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
                 }}
             />
 
-            <VideoField propertyName="Video" value={component.data?.video} onUpdate={handleUpdate("video")} />
+            <VideoField propertyName="Video" value={component.data?.video} onUpdate={onUpdate("video")} />
 
             <NumberField
                 propertyName="Width"
                 value={component.data?.width}
-                onUpdate={handleUpdate("width")}
+                onUpdate={onUpdate("width")}
                 options={{ min: 0, step: 1 }}
             />
 
             <NumberField
                 propertyName="Height"
                 value={component.data?.height}
-                onUpdate={handleUpdate("height")}
+                onUpdate={onUpdate("height")}
                 options={{ min: 0, step: 1 }}
             />
 
             <Vector2Field
                 propertyName="Offset"
                 value={component.data?.offset}
-                onUpdate={handleUpdate("offset")}
+                onUpdate={onUpdate("offset")}
                 defaultValue={{ x: 0, y: 0 }}
             />
 
             <BooleanField
                 propertyName="Flip Horizontally"
                 value={component.data?.flipHorizontally}
-                onUpdate={handleUpdate("flipHorizontally")}
+                onUpdate={onUpdate("flipHorizontally")}
                 defaultValue={false}
             />
 
             <BooleanField
                 propertyName="Flip Vertically"
                 value={component.data?.flipVertically}
-                onUpdate={handleUpdate("flipVertically")}
+                onUpdate={onUpdate("flipVertically")}
                 defaultValue={false}
             />
 
             <NumberField
                 propertyName="Rotation"
                 value={component.data?.rotation}
-                onUpdate={handleUpdate("rotation")}
+                onUpdate={onUpdate("rotation")}
                 defaultValue={0}
                 options={{ min: -2 * Math.PI, max: 2 * Math.PI, step: 0.03 }}
             />
@@ -83,42 +75,34 @@ const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
             <NumberField
                 propertyName="Opacity"
                 value={component.data?.opacity}
-                onUpdate={handleUpdate("opacity")}
+                onUpdate={onUpdate("opacity")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
 
-            <ColorField
-                propertyName="Mask Color"
-                value={component.data?.maskColor}
-                onUpdate={handleUpdate("maskColor")}
-            />
+            <ColorField propertyName="Mask Color" value={component.data?.maskColor} onUpdate={onUpdate("maskColor")} />
 
             <NumberField
                 propertyName="Mask Color Mix"
                 value={component.data?.maskColorMix}
-                onUpdate={handleUpdate("maskColorMix")}
+                onUpdate={onUpdate("maskColorMix")}
                 defaultValue={0}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
 
-            <ColorField
-                propertyName="Tint Color"
-                value={component.data?.tintColor}
-                onUpdate={handleUpdate("tintColor")}
-            />
+            <ColorField propertyName="Tint Color" value={component.data?.tintColor} onUpdate={onUpdate("tintColor")} />
 
             <RectField
                 propertyName="Slice"
                 value={component.data?.slice}
-                onUpdate={handleUpdate("slice")}
+                onUpdate={onUpdate("slice")}
                 options={{ setUndefinedWhenZero: true }}
             />
 
             <NumberField
                 propertyName="Volume"
                 value={component.data?.volume}
-                onUpdate={handleUpdate("volume")}
+                onUpdate={onUpdate("volume")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
@@ -126,21 +110,21 @@ const VideoRenderer: React.FC<VideoRendererProps> = ({ component }) => {
             <BooleanField
                 propertyName="Loop"
                 value={component.data?.loop}
-                onUpdate={handleUpdate("loop")}
+                onUpdate={onUpdate("loop")}
                 defaultValue={false}
             />
 
             <BooleanField
                 propertyName="Fixed To Time Scale"
                 value={component.data?.fixedToTimeScale}
-                onUpdate={handleUpdate("fixedToTimeScale")}
+                onUpdate={onUpdate("fixedToTimeScale")}
                 defaultValue={false}
             />
 
             <ListField
                 propertyName="Action"
                 value={component.data?.action}
-                onUpdate={handleUpdate("action")}
+                onUpdate={onUpdate("action")}
                 defaultValue="play"
                 options={{
                     items: [

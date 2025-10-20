@@ -1,4 +1,4 @@
-import { useEditor } from "./hooks/useEditor";
+import { useEditorStore } from "./stores/editorStore";
 import ResizablePanel from "./components/ui/ResizablePanel";
 import SceneTreeTabs from "./components/sceneTree/SceneTreeTabs";
 import InspectorTabs from "./components/inspector/InspectorTabs";
@@ -9,7 +9,7 @@ import SceneEditor from "./components/sceneEditor";
 import { ContextMenuProvider } from "./providers/ContextMenuProvider";
 
 function App() {
-    const { panelSizes, setPanelSize } = useEditor();
+    const { panelSizes, setPanelSize } = useEditorStore();
 
     // Disable default context menu
     const handleContextMenu = (e: React.MouseEvent) => {

@@ -1,27 +1,19 @@
 import React from "react";
-import { EntityComponent } from "../../../types/scene";
-import { useEditor } from "../../../hooks/useEditor";
+import { BuiltInComponentProps } from "../../../types/component";
 import NumberField from "../propertyField/NumberField";
 import ColorField from "../propertyField/ColorField";
 import ListField from "../propertyField/ListField";
+import { useEditorStore } from "../../../stores/editorStore";
 
-interface DarknessRendererProps {
-    component: EntityComponent;
-}
-
-const DarknessRenderer: React.FC<DarknessRendererProps> = ({ component }) => {
-    const { updateComponentProperty, layers } = useEditor();
-
-    const handleUpdate = (propertyName: string) => (newValue: unknown) => {
-        updateComponentProperty(component.id, propertyName, newValue);
-    };
+const DarknessRenderer: React.FC<BuiltInComponentProps> = ({ component, onUpdate }) => {
+    const { layers } = useEditorStore();
 
     return (
         <>
             <ListField
                 propertyName="Layer"
                 value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
+                onUpdate={onUpdate("layer")}
                 defaultValue="Default"
                 options={{
                     items: [
@@ -34,7 +26,7 @@ const DarknessRenderer: React.FC<DarknessRendererProps> = ({ component }) => {
             <ColorField
                 propertyName="Color"
                 value={component.data?.color}
-                onUpdate={handleUpdate("color")}
+                onUpdate={onUpdate("color")}
                 defaultValue="#000000"
                 allowClear={false}
             />
@@ -42,7 +34,7 @@ const DarknessRenderer: React.FC<DarknessRendererProps> = ({ component }) => {
             <NumberField
                 propertyName="Width"
                 value={component.data?.width}
-                onUpdate={handleUpdate("width")}
+                onUpdate={onUpdate("width")}
                 defaultValue={0}
                 options={{ min: 0, step: 1 }}
             />
@@ -50,7 +42,7 @@ const DarknessRenderer: React.FC<DarknessRendererProps> = ({ component }) => {
             <NumberField
                 propertyName="Height"
                 value={component.data?.height}
-                onUpdate={handleUpdate("height")}
+                onUpdate={onUpdate("height")}
                 defaultValue={0}
                 options={{ min: 0, step: 1 }}
             />
@@ -58,7 +50,7 @@ const DarknessRenderer: React.FC<DarknessRendererProps> = ({ component }) => {
             <NumberField
                 propertyName="Opacity"
                 value={component.data?.opacity}
-                onUpdate={handleUpdate("opacity")}
+                onUpdate={onUpdate("opacity")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />

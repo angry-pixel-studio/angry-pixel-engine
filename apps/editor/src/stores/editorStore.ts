@@ -2,38 +2,24 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { enableMapSet } from "immer";
-import { EntityComponent, Entity } from "../types/scene";
-import { useSceneStore } from "./sceneStore";
+import { Entity } from "../types/scene";
 import { BuiltInComponent } from "../types/component";
-import { v4 as uuid } from "uuid";
 import { exampleScene } from "../data/example-scene";
-import { defaultValues } from "../utils/builtInComponent/defaultValues";
 
 // Enable MapSet support for Immer
 enableMapSet();
 
 export interface EditorState {
-    // Selection state
     selectedEntityId: string | null;
-
-    // Entity inspector state
     entityInspector: {
-        entityName: string;
-        entityEnabled: boolean;
         collapsedComponents: Set<string>;
-        components: Map<string, EntityComponent>;
     };
-
-    // Panel sizes
     panelSizes: {
         sceneTree: number;
         filesystemNav: number;
         entityInspector: number;
     };
-
-    // Inspector tabs
     activeInspectorTab: string;
-
     layers: {
         renderLayers: string[];
         collisionLayers: string[];
@@ -41,26 +27,10 @@ export interface EditorState {
 }
 
 interface EditorActions {
-    // Selection actions
     selectEntity: (entity: Entity | null) => void;
-
-    // Entity inspector actions
-    setEntityName: (name: string) => void;
-    setEntityEnabled: (enabled: boolean) => void;
-    addEntity: (entity: Entity) => void;
-    deleteEntity: (entityId: string) => void;
     toggleComponentCollapsed: (componentId: string) => void;
-    setComponentEnabled: (componentId: string, enabled: boolean) => void;
-    updateComponentProperty: (componentId: string, propertyName: string, value: unknown) => void;
-    addComponent: (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => void;
-
-    // Panel size management
     setPanelSize: (panel: keyof EditorState["panelSizes"], size: number) => void;
-
-    // Inspector tab management
     setActiveInspectorTab: (tabId: string) => void;
-
-    // Layers actions
     setRenderLayers: (layers: string[]) => void;
     setCollisionLayers: (layers: string[]) => void;
 }
@@ -93,86 +63,7 @@ export const useEditorStore = create<EditorState & EditorActions>()(
             selectEntity: (entity) => {
                 set((state) => {
                     state.selectedEntityId = entity?.id || null;
-
-                    if (entity) {
-                        state.entityInspector.entityName = entity.name;
-                        state.entityInspector.entityEnabled = entity.enabled;
-
-                        const components = useSceneStore.getState().componentsMap.get(entity.id);
-                        state.entityInspector.components = components
-                            ? new Map(components.map((c) => [c.id, c]))
-                            : new Map();
-
-                        // Automatically switch to entity inspector tab when an entity is selected
-                        state.activeInspectorTab = "entityInspector";
-                    } else {
-                        state.entityInspector.entityName = "";
-                        state.entityInspector.entityEnabled = true;
-                        state.entityInspector.components = new Map();
-                    }
-                });
-            },
-
-            setEntityName: (name) => {
-                set((state) => {
-                    state.entityInspector.entityName = name;
-                    if (state.selectedEntityId) {
-                        const sceneStore = useSceneStore.getState();
-                        sceneStore.updateEntity(state.selectedEntityId, { name });
-                    }
-                });
-            },
-
-            setEntityEnabled: (enabled) => {
-                set((state) => {
-                    state.entityInspector.entityEnabled = enabled;
-                    if (state.selectedEntityId) {
-                        const sceneStore = useSceneStore.getState();
-                        sceneStore.updateEntity(state.selectedEntityId, { enabled });
-                    }
-                });
-            },
-
-            addEntity: (entity) => {
-                set((state) => {
-                    const entityWithTransform = {
-                        ...entity,
-                        components: [
-                            {
-                                enabled: true,
-                                id: uuid(),
-                                name: BuiltInComponent.Transform,
-                                data: defaultValues[BuiltInComponent.Transform] as Record<string, unknown>,
-                                builtIn: true,
-                            },
-                        ],
-                    };
-                    const sceneStore = useSceneStore.getState();
-                    sceneStore.addEntity(entityWithTransform);
-                    state.selectEntity(entityWithTransform);
-                });
-            },
-
-            deleteEntity: (entityId) => {
-                set((state) => {
-                    if (state.selectedEntityId === entityId) {
-                        state.selectedEntityId = null;
-                    }
-                    const sceneStore = useSceneStore.getState();
-                    sceneStore.deleteEntity(entityId);
-                });
-            },
-
-            setComponentEnabled: (componentId, enabled) => {
-                set((state) => {
-                    const component = state.entityInspector.components.get(componentId);
-                    if (component) {
-                        component.enabled = enabled;
-                        if (state.selectedEntityId) {
-                            const sceneStore = useSceneStore.getState();
-                            sceneStore.updateComponent(state.selectedEntityId, componentId, { enabled });
-                        }
-                    }
+                    if (entity) state.activeInspectorTab = "entityInspector";
                 });
             },
 
@@ -182,47 +73,6 @@ export const useEditorStore = create<EditorState & EditorActions>()(
                         state.entityInspector.collapsedComponents.delete(componentId);
                     } else {
                         state.entityInspector.collapsedComponents.add(componentId);
-                    }
-                });
-            },
-
-            addComponent: (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => {
-                set((state) => {
-                    const sceneStore = useSceneStore.getState();
-                    const component = {
-                        enabled: true,
-                        id: uuid(),
-                        name: componentName,
-                        data: defaultValues ?? {},
-                        builtIn: true,
-                    };
-                    if (state.selectedEntityId) {
-                        state.entityInspector.components.set(component.id, component);
-                        sceneStore.addComponent(state.selectedEntityId, component);
-                    }
-                });
-            },
-
-            updateComponentProperty: (componentId, propertyName, value) => {
-                set((state) => {
-                    const component = state.entityInspector.components.get(componentId);
-                    if (component) {
-                        const updatedComponent = {
-                            ...component,
-                            data: {
-                                ...(component.data ?? {}),
-                                [propertyName]: value,
-                            },
-                        };
-
-                        state.entityInspector.components.set(componentId, updatedComponent);
-
-                        if (state.selectedEntityId) {
-                            const sceneStore = useSceneStore.getState();
-                            sceneStore.updateComponent(state.selectedEntityId, componentId, {
-                                data: updatedComponent.data,
-                            });
-                        }
                     }
                 });
             },

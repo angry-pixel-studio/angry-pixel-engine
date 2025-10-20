@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { EntityComponent } from "../../../types/scene";
-import { useEditor } from "../../../hooks/useEditor";
+import { BuiltInComponentProps } from "../../../types/component";
 import ListField from "../propertyField/ListField";
 import ColorField from "../propertyField/ColorField";
 import NumberField from "../propertyField/NumberField";
@@ -9,23 +8,16 @@ import Vector2Field from "../propertyField/Vector2Field";
 import { MaskShape } from "angry-pixel";
 import { BuiltInComponent } from "../../../types/component";
 import { defaultValues, MaskRendererDefaultValues } from "../../../utils/builtInComponent/defaultValues";
+import { useEditorStore } from "../../../stores/editorStore";
 
-interface MaskRendererProps {
-    component: EntityComponent;
-}
-
-const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
-    const { updateComponentProperty, layers } = useEditor();
+const MaskRenderer: React.FC<BuiltInComponentProps> = ({ component, onUpdate }) => {
+    const { layers } = useEditorStore();
     const [shape, setShape] = useState<MaskShape>(component.data?.shape as MaskShape);
     const defaultValue = defaultValues[BuiltInComponent.MaskRenderer] as MaskRendererDefaultValues;
 
-    const handleUpdate = (propertyName: string) => (newValue: unknown) => {
-        updateComponentProperty(component.id, propertyName, newValue);
-    };
-
     const handleShapeChange = (newValue: unknown) => {
         setShape(newValue as MaskShape);
-        handleUpdate("shape")(newValue === "" ? undefined : newValue);
+        onUpdate("shape")(newValue === "" ? undefined : newValue);
     };
 
     return (
@@ -33,7 +25,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
             <ListField
                 propertyName="Layer"
                 value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
+                onUpdate={onUpdate("layer")}
                 defaultValue={defaultValue.layer}
                 options={{
                     items: [
@@ -61,7 +53,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
             <ColorField
                 propertyName="Color"
                 value={component.data?.color}
-                onUpdate={handleUpdate("color")}
+                onUpdate={onUpdate("color")}
                 defaultValue={defaultValue.color}
                 allowClear={false}
             />
@@ -70,7 +62,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 <NumberField
                     propertyName="Width"
                     value={component.data?.width}
-                    onUpdate={handleUpdate("width")}
+                    onUpdate={onUpdate("width")}
                     defaultValue={defaultValue.width}
                     options={{ min: 0, step: 1 }}
                 />
@@ -80,7 +72,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 <NumberField
                     propertyName="Height"
                     value={component.data?.height}
-                    onUpdate={handleUpdate("height")}
+                    onUpdate={onUpdate("height")}
                     defaultValue={defaultValue.height}
                     options={{ min: 0, step: 1 }}
                 />
@@ -90,7 +82,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 <NumberField
                     propertyName="Radius"
                     value={component.data?.radius}
-                    onUpdate={handleUpdate("radius")}
+                    onUpdate={onUpdate("radius")}
                     defaultValue={defaultValue.radius}
                     options={{ min: 0, step: 1 }}
                 />
@@ -100,7 +92,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 <Vector2ArrayField
                     propertyName="Vertex Model"
                     value={component.data?.vertexModel}
-                    onUpdate={handleUpdate("vertexModel")}
+                    onUpdate={onUpdate("vertexModel")}
                     defaultValue={defaultValue.vertexModel}
                 />
             )}
@@ -108,7 +100,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
             <Vector2Field
                 propertyName="Offset"
                 value={component.data?.offset}
-                onUpdate={handleUpdate("offset")}
+                onUpdate={onUpdate("offset")}
                 defaultValue={defaultValue.offset}
             />
 
@@ -116,7 +108,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
                 <NumberField
                     propertyName="Rotation"
                     value={component.data?.rotation}
-                    onUpdate={handleUpdate("rotation")}
+                    onUpdate={onUpdate("rotation")}
                     defaultValue={defaultValue.rotation}
                     options={{ min: -2 * Math.PI, max: 2 * Math.PI, step: 0.03 }}
                 />
@@ -125,7 +117,7 @@ const MaskRenderer: React.FC<MaskRendererProps> = ({ component }) => {
             <NumberField
                 propertyName="Opacity"
                 value={component.data?.opacity}
-                onUpdate={handleUpdate("opacity")}
+                onUpdate={onUpdate("opacity")}
                 defaultValue={defaultValue.opacity}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />

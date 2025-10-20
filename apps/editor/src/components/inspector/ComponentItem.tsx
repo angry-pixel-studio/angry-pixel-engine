@@ -1,4 +1,5 @@
-import { useEditor } from "../../hooks/useEditor";
+import { useEditorStore } from "../../stores/editorStore";
+import { useSceneStore } from "../../stores/sceneStore";
 import { EntityComponent } from "../../types/scene";
 import { BuiltInComponentFactory } from "./builtInComponents";
 import { StringField } from "./propertyField";
@@ -8,13 +9,14 @@ interface ComponentItemProps {
 }
 
 const ComponentItem = ({ component }: ComponentItemProps) => {
-    const { entityInspector, toggleComponentCollapsed, setComponentEnabled, updateComponentProperty } = useEditor();
+    const { selectedEntityId, entityInspector, toggleComponentCollapsed } = useEditorStore();
+    const { updateComponentData, setComponentEnabled } = useSceneStore();
 
     const isBuiltIn = component.builtIn;
     const isCollapsed = entityInspector.collapsedComponents.has(component.id);
 
     const handleToggleEnabled = () => {
-        setComponentEnabled(component.id, !component.enabled);
+        setComponentEnabled(selectedEntityId as string, component.id, !component.enabled);
     };
 
     const handleToggleCollapse = (e: React.MouseEvent) => {
@@ -68,7 +70,9 @@ const ComponentItem = ({ component }: ComponentItemProps) => {
                                     propertyName={key}
                                     value={typeof value === "object" ? JSON.stringify(value) : String(value)}
                                     onUpdate={(newValue: unknown) => {
-                                        updateComponentProperty(component.id, key, newValue);
+                                        updateComponentData(selectedEntityId as string, component.id, {
+                                            [key]: newValue,
+                                        });
                                     }}
                                 />
                             ))

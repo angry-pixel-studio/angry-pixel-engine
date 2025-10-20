@@ -1,6 +1,5 @@
 import React from "react";
-import { EntityComponent } from "../../../types/scene";
-import { useEditor } from "../../../hooks/useEditor";
+import { BuiltInComponentProps } from "../../../types/component";
 import ImageField from "../propertyField/ImageField";
 import RectField from "../propertyField/RectField";
 import Vector2Field from "../propertyField/Vector2Field";
@@ -8,24 +7,17 @@ import BooleanField from "../propertyField/BooleanField";
 import NumberField from "../propertyField/NumberField";
 import ColorField from "../propertyField/ColorField";
 import ListField from "../propertyField/ListField";
+import { useEditorStore } from "../../../stores/editorStore";
 
-interface SpriteRendererProps {
-    component: EntityComponent;
-}
-
-const SpriteRenderer: React.FC<SpriteRendererProps> = ({ component }) => {
-    const { updateComponentProperty, layers } = useEditor();
-
-    const handleUpdate = (propertyName: string) => (newValue: unknown) => {
-        updateComponentProperty(component.id, propertyName, newValue);
-    };
+const SpriteRenderer: React.FC<BuiltInComponentProps> = ({ component, onUpdate }) => {
+    const { layers } = useEditorStore();
 
     return (
         <>
             <ListField
                 propertyName="Layer"
                 value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
+                onUpdate={onUpdate("layer")}
                 defaultValue="Default"
                 options={{
                     items: [
@@ -35,19 +27,19 @@ const SpriteRenderer: React.FC<SpriteRendererProps> = ({ component }) => {
                 }}
             />
 
-            <ImageField propertyName="Image" value={component.data?.image} onUpdate={handleUpdate("image")} />
+            <ImageField propertyName="Image" value={component.data?.image} onUpdate={onUpdate("image")} />
 
             <RectField
                 propertyName="Slice"
                 value={component.data?.slice}
-                onUpdate={handleUpdate("slice")}
+                onUpdate={onUpdate("slice")}
                 options={{ setUndefinedWhenZero: true }}
             />
 
             <Vector2Field
                 propertyName="Tiled"
                 value={component.data?.tiled}
-                onUpdate={handleUpdate("tiled")}
+                onUpdate={onUpdate("tiled")}
                 defaultValue={{ x: 1, y: 1 }}
                 options={{ minX: 1, minY: 1, step: 1 }}
             />
@@ -55,72 +47,64 @@ const SpriteRenderer: React.FC<SpriteRendererProps> = ({ component }) => {
             <BooleanField
                 propertyName="Flip Horizontally"
                 value={component.data?.flipHorizontally}
-                onUpdate={handleUpdate("flipHorizontally")}
+                onUpdate={onUpdate("flipHorizontally")}
             />
 
             <BooleanField
                 propertyName="Flip Vertically"
                 value={component.data?.flipVertically}
-                onUpdate={handleUpdate("flipVertically")}
+                onUpdate={onUpdate("flipVertically")}
             />
 
-            <BooleanField propertyName="Smooth" value={component.data?.smooth} onUpdate={handleUpdate("smooth")} />
+            <BooleanField propertyName="Smooth" value={component.data?.smooth} onUpdate={onUpdate("smooth")} />
 
             <NumberField
                 propertyName="Opacity"
                 value={component.data?.opacity}
-                onUpdate={handleUpdate("opacity")}
+                onUpdate={onUpdate("opacity")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
 
-            <ColorField
-                propertyName="Tint Color"
-                value={component.data?.tintColor}
-                onUpdate={handleUpdate("tintColor")}
-            />
+            <ColorField propertyName="Tint Color" value={component.data?.tintColor} onUpdate={onUpdate("tintColor")} />
 
-            <ColorField
-                propertyName="Mask Color"
-                value={component.data?.maskColor}
-                onUpdate={handleUpdate("maskColor")}
-            />
+            <ColorField propertyName="Mask Color" value={component.data?.maskColor} onUpdate={onUpdate("maskColor")} />
 
             <NumberField
                 propertyName="Mask Color Mix"
                 value={component.data?.maskColorMix}
-                onUpdate={handleUpdate("maskColorMix")}
+                onUpdate={onUpdate("maskColorMix")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
 
-            <Vector2Field propertyName="Offset" value={component.data?.offset} onUpdate={handleUpdate("offset")} />
+            <Vector2Field propertyName="Offset" value={component.data?.offset} onUpdate={onUpdate("offset")} />
 
             <Vector2Field
                 propertyName="Scale"
                 value={component.data?.scale}
-                onUpdate={handleUpdate("scale")}
+                onUpdate={onUpdate("scale")}
                 defaultValue={{ x: 1, y: 1 }}
             />
 
             <NumberField
                 propertyName="Rotation"
                 value={component.data?.rotation}
-                onUpdate={handleUpdate("rotation")}
+                onUpdate={onUpdate("rotation")}
                 options={{ min: -2 * Math.PI, max: 2 * Math.PI, step: 0.03 }}
             />
 
             <NumberField
                 propertyName="Width"
                 value={component.data?.width}
-                onUpdate={handleUpdate("width")}
+                onUpdate={onUpdate("width")}
                 options={{ setUndefinedWhenZero: true }}
             />
 
             <NumberField
                 propertyName="Height"
                 value={component.data?.height}
-                onUpdate={handleUpdate("height")}
+                onUpdate={onUpdate("height")}
                 options={{ setUndefinedWhenZero: true }}
             />
         </>

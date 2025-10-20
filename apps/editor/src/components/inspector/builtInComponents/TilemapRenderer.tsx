@@ -1,29 +1,21 @@
 import React from "react";
-import { EntityComponent } from "../../../types/scene";
-import { useEditor } from "../../../hooks/useEditor";
+import { BuiltInComponentProps } from "../../../types/component";
+import { useEditorStore } from "../../../stores/editorStore";
 import ButtonField from "../propertyField/ButtonField";
 import ListField from "../propertyField/ListField";
 import NumberField from "../propertyField/NumberField";
 import ColorField from "../propertyField/ColorField";
 import BooleanField from "../propertyField/BooleanField";
 
-interface TilemapRendererProps {
-    component: EntityComponent;
-}
-
-const TilemapRenderer: React.FC<TilemapRendererProps> = ({ component }) => {
-    const { updateComponentProperty, layers } = useEditor();
-
-    const handleUpdate = (propertyName: string) => (newValue: unknown) => {
-        updateComponentProperty(component.id, propertyName, newValue);
-    };
+const TilemapRenderer: React.FC<BuiltInComponentProps> = ({ component, onUpdate }) => {
+    const { layers } = useEditorStore();
 
     return (
         <>
             <ListField
                 propertyName="Layer"
                 value={component.data?.layer}
-                onUpdate={handleUpdate("layer")}
+                onUpdate={onUpdate("layer")}
                 defaultValue="Default"
                 options={{
                     items: [
@@ -36,56 +28,56 @@ const TilemapRenderer: React.FC<TilemapRendererProps> = ({ component }) => {
             <ButtonField
                 propertyName="Tileset"
                 value={component.data?.tileset}
-                onUpdate={handleUpdate("tileset")}
+                onUpdate={onUpdate("tileset")}
                 options={{ buttonLabel: "Edit" }}
             />
 
             <ButtonField
                 propertyName="Tilemap"
                 value={component.data?.data}
-                onUpdate={handleUpdate("data")}
+                onUpdate={onUpdate("data")}
                 options={{ buttonLabel: "Edit" }}
             />
 
             <NumberField
                 propertyName="Tile Width"
                 value={component.data?.tileWidth}
-                onUpdate={handleUpdate("tileWidth")}
+                onUpdate={onUpdate("tileWidth")}
                 options={{ min: 0 }}
             />
 
             <NumberField
                 propertyName="Tile Height"
                 value={component.data?.tileHeight}
-                onUpdate={handleUpdate("tileHeight")}
+                onUpdate={onUpdate("tileHeight")}
                 options={{ min: 0 }}
             />
 
             <ColorField
                 propertyName="Tint Color"
                 value={component.data?.tintColor}
-                onUpdate={handleUpdate("tintColor")}
+                onUpdate={onUpdate("tintColor")}
                 defaultValue="#FFFFFF"
             />
 
             <ColorField
                 propertyName="Mask Color"
                 value={component.data?.maskColor}
-                onUpdate={handleUpdate("maskColor")}
+                onUpdate={onUpdate("maskColor")}
                 defaultValue="#FFFFFF"
             />
 
             <NumberField
                 propertyName="Mask Color Mix"
                 value={component.data?.maskColorMix}
-                onUpdate={handleUpdate("maskColorMix")}
+                onUpdate={onUpdate("maskColorMix")}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
 
             <NumberField
                 propertyName="Opacity"
                 value={component.data?.opacity}
-                onUpdate={handleUpdate("opacity")}
+                onUpdate={onUpdate("opacity")}
                 defaultValue={1}
                 options={{ min: 0, max: 1, step: 0.01 }}
             />
@@ -93,7 +85,7 @@ const TilemapRenderer: React.FC<TilemapRendererProps> = ({ component }) => {
             <BooleanField
                 propertyName="Smooth"
                 value={component.data?.smooth}
-                onUpdate={handleUpdate("smooth")}
+                onUpdate={onUpdate("smooth")}
                 defaultValue={false}
             />
         </>

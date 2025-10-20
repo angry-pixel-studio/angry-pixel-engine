@@ -1,33 +1,33 @@
 import { useState, useEffect } from "react";
 import { Edit2, Check, X } from "lucide-react";
 import Icon from "../ui/Icon";
-import { useEditor } from "../../hooks/useEditor";
 import { Entity } from "../../types/scene";
+import { useSceneStore } from "../../stores/sceneStore";
 
 const EntityName = ({ entity }: { entity: Entity }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(entity.name);
-    const { entityInspector, setEntityName, setEntityEnabled } = useEditor();
+    const { updateEntity } = useSceneStore();
 
     // Sync local state with store state
     useEffect(() => {
-        setEditValue(entityInspector.entityName);
-    }, [entityInspector.entityName]);
+        setEditValue(entity.name);
+    }, [entity]);
 
     const handleEdit = () => {
         setIsEditing(true);
-        setEditValue(entityInspector.entityName);
+        setEditValue(entity.name);
     };
 
     const handleSave = () => {
-        if (editValue.trim() !== "" && editValue !== entityInspector.entityName) {
-            setEntityName(editValue.trim());
+        if (editValue.trim() !== "" && editValue !== entity.name) {
+            updateEntity(entity.id, { name: editValue.trim() });
         }
         setIsEditing(false);
     };
 
     const handleCancel = () => {
-        setEditValue(entityInspector.entityName);
+        setEditValue(entity.name);
         setIsEditing(false);
     };
 
@@ -40,7 +40,7 @@ const EntityName = ({ entity }: { entity: Entity }) => {
     };
 
     const handleEnabledChange = (enabled: boolean) => {
-        setEntityEnabled(enabled);
+        updateEntity(entity.id, { enabled });
     };
 
     if (isEditing) {
@@ -75,7 +75,7 @@ const EntityName = ({ entity }: { entity: Entity }) => {
     return (
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 ml-2">
-                <span className="text-base font-medium text-text-primary">{entityInspector.entityName}</span>
+                <span className="text-base font-medium text-text-primary">{entity.name}</span>
 
                 <button
                     onClick={handleEdit}
@@ -89,7 +89,7 @@ const EntityName = ({ entity }: { entity: Entity }) => {
             <label className="flex items-center space-x-2 cursor-pointer mr-2">
                 <input
                     type="checkbox"
-                    checked={entityInspector.entityEnabled}
+                    checked={entity.enabled}
                     onChange={(e) => handleEnabledChange(e.target.checked)}
                     className="w-4 h-4 text-primary-600 bg-surface-secondary border-border-primary rounded focus:ring-primary-500 focus:ring-2"
                 />

@@ -1,18 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronRight, ChevronDown, Box, Copy, Trash2, Plus, FileBox } from "lucide-react";
 import Icon from "../ui/Icon";
-import { useEditor } from "../../hooks/useEditor";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import { EntityWithChildren } from "../../types/scene";
 import { ContextMenuItem } from "../../types/contextMenu";
 import { v4 as uuid } from "uuid";
+import { useSceneStore } from "../../stores/sceneStore";
+import { BuiltInComponent } from "../../types/component";
+import { defaultValues } from "../../utils/builtInComponent/defaultValues";
+import { useEditorStore } from "../../stores/editorStore";
 
 const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; level?: number }) => {
-    const { selectedEntity, selectEntity, deleteEntity } = useEditor();
+    const { selectedEntityId, selectEntity } = useEditorStore();
+    const { deleteEntity } = useSceneStore();
     const { showContextMenu } = useContextMenu();
     const [isExpanded, setIsExpanded] = useState(false);
     const hasChildren = entity.children && entity.children.length > 0;
-    const isSelected = selectedEntity?.id === entity.id;
+    const isSelected = selectedEntityId === entity.id;
 
     const handleToggle = () => {
         if (hasChildren) {
@@ -118,7 +122,7 @@ const EntityTreeItem = ({ entity, level = 0 }: { entity: EntityWithChildren; lev
 };
 
 const EntityTree = () => {
-    const { entitiesMap, addEntity } = useEditor();
+    const { entitiesMap, addEntity } = useSceneStore();
     const [tree, setTree] = useState<EntityWithChildren[]>([]);
     const { showContextMenu } = useContextMenu();
 
@@ -159,6 +163,15 @@ const EntityTree = () => {
             id: uuid(),
             name: "New Entity",
             enabled: true,
+            components: [
+                {
+                    enabled: true,
+                    id: uuid(),
+                    name: BuiltInComponent.Transform,
+                    data: defaultValues[BuiltInComponent.Transform] as Record<string, unknown>,
+                    builtIn: true,
+                },
+            ],
         });
     };
 

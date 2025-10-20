@@ -10,6 +10,8 @@ import VideoRenderer from "./VideoRenderer";
 import MaskRenderer from "./MaskRenderer";
 import LightRenderer from "./LightRenderer";
 import DarknessRenderer from "./DarknessRenderer";
+import { useSceneStore } from "../../../stores/sceneStore";
+import { useEditorStore } from "../../../stores/editorStore";
 
 interface BuiltInComponentFactoryProps {
     component: EntityComponent;
@@ -17,34 +19,40 @@ interface BuiltInComponentFactoryProps {
 
 const BuiltInComponentFactory: React.FC<BuiltInComponentFactoryProps> = ({ component }) => {
     const componentName = component.name as BuiltInComponent;
+    const { selectedEntityId } = useEditorStore();
+    const { updateComponentData: updateComponent } = useSceneStore();
+
+    const handleUpdate = (propertyName: string) => (newValue: unknown) => {
+        updateComponent(selectedEntityId as string, component.id, { [propertyName]: newValue });
+    };
 
     switch (componentName) {
         case BuiltInComponent.Transform:
-            return <Transform component={component} />;
+            return <Transform component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.Camera:
-            return <Camera component={component} />;
+            return <Camera component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.SpriteRenderer:
-            return <SpriteRenderer component={component} />;
+            return <SpriteRenderer component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.TextRenderer:
-            return <TextRenderer component={component} />;
+            return <TextRenderer component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.TilemapRenderer:
-            return <TilemapRenderer component={component} />;
+            return <TilemapRenderer component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.VideoRenderer:
-            return <VideoRenderer component={component} />;
+            return <VideoRenderer component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.MaskRenderer:
-            return <MaskRenderer component={component} />;
+            return <MaskRenderer component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.LightRenderer:
-            return <LightRenderer component={component} />;
+            return <LightRenderer component={component} onUpdate={handleUpdate} />;
 
         case BuiltInComponent.DarknessRenderer:
-            return <DarknessRenderer component={component} />;
+            return <DarknessRenderer component={component} onUpdate={handleUpdate} />;
 
         default:
             // TODO: remove when all components are implemented

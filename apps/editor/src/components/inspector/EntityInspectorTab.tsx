@@ -1,22 +1,36 @@
 import { FileText, Plus } from "lucide-react";
 import Icon from "../ui/Icon";
-import { useEditor } from "../../hooks/useEditor";
 import EntityName from "./EntityName";
 import ComponentItem from "./ComponentItem";
 import ComponentDialog from "../ui/ComponentDialog";
 import { useState } from "react";
 import { BuiltInComponent } from "../../types/component";
+import { useSceneStore } from "../../stores/sceneStore";
+import { v4 as uuid } from "uuid";
+import { useEditorStore } from "../../stores/editorStore";
 
 const EntityInspectorTab = () => {
-    const { selectedEntity, entityInspector, addComponent } = useEditor();
+    const { selectedEntityId } = useEditorStore();
+    const { getComponentsByEntityId, addComponent, getEntityById } = useSceneStore();
     const [isComponentDialogOpen, setIsComponentDialogOpen] = useState(false);
+
+    const components = getComponentsByEntityId(selectedEntityId as string);
+    const hasComponents = components.length > 0;
+    const selectedEntity = getEntityById(selectedEntityId as string);
 
     const handleAddComponent = () => {
         setIsComponentDialogOpen(true);
     };
 
     const handleComponentSelect = (componentName: BuiltInComponent, defaultValues?: Record<string, unknown>) => {
-        addComponent(componentName, defaultValues);
+        const component = {
+            enabled: true,
+            id: uuid(),
+            name: componentName,
+            data: defaultValues ?? {},
+            builtIn: true,
+        };
+        addComponent(selectedEntityId as string, component);
         setIsComponentDialogOpen(false);
     };
 
@@ -33,9 +47,6 @@ const EntityInspectorTab = () => {
             </div>
         );
     }
-
-    const components = Array.from(entityInspector.components.values());
-    const hasComponents = components.length > 0;
 
     return (
         <div className="h-full flex flex-col">

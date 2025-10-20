@@ -52,13 +52,15 @@ export interface SceneState {
 
     // Component actions
     addComponent: (entityId: string, component: EntityComponent) => void;
-    removeComponent: (entityId: string, componentId: string) => void;
-    updateComponent: (entityId: string, componentId: string, updates: Partial<EntityComponent>) => void;
+    deleteComponent: (entityId: string, componentId: string) => void;
+    updateComponentData: (entityId: string, componentId: string, updates: Partial<EntityComponent>) => void;
+    setComponentEnabled: (entityId: string, componentId: string, enabled: boolean) => void;
+    getComponentsByEntityId: (entityId: string) => EntityComponent[];
 
     // Asset actions
     // System actions
     addSystem: (system: System) => void;
-    removeSystem: (systemId: string) => void;
+    deleteSystem: (systemId: string) => void;
     updateSystem: (systemId: string, updates: Partial<System>) => void;
     updateSystems: (systems: System[]) => void;
 
@@ -168,12 +170,25 @@ export const useSceneStore = create<SceneState>()(
                     });
                 },
 
-                updateComponent: (entityId, componentId, updates) => {
+                updateComponentData: (entityId, componentId, updates) => {
                     set((state) => {
                         const entityComponents = state.componentsMap.get(entityId);
                         if (entityComponents) {
-                            const component = entityComponents.find((comp) => comp.id === componentId);
-                            if (component) Object.assign(component, updates);
+                            const component = entityComponents.find((c) => c.id === componentId);
+                            if (component) Object.assign(component.data ?? {}, updates);
+
+                            state.action = SceneStateAction.ComponentUpdated;
+                            state.componentUpdated = [entityId, componentId];
+                        }
+                    });
+                },
+
+                setComponentEnabled: (entityId, componentId, enabled) => {
+                    set((state) => {
+                        const entityComponents = state.componentsMap.get(entityId);
+                        if (entityComponents) {
+                            const component = entityComponents.find((c) => c.id === componentId);
+                            if (component) component.enabled = enabled;
 
                             state.action = SceneStateAction.ComponentUpdated;
                             state.componentUpdated = [entityId, componentId];
@@ -193,7 +208,7 @@ export const useSceneStore = create<SceneState>()(
                     });
                 },
 
-                removeComponent: (entityId, componentId) => {
+                deleteComponent: (entityId, componentId) => {
                     set((state) => {
                         const entityComponents = state.componentsMap.get(entityId);
                         if (entityComponents) {
@@ -206,6 +221,11 @@ export const useSceneStore = create<SceneState>()(
                             }
                         }
                     });
+                },
+
+                getComponentsByEntityId: (entityId) => {
+                    const state = get();
+                    return state.componentsMap.get(entityId) || [];
                 },
 
                 updateScene: (updates) => {
@@ -221,7 +241,7 @@ export const useSceneStore = create<SceneState>()(
                     });
                 },
 
-                removeSystem: (systemId) => {
+                deleteSystem: (systemId) => {
                     set((state) => {
                         state.systemsMap.delete(systemId);
                     });

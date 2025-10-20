@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Cpu, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
 import Icon from "../ui/Icon";
-import { useEditor } from "../../hooks/useEditor";
 import { System } from "../../types/scene";
+import { useSceneStore } from "../../stores/sceneStore";
 
 interface DragItem {
     index: number;
@@ -11,7 +11,7 @@ interface DragItem {
 }
 
 const SystemsList = () => {
-    const { systemsMap, updateSystems } = useEditor();
+    const { systemsMap, updateSystems } = useSceneStore();
     const [draggedItem, setDraggedItem] = useState<DragItem | null>(null);
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
     const [selectedSystemId, setSelectedSystemId] = useState<string | null>(null);

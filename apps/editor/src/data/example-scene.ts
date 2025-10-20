@@ -14,6 +14,12 @@ export const exampleScene: Scene = {
         },
         {
             id: uuid(),
+            name: "Goblin Spritesheet",
+            url: "assets/example-scene/image/goblin-spritesheet.png",
+            type: AssetType.Image,
+        },
+        {
+            id: uuid(),
             name: "Tileset",
             url: "assets/example-scene/image/tileset.png",
             type: AssetType.Image,
