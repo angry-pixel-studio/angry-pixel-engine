@@ -1,7 +1,6 @@
 import {
     BallCollider,
     BoxCollider,
-    Camera,
     Component,
     ComponentType,
     DarknessRenderer,
@@ -23,8 +22,6 @@ export const getComponentType = (componentName: BuiltInComponent): ComponentType
     switch (componentName) {
         case BuiltInComponent.Transform:
             return Transform;
-        case BuiltInComponent.Camera:
-            return Camera;
         case BuiltInComponent.SpriteRenderer:
             return SpriteRenderer;
         case BuiltInComponent.TilemapRenderer:

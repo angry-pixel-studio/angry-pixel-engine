@@ -1,6 +1,17 @@
 import { EntityIdentifier } from "../component/EntityIdentifier";
 import { AssetType, EntityWithComponentsAndChildren, Scene } from "../../../types/scene";
-import { AssetManager, Entity, EntityManager, inject, SYMBOLS, System, SystemManager, TimeManager } from "angry-pixel";
+import {
+    AssetManager,
+    Camera,
+    Entity,
+    EntityManager,
+    inject,
+    SYMBOLS,
+    System,
+    SystemManager,
+    TimeManager,
+    Transform,
+} from "angry-pixel";
 import { SceneState } from "../../../stores/sceneStore";
 import { StoreApi, UseBoundStore } from "zustand";
 import { getComponentType, mapComponentData } from "../utils/components";
@@ -67,6 +78,8 @@ export class LoadSceneSystem implements System {
     }
 
     private createEntities(parent?: Entity, children?: EntityWithComponentsAndChildren[]): void {
+        this.createCamera();
+
         const entities = parent ? children : this.sceneData?.entities;
 
         entities?.forEach(({ id, name, components, children }) => {
@@ -89,5 +102,22 @@ export class LoadSceneSystem implements System {
                 this.createEntities(entity, children as EntityWithComponentsAndChildren[]);
             }
         });
+    }
+
+    private createCamera(): void {
+        this.entityManager.createEntity([
+            new Transform(),
+            new Camera({
+                layers: this.sceneData?.entities
+                    .filter((e) => e.components.some((c) => c.name === BuiltInComponent.Camera))
+                    .reduce<string[]>((acc, e) => {
+                        acc.push(
+                            ...(e.components.find((c) => c.name === BuiltInComponent.Camera)?.data?.layers as string[]),
+                        );
+                        return acc;
+                    }, []),
+                debug: true,
+            }),
+        ]);
     }
 }
