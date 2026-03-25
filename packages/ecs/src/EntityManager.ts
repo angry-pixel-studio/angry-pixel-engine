@@ -623,9 +623,11 @@ export class EntityManager {
     public isComponentEnabled<T extends Component>(entity: Entity, componentType: ComponentType<T>): boolean;
     public isComponentEnabled<T extends Component>(arg1: Entity | T, arg2?: ComponentType<T>): boolean {
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
-        const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
+        // entity does not have the component
+        if (typeof arg1 === "number" && !this.components.get(id)?.has(arg1)) return false;
 
-        return entity !== undefined && !this.disabledComponents.get(entity)?.has(id);
+        const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
+        return !this.disabledComponents.get(entity)?.has(id);
     }
 
     /**

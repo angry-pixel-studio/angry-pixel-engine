@@ -12,9 +12,6 @@
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "license": "MIT",
     "private": true,
-    "dependencies": {
-        "gl-matrix": "^3.4.3"
-    },
     "devDependencies": {
         "@rollup/plugin-alias": "^5.1.1",
         "@rollup/plugin-commonjs": "^26.0.1",
