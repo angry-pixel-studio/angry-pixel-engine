@@ -1,0 +1,38 @@
+---
+description: Angry Pixel Engine monorepo layout, ECS architecture, and where to work
+alwaysApply: true
+---
+
+# Angry Pixel Engine
+
+**Angry Pixel** is a **2D game engine** in **TypeScript** built around **Entity–Component–System (ECS)**. Prefer extending the engine via **components** and **systems** rather than ad-hoc globals.
+
+## Monorepo layout
+
+| Area | Path | Role |
+|------|------|------|
+| Library source | `packages/` | Private workspaces `@angry-pixel/*` — engine core lives here |
+| Published npm bundle | `bundles/angry-pixel/` | Build output for the public package **`angry-pixel`** (versioned here) |
+| Documentation | `docs/docs/` | MkDocs sources (`en/`, `es/`); site built from `docs/` |
+| Demo game | `apps/demo/` | Integration testbed and example usage |
+
+## Packages (`packages/`)
+
+Workspaces compose the engine; **`@angry-pixel/engine`** references **`ecs`**, **`math`**, **`collisions`**, **`webgl`**, **`ioc`**.
+
+- **`ecs`** — entity manager, components, systems.
+- **`engine`** — game loop, scenes, built-in components/systems, rendering pipeline; uses path aliases like `@component/*`, `@system/*`, `@manager/*` (see `packages/engine/tsconfig.json`).
+
+Change engine behavior in **`packages/`**; the bundle in **`bundles/angry-pixel/`** is the packaged artifact, not the primary edit surface.
+
+## Common commands (repo root)
+
+- `yarn build` — builds `@angry-pixel/engine` (tsc project refs + Rollup).
+- `yarn demo:start` — runs **`apps/demo`** via webpack dev server.
+- `yarn docs` — builds MkDocs (requires Python + mkdocs in `docs/`).
+
+## Docs and API
+
+User-facing docs: **`docs/docs/`**. API reference is generated (`yarn api-docs` uses TypeDoc from the engine package).
+
+When unsure of a public API or pattern, check **`docs/docs/`** and existing usage in **`apps/demo/`** before inventing new patterns.
