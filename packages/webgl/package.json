@@ -5,5 +5,8 @@
     "author": "Mauro Cristy <maurocristy@gmail.com>",
     "license": "MIT",
     "private": true,
-    "main": "src/index.ts"
+    "main": "src/index.ts",
+    "dependencies": {
+        "gl-matrix": "^3.4.3"
+    }
 }
