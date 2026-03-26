@@ -20,21 +20,51 @@ export class SpartialGrid implements BroadPhaseResolver {
     private cellHeight: number;
     private subdivisions: number = 0;
 
+    private lastAreaX = NaN;
+    private lastAreaY = NaN;
+    private lastAreaW = NaN;
+    private lastAreaH = NaN;
+    private lastSubdivisions = -1;
+
+    /** Dedupe in retrieve: generation stamp per id index */
+    private seenGen: number[] = [];
+    private retrieveSerial = 0;
+    private readonly retrieveResult: number[] = [];
+
     // cache
     private minArea: Vector2 = new Vector2();
     private maxArea: Vector2 = new Vector2();
     private coordinates: Coordinates = { x0: 0, x1: 0, y0: 0, y1: 0 };
 
     public update(shapes: Shape[]): void {
-        this.clear();
-        if (shapes.length === 0) return;
+        if (shapes.length === 0) {
+            this.rects.clear();
+            if (this.grid.length > 0) {
+                this.clearGridCells();
+            }
+            return;
+        }
+
         this.resize(shapes);
+        this.ensureSeenCapacity(shapes.length);
+
         shapes.forEach(({ id, boundingBox }) => this.insert(id, boundingBox));
     }
 
-    private clear(): void {
-        this.grid = [];
-        this.rects.clear();
+    private ensureSeenCapacity(shapeCount: number): void {
+        if (this.seenGen.length < shapeCount) {
+            const start = this.seenGen.length;
+            this.seenGen.length = shapeCount;
+            this.seenGen.fill(0, start, shapeCount);
+        }
+    }
+
+    private clearGridCells(): void {
+        for (let x = 0; x < this.subdivisions; x++) {
+            for (let y = 0; y < this.subdivisions; y++) {
+                this.grid[x][y].length = 0;
+            }
+        }
     }
 
     private resize(shapes: Shape[]): void {
@@ -46,19 +76,44 @@ export class SpartialGrid implements BroadPhaseResolver {
             this.maxArea.set(Math.max(box.x1, this.maxArea.x), Math.max(box.y1, this.maxArea.y));
         });
 
-        this.area.set(this.minArea.x, this.minArea.y, this.maxArea.x - this.minArea.x, this.maxArea.y - this.minArea.y);
+        const ax = this.minArea.x;
+        const ay = this.minArea.y;
+        const aw = this.maxArea.x - this.minArea.x;
+        const ah = this.maxArea.y - this.minArea.y;
 
-        this.updateSubdivisions(shapes.length);
+        this.area.set(ax, ay, aw, ah);
+
+        const newSubdivisions = ((shapes.length / MAX_COLLIDERS_PER_CELL) | 0) + 1;
+
+        this.cellWidth = Math.ceil(this.area.width / newSubdivisions);
+        this.cellHeight = Math.ceil(this.area.height / newSubdivisions);
+
+        const reuse =
+            this.grid.length > 0 &&
+            newSubdivisions === this.lastSubdivisions &&
+            ax === this.lastAreaX &&
+            ay === this.lastAreaY &&
+            aw === this.lastAreaW &&
+            ah === this.lastAreaH;
+
+        if (reuse) {
+            this.clearGridCells();
+        } else {
+            this.subdivisions = newSubdivisions;
+            this.buildGrid();
+            this.lastSubdivisions = newSubdivisions;
+            this.lastAreaX = ax;
+            this.lastAreaY = ay;
+            this.lastAreaW = aw;
+            this.lastAreaH = ah;
+        }
+
+        this.subdivisions = newSubdivisions;
+        this.rects.clear();
     }
 
-    private updateSubdivisions(length: number): void {
-        this.subdivisions = ((length / MAX_COLLIDERS_PER_CELL) | 0) + 1;
-
-        this.cellWidth = Math.ceil(this.area.width / this.subdivisions);
-        this.cellHeight = Math.ceil(this.area.height / this.subdivisions);
-
+    private buildGrid(): void {
         this.grid = [];
-
         for (let x = 0; x < this.subdivisions; x++) {
             this.grid[x] = [];
 
@@ -81,20 +136,30 @@ export class SpartialGrid implements BroadPhaseResolver {
     }
 
     public retrieve(box: Rectangle): number[] {
-        const ids = new Set<number>();
+        this.retrieveResult.length = 0;
+        if (++this.retrieveSerial === 0x7fffffff) {
+            this.retrieveSerial = 1;
+            this.seenGen.fill(0);
+        }
+
         this.updateCoordinates(box);
 
         for (let x = this.coordinates.x0; x <= this.coordinates.x1; x++) {
             for (let y = this.coordinates.y0; y <= this.coordinates.y1; y++) {
-                this.grid[x][y].forEach((id) => {
+                const cellIds = this.grid[x][y];
+                for (let i = 0, len = cellIds.length; i < len; i++) {
+                    const id = cellIds[i];
                     if (this.rects.get(id)!.intersects(box)) {
-                        ids.add(id);
+                        if (this.seenGen[id] !== this.retrieveSerial) {
+                            this.seenGen[id] = this.retrieveSerial;
+                            this.retrieveResult.push(id);
+                        }
                     }
-                });
+                }
             }
         }
 
-        return Array.from(ids);
+        return this.retrieveResult;
     }
 
     private updateCoordinates(area: Rectangle): void {

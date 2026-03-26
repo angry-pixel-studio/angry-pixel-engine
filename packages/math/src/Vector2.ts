@@ -169,7 +169,13 @@ export class Vector2 {
      * ```
      */
     public static unit(out: Vector2, a: Vector2): Vector2 {
-        a.magnitude === 0 ? out.set(0, 0) : out.set(a.x / a.magnitude, a.y / a.magnitude);
+        const lenSq = a.x * a.x + a.y * a.y;
+        if (lenSq === 0) {
+            out.set(0, 0);
+        } else {
+            const inv = 1 / Math.sqrt(lenSq);
+            out.set(a.x * inv, a.y * inv);
+        }
 
         return out;
     }
