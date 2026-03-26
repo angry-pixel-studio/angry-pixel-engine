@@ -40,9 +40,10 @@ export abstract class BaseUpdateColliderShapeSystem {
 
         if (localRotation !== 0) {
             const translatedAngle = Math.atan2(this.auxScaledOffset.y, this.auxScaledOffset.x) + localRotation;
+            const len = this.auxScaledOffset.magnitude;
             shape.position.set(
-                localPosition.x + this.auxScaledOffset.magnitude * Math.cos(translatedAngle),
-                localPosition.y + this.auxScaledOffset.magnitude * Math.sin(translatedAngle),
+                localPosition.x + len * Math.cos(translatedAngle),
+                localPosition.y + len * Math.sin(translatedAngle),
             );
         } else {
             Vector2.add(shape.position, localPosition, this.auxScaledOffset);

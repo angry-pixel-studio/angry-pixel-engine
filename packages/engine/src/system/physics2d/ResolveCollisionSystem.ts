@@ -24,14 +24,30 @@ export class ResolveCollisionSystem implements System {
     private colliders: Collider[] = [];
     private collisions: Set<string> = new Set();
     private shapes: Shape[] = [];
+    /** When set, O(1) layer-pair lookup instead of scanning collisionMatrix per neighbor */
+    private readonly layerNeighbors: Map<string, Set<string>> | null;
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
         @inject(SYMBOLS.CollisionBroadphaseResolver) private broadPhaseResolver: BroadPhaseResolver,
-        @inject(SYMBOLS.CollisionMatrix) private collisionMatrix: CollisionMatrix,
+        @inject(SYMBOLS.CollisionMatrix) collisionMatrix: CollisionMatrix | undefined,
         @inject(SYMBOLS.CollisionResolutionMethod) private collisionResolutionMethod: CollisionMethod,
         @inject(SYMBOLS.CollisionRepository) private collisionRepository: CollisionRepository,
-    ) {}
+    ) {
+        if (collisionMatrix !== undefined && collisionMatrix !== null) {
+            const map = new Map<string, Set<string>>();
+            for (let i = 0; i < collisionMatrix.length; i++) {
+                const [a, b] = collisionMatrix[i];
+                if (!map.has(a)) map.set(a, new Set());
+                if (!map.has(b)) map.set(b, new Set());
+                map.get(a)!.add(b);
+                map.get(b)!.add(a);
+            }
+            this.layerNeighbors = map;
+        } else {
+            this.layerNeighbors = null;
+        }
+    }
 
     public onUpdate(): void {
         this.collisionRepository.removeAll();
@@ -62,18 +78,28 @@ export class ResolveCollisionSystem implements System {
 
     // broad phase takes care of looking for possible collisions
     private broadPhase({ boundingBox, layer }: Shape): Shape[] {
-        return this.collisionMatrix
-            ? this.broadPhaseResolver
-                  .retrieve(boundingBox)
-                  .map<Shape>((id) => this.shapes[id])
-                  .filter((remote) =>
-                      this.collisionMatrix.some(
-                          (row) =>
-                              (row[0] === layer && row[1] === remote.layer) ||
-                              (row[1] === layer && row[0] === remote.layer),
-                      ),
-                  )
-            : this.broadPhaseResolver.retrieve(boundingBox).map<Shape>((id) => this.shapes[id]);
+        const ids = this.broadPhaseResolver.retrieve(boundingBox);
+        const n = ids.length;
+        const out: Shape[] = [];
+
+        if (this.layerNeighbors) {
+            const allowed = this.layerNeighbors.get(layer);
+            if (!allowed) {
+                return out;
+            }
+            for (let i = 0; i < n; i++) {
+                const remote = this.shapes[ids[i]];
+                if (allowed.has(remote.layer)) {
+                    out.push(remote);
+                }
+            }
+            return out;
+        }
+
+        for (let i = 0; i < n; i++) {
+            out.push(this.shapes[ids[i]]);
+        }
+        return out;
     }
 
     // narrow phase takes care of checking for actual collision
@@ -91,13 +117,22 @@ export class ResolveCollisionSystem implements System {
                 const resolution = this.collisionResolutionMethod.findCollision(local, neighbor);
 
                 if (resolution) {
+                    const penetration = resolution.penetration;
+                    const dirA = resolution.direction.clone();
+
                     this.collisionRepository.persist({
                         localCollider: this.colliders[local.collider],
                         localEntity: local.entity,
                         remoteCollider: this.colliders[neighbor.collider],
                         remoteEntity: neighbor.entity,
-                        resolution,
+                        resolution: {
+                            direction: dirA,
+                            penetration,
+                        },
                     });
+
+                    const dirB = resolution.direction.clone();
+                    Vector2.scale(dirB, dirB, -1);
 
                     this.collisionRepository.persist({
                         localCollider: this.colliders[neighbor.collider],
@@ -105,8 +140,8 @@ export class ResolveCollisionSystem implements System {
                         remoteCollider: this.colliders[local.collider],
                         remoteEntity: local.entity,
                         resolution: {
-                            direction: Vector2.scale(new Vector2(), resolution.direction, -1),
-                            penetration: resolution.penetration,
+                            direction: dirB,
+                            penetration,
                         },
                     });
 

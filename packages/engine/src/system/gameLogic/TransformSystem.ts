@@ -60,15 +60,14 @@ export class TransformSystem implements System {
         child.localScale.x = child.scale.x * (child.ignoreParentScale ? 1 : child._parent.scale.x);
         child.localScale.y = child.scale.y * (child.ignoreParentScale ? 1 : child._parent.scale.y);
 
+        const len = child.position.magnitude;
         const translatedAngle =
             Math.atan2(child.position.y, child.position.x) +
             (child.ignoreParentRotation ? 0 : child._parent.localRotation);
 
         child.localPosition.set(
-            child.position.magnitude * Math.cos(translatedAngle) +
-                (child.ignoreParentPosition ? 0 : child._parent.localPosition.x),
-            child.position.magnitude * Math.sin(translatedAngle) +
-                (child.ignoreParentPosition ? 0 : child._parent.localPosition.y),
+            len * Math.cos(translatedAngle) + (child.ignoreParentPosition ? 0 : child._parent.localPosition.x),
+            len * Math.sin(translatedAngle) + (child.ignoreParentPosition ? 0 : child._parent.localPosition.y),
         );
     }
 }

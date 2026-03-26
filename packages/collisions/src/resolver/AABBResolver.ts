@@ -11,6 +11,8 @@ export class AABBResolver implements CollisionResolver {
     private minOverlap: number;
     private direction: Vector2 = new Vector2();
     private resolutionDirection: Vector2 = new Vector2();
+    /** Reused return direction; callers that store CollisionResolution must copy `direction`. */
+    private readonly outDirection: Vector2 = new Vector2();
 
     public resolve({ boundingBox: boxA }: Shape, { boundingBox: boxB }: Shape): CollisionResolution {
         this.overlapX = Math.min(boxA.x1, boxB.x1) - Math.max(boxA.x, boxB.x);
@@ -33,7 +35,7 @@ export class AABBResolver implements CollisionResolver {
         }
 
         return {
-            direction: Vector2.unit(new Vector2(), this.resolutionDirection),
+            direction: Vector2.unit(this.outDirection, this.resolutionDirection),
             penetration: this.minOverlap,
         };
     }
