@@ -1,4 +1,4 @@
-import { EntityManager, System } from "@angry-pixel/ecs";
+import { ComponentType, EntityManager, System } from "@angry-pixel/ecs";
 import { inject, injectable } from "@angry-pixel/ioc";
 import { Collider } from "@angry-pixel/collisions";
 import { SYMBOLS } from "@config/dependencySymbols";
@@ -12,6 +12,14 @@ import { TilemapCollider } from "@component/physics2d/TilemapCollider";
 import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";
 import { RigidBody, RigidBodyType } from "@component/physics2d/RigidBody";
 
+const colliderTypes: Set<ComponentType<Collider>> = new Set([
+    BoxCollider,
+    BallCollider,
+    PolygonCollider,
+    EdgeCollider,
+    TilemapCollider,
+]);
+
 @injectable(SYSTEM_SYMBOLS.UpdateCollidersAfterRepositionSystem)
 export class UpdateCollidersAfterRepositionSystem extends BaseUpdateColliderShapeSystem implements System {
     constructor(@inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager) {
@@ -19,23 +27,20 @@ export class UpdateCollidersAfterRepositionSystem extends BaseUpdateColliderShap
     }
 
     public onUpdate(): void {
-        const dynamicBodies = this.entityManager
+        this.entityManager
             .search(RigidBody, (rigidBody) => rigidBody.type === RigidBodyType.Dynamic)
-            .map(({ entity }) => entity);
+            .forEach(({ entity }) => {
+                const transform = this.entityManager.getComponent(entity, Transform);
 
-        [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
-            this.entityManager
-                .search<Collider>(type, (collider, entity) => dynamicBodies.includes(entity))
-                .forEach(({ component: collider, entity }) =>
-                    collider.shapes.forEach((shape) => {
-                        this.updatePositionAndVertices(
-                            shape,
-                            collider.offset,
-                            this.entityManager.getComponent(entity, Transform),
-                        );
-                        this.updateBoundingBox(shape);
-                    }),
-                ),
-        );
+                for (const type of colliderTypes) {
+                    if (this.entityManager.hasComponent(entity, type)) {
+                        const collider = this.entityManager.getComponent(entity, type);
+                        collider.shapes.forEach((shape) => {
+                            this.updatePositionAndVertices(shape, collider.offset, transform);
+                            this.updateBoundingBox(shape);
+                        });
+                    }
+                }
+            });
     }
 }

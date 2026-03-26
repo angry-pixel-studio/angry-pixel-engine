@@ -14,6 +14,10 @@ export class QuadTree implements BroadPhaseResolver {
     private rects: Map<number, Rectangle> = new Map();
     private children: QuadTree[] = null;
 
+    /** Root-only: dedupe ids across leaves (same scheme as SpartialGrid) */
+    private seenGen: number[] = [];
+    private retrieveSerial = 0;
+
     // cache
     private minArea: Vector2 = new Vector2();
     private maxArea: Vector2 = new Vector2();
@@ -27,7 +31,16 @@ export class QuadTree implements BroadPhaseResolver {
         this.clear();
         if (shapes.length === 0) return;
         this.resize(shapes);
+        this.ensureSeenCapacity(shapes.length);
         shapes.forEach(({ id, boundingBox }) => this.insert(id, boundingBox));
+    }
+
+    private ensureSeenCapacity(shapeCount: number): void {
+        if (this.seenGen.length < shapeCount) {
+            const start = this.seenGen.length;
+            this.seenGen.length = shapeCount;
+            this.seenGen.fill(0, start, shapeCount);
+        }
     }
 
     private clear(): void {
@@ -98,21 +111,26 @@ export class QuadTree implements BroadPhaseResolver {
     }
 
     public retrieve(rect: Rectangle): number[] {
+        if (++this.retrieveSerial === 0x7fffffff) {
+            this.retrieveSerial = 1;
+            this.seenGen.fill(0);
+        }
         const neighbors: number[] = [];
-        this.retrieveFromNode(rect, neighbors);
+        this.retrieveFromNode(rect, neighbors, this.retrieveSerial, this.seenGen);
         return neighbors;
     }
 
-    private retrieveFromNode(rect: Rectangle, result: number[]): void {
+    private retrieveFromNode(rect: Rectangle, result: number[], serial: number, seenGen: number[]): void {
         if (this.children) {
             this.children.forEach((child) => {
                 if (child.bounds.intersects(rect)) {
-                    child.retrieveFromNode(rect, result);
+                    child.retrieveFromNode(rect, result, serial, seenGen);
                 }
             });
         } else {
             this.rects.forEach((value, key) => {
-                if (value.intersects(rect) && result.indexOf(key) === -1) {
+                if (value.intersects(rect) && seenGen[key] !== serial) {
+                    seenGen[key] = serial;
                     result.push(key);
                 }
             });
