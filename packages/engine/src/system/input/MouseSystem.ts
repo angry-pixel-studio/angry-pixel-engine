@@ -35,9 +35,9 @@ export class MouseSystem {
         event.preventDefault();
         event.stopPropagation();
 
-        this.leftButtonPressed = event.button === 0;
-        this.scrollButtonPressed = event.button === 1;
-        this.rightButtonPressed = event.button === 2;
+        this.leftButtonPressed = event.button === 0 ? true : this.leftButtonPressed;
+        this.scrollButtonPressed = event.button === 1 ? true : this.scrollButtonPressed;
+        this.rightButtonPressed = event.button === 2 ? true : this.rightButtonPressed;
     }
 
     private updateButtonUp(event: MouseEvent) {
