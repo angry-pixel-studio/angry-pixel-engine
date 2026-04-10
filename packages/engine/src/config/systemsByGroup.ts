@@ -16,6 +16,7 @@ import { CullingSystem } from "@system/render2d/CullingSystem";
 import { MaskRendererSystem } from "@system/render2d/MaskRendererSystem";
 import { RenderSystem } from "@system/render2d/RenderSystem";
 import { DarknessLightRendererSystem } from "@system/render2d/DarknessLightRendererSystem";
+import { GeometricRendererSystem } from "@system/render2d/GeometricRendererSystem";
 import { SpriteRendererSystem } from "@system/render2d/SpriteRendererSystem";
 import { TextRendererSystem } from "@system/render2d/TextRendererSystem";
 import { TilemapRendererSystem } from "@system/render2d/TilemapRendererSystem";
@@ -72,6 +73,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEM_SYMBOLS.CameraSystem, type: CameraSystem },
             { name: SYSTEM_SYMBOLS.TilemapRendererSystem, type: TilemapRendererSystem },
             { name: SYSTEM_SYMBOLS.SpriteRendererSystem, type: SpriteRendererSystem },
+            { name: SYSTEM_SYMBOLS.GeometricRendererSystem, type: GeometricRendererSystem },
             { name: SYSTEM_SYMBOLS.MaskRendererSystem, type: MaskRendererSystem },
             { name: SYSTEM_SYMBOLS.DarknessLightRendererSystem, type: DarknessLightRendererSystem },
             { name: SYSTEM_SYMBOLS.TextRendererSystem, type: TextRendererSystem },

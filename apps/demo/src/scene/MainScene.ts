@@ -1,10 +1,12 @@
 import {
     AudioPlayer,
-    MaskRenderer,
-    MaskShape,
+    GeometricRenderer,
+    GeometricShape,
     randomInt,
     Scene,
     TextAlignment,
+    MaskRenderer,
+    MaskShape,
     TextRenderer,
     Transform,
     Vector2,
@@ -160,6 +162,36 @@ export class MainScene extends Scene {
                 },
                 letterSpacing: 0,
                 alignment: TextAlignment.Left,
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(-280, 0) }),
+            new GeometricRenderer({
+                shape: GeometricShape.Polygon,
+                color: "#00FF88",
+                layer: RENDER_LAYERS.Foreground,
+                vertexModel: [new Vector2(-36, -28), new Vector2(36, -28), new Vector2(44, 24), new Vector2(-44, 24)],
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(0, -96) }),
+            new GeometricRenderer({
+                shape: GeometricShape.Line,
+                color: "#FFCC00",
+                layer: RENDER_LAYERS.Foreground,
+                vertexModel: [new Vector2(-80, -20), new Vector2(80, 20), new Vector2(-60, 30), new Vector2(60, -30)],
+            }),
+        ]);
+
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(280, 0) }),
+            new GeometricRenderer({
+                shape: GeometricShape.Circumference,
+                color: "#66AAFF",
+                layer: RENDER_LAYERS.Foreground,
+                radius: 48,
             }),
         ]);
     }

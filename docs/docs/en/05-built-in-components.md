@@ -27,5 +27,6 @@ Angry Pixel Engine includes a set of built-in components that cover common funct
 -   SpriteRenderer
 -   DarknessRenderer
 -   MaskRenderer
+-   GeometricRenderer
 -   LightRenderer
 -   Camera

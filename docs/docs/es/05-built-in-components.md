@@ -27,5 +27,6 @@ Angry Pixel Engine incluye una serie de componentes integrados (_built-in_) que 
 -   SpriteRenderer
 -   DarknessRenderer
 -   MaskRenderer
+-   GeometricRenderer
 -   LightRenderer
 -   Camera

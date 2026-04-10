@@ -91,6 +91,7 @@ nav:
           - TextRenderer: 05-06-text-renderer.md
           - TilemapRenderer: 05-07-tilemap-renderer.md
           - MaskRenderer: 05-08-mask-renderer.md
+          - GeometricRenderer: 05-18-geometric-renderer.md
           - Darkness Light Renderer: 05-09-darkness-light-renderer.md
           - VideoRenderer: 05-10-video-renderer.md
           - Animator: 05-11-animator.md

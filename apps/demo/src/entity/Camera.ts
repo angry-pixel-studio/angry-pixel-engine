@@ -1,6 +1,6 @@
 import { FollowPlayerCamera } from "@component/camera/FollowPlayerCamera";
 import { RENDER_LAYERS } from "@config/layers";
-import { Archetype, Camera, defaultRenderLayer, DarknessRenderer, Transform } from "angry-pixel";
+import { Archetype, Camera, DarknessRenderer, Transform } from "angry-pixel";
 
 export const mainCameraArchetype: Archetype = {
     components: [

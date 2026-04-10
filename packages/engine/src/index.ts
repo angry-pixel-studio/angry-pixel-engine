@@ -40,6 +40,7 @@ export * from "@component/render2d/Camera";
 export * from "@component/render2d/LightRenderer";
 export * from "@component/render2d/MaskRenderer";
 export * from "@component/render2d/DarknessRenderer";
+export * from "@component/render2d/GeometricRenderer";
 export * from "@component/render2d/SpriteRenderer";
 export * from "@component/render2d/TextRenderer";
 export * from "@component/render2d/TilemapRenderer";
@@ -83,4 +84,4 @@ export {
     Polygon,
     Shape,
 } from "@angry-pixel/collisions";
-export { MaskShape, Slice, TilemapOrientation, TextAlignment } from "@angry-pixel/webgl";
+export { GeometricShape, MaskShape, Slice, TilemapOrientation, TextAlignment } from "@angry-pixel/webgl";

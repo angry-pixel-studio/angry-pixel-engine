@@ -29,6 +29,7 @@ export const SYSTEM_SYMBOLS = {
     RenderSystem: Symbol.for("RenderSystem"),
     DarknessLightRendererSystem: Symbol.for("DarknessLightRendererSystem"),
     SpriteRendererSystem: Symbol.for("SpriteRendererSystem"),
+    GeometricRendererSystem: Symbol.for("GeometricRendererSystem"),
     TextRendererSystem: Symbol.for("TextRendererSystem"),
     TilemapRendererSystem: Symbol.for("TilemapRendererSystem"),
     VideoRendererSystem: Symbol.for("VideoRendererSystem"),
