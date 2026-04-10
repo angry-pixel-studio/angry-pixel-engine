@@ -20,7 +20,9 @@
         "prettier-check": "prettier --check \"packages/*/src/**/*.ts\"",
         "publish": "yarn run build && yarn workspace angry-pixel publish",
         "api-docs": "yarn run build:types && yarn workspace @angry-pixel/engine typedoc",
-        "docs": "cd docs && python -m mkdocs build"
+        "docs": "cd docs && mkdocs build",
+        "deploy-docs": "scripts/deploy-docs-rsync.sh",
+        "deploy-api-docs": "scripts/deploy-api-docs-rsync.sh"
     },
     "devDependencies": {
         "eslint": "^9.2.0",
