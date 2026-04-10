@@ -62,6 +62,6 @@ export class TouchScreenSystem {
 
     public onUpdate(): void {
         this.touchScreen.touching = this.touching;
-        this.touchScreen.interactions = [...this.touchScreen.interactions];
+        this.touchScreen.interactions = this.touching ? [...this.interactions] : [];
     }
 }
