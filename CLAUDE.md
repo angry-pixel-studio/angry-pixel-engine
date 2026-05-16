@@ -1,8 +1,3 @@
----
-description: Angry Pixel Engine monorepo layout, ECS architecture, and where to work
-alwaysApply: true
----
-
 # Angry Pixel Engine
 
 **Angry Pixel** is a **2D game engine** in **TypeScript** built around **Entity–Component–System (ECS)**. Prefer extending the engine via **components** and **systems** rather than ad-hoc globals.

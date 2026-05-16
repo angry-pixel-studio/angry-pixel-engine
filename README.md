@@ -1,4 +1,4 @@
-![Angry Pixel](https://angrypixel.gg/assets/image/logo-text-white-mid.png)
+<img src="https://angrypixel.gg/image/angry-pixel-logo.png" alt="Angry Pixel" width="256" />
 
 [![NPM Version](https://img.shields.io/npm/v/angry-pixel?style=for-the-badge)](https://www.npmjs.com/package/angry-pixel)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/angry-pixel-studio/angry-pixel-engine/blob/master/LICENSE)
@@ -190,5 +190,5 @@ game.run();
 
 ## DOCS
 
-🔎 [Documentation](https://docs.angrypixel.gg)\
-⚙️ [Api Docs](https://api-docs.angrypixel.gg)
+🔎 [Documentation](https://angrypixel.gg/engine)\
+⚙️ [Api Docs](https://angrypixel.gg/engine/api-docs)
