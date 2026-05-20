@@ -6,7 +6,7 @@
         "strict": true,
         "strictNullChecks": false,
         "sourceMap": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "experimentalDecorators": true

@@ -3,6 +3,9 @@ import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchR
 import { deepClone } from "./utils";
 import { SYMBOLS } from "./symbols";
 
+const COMPONENT_TYPE_ID = Symbol("ecs.componentTypeId");
+let nextComponentTypeId = 0;
+
 /**
  * The EntityManager is responsible for managing the lifecycle and relationships of entities and components.\
  * It provides methods for creating, reading, updating and deleting entities and their associated components.\
@@ -60,9 +63,10 @@ import { SYMBOLS } from "./symbols";
 @injectable(SYMBOLS.EntityManager)
 export class EntityManager {
     private lastEntityId: number = 0;
-    private lastComponentTypeId: number = 0;
     private entities: Set<Entity> = new Set();
     private components: Map<number, Map<Entity, Component>> = new Map(); // componen type id -> entity id -> component
+    private entityComponents: Map<Entity, Map<number, Component>> = new Map(); // entity -> component type id -> component
+    private componentToEntity: WeakMap<Component, Entity> = new WeakMap(); // component instance -> entity
     private disabledEntities: Set<Entity> = new Set();
     private manuallyDisabledEntities: Set<Entity> = new Set();
     private disabledComponents: Map<Entity, Set<number>> = new Map(); // entity -> set of component type id
@@ -188,9 +192,14 @@ export class EntityManager {
     public removeEntity(entity: Entity): void {
         this.getChildren(entity).forEach((child) => this.removeEntity(child));
 
-        this.components.forEach((row) => {
-            if (row.has(entity)) row.delete(entity);
-        });
+        const entityMap = this.entityComponents.get(entity);
+        if (entityMap) {
+            entityMap.forEach((component, id) => {
+                this.components.get(id)?.delete(entity);
+                this.componentToEntity.delete(component);
+            });
+            this.entityComponents.delete(entity);
+        }
 
         this.disabledComponents.delete(entity);
         this.disabledEntities.delete(entity);
@@ -229,6 +238,8 @@ export class EntityManager {
             }
         } else {
             this.components.clear();
+            this.entityComponents.clear();
+            this.componentToEntity = new WeakMap();
             this.disabledComponents.clear();
             this.disabledEntities.clear();
             this.manuallyDisabledEntities.clear();
@@ -473,6 +484,14 @@ export class EntityManager {
 
         this.components.get(id).set(entity, instance);
 
+        let entityMap = this.entityComponents.get(entity);
+        if (!entityMap) {
+            entityMap = new Map();
+            this.entityComponents.set(entity, entityMap);
+        }
+        entityMap.set(id, instance);
+        this.componentToEntity.set(instance, entity);
+
         return instance as T;
     }
 
@@ -488,7 +507,7 @@ export class EntityManager {
      * ```
      */
     public hasComponent(entity: Entity, componentType: ComponentType): boolean {
-        return this.getComponent(entity, componentType) !== undefined;
+        return this.components.get(this.getComponentTypeId(componentType))?.has(entity) ?? false;
     }
 
     /**
@@ -517,15 +536,8 @@ export class EntityManager {
      * ```
      */
     public getComponents(entity: Entity): Component[] {
-        const components: Component[] = [];
-
-        this.components.forEach((entityComponent) =>
-            entityComponent.forEach((c, e) => {
-                if (entity === e) components.push(c);
-            }),
-        );
-
-        return components;
+        const map = this.entityComponents.get(entity);
+        return map ? Array.from(map.values()) : [];
     }
 
     /**
@@ -561,13 +573,7 @@ export class EntityManager {
      * ```
      */
     public getEntityForComponent(component: Component): Entity {
-        const id = this.getComponentTypeId(component);
-        if (this.components.has(id)) {
-            for (const [e, c] of this.components.get(id)) {
-                if (c === component) return e;
-            }
-        }
-        return undefined;
+        return this.componentToEntity.get(component);
     }
 
     /**
@@ -595,7 +601,20 @@ export class EntityManager {
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
 
-        if (entity !== undefined && this.components.get(id)?.has(entity)) this.components.get(id).delete(entity);
+        if (entity === undefined) return;
+
+        const row = this.components.get(id);
+        const instance = row?.get(entity);
+        if (instance === undefined) return;
+
+        row.delete(entity);
+        this.componentToEntity.delete(instance);
+
+        const entityMap = this.entityComponents.get(entity);
+        if (entityMap) {
+            entityMap.delete(id);
+            if (entityMap.size === 0) this.entityComponents.delete(entity);
+        }
     }
 
     /**
@@ -788,15 +807,17 @@ export class EntityManager {
         const includeDisabled = typeof arg1 === "boolean" ? arg1 : arg2;
         const filter = typeof arg1 === "function" ? arg1 : undefined;
 
-        if (this.components.has(id)) {
-            this.components.get(id).forEach((component, entity) => {
+        const row = this.components.get(id);
+        if (row) {
+            for (const [entity, component] of row) {
                 if (
                     (!filter || filter(component as T, entity)) &&
                     (includeDisabled ||
-                        (this.isEntityEnabled(entity) && this.isComponentEnabled(entity, componentType)))
-                )
+                        (!this.disabledEntities.has(entity) && !this.disabledComponents.get(entity)?.has(id)))
+                ) {
                     result.push({ entity, component: component as T });
-            });
+                }
+            }
         }
 
         return result;
@@ -815,27 +836,32 @@ export class EntityManager {
      * ```
      */
     public searchEntitiesByComponents(componentTypes: ComponentType[]): Entity[] {
-        const entities: Entity[] = [];
-        let first = true;
+        if (componentTypes.length === 0) return [];
 
+        const maps: Map<Entity, Component>[] = [];
         for (const componentType of componentTypes) {
             const id = this.getComponentTypeId(componentType);
-            if (!id || !this.components.has(id)) return [];
-
-            if (first) {
-                entities.push(...this.components.get(id).keys());
-                first = false;
-                continue;
-            }
-
-            const toCompare = new Set(this.components.get(id).keys());
-
-            entities.forEach((e, i) => {
-                if (!toCompare.has(e)) entities.splice(i, 1);
-            });
+            const map = this.components.get(id);
+            if (!map || map.size === 0) return [];
+            maps.push(map);
         }
 
-        return entities;
+        // Iterate the smallest set first to minimize the candidate pool
+        maps.sort((a, b) => a.size - b.size);
+        const [smallest, ...rest] = maps;
+
+        const result: Entity[] = [];
+        for (const entity of smallest.keys()) {
+            let matches = true;
+            for (const m of rest) {
+                if (!m.has(entity)) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) result.push(entity);
+        }
+        return result;
     }
 
     /**
@@ -867,15 +893,15 @@ export class EntityManager {
         componentType: ComponentType<T>,
         includeDisabled: boolean = false,
     ): SearchResult<T>[] {
-        const children = this.getChildren(parent);
-        return this.search(componentType, includeDisabled).filter(({ entity }) => children.includes(entity));
+        const children = new Set(this.getChildren(parent));
+        return this.search(componentType, includeDisabled).filter(({ entity }) => children.has(entity));
     }
 
     private getComponentTypeId<T extends Component>(component: ComponentType<T> | T): number {
-        const prototype = typeof component === "object" ? component.constructor.prototype : component.prototype;
-        if (prototype.__ecs_type_id === undefined) {
-            prototype.__ecs_type_id = Number(`${++this.lastComponentTypeId}${(performance.now() * 1e5).toFixed(0)}`);
-        }
-        return prototype.__ecs_type_id;
+        const ctor = (typeof component === "object" ? component.constructor : component) as ComponentType & {
+            [COMPONENT_TYPE_ID]?: number;
+        };
+        if (ctor[COMPONENT_TYPE_ID] === undefined) ctor[COMPONENT_TYPE_ID] = ++nextComponentTypeId;
+        return ctor[COMPONENT_TYPE_ID];
     }
 }

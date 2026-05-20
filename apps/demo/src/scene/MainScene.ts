@@ -112,7 +112,7 @@ export class MainScene extends Scene {
     private setupAudioPlayer(): void {
         this.entityManager.createEntity([
             new AudioPlayer({
-                audioSource: this.assetManager.getAudio(ASSETS.audio.mainSong),
+                audioSource: ASSETS.audio.mainSong,
                 loop: true,
                 volume: 0.3,
                 action: "play",

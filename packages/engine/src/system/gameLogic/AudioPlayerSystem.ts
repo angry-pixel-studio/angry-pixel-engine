@@ -5,6 +5,7 @@ import { EntityManager, System } from "@angry-pixel/ecs";
 import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
 import { TimeManager } from "@manager/TimeManager";
+import { AssetManager } from "../..";
 
 const userInputEventNames = [
     "click",
@@ -28,6 +29,7 @@ export class AudioPlayerSystem implements System {
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
         @inject(SYMBOLS.InputManager) private readonly inputManager: InputManager,
         @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
+        @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
     ) {}
 
     public onCreate(): void {
@@ -69,13 +71,12 @@ export class AudioPlayerSystem implements System {
         if (!this.canPlay && !this.checkGamepad()) return;
 
         this.entityManager.search(AudioPlayer).forEach(({ component: audioPlayer }) => {
-            if (
-                !audioPlayer.audioSource ||
-                typeof audioPlayer.audioSource === "string" ||
-                !audioPlayer.audioSource.duration
-            ) {
-                return;
+            if (typeof audioPlayer.audioSource === "string") {
+                audioPlayer.audioSource = this.assetManager.getAudio(audioPlayer.audioSource);
+                if (!audioPlayer.audioSource) throw new Error(`Asset ${audioPlayer.audioSource} not found`);
             }
+
+            if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
 
             if (audioPlayer._playAfterUserInput) {
                 audioPlayer._playAfterUserInput = false;
