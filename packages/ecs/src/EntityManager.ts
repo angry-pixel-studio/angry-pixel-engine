@@ -780,10 +780,7 @@ export class EntityManager {
      * ```
      */
     public search<T extends Component>(componentType: ComponentType<T>): SearchResult<T>[];
-    public search<T extends Component>(
-        componentType: ComponentType<T>,
-        includeDisabled: boolean,
-    ): SearchResult<T>[];
+    public search<T extends Component>(componentType: ComponentType<T>, includeDisabled: boolean): SearchResult<T>[];
     /**
      * Performs a search for entities given a component type and invokes the callback for each match without allocating an intermediate array.\
      * Intended for hot per-frame loops in systems. The callback receives the component instance and the entity.\
