@@ -194,8 +194,8 @@ export class Animation {
 
             if (options.slice) {
                 this.slice.size.copy(options.slice.size);
-                options.slice.offset && this.slice.offset.copy(options.slice.offset);
-                options.slice.padding && this.slice.padding.copy(options.slice.padding);
+                if (options.slice.offset) this.slice.offset.copy(options.slice.offset);
+                if (options.slice.padding) this.slice.padding.copy(options.slice.padding);
             }
         }
     }

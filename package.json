@@ -27,9 +27,9 @@
     "devDependencies": {
         "eslint": "^9.2.0",
         "prettier": "^3.2.5",
-        "typedoc": "^0.26.7",
+        "typedoc": "^0.28.19",
         "typedoc-plugin-markdown": "^4.2.8",
-        "typescript": "^5.4.5",
-        "typescript-eslint": "^7.14.1"
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.60.0"
     }
 }
