@@ -19,7 +19,7 @@ export class AnimatorSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(Animator).forEach(({ entity, component: animator }) => {
+        this.entityManager.search(Animator, (animator, entity) => {
             this.processAssets(animator);
 
             this.reset(animator);

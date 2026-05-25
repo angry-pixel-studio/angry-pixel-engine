@@ -14,7 +14,7 @@ export class UpdateBallColliderShapeSystem extends BaseUpdateColliderShapeSystem
     }
 
     public onUpdate(): void {
-        this.entityManager.search(BallCollider).forEach(({ component: ballCollider, entity }) => {
+        this.entityManager.search(BallCollider, (ballCollider, entity) => {
             if (ballCollider.shapes.length === 0) {
                 ballCollider.shapes[0] = new Circumference(ballCollider.radius);
             }

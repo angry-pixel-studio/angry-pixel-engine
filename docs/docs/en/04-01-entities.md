@@ -67,7 +67,15 @@ entityManager.enableEntity(entity);
 
 ## Searching for entities
 
-The `search` method allows you to find entities that have a specific component:
+The `search` method finds entities that have a specific component. The recommended form passes a callback — it iterates directly over the underlying store without allocating an intermediate array, which is the right choice for per-frame loops:
+
+```typescript
+entityManager.search(Player, (player, entity) => {
+    console.log(`Entity: ${entity}, HP: ${player.health}`);
+});
+```
+
+Alternatively, call `search` without a callback to get a `SearchResult[]` you can sort, slice, or store:
 
 ```typescript
 const result = entityManager.search(Player);
@@ -77,10 +85,12 @@ result.forEach(({ entity, component }) => {
 });
 ```
 
-You can also search by specific attributes:
+To filter, short-circuit inside the callback (preferred for hot paths) or use `Array.filter` on the array form:
 
 ```typescript
-const alivePlayers = entityManager.search(Player, (component) => component.status === "alive");
+const alivePlayers = entityManager
+    .search(Player)
+    .filter(({ component }) => component.status === "alive");
 ```
 
 ## Modifying components of an entity

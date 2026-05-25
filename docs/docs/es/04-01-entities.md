@@ -67,7 +67,15 @@ entityManager.enableEntity(entity);
 
 ## Buscar entidades
 
-El método `search` permite encontrar entidades que tengan un componente específico:
+El método `search` encuentra entidades que tengan un componente específico. La forma recomendada usa un callback — itera directamente sobre la estructura interna sin asignar un array intermedio, lo cual es la opción correcta para bucles por frame:
+
+```typescript
+entityManager.search(Player, (player, entity) => {
+    console.log(`Entidad: ${entity}, HP: ${player.health}`);
+});
+```
+
+Alternativamente, llamá a `search` sin callback para obtener un `SearchResult[]` que podés ordenar, recortar o almacenar:
 
 ```typescript
 const result = entityManager.search(Player);
@@ -77,10 +85,12 @@ result.forEach(({ entity, component }) => {
 });
 ```
 
-También puedes buscar por atributos específicos:
+Para filtrar, salí temprano dentro del callback (preferido en rutas calientes) o usá `Array.filter` sobre el array:
 
 ```typescript
-const alivePlayers = entityManager.search(Player, (component) => component.status === "alive");
+const alivePlayers = entityManager
+    .search(Player)
+    .filter(({ component }) => component.status === "alive");
 ```
 
 ## Modificar componentes de una entidad

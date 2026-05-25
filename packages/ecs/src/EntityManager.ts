@@ -52,12 +52,13 @@ let nextComponentTypeId = 0;
  * const searchResult = entityManager.search(SpriteRenderer);
  * searchResult.forEach(({component, entity}) => {
  *   // do something with the component and entity
- * })
+ * });
  *
- * const searchResult = entityManager.search(Enemy, (component) => component.status === "alive");
- * searchResult.forEach(({component, entity}) => {
- *   // do something with the component and entity
- * })
+ * // Allocation-free iteration for hot paths
+ * entityManager.search(Enemy, (enemy, entity) => {
+ *   if (enemy.status !== "alive") return;
+ *   // do something
+ * });
  * ```
  */
 @injectable(SYMBOLS.EntityManager)
@@ -736,90 +737,107 @@ export class EntityManager {
 
     /**
      * Performs a search for entities given a component type.\
-     * This method returns a collection of objects of type SearchResult, which has the entity found, and the instance of the component.\
-     * This search can be filtered by passing as a second argument a filter function.\
-     * The third argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
+     * The recommended form passes a callback as the second argument — it iterates directly over the underlying store without allocating an intermediate array, which is the right choice for system `onUpdate` and any per-frame loop.\
+     * Without a callback, returns a collection of `SearchResult` objects (each containing the entity and the component instance) that you can sort, slice, or treat as a collection.
      * @param componentType The component class
-     * @param filter The filter function
-     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
+     * @param includeDisabled TRUE to include disabled entities and components. Default is FALSE.
      * @returns SearchResult
      * @public
      * @example
      * ```js
+     * // recommended: pass a callback to iterate without allocations
+     * entityManager.search(SpriteRenderer, (spriteRenderer, entity) => {
+     *   // do something with the component and entity
+     * });
+     * ```
+     * @example
+     * ```js
+     * // short-circuit inside the callback to filter
+     * entityManager.search(Enemy, (enemy, entity) => {
+     *   if (enemy.status !== "alive") return;
+     *   // ...
+     * });
+     * ```
+     * @example
+     * ```js
+     * // alternative: array form, useful when you need to sort/slice/etc.
      * const searchResult = entityManager.search(SpriteRenderer);
      * searchResult.forEach(({component, entity}) => {
      *   // do something with the component and entity
-     * })
+     * });
      * ```
      * @example
      * ```js
-     * const searchResult = entityManager.search(Enemy, (component) => component.status === "alive");
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
-     * ```
-     * @example
-     * ```js
-     * // include disabled entities and components
-     * const searchResult = entityManager.search(Enemy, (component) => component.status === "dead", true);
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
-     * ```
-     */
-    public search<T extends Component>(
-        componentType: ComponentType<T>,
-        filter?: (component: T, entity?: Entity) => boolean,
-        includeDisabled?: boolean,
-    ): SearchResult<T>[];
-    /**
-     * Performs a search for entities given a component type.\
-     * This method returns a collection of objects of type SearchResult, which has the entity found, and the instance of the component.\
-     * The second argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
-     * @param componentType The component class
-     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
-     * @returns SearchResult
-     * @public
-     * @example
-     * ```js
-     * const searchResult = entityManager.search(SpriteRenderer);
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
+     * // filter the array form
+     * const aliveEnemies = entityManager
+     *   .search(Enemy)
+     *   .filter(({component}) => component.status === "alive");
      * ```
      * @example
      * ```js
      * // include disabled entities and components
      * const searchResult = entityManager.search(Enemy, true);
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
      * ```
      */
-    public search<T extends Component>(componentType: ComponentType<T>, includeDisabled?: boolean): SearchResult<T>[];
+    public search<T extends Component>(componentType: ComponentType<T>): SearchResult<T>[];
     public search<T extends Component>(
         componentType: ComponentType<T>,
-        arg1?: ((component: T, entity?: Entity) => boolean) | boolean,
+        includeDisabled: boolean,
+    ): SearchResult<T>[];
+    /**
+     * Performs a search for entities given a component type and invokes the callback for each match without allocating an intermediate array.\
+     * Intended for hot per-frame loops in systems. The callback receives the component instance and the entity.\
+     * Disabled entities and components are skipped unless `includeDisabled` is TRUE.\
+     * Do NOT add or remove entities/components for the same component type from within the callback.
+     * @param componentType The component class
+     * @param callback Invoked once per matching entity
+     * @param includeDisabled TRUE to include disabled entities and components. Default is FALSE.
+     * @public
+     * @example
+     * ```js
+     * entityManager.search(SpriteRenderer, (spriteRenderer, entity) => {
+     *   // do something with the component and entity
+     * });
+     * ```
+     */
+    public search<T extends Component>(
+        componentType: ComponentType<T>,
+        callback: (component: T, entity: Entity) => void,
+        includeDisabled?: boolean,
+    ): void;
+    public search<T extends Component>(
+        componentType: ComponentType<T>,
+        arg1?: ((component: T, entity: Entity) => void) | boolean,
         arg2: boolean = false,
-    ): SearchResult<T>[] {
-        const result: SearchResult<T>[] = [];
+    ): SearchResult<T>[] | void {
         const id = this.getComponentTypeId(componentType);
+        const callback = typeof arg1 === "function" ? arg1 : undefined;
         const includeDisabled = typeof arg1 === "boolean" ? arg1 : arg2;
-        const filter = typeof arg1 === "function" ? arg1 : undefined;
 
         const row = this.components.get(id);
-        if (row) {
+        if (!row) return callback ? undefined : [];
+
+        if (callback) {
             for (const [entity, component] of row) {
                 if (
-                    (!filter || filter(component as T, entity)) &&
-                    (includeDisabled ||
-                        (!this.disabledEntities.has(entity) && !this.disabledComponents.get(entity)?.has(id)))
+                    includeDisabled ||
+                    (!this.disabledEntities.has(entity) && !this.disabledComponents.get(entity)?.has(id))
                 ) {
-                    result.push({ entity, component: component as T });
+                    callback(component as T, entity);
                 }
             }
+            return;
         }
 
+        const result: SearchResult<T>[] = [];
+        for (const [entity, component] of row) {
+            if (
+                includeDisabled ||
+                (!this.disabledEntities.has(entity) && !this.disabledComponents.get(entity)?.has(id))
+            ) {
+                result.push({ entity, component: component as T });
+            }
+        }
         return result;
     }
 

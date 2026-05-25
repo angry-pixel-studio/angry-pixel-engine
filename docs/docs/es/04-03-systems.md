@@ -16,9 +16,9 @@ Para crear un sistema, extiende la clase `GameSystem` e implementa el método `o
 ```typescript
 class PlayerSystem extends GameSystem {
     onUpdate() {
-        this.entityManager.search(Player).forEach(({ entity, component }) => {
+        this.entityManager.search(Player, (player, entity) => {
             // Lógica del jugador
-            if (component.health <= 0) {
+            if (player.health <= 0) {
                 console.log(`El jugador ${entity} ha muerto.`);
             }
         });

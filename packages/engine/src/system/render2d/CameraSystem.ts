@@ -14,7 +14,7 @@ export class CameraSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(Camera).forEach(({ entity, component: camera }) => {
+        this.entityManager.search(Camera, (camera, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("Camera component needs a Transform");
 

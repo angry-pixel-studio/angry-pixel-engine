@@ -27,20 +27,20 @@ export class UpdateCollidersAfterRepositionSystem extends BaseUpdateColliderShap
     }
 
     public onUpdate(): void {
-        this.entityManager
-            .search(RigidBody, (rigidBody) => rigidBody.type === RigidBodyType.Dynamic)
-            .forEach(({ entity }) => {
-                const transform = this.entityManager.getComponent(entity, Transform);
+        this.entityManager.search(RigidBody, (rigidBody, entity) => {
+            if (rigidBody.type !== RigidBodyType.Dynamic) return;
 
-                for (const type of colliderTypes) {
-                    if (this.entityManager.hasComponent(entity, type)) {
-                        const collider = this.entityManager.getComponent(entity, type);
-                        collider.shapes.forEach((shape) => {
-                            this.updatePositionAndVertices(shape, collider.offset, transform);
-                            this.updateBoundingBox(shape);
-                        });
-                    }
+            const transform = this.entityManager.getComponent(entity, Transform);
+
+            for (const type of colliderTypes) {
+                if (this.entityManager.hasComponent(entity, type)) {
+                    const collider = this.entityManager.getComponent(entity, type);
+                    collider.shapes.forEach((shape) => {
+                        this.updatePositionAndVertices(shape, collider.offset, transform);
+                        this.updateBoundingBox(shape);
+                    });
                 }
-            });
+            }
+        });
     }
 }

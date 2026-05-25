@@ -42,7 +42,7 @@ export class VideoRendererSystem implements System {
     public onCreate(): void {
         // pauses video when document is not visible
         document.addEventListener("visibilitychange", () => {
-            this.entityManager.search(VideoRenderer).forEach(({ component: { video, playing } }) => {
+            this.entityManager.search(VideoRenderer, ({ video, playing }) => {
                 if (!video || typeof video === "string") return;
 
                 if (document.hidden) video.pause();
@@ -77,7 +77,7 @@ export class VideoRendererSystem implements System {
     public onUpdate(): void {
         if (!this.canPlay && !this.checkGamepad()) return;
 
-        this.entityManager.search(VideoRenderer).forEach(({ entity, component: videoRenderer }) => {
+        this.entityManager.search(VideoRenderer, (videoRenderer, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("VideoRenderer component needs a Transform");
 
@@ -177,7 +177,7 @@ export class VideoRendererSystem implements System {
     }
 
     public onDisabled(): void {
-        this.entityManager.search(VideoRenderer).forEach(({ component: videoRenderer }) => {
+        this.entityManager.search(VideoRenderer, (videoRenderer) => {
             if (videoRenderer.video && typeof videoRenderer.video !== "string") {
                 videoRenderer.video.pause();
                 videoRenderer.video.currentTime = 0;

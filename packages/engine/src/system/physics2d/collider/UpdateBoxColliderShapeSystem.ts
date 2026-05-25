@@ -15,7 +15,7 @@ export class UpdateBoxColliderShapeSystem extends BaseUpdateColliderShapeSystem 
     }
 
     public onUpdate(): void {
-        this.entityManager.search(BoxCollider).forEach(({ component: boxCollider, entity }) => {
+        this.entityManager.search(BoxCollider, (boxCollider, entity) => {
             if (boxCollider.shapes.length === 0) {
                 boxCollider.shapes[0] = new Polygon([new Vector2(), new Vector2(), new Vector2(), new Vector2()]);
             }

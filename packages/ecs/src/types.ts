@@ -42,7 +42,7 @@ export type ComponentType<T extends Component = Component> = { new (...args: any
  * @public
  * @category Entity-Component-System
  */
-export type SearchResult<T extends Component> = { entity: Entity; component: T };
+export type SearchResult<T extends Component> = { component: T; entity: Entity };
 
 /**
  * This type represents an Entity Archetype, which defines a template for creating entities with a specific set of components.\

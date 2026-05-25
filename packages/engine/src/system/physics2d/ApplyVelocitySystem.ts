@@ -24,42 +24,41 @@ export class ApplyVelocitySystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager
-            .search(RigidBody)
-            .filter(({ component: { type } }) => this.types.has(type))
-            .forEach(({ component: { velocity, acceleration, gravity, type }, entity }) => {
-                const { position } = this.entityManager.getComponent(entity, Transform);
+        this.entityManager.search(RigidBody, ({ velocity, acceleration, gravity, type }, entity) => {
+            if (!this.types.has(type)) return;
 
-                // apply gravity to acceleration (only for dynamyc bodies)
-                if (type === RigidBodyType.Dynamic) {
-                    this.totalAcceleration.y = acceleration.y - gravity;
-                    this.totalAcceleration.x = acceleration.x;
-                } else {
-                    this.totalAcceleration.copy(acceleration);
-                }
+            const { position } = this.entityManager.getComponent(entity, Transform);
 
-                // update velocity by the acceleration
+            // apply gravity to acceleration (only for dynamyc bodies)
+            if (type === RigidBodyType.Dynamic) {
+                this.totalAcceleration.y = acceleration.y - gravity;
+                this.totalAcceleration.x = acceleration.x;
+            } else {
+                this.totalAcceleration.copy(acceleration);
+            }
+
+            // update velocity by the acceleration
+            Vector2.add(
+                velocity,
+                velocity,
+                Vector2.scale(this.scaledAcceleration, this.totalAcceleration, this.timeManager.physicsDeltaTime),
+            );
+
+            // update position using UAM
+            Vector2.add(
+                position,
+                position,
                 Vector2.add(
-                    velocity,
-                    velocity,
-                    Vector2.scale(this.scaledAcceleration, this.totalAcceleration, this.timeManager.physicsDeltaTime),
-                );
-
-                // update position using UAM
-                Vector2.add(
-                    position,
-                    position,
-                    Vector2.add(
-                        this.displacement,
-                        Vector2.scale(this.scaledVelocity, velocity, this.timeManager.physicsDeltaTime),
-                        Vector2.scale(
-                            this.scaledAcceleration,
-                            this.totalAcceleration,
-                            0.5 * this.timeManager.physicsDeltaTime ** 2,
-                        ),
+                    this.displacement,
+                    Vector2.scale(this.scaledVelocity, velocity, this.timeManager.physicsDeltaTime),
+                    Vector2.scale(
+                        this.scaledAcceleration,
+                        this.totalAcceleration,
+                        0.5 * this.timeManager.physicsDeltaTime ** 2,
                     ),
-                );
-            });
+                ),
+            );
+        });
 
         this.transformSystem.onUpdate();
     }

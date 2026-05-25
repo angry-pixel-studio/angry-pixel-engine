@@ -19,7 +19,7 @@ export class MaskRendererSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(MaskRenderer).forEach(({ entity, component: maskRenderer }) => {
+        this.entityManager.search(MaskRenderer, (maskRenderer, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("MaskRenderer component needs a Transform");
 

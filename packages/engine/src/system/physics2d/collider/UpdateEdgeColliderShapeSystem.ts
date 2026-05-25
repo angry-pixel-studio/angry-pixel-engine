@@ -15,7 +15,7 @@ export class UpdateEdgeColliderShapeSystem extends BaseUpdateColliderShapeSystem
     }
 
     public onUpdate(): void {
-        this.entityManager.search(EdgeCollider).forEach(({ component: edgeCollider, entity }) => {
+        this.entityManager.search(EdgeCollider, (edgeCollider, entity) => {
             for (let i = 0; i < edgeCollider.vertexModel.length - 1; i++) {
                 if (!edgeCollider.shapes[i]) edgeCollider.shapes[i] = new Polygon([new Vector2(), new Vector2()]);
 

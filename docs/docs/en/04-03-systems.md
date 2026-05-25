@@ -16,9 +16,9 @@ To create a system, extend the `GameSystem` class and implement the `onUpdate` m
 ```typescript
 class PlayerSystem extends GameSystem {
     onUpdate() {
-        this.entityManager.search(Player).forEach(({ entity, component }) => {
+        this.entityManager.search(Player, (player, entity) => {
             // Player logic
-            if (component.health <= 0) {
+            if (player.health <= 0) {
                 console.log(`Player ${entity} has died.`);
             }
         });

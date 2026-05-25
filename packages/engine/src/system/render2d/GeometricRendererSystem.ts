@@ -18,7 +18,7 @@ export class GeometricRendererSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(GeometricRenderer).forEach(({ entity, component: geometric }) => {
+        this.entityManager.search(GeometricRenderer, (geometric, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("GeometricRenderer component needs a Transform");
 

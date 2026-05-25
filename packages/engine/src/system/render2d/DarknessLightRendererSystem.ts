@@ -19,7 +19,7 @@ export class DarknessLightRendererSystem implements System {
         const lightRenderers = this.entityManager.search(LightRenderer);
         lightRenderers.forEach(({ entity, component }) => this.updateLightRendererBoundingBox(entity, component));
 
-        this.entityManager.search(DarknessRenderer).forEach(({ entity, component: darknessRenderer }) => {
+        this.entityManager.search(DarknessRenderer, (darknessRenderer, entity) => {
             this.updatDarknessRendererBoundingBox(entity, darknessRenderer);
 
             darknessRenderer._renderData.layer = darknessRenderer.layer;

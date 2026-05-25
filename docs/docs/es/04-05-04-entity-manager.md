@@ -34,12 +34,24 @@ const player = entityManager.createEntity(playerArchetype);
 
 ### Buscar entidades con un componente
 
+La forma recomendada de procesar cada coincidencia es pasar un callback. Esto itera directamente sobre la estructura interna y evita asignar un array intermedio — es la opción correcta para el `onUpdate` de un sistema y cualquier bucle por frame.
+
+```typescript
+entityManager.search(Player, (player, entity) => {
+    player.health -= 10;
+});
+```
+
+El callback recibe primero la instancia del componente y luego la entidad. Las entidades y componentes deshabilitados se omiten por defecto; pasá `true` como tercer argumento para incluirlos.
+
+Como alternativa, llamar a `search` sin callback devuelve un array de `SearchResult`. Usá esta forma cuando necesites ordenar, recortar o tratar las coincidencias como una colección:
+
 ```typescript
 const players = entityManager.search(Player);
 
-for (const { entity, component } of players) {
+players.forEach(({ entity, component }) => {
     component.health -= 10;
-}
+});
 ```
 
 ### Buscar entidades con varios componentes
@@ -48,10 +60,21 @@ for (const { entity, component } of players) {
 const entities = entityManager.searchEntitiesByComponents([Player, Transform]);
 ```
 
-### Buscar entidades con criterios (SearchCriteria)
+### Filtrar resultados
+
+Preferí salir temprano dentro del callback en rutas calientes. Si ya tenés la forma con array, usá `Array.filter`:
 
 ```typescript
-const injuredPlayers = entityManager.search(Player, (component) => component.status === "injured");
+// forma con callback (sin asignaciones, recomendada)
+entityManager.search(Player, (player, entity) => {
+    if (player.status !== "injured") return;
+    // ...
+});
+
+// forma con array
+const injuredPlayers = entityManager
+    .search(Player)
+    .filter(({ component }) => component.status === "injured");
 ```
 
 ### Buscar dentro de los hijos (SearchInChildren)
@@ -120,6 +143,6 @@ if (entityManager.hasComponent(player, SpriteRenderer)) {
 -   Cada entidad tiene un identificador único de tipo `number`.
 -   Los componentes son objetos simples que contienen datos.
 -   Los componentes pueden estar habilitados o deshabilitados individualmente.
--   La búsqueda puede incluir criterios (`SearchCriteria`) para filtrar resultados.
+-   `search` retorna un array, o itera mediante un callback cuando se pasa uno — usá la forma con callback en bucles por frame para evitar asignar resultados intermedios.
 -   Cuando se crea una relación padre-hijo entre entidades que tienen `Transform`,
     las transformaciones del padre afectan automáticamente a sus hijos.

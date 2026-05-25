@@ -16,7 +16,7 @@ export class UpdateTilemapColliderShapeSystem extends BaseUpdateColliderShapeSys
     }
 
     public onUpdate(): void {
-        this.entityManager.search(TilemapCollider).forEach(({ component: tilemapCollider, entity }) => {
+        this.entityManager.search(TilemapCollider, (tilemapCollider, entity) => {
             const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
 
             if (!tilemapRenderer || tilemapRenderer.data.length === 0) return;

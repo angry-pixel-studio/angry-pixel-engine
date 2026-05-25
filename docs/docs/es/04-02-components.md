@@ -69,20 +69,29 @@ const archetype = {
 
 ## Buscar entidades por componentes
 
-Puedes buscar todas las entidades que tengan un componente específico:
+La forma recomendada de procesar cada entidad que tiene un componente específico es pasar un callback — itera directamente sin asignar un array intermedio:
 
 ```typescript
-const result = entityManager.search(Player);
-
-result.forEach(({ entity, component }) => {
-    console.log(`Entidad ${entity} tiene vida: ${component.health}`);
+entityManager.search(Player, (player, entity) => {
+    console.log(`Entidad ${entity} tiene vida: ${player.health}`);
 });
 ```
 
-También puedes buscar filtrando por atributos del componente:
+Salí temprano dentro del callback para filtrar:
 
 ```typescript
-const fastPlayers = entityManager.search(Player, { speed: 100 });
+entityManager.search(Player, (player, entity) => {
+    if (player.speed !== 100) return;
+    // ...
+});
+```
+
+Como alternativa, llamá a `search` sin callback para obtener un array que podés `.filter`, `.sort` o tratar como una colección:
+
+```typescript
+const fastPlayers = entityManager
+    .search(Player)
+    .filter(({ component }) => component.speed === 100);
 ```
 
 ---

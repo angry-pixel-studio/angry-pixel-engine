@@ -44,10 +44,10 @@ import { GameSystem } from "angry-pixel";
 
 class PlayerSystem extends GameSystem {
     onUpdate() {
-        this.entityManager.search(Player).forEach(({ entity, component }) => {
+        this.entityManager.search(Player, (player, entity) => {
             // Aquí va la lógica para cada jugador
             // Por ejemplo, regenerar maná:
-            component.mana = Math.min(component.mana + 1, 50);
+            player.mana = Math.min(player.mana + 1, 50);
         });
     }
 }

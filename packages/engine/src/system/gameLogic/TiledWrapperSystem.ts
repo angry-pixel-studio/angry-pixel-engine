@@ -14,7 +14,7 @@ export class TiledWrapperSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(TiledWrapper).forEach(({ entity, component: tiledWrapper }) => {
+        this.entityManager.search(TiledWrapper, (tiledWrapper, entity) => {
             const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
             if (!tilemapRenderer) return;
 

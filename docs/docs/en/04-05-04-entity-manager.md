@@ -34,12 +34,24 @@ const player = entityManager.createEntity(playerArchetype);
 
 ### Search for entities with a component
 
+The recommended way to process every match is to pass a callback. This iterates the underlying store directly and avoids allocating an intermediate result array — the right choice for system `onUpdate` and any per-frame loop.
+
+```typescript
+entityManager.search(Player, (player, entity) => {
+    player.health -= 10;
+});
+```
+
+The callback receives the component instance first and the entity second. Disabled entities and components are skipped by default; pass `true` as the third argument to include them.
+
+As an alternative, calling `search` without a callback returns an array of `SearchResult` objects. Use this when you need to sort, slice, or otherwise treat the matches as a collection:
+
 ```typescript
 const players = entityManager.search(Player);
 
-for (const { entity, component } of players) {
+players.forEach(({ entity, component }) => {
     component.health -= 10;
-}
+});
 ```
 
 ### Search for entities with multiple components
@@ -48,10 +60,21 @@ for (const { entity, component } of players) {
 const entities = entityManager.searchEntitiesByComponents([Player, Transform]);
 ```
 
-### Search with criteria (SearchCriteria)
+### Filter results
+
+Prefer short-circuiting inside the callback for hot paths. If you already have the array form, use `Array.filter`:
 
 ```typescript
-const injuredPlayers = entityManager.search(Player, (component) => component.status === "injured");
+// callback form (allocation-free, recommended)
+entityManager.search(Player, (player, entity) => {
+    if (player.status !== "injured") return;
+    // ...
+});
+
+// array form
+const injuredPlayers = entityManager
+    .search(Player)
+    .filter(({ component }) => component.status === "injured");
 ```
 
 ### Search in children (SearchInChildren)
@@ -120,6 +143,6 @@ if (entityManager.hasComponent(player, SpriteRenderer)) {
 -   Each entity has a unique identifier of type `number`.
 -   Components are plain data objects.
 -   Components can be individually enabled or disabled.
--   Searches can include `SearchCriteria` to filter results.
+-   `search` returns an array, or iterates via a callback when one is passed — use the callback form in hot per-frame loops to avoid allocating intermediate results.
 -   When establishing a parent-child relationship between entities with `Transform`,
     the parent's transformations automatically affect its children.

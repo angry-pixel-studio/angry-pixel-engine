@@ -21,7 +21,7 @@ export class SpriteRendererSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(SpriteRenderer).forEach(({ component: spriteRenderer, entity }) => {
+        this.entityManager.search(SpriteRenderer, (spriteRenderer, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("SpriteRenderer component needs a Transform");
 
