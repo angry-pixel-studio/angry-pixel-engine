@@ -59,11 +59,12 @@ Disabled components will not be processed by systems until they are enabled agai
 
 ## Creating components disabled at start
 
-You can create components that are initially disabled using `disableComponent`:
+Use the archetype's `disabledComponents` array. It has the same shape as `components` (instances or classes) and attaches each entry to the entity already disabled:
 
 ```typescript
 const archetype = {
-    components: [disableComponent(new BoxCollider())],
+    components: [new Transform()],
+    disabledComponents: [new BoxCollider()],
 };
 ```
 

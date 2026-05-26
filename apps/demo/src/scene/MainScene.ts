@@ -64,26 +64,26 @@ export class MainScene extends Scene {
     }
 
     private setupCameras(): void {
-        this.entityManager.createEntityFromArchetype(mainCameraArchetype);
-        this.entityManager.createEntityFromArchetype(uiCameraArchetype);
+        this.entityManager.createEntity(mainCameraArchetype);
+        this.entityManager.createEntity(uiCameraArchetype);
     }
 
     private setupGameObjects(): void {
         this.entityManager.createEntity([InputController]);
 
-        this.entityManager.createEntityFromArchetype(foregroundArchetype);
+        this.entityManager.createEntity(foregroundArchetype);
 
         this.entityManager.createEntity(slopePlatform);
 
-        this.entityManager.createEntityFromArchetype(ninjaArchetype);
+        this.entityManager.createEntity(ninjaArchetype);
 
-        const movingPlatform = this.entityManager.createEntityFromArchetype(movingPlatformArchetype);
+        const movingPlatform = this.entityManager.createEntity(movingPlatformArchetype);
         this.entityManager.updateComponentData(movingPlatform, MovingPlatform, (component) => {
             component.spots = [new Vector2(-112, -72), new Vector2(168, -72)];
         });
 
         for (let i = 0; i < 50; i++) {
-            const goblin = this.entityManager.createEntityFromArchetype(goblinArchetype);
+            const goblin = this.entityManager.createEntity(goblinArchetype);
             this.entityManager.updateComponentData(goblin, Transform, (component) => {
                 component.position.x = randomInt(-600, 192);
             });
@@ -94,7 +94,7 @@ export class MainScene extends Scene {
     }
 
     private setupUIText(): void {
-        const instructionText = this.entityManager.createEntityFromArchetype(textArchetype);
+        const instructionText = this.entityManager.createEntity(textArchetype);
         this.entityManager.updateComponentData(instructionText, Transform, (component) => {
             component.position.set(0, -450);
         });
@@ -102,7 +102,7 @@ export class MainScene extends Scene {
             component.text = "USE WASD TO MOVE AND SPACE BAR TO JUMP.";
         });
 
-        const fpsText = this.entityManager.createEntityFromArchetype(textArchetype);
+        const fpsText = this.entityManager.createEntity(textArchetype);
         this.entityManager.updateComponentData(fpsText, Transform, (component) => {
             component.position.set(0, -500);
         });

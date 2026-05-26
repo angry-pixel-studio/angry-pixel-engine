@@ -28,7 +28,7 @@ const entity = entityManager.createEntity([
 
 ### Create an entity from an archetype
 
-An **archetype** is a reusable template that defines which components the entity and its children will have.
+An **archetype** is a reusable template that defines which components the entity and its children will have. Pass it directly to `createEntity`:
 
 ```typescript
 const playerArchetype = {
@@ -36,7 +36,7 @@ const playerArchetype = {
     enabled: true,
 };
 
-const entity = entityManager.createEntityFromArchetype(playerArchetype);
+const entity = entityManager.createEntity(playerArchetype);
 ```
 
 ## Parent-child relationships
@@ -141,7 +141,7 @@ const playerArchetype = {
     enabled: true,
 };
 
-const entity = entityManager.createEntityFromArchetype(playerArchetype);
+const entity = entityManager.createEntity(playerArchetype);
 ```
 
 **Result:**  
@@ -151,17 +151,16 @@ An entity is created with the `Player`, `Transform`, and `SpriteRenderer` compon
 
 ### 2️⃣ Archetype with disabled components
 
+Use `disabledComponents` to attach components that should start disabled. It has the same shape as `components` (instances or classes) — just don't list the same component type in both arrays.
+
 ```typescript
 const stealthEnemyArchetype = {
-    components: [
-        new Enemy({ aggression: 80 }),
-        new Transform({ position: new Vector2(100, 200) }),
-        disableComponent(new BoxCollider()), // The enemy starts without collision
-    ],
+    components: [new Enemy({ aggression: 80 }), new Transform({ position: new Vector2(100, 200) })],
+    disabledComponents: [new BoxCollider()], // The enemy starts without collision
     enabled: true,
 };
 
-const enemy = entityManager.createEntityFromArchetype(stealthEnemyArchetype);
+const enemy = entityManager.createEntity(stealthEnemyArchetype);
 ```
 
 **Result:**  
@@ -191,7 +190,7 @@ const bossArchetype = {
     enabled: true,
 };
 
-const boss = entityManager.createEntityFromArchetype(bossArchetype);
+const boss = entityManager.createEntity(bossArchetype);
 ```
 
 **Result:**  

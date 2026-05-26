@@ -59,11 +59,12 @@ Los componentes deshabilitados no serán procesados por los sistemas hasta que s
 
 ## Crear componentes deshabilitados al inicio
 
-Puedes crear componentes deshabilitados desde el inicio usando `disableComponent`:
+Usá el array `disabledComponents` del arquetipo. Tiene la misma forma que `components` (instancias o clases) y adjunta cada entrada a la entidad ya deshabilitada:
 
 ```typescript
 const archetype = {
-    components: [disableComponent(new BoxCollider())],
+    components: [new Transform()],
+    disabledComponents: [new BoxCollider()],
 };
 ```
 

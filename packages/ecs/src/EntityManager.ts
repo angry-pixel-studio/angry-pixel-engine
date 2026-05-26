@@ -1,5 +1,5 @@
 import { injectable } from "@angry-pixel/ioc";
-import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchResult } from "./types";
+import { Archetype, Component, ComponentType, Entity, SearchResult } from "./types";
 import { deepClone } from "./utils";
 import { SYMBOLS } from "./symbols";
 
@@ -49,14 +49,13 @@ let nextComponentTypeId = 0;
  * entityManager.removeComponent(spriteRenderer);
  *
  * // Search for entities with specific components
- * const searchResult = entityManager.search(SpriteRenderer);
- * searchResult.forEach(({component, entity}) => {
- *   // do something with the component and entity
- * });
- *
- * // Allocation-free iteration for hot paths
  * entityManager.search(Enemy, (enemy, entity) => {
  *   if (enemy.status !== "alive") return;
+ *   // do something
+ * });
+ *
+ * const searchResult = entityManager.search(SpriteRenderer);
+ * searchResult.forEach(({component, entity}) => {
  *   // do something
  * });
  * ```
@@ -75,7 +74,7 @@ export class EntityManager {
     private childEntities: Map<Entity, Set<Entity>> = new Map(); // parent entity -> set of child entities
 
     /**
-     * Creates an entity without component
+     * Creates an entity without components.
      * @return The created Entity
      * @public
      * @example
@@ -100,43 +99,61 @@ export class EntityManager {
      * ```
      */
     public createEntity(components: (ComponentType | Component)[], parent?: Entity): Entity;
-    public createEntity(components?: (ComponentType | Component)[], parent?: Entity): Entity {
-        const entity = this.lastEntityId++;
-
-        if (components) {
-            this.entities.add(entity);
-            components.forEach((component) => this.addComponent(entity, component));
-            if (parent) this.setParent(entity, parent);
-        }
-
-        return entity;
-    }
-
     /**
-     * Creates an Entity based on an Archetype.\
-     * Since the components are cloned, the archetype can be reused to create multiple entities.
+     * Creates an Entity from an Archetype template.\
+     * Components are cloned, so the archetype can be reused to create multiple entities.
      * @param archetype The archetype to create the entity from
      * @param parent The parent entity (optional)
-     * @returns The created Entity
+     * @return The created Entity
      * @public
      * @example
      * ```js
      * const archetype = {
      *   components: [
      *     new Transform({position: new Vector2(100, 100)}),
-     *     SpriteRenderer
+     *     SpriteRenderer,
+     *     new BoxCollider(),
      *   ],
+     *   disabledComponents: [BoxCollider],
      *   children: [childArchetype],
-     *   enabled: true
-     * }
-     * const entity = entityManager.createEntityFromArchetype(archetype);
+     *   enabled: true,
+     * };
+     * const entity = entityManager.createEntity(archetype);
      * ```
      */
-    public createEntityFromArchetype({ components, children, enabled }: Archetype, parent?: Entity): Entity {
+    public createEntity(archetype: Archetype, parent?: Entity): Entity;
+    public createEntity(arg1?: (ComponentType | Component)[] | Archetype, parent?: Entity): Entity {
+        if (arg1 === undefined) {
+            return this.lastEntityId++;
+        }
+
+        if (Array.isArray(arg1)) {
+            const entity = this.lastEntityId++;
+            this.entities.add(entity);
+            arg1.forEach((component) => this.addComponent(entity, component));
+            if (parent) this.setParent(entity, parent);
+            return entity;
+        }
+
+        return this.createEntityFromArchetype(arg1, parent);
+    }
+
+    /**
+     * Creates an Entity from an Archetype.
+     * @param archetype
+     * @param parent
+     * @returns The created Entity
+     * @private
+     */
+    private createEntityFromArchetype(
+        { components, disabledComponents, children, enabled }: Archetype,
+        parent?: Entity,
+    ): Entity {
         const entity = this.lastEntityId++;
         this.entities.add(entity);
 
         this.createComponentsFromArchetype(components, entity);
+        if (disabledComponents) this.createComponentsFromArchetype(disabledComponents, entity, true);
 
         if (parent) this.setParent(entity, parent);
         if (children) children.forEach((child) => this.createEntityFromArchetype(child, entity));
@@ -149,25 +166,16 @@ export class EntityManager {
      * Creates components from an archetype
      * @param components The components to create
      * @param entity The entity to create the components for
+     * @param disabled If TRUE, each created component is disabled. Default is FALSE.
      * @private
      */
     private createComponentsFromArchetype(
-        components: (Component | ComponentType | DisabledComponent)[],
+        components: (Component | ComponentType)[],
         entity: Entity,
+        disabled: boolean = false,
     ): void {
         components.forEach((component) => {
-            let enabled = true;
             let instance: Component;
-
-            if (
-                typeof component === "object" &&
-                "component" in component &&
-                "enabled" in component &&
-                component.enabled === false
-            ) {
-                enabled = false;
-                component = component.component;
-            }
 
             if (typeof component === "object") {
                 instance = this.addComponent(entity, deepClone<Component>(component));
@@ -177,7 +185,7 @@ export class EntityManager {
                 throw new Error("Invalid component type");
             }
 
-            if (!enabled) this.disableComponent(instance);
+            if (disabled) this.disableComponent(instance);
         });
     }
 
@@ -912,6 +920,11 @@ export class EntityManager {
         return this.search(componentType, includeDisabled).filter(({ entity }) => children.has(entity));
     }
 
+    /**
+     * Returns the id for the given component type.
+     * @param component The component class
+     * @returns The component type id
+     */
     private getComponentTypeId<T extends Component>(component: ComponentType<T> | T): number {
         const ctor = (typeof component === "object" ? component.constructor : component) as ComponentType & {
             [COMPONENT_TYPE_ID]?: number;

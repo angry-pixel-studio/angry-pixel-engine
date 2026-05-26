@@ -60,7 +60,6 @@ export {
     Archetype,
     Component,
     ComponentType,
-    DisabledComponent,
     Entity,
     EntityManager,
     SearchResult,
@@ -68,7 +67,6 @@ export {
     SystemGroup,
     SystemManager,
     SystemType,
-    disableComponent,
 } from "@angry-pixel/ecs";
 export * from "@input";
 export { inject, injectable, DependencyName, DependencyType, PropertyKey } from "@angry-pixel/ioc";

@@ -28,7 +28,7 @@ const entity = entityManager.createEntity([
 
 ### Crear una entidad a partir de un arquetipo
 
-Un **arquetipo** es una plantilla reutilizable que define qué componentes tendrá la entidad y sus hijos.
+Un **arquetipo** es una plantilla reutilizable que define qué componentes tendrá la entidad y sus hijos. Pasalo directamente a `createEntity`:
 
 ```typescript
 const playerArchetype = {
@@ -36,7 +36,7 @@ const playerArchetype = {
     enabled: true,
 };
 
-const entity = entityManager.createEntityFromArchetype(playerArchetype);
+const entity = entityManager.createEntity(playerArchetype);
 ```
 
 ## Relaciones padre-hijo
@@ -141,7 +141,7 @@ const playerArchetype = {
     enabled: true,
 };
 
-const entity = entityManager.createEntityFromArchetype(playerArchetype);
+const entity = entityManager.createEntity(playerArchetype);
 ```
 
 **Resultado:**  
@@ -151,17 +151,16 @@ Se crea una entidad con los componentes `Player`, `Transform` y `SpriteRenderer`
 
 ### 2️⃣ Arquetipo con componentes deshabilitados
 
+Usá `disabledComponents` para adjuntar componentes que deben iniciar deshabilitados. Tiene la misma forma que `components` (instancias o clases) — solo no listes el mismo tipo de componente en ambos arrays.
+
 ```typescript
 const stealthEnemyArchetype = {
-    components: [
-        new Enemy({ aggression: 80 }),
-        new Transform({ position: new Vector2(100, 200) }),
-        disableComponent(new BoxCollider()), // El enemigo empieza sin colisión
-    ],
+    components: [new Enemy({ aggression: 80 }), new Transform({ position: new Vector2(100, 200) })],
+    disabledComponents: [new BoxCollider()], // El enemigo empieza sin colisión
     enabled: true,
 };
 
-const enemy = entityManager.createEntityFromArchetype(stealthEnemyArchetype);
+const enemy = entityManager.createEntity(stealthEnemyArchetype);
 ```
 
 **Resultado:**  
@@ -191,7 +190,7 @@ const bossArchetype = {
     enabled: true,
 };
 
-const boss = entityManager.createEntityFromArchetype(bossArchetype);
+const boss = entityManager.createEntity(bossArchetype);
 ```
 
 **Resultado:**  
