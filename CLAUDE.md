@@ -9,7 +9,7 @@
 | Library source | `packages/` | Private workspaces `@angry-pixel/*` — engine core lives here |
 | Published npm bundle | `bundles/angry-pixel/` | Build output for the public package **`angry-pixel`** (versioned here) |
 | Documentation | `docs/docs/` | MkDocs sources (`en/`, `es/`); site built from `docs/` |
-| Demo game | `apps/demo/` | Integration testbed and example usage |
+| Demo game | `demos/platformer/` | Integration testbed and example usage |
 
 ## Packages (`packages/`)
 
@@ -23,11 +23,11 @@ Change engine behavior in **`packages/`**; the bundle in **`bundles/angry-pixel/
 ## Common commands (repo root)
 
 - `yarn build` — builds `@angry-pixel/engine` (tsc project refs + Rollup).
-- `yarn demo:start` — runs **`apps/demo`** via webpack dev server.
+- `yarn demo:start` — runs **`demos/platformer`** via webpack dev server.
 - `yarn docs` — builds MkDocs (requires Python + mkdocs in `docs/`).
 
 ## Docs and API
 
 User-facing docs: **`docs/docs/`**. API reference is generated (`yarn api-docs` uses TypeDoc from the engine package).
 
-When unsure of a public API or pattern, check **`docs/docs/`** and existing usage in **`apps/demo/`** before inventing new patterns.
+When unsure of a public API or pattern, check **`docs/docs/`** and existing usage in **`demos/platformer/`** before inventing new patterns.

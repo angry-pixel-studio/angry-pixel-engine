@@ -8,10 +8,9 @@
     "workspaces": [
         "packages/*",
         "bundles/*",
-        "apps/*"
+        "demos/*"
     ],
     "scripts": {
-        "demo:start": "yarn workspace @angry-pixel/demo start",
         "build": "yarn workspace @angry-pixel/engine build",
         "build:types": "yarn workspace @angry-pixel/engine build:types",
         "lint": "eslint .",
@@ -22,7 +21,9 @@
         "api-docs": "yarn run build:types && yarn workspace @angry-pixel/engine typedoc",
         "docs": "cd docs && mkdocs build",
         "deploy-docs": "scripts/deploy-docs-rsync.sh",
-        "deploy-api-docs": "scripts/deploy-api-docs-rsync.sh"
+        "deploy-api-docs": "scripts/deploy-api-docs-rsync.sh",
+        "demo:platformer": "yarn workspace @angry-pixel/platformer dev",
+        "demo:shmup": "yarn workspace @angry-pixel/shmup dev"
     },
     "devDependencies": {
         "eslint": "^9.2.0",
