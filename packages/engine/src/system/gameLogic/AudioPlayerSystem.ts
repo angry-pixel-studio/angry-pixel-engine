@@ -55,9 +55,7 @@ export class AudioPlayerSystem implements System {
 
     // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
     private userInputEventHandler = (): void => {
-        userInputEventNames.forEach((eventName) =>
-            window.removeEventListener(eventName, this.userInputEventHandler),
-        );
+        userInputEventNames.forEach((eventName) => window.removeEventListener(eventName, this.userInputEventHandler));
         this.canPlay = true;
         // Resume the AudioContext from inside the user-gesture handler.
         if (this.audioContext.state === "suspended") this.audioContext.resume();

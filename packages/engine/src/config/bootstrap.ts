@@ -121,7 +121,7 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
 
 const createAudioContext = ({ headless }: GameConfig): AudioContext | null => {
     if (headless) return null;
-    const Ctor = typeof window !== "undefined" ? (window.AudioContext ?? (window as any).webkitAudioContext) : undefined;
+    const Ctor = typeof window !== "undefined" ? window.AudioContext ?? (window as any).webkitAudioContext : undefined;
     return Ctor ? new Ctor() : null;
 };
 
