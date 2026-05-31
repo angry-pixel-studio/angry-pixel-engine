@@ -5,26 +5,26 @@ It allows playing, pausing, and stopping audio sources, controlling volume, enab
 
 ### Properties
 
-| Property                | Type                           | Description                                                                                      |
-| ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------ |
-| `action`                | `AudioPlayerAction`            | Action to perform on the audio source. This is cleared at the end of the frame.                  |
-| `audioSource`           | `HTMLAudioElement` \| `string` | The audio source to be played.                                                                   |
-| `fixedToTimeScale`      | `boolean`                      | If `true`, playback speed will be locked to the `TimeManager`’s time scale. Defaults to `false`. |
-| `loop`                  | `boolean`                      | If `true`, the audio source will loop playback.                                                  |
-| `volume`                | `number`                       | The volume of the audio source.                                                                  |
-| `stopOnSceneTransition` | `boolean`                      | If `true`, the audio source will stop on scene transition. Defaults to `true`.                   |
-| `state` _(read-only)_   | `AudioPlayerState`             | The current state of the audio source: `"stopped"`, `"playing"`, or `"paused"`.                  |
-| `playing` _(read-only)_ | `boolean`                      | Returns `true` if the audio source is currently playing.                                         |
-| `paused` _(read-only)_  | `boolean`                      | Returns `true` if the audio source is currently paused.                                          |
-| `stopped` _(read-only)_ | `boolean`                      | Returns `true` if the audio source is currently stopped.                                         |
+| Property                | Type                      | Description                                                                                      |
+| ----------------------- | ------------------------- | ------------------------------------------------------------------------------------------------ |
+| `action`                | `AudioPlayerAction`       | Action to perform on the audio source. This is cleared at the end of the frame.                  |
+| `audioSource`           | `AudioSource` \| `string` | The audio source to be played (from `AssetManager.getAudio`, or an asset URL/name string).       |
+| `fixedToTimeScale`      | `boolean`                 | If `true`, playback speed will be locked to the `TimeManager`’s time scale. Defaults to `false`. |
+| `loop`                  | `boolean`                 | If `true`, the audio source will loop playback.                                                  |
+| `volume`                | `number`                  | The volume of the audio source.                                                                  |
+| `stopOnSceneTransition` | `boolean`                 | If `true`, the audio source will stop on scene transition. Defaults to `true`.                   |
+| `state` _(read-only)_   | `AudioPlayerState`        | The current state of the audio source: `"stopped"`, `"playing"`, or `"paused"`.                  |
+| `playing` _(read-only)_ | `boolean`                 | Returns `true` if the audio source is currently playing.                                         |
+| `paused` _(read-only)_  | `boolean`                 | Returns `true` if the audio source is currently paused.                                          |
+| `stopped` _(read-only)_ | `boolean`                 | Returns `true` if the audio source is currently stopped.                                         |
 
 ### Methods
 
-| Method                                 | Description                                                                                    |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `play(audioSource?: HTMLAudioElement)` | Sets the `play` action to start playback. If a new `audioSource` is provided, it will be used. |
-| `pause()`                              | Sets the `pause` action to pause the current playback.                                         |
-| `stop()`                               | Sets the `stop` action to stop playback and reset the playback position to the beginning.      |
+| Method                                      | Description                                                                                    |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `play(audioSource?: AudioSource \| string)` | Sets the `play` action to start playback. If a new `audioSource` is provided, it will be used. |
+| `pause()`                                   | Sets the `pause` action to pause the current playback.                                         |
+| `stop()`                                    | Sets the `stop` action to stop playback and reset the playback position to the beginning.      |
 
 **Important:** These methods _do not perform any playback logic directly_. They only modify the `action` property. Actual playback, pause, or stop logic is handled by the system responsible for processing `AudioPlayer` components in the game loop.
 
@@ -50,7 +50,8 @@ audioPlayer.stop();
 
 ### Notes
 
--   The `AudioPlayer` supports both existing `HTMLAudioElement` sources and file path strings.
+-   The `AudioPlayer` accepts either an `AudioSource` (from `AssetManager.getAudio`) or an asset URL/name string.
+-   Playback uses the Web Audio API.
 -   The `action` property signals the intended behavior for the next frame and is automatically cleared afterward.
 -   The `fixedToTimeScale` option is useful for syncing sound effects or music with modified game speeds (e.g., slow motion or acceleration).
 -   The `stopOnSceneTransition` option is useful for choosing whether the audio source should stop on scene transition.

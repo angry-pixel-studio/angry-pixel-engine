@@ -109,6 +109,7 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
 
     container.set(SYMBOLS.GameConfig, gameConfig);
     container.set(SYMBOLS.CanvasElement, createCanvas(gameConfig));
+    container.set(SYMBOLS.AudioContext, createAudioContext(gameConfig));
 
     setupPhysicsDependencies(container);
     setupManagers(container);
@@ -116,6 +117,12 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
     setupExternalDependencies(container);
 
     return container;
+};
+
+const createAudioContext = ({ headless }: GameConfig): AudioContext | null => {
+    if (headless) return null;
+    const Ctor = typeof window !== "undefined" ? (window.AudioContext ?? (window as any).webkitAudioContext) : undefined;
+    return Ctor ? new Ctor() : null;
 };
 
 const setDefaultValues = (gameConfig: GameConfig) => {

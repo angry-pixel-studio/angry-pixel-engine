@@ -47,3 +47,4 @@ if (this.assetManager.getAssetsLoaded()) {
 
 -   Cada recurso puede recuperarse ya sea por su URL o por un nombre personalizado especificado al momento de cargarlo.
 -   Las fuentes se agregan automáticamente a `document.fonts` y pueden utilizarse inmediatamente en los contextos de renderizado.
+-   `getAudio()` devuelve un `AudioSource` — `{ buffer: AudioBuffer; element: HTMLAudioElement }`. El `buffer` decodificado alimenta el camino de la Web Audio API usado por `AudioPlayer`; el `element` lo usan los helpers `playSfx` / `stopSfx`.

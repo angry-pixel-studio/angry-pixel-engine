@@ -5,7 +5,7 @@ import { EntityManager, System } from "@angry-pixel/ecs";
 import { inject, injectable } from "@angry-pixel/ioc";
 import { InputManager } from "@manager/InputManager";
 import { TimeManager } from "@manager/TimeManager";
-import { AssetManager } from "../..";
+import { AssetManager } from "@manager/AssetManager";
 
 const userInputEventNames = [
     "click",
@@ -30,19 +30,19 @@ export class AudioPlayerSystem implements System {
         @inject(SYMBOLS.InputManager) private readonly inputManager: InputManager,
         @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
+        @inject(SYMBOLS.AudioContext) private readonly audioContext: AudioContext,
     ) {}
 
     public onCreate(): void {
-        // pauses audio when document is not visible
+        // suspend the AudioContext when the document is hidden so audio doesn't keep playing in the background.
         document.addEventListener("visibilitychange", () => {
-            this.entityManager.search(AudioPlayer, ({ audioSource, playing }) => {
-                if (!audioSource || typeof audioSource === "string") return;
-
-                if (document.hidden) audioSource.pause();
-                else if (!document.hidden && playing) audioSource.play();
-
-                this.canPlay = !document.hidden;
-            });
+            if (document.hidden) {
+                this.canPlay = false;
+                if (this.audioContext.state === "running") this.audioContext.suspend();
+            } else {
+                this.canPlay = true;
+                if (this.audioContext.state === "suspended") this.audioContext.resume();
+            }
         });
     }
 
@@ -55,11 +55,12 @@ export class AudioPlayerSystem implements System {
 
     // see https://developer.chrome.com/blog/autoplay/#audiovideo-elements
     private userInputEventHandler = (): void => {
-        userInputEventNames.forEach((eventName) => {
-            window.removeEventListener(eventName, this.userInputEventHandler);
-        });
-
+        userInputEventNames.forEach((eventName) =>
+            window.removeEventListener(eventName, this.userInputEventHandler),
+        );
         this.canPlay = true;
+        // Resume the AudioContext from inside the user-gesture handler.
+        if (this.audioContext.state === "suspended") this.audioContext.resume();
     };
 
     private checkGamepad(): boolean {
@@ -71,65 +72,50 @@ export class AudioPlayerSystem implements System {
         if (!this.canPlay && !this.checkGamepad()) return;
 
         this.entityManager.search(AudioPlayer, (audioPlayer) => {
+            // resolve string audio source through the AssetManager
             if (typeof audioPlayer.audioSource === "string") {
-                audioPlayer.audioSource = this.assetManager.getAudio(audioPlayer.audioSource);
-                if (!audioPlayer.audioSource) throw new Error(`Asset ${audioPlayer.audioSource} not found`);
+                const resolved = this.assetManager.getAudio(audioPlayer.audioSource);
+                if (!resolved?.buffer) return; // asset missing or not decoded yet
+                audioPlayer.audioSource = resolved;
             }
 
-            if (!audioPlayer.audioSource || !audioPlayer.audioSource.duration) return;
+            // wait for decode to populate the buffer (`loadAudio` returns the AudioSource synchronously)
+            if (!audioPlayer.audioSource?.buffer) return;
 
             if (audioPlayer._playAfterUserInput) {
                 audioPlayer._playAfterUserInput = false;
                 audioPlayer.action = "play";
             }
 
-            // new audio source
+            // new audio source — stop any current playback before replacing it
             if (audioPlayer.audioSource !== audioPlayer._currentAudioSource) {
-                if (audioPlayer._currentAudioSource) {
-                    audioPlayer._currentAudioSource.pause();
-                    audioPlayer._currentAudioSource.currentTime = 0;
-                }
+                this.disposeSource(audioPlayer);
                 audioPlayer._currentAudioSource = audioPlayer.audioSource;
-                audioPlayer.audioSource.currentTime = 0;
+                audioPlayer._pauseOffset = 0;
                 audioPlayer.state = "stopped";
             }
 
-            audioPlayer.audioSource.loop = audioPlayer.loop;
-            audioPlayer.audioSource.volume = audioPlayer.volume;
+            // live updates to gain/playbackRate/loop on the active node so user-side mutations take effect
+            if (audioPlayer._gainNode) audioPlayer._gainNode.gain.value = audioPlayer.volume;
+            if (audioPlayer._sourceNode) {
+                audioPlayer._sourceNode.playbackRate.value = this.computePlaybackRate(audioPlayer);
+                audioPlayer._sourceNode.loop = audioPlayer.loop;
+            }
 
-            if (audioPlayer.action === "play" && audioPlayer.state !== "playing" && !audioPlayer._playPromisePendind) {
-                // start playing
-                audioPlayer._playPromisePendind = true;
-                audioPlayer.audioSource.playbackRate = audioPlayer.fixedToTimeScale
-                    ? this.timeManager.timeScale < 0.0625
-                        ? 0
-                        : Math.min(this.timeManager.timeScale, 16)
-                    : 1;
-                audioPlayer.audioSource
-                    .play()
-                    .then(() => {
-                        audioPlayer._playPromisePendind = false;
-                        audioPlayer.state = "playing";
-                    })
-                    .catch(() => {
-                        audioPlayer._playAfterUserInput = true;
-                        audioPlayer._playPromisePendind = false;
-                        if (!this.userInputErrorCatched) this.catchUserInput();
-                    });
+            if (audioPlayer.action === "play" && audioPlayer.state !== "playing") {
+                if (this.audioContext.state === "suspended") {
+                    audioPlayer._playAfterUserInput = true;
+                    if (!this.userInputErrorCatched) this.catchUserInput();
+                } else {
+                    this.startSource(audioPlayer);
+                    audioPlayer.state = "playing";
+                }
             } else if (audioPlayer.action === "pause" && audioPlayer.state === "playing") {
-                // set pause
-                audioPlayer.audioSource.pause();
+                this.pauseSource(audioPlayer);
                 audioPlayer.state = "paused";
-            } else if (
-                audioPlayer.action === "stop" &&
-                (!audioPlayer.audioSource.paused || audioPlayer.audioSource.currentTime !== 0)
-            ) {
-                // force stop
-                audioPlayer.audioSource.pause();
-                audioPlayer.audioSource.currentTime = 0;
-                audioPlayer.state = "stopped";
-            } else if (audioPlayer.state === "playing" && audioPlayer.audioSource.paused) {
-                // track is ended
+            } else if (audioPlayer.action === "stop" && audioPlayer.state !== "stopped") {
+                this.disposeSource(audioPlayer);
+                audioPlayer._pauseOffset = 0;
                 audioPlayer.state = "stopped";
             }
 
@@ -138,15 +124,76 @@ export class AudioPlayerSystem implements System {
     }
 
     public onDisabled(): void {
-        this.entityManager.search(AudioPlayer, ({ audioSource, stopOnSceneTransition }) => {
-            if (audioSource && typeof audioSource !== "string" && stopOnSceneTransition) {
-                audioSource.pause();
-                audioSource.currentTime = 0;
-            }
+        this.entityManager.search(AudioPlayer, (audioPlayer) => {
+            if (!audioPlayer.stopOnSceneTransition) return;
+            this.disposeSource(audioPlayer);
+            audioPlayer._pauseOffset = 0;
+            audioPlayer.state = "stopped";
         });
     }
 
     public onDestroy(): void {
         this.onDisabled();
+    }
+
+    private computePlaybackRate(audioPlayer: AudioPlayer): number {
+        if (!audioPlayer.fixedToTimeScale) return 1;
+        return this.timeManager.timeScale < 0.0625 ? 0 : Math.min(this.timeManager.timeScale, 16);
+    }
+
+    /**
+     * Create a fresh BufferSourceNode, wire it through a (possibly reused) GainNode,
+     * and start playback at the saved pause offset.
+     */
+    private startSource(audioPlayer: AudioPlayer): void {
+        const source = this.audioContext.createBufferSource();
+        source.buffer = audioPlayer._currentAudioSource.buffer;
+        source.loop = audioPlayer.loop;
+        source.playbackRate.value = this.computePlaybackRate(audioPlayer);
+
+        const gain = audioPlayer._gainNode ?? this.audioContext.createGain();
+        gain.gain.value = audioPlayer.volume;
+
+        source.connect(gain);
+        if (!audioPlayer._gainNode) gain.connect(this.audioContext.destination);
+
+        source.onended = () => {
+            // ignore "ended" we triggered ourselves (stop/pause/source-change replace the node first)
+            if (audioPlayer._sourceNode !== source) return;
+            audioPlayer._sourceNode = undefined;
+            audioPlayer._pauseOffset = 0;
+            audioPlayer.state = "stopped";
+        };
+
+        const offset = audioPlayer._pauseOffset;
+        source.start(0, offset);
+
+        audioPlayer._sourceNode = source;
+        audioPlayer._gainNode = gain;
+        audioPlayer._startedAt = this.audioContext.currentTime - offset;
+    }
+
+    /**
+     * Stop the active source and persist the elapsed offset (loop-aware) so a subsequent play resumes from there.
+     */
+    private pauseSource(audioPlayer: AudioPlayer): void {
+        if (!audioPlayer._sourceNode) return;
+        let elapsed = this.audioContext.currentTime - audioPlayer._startedAt;
+        if (audioPlayer.loop && audioPlayer._currentAudioSource) {
+            elapsed %= audioPlayer._currentAudioSource.buffer.duration;
+        }
+        audioPlayer._pauseOffset = Math.max(0, elapsed);
+        this.disposeSource(audioPlayer);
+    }
+
+    private disposeSource(audioPlayer: AudioPlayer): void {
+        if (!audioPlayer._sourceNode) return;
+        audioPlayer._sourceNode.onended = null;
+        try {
+            audioPlayer._sourceNode.stop();
+        } catch {
+            // start() never called or already stopped — ignore
+        }
+        audioPlayer._sourceNode = undefined;
     }
 }

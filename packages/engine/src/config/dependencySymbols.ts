@@ -4,6 +4,7 @@ import { SYMBOLS as WEBGL_SYMBOLS } from "@angry-pixel/webgl";
 
 export const SYMBOLS = {
     AssetManager: Symbol.for("AssetManager"),
+    AudioContext: Symbol.for("AudioContext"),
     CreateSystemService: Symbol.for("CreateSystemService"),
     GameConfig: Symbol.for("GameConfig"),
     InputManager: Symbol.for("InputManager"),

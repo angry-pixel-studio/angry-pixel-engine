@@ -47,3 +47,4 @@ if (this.assetManager.getAssetsLoaded()) {
 
 -   Each asset can be retrieved either by its URL or by a custom name specified at the time of loading.
 -   Fonts are automatically added to `document.fonts` and can be used immediately in rendering contexts.
+-   `getAudio()` returns an `AudioSource` — `{ buffer: AudioBuffer; element: HTMLAudioElement }`. The decoded `buffer` powers the Web Audio API path used by `AudioPlayer`; the `element` is used by the `playSfx` / `stopSfx` helpers.
