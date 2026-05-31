@@ -16,7 +16,7 @@ import { AudioSource } from "@manager/AssetManager";
  */
 export interface AudioPlayerOptions {
     /** The action to perform with the audio source. */
-    action: AudioPlayerAction;
+    action: "stop" | "play" | "pause";
     /** The audio source to play. Either an `AudioSource` (from `AssetManager.getAudio`) or an asset URL/name string. */
     audioSource: AudioSource | string;
     /** TRUE If the audio source should stop on scene transition, FALSE otherwise. Default is TRUE. */
@@ -46,7 +46,7 @@ export interface AudioPlayerOptions {
  */
 export class AudioPlayer {
     /** The action to perform with the audio source. This action will be erased at the end of the frame */
-    action: AudioPlayerAction = undefined;
+    action: "stop" | "play" | "pause";
     /** The audio source to play. Either an `AudioSource` (from `AssetManager.getAudio`) or an asset URL/name string. */
     audioSource: AudioSource | string;
     /** TRUE If the audio source should stop on scene transition, FALSE otherwise. Default is TRUE. */
@@ -56,7 +56,7 @@ export class AudioPlayer {
     /** TRUE If the audio source should loop. */
     loop: boolean = false;
     /** READONLY, The current state of the audio source. */
-    state: AudioPlayerState = "stopped";
+    state: "stopped" | "playing" | "paused" = "stopped";
     /** The volume of the audio source. */
     volume: number = 1;
 
@@ -116,15 +116,3 @@ export class AudioPlayer {
         this.action = "stop";
     }
 }
-
-/**
- * @public
- * @category Components Configuration
- */
-export type AudioPlayerAction = "stop" | "play" | "pause";
-
-/**
- * @public
- * @category Components Configuration
- */
-export type AudioPlayerState = "stopped" | "playing" | "paused";

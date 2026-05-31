@@ -39,6 +39,14 @@ The `Animator` component manages multiple animations and allows switching betwee
 | `currentTime`     | `number`                 | The accumulated playback time (read-only).                                |
 | `ignoreTimeScale` | `boolean`                | If `true`, the animation won't be affected by `TimeManager.timeScale`     |
 
+#### Methods
+
+| Method                     | Description                                                                                                                 |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `play(animation?: string)` | Starts (or resumes) playback. If a new animation name is passed and it differs from the current, switches to it and resets. |
+| `pause()`                  | Stops playback while keeping the current frame, so a later `play()` resumes from where it left off.                         |
+| `stop()`                   | Stops playback and resets the current frame and time to zero.                                                               |
+
 ---
 
 ### Basic Example — Sprite Sheet Animations

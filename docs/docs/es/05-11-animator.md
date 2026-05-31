@@ -39,6 +39,14 @@ El componente `Animator` administra múltiples animaciones y permite cambiar ent
 | `currentTime`     | `number`                 | Tiempo acumulado de reproducción (solo lectura).                            |
 | `ignoreTimeScale` | `boolean`                | Si es `true`, la animación no se verá afectada por `TimeManager.timeScale`. |
 
+#### Métodos
+
+| Método                     | Descripción                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `play(animation?: string)` | Inicia (o reanuda) la reproducción. Si se pasa un nuevo nombre de animación distinto al actual, cambia y reinicia. |
+| `pause()`                  | Detiene la reproducción manteniendo el frame actual, de modo que un `play()` posterior continúa desde ese punto.   |
+| `stop()`                   | Detiene la reproducción y restablece el frame y tiempo actuales a cero.                                            |
+
 ---
 
 ### Ejemplo básico — animaciones con sprite sheet
