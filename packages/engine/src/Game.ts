@@ -31,7 +31,7 @@ import { SceneManager, SceneType } from "@manager/SceneManager";
  *   containerNode: document.getElementById("app"),
  *   width: 1920,
  *   height: 1080,
- *   debugEnabled: false,
+ *   debug: { colliders: false, mousePosition: false, textRendererBoundingBoxes: false },
  *   canvasColor: "#000000",
  *   physicsFramerate: 180,
  *   collisions: {
@@ -40,7 +40,7 @@ import { SceneManager, SceneType } from "@manager/SceneManager";
  *       ["layer1", "layer3"],
  *     ],
  *     collisionMethod: CollisionMethods.SAT,
- *     collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+ *     collisionBroadPhaseMethod: BroadPhaseMethods.SpatialGrid,
  *   }
  * });
  * game.addScene(MainScene, "MainScene");

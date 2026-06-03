@@ -14,7 +14,7 @@ export class QuadTree implements BroadPhaseResolver {
     private rects: Map<number, Rectangle> = new Map();
     private children: QuadTree[] = null;
 
-    /** Root-only: dedupe ids across leaves (same scheme as SpartialGrid) */
+    /** Root-only: dedupe ids across leaves (same scheme as SpatialGrid) */
     private seenGen: number[] = [];
     private retrieveSerial = 0;
 
