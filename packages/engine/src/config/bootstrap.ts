@@ -10,7 +10,7 @@ import {
     QuadTree,
     SatMethod,
     SatResolver,
-    SpartialGrid,
+    SpatialGrid,
 } from "@angry-pixel/collisions";
 import { CollisionMatrix } from "@system/physics2d/ResolveCollisionSystem";
 import { SYMBOLS } from "./dependencySymbols";
@@ -40,7 +40,7 @@ import { SYSTEM_SYMBOLS } from "./systemSymbols";
  *   containerNode: document.getElementById("app"),
  *   width: 1920,
  *   height: 1080,
- *   debugEnabled: false,
+ *   debug: { colliders: false, mousePosition: false, textRendererBoundingBoxes: false },
  *   canvasColor: "#000000",
  *   physicsFramerate: 180,
  *   headless: false,
@@ -51,7 +51,7 @@ import { SYSTEM_SYMBOLS } from "./systemSymbols";
  *       ["layer1", "layer3"],
  *     ],
  *     collisionMethod: CollisionMethods.SAT,
- *     collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+ *     collisionBroadPhaseMethod: BroadPhaseMethods.SpatialGrid,
  *   }
  * };
  * ```
@@ -93,11 +93,11 @@ export interface GameConfig {
     dependencies?: [DependencyName, any][];
     /** Collision configuration options */
     collisions?: {
-        /** Collision detection method: CollisionMethods.SAT or CollisionMethods.ABB. Default value is CollisionMethods.SAT */
+        /** Collision detection method: CollisionMethods.SAT or CollisionMethods.AABB. Default value is CollisionMethods.SAT */
         collisionMethod?: CollisionMethods;
-        /** Define a fixed rectangular area for collision detection */
+        /** Pairs of collision layers that are allowed to collide with each other */
         collisionMatrix?: CollisionMatrix;
-        /** Collision broad phase method: BroadPhaseMethods.QuadTree or BroadPhaseMethods.SpartialGrid. Default values is BroadPhaseMethods.SpartialGrid */
+        /** Collision broad phase method: BroadPhaseMethods.QuadTree or BroadPhaseMethods.SpatialGrid. Default values is BroadPhaseMethods.SpatialGrid */
         collisionBroadPhaseMethod?: BroadPhaseMethods;
     };
 }
@@ -109,6 +109,7 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
 
     container.set(SYMBOLS.GameConfig, gameConfig);
     container.set(SYMBOLS.CanvasElement, createCanvas(gameConfig));
+    container.set(SYMBOLS.AudioContext, createAudioContext(gameConfig));
 
     setupPhysicsDependencies(container);
     setupManagers(container);
@@ -116,6 +117,12 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
     setupExternalDependencies(container);
 
     return container;
+};
+
+const createAudioContext = ({ headless }: GameConfig): AudioContext | null => {
+    if (headless) return null;
+    const Ctor = typeof window !== "undefined" ? window.AudioContext ?? (window as any).webkitAudioContext : undefined;
+    return Ctor ? new Ctor() : null;
 };
 
 const setDefaultValues = (gameConfig: GameConfig) => {
@@ -135,7 +142,7 @@ const setDefaultValues = (gameConfig: GameConfig) => {
 
     gameConfig.collisions = gameConfig.collisions ?? {};
     gameConfig.collisions.collisionBroadPhaseMethod =
-        gameConfig.collisions.collisionBroadPhaseMethod ?? BroadPhaseMethods.SpartialGrid;
+        gameConfig.collisions.collisionBroadPhaseMethod ?? BroadPhaseMethods.SpatialGrid;
     gameConfig.collisions.collisionMatrix = gameConfig.collisions.collisionMatrix ?? undefined;
     gameConfig.collisions.collisionMethod = gameConfig.collisions.collisionMethod ?? CollisionMethods.SAT;
 };
@@ -222,7 +229,7 @@ const setupPhysicsDependencies = (container: Container): void => {
         container.add(SatResolver);
     }
 
-    container.add(collisionBroadPhaseMethod === BroadPhaseMethods.QuadTree ? QuadTree : SpartialGrid);
+    container.add(collisionBroadPhaseMethod === BroadPhaseMethods.QuadTree ? QuadTree : SpatialGrid);
     container.add(collisionMethod === CollisionMethods.AABB ? AABBMethod : SatMethod);
 
     container.set(SYMBOLS.CollisionMatrix, collisionMatrix);

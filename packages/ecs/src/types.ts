@@ -42,11 +42,11 @@ export type ComponentType<T extends Component = Component> = { new (...args: any
  * @public
  * @category Entity-Component-System
  */
-export type SearchResult<T extends Component> = { entity: Entity; component: T };
+export type SearchResult<T extends Component> = { component: T; entity: Entity };
 
 /**
  * This type represents an Entity Archetype, which defines a template for creating entities with a specific set of components.\
- * It specifies which components should be attached to the entity, whether the entity should be enabled/disabled,\
+ * It specifies which components should be attached to the entity, which of them should start disabled, whether the entity should be enabled/disabled,\
  * and can include child archetypes to create hierarchical entity structures.
  * @public
  * @category Entity-Component-System
@@ -65,9 +65,9 @@ export type SearchResult<T extends Component> = { entity: Entity; component: T }
  * const enemyArchetype: Archetype = {
  *   components: [
  *     new Transform(),
- *     new Enemy(),
- *     disableComponent(new BoxCollider()) // This component starts disabled
+ *     new Enemy()
  *   ],
+ *   disabledComponents: [new BoxCollider()], // The BoxCollider is attached but starts disabled
  *   children: [
  *     {
  *       components: [new WeaponMount()],
@@ -78,17 +78,22 @@ export type SearchResult<T extends Component> = { entity: Entity; component: T }
  * ```
  */
 export type Archetype = {
-    components: (Component | ComponentType | DisabledComponent)[];
+    /**
+     * Components to attach to the entity. Each entry can be a component instance (cloned on creation, so the archetype can be reused)
+     * or a component class (instantiated with no arguments).
+     */
+    components: (Component | ComponentType)[];
+    /**
+     * Components to attach to the entity that should start disabled. Same shape as `components`:
+     * entries can be component instances (cloned on creation) or component classes (instantiated with no arguments).
+     * Do not list the same component type in both arrays.
+     */
+    disabledComponents?: (Component | ComponentType)[];
+    /** Child archetypes. Each one is created as a separate entity parented to this archetype's entity. */
     children?: Archetype[];
+    /** Whether the entity starts enabled. Defaults to `true`. Set to `false` to disable the entity on creation. */
     enabled?: boolean;
 };
-
-/**
- * This type represents a disabled component
- * @public
- * @category Entity-Component-System
- */
-export type DisabledComponent = { enabled: false; component: Component | ComponentType };
 
 /**
  * This interface defines the core structure for system classes in the ECS architecture.\

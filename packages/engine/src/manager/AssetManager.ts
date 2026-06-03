@@ -1,4 +1,4 @@
-import { injectable } from "@angry-pixel/ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "@config/dependencySymbols";
 
 enum AssetType {
@@ -9,7 +9,17 @@ enum AssetType {
     Json,
 }
 
-type AssetElement = HTMLImageElement | HTMLAudioElement | FontFace | HTMLVideoElement | Record<string, any>;
+/**
+ * A loaded audio asset. Holds both a decoded `AudioBuffer` and an `HTMLAudioElement`.
+ * @public
+ * @category Assets
+ */
+export interface AudioSource {
+    buffer?: AudioBuffer;
+    element: HTMLAudioElement;
+}
+
+type AssetElement = HTMLImageElement | AudioSource | FontFace | HTMLVideoElement | Record<string, any>;
 
 interface Asset {
     type: AssetType;
@@ -35,7 +45,7 @@ interface Asset {
  * this.assetManager.loadJson("data.json");
  *
  * const imageElement = this.assetManager.getImage("image.png");
- * const audioElement = this.assetManager.getAudio("audio.ogg");
+ * const audioSource = this.assetManager.getAudio("audio.ogg");
  * const videoElement = this.assetManager.getVideo("video.mp4");
  * const fontFace = this.assetManager.getFont("custom-font");
  * const jsonData = this.assetManager.getJson("data.json");
@@ -48,6 +58,8 @@ interface Asset {
 @injectable(SYMBOLS.AssetManager)
 export class AssetManager {
     private readonly assets: Asset[] = [];
+
+    constructor(@inject(SYMBOLS.AudioContext) private readonly audioContext: AudioContext | null) {}
 
     /**
      * Returns TRUE if the assets are loaded
@@ -83,20 +95,38 @@ export class AssetManager {
      * Loads an audio asset
      * @param url The asset URL
      * @param name The asset name [optional]
-     * @returns The HTML Audio element created
+     * @returns The {@link AudioSource} (with its `buffer` populated asynchronously), or `null` if no AudioContext is available.
      */
-    public loadAudio(url: string, name?: string): HTMLAudioElement {
-        if (this.getAudio(url)) return this.getAudio(url);
+    public loadAudio(url: string, name?: string): AudioSource | null {
+        const existing = this.getAudio(url);
+        if (existing) return existing;
 
-        const audio = new Audio();
-        audio.src = url;
+        if (!this.audioContext) {
+            // headless / no Web Audio support — treat as "loaded" so getAssetsLoaded doesn't hang.
+            const asset = this.createAsset(url, AssetType.Audio, undefined, name);
+            asset.loaded = true;
+            return null;
+        }
 
-        const asset = this.createAsset(url, AssetType.Audio, audio, name);
+        // HTMLAudioElement loads its own stream from the URL (browser cache dedupes the fetch below).
+        const element = new Audio();
+        element.src = url;
 
-        if (audio.duration) asset.loaded = true;
-        else audio.addEventListener("canplaythrough", () => (asset.loaded = true));
+        const source: AudioSource = { element };
+        const asset = this.createAsset(url, AssetType.Audio, source, name);
 
-        return audio;
+        this.decodeAudioBuffer(url).then((buffer) => {
+            source.buffer = buffer;
+            asset.loaded = true;
+        });
+
+        return source;
+    }
+
+    private async decodeAudioBuffer(url: string): Promise<AudioBuffer> {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        return this.audioContext.decodeAudioData(arrayBuffer);
     }
 
     /**
@@ -180,19 +210,19 @@ export class AssetManager {
     /**
      * Retrieves an audio asset
      * @param url The asset URL
-     * @returns The HTML Audio element
+     * @returns The loaded {@link AudioSource}.
      */
-    public getAudio(url: string): HTMLAudioElement;
+    public getAudio(url: string): AudioSource;
     /**
      * Retrieves an audio asset
      * @param name The asset name
-     * @returns The HTML Audio element
+     * @returns The loaded {@link AudioSource}.
      */
-    public getAudio(name: string): HTMLAudioElement;
-    public getAudio(disc: string): HTMLAudioElement {
+    public getAudio(name: string): AudioSource;
+    public getAudio(disc: string): AudioSource {
         return this.assets.find(
             (asset) => asset.type === AssetType.Audio && (asset.url === disc || asset.name === disc),
-        )?.element as HTMLAudioElement;
+        )?.element as AudioSource;
     }
 
     /**

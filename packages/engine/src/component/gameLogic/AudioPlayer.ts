@@ -1,3 +1,5 @@
+import { AudioSource } from "@manager/AssetManager";
+
 /**
  * AudioPlayer component configuration
  * @public
@@ -14,9 +16,9 @@
  */
 export interface AudioPlayerOptions {
     /** The action to perform with the audio source. */
-    action: AudioPlayerAction;
-    /** The audio source to play. */
-    audioSource: HTMLAudioElement | string;
+    action: "stop" | "play" | "pause";
+    /** The audio source to play. Either an `AudioSource` (from `AssetManager.getAudio`) or an asset URL/name string. */
+    audioSource: AudioSource | string;
     /** TRUE If the audio source should stop on scene transition, FALSE otherwise. Default is TRUE. */
     stopOnSceneTransition: boolean;
     /** TRUE If the playback rate is fixed to the TimeManager time scale, default FALSE */
@@ -44,9 +46,9 @@ export interface AudioPlayerOptions {
  */
 export class AudioPlayer {
     /** The action to perform with the audio source. This action will be erased at the end of the frame */
-    action: AudioPlayerAction = undefined;
-    /** The audio source to play. */
-    audioSource: HTMLAudioElement | string;
+    action: "stop" | "play" | "pause";
+    /** The audio source to play. Either an `AudioSource` (from `AssetManager.getAudio`) or an asset URL/name string. */
+    audioSource: AudioSource | string;
     /** TRUE If the audio source should stop on scene transition, FALSE otherwise. Default is TRUE. */
     stopOnSceneTransition: boolean = true;
     /** TRUE If the playback rate is fixed to the TimeManager time scale, default FALSE */
@@ -54,7 +56,7 @@ export class AudioPlayer {
     /** TRUE If the audio source should loop. */
     loop: boolean = false;
     /** READONLY, The current state of the audio source. */
-    state: AudioPlayerState = "stopped";
+    state: "stopped" | "playing" | "paused" = "stopped";
     /** The volume of the audio source. */
     volume: number = 1;
 
@@ -74,10 +76,16 @@ export class AudioPlayer {
     }
 
     /** @internal */
-    _currentAudioSource: HTMLAudioElement = undefined;
-    /* @internal */
-    _playPromisePendind: boolean = false;
-    /* @internal */
+    _currentAudioSource: AudioSource = undefined;
+    /** @internal Active BufferSourceNode that's playing the current buffer (null when not playing) */
+    _sourceNode: AudioBufferSourceNode = undefined;
+    /** @internal GainNode wired between sourceNode and destination, used to set volume */
+    _gainNode: GainNode = undefined;
+    /** @internal AudioContext.currentTime when the current sourceNode started */
+    _startedAt: number = 0;
+    /** @internal Offset (seconds) within the buffer at which the next play should resume from (used on pause) */
+    _pauseOffset: number = 0;
+    /** @internal */
     _playAfterUserInput: boolean = false;
     /** @internal */
     static componentName: string = "AudioPlayer";
@@ -89,7 +97,7 @@ export class AudioPlayer {
     /**
      * Play the audio source.
      */
-    public play(audioSource?: HTMLAudioElement): void {
+    public play(audioSource?: AudioSource | string): void {
         if (audioSource) this.audioSource = audioSource;
         this.action = "play";
     }
@@ -108,15 +116,3 @@ export class AudioPlayer {
         this.action = "stop";
     }
 }
-
-/**
- * @public
- * @category Components Configuration
- */
-export type AudioPlayerAction = "stop" | "play" | "pause";
-
-/**
- * @public
- * @category Components Configuration
- */
-export type AudioPlayerState = "stopped" | "playing" | "paused";

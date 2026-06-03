@@ -1,5 +1,3 @@
-import { Component, ComponentType, DisabledComponent } from "./types";
-
 export const deepClone = <T>(value: T): T => {
     if (value === null || typeof value !== "object") {
         return value; // primitives
@@ -50,19 +48,3 @@ export const deepClone = <T>(value: T): T => {
 
     return clone;
 };
-
-/**
- * Creates a disabled component
- * @param component The component to disable
- * @returns The disabled component
- * @category Entity-Component-System
- * @public
- * @example
- * ```js
- * const disabledTransform = disableComponent(Transform);
- * ```
- */
-export const disableComponent = (component: Component | ComponentType): DisabledComponent => ({
-    enabled: false,
-    component,
-});

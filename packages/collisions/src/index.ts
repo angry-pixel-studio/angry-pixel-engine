@@ -1,6 +1,6 @@
 export * from "./broadPhase/IBroadPhaseResolver";
 export * from "./broadPhase/QuadTree";
-export * from "./broadPhase/SpartialGrid";
+export * from "./broadPhase/SpatialGrid";
 
 export * from "./method/AABBMethod";
 export * from "./method/CollisionMethod";

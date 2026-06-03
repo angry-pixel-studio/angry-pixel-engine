@@ -18,7 +18,7 @@ export class TilemapRendererSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(TilemapRenderer).forEach(({ entity, component: tilemapRenderer }) => {
+        this.entityManager.search(TilemapRenderer, (tilemapRenderer, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("TilemapRenderer component needs a Transform");
 

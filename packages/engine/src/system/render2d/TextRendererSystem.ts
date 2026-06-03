@@ -21,7 +21,7 @@ export class TextRendererSystem implements System {
     ) {}
 
     public onUpdate(): void {
-        this.entityManager.search(TextRenderer).forEach(({ entity, component: textRenderer }) => {
+        this.entityManager.search(TextRenderer, (textRenderer, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("TextRenderer component needs a Transform");
 

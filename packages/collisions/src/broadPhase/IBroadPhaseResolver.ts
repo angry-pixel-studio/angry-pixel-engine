@@ -4,13 +4,13 @@ import { Shape } from "../Shape";
 /**
  * Broad phase collision methods
  * - QuadTree: Stores the shapes in an incremental quad tree.
- * - SpartialGrid: Stores the shapes in an incremental spartial grid.
+ * - SpatialGrid: Stores the shapes in an incremental spatial grid.
  * @category Config
  * @public
  */
 export enum BroadPhaseMethods {
     QuadTree,
-    SpartialGrid,
+    SpatialGrid,
 }
 
 export interface BroadPhaseResolver {

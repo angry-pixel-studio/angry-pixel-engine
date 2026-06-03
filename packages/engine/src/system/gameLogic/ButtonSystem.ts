@@ -29,7 +29,7 @@ export class ButtonSystem implements System {
     }
 
     public onUpdate(): void {
-        this.entityManager.search(Button).forEach(({ entity, component: button }) => {
+        this.entityManager.search(Button, (button, entity) => {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("Button component needs a Transform");
 

@@ -26,7 +26,7 @@ export class DebugColliderRenderSystem implements System {
         if (!this.gameConfig.debug?.colliders) return;
 
         [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider].forEach((type) =>
-            this.entityManager.search<Collider>(type).forEach(({ component: collider }) =>
+            this.entityManager.search<Collider>(type, (collider) =>
                 collider.shapes.forEach((shape) => {
                     const renderData: GeometricRenderData = {
                         type: RenderDataType.Geometric,

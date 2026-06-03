@@ -102,6 +102,27 @@ export class Animator {
     constructor(options?: Partial<AnimatorOptions>) {
         Object.assign(this, options);
     }
+
+    /** Play the animation. If a new animation name is given, switches to it and resets. */
+    public play(animation?: string): void {
+        if (animation !== undefined && animation !== this.animation) {
+            this.animation = animation;
+            this.reset = true;
+        }
+        this.playing = true;
+    }
+
+    /** Pause the animation, keeping the current frame. */
+    public pause(): void {
+        this.playing = false;
+    }
+
+    /** Stop the animation and reset to the first frame. */
+    public stop(): void {
+        this.playing = false;
+        this.currentFrame = 0;
+        this.currentTime = 0;
+    }
 }
 
 /**
@@ -194,8 +215,8 @@ export class Animation {
 
             if (options.slice) {
                 this.slice.size.copy(options.slice.size);
-                options.slice.offset && this.slice.offset.copy(options.slice.offset);
-                options.slice.padding && this.slice.padding.copy(options.slice.padding);
+                if (options.slice.offset) this.slice.offset.copy(options.slice.offset);
+                if (options.slice.padding) this.slice.padding.copy(options.slice.padding);
             }
         }
     }

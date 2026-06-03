@@ -1,7 +1,10 @@
 import { injectable } from "@angry-pixel/ioc";
-import { Archetype, Component, ComponentType, DisabledComponent, Entity, SearchResult } from "./types";
+import { Archetype, Component, ComponentType, Entity, SearchResult } from "./types";
 import { deepClone } from "./utils";
 import { SYMBOLS } from "./symbols";
+
+const COMPONENT_TYPE_ID = Symbol("ecs.componentTypeId");
+let nextComponentTypeId = 0;
 
 /**
  * The EntityManager is responsible for managing the lifecycle and relationships of entities and components.\
@@ -46,23 +49,24 @@ import { SYMBOLS } from "./symbols";
  * entityManager.removeComponent(spriteRenderer);
  *
  * // Search for entities with specific components
+ * entityManager.search(Enemy, (enemy, entity) => {
+ *   if (enemy.status !== "alive") return;
+ *   // do something
+ * });
+ *
  * const searchResult = entityManager.search(SpriteRenderer);
  * searchResult.forEach(({component, entity}) => {
- *   // do something with the component and entity
- * })
- *
- * const searchResult = entityManager.search(Enemy, (component) => component.status === "alive");
- * searchResult.forEach(({component, entity}) => {
- *   // do something with the component and entity
- * })
+ *   // do something
+ * });
  * ```
  */
 @injectable(SYMBOLS.EntityManager)
 export class EntityManager {
     private lastEntityId: number = 0;
-    private lastComponentTypeId: number = 0;
     private entities: Set<Entity> = new Set();
     private components: Map<number, Map<Entity, Component>> = new Map(); // componen type id -> entity id -> component
+    private entityComponents: Map<Entity, Map<number, Component>> = new Map(); // entity -> component type id -> component
+    private componentToEntity: WeakMap<Component, Entity> = new WeakMap(); // component instance -> entity
     private disabledEntities: Set<Entity> = new Set();
     private manuallyDisabledEntities: Set<Entity> = new Set();
     private disabledComponents: Map<Entity, Set<number>> = new Map(); // entity -> set of component type id
@@ -70,7 +74,7 @@ export class EntityManager {
     private childEntities: Map<Entity, Set<Entity>> = new Map(); // parent entity -> set of child entities
 
     /**
-     * Creates an entity without component
+     * Creates an entity without components.
      * @return The created Entity
      * @public
      * @example
@@ -95,43 +99,61 @@ export class EntityManager {
      * ```
      */
     public createEntity(components: (ComponentType | Component)[], parent?: Entity): Entity;
-    public createEntity(components?: (ComponentType | Component)[], parent?: Entity): Entity {
-        const entity = this.lastEntityId++;
-
-        if (components) {
-            this.entities.add(entity);
-            components.forEach((component) => this.addComponent(entity, component));
-            if (parent) this.setParent(entity, parent);
-        }
-
-        return entity;
-    }
-
     /**
-     * Creates an Entity based on an Archetype.\
-     * Since the components are cloned, the archetype can be reused to create multiple entities.
+     * Creates an Entity from an Archetype template.\
+     * Components are cloned, so the archetype can be reused to create multiple entities.
      * @param archetype The archetype to create the entity from
      * @param parent The parent entity (optional)
-     * @returns The created Entity
+     * @return The created Entity
      * @public
      * @example
      * ```js
      * const archetype = {
      *   components: [
      *     new Transform({position: new Vector2(100, 100)}),
-     *     SpriteRenderer
+     *     SpriteRenderer,
+     *     new BoxCollider(),
      *   ],
+     *   disabledComponents: [BoxCollider],
      *   children: [childArchetype],
-     *   enabled: true
-     * }
-     * const entity = entityManager.createEntityFromArchetype(archetype);
+     *   enabled: true,
+     * };
+     * const entity = entityManager.createEntity(archetype);
      * ```
      */
-    public createEntityFromArchetype({ components, children, enabled }: Archetype, parent?: Entity): Entity {
+    public createEntity(archetype: Archetype, parent?: Entity): Entity;
+    public createEntity(arg1?: (ComponentType | Component)[] | Archetype, parent?: Entity): Entity {
+        if (arg1 === undefined) {
+            return this.lastEntityId++;
+        }
+
+        if (Array.isArray(arg1)) {
+            const entity = this.lastEntityId++;
+            this.entities.add(entity);
+            arg1.forEach((component) => this.addComponent(entity, component));
+            if (parent) this.setParent(entity, parent);
+            return entity;
+        }
+
+        return this.createEntityFromArchetype(arg1, parent);
+    }
+
+    /**
+     * Creates an Entity from an Archetype.
+     * @param archetype
+     * @param parent
+     * @returns The created Entity
+     * @private
+     */
+    private createEntityFromArchetype(
+        { components, disabledComponents, children, enabled }: Archetype,
+        parent?: Entity,
+    ): Entity {
         const entity = this.lastEntityId++;
         this.entities.add(entity);
 
         this.createComponentsFromArchetype(components, entity);
+        if (disabledComponents) this.createComponentsFromArchetype(disabledComponents, entity, true);
 
         if (parent) this.setParent(entity, parent);
         if (children) children.forEach((child) => this.createEntityFromArchetype(child, entity));
@@ -144,25 +166,16 @@ export class EntityManager {
      * Creates components from an archetype
      * @param components The components to create
      * @param entity The entity to create the components for
+     * @param disabled If TRUE, each created component is disabled. Default is FALSE.
      * @private
      */
     private createComponentsFromArchetype(
-        components: (Component | ComponentType | DisabledComponent)[],
+        components: (Component | ComponentType)[],
         entity: Entity,
+        disabled: boolean = false,
     ): void {
         components.forEach((component) => {
-            let enabled = true;
             let instance: Component;
-
-            if (
-                typeof component === "object" &&
-                "component" in component &&
-                "enabled" in component &&
-                component.enabled === false
-            ) {
-                enabled = false;
-                component = component.component;
-            }
 
             if (typeof component === "object") {
                 instance = this.addComponent(entity, deepClone<Component>(component));
@@ -172,7 +185,7 @@ export class EntityManager {
                 throw new Error("Invalid component type");
             }
 
-            if (!enabled) this.disableComponent(instance);
+            if (disabled) this.disableComponent(instance);
         });
     }
 
@@ -188,9 +201,14 @@ export class EntityManager {
     public removeEntity(entity: Entity): void {
         this.getChildren(entity).forEach((child) => this.removeEntity(child));
 
-        this.components.forEach((row) => {
-            if (row.has(entity)) row.delete(entity);
-        });
+        const entityMap = this.entityComponents.get(entity);
+        if (entityMap) {
+            entityMap.forEach((component, id) => {
+                this.components.get(id)?.delete(entity);
+                this.componentToEntity.delete(component);
+            });
+            this.entityComponents.delete(entity);
+        }
 
         this.disabledComponents.delete(entity);
         this.disabledEntities.delete(entity);
@@ -229,6 +247,8 @@ export class EntityManager {
             }
         } else {
             this.components.clear();
+            this.entityComponents.clear();
+            this.componentToEntity = new WeakMap();
             this.disabledComponents.clear();
             this.disabledEntities.clear();
             this.manuallyDisabledEntities.clear();
@@ -473,6 +493,14 @@ export class EntityManager {
 
         this.components.get(id).set(entity, instance);
 
+        let entityMap = this.entityComponents.get(entity);
+        if (!entityMap) {
+            entityMap = new Map();
+            this.entityComponents.set(entity, entityMap);
+        }
+        entityMap.set(id, instance);
+        this.componentToEntity.set(instance, entity);
+
         return instance as T;
     }
 
@@ -488,7 +516,7 @@ export class EntityManager {
      * ```
      */
     public hasComponent(entity: Entity, componentType: ComponentType): boolean {
-        return this.getComponent(entity, componentType) !== undefined;
+        return this.components.get(this.getComponentTypeId(componentType))?.has(entity) ?? false;
     }
 
     /**
@@ -517,15 +545,8 @@ export class EntityManager {
      * ```
      */
     public getComponents(entity: Entity): Component[] {
-        const components: Component[] = [];
-
-        this.components.forEach((entityComponent) =>
-            entityComponent.forEach((c, e) => {
-                if (entity === e) components.push(c);
-            }),
-        );
-
-        return components;
+        const map = this.entityComponents.get(entity);
+        return map ? Array.from(map.values()) : [];
     }
 
     /**
@@ -561,13 +582,7 @@ export class EntityManager {
      * ```
      */
     public getEntityForComponent(component: Component): Entity {
-        const id = this.getComponentTypeId(component);
-        if (this.components.has(id)) {
-            for (const [e, c] of this.components.get(id)) {
-                if (c === component) return e;
-            }
-        }
-        return undefined;
+        return this.componentToEntity.get(component);
     }
 
     /**
@@ -595,7 +610,20 @@ export class EntityManager {
         const id = this.getComponentTypeId(typeof arg1 === "object" ? arg1 : arg2);
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
 
-        if (entity !== undefined && this.components.get(id)?.has(entity)) this.components.get(id).delete(entity);
+        if (entity === undefined) return;
+
+        const row = this.components.get(id);
+        const instance = row?.get(entity);
+        if (instance === undefined) return;
+
+        row.delete(entity);
+        this.componentToEntity.delete(instance);
+
+        const entityMap = this.entityComponents.get(entity);
+        if (entityMap) {
+            entityMap.delete(id);
+            if (entityMap.size === 0) this.entityComponents.delete(entity);
+        }
     }
 
     /**
@@ -717,88 +745,104 @@ export class EntityManager {
 
     /**
      * Performs a search for entities given a component type.\
-     * This method returns a collection of objects of type SearchResult, which has the entity found, and the instance of the component.\
-     * This search can be filtered by passing as a second argument a filter function.\
-     * The third argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
+     * The recommended form passes a callback as the second argument — it iterates directly over the underlying store without allocating an intermediate array, which is the right choice for system `onUpdate` and any per-frame loop.\
+     * Without a callback, returns a collection of `SearchResult` objects (each containing the entity and the component instance) that you can sort, slice, or treat as a collection.
      * @param componentType The component class
-     * @param filter The filter function
-     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
+     * @param includeDisabled TRUE to include disabled entities and components. Default is FALSE.
      * @returns SearchResult
      * @public
      * @example
      * ```js
+     * // recommended: pass a callback to iterate without allocations
+     * entityManager.search(SpriteRenderer, (spriteRenderer, entity) => {
+     *   // do something with the component and entity
+     * });
+     * ```
+     * @example
+     * ```js
+     * // short-circuit inside the callback to filter
+     * entityManager.search(Enemy, (enemy, entity) => {
+     *   if (enemy.status !== "alive") return;
+     *   // ...
+     * });
+     * ```
+     * @example
+     * ```js
+     * // alternative: array form, useful when you need to sort/slice/etc.
      * const searchResult = entityManager.search(SpriteRenderer);
      * searchResult.forEach(({component, entity}) => {
      *   // do something with the component and entity
-     * })
+     * });
      * ```
      * @example
      * ```js
-     * const searchResult = entityManager.search(Enemy, (component) => component.status === "alive");
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
-     * ```
-     * @example
-     * ```js
-     * // include disabled entities and components
-     * const searchResult = entityManager.search(Enemy, (component) => component.status === "dead", true);
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
-     * ```
-     */
-    public search<T extends Component>(
-        componentType: ComponentType<T>,
-        filter?: (component: T, entity?: Entity) => boolean,
-        includeDisabled?: boolean,
-    ): SearchResult<T>[];
-    /**
-     * Performs a search for entities given a component type.\
-     * This method returns a collection of objects of type SearchResult, which has the entity found, and the instance of the component.\
-     * The second argument determines if disabled entities or components are included in the search result,\its default value is FALSE.
-     * @param componentType The component class
-     * @param includeDisabled TRUE to incluide disabled entities and components. Default is FALSE.
-     * @returns SearchResult
-     * @public
-     * @example
-     * ```js
-     * const searchResult = entityManager.search(SpriteRenderer);
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
+     * // filter the array form
+     * const aliveEnemies = entityManager
+     *   .search(Enemy)
+     *   .filter(({component}) => component.status === "alive");
      * ```
      * @example
      * ```js
      * // include disabled entities and components
      * const searchResult = entityManager.search(Enemy, true);
-     * searchResult.forEach(({component, entity}) => {
-     *   // do something with the component and entity
-     * })
      * ```
      */
-    public search<T extends Component>(componentType: ComponentType<T>, includeDisabled?: boolean): SearchResult<T>[];
+    public search<T extends Component>(componentType: ComponentType<T>): SearchResult<T>[];
+    public search<T extends Component>(componentType: ComponentType<T>, includeDisabled: boolean): SearchResult<T>[];
+    /**
+     * Performs a search for entities given a component type and invokes the callback for each match without allocating an intermediate array.\
+     * Intended for hot per-frame loops in systems. The callback receives the component instance and the entity.\
+     * Disabled entities and components are skipped unless `includeDisabled` is TRUE.\
+     * Do NOT add or remove entities/components for the same component type from within the callback.
+     * @param componentType The component class
+     * @param callback Invoked once per matching entity
+     * @param includeDisabled TRUE to include disabled entities and components. Default is FALSE.
+     * @public
+     * @example
+     * ```js
+     * entityManager.search(SpriteRenderer, (spriteRenderer, entity) => {
+     *   // do something with the component and entity
+     * });
+     * ```
+     */
     public search<T extends Component>(
         componentType: ComponentType<T>,
-        arg1?: ((component: T, entity?: Entity) => boolean) | boolean,
+        callback: (component: T, entity: Entity) => void,
+        includeDisabled?: boolean,
+    ): void;
+    public search<T extends Component>(
+        componentType: ComponentType<T>,
+        arg1?: ((component: T, entity: Entity) => void) | boolean,
         arg2: boolean = false,
-    ): SearchResult<T>[] {
-        const result: SearchResult<T>[] = [];
+    ): SearchResult<T>[] | void {
         const id = this.getComponentTypeId(componentType);
+        const callback = typeof arg1 === "function" ? arg1 : undefined;
         const includeDisabled = typeof arg1 === "boolean" ? arg1 : arg2;
-        const filter = typeof arg1 === "function" ? arg1 : undefined;
 
-        if (this.components.has(id)) {
-            this.components.get(id).forEach((component, entity) => {
+        const row = this.components.get(id);
+        if (!row) return callback ? undefined : [];
+
+        if (callback) {
+            for (const [entity, component] of row) {
                 if (
-                    (!filter || filter(component as T, entity)) &&
-                    (includeDisabled ||
-                        (this.isEntityEnabled(entity) && this.isComponentEnabled(entity, componentType)))
-                )
-                    result.push({ entity, component: component as T });
-            });
+                    includeDisabled ||
+                    (!this.disabledEntities.has(entity) && !this.disabledComponents.get(entity)?.has(id))
+                ) {
+                    callback(component as T, entity);
+                }
+            }
+            return;
         }
 
+        const result: SearchResult<T>[] = [];
+        for (const [entity, component] of row) {
+            if (
+                includeDisabled ||
+                (!this.disabledEntities.has(entity) && !this.disabledComponents.get(entity)?.has(id))
+            ) {
+                result.push({ entity, component: component as T });
+            }
+        }
         return result;
     }
 
@@ -815,27 +859,32 @@ export class EntityManager {
      * ```
      */
     public searchEntitiesByComponents(componentTypes: ComponentType[]): Entity[] {
-        const entities: Entity[] = [];
-        let first = true;
+        if (componentTypes.length === 0) return [];
 
+        const maps: Map<Entity, Component>[] = [];
         for (const componentType of componentTypes) {
             const id = this.getComponentTypeId(componentType);
-            if (!id || !this.components.has(id)) return [];
-
-            if (first) {
-                entities.push(...this.components.get(id).keys());
-                first = false;
-                continue;
-            }
-
-            const toCompare = new Set(this.components.get(id).keys());
-
-            entities.forEach((e, i) => {
-                if (!toCompare.has(e)) entities.splice(i, 1);
-            });
+            const map = this.components.get(id);
+            if (!map || map.size === 0) return [];
+            maps.push(map);
         }
 
-        return entities;
+        // Iterate the smallest set first to minimize the candidate pool
+        maps.sort((a, b) => a.size - b.size);
+        const [smallest, ...rest] = maps;
+
+        const result: Entity[] = [];
+        for (const entity of smallest.keys()) {
+            let matches = true;
+            for (const m of rest) {
+                if (!m.has(entity)) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) result.push(entity);
+        }
+        return result;
     }
 
     /**
@@ -867,15 +916,20 @@ export class EntityManager {
         componentType: ComponentType<T>,
         includeDisabled: boolean = false,
     ): SearchResult<T>[] {
-        const children = this.getChildren(parent);
-        return this.search(componentType, includeDisabled).filter(({ entity }) => children.includes(entity));
+        const children = new Set(this.getChildren(parent));
+        return this.search(componentType, includeDisabled).filter(({ entity }) => children.has(entity));
     }
 
+    /**
+     * Returns the id for the given component type.
+     * @param component The component class
+     * @returns The component type id
+     */
     private getComponentTypeId<T extends Component>(component: ComponentType<T> | T): number {
-        const prototype = typeof component === "object" ? component.constructor.prototype : component.prototype;
-        if (prototype.__ecs_type_id === undefined) {
-            prototype.__ecs_type_id = Number(`${++this.lastComponentTypeId}${(performance.now() * 1e5).toFixed(0)}`);
-        }
-        return prototype.__ecs_type_id;
+        const ctor = (typeof component === "object" ? component.constructor : component) as ComponentType & {
+            [COMPONENT_TYPE_ID]?: number;
+        };
+        if (ctor[COMPONENT_TYPE_ID] === undefined) ctor[COMPONENT_TYPE_ID] = ++nextComponentTypeId;
+        return ctor[COMPONENT_TYPE_ID];
     }
 }

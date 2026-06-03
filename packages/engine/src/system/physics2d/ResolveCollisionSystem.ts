@@ -56,7 +56,7 @@ export class ResolveCollisionSystem implements System {
         this.shapes = [];
 
         this.colliderTypes.forEach((type) =>
-            this.entityManager.search<Collider>(type).forEach(({ component: collider, entity }) => {
+            this.entityManager.search<Collider>(type, (collider, entity) => {
                 this.colliders.push(collider);
                 collider.shapes.forEach((shape) => {
                     shape.entity = entity;

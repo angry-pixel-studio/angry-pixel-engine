@@ -11,7 +11,7 @@ export class TilemapPreProcessingSystem implements System {
     constructor(@inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager) {}
 
     public onUpdate(): void {
-        this.entityManager.search(TilemapRenderer).forEach(({ component: tilemapRenderer }) => {
+        this.entityManager.search(TilemapRenderer, (tilemapRenderer) => {
             if (!tilemapRenderer._processed) {
                 if (tilemapRenderer.chunks && tilemapRenderer.chunks.length > 0) this.chunksToData(tilemapRenderer);
                 else if (tilemapRenderer.data && tilemapRenderer.data.length > 0) this.dataToChunks(tilemapRenderer);

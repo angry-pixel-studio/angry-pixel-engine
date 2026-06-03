@@ -33,37 +33,37 @@ export class ApplyRepositionSystem implements System {
 
         if (collisions.length === 0) return;
 
-        this.entityManager
-            .search(RigidBody, (rigidBody) => rigidBody.type === RigidBodyType.Dynamic)
-            .forEach(({ component: rigidBody, entity }) => {
-                this.maxCorrection.set(0, 0);
+        this.entityManager.search(RigidBody, (rigidBody, entity) => {
+            if (rigidBody.type !== RigidBodyType.Dynamic) return;
 
-                collisions
-                    .filter(({ localEntity }) => entity === localEntity)
-                    .forEach(({ remoteEntity, resolution: { direction, penetration } }) => {
-                        // if remote body is dynamic and since the correction distance must be the same as the penetration,
-                        // both bodies will be displaced by half the penetration
-                        if (this.entityManager.getComponent(remoteEntity, RigidBody).type === RigidBodyType.Dynamic) {
-                            penetration /= 2;
-                        }
+            this.maxCorrection.set(0, 0);
 
-                        Vector2.scale(this.correction, direction, -penetration);
+            collisions
+                .filter(({ localEntity }) => entity === localEntity)
+                .forEach(({ remoteEntity, resolution: { direction, penetration } }) => {
+                    // if remote body is dynamic and since the correction distance must be the same as the penetration,
+                    // both bodies will be displaced by half the penetration
+                    if (this.entityManager.getComponent(remoteEntity, RigidBody).type === RigidBodyType.Dynamic) {
+                        penetration /= 2;
+                    }
 
-                        if (this.correction.magnitude > this.maxCorrection.magnitude) {
-                            this.maxCorrection.copy(this.correction);
-                        }
-                    });
+                    Vector2.scale(this.correction, direction, -penetration);
 
-                if (this.maxCorrection.x === 0 && this.maxCorrection.y === 0) return;
+                    if (this.correction.magnitude > this.maxCorrection.magnitude) {
+                        this.maxCorrection.copy(this.correction);
+                    }
+                });
 
-                const { position } = this.entityManager.getComponent(entity, Transform);
-                Vector2.add(position, position, this.maxCorrection);
+            if (this.maxCorrection.x === 0 && this.maxCorrection.y === 0) return;
 
-                // due to gravity, we need to stop vertical velocity if it's direction is inverse to the correction direction
-                if (rigidBody.gravity > 0 && this.maxCorrection.y * rigidBody.velocity.y < 0) {
-                    rigidBody.velocity.y = 0;
-                }
-            });
+            const { position } = this.entityManager.getComponent(entity, Transform);
+            Vector2.add(position, position, this.maxCorrection);
+
+            // due to gravity, we need to stop vertical velocity if it's direction is inverse to the correction direction
+            if (rigidBody.gravity > 0 && this.maxCorrection.y * rigidBody.velocity.y < 0) {
+                rigidBody.velocity.y = 0;
+            }
+        });
 
         this.transformSystem.onUpdate();
     }
