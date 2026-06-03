@@ -190,5 +190,4 @@ game.run();
 
 ## DOCS
 
-🔎 [Documentation](https://angrypixel.gg/engine)\
-⚙️ [Api Docs](https://angrypixel.gg/engine/api-docs)
+🔎 [Documentation](https://angrypixel.gg/engine)
