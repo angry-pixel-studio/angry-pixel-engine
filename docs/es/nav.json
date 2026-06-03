@@ -175,5 +175,13 @@
         "file": "manual/best-practices.md"
       }
     ]
+  },
+  {
+    "title": "Tutorial",
+    "file": "tutorial/index.md"
+  },
+  {
+    "title": "API Docs",
+    "file": "api-docs/index.md"
   }
 ]
