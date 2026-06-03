@@ -1,0 +1,179 @@
+[
+  {
+    "title": "Bienvenida",
+    "children": [
+      {
+        "title": "Introducción",
+        "file": "welcome/introduction.md"
+      },
+      {
+        "title": "Arquitectura",
+        "file": "welcome/architecture.md"
+      }
+    ]
+  },
+  {
+    "title": "Manual",
+    "children": [
+      {
+        "title": "Primeros pasos",
+        "file": "manual/getting-started.md"
+      },
+      {
+        "title": "La clase Game",
+        "file": "manual/game-class.md"
+      },
+      {
+        "title": "Crear una escena",
+        "file": "manual/creating-a-scene.md"
+      },
+      {
+        "title": "El Asset Manager",
+        "file": "manual/asset-manager.md"
+      },
+      {
+        "title": "El Entity Manager",
+        "file": "manual/entity-manager.md"
+      },
+      {
+        "title": "Agregar entidades a la escena",
+        "file": "manual/adding-entities-to-the-scene.md"
+      },
+      {
+        "title": "Componentes y sistemas personalizados",
+        "file": "manual/custom-components-and-systems.md"
+      },
+      {
+        "title": "El Input Manager",
+        "file": "manual/input-manager.md"
+      },
+      {
+        "title": "El Time Manager",
+        "file": "manual/time-manager.md"
+      },
+      {
+        "title": "El Scene Manager",
+        "file": "manual/scene-manager.md"
+      },
+      {
+        "title": "Física",
+        "file": "manual/physics.md"
+      },
+      {
+        "title": "Renderizado",
+        "file": "manual/rendering.md"
+      },
+      {
+        "title": "Audio",
+        "file": "manual/audio.md"
+      },
+      {
+        "title": "Componentes integrados",
+        "file": "manual/built-in-components/index.md",
+        "children": [
+          {
+            "title": "Transform",
+            "file": "manual/built-in-components/transform.md"
+          },
+          {
+            "title": "Animator",
+            "file": "manual/built-in-components/animator.md"
+          },
+          {
+            "title": "AudioPlayer",
+            "file": "manual/built-in-components/audio-player.md"
+          },
+          {
+            "title": "Button",
+            "file": "manual/built-in-components/button.md"
+          },
+          {
+            "title": "TiledWrapper",
+            "file": "manual/built-in-components/tiled-wrapper.md"
+          },
+          {
+            "title": "RigidBody",
+            "file": "manual/built-in-components/rigid-body.md"
+          },
+          {
+            "title": "BoxCollider",
+            "file": "manual/built-in-components/box-collider.md"
+          },
+          {
+            "title": "BallCollider",
+            "file": "manual/built-in-components/ball-collider.md"
+          },
+          {
+            "title": "PolygonCollider",
+            "file": "manual/built-in-components/polygon-collider.md"
+          },
+          {
+            "title": "EdgeCollider",
+            "file": "manual/built-in-components/edge-collider.md"
+          },
+          {
+            "title": "TilemapCollider",
+            "file": "manual/built-in-components/tilemap-collider.md"
+          },
+          {
+            "title": "Camera",
+            "file": "manual/built-in-components/camera.md"
+          },
+          {
+            "title": "SpriteRenderer",
+            "file": "manual/built-in-components/sprite-renderer.md"
+          },
+          {
+            "title": "TextRenderer",
+            "file": "manual/built-in-components/text-renderer.md"
+          },
+          {
+            "title": "TilemapRenderer",
+            "file": "manual/built-in-components/tilemap-renderer.md"
+          },
+          {
+            "title": "MaskRenderer",
+            "file": "manual/built-in-components/mask-renderer.md"
+          },
+          {
+            "title": "GeometricRenderer",
+            "file": "manual/built-in-components/geometric-renderer.md"
+          },
+          {
+            "title": "LightRenderer",
+            "file": "manual/built-in-components/light-renderer.md"
+          },
+          {
+            "title": "DarknessRenderer",
+            "file": "manual/built-in-components/darkness-renderer.md"
+          },
+          {
+            "title": "VideoRenderer",
+            "file": "manual/built-in-components/video-renderer.md"
+          }
+        ]
+      },
+      {
+        "title": "Matemáticas",
+        "children": [
+          {
+            "title": "Vector2",
+            "file": "manual/maths/vector2.md"
+          },
+          {
+            "title": "Rectangle",
+            "file": "manual/maths/rectangle.md"
+          },
+          {
+            "title": "Funciones útiles",
+            "file": "manual/maths/utils.md"
+          }
+        ]
+      },
+      {
+        "title": "Buenas prácticas",
+        "file": "manual/best-practices.md"
+      }
+    ]
+  }
+]
