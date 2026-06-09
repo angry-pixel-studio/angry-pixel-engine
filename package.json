@@ -22,8 +22,8 @@
         "docs": "cd docs && mkdocs build",
         "deploy-docs": "scripts/deploy-docs-rsync.sh",
         "deploy-api-docs": "scripts/deploy-api-docs-rsync.sh",
-        "demo:platformer": "yarn workspace @angry-pixel/platformer dev",
-        "demo:shmup": "yarn workspace @angry-pixel/shmup dev"
+        "demo:dev": "yarn workspace @angry-pixel/dev dev",
+        "demo:move-and-bounce": "yarn workspace @angry-pixel/move-and-bounce dev"
     },
     "devDependencies": {
         "eslint": "^9.2.0",

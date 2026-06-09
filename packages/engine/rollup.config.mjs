@@ -7,7 +7,7 @@ import del from "rollup-plugin-del";
 import alias from "@rollup/plugin-alias";
 import path from "path";
 
-const builderECS = (format, filename) => ({
+const builder = (format, filename) => ({
     exports: "named",
     name: "angry-pixel",
     file: "../../bundles/angry-pixel/lib/" + filename,
@@ -20,11 +20,7 @@ const main = () => {
         // this generates the modules
         {
             input: "src/index.ts",
-            output: [
-                builderECS("umd", "index.js"),
-                builderECS("esm", "index.esm.js"),
-                builderECS("cjs", "index.cjs.js"),
-            ],
+            output: [builder("umd", "index.js"), builder("esm", "index.esm.js"), builder("cjs", "index.cjs.js")],
             plugins: [
                 alias({
                     entries: [

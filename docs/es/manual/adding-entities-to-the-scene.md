@@ -6,6 +6,8 @@ Las entidades iniciales de una escena se crean en su método `createEntities`, q
 
 La forma más sencilla de agregar una entidad es pasar una lista de componentes a `createEntity`. Los componentes pueden ser instancias o clases, y pueden ser tanto tus propios componentes personalizados como los integrados del motor. Consulta [Componentes integrados](built-in-components/index.md).
 
+Las instancias de componentes que se pasan de esta forma se clonan: la entidad almacena una copia, no el objeto que pasaste. Obtén el componente asociado con `getComponent`. Consulta [El Entity Manager](entity-manager.md).
+
 ```typescript
 import { Scene, Transform, SpriteRenderer, Vector2 } from "angry-pixel";
 import { Player } from "../component/Player";
@@ -23,7 +25,7 @@ export class MainScene extends Scene {
 
 ## Definir entidades con arquetipos
 
-Para entidades que creas con frecuencia, o que tienen muchos componentes, define un **arquetipo**: una plantilla reutilizable que describe los componentes que debe tener una entidad. Los arquetipos se suelen mantener en sus propios archivos dentro de `src/entity/`.
+Para entidades que creas con frecuencia, o que necesitan componentes desactivados o entidades hijas, define un **arquetipo**: una plantilla reutilizable que describe los componentes que debe tener una entidad. Los arquetipos se suelen mantener en sus propios archivos dentro de `src/entity/`.
 
 ```typescript
 // src/entity/Player.ts

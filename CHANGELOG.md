@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.1] - 2026-06-03
+
+### Changed
+
+#### ECS
+
+-   `EntityManager.createEntity(components)` now clones component instances before attaching them, matching the archetype overload. The entity stores a copy, so the component array — and any instances in it — can be safely reused to create multiple entities. Retrieve the attached instance with `getComponent` (keeping a reference to the original passed-in instance no longer affects the entity).
+
 ## [2.3.0] - 2026-05-31
 
 > **Note:** This release includes breaking changes in the ECS, archetype, and audio APIs. If you follow strict semver, consider it a major (3.0.0) bump.

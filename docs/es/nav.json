@@ -68,6 +68,10 @@
         "file": "manual/audio.md"
       },
       {
+        "title": "Compilar el juego",
+        "file": "manual/building-the-game.md"
+      },
+      {
         "title": "Componentes integrados",
         "file": "manual/built-in-components/index.md",
         "children": [

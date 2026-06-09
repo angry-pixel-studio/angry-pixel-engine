@@ -15,7 +15,7 @@ export const createAndStart = () => {
         physicsFramerate: 180,
         collisions: {
             collisionMatrix,
-            collisionBroadPhaseMethod: BroadPhaseMethods.SpartialGrid,
+            collisionBroadPhaseMethod: BroadPhaseMethods.SpatialGrid,
             collisionMethod: CollisionMethods.SAT,
         },
         debug: {

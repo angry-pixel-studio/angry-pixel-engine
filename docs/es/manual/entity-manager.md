@@ -8,7 +8,7 @@ Una entidad es un identificador numérico; los componentes son los datos asociad
 
 ## Crear entidades
 
-`createEntity` devuelve el identificador de la nueva entidad. Acepta una lista de componentes, que pueden ser instancias o clases de componentes. Las clases se instancian sin argumentos; las instancias se clonan.
+`createEntity` devuelve el identificador de la nueva entidad. Acepta una lista de componentes, que pueden ser instancias o clases de componentes. Las clases se instancian sin argumentos. Las instancias se clonan: la entidad almacena una copia, no el objeto que pasaste, por lo que mantener una referencia al original no afectará a la entidad. Obtén el componente asociado con `getComponent`.
 
 ```typescript
 import { Transform, SpriteRenderer } from "angry-pixel";
