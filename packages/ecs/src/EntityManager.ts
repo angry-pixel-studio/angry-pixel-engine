@@ -85,8 +85,8 @@ export class EntityManager {
     public createEntity(): Entity;
     /**
      * Creates an Entity with the given components.\
-     * Since the components are not cloned, the collection of components must not be reused.
-     * @param components A collection of component instances and component classes
+     * Component instances are cloned, so the collection of components can be reused to create multiple entities.
+     * @param components A collection of component instances and/or component classes
      * @param parent The parent entity (optional)
      * @return The created Entity
      * @public
@@ -101,7 +101,7 @@ export class EntityManager {
     public createEntity(components: (ComponentType | Component)[], parent?: Entity): Entity;
     /**
      * Creates an Entity from an Archetype template.\
-     * Components are cloned, so the archetype can be reused to create multiple entities.
+     * Component instances are cloned, so the archetype can be reused to create multiple entities.
      * @param archetype The archetype to create the entity from
      * @param parent The parent entity (optional)
      * @return The created Entity
@@ -127,15 +127,20 @@ export class EntityManager {
             return this.lastEntityId++;
         }
 
-        if (Array.isArray(arg1)) {
-            const entity = this.lastEntityId++;
-            this.entities.add(entity);
-            arg1.forEach((component) => this.addComponent(entity, component));
-            if (parent) this.setParent(entity, parent);
-            return entity;
-        }
+        if (Array.isArray(arg1)) return this.createEntityFromArray(arg1, parent);
 
         return this.createEntityFromArchetype(arg1, parent);
+    }
+
+    private createEntityFromArray(components: (Component | ComponentType)[], parent?: Entity): Entity {
+        const entity = this.lastEntityId++;
+        this.entities.add(entity);
+
+        this.createComponentsForEntity(components, entity);
+
+        if (parent) this.setParent(entity, parent);
+
+        return entity;
     }
 
     /**
@@ -152,8 +157,8 @@ export class EntityManager {
         const entity = this.lastEntityId++;
         this.entities.add(entity);
 
-        this.createComponentsFromArchetype(components, entity);
-        if (disabledComponents) this.createComponentsFromArchetype(disabledComponents, entity, true);
+        this.createComponentsForEntity(components, entity);
+        if (disabledComponents) this.createComponentsForEntity(disabledComponents, entity, true);
 
         if (parent) this.setParent(entity, parent);
         if (children) children.forEach((child) => this.createEntityFromArchetype(child, entity));
@@ -163,13 +168,13 @@ export class EntityManager {
     }
 
     /**
-     * Creates components from an archetype
+     * Creates components from a collection of component types and instances, and adds them to the entity.\
      * @param components The components to create
      * @param entity The entity to create the components for
      * @param disabled If TRUE, each created component is disabled. Default is FALSE.
      * @private
      */
-    private createComponentsFromArchetype(
+    private createComponentsForEntity(
         components: (Component | ComponentType)[],
         entity: Entity,
         disabled: boolean = false,

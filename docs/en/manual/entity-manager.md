@@ -8,7 +8,7 @@ An entity is a numeric identifier; components are the data attached to it. See [
 
 ## Creating entities
 
-`createEntity` returns the new entity's identifier. It accepts a list of components, which can be component instances or component classes. Classes are instantiated with no arguments; instances are cloned.
+`createEntity` returns the new entity's identifier. It accepts a list of components, which can be component instances or component classes. Classes are instantiated with no arguments. Instances are cloned: the entity stores a copy, not the object you passed in, so keeping a reference to the original will not affect the entity. Retrieve the attached component with `getComponent`.
 
 ```typescript
 import { Transform, SpriteRenderer } from "angry-pixel";

@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "types": ["vite/client"],
+        "paths": {
+            "@entity/*": ["./src/entity/*"],
+            "@component/*": ["./src/component/*"],
+            "@scene/*": ["./src/scene/*"],
+            "@system/*": ["./src/system/*"]
+        }
+    },
+    "include": ["src"]
+}

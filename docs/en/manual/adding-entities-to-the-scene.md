@@ -6,6 +6,8 @@ A scene's initial entities are created in its `createEntities` method, which run
 
 The simplest way to add an entity is to pass a list of components to `createEntity`. Components can be instances or classes, and may be either your own custom components or the engine's built-in ones. See [Built-in Components](built-in-components/index.md).
 
+Component instances passed this way are cloned — the entity stores a copy, not the object you passed in. Retrieve the attached component with `getComponent`. See [The Entity Manager](entity-manager.md).
+
 ```typescript
 import { Scene, Transform, SpriteRenderer, Vector2 } from "angry-pixel";
 import { Player } from "../component/Player";
@@ -23,7 +25,7 @@ export class MainScene extends Scene {
 
 ## Defining entities with archetypes
 
-For entities you create often, or that have many components, define an **archetype** — a reusable template describing the components an entity should have. Archetypes are typically kept in their own files under `src/entity/`.
+For entities you create often, or that need disabled components or child entities, define an **archetype** — a reusable template describing the components an entity should have. Archetypes are typically kept in their own files under `src/entity/`.
 
 ```typescript
 // src/entity/Player.ts

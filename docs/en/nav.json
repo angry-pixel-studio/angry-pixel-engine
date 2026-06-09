@@ -68,6 +68,10 @@
         "file": "manual/audio.md"
       },
       {
+        "title": "Building the Game",
+        "file": "manual/building-the-game.md"
+      },
+      {
         "title": "Built-in Components",
         "file": "manual/built-in-components/index.md",
         "children": [

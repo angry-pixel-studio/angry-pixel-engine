@@ -1,7 +1,7 @@
 {
-    "name": "@angry-pixel/platformer",
+    "name": "@angry-pixel/move-and-bounce",
     "version": "1.0.0",
-    "description": "Angry Pixel ECS platformer demo.",
+    "description": "Angry Pixel engine demo",
     "type": "module",
     "scripts": {
         "dev": "vite",

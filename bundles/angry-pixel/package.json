@@ -1,6 +1,6 @@
 {
     "name": "angry-pixel",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "description": "Lightweight 2D game engine made with TypeScript.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -9,7 +9,7 @@
         "type": "git",
         "url": "git+https://github.com/angry-pixel-studio/angry-pixel-engine.git"
     },
-    "homepage": "https://github.com/angry-pixel-studio/angry-pixel-engine",
+    "homepage": "https://angrypixel.gg/engine",
     "keywords": [
         "video game engine",
         "game engine",
