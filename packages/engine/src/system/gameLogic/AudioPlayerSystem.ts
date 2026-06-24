@@ -203,8 +203,9 @@ export class AudioPlayerSystem implements System {
      */
     private wrapElapsed(audioPlayer: AudioPlayer, elapsed: number): number {
         if (audioPlayer.loop && audioPlayer._currentAudioSource) {
-            if (audioPlayer.loopEnd > 0) {
-                const { loopStart: start, loopEnd: end } = audioPlayer;
+            const { loopStart: start, loopEnd: end } = audioPlayer;
+            // mirror the Web Audio API: an invalid range (end <= start, includes the loopEnd = 0 default) loops the whole buffer
+            if (end > start) {
                 if (elapsed > end) elapsed = start + ((elapsed - start) % (end - start));
             } else {
                 elapsed %= audioPlayer._currentAudioSource.buffer.duration;
