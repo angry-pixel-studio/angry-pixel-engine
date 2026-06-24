@@ -97,7 +97,7 @@ export class AudioPlayerSystem implements System {
             if (audioPlayer._gainNode) audioPlayer._gainNode.gain.value = audioPlayer.volume;
             if (audioPlayer._sourceNode) {
                 audioPlayer._sourceNode.playbackRate.value = this.computePlaybackRate(audioPlayer);
-                audioPlayer._sourceNode.loop = audioPlayer.loop;
+                this.applyLoop(audioPlayer, audioPlayer._sourceNode);
             }
 
             if (audioPlayer.action === "play" && audioPlayer.state !== "playing") {
@@ -105,6 +105,8 @@ export class AudioPlayerSystem implements System {
                     audioPlayer._playAfterUserInput = true;
                     if (!this.userInputErrorCatched) this.catchUserInput();
                 } else {
+                    // fresh play from stopped starts at startAt; resuming from pause keeps the saved offset
+                    if (audioPlayer.state === "stopped") audioPlayer._pauseOffset = audioPlayer.startAt;
                     this.startSource(audioPlayer);
                     audioPlayer.state = "playing";
                 }
@@ -118,6 +120,8 @@ export class AudioPlayerSystem implements System {
             }
 
             audioPlayer.action = undefined;
+
+            this.updateCurrentTime(audioPlayer);
         });
     }
 
@@ -146,7 +150,7 @@ export class AudioPlayerSystem implements System {
     private startSource(audioPlayer: AudioPlayer): void {
         const source = this.audioContext.createBufferSource();
         source.buffer = audioPlayer._currentAudioSource.buffer;
-        source.loop = audioPlayer.loop;
+        this.applyLoop(audioPlayer, source);
         source.playbackRate.value = this.computePlaybackRate(audioPlayer);
 
         const gain = audioPlayer._gainNode ?? this.audioContext.createGain();
@@ -176,12 +180,50 @@ export class AudioPlayerSystem implements System {
      */
     private pauseSource(audioPlayer: AudioPlayer): void {
         if (!audioPlayer._sourceNode) return;
-        let elapsed = this.audioContext.currentTime - audioPlayer._startedAt;
-        if (audioPlayer.loop && audioPlayer._currentAudioSource) {
-            elapsed %= audioPlayer._currentAudioSource.buffer.duration;
-        }
-        audioPlayer._pauseOffset = Math.max(0, elapsed);
+        audioPlayer._pauseOffset = this.wrapElapsed(
+            audioPlayer,
+            this.audioContext.currentTime - audioPlayer._startedAt,
+        );
         this.disposeSource(audioPlayer);
+    }
+
+    /**
+     * Apply the looping configuration to a source node, mirroring the Web Audio API: `loopStart`/`loopEnd`
+     * (seconds) only take effect when `loop` is enabled and `loopEnd` is greater than zero.
+     */
+    private applyLoop(audioPlayer: AudioPlayer, source: AudioBufferSourceNode): void {
+        source.loop = audioPlayer.loop;
+        source.loopStart = audioPlayer.loopStart;
+        source.loopEnd = audioPlayer.loopEnd;
+    }
+
+    /**
+     * Wrap an elapsed time (seconds) into the buffer accounting for looping: between the `loopStart`/`loopEnd`
+     * marks when set, otherwise modulo the buffer duration when `loop` is enabled.
+     */
+    private wrapElapsed(audioPlayer: AudioPlayer, elapsed: number): number {
+        if (audioPlayer.loop && audioPlayer._currentAudioSource) {
+            const { loopStart: start, loopEnd: end } = audioPlayer;
+            // mirror the Web Audio API: an invalid range (end <= start, includes the loopEnd = 0 default) loops the whole buffer
+            if (end > start) {
+                if (elapsed > end) elapsed = start + ((elapsed - start) % (end - start));
+            } else {
+                elapsed %= audioPlayer._currentAudioSource.buffer.duration;
+            }
+        }
+        return Math.max(0, elapsed);
+    }
+
+    /** Refresh the component's current playback time mark (seconds) for user-side reads. */
+    private updateCurrentTime(audioPlayer: AudioPlayer): void {
+        if (audioPlayer.state !== "playing" || !audioPlayer._sourceNode) {
+            audioPlayer._currentTime = audioPlayer._pauseOffset;
+            return;
+        }
+        audioPlayer._currentTime = this.wrapElapsed(
+            audioPlayer,
+            this.audioContext.currentTime - audioPlayer._startedAt,
+        );
     }
 
     private disposeSource(audioPlayer: AudioPlayer): void {

@@ -25,6 +25,12 @@ export interface AudioPlayerOptions {
     fixedToTimeScale: boolean;
     /** TRUE If the audio source should loop. */
     loop: boolean;
+    /** Time mark (seconds) where looping starts. Only has effect when `loop` is TRUE and `loopEnd` is greater than zero. */
+    loopStart: number;
+    /** Time mark (seconds) where looping ends. When `loop` is TRUE and this is greater than zero, the audio loops between `loopStart` and `loopEnd`. */
+    loopEnd: number;
+    /** Time mark (seconds) where playback starts from when playing from a stopped state. Default is 0. */
+    startAt: number;
     /** The volume of the audio source. */
     volume: number;
 }
@@ -55,10 +61,21 @@ export class AudioPlayer {
     fixedToTimeScale: boolean = false;
     /** TRUE If the audio source should loop. */
     loop: boolean = false;
+    /** Time mark (seconds) where looping starts. Only has effect when `loop` is TRUE and `loopEnd` is greater than zero. */
+    loopStart: number = 0;
+    /** Time mark (seconds) where looping ends. When `loop` is TRUE and this is greater than zero, the audio loops between `loopStart` and `loopEnd`. */
+    loopEnd: number = 0;
+    /** Time mark (seconds) where playback starts from when playing from a stopped state. Default is 0. */
+    startAt: number = 0;
     /** READONLY, The current state of the audio source. */
     state: "stopped" | "playing" | "paused" = "stopped";
     /** The volume of the audio source. */
     volume: number = 1;
+
+    /** READONLY, The current playback time mark of the audio source, expressed in seconds. */
+    public get currentTime(): number {
+        return this._currentTime;
+    }
 
     /** READONLY, TRUE If the audio source is playing. */
     public get playing(): boolean {
@@ -85,6 +102,8 @@ export class AudioPlayer {
     _startedAt: number = 0;
     /** @internal Offset (seconds) within the buffer at which the next play should resume from (used on pause) */
     _pauseOffset: number = 0;
+    /** @internal Current playback time mark (seconds), updated each frame by the AudioPlayerSystem */
+    _currentTime: number = 0;
     /** @internal */
     _playAfterUserInput: boolean = false;
     /** @internal */
