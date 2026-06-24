@@ -105,6 +105,8 @@ export class AudioPlayerSystem implements System {
                     audioPlayer._playAfterUserInput = true;
                     if (!this.userInputErrorCatched) this.catchUserInput();
                 } else {
+                    // fresh play from stopped starts at startAt; resuming from pause keeps the saved offset
+                    if (audioPlayer.state === "stopped") audioPlayer._pauseOffset = audioPlayer.startAt;
                     this.startSource(audioPlayer);
                     audioPlayer.state = "playing";
                 }

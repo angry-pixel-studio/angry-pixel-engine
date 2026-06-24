@@ -29,6 +29,8 @@ export interface AudioPlayerOptions {
     loopStart: number;
     /** Time mark (seconds) where looping ends. When `loop` is TRUE and this is greater than zero, the audio loops between `loopStart` and `loopEnd`. */
     loopEnd: number;
+    /** Time mark (seconds) where playback starts from when playing from a stopped state. Default is 0. */
+    startAt: number;
     /** The volume of the audio source. */
     volume: number;
 }
@@ -63,6 +65,8 @@ export class AudioPlayer {
     loopStart: number = 0;
     /** Time mark (seconds) where looping ends. When `loop` is TRUE and this is greater than zero, the audio loops between `loopStart` and `loopEnd`. */
     loopEnd: number = 0;
+    /** Time mark (seconds) where playback starts from when playing from a stopped state. Default is 0. */
+    startAt: number = 0;
     /** READONLY, The current state of the audio source. */
     state: "stopped" | "playing" | "paused" = "stopped";
     /** The volume of the audio source. */

@@ -9,6 +9,9 @@ The `AudioPlayer` component plays, pauses, and stops audio sources. It controls 
 | `audioSource` | `AudioSource \| string` | — | The audio to play: an `AudioSource` (from `AssetManager.getAudio`) or an asset URL/name string. |
 | `volume` | `number` | `1` | Playback volume. |
 | `loop` | `boolean` | `false` | Whether the audio repeats. |
+| `loopStart` | `number` | `0` | Time mark (seconds) where looping starts. Only has effect when `loop` is `true` and `loopEnd` is greater than zero. |
+| `loopEnd` | `number` | `0` | Time mark (seconds) where looping ends. When `loop` is `true` and this is greater than zero, the audio loops between `loopStart` and `loopEnd`; otherwise the whole track loops. |
+| `startAt` | `number` | `0` | Time mark (seconds) where playback starts from when playing from a stopped state. |
 | `stopOnSceneTransition` | `boolean` | `true` | Whether the audio stops when a new scene loads. |
 | `fixedToTimeScale` | `boolean` | `false` | Whether the playback rate follows the time scale. |
 
@@ -20,6 +23,7 @@ The `AudioPlayer` component plays, pauses, and stops audio sources. It controls 
 | `playing` | `boolean` | `true` while playing. |
 | `paused` | `boolean` | `true` while paused. |
 | `stopped` | `boolean` | `true` while stopped. |
+| `currentTime` | `number` | The current playback time mark in seconds (with decimals), updated each frame. |
 
 ## Methods
 

@@ -7,6 +7,7 @@
 #### Audio
 
 -   `AudioPlayer.loopStart` and `AudioPlayer.loopEnd` (seconds): when `loop` is TRUE and `loopEnd` is greater than zero, the audio loops between these two time marks (mirrors the Web Audio API). Otherwise the whole buffer loops.
+-   `AudioPlayer.startAt` (seconds): time mark playback starts from when playing from a stopped state. Default is 0.
 -   `AudioPlayer.currentTime` (READONLY): the current playback time mark in seconds, updated each frame.
 
 ## [2.3.1] - 2026-06-03

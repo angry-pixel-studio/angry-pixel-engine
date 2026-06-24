@@ -9,6 +9,9 @@ El componente `AudioPlayer` reproduce, pausa y detiene fuentes de audio. Control
 | `audioSource` | `AudioSource \| string` | — | El audio a reproducir: un `AudioSource` (de `AssetManager.getAudio`) o una cadena con la URL/nombre del recurso. |
 | `volume` | `number` | `1` | Volumen de reproducción. |
 | `loop` | `boolean` | `false` | Si el audio se repite. |
+| `loopStart` | `number` | `0` | Marca de tiempo (segundos) donde comienza el bucle. Solo tiene efecto cuando `loop` es `true` y `loopEnd` es mayor que cero. |
+| `loopEnd` | `number` | `0` | Marca de tiempo (segundos) donde termina el bucle. Cuando `loop` es `true` y este valor es mayor que cero, el audio se repite entre `loopStart` y `loopEnd`; de lo contrario se repite la pista completa. |
+| `startAt` | `number` | `0` | Marca de tiempo (segundos) desde la que comienza la reproducción al reproducir desde el estado detenido. |
 | `stopOnSceneTransition` | `boolean` | `true` | Si el audio se detiene cuando se carga una nueva escena. |
 | `fixedToTimeScale` | `boolean` | `false` | Si la velocidad de reproducción sigue la escala de tiempo. |
 
@@ -20,6 +23,7 @@ El componente `AudioPlayer` reproduce, pausa y detiene fuentes de audio. Control
 | `playing` | `boolean` | `true` mientras se reproduce. |
 | `paused` | `boolean` | `true` mientras está en pausa. |
 | `stopped` | `boolean` | `true` mientras está detenido. |
+| `currentTime` | `number` | La marca de tiempo de reproducción actual en segundos (con decimales), actualizada en cada frame. |
 
 ## Métodos
 
