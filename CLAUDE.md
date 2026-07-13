@@ -5,6 +5,7 @@
 ## Git
 
 -   **Never add yourself as a co-author of commits.** Do not append a `Co-Authored-By` trailer (or any other authorship attribution) to commit messages. Write the plain commit message only.
+-   **Never commit unless explicitly asked.** Make and stage changes, but only run `git commit` when the user requests it.
 
 ## Monorepo layout
 
