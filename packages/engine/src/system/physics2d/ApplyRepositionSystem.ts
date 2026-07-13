@@ -41,11 +41,17 @@ export class ApplyRepositionSystem implements System {
             collisions
                 .filter(({ localEntity }) => entity === localEntity)
                 .forEach(({ remoteEntity, localCollider, remoteCollider, resolution: { direction, penetration } }) => {
-                    // this body behaves as static for the colliding body's layer, so it is not repositioned
-                    // by this collision (the other body takes the whole correction)
-                    if (rigidBody.staticForLayers.includes(remoteCollider.layer)) return;
-
                     const remoteRigidBody = this.entityManager.getComponent(remoteEntity, RigidBody);
+
+                    // this body behaves as static for a colliding Dynamic body's layer, so it is not repositioned
+                    // by this collision (the other Dynamic body takes the whole correction). Static/Kinematic
+                    // remotes are never repositioned, so this body must still take the full correction against them.
+                    if (
+                        remoteRigidBody.type === RigidBodyType.Dynamic &&
+                        rigidBody.staticForLayers.includes(remoteCollider.layer)
+                    ) {
+                        return;
+                    }
 
                     // the remote body is treated as static toward this body when it is not dynamic, or when it
                     // behaves as static for this body's collider layer
