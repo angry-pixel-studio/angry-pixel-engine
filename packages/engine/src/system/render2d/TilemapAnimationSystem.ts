@@ -14,6 +14,11 @@ export class TilemapAnimationSystem implements System {
 
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer, (tilemapRenderer) => {
+            // drop state for tiles whose animation was removed, otherwise their last frame would render forever
+            tilemapRenderer._tileAnimationState.forEach((_, tile) => {
+                if (!tilemapRenderer.animations.has(tile)) tilemapRenderer._tileAnimationState.delete(tile);
+            });
+
             if (tilemapRenderer.animations.size === 0) return;
 
             tilemapRenderer.animations.forEach((animation, tile) => {
