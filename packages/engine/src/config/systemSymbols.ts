@@ -22,6 +22,7 @@ export const SYSTEM_SYMBOLS = {
     ResolveCollisionSystem: Symbol.for("ResolveCollisionSystem"),
     // render 2d
     AnimatorSystem: Symbol.for("AnimatorSystem"),
+    TilemapAnimationSystem: Symbol.for("TilemapAnimationSystem"),
     CameraSystem: Symbol.for("CameraSystem"),
     ClearScreenSystem: Symbol.for("ClearScreenSystem"),
     CullingSystem: Symbol.for("CullingSystem"),

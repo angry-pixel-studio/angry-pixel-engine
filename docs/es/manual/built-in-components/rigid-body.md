@@ -18,6 +18,19 @@ El componente `RigidBody` habilita el movimiento físico de una entidad, haciend
 | `velocity` | `Vector2` | `(0, 0)` | Velocidad en píxeles por segundo. Para cuerpos Dynamic y Kinematic. |
 | `acceleration` | `Vector2` | `(0, 0)` | Aceleración en píxeles por segundo al cuadrado. Para cuerpos Dynamic y Kinematic. |
 | `gravity` | `number` | `0` | Gravedad en píxeles por segundo al cuadrado. Solo para cuerpos Dynamic. |
+| `staticForLayers` | `string[]` | `[]` | Capas de colisión para las que este cuerpo se comporta como estático (ver más abajo). |
+
+## Estático para ciertas capas
+
+Cuando dos cuerpos Dynamic colisionan, ambos se reposicionan la mitad de la penetración cada uno. Cuando un cuerpo Dynamic colisiona con uno Static, solo se reposiciona el cuerpo Dynamic.
+
+`staticForLayers` permite que un cuerpo Dynamic se comporte como estático frente a ciertas capas. Cuando un cuerpo Dynamic cuyo colisionador está en una de las capas listadas en `staticForLayers` colisiona con este cuerpo, solo se reposiciona el otro cuerpo — este permanece en su lugar, como si fuera estático. Para cualquier otra colisión, el cuerpo sigue comportándose según su propio tipo.
+
+Por ejemplo, una plataforma móvil que debe empujar al jugador pero nunca ser empujada puede listar la capa de colisión del jugador:
+
+```typescript
+new RigidBody({ type: RigidBodyType.Dynamic, staticForLayers: ["Player"] });
+```
 
 ## Ejemplo
 
