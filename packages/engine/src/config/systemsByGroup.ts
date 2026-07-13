@@ -9,6 +9,7 @@ import { KeyboardSystem } from "@system/input/KeyboardSystem";
 import { MouseSystem } from "@system/input/MouseSystem";
 import { TouchScreenSystem } from "@system/input/TouchScreenSystem";
 import { AnimatorSystem } from "@system/render2d/AnimatorSystem";
+import { TilemapAnimationSystem } from "@system/render2d/TilemapAnimationSystem";
 import { CameraSystem } from "@system/render2d/CameraSystem";
 import { ClearScreenSystem } from "@system/render2d/ClearScreenSystem";
 import { DebugColliderRenderSystem } from "@system/debug/DebugColliderRenderSystem";
@@ -70,6 +71,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
         SystemGroup.Render,
         [
             { name: SYSTEM_SYMBOLS.AnimatorSystem, type: AnimatorSystem },
+            { name: SYSTEM_SYMBOLS.TilemapAnimationSystem, type: TilemapAnimationSystem },
             { name: SYSTEM_SYMBOLS.CameraSystem, type: CameraSystem },
             { name: SYSTEM_SYMBOLS.TilemapRendererSystem, type: TilemapRendererSystem },
             { name: SYSTEM_SYMBOLS.SpriteRendererSystem, type: SpriteRendererSystem },
