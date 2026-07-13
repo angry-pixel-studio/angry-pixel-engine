@@ -66,6 +66,13 @@ export interface RigidBodyOptions {
      * @public
      */
     acceleration: Vector2;
+    /**
+     * Collision layers for which this body behaves as static. When a Dynamic body whose collider layer
+     * is listed here collides with this body, only the other body is repositioned, as if this one were static.
+     * This body still behaves as its own type (e.g. Dynamic) for every other collision.
+     * @public
+     */
+    staticForLayers: string[];
 }
 
 /**
@@ -132,6 +139,13 @@ export class RigidBody {
      * @public
      */
     acceleration: Vector2 = new Vector2();
+    /**
+     * Collision layers for which this body behaves as static. When a Dynamic body whose collider layer
+     * is listed here collides with this body, only the other body is repositioned, as if this one were static.
+     * This body still behaves as its own type (e.g. Dynamic) for every other collision.
+     * @public
+     */
+    staticForLayers: string[] = [];
     /** @internal */
     static componentName: string = "RigidBody";
 
