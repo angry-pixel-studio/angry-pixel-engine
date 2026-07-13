@@ -49,6 +49,8 @@ export class TilemapRendererSystem implements System {
                 renderData.tilemap.realHeight = renderData.tilemap.height * renderData.tilemap.tileHeight;
 
                 renderData.tiles = chunk.data;
+                renderData.tileAnimations =
+                    tilemapRenderer._tileAnimationState.size > 0 ? tilemapRenderer._tileAnimationState : undefined;
                 renderData.tileset = tilemapRenderer.tileset as Tileset;
                 renderData.opacity = tilemapRenderer.opacity;
                 renderData.rotation = transform.localRotation;

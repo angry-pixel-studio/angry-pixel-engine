@@ -40,12 +40,21 @@ export class ApplyRepositionSystem implements System {
 
             collisions
                 .filter(({ localEntity }) => entity === localEntity)
-                .forEach(({ remoteEntity, resolution: { direction, penetration } }) => {
-                    // if remote body is dynamic and since the correction distance must be the same as the penetration,
-                    // both bodies will be displaced by half the penetration
-                    if (this.entityManager.getComponent(remoteEntity, RigidBody).type === RigidBodyType.Dynamic) {
-                        penetration /= 2;
-                    }
+                .forEach(({ remoteEntity, localCollider, remoteCollider, resolution: { direction, penetration } }) => {
+                    // this body behaves as static for the colliding body's layer, so it is not repositioned
+                    // by this collision (the other body takes the whole correction)
+                    if (rigidBody.staticForLayers.includes(remoteCollider.layer)) return;
+
+                    const remoteRigidBody = this.entityManager.getComponent(remoteEntity, RigidBody);
+
+                    // the remote body is treated as static toward this body when it is not dynamic, or when it
+                    // behaves as static for this body's collider layer
+                    const remoteActsAsStatic =
+                        remoteRigidBody.type !== RigidBodyType.Dynamic ||
+                        remoteRigidBody.staticForLayers.includes(localCollider.layer);
+
+                    // if both bodies move, the correction distance is split so each is displaced by half the penetration
+                    if (!remoteActsAsStatic) penetration /= 2;
 
                     Vector2.scale(this.correction, direction, -penetration);
 
