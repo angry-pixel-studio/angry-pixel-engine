@@ -46,6 +46,7 @@ export interface TilemapRendererOptions {
     maskColorMix: number;
     opacity: number;
     smooth: boolean;
+    animations: Map<number, TileAnimation>;
 }
 
 /**
@@ -109,16 +110,72 @@ export class TilemapRenderer {
     maskColorMix: number;
     /** TRUE for smooth pixels (not recommended for pixel art) */
     smooth: boolean = false;
+    /** Animated tiles, keyed by the tile id to animate. */
+    animations: Map<number, TileAnimation> = new Map();
 
     /** @internal */
     _processed: boolean = false;
     /** @internal */
     _renderData: TilemapRenderData[] = [];
+    /** Maps each animated tile id to the tile id currently displayed. @internal */
+    _tileAnimationState: Map<number, number> = new Map();
     /** @internal */
     static componentName: string = "TilemapRenderer";
 
     constructor(options?: Partial<TilemapRendererOptions>) {
         Object.assign(this, options);
+    }
+}
+
+/**
+ * TileAnimation configuration
+ * @public
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const waterAnimation = new TileAnimation({
+ *   tiles: [5, 6, 7, 8],
+ *   fps: 6
+ * });
+ * ```
+ */
+export interface TileAnimationOptions {
+    tiles: number[];
+    fps?: number;
+}
+
+/**
+ * TileAnimation cycles a tile through a sequence of tile ids from the tileset.\
+ * It is assigned to a {@link TilemapRenderer} keyed by the tile id that should animate.
+ * @public
+ * @category Components Configuration
+ * @example
+ * ```js
+ * const tilemapRenderer = new TilemapRenderer({
+ *   tileset: { image: "tileset.png", width: 10, tileWidth: 32, tileHeight: 32 },
+ *   data: [1, 2, 3, 4],
+ *   width: 2,
+ *   animations: new Map([
+ *     [3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]
+ *   ])
+ * });
+ * ```
+ */
+export class TileAnimation {
+    /** The sequence of tile ids to cycle through. */
+    tiles: number[] = [];
+    /** The animation speed in frames per second. */
+    fps: number = 12;
+    /** The current frame of the animation. */
+    currentFrame: number = 0;
+    /** The current time of the animation. */
+    currentTime: number = 0;
+
+    constructor(options?: TileAnimationOptions) {
+        if (options) {
+            this.tiles = options.tiles ?? this.tiles;
+            this.fps = options.fps ?? this.fps;
+        }
     }
 }
 
