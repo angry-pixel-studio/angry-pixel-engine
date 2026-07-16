@@ -18,6 +18,19 @@ The `RigidBody` component enables physics movement for an entity, making it move
 | `velocity` | `Vector2` | `(0, 0)` | Velocity in pixels per second. For Dynamic and Kinematic bodies. |
 | `acceleration` | `Vector2` | `(0, 0)` | Acceleration in pixels per second squared. For Dynamic and Kinematic bodies. |
 | `gravity` | `number` | `0` | Gravity in pixels per second squared. For Dynamic bodies only. |
+| `staticForLayers` | `string[]` | `[]` | Collision layers for which this body behaves as static (see below). |
+
+## Static for layers
+
+When two Dynamic bodies collide, both are repositioned by half the penetration. When a Dynamic body collides with a Static one, only the Dynamic body is repositioned.
+
+`staticForLayers` lets a Dynamic body behave as static toward specific layers. When a Dynamic body whose collider layer is listed in `staticForLayers` collides with this body, only the other body is repositioned — this one stays in place, as if it were static. For every other collision, the body still behaves as its own type.
+
+For example, a moving platform that should push the player but never be pushed back can list the player's collision layer:
+
+```typescript
+new RigidBody({ type: RigidBodyType.Dynamic, staticForLayers: ["Player"] });
+```
 
 ## Example
 
