@@ -21,6 +21,7 @@ Cada tile se referencia mediante un ID, donde `0` representa espacio vacío. Los
 | `maskColor` | `string` | — | Color de máscara aplicado a los tiles. |
 | `maskColorMix` | `number` | — | Opacidad del color de máscara entre `0` y `1`. |
 | `smooth` | `boolean` | `false` | Suaviza los píxeles. No recomendado para pixel art. |
+| `animations` | `Map<number, TileAnimation>` | vacío | Tiles animados, indexados por el ID del tile a animar (ver más abajo). |
 
 ### Tileset
 
@@ -32,6 +33,15 @@ Cada tile se referencia mediante un ID, donde `0` representa espacio vacío. Los
 | `tileHeight` | `number` | Alto del tile en píxeles. |
 | `margin` | `Vector2` | Margen opcional (arriba e izquierda) en píxeles. |
 | `spacing` | `Vector2` | Espaciado opcional (abajo y derecha) en píxeles. |
+
+### Animaciones de tiles
+
+Un `TileAnimation` hace que un tile recorra una secuencia de IDs de tile del tileset. El mapa `animations` se indexa por el ID del tile que debe animarse: todos los tiles del mapa con ese ID reproducen la animación. Las animaciones siempre se repiten en bucle.
+
+| Opción | Tipo | Valor por defecto | Descripción |
+|--------|------|---------|-------------|
+| `tiles` | `number[]` | `[]` | La secuencia de IDs de tile a recorrer. |
+| `fps` | `number` | `12` | Cuadros por segundo. |
 
 ## Ejemplo
 
@@ -51,6 +61,29 @@ this.entityManager.createEntity([
         data: [1, 2, 3, 4],
         width: 2,
         height: 2,
+    }),
+]);
+```
+
+## Ejemplo de tiles animados
+
+```typescript
+import { Transform, TilemapRenderer, TileAnimation } from "angry-pixel";
+
+this.entityManager.createEntity([
+    new Transform(),
+    new TilemapRenderer({
+        tileset: {
+            image: this.assetManager.getImage("tileset.png"),
+            width: 8,
+            tileWidth: 16,
+            tileHeight: 16,
+        },
+        data: [1, 2, 3, 4],
+        width: 2,
+        height: 2,
+        // Cada tile con ID 3 recorre 3, 4, 5 a 6 fps.
+        animations: new Map([[3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]]),
     }),
 ]);
 ```

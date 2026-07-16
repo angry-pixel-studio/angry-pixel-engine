@@ -20,6 +20,7 @@ export interface TilemapRenderData extends RenderData {
     tiles: number[];
     tilemap: Tilemap;
     tileset: Tileset;
+    tileAnimations?: Map<number, number>;
     smooth?: boolean;
     flipHorizontal?: boolean;
     flipVertical?: boolean;
@@ -186,14 +187,16 @@ export class TilemapRenderer implements Renderer {
             1 - this.tileset.texMargin.y - this.tileset.texSpacing.y - 2 * this.tileset.texCorrection.y;
     }
 
-    private generateVertices({ tiles, tilemap }: TilemapRenderData): void {
+    private generateVertices({ tiles, tilemap, tileAnimations }: TilemapRenderData): void {
         this.posVertices = [];
         this.texVertices = [];
 
         const height = Math.floor(tiles.length / tilemap.width);
 
-        tiles.forEach((tilesetTile, tilemapTile) => {
-            if (tilesetTile === 0) return;
+        tiles.forEach((tile, tilemapTile) => {
+            if (tile === 0) return;
+
+            const tilesetTile = tileAnimations?.get(tile) ?? tile;
 
             const px = (tilemapTile % tilemap.width) - tilemap.width / 2;
             const py = height / 2 - Math.floor(tilemapTile / tilemap.width);

@@ -21,6 +21,7 @@ Each tile is referenced by an ID, where `0` represents empty space. The tile dat
 | `maskColor` | `string` | — | Mask color applied to the tiles. |
 | `maskColorMix` | `number` | — | Mask color opacity between `0` and `1`. |
 | `smooth` | `boolean` | `false` | Smooths pixels. Not recommended for pixel art. |
+| `animations` | `Map<number, TileAnimation>` | empty | Animated tiles, keyed by the tile ID to animate (see below). |
 
 ### Tileset
 
@@ -32,6 +33,15 @@ Each tile is referenced by an ID, where `0` represents empty space. The tile dat
 | `tileHeight` | `number` | Tile height in pixels. |
 | `margin` | `Vector2` | Optional margin (top and left) in pixels. |
 | `spacing` | `Vector2` | Optional spacing (bottom and right) in pixels. |
+
+### Tile animations
+
+A `TileAnimation` cycles a tile through a sequence of tileset tile IDs. The `animations` map is keyed by the tile ID that should animate: every tile in the map with that ID plays the animation. Animations always loop.
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `tiles` | `number[]` | `[]` | The sequence of tile IDs to cycle through. |
+| `fps` | `number` | `12` | Frames per second. |
 
 ## Example
 
@@ -51,6 +61,29 @@ this.entityManager.createEntity([
         data: [1, 2, 3, 4],
         width: 2,
         height: 2,
+    }),
+]);
+```
+
+## Animated tiles example
+
+```typescript
+import { Transform, TilemapRenderer, TileAnimation } from "angry-pixel";
+
+this.entityManager.createEntity([
+    new Transform(),
+    new TilemapRenderer({
+        tileset: {
+            image: this.assetManager.getImage("tileset.png"),
+            width: 8,
+            tileWidth: 16,
+            tileHeight: 16,
+        },
+        data: [1, 2, 3, 4],
+        width: 2,
+        height: 2,
+        // Every tile with ID 3 cycles through 3, 4, 5 at 6 fps.
+        animations: new Map([[3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]]),
     }),
 ]);
 ```
