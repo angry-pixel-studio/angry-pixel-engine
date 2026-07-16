@@ -6,7 +6,7 @@ import { RenderDataType, TextRenderData, TextAlignment } from "@angry-pixel/webg
  * @internal
  */
 export const defaultTextureAtlasOptions = {
-    charRanges: [32, 126, 161, 255],
+    charRanges: [32, 132, 161, 255],
     fontSize: 64,
     spacing: 8,
 };
@@ -32,7 +32,7 @@ export const defaultTextureAtlasOptions = {
  *     opacity: 0.5,
  *   },
  *   textureAtlas: {
- *     charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
+ *     charRanges: [32, 132, 161, 255, 0x3040, 0x309f],
  *     fontSize: 64,
  *     spacing: 4,
  *   },
@@ -87,9 +87,15 @@ export interface TextRendererOptions {
     text: string;
     /** The texture atlas configuration */
     textureAtlas: {
-        /** Range of characters covered by the component defined in number pairs.
-         * The default value is [32, 126, 161, 255], this means that the component
-         * will render characters from 32 to 126 and from 161 to 255. */
+        /** Ranges of characters covered by the component, defined as pairs of
+         * Unicode code points (each pair is an inclusive from–to range).
+         * The default value is [32, 132, 161, 255], which covers Basic Latin
+         * (letters, digits and punctuation) and the Latin-1 Supplement
+         * (accented letters and symbols used by Western European languages).
+         * Additional pairs can be appended to render other alphabets, e.g.
+         * [0x3040, 0x309F] for Japanese Hiragana or [0x0400, 0x04FF] for Cyrillic.
+         * See the official Unicode Character Code Charts to find the range of
+         * each alphabet: {@link https://www.unicode.org/charts/} */
         charRanges?: number[];
         /** The size of the font in pixels for bitmap fonts. */
         fontSize?: number;
@@ -141,7 +147,7 @@ export interface TextRendererOptions {
  *     opacity: 0.5,
  *   },
  *   textureAtlas: {
- *     charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
+ *     charRanges: [32, 132, 161, 255, 0x3040, 0x309f],
  *     fontSize: 64,
  *     spacing: 4,
  *   },
@@ -198,9 +204,15 @@ export class TextRenderer {
     text: string = "Hello World!";
     /** The texture atlas configuration */
     textureAtlas: {
-        /** Range of characters covered by the component defined in number pairs.
-         * The default value is [32, 126, 161, 255], this means that the component
-         * will render characters from 32 to 126 and from 161 to 255. */
+        /** Ranges of characters covered by the component, defined as pairs of
+         * Unicode code points (each pair is an inclusive from–to range).
+         * The default value is [32, 132, 161, 255], which covers Basic Latin
+         * (letters, digits and punctuation) and the Latin-1 Supplement
+         * (accented letters and symbols used by Western European languages).
+         * Additional pairs can be appended to render other alphabets, e.g.
+         * [0x3040, 0x309F] for Japanese Hiragana or [0x0400, 0x04FF] for Cyrillic.
+         * See the official Unicode Character Code Charts to find the range of
+         * each alphabet: {@link https://www.unicode.org/charts/} */
         charRanges?: number[];
         /** The size of the font in pixels for bitmap fonts. */
         fontSize?: number;

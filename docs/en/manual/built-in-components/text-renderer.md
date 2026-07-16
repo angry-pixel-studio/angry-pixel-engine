@@ -23,9 +23,15 @@ The `TextRenderer` component renders text to the screen. It works with web-safe 
 | `flipVertically` | `boolean` | `false` | Flips the text vertically. |
 | `smooth` | `boolean` | `false` | Smooths pixels. Not recommended for bitmap fonts. |
 | `shadow` | `{ color: string; offset: Vector2; opacity: number }` | — | Optional text shadow. |
-| `textureAtlas` | `{ charRanges?: number[]; fontSize?: number; spacing?: number }` | `charRanges: [32, 126, 161, 255]`, `fontSize: 64`, `spacing: 8` | Configuration of the generated character atlas. |
+| `textureAtlas` | `{ charRanges?: number[]; fontSize?: number; spacing?: number }` | `charRanges: [32, 132, 161, 255]`, `fontSize: 64`, `spacing: 8` | Configuration of the generated character atlas. |
 
-The `textureAtlas.charRanges` option defines, in number pairs, the ranges of characters the component can render. The default `[32, 126, 161, 255]` covers characters 32–126 and 161–255.
+The `textureAtlas.charRanges` option defines, as pairs of Unicode code points, the inclusive ranges of characters the component can render. The default `[32, 132, 161, 255]` covers Basic Latin (letters, digits and punctuation) and the Latin-1 Supplement (accented letters and symbols used by Western European languages). Additional pairs can be appended to render other alphabets, for example `[0x3040, 0x309F]` for Japanese Hiragana or `[0x0400, 0x04FF]` for Cyrillic. The code-point range of every alphabet can be found in the official [Unicode Character Code Charts](https://www.unicode.org/charts/):
+
+```typescript
+textureAtlas: {
+    charRanges: [32, 132, 161, 255, 0x3040, 0x309f],
+}
+```
 
 ## Example
 

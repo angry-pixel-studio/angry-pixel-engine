@@ -156,7 +156,7 @@ export class MainScene extends Scene {
                 layer: RENDER_LAYERS.UI,
                 font: "Arial",
                 textureAtlas: {
-                    charRanges: [32, 126, 161, 255, 0x3040, 0x309f],
+                    charRanges: [32, 132, 161, 255, 0x3040, 0x309f],
                     fontSize: 64,
                     spacing: 0,
                 },
