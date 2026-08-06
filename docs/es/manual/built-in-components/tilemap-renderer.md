@@ -21,22 +21,33 @@ Cada tile se referencia mediante un ID, donde `0` representa espacio vacío. Los
 | `maskColor` | `string` | — | Color de máscara aplicado a los tiles. |
 | `maskColorMix` | `number` | — | Opacidad del color de máscara entre `0` y `1`. |
 | `smooth` | `boolean` | `false` | Suaviza los píxeles. No recomendado para pixel art. |
-| `animations` | `Map<number, TileAnimation>` | vacío | Tiles animados, indexados por el ID del tile a animar (ver más abajo). |
 
 ### Tileset
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | `image` | `HTMLImageElement \| string` | La imagen del tileset, o una cadena con la URL/nombre del recurso. |
-| `width` | `number` | Ancho del tileset en tiles. |
 | `tileWidth` | `number` | Ancho del tile en píxeles. |
 | `tileHeight` | `number` | Alto del tile en píxeles. |
-| `margin` | `Vector2` | Margen opcional (arriba e izquierda) en píxeles. |
-| `spacing` | `Vector2` | Espaciado opcional (abajo y derecha) en píxeles. |
+| `margin` | `number` | Espacio en píxeles entre los tiles y los cuatro bordes de la imagen. Por defecto `0`. |
+| `spacing` | `number` | Espacio en píxeles entre tiles adyacentes. Por defecto `0`. |
+| `animations` | `Map<number, TileAnimation>` | Tiles animados, indexados por el ID del tile a animar (ver más abajo). |
+
+Para un tileset cuyos tiles están extruidos 1 píxel, la imagen tiene un margen de `1` y un espaciado de `2`:
+
+```typescript
+tileset: {
+    image: this.assetManager.getImage("tileset.png"),
+    tileWidth: 16,
+    tileHeight: 16,
+    margin: 1,
+    spacing: 2,
+}
+```
 
 ### Animaciones de tiles
 
-Un `TileAnimation` hace que un tile recorra una secuencia de IDs de tile del tileset. El mapa `animations` se indexa por el ID del tile que debe animarse: todos los tiles del mapa con ese ID reproducen la animación. Las animaciones siempre se repiten en bucle.
+Un `TileAnimation` hace que un tile recorra una secuencia de IDs de tile del tileset. El mapa `animations` se define en el tileset y se indexa por el ID del tile que debe animarse: todos los tiles con ese ID reproducen la animación. Como las animaciones pertenecen al tileset, todos los tilemaps que lo usan las reproducen sincronizadas. Las animaciones siempre se repiten en bucle.
 
 | Opción | Tipo | Valor por defecto | Descripción |
 |--------|------|---------|-------------|
@@ -54,7 +65,6 @@ this.entityManager.createEntity([
         layer: "Default",
         tileset: {
             image: this.assetManager.getImage("tileset.png"),
-            width: 8,
             tileWidth: 16,
             tileHeight: 16,
         },
@@ -75,15 +85,14 @@ this.entityManager.createEntity([
     new TilemapRenderer({
         tileset: {
             image: this.assetManager.getImage("tileset.png"),
-            width: 8,
             tileWidth: 16,
             tileHeight: 16,
+            // Cada tile con ID 3 recorre 3, 4, 5 a 6 fps.
+            animations: new Map([[3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]]),
         },
         data: [1, 2, 3, 4],
         width: 2,
         height: 2,
-        // Cada tile con ID 3 recorre 3, 4, 5 a 6 fps.
-        animations: new Map([[3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]]),
     }),
 ]);
 ```
