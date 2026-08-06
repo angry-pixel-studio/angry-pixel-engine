@@ -26,7 +26,6 @@ this.entityManager.createEntity([
     new TilemapRenderer({
         tileset: {
             image: this.assetManager.getImage("tileset.png"),
-            width: 8,
             tileWidth: 16,
             tileHeight: 16,
         },
