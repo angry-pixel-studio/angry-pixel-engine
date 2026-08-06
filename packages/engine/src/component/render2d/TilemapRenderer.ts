@@ -1,4 +1,3 @@
-import { Vector2 } from "@angry-pixel/math";
 import { defaultRenderLayer } from "./Camera";
 import { TilemapRenderData } from "@angry-pixel/webgl";
 
@@ -12,11 +11,10 @@ import { TilemapRenderData } from "@angry-pixel/webgl";
  *   layer: "Default",
  *   tileset: {
  *     image: this.assetManager.getImage("tileset.png"),
- *     width: 10,
  *     tileWidth: 32,
  *     tileHeight: 32,
- *     margin: new Vector2(0, 0),
- *     spacing: new Vector2(0, 0)
+ *     margin: 0,
+ *     spacing: 0
  *   },
  *   data: [1, 2, 3, 4],
  *   chunks: [],
@@ -46,7 +44,6 @@ export interface TilemapRendererOptions {
     maskColorMix: number;
     opacity: number;
     smooth: boolean;
-    animations: Map<number, TileAnimation>;
 }
 
 /**
@@ -63,11 +60,10 @@ export interface TilemapRendererOptions {
  *   layer: "Default",
  *   tileset: {
  *     image: this.assetManager.getImage("tileset.png"),
- *     width: 10,
  *     tileWidth: 32,
  *     tileHeight: 32,
- *     margin: new Vector2(0, 0),
- *     spacing: new Vector2(0, 0)
+ *     margin: 0,
+ *     spacing: 0
  *   },
  *   data: [1, 2, 3, 4],
  *   chunks: [],
@@ -110,15 +106,11 @@ export class TilemapRenderer {
     maskColorMix: number;
     /** TRUE for smooth pixels (not recommended for pixel art) */
     smooth: boolean = false;
-    /** Animated tiles, keyed by the tile id to animate. */
-    animations: Map<number, TileAnimation> = new Map();
 
     /** @internal */
     _processed: boolean = false;
     /** @internal */
     _renderData: TilemapRenderData[] = [];
-    /** Maps each animated tile id to the tile id currently displayed. @internal */
-    _tileAnimationState: Map<number, number> = new Map();
     /** @internal */
     static componentName: string = "TilemapRenderer";
 
@@ -146,18 +138,23 @@ export interface TileAnimationOptions {
 
 /**
  * TileAnimation cycles a tile through a sequence of tile ids from the tileset.\
- * It is assigned to a {@link TilemapRenderer} keyed by the tile id that should animate.
+ * It is assigned to a {@link Tileset} keyed by the tile id that should animate,\
+ * so every tilemap using that tileset plays the animation in sync.
  * @public
  * @category Components Configuration
  * @example
  * ```js
  * const tilemapRenderer = new TilemapRenderer({
- *   tileset: { image: "tileset.png", width: 10, tileWidth: 32, tileHeight: 32 },
+ *   tileset: {
+ *     image: "tileset.png",
+ *     tileWidth: 32,
+ *     tileHeight: 32,
+ *     animations: new Map([
+ *       [3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]
+ *     ])
+ *   },
  *   data: [1, 2, 3, 4],
- *   width: 2,
- *   animations: new Map([
- *     [3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]
- *   ])
+ *   width: 2
  * });
  * ```
  */
@@ -181,25 +178,38 @@ export class TileAnimation {
 
 /**
  * The Tileset configuration defines the properties of a tileset used by the TilemapRenderer.\
- * It specifies the source image containing the tiles, the dimensions of the tileset and individual tiles,\
- * and optional margin and spacing between tiles. This configuration is essential for properly\
- * slicing and rendering tiles from the tileset image.
+ * It specifies the source image containing the tiles, the size of the individual tiles,\
+ * and the optional margin and spacing of the image. The number of columns of the tileset\
+ * is obtained from the image. The tileset cannot be updated at runtime.
  * @public
  * @category Components Configuration
+ * @example
+ * ```js
+ * // a tileset of 16x16 tiles extruded by 1 pixel
+ * const tileset = {
+ *   image: this.assetManager.getImage("tileset.png"),
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ *   margin: 1,
+ *   spacing: 2
+ * };
+ * ```
  */
 export type Tileset = {
     /** The tileset image element */
     image: HTMLImageElement | string;
-    /* The width of tileset (in tiles) */
-    width: number;
     /* The width of the tile (in pixels) */
     tileWidth: number;
     /* The height of the tile (in pixels) */
     tileHeight: number;
-    /** Margin of the tile in pixels (space in the top and the left) */
-    margin?: Vector2;
-    /** Spacing of the tile in pixels (space in the bottom and the right) */
-    spacing?: Vector2;
+    /** Space in pixels between the tiles and the four edges of the image */
+    margin?: number;
+    /** Space in pixels between adjacent tiles */
+    spacing?: number;
+    /** Animated tiles, keyed by the tile id to animate */
+    animations?: Map<number, TileAnimation>;
+    /** Maps each animated tile id to the tile id currently displayed. @internal */
+    _animationState?: Map<number, number>;
 };
 
 /**
