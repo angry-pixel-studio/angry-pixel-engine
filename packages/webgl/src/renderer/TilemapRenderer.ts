@@ -20,7 +20,6 @@ export interface TilemapRenderData extends RenderData {
     tiles: number[];
     tilemap: Tilemap;
     tileset: Tileset;
-    tileAnimations?: Map<number, number>;
     smooth?: boolean;
     flipHorizontal?: boolean;
     flipVertical?: boolean;
@@ -34,12 +33,31 @@ export interface TilemapRenderData extends RenderData {
 
 export type Tileset = {
     image: HTMLImageElement;
-    width: number;
     tileWidth: number;
     tileHeight: number;
-    margin?: Vector2;
-    spacing?: Vector2;
-    correction?: Vector2;
+    /** Space in pixels between the tiles and the four edges of the image */
+    margin?: number;
+    /** Space in pixels between adjacent tiles */
+    spacing?: number;
+    /** Maps each animated tile id to the tile id currently displayed. @internal */
+    _animationState?: Map<number, number>;
+    /** Tileset values in texture coordinates. Computed once by the renderer. @internal */
+    _texData?: TilesetTexData;
+};
+
+/**
+ * Tileset values expressed in texture coordinates (0 to 1), plus the number of columns of the tileset.
+ * @internal
+ */
+type TilesetTexData = {
+    /** The width of the tileset (in tiles) */
+    columns: number;
+    /** The margin of the image */
+    margin: Vector2;
+    /** The distance between the origin of two adjacent tiles */
+    step: Vector2;
+    /** The size of a tile */
+    tileSize: Vector2;
 };
 
 export type Tilemap = {
@@ -64,16 +82,6 @@ export class TilemapRenderer implements Renderer {
 
     // cache
     private lastTexture: WebGLTexture = null;
-    private tileset = {
-        width: 0,
-        tileWidth: 0,
-        tileHeight: 0,
-        texMargin: new Vector2(),
-        texSpacing: new Vector2(),
-        texWidth: 0,
-        texHeight: 0,
-        texCorrection: new Vector2(),
-    };
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -90,7 +98,7 @@ export class TilemapRenderer implements Renderer {
     public render(renderData: TilemapRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
         if (renderData.tiles.reduce((acc, tile) => acc + tile, 0) === 0) return false;
 
-        this.processTileset(renderData);
+        this.processTileset(renderData.tileset);
         this.generateVertices(renderData);
 
         if (this.posVertices.length === 0) return false;
@@ -115,12 +123,8 @@ export class TilemapRenderer implements Renderer {
             1,
         ]);
 
+        // the texture vertices are already expressed in texture coordinates
         this.textureMatrix = mat4.identity(this.textureMatrix);
-        mat4.scale(this.textureMatrix, this.textureMatrix, [
-            this.tileset.tileWidth / renderData.tileset.image.naturalWidth,
-            this.tileset.tileHeight / renderData.tileset.image.naturalHeight,
-            1,
-        ]);
 
         setProjectionMatrix(this.projectionMatrix, this.gl, cameraData.zoom, cameraData.position);
 
@@ -159,44 +163,39 @@ export class TilemapRenderer implements Renderer {
         return true;
     }
 
-    private processTileset({ tileset }: TilemapRenderData): void {
-        tileset.margin = tileset.margin ?? new Vector2();
-        tileset.spacing = tileset.spacing ?? new Vector2();
-        tileset.correction = tileset.correction ?? new Vector2();
+    /**
+     * Translates the tileset into texture coordinates. Since the tileset cannot be updated at runtime,\
+     * the result is cached in the tileset object and computed only once.
+     */
+    private processTileset(tileset: Tileset): void {
+        if (tileset._texData) return;
 
-        this.tileset.width = tileset.width;
-        this.tileset.tileWidth = tileset.tileWidth + (tileset.margin.x ?? 0) + (tileset.spacing.x ?? 0);
-        this.tileset.tileHeight = tileset.tileHeight + (tileset.margin.y ?? 0) + (tileset.spacing.y ?? 0);
+        const { naturalWidth, naturalHeight } = tileset.image;
+        const margin = tileset.margin ?? 0;
+        const spacing = tileset.spacing ?? 0;
 
-        this.tileset.texMargin.set(
-            tileset.margin.x / this.tileset.tileWidth,
-            tileset.margin.y / this.tileset.tileHeight,
-        );
-        this.tileset.texSpacing.set(
-            tileset.spacing.x / this.tileset.tileWidth,
-            tileset.spacing.y / this.tileset.tileHeight,
-        );
-        this.tileset.texCorrection.set(
-            tileset.correction.x / this.tileset.tileWidth,
-            tileset.correction.y / this.tileset.tileHeight,
-        );
-
-        this.tileset.texWidth =
-            1 - this.tileset.texMargin.x - this.tileset.texSpacing.x - 2 * this.tileset.texCorrection.x;
-        this.tileset.texHeight =
-            1 - this.tileset.texMargin.y - this.tileset.texSpacing.y - 2 * this.tileset.texCorrection.y;
+        tileset._texData = {
+            columns: Math.floor((naturalWidth - 2 * margin + spacing) / (tileset.tileWidth + spacing)),
+            margin: new Vector2(margin / naturalWidth, margin / naturalHeight),
+            step: new Vector2(
+                (tileset.tileWidth + spacing) / naturalWidth,
+                (tileset.tileHeight + spacing) / naturalHeight,
+            ),
+            tileSize: new Vector2(tileset.tileWidth / naturalWidth, tileset.tileHeight / naturalHeight),
+        };
     }
 
-    private generateVertices({ tiles, tilemap, tileAnimations }: TilemapRenderData): void {
+    private generateVertices({ tiles, tilemap, tileset }: TilemapRenderData): void {
         this.posVertices = [];
         this.texVertices = [];
 
+        const { columns, margin, step, tileSize } = tileset._texData;
         const height = Math.floor(tiles.length / tilemap.width);
 
         tiles.forEach((tile, tilemapTile) => {
             if (tile === 0) return;
 
-            const tilesetTile = tileAnimations?.get(tile) ?? tile;
+            const tilesetTile = tileset._animationState?.get(tile) ?? tile;
 
             const px = (tilemapTile % tilemap.width) - tilemap.width / 2;
             const py = height / 2 - Math.floor(tilemapTile / tilemap.width);
@@ -211,21 +210,17 @@ export class TilemapRenderer implements Renderer {
                 px + 1, py
             )
 
-            const tx =
-                ((tilesetTile - 1) % this.tileset.width) + this.tileset.texMargin.x + this.tileset.texCorrection.x;
-            const ty =
-                Math.floor((tilesetTile - 1) / this.tileset.width) +
-                this.tileset.texMargin.y +
-                this.tileset.texCorrection.y;
+            const tx = margin.x + ((tilesetTile - 1) % columns) * step.x;
+            const ty = margin.y + Math.floor((tilesetTile - 1) / columns) * step.y;
 
             // prettier-ignore
-            this.texVertices.push( 
-                tx, ty + this.tileset.texHeight,
-                tx + this.tileset.texWidth, ty + this.tileset.texHeight,
+            this.texVertices.push(
+                tx, ty + tileSize.y,
+                tx + tileSize.x, ty + tileSize.y,
                 tx, ty,
                 tx, ty,
-                tx + this.tileset.texWidth, ty + this.tileset.texHeight,
-                tx + this.tileset.texWidth, ty
+                tx + tileSize.x, ty + tileSize.y,
+                tx + tileSize.x, ty
             );
         });
     }

@@ -27,7 +27,6 @@ export const foregroundArchetype: Archetype = {
                 image: ASSETS.images.tileset,
                 tileWidth: 16,
                 tileHeight: 16,
-                width: 12,
             },
             layer: RENDER_LAYERS.Foreground,
         }),
