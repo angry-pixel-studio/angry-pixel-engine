@@ -2,9 +2,11 @@ import { SystemType } from "@angry-pixel/ecs";
 
 /** @internal */
 export enum SystemGroup {
+    // systems defined by the user
     GameLogic,
     GamePhysics,
     GamePreRender,
+    // systems defined by the engine
     Physics,
     PreGameLogic,
     Render,
