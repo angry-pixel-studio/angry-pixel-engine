@@ -35,6 +35,7 @@ export const SYSTEM_SYMBOLS = {
     TilemapRendererSystem: Symbol.for("TilemapRendererSystem"),
     VideoRendererSystem: Symbol.for("VideoRendererSystem"),
     // debug
+    DebugButtonSystem: Symbol.for("DebugButtonSystem"),
     DebugColliderRenderSystem: Symbol.for("DebugColliderRenderSystem"),
     DebugMousePositionSystem: Symbol.for("DebugMousePositionSystem"),
     DebugTextRendererSystem: Symbol.for("DebugTextRendererSystem"),

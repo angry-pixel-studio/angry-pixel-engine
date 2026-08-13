@@ -43,7 +43,9 @@ The `debug` object enables on-screen debugging aids:
 | `colliders`                 | `boolean`                                                      | `false`         | Draw colliders.                    |
 | `mousePosition`             | `boolean`                                                      | `false`         | Show the mouse position.           |
 | `textRendererBoundingBoxes` | `boolean`                                                      | `false`         | Draw text renderer bounding boxes. |
+| `buttons`                   | `boolean`                                                      | `false`         | Draw button shapes.                |
 | `collidersColor`            | `string`                                                       | `"#00FF00"`     | Color of the colliders.            |
+| `buttonColor`               | `string`                                                       | `"#FF00FF"`     | Color of the button shapes.        |
 | `textBoxColor`              | `string`                                                       | `"#0000FF"`     | Color of the text bounding box.    |
 | `textColor`                 | `string`                                                       | `"#00FF00"`     | Color of the debug text.           |
 | `textPosition`              | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` | `"bottom-left"` | Position of the debug text.        |
