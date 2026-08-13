@@ -1,6 +1,6 @@
 # TiledWrapper
 
-The `TiledWrapper` component wraps a tilemap exported from the [Tiled](https://www.mapeditor.org/) map editor and selects which layer to render. It works together with a [`TilemapRenderer`](tilemap-renderer.md) on the same entity, which draws the tiles using a tileset.
+The `TiledWrapper` component wraps a tilemap exported from the [Tiled](https://www.mapeditor.org/) map editor and selects which layer to render. It works together with a [`TilemapRenderer`](tilemap-renderer.md) on the same entity, which draws the tiles using a tileset. It can also create entities from the objects placed in the tilemap.
 
 > **Note:** Only orthogonal Tiled maps are supported.
 
@@ -10,6 +10,7 @@ The `TiledWrapper` component wraps a tilemap exported from the [Tiled](https://w
 |--------|------|-------------|
 | `tilemap` | `TiledTilemap \| string` | The Tiled map data, as a parsed object or an asset URL/name string of a loaded JSON. |
 | `layerToRender` | `string` | The name of the Tiled layer to render. |
+| `objects` | `Map<string, TiledObjectBlueprint>` | The entities to create from the objects of the tilemap, keyed by the class of the Tiled object. |
 
 ## Example
 
@@ -31,3 +32,51 @@ this.entityManager.createEntity([
 ```
 
 The Tiled JSON is loaded through the [asset manager](../asset-manager.md) with `loadJson`, typically in the scene's `loadAssets` method. See [`TilemapRenderer`](tilemap-renderer.md) for the tileset configuration.
+
+## Creating entities from Tiled objects
+
+The `objects` map associates a Tiled object class with a blueprint. One entity is created for each object of that class, and the objects whose class is not in the map are ignored. The entities are created once, the first time the component is processed.
+
+A blueprint can be:
+
+-   An [archetype](../adding-entities-to-the-scene.md).
+-   A collection of components (instances or classes).
+-   A factory function that receives the object's properties and returns either of the two.
+
+```typescript
+import { TiledWrapper, TiledObjectBlueprint, Transform, SpriteRenderer } from "angry-pixel";
+import { playerArchetype } from "../entity/Player";
+import { Door } from "../component/Door";
+
+const objects = new Map<string, TiledObjectBlueprint>([
+    // an archetype
+    ["Player", playerArchetype],
+    // a collection of components
+    ["Coin", [new Transform(), new SpriteRenderer({ image: "coin.png" })]],
+    // a factory function
+    ["Door", (properties) => [new Door({ locked: properties.get("locked") as boolean })]],
+]);
+
+new TiledWrapper({ tilemap: "map.json", layerToRender: "Ground", objects });
+```
+
+### Object properties
+
+The factory function receives the properties of the Tiled object as a `Map` keyed by property name, and the Tiled object itself as a second argument (useful to read its `name`, `width`, `height`, `polygon`, etc.).
+
+A property value can be a `number` (`int` and `float`), a `boolean` (`bool`), a `string` (`string`, `color` and `file`), an `Entity` (`object`), or a nested set of values (`class`), so it needs to be cast to the expected type.
+
+Properties of type `object` reference another Tiled object by its id. They are given to the factory as the **entity** created for the referenced object, so entities can be linked to each other. All the entities are created before any factory is called, so the order of the objects in the tilemap does not matter. A property that references an object for which no entity was created is given as `undefined`.
+
+### Position
+
+The entity's `Transform` position is set from the object's `x` and `y`, relative to the center of the tilemap, plus the position of the entity that holds the `TiledWrapper`. If the blueprint does not include a `Transform`, one is added.
+
+The position is calculated from the center of the object, using the tile size declared in the tilemap. Tile objects (objects with a `gid`) have their origin in the bottom-left corner; the rest have it in the top-left corner.
+
+### Rules
+
+-   Objects are matched by class in every object layer of the tilemap, regardless of the layer they belong to.
+-   Objects with visibility turned off are ignored, and so are all the objects of a layer with visibility turned off.
+-   The parent-child relationship between Tiled objects is not supported.
+-   Tiled 1.9 exports the class of an object as `class`, and the other versions as `type`. Both are supported.
