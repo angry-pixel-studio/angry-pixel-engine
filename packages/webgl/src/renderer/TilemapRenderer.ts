@@ -174,6 +174,8 @@ export class TilemapRenderer implements Renderer {
         const margin = tileset.margin ?? 0;
         const spacing = tileset.spacing ?? 0;
 
+        if (!naturalWidth || !naturalHeight) return;
+
         tileset._texData = {
             columns: Math.floor((naturalWidth - 2 * margin + spacing) / (tileset.tileWidth + spacing)),
             margin: new Vector2(margin / naturalWidth, margin / naturalHeight),
