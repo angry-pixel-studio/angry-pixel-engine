@@ -5,7 +5,13 @@ import { Archetype, Camera, DarknessRenderer, Transform } from "angry-pixel";
 export const mainCameraArchetype: Archetype = {
     components: [
         new Camera({
-            layers: [RENDER_LAYERS.Foreground, RENDER_LAYERS.Goblin, RENDER_LAYERS.Ninja, RENDER_LAYERS.Darkness],
+            layers: [
+                RENDER_LAYERS.Foreground,
+                RENDER_LAYERS.Goblin,
+                RENDER_LAYERS.Ninja,
+                RENDER_LAYERS.Darkness,
+                RENDER_LAYERS.Overlayer,
+            ],
             zoom: 4,
             debug: true,
         }),
@@ -16,7 +22,7 @@ export const mainCameraArchetype: Archetype = {
             width: 1920,
             height: 1080,
             layer: RENDER_LAYERS.Darkness,
-            opacity: 1,
+            opacity: 0.7,
         }),
     ],
 };

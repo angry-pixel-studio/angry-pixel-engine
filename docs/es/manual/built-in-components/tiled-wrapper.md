@@ -1,6 +1,6 @@
 # TiledWrapper
 
-El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de mapas [Tiled](https://www.mapeditor.org/) y selecciona qué capa renderizar. Funciona junto con un [`TilemapRenderer`](tilemap-renderer.md) en la misma entidad, que dibuja los tiles usando un tileset.
+El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de mapas [Tiled](https://www.mapeditor.org/) y selecciona qué capa renderizar. Funciona junto con un [`TilemapRenderer`](tilemap-renderer.md) en la misma entidad, que dibuja los tiles usando un tileset. También puede crear entidades a partir de los objetos ubicados en el tilemap.
 
 > **Nota:** Solo se admiten mapas de Tiled ortogonales.
 
@@ -10,6 +10,7 @@ El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de ma
 |--------|------|-------------|
 | `tilemap` | `TiledTilemap \| string` | Los datos del mapa de Tiled, como un objeto ya parseado o una cadena con la URL/nombre del recurso de un JSON cargado. |
 | `layerToRender` | `string` | El nombre de la capa de Tiled a renderizar. |
+| `objects` | `Map<string, TiledObjectBlueprint>` | Las entidades a crear a partir de los objetos del tilemap, indexadas por la clase del objeto de Tiled. |
 
 ## Ejemplo
 
@@ -31,3 +32,51 @@ this.entityManager.createEntity([
 ```
 
 El JSON de Tiled se carga a través del [Asset Manager](../asset-manager.md) con `loadJson`, normalmente en el método `loadAssets` de la escena. Consulta [`TilemapRenderer`](tilemap-renderer.md) para la configuración del tileset.
+
+## Crear entidades a partir de objetos de Tiled
+
+El mapa `objects` asocia una clase de objeto de Tiled con un blueprint. Se crea una entidad por cada objeto de esa clase, y los objetos cuya clase no está en el mapa se ignoran. Las entidades se crean una sola vez, la primera vez que se procesa el componente.
+
+Un blueprint puede ser:
+
+-   Un [archetype](../adding-entities-to-the-scene.md).
+-   Una colección de componentes (instancias o clases).
+-   Una función factory que recibe las propiedades del objeto y devuelve cualquiera de los dos.
+
+```typescript
+import { TiledWrapper, TiledObjectBlueprint, Transform, SpriteRenderer } from "angry-pixel";
+import { playerArchetype } from "../entity/Player";
+import { Door } from "../component/Door";
+
+const objects = new Map<string, TiledObjectBlueprint>([
+    // un archetype
+    ["Player", playerArchetype],
+    // una colección de componentes
+    ["Coin", [new Transform(), new SpriteRenderer({ image: "coin.png" })]],
+    // una función factory
+    ["Door", (properties) => [new Door({ locked: properties.get("locked") as boolean })]],
+]);
+
+new TiledWrapper({ tilemap: "map.json", layerToRender: "Ground", objects });
+```
+
+### Propiedades de los objetos
+
+La función factory recibe las propiedades del objeto de Tiled como un `Map` indexado por el nombre de la propiedad, y el objeto de Tiled en sí como segundo argumento (útil para leer su `name`, `width`, `height`, `polygon`, etc.).
+
+El valor de una propiedad puede ser un `number` (`int` y `float`), un `boolean` (`bool`), un `string` (`string`, `color` y `file`), una `Entity` (`object`), o un conjunto anidado de valores (`class`), por lo que debe castearse al tipo esperado.
+
+Las propiedades de tipo `object` referencian a otro objeto de Tiled por su id. La factory las recibe como la **entidad** creada para el objeto referenciado, de modo que las entidades pueden vincularse entre sí. Todas las entidades se crean antes de llamar a cualquier factory, por lo que el orden de los objetos en el tilemap no importa. Una propiedad que referencia a un objeto para el cual no se creó ninguna entidad se recibe como `undefined`.
+
+### Posición
+
+La posición del `Transform` de la entidad se calcula a partir de las propiedades `x` e `y` del objeto, relativa al centro del tilemap, más la posición de la entidad que contiene el `TiledWrapper`. Si el blueprint no incluye un `Transform`, se le agrega uno.
+
+La posición se calcula desde el centro del objeto, usando el tamaño de tile declarado en el tilemap. Los tile objects (los objetos con `gid`) tienen su origen en la esquina inferior izquierda; el resto lo tiene en la esquina superior izquierda.
+
+### Reglas
+
+-   Los objetos se buscan por clase en todas las capas de objetos del tilemap, sin importar a qué capa pertenecen.
+-   Los objetos con la visibilidad desactivada se ignoran, al igual que todos los objetos de una capa con la visibilidad desactivada.
+-   La relación padre-hijo entre objetos de Tiled no está soportada.
+-   Tiled 1.9 exporta la clase de un objeto como `class`, y el resto de las versiones como `type`. Ambas están soportadas.
