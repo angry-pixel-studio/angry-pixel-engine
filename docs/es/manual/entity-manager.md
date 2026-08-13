@@ -63,6 +63,13 @@ this.entityManager.removeComponent(entity, SpriteRenderer);
 this.entityManager.removeComponent(spriteRenderer);
 ```
 
+`addArchetype` asocia el contenido de un [archetype](adding-entities-to-the-scene.md) a una entidad existente: sus componentes se clonan y se agregan, y sus hijos se crean como nuevas entidades con esa entidad como padre.
+
+```typescript
+const entity = this.entityManager.createEntity();
+this.entityManager.addArchetype(entity, playerArchetype);
+```
+
 ## Buscar entidades
 
 `search` encuentra las entidades que tienen un tipo de componente dado. Tiene dos formas:
