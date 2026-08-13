@@ -96,8 +96,6 @@ export class LoopManager {
     }
 
     private physicsIteration(): void {
-        if (this.timeManager.timeScale <= 0) return;
-
         if (this.systemManager.groupHasSystems(SystemGroup.GamePhysics)) {
             this.systemManager.update(SystemGroup.GamePhysics);
             this.systemManager.update(SystemGroup.Transform);
