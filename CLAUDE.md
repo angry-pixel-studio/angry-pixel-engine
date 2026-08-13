@@ -25,6 +25,12 @@ Workspaces compose the engine; **`@angry-pixel/engine`** references **`ecs`**, *
 
 Change engine behavior in **`packages/`**; the bundle in **`bundles/angry-pixel/`** is the packaged artifact, not the primary edit surface.
 
+## Writing systems
+
+Systems run on every frame, so anything allocated inside `onUpdate` is allocated dozens of times per second.
+
+-   **Prefer reusable class properties over per-call constants.** Whenever it is possible and worthwhile, hoist values that would otherwise be created on every update — vectors, arrays, maps, temporary objects — into properties of the system and reuse them, instead of declaring them as local constants inside the method. Trading a little RAM for less garbage collector activity is the right call here: dropped frames cost more than memory.
+
 ## Common commands (repo root)
 
 -   `yarn build` — builds `@angry-pixel/engine` (tsc project refs + Rollup).
