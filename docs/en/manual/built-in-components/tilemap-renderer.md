@@ -102,11 +102,18 @@ this.entityManager.createEntity([
 
 ## Updating the tilemap at runtime
 
-The tile data is processed once: the `data` array and the `chunks` array are generated from each other, and the height of the tilemap is resolved. After changing the data at runtime, call `refresh` so it is processed again. The array that was generated from the other one is emptied, so it is generated again.
+The tile data is processed once: the `data` array and the `chunks` array are generated from each other, and the height of the tilemap is resolved. After changing the data at runtime, call `refresh` so it is processed again.
+
+`refresh` keeps the array the tiles were given in and empties the one generated from it, so the change has to be made on the source array: `data` for a tilemap defined with tiles, and `chunks` for a tilemap defined with chunks, which is the case of the infinite tilemaps of Tiled. Assigning `data` on a tilemap defined with chunks has no effect, because `data` is generated again from the chunks.
 
 ```typescript
 const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
+
+// a tilemap defined with tiles
 tilemapRenderer.data = newData;
+// a tilemap defined with chunks
+tilemapRenderer.chunks = newChunks;
+
 tilemapRenderer.refresh();
 ```
 

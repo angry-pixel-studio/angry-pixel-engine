@@ -102,11 +102,18 @@ this.entityManager.createEntity([
 
 ## Actualizar el tilemap en tiempo de ejecución
 
-Los datos de los tiles se procesan una sola vez: el arreglo `data` y el arreglo `chunks` se generan uno a partir del otro, y se resuelve la altura del tilemap. Después de cambiar los datos en tiempo de ejecución, hay que llamar a `refresh` para que se procesen de nuevo. El arreglo que fue generado a partir del otro se vacía, para que se genere nuevamente.
+Los datos de los tiles se procesan una sola vez: el arreglo `data` y el arreglo `chunks` se generan uno a partir del otro, y se resuelve la altura del tilemap. Después de cambiar los datos en tiempo de ejecución, hay que llamar a `refresh` para que se procesen de nuevo.
+
+`refresh` conserva el arreglo en el que se entregaron los tiles y vacía el que fue generado a partir de él, por lo que el cambio debe hacerse sobre el arreglo de origen: `data` para un tilemap definido con tiles, y `chunks` para un tilemap definido con chunks, que es el caso de los tilemaps infinitos de Tiled. Asignar `data` en un tilemap definido con chunks no tiene efecto, porque `data` se genera nuevamente a partir de los chunks.
 
 ```typescript
 const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
+
+// un tilemap definido con tiles
 tilemapRenderer.data = newData;
+// un tilemap definido con chunks
+tilemapRenderer.chunks = newChunks;
+
 tilemapRenderer.refresh();
 ```
 

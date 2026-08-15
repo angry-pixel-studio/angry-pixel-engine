@@ -14,7 +14,7 @@ Cuando `composite` es `false`, crea un colisionador rectangular individual por c
 | `physics` | `boolean` | `true` | Si es `true`, el colisionador interactúa con los cuerpos rígidos. |
 | `ignoreCollisionsWithLayers` | `string[]` | `[]` | Capas que este colisionador ignora. |
 
-> **Nota:** Las formas del colisionador se generan una sola vez y no pueden modificarse después. Para cambiarlas, crea un nuevo `TilemapCollider`.
+> **Nota:** Las formas del colisionador se generan una sola vez. Para volver a generarlas después de que el tilemap cambie, hay que llamar a `refresh` (ver más abajo).
 
 ## Ejemplo
 
