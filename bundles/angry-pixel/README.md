@@ -24,7 +24,7 @@ Main features:
 
 ## Getting Started
 
-Let's create a scene where the Angry Pixel logo bounces off the edges of the screen in a DVD screensaver fashion.
+Let's create a scene where the Angry Pixel sprite bounces off the edges of the screen in a DVD screensaver fashion.
 
 ### Installation
 
@@ -71,7 +71,7 @@ import { Scene } from "angry-pixel";
 class MainScene extends Scene {
     // within this method we load the assets
     loadAssets(): void {
-        this.assetManager.loadImage("logo.png");
+        this.assetManager.loadImage("sprite.png");
     }
 }
 ```
@@ -132,7 +132,7 @@ import { Scene } from "angry-pixel";
 
 class MainScene extends Scene {
     loadAssets(): void {
-        this.assetManager.loadImage("logo.png");
+        this.assetManager.loadImage("sprite.png");
     }
 
     // within this method we register the systems of the scene
@@ -144,14 +144,14 @@ class MainScene extends Scene {
 
 ### Create the entities
 
-Finally, we need to create two entities, one that represents our logo, to which we want to apply the behavior of moving and bouncing, and another one that represents the camera of our game. For this we will use the `EntityManager`, specifically the `createEntity` method. This method accepts an array of components, the components can be concrete instances (this is useful when it is necessary to pass parameters by constructor) or classes (if it is not necessary to pass parameters by constructor, we can pass only the class).
+Finally, we need to create two entities, one that represents our sprite, to which we want to apply the behavior of moving and bouncing, and another one that represents the camera of our game. For this we will use the `EntityManager`, specifically the `createEntity` method. This method accepts an array of components, the components can be concrete instances (this is useful when it is necessary to pass parameters by constructor) or classes (if it is not necessary to pass parameters by constructor, we can pass only the class).
 
 ```typescript
 import { Camera, Scene, SpriteRenderer, Transform } from "angry-pixel";
 
 class MainScene extends Scene {
     loadAssets(): void {
-        this.assetManager.loadImage("logo.png");
+        this.assetManager.loadImage("sprite.png");
     }
 
     registerSystems(): void {
@@ -161,15 +161,15 @@ class MainScene extends Scene {
     // within this method we create the entities
     createEntities(): void {
         // camera
-        this.entityManager.createEntity([new Transform(), new Camera({ layers: ["Logo"] })]);
+        this.entityManager.createEntity([new Transform(), new Camera({ layers: ["Sprite"] })]);
 
-        // logo
+        // sprite
         this.entityManager.createEntity([
             new Transform(),
             new MoveAndBounce(),
             new SpriteRenderer({
-                layer: "Logo",
-                image: this.assetManager.getImage("logo.png"),
+                layer: "Sprite",
+                image: this.assetManager.getImage("sprite.png"),
             }),
         ]);
     }
@@ -181,7 +181,7 @@ class MainScene extends Scene {
 Now we can start the game:
 
 ```typescript
-game.run();
+game.start();
 ```
 
 ### Check this example live
