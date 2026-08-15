@@ -33,6 +33,16 @@ this.entityManager.createEntity([
 
 El JSON de Tiled se carga a través del [Asset Manager](../asset-manager.md) con `loadJson`, normalmente en el método `loadAssets` de la escena. Consulta [`TilemapRenderer`](tilemap-renderer.md) para la configuración del tileset.
 
+## Tiles animados
+
+Los tiles animados en Tiled se mapean a las `animations` del tileset del [`TilemapRenderer`](tilemap-renderer.md) la primera vez que se procesa el componente, por lo que se reproducen sin ninguna configuración adicional.
+
+Los ids de los tiles se traducen desde el tileset al que pertenecen: un tile se indexa con el `firstgid` de su tileset más el id que tiene dentro de él. Las animaciones ya definidas en el tileset tienen precedencia sobre las declaradas en Tiled.
+
+Tiled permite una duración distinta para cada frame, mientras que el motor renderiza todos los frames de una animación al mismo ritmo. Se usa la duración promedio, lo que conserva la duración total de la animación y es exacto siempre que todos los frames duren lo mismo.
+
+> **Nota:** El tileset debe estar embebido en el mapa. Los tilesets externos (`.tsx`) se referencian por archivo y el motor no los lee.
+
 ## Crear entidades a partir de objetos de Tiled
 
 El mapa `objects` asocia una clase de objeto de Tiled con un blueprint. Se crea una entidad por cada objeto de esa clase, y los objetos cuya clase no está en el mapa se ignoran. Las entidades se crean una sola vez, la primera vez que se procesa el componente.
