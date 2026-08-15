@@ -14,7 +14,7 @@ When `composite` is `false`, it creates an individual rectangle collider for eac
 | `physics` | `boolean` | `true` | If `true`, the collider interacts with rigid bodies. |
 | `ignoreCollisionsWithLayers` | `string[]` | `[]` | Layers this collider ignores. |
 
-> **Note:** The collider shapes are generated once and cannot be modified afterwards. To change them, create a new `TilemapCollider`.
+> **Note:** The collider shapes are generated once. To generate them again after the tilemap changes, call `refresh` (see below).
 
 ## Example
 
