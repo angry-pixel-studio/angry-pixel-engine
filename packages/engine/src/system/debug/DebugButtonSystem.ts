@@ -22,6 +22,8 @@ export class DebugButtonSystem implements System {
         if (!this.gameConfig.debug?.buttons) return;
 
         this.entityManager.search(Button, ({ shape, width, height, radius, offset }, entity) => {
+            if (shape !== ButtonShape.Rectangle && shape !== ButtonShape.Circumference) return;
+
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) return;
 
