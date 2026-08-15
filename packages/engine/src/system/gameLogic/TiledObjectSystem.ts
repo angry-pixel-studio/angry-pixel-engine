@@ -1,17 +1,12 @@
 import { Archetype, Entity, EntityManager, System } from "@angry-pixel/ecs";
 import { inject, injectable } from "@angry-pixel/ioc";
-import { Vector2 } from "@angry-pixel/math";
+import { degreesToRadians, Vector2 } from "@angry-pixel/math";
 import { SYMBOLS } from "@config/dependencySymbols";
 import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
-import {
-    TiledObject,
-    TiledObjectLayer,
-    TiledObjectProperties,
-    TiledTilemap,
-    TiledWrapper,
-} from "@component/gameLogic/TiledWrapper";
+import { TiledObject, TiledObjectProperties, TiledTilemap, TiledWrapper } from "@component/gameLogic/TiledWrapper";
 import { Transform } from "@component/gameLogic/Transform";
 import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
+import { forEachTiledLayer } from "@utils/tiled";
 
 /** The size of the tilemap as it is rendered, used to translate the coordinates of the Tiled objects */
 type TilemapBounds = {
@@ -19,6 +14,13 @@ type TilemapBounds = {
     height: number;
     tileWidth: number;
     tileHeight: number;
+};
+
+/** A Tiled object with the offset of the layer that contains it */
+type LayerObject = {
+    object: TiledObject;
+    offsetX: number;
+    offsetY: number;
 };
 
 @injectable(SYSTEM_SYMBOLS.TiledObjectSystem)
@@ -42,14 +44,15 @@ export class TiledObjectSystem implements System {
         // the entities are created before building the components, so the object properties
         // that reference other Tiled objects can be resolved to their entities
         const entitiesByObjectId = new Map<number, Entity>(
-            objects.map((object) => [object.id, this.entityManager.createEntity()]),
+            objects.map(({ object }) => [object.id, this.entityManager.createEntity()]),
         );
 
         const transform = this.entityManager.getComponent(entity, Transform);
-        const origin = transform ? transform.position : new Vector2();
+        const position = transform ? transform.position : new Vector2();
         const bounds = this.getBounds(tilemap, entity);
 
-        objects.forEach((object) => {
+        objects.forEach((layerObject) => {
+            const { object } = layerObject;
             const blueprint = tiledWrapper.objects.get(objectClass(object));
             const objectEntity = entitiesByObjectId.get(object.id);
 
@@ -69,7 +72,7 @@ export class TiledObjectSystem implements System {
                 this.entityManager.getComponent(objectEntity, Transform) ??
                 this.entityManager.addComponent<Transform>(objectEntity, Transform);
 
-            setObjectPosition(objectTransform, tilemap, object, origin, bounds);
+            setObjectTransform(objectTransform, tilemap, layerObject, position, tiledWrapper._origin, bounds);
         });
     }
 
@@ -92,14 +95,16 @@ export class TiledObjectSystem implements System {
               };
     }
 
-    private collectObjects(tiledWrapper: TiledWrapper, tilemap: TiledTilemap): TiledObject[] {
-        const objects: TiledObject[] = [];
+    private collectObjects(tiledWrapper: TiledWrapper, tilemap: TiledTilemap): LayerObject[] {
+        const objects: LayerObject[] = [];
 
-        tilemap.layers.forEach((layer) => {
-            if (layer.type !== "objectgroup" || (layer as TiledObjectLayer).visible === false) return;
+        forEachTiledLayer(tilemap.layers, (layer, offsetX, offsetY, visible) => {
+            if (layer.type !== "objectgroup" || !visible) return;
 
-            (layer as TiledObjectLayer).objects.forEach((object) => {
-                if (object.visible !== false && tiledWrapper.objects.has(objectClass(object))) objects.push(object);
+            layer.objects.forEach((object) => {
+                if (object.visible !== false && tiledWrapper.objects.has(objectClass(object))) {
+                    objects.push({ object, offsetX, offsetY });
+                }
             });
         });
 
@@ -121,20 +126,34 @@ export class TiledObjectSystem implements System {
 
 const objectClass = (object: TiledObject): string => object.class ?? object.type;
 
-const setObjectPosition = (
+const setObjectTransform = (
     transform: Transform,
     tilemap: TiledTilemap,
-    object: TiledObject,
-    origin: Vector2,
+    { object, offsetX, offsetY }: LayerObject,
+    position: Vector2,
+    tileOrigin: Vector2,
     { width, height, tileWidth, tileHeight }: TilemapBounds,
 ): void => {
     // tile objects have their origin at the bottom-left corner, the rest at the top-left corner
-    const centerY = object.gid !== undefined ? object.y - object.height / 2 : object.y + object.height / 2;
+    const centerX = object.width / 2;
+    const centerY = object.gid !== undefined ? -object.height / 2 : object.height / 2;
 
-    // the coordinates of the object are in the pixel space of the tilemap,
-    // and the tilemap is rendered centered on the entity that contains it
+    // the object rotates around its origin, so the position of its center rotates with it
+    const rotation = degreesToRadians(object.rotation ?? 0);
+    const cos = Math.cos(rotation);
+    const sin = Math.sin(rotation);
+
+    // the coordinates of the object are in the pixel space of the tilemap, relative to the origin
+    // of the rendered layer, and the tilemap is rendered centered on the entity that contains it
+    const tileX = (object.x + offsetX + centerX * cos - centerY * sin) / tilemap.tilewidth - tileOrigin.x;
+    const tileY = (object.y + offsetY + centerX * sin + centerY * cos) / tilemap.tileheight - tileOrigin.y;
+
     transform.position.set(
-        origin.x + ((object.x + object.width / 2) / tilemap.tilewidth - width / 2) * tileWidth,
-        origin.y + (height / 2 - centerY / tilemap.tileheight) * tileHeight,
+        position.x + (tileX - width / 2) * tileWidth,
+        position.y + (height / 2 - tileY) * tileHeight,
     );
+
+    // Tiled rotates clockwise, and the y axis of the engine points upwards.
+    // A rotation of zero is left untouched, so the blueprint can define its own.
+    if (rotation !== 0) transform.rotation = -rotation;
 };

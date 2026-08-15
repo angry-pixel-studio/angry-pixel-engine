@@ -12,6 +12,7 @@
             "@input": ["./src/utils/input"],
             "@manager/*": ["./src/manager/*"],
             "@system/*": ["./src/system/*"],
+            "@utils/*": ["./src/utils/*"],
             "@misc": ["./src/utils/misc"]
         }
     },
