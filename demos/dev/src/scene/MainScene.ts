@@ -10,6 +10,7 @@ import {
     Transform,
     Vector2,
     VideoRenderer,
+    randomInt,
 } from "angry-pixel";
 import { FpsMetterSystem } from "@system/FpsMetterSystem";
 import { InputControllerSystem } from "@system/InputControllerSystem";
@@ -26,6 +27,8 @@ import { textArchetype } from "@entity/Text";
 import { FpsMetter } from "@component/FpsMetter";
 import { RENDER_LAYERS } from "@config/layers";
 import { mainCameraArchetype, uiCameraArchetype } from "@entity/Camera";
+import { goblinArchetype } from "@entity/Goblin";
+import { GoblinMovement } from "@component/goblin/GoblinMovement";
 
 export class MainScene extends Scene {
     public loadAssets(): void {
@@ -67,7 +70,7 @@ export class MainScene extends Scene {
 
         this.entityManager.createEntity(foregroundArchetype);
 
-        /*for (let i = 0; i < 50; i++) {
+        /*for (let i = 0; i < 1; i++) {
             const goblin = this.entityManager.createEntity(goblinArchetype);
             this.entityManager.updateComponentData(goblin, Transform, (component) => {
                 component.position.x = randomInt(-600, 192);
