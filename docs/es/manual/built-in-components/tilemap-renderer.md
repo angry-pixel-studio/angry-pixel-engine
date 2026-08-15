@@ -54,6 +54,8 @@ Un `TileAnimation` hace que un tile recorra una secuencia de IDs de tile del til
 | `tiles` | `number[]` | `[]` | La secuencia de IDs de tile a recorrer. |
 | `fps` | `number` | `12` | Cuadros por segundo. |
 
+Cuando el tilemap proviene de Tiled, los tiles animados en el editor de mapas se mapean a este mapa automáticamente. Consulta [`TiledWrapper`](tiled-wrapper.md).
+
 ## Ejemplo
 
 ```typescript

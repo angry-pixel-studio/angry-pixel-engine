@@ -31,6 +31,7 @@ export interface TiledWrapperOptions {
 /**
  * The TiledWrapper component wraps a Tiled map editor tilemap and handles rendering a specific layer.\
  * It provides an interface between Tiled's map format and the engine's tilemap rendering system.\
+ * The tiles animated in Tiled are mapped to the animations of the TilemapRenderer tileset.\
  * It can also create entities from the objects of the tilemap, matching them by class with the `objects` map.
  * @public
  * @category Components
@@ -63,6 +64,8 @@ export class TiledWrapper {
     objects: Map<string, TiledObjectBlueprint> = new Map();
     /** @internal */
     _objectsCreated: boolean = false;
+    /** @internal */
+    _animationsMapped: boolean = false;
     /** @internal */
     static componentName: string = "TiledWrapper";
 
@@ -116,10 +119,55 @@ export interface TiledTilemap {
     infinite: boolean;
     layers: (TiledLayer | TiledObjectLayer)[];
     renderorder: string;
-    tilesets: { firstgid: number }[];
+    tilesets: TiledTileset[];
     tilewidth: number;
     tileheight: number;
     properties?: TiledProperty[];
+}
+
+/**
+ * @public
+ * @category Components Configuration
+ */
+export interface TiledTileset {
+    /** The id of the first tile of the tileset. The id of a tile is this value plus the id it has within the tileset */
+    firstgid: number;
+    /** Only present in external tilesets, which are not read by the engine */
+    source?: string;
+    name?: string;
+    image?: string;
+    columns?: number;
+    tilecount?: number;
+    tilewidth?: number;
+    tileheight?: number;
+    margin?: number;
+    spacing?: number;
+    /** Only the tiles with data of their own, such as animations or properties */
+    tiles?: TiledTilesetTile[];
+}
+
+/**
+ * @public
+ * @category Components Configuration
+ */
+export interface TiledTilesetTile {
+    /** The id of the tile within the tileset */
+    id: number;
+    animation?: TiledTileAnimationFrame[];
+    objectgroup?: TiledObjectLayer;
+    properties?: TiledProperty[];
+    type?: string;
+}
+
+/**
+ * @public
+ * @category Components Configuration
+ */
+export interface TiledTileAnimationFrame {
+    /** The duration of the frame in milliseconds */
+    duration: number;
+    /** The id of the tile to render, within the tileset */
+    tileid: number;
 }
 
 /**

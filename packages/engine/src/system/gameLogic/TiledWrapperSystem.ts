@@ -12,7 +12,7 @@ import {
     TiledWrapper,
 } from "@component/gameLogic/TiledWrapper";
 import { Transform } from "@component/gameLogic/Transform";
-import { TilemapRenderer } from "@component/render2d/TilemapRenderer";
+import { TileAnimation, TilemapRenderer, Tileset } from "@component/render2d/TilemapRenderer";
 import { AssetManager } from "@manager/AssetManager";
 
 @injectable(SYSTEM_SYMBOLS.TiledWrapperSystem)
@@ -25,8 +25,16 @@ export class TiledWrapperSystem implements System {
     public onUpdate(): void {
         this.entityManager.search(TiledWrapper, (tiledWrapper, entity) => {
             const tilemap = this.resolveTilemap(tiledWrapper);
+            const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
 
-            this.renderLayer(tiledWrapper, tilemap, entity);
+            if (tilemapRenderer) {
+                this.renderLayer(tiledWrapper, tilemap, tilemapRenderer);
+
+                if (!tiledWrapper._animationsMapped && tilemapRenderer.tileset) {
+                    this.mapAnimations(tilemap, tilemapRenderer.tileset);
+                    tiledWrapper._animationsMapped = true;
+                }
+            }
 
             if (!tiledWrapper._objectsCreated && tiledWrapper.objects?.size > 0) {
                 this.createObjects(tiledWrapper, tilemap, entity);
@@ -46,10 +54,7 @@ export class TiledWrapperSystem implements System {
         return tiledWrapper.tilemap;
     }
 
-    private renderLayer(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, entity: Entity): void {
-        const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
-        if (!tilemapRenderer) return;
-
+    private renderLayer(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, tilemapRenderer: TilemapRenderer): void {
         const layer = tilemap.layers.find(
             (l) => l.name === tiledWrapper.layerToRender && l.type === "tilelayer",
         ) as TiledLayer;
@@ -60,6 +65,31 @@ export class TiledWrapperSystem implements System {
         else tilemapRenderer.data = layer.data;
 
         tilemapRenderer.width = tilemap.width;
+    }
+
+    private mapAnimations(tilemap: TiledTilemap, tileset: Tileset): void {
+        tilemap.tilesets.forEach(({ firstgid, tiles }) => {
+            if (!tiles) return;
+
+            tiles.forEach(({ id, animation }) => {
+                if (!animation || animation.length === 0) return;
+
+                const tile = firstgid + id;
+                if (tileset.animations?.has(tile)) return;
+
+                if (!tileset.animations) tileset.animations = new Map();
+
+                tileset.animations.set(
+                    tile,
+                    new TileAnimation({
+                        tiles: animation.map(({ tileid }) => firstgid + tileid),
+                        // Tiled defines a duration per frame, the engine renders every frame at the same rate,
+                        // so the average duration is used to preserve the total duration of the animation
+                        fps: (1000 * animation.length) / animation.reduce((total, { duration }) => total + duration, 0),
+                    }),
+                );
+            });
+        });
     }
 
     private createObjects(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, entity: Entity): void {
@@ -127,10 +157,6 @@ export class TiledWrapperSystem implements System {
 
 const objectClass = (object: TiledObject): string => object.class ?? object.type;
 
-/**
- * Translates the Tiled coordinates of an object (top-left origin, y-axis pointing down)\
- * into the position of its center within the simulated world, relative to the center of the tilemap.
- */
 const setObjectPosition = (transform: Transform, tilemap: TiledTilemap, object: TiledObject, origin: Vector2): void => {
     // tile objects have their origin at the bottom-left corner, the rest at the top-left corner
     const centerY = object.gid !== undefined ? object.y - object.height / 2 : object.y + object.height / 2;

@@ -54,6 +54,8 @@ A `TileAnimation` cycles a tile through a sequence of tileset tile IDs. The `ani
 | `tiles` | `number[]` | `[]` | The sequence of tile IDs to cycle through. |
 | `fps` | `number` | `12` | Frames per second. |
 
+When the tilemap comes from Tiled, the tiles animated in the map editor are mapped to this map automatically. See [`TiledWrapper`](tiled-wrapper.md).
+
 ## Example
 
 ```typescript
