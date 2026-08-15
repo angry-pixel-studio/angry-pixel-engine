@@ -1,5 +1,86 @@
 # Changelog
 
+## [2.3.5] - 2026-08-15
+
+### Added
+
+#### Tiled
+
+-   `TiledWrapper.objects`: a map keyed by the class of the Tiled object, whose value is an archetype, a collection of components, or a factory function that builds either of them from the properties of the object. One entity is created per matching object, once, the first time the component is processed.
+-   Object properties of type `object` are given to the factory as the entity created for the referenced Tiled object. All the entities are created before any factory runs, so entities can be linked to each other regardless of the order of the objects in the tilemap.
+-   The position of the entity is taken from the `x` and `y` of the object, and its rotation from `rotation`. Tile objects (those with a `gid`) are treated as bottom-left origin, the rest as top-left. A `Transform` is added when the blueprint does not include one.
+-   The tiles animated in Tiled are mapped to the `animations` of the tileset, translated with the `firstgid` of the tileset they belong to. Tiled defines a duration per frame and the engine renders every frame at the same rate, so the average duration is used, which preserves the total duration of the animation.
+-   Group layers: the layer to render and the objects are searched inside them. Their offset, their visibility and their opacity are applied to the layers they contain.
+-   The `offsetx` / `offsety`, `opacity`, `tintcolor` and `visible` of the rendered layer are applied to the `TilemapRenderer`. The offset is applied to the `TilemapCollider` as well, so the colliders follow the tiles.
+-   Infinite tilemaps are placed from the `startx` / `starty` of the layer, so the chunks painted above or to the left of the origin are no longer written to negative positions of the tile data.
+-   Tiled format types: `TiledTileset`, `TiledTilesetTile`, `TiledTileAnimationFrame`, `TiledGroupLayer`, `TiledObjectBlueprint`, `TiledObjectFactory` and `TiledObjectProperties`.
+
+#### Components
+
+-   `TiledWrapper.refresh()`, `TilemapRenderer.refresh()` and `TilemapCollider.refresh()`: process the data of the tilemap again to apply the changes made at runtime, such as rendering another layer. They are expensive operations, they should not be called on every frame.
+-   `TilemapRenderer.offset`: X-Y axis offset from the position of the entity.
+
+#### ECS
+
+-   `EntityManager.addArchetype(entity, archetype)`: adds the components of an archetype to an existing entity, with the same clone, children and `enabled` semantics as `createEntity`.
+
+#### Debug
+
+-   `debug.buttons` and `debug.buttonColor` game options, and the `DebugButtonSystem` that draws the shape of the buttons.
+
+### Changed
+
+#### Tiled
+
+-   The size of the tilemap and the size of its tiles are taken from the tilemap instead of being inferred from the tile data and the tileset. Infinite tilemaps use the bounds of the layer.
+-   The tilemap is read once instead of on every frame. Use `refresh` to read it again.
+-   The class of an object is read from `class` (Tiled 1.9) or from `type` (the other versions).
+
+### Fixed
+
+#### ECS
+
+-   `EntityManager.createEntity()` returned an identifier without registering the entity, so those entities failed `isEntity`, could not be given a parent, and survived `removeAllEntities(preserveComponentType)`.
+-   `createEntity` skipped the parent when it was the entity `0`, which is the first entity of every scene.
+
+#### Rendering
+
+-   The entities created from Tiled objects are placed with the size and the tile size the tilemap is rendered with, which differ from the ones declared by Tiled in infinite tilemaps and whenever the tile size of the tileset is not the tile size of the tilemap.
+-   The height of a chunk in the tilemap render data was calculated by dividing the tile count of the whole tilemap by the width of the chunk, which gave a wrong `realHeight`.
+-   The tileset texture data is skipped when the image has no natural size, and the tilemap is not rendered until the data is available, instead of rendering with the vertices of another tilemap.
+-   The `DebugButtonSystem` ignores a `Button` without a shape, instead of queuing render data with no vertices.
+
+#### Physics
+
+-   The time scale check moved from `LoopManager` to `ApplyVelocitySystem`, so the rest of the physics systems keep running when the time scale is zero.
+
+## [2.3.4] - 2026-08-06
+
+### Breaking changes
+
+#### Tilemap
+
+-   `Tileset.width` no longer exists. The number of columns is derived from the image.
+-   `Tileset.margin` and `Tileset.spacing` are `number` instead of `Vector2`, with corrected semantics: `margin` is the space between the tiles and the four edges of the image, `spacing` is the separation between adjacent tiles. A tilesheet whose tiles are extruded by 1 px has `margin: 1` and `spacing: 2`.
+-   `Tileset.correction` has been removed.
+-   `TilemapRenderer.animations` moved to `Tileset.animations`. An animated tile is a property of the tileset image, not of a particular map, so the tilemaps that share a tileset play their animations in sync.
+
+### Performance
+
+-   Everything `processTileset` computed is cached on the tileset object and calculated once instead of every frame, since the tileset cannot be updated at runtime. Texture vertices are emitted directly in texture coordinates, so the per-frame texture matrix scale is gone.
+
+## [2.3.3] - 2026-07-13
+
+### Added
+
+#### Tilemap
+
+-   `TileAnimation`: cycles a tile through a sequence of tile ids, with a configurable speed in frames per second. Animations always loop.
+
+#### Physics
+
+-   `RigidBody.staticForLayers`: the collision layers against which a dynamic body behaves as a static one.
+
 ## [2.3.2] - 2026-06-24
 
 ### Added
