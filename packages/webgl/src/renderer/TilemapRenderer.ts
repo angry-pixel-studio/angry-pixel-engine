@@ -171,10 +171,11 @@ export class TilemapRenderer implements Renderer {
         if (tileset._texData) return;
 
         const { naturalWidth, naturalHeight } = tileset.image;
-        const margin = tileset.margin ?? 0;
-        const spacing = tileset.spacing ?? 0;
 
         if (!naturalWidth || !naturalHeight) return;
+
+        const margin = tileset.margin ?? 0;
+        const spacing = tileset.spacing ?? 0;
 
         tileset._texData = {
             columns: Math.floor((naturalWidth - 2 * margin + spacing) / (tileset.tileWidth + spacing)),
@@ -190,6 +191,8 @@ export class TilemapRenderer implements Renderer {
     private generateVertices({ tiles, tilemap, tileset }: TilemapRenderData): void {
         this.posVertices = [];
         this.texVertices = [];
+
+        if (!tileset._texData) return;
 
         const { columns, margin, step, tileSize } = tileset._texData;
         const height = Math.floor(tiles.length / tilemap.width);
