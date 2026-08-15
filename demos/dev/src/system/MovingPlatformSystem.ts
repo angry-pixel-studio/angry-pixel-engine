@@ -4,6 +4,10 @@ import { MovingPlatform } from "@component/MovingPlatform";
 export class MovingPlatformSystem extends GameSystem {
     public onEnabled(): void {
         this.entityManager.search(MovingPlatform).forEach(({ entity, component: platform }) => {
+            platform.spots = platform.spotEntities.map((spotEntity) => {
+                const spotTransform = this.entityManager.getComponent(spotEntity, Transform);
+                return spotTransform.position.clone();
+            });
             this.entityManager.getComponent(entity, Transform).position.copy(platform.spots[0]);
             platform.nextSpot = 1;
             Vector2.unit(

@@ -21,6 +21,7 @@ Cada tile se referencia mediante un ID, donde `0` representa espacio vacío. Los
 | `maskColor` | `string` | — | Color de máscara aplicado a los tiles. |
 | `maskColorMix` | `number` | — | Opacidad del color de máscara entre `0` y `1`. |
 | `smooth` | `boolean` | `false` | Suaviza los píxeles. No recomendado para pixel art. |
+| `offset` | `Vector2` | `(0, 0)` | Desplazamiento en los ejes X-Y respecto de la posición de la entidad. |
 
 ### Tileset
 
@@ -53,6 +54,8 @@ Un `TileAnimation` hace que un tile recorra una secuencia de IDs de tile del til
 |--------|------|---------|-------------|
 | `tiles` | `number[]` | `[]` | La secuencia de IDs de tile a recorrer. |
 | `fps` | `number` | `12` | Cuadros por segundo. |
+
+Cuando el tilemap proviene de Tiled, los tiles animados en el editor de mapas se mapean a este mapa automáticamente. Consulta [`TiledWrapper`](tiled-wrapper.md).
 
 ## Ejemplo
 
@@ -96,3 +99,22 @@ this.entityManager.createEntity([
     }),
 ]);
 ```
+
+## Actualizar el tilemap en tiempo de ejecución
+
+Los datos de los tiles se procesan una sola vez: el arreglo `data` y el arreglo `chunks` se generan uno a partir del otro, y se resuelve la altura del tilemap. Después de cambiar los datos en tiempo de ejecución, hay que llamar a `refresh` para que se procesen de nuevo.
+
+`refresh` conserva el arreglo en el que se entregaron los tiles y vacía el que fue generado a partir de él, por lo que el cambio debe hacerse sobre el arreglo de origen: `data` para un tilemap definido con tiles, y `chunks` para un tilemap definido con chunks, que es el caso de los tilemaps infinitos de Tiled. Asignar `data` en un tilemap definido con chunks no tiene efecto, porque `data` se genera nuevamente a partir de los chunks.
+
+```typescript
+const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
+
+// un tilemap definido con tiles
+tilemapRenderer.data = newData;
+// un tilemap definido con chunks
+tilemapRenderer.chunks = newChunks;
+
+tilemapRenderer.refresh();
+```
+
+Esta operación es costosa, no debe llamarse en cada frame. Cuando el tilemap proviene de Tiled, también hay que refrescar el [`TiledWrapper`](tiled-wrapper.md), y el [`TilemapCollider`](tilemap-collider.md) si la entidad tiene uno.

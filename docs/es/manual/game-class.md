@@ -43,7 +43,9 @@ El objeto `debug` activa ayudas de depuración en pantalla:
 | `colliders`                 | `boolean`                                                      | `false`           | Dibuja los colisionadores.                           |
 | `mousePosition`             | `boolean`                                                      | `false`           | Muestra la posición del ratón.                       |
 | `textRendererBoundingBoxes` | `boolean`                                                      | `false`           | Dibuja las cajas delimitadoras de los TextRenderer.  |
+| `buttons`                   | `boolean`                                                      | `false`           | Dibuja las formas de los Button.                     |
 | `collidersColor`            | `string`                                                       | `"#00FF00"`       | Color de los colisionadores.                         |
+| `buttonColor`               | `string`                                                       | `"#FF00FF"`       | Color de las formas de los Button.                   |
 | `textBoxColor`              | `string`                                                       | `"#0000FF"`       | Color de la caja delimitadora del texto.             |
 | `textColor`                 | `string`                                                       | `"#00FF00"`       | Color del texto de depuración.                       |
 | `textPosition`              | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` | `"bottom-left"`   | Posición del texto de depuración.                    |

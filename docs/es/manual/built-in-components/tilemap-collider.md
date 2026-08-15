@@ -14,7 +14,7 @@ Cuando `composite` es `false`, crea un colisionador rectangular individual por c
 | `physics` | `boolean` | `true` | Si es `true`, el colisionador interactúa con los cuerpos rígidos. |
 | `ignoreCollisionsWithLayers` | `string[]` | `[]` | Capas que este colisionador ignora. |
 
-> **Nota:** Las formas del colisionador se generan una sola vez y no pueden modificarse después. Para cambiarlas, crea un nuevo `TilemapCollider`.
+> **Nota:** Las formas del colisionador se generan una sola vez. Para volver a generarlas después de que el tilemap cambie, hay que llamar a `refresh` (ver más abajo).
 
 ## Ejemplo
 
@@ -33,3 +33,13 @@ this.entityManager.createEntity([
     new TilemapCollider({ composite: true, layer: "Ground" }),
 ]);
 ```
+
+## Actualizar los colliders en tiempo de ejecución
+
+Las formas de los colliders se generan una sola vez, a partir de los datos de los tiles del [`TilemapRenderer`](tilemap-renderer.md). Después de que el tilemap cambie en tiempo de ejecución, hay que llamar a `refresh` para que se generen de nuevo.
+
+```typescript
+this.entityManager.getComponent(entity, TilemapCollider).refresh();
+```
+
+Esta operación es costosa, no debe llamarse en cada frame.

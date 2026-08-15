@@ -24,6 +24,8 @@ export class ApplyVelocitySystem implements System {
     ) {}
 
     public onUpdate(): void {
+        if (this.timeManager.timeScale <= 0) return;
+
         this.entityManager.search(RigidBody, ({ velocity, acceleration, gravity, type }, entity) => {
             if (!this.types.has(type)) return;
 

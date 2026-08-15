@@ -13,6 +13,7 @@ export class FollowPlayerCameraSystem extends GameSystem {
     public onUpdate(): void {
         this.entityManager.search(FollowPlayerCamera).forEach(({ entity, component }) => {
             if (!component.playerTransform || !component.boundaries) this.initialize(component);
+            if (!component.playerTransform || !component.boundaries) return;
 
             const transform = this.entityManager.getComponent(entity, Transform);
 
@@ -23,6 +24,7 @@ export class FollowPlayerCameraSystem extends GameSystem {
 
     private initialize(component: FollowPlayerCamera): void {
         const player = this.entityManager.search(NinjaMovement)[0];
+        if (!player) return;
         component.playerTransform = this.entityManager.getComponent(player.entity, Transform);
 
         const foreground = this.entityManager.search(TilemapRenderer)[0];

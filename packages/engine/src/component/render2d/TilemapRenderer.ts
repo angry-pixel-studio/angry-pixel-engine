@@ -1,4 +1,5 @@
 import { defaultRenderLayer } from "./Camera";
+import { Vector2 } from "@angry-pixel/math";
 import { TilemapRenderData } from "@angry-pixel/webgl";
 
 /**
@@ -44,6 +45,7 @@ export interface TilemapRendererOptions {
     maskColorMix: number;
     opacity: number;
     smooth: boolean;
+    offset: Vector2;
 }
 
 /**
@@ -106,9 +108,13 @@ export class TilemapRenderer {
     maskColorMix: number;
     /** TRUE for smooth pixels (not recommended for pixel art) */
     smooth: boolean = false;
+    /** X-Y axis offset */
+    offset: Vector2 = new Vector2();
 
     /** @internal */
     _processed: boolean = false;
+    /** @internal */
+    _dataFromChunks: boolean = false;
     /** @internal */
     _renderData: TilemapRenderData[] = [];
     /** @internal */
@@ -116,6 +122,19 @@ export class TilemapRenderer {
 
     constructor(options?: Partial<TilemapRendererOptions>) {
         Object.assign(this, options);
+    }
+
+    /**
+     * Processes the tilemap data again, to apply the changes made to it at runtime.\
+     * The array that was generated from the other one is emptied, so it is generated again.\
+     * This operation is expensive, avoid calling it on every frame.
+     */
+    public refresh(): void {
+        if (this._dataFromChunks) this.data = [];
+        else this.chunks = [];
+
+        this.height = 0;
+        this._processed = false;
     }
 }
 

@@ -171,12 +171,10 @@ export class CullingSystem implements System {
     }
 
     private setObjectForTilemap(renderData: TilemapRenderData): void {
-        renderData.tilemap.height = Math.ceil(renderData.tiles.length / renderData.tilemap.width);
-
         this.setObjectForResizeable({
             position: renderData.position,
-            width: renderData.tilemap.width * renderData.tilemap.tileWidth,
-            height: renderData.tilemap.height * renderData.tilemap.tileHeight,
+            width: renderData.tilemap.realWidth,
+            height: renderData.tilemap.realHeight,
             rotation: renderData.rotation,
         } as ResizeableRenderData);
     }
