@@ -1,6 +1,7 @@
 import { SystemType } from "@angry-pixel/ecs";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 import { ButtonSystem } from "@system/gameLogic/ButtonSystem";
+import { TiledObjectSystem } from "@system/gameLogic/TiledObjectSystem";
 import { TiledWrapperSystem } from "@system/gameLogic/TiledWrapperSystem";
 import { TilemapPreProcessingSystem } from "@system/gameLogic/TilemapPreProcessingSystem";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
@@ -51,6 +52,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEM_SYMBOLS.AudioPlayerSystem, type: AudioPlayerSystem },
             { name: SYSTEM_SYMBOLS.TiledWrapperSystem, type: TiledWrapperSystem },
             { name: SYSTEM_SYMBOLS.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
+            { name: SYSTEM_SYMBOLS.TiledObjectSystem, type: TiledObjectSystem },
         ],
     ],
     [SystemGroup.Transform, [{ name: SYSTEM_SYMBOLS.TransformSystem, type: TransformSystem }]],

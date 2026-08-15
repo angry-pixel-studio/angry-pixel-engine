@@ -82,7 +82,9 @@ Properties of type `object` reference another Tiled object by its id. They are g
 
 The entity's `Transform` position is set from the object's `x` and `y`, relative to the center of the tilemap, plus the position of the entity that holds the `TiledWrapper`. If the blueprint does not include a `Transform`, one is added.
 
-The position is calculated from the center of the object, using the tile size declared in the tilemap. Tile objects (objects with a `gid`) have their origin in the bottom-left corner; the rest have it in the top-left corner.
+The position is calculated from the center of the object, in the space the tilemap is rendered in: the size and the tile size of the [`TilemapRenderer`](tilemap-renderer.md), which do not always match the ones declared by Tiled. An infinite tilemap is rendered with the size of its chunks, and the tile size comes from the tileset. When the entity has no `TilemapRenderer`, the values declared in the tilemap are used.
+
+Tile objects (objects with a `gid`) have their origin in the bottom-left corner; the rest have it in the top-left corner.
 
 ### Rules
 
