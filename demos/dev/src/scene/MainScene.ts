@@ -2,7 +2,6 @@ import {
     AudioPlayer,
     GeometricRenderer,
     GeometricShape,
-    randomInt,
     Scene,
     TextAlignment,
     MaskRenderer,
@@ -22,15 +21,10 @@ import { NinjaMovementSystem } from "@system/ninja/NinjaMovementSystem";
 import { NinjaSfxSystem } from "@system/ninja/NinjaSfxSystem";
 import { ASSETS } from "@config/assets";
 import { InputController } from "@component/InputController";
-import { foregroundArchetype, slopePlatform } from "@entity/Foreground";
-import { ninjaArchetype } from "@entity/Ninja";
-import { movingPlatformArchetype } from "@entity/MovingPlatform";
+import { foregroundArchetype } from "@entity/Foreground";
 import { textArchetype } from "@entity/Text";
 import { FpsMetter } from "@component/FpsMetter";
 import { RENDER_LAYERS } from "@config/layers";
-import { goblinArchetype } from "@entity/Goblin";
-import { GoblinMovement } from "@component/goblin/GoblinMovement";
-import { MovingPlatform } from "@component/MovingPlatform";
 import { mainCameraArchetype, uiCameraArchetype } from "@entity/Camera";
 
 export class MainScene extends Scene {
@@ -73,16 +67,7 @@ export class MainScene extends Scene {
 
         this.entityManager.createEntity(foregroundArchetype);
 
-        this.entityManager.createEntity(slopePlatform);
-
-        this.entityManager.createEntity(ninjaArchetype);
-
-        const movingPlatform = this.entityManager.createEntity(movingPlatformArchetype);
-        this.entityManager.updateComponentData(movingPlatform, MovingPlatform, (component) => {
-            component.spots = [new Vector2(-112, -72), new Vector2(168, -72)];
-        });
-
-        for (let i = 0; i < 50; i++) {
+        /*for (let i = 0; i < 50; i++) {
             const goblin = this.entityManager.createEntity(goblinArchetype);
             this.entityManager.updateComponentData(goblin, Transform, (component) => {
                 component.position.x = randomInt(-600, 192);
@@ -90,7 +75,7 @@ export class MainScene extends Scene {
             this.entityManager.updateComponentData(goblin, GoblinMovement, (component) => {
                 component.walkSpeed = randomInt(20, 60);
             });
-        }
+        }*/
     }
 
     private setupUIText(): void {

@@ -10,47 +10,49 @@ import {
     PolygonCollider,
     MaskRenderer,
     MaskShape,
-    Component,
     TiledObjectBlueprint,
-    LightRenderer,
-    TextRenderer,
-    TextAlignment,
 } from "angry-pixel";
 import { ASSETS } from "@config/assets";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { goblinArchetype } from "@entity/Goblin";
+import { ninjaArchetype } from "./Ninja";
+import { movingPlatformArchetype } from "./MovingPlatform";
+import { MovingPlatform } from "@component/MovingPlatform";
 
 // entities created from the objects of the tilemap, matched by the class of the Tiled object
 const tiledObjects = new Map<string, TiledObjectBlueprint>([
-    // an archetype
     ["Goblin", goblinArchetype],
-    // a collection of components (the Transform is added by the engine)
+    ["Ninja", ninjaArchetype],
     [
-        "Torch",
+        "Slope",
         [
-            new LightRenderer({
-                radius: 96,
-                layer: RENDER_LAYERS.Darkness,
-                smooth: true,
-                intensity: 0.8,
+            new RigidBody({ type: RigidBodyType.Static }),
+            new PolygonCollider({
+                layer: COLLISION_LAYERS.Foreground,
+                vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 0)],
+                offset: new Vector2(-64, -32),
+            }),
+            new MaskRenderer({
+                shape: MaskShape.Polygon,
+                vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 60), new Vector2(6, 0)],
+                color: "#82aa28",
+                layer: RENDER_LAYERS.Foreground,
+                offset: new Vector2(-64, -32),
             }),
         ],
     ],
-    // a factory: the "goblin" property references another Tiled object, and is received as its entity
+    ["Spot", [new Transform()]],
     [
-        "Sign",
-        (properties) => [
-            new TextRenderer({
-                font: ASSETS.fonts.main.name,
-                text: `${properties.get("text")} - GOBLIN ENTITY ${properties.get("goblin")}`,
-                color: "#FFFFFF",
-                fontSize: 8,
-                width: 192,
-                height: 16,
-                layer: RENDER_LAYERS.Overlayer,
-                alignment: TextAlignment.Center,
-            }),
-        ],
+        "MovingPlatform",
+        (props) => {
+            const movingPlatform = movingPlatformArchetype.components.find((c) => c instanceof MovingPlatform);
+            movingPlatform.spotEntities = props
+                .keys()
+                .filter((key) => key.startsWith("spot"))
+                .map((key) => props.get(key) as number)
+                .toArray();
+            return movingPlatformArchetype;
+        },
     ],
 ]);
 
@@ -79,18 +81,3 @@ export const foregroundArchetype: Archetype = {
         }),
     ],
 };
-
-export const slopePlatform: Component[] = [
-    new Transform({ position: new Vector2(128, -112) }),
-    new RigidBody({ type: RigidBodyType.Static }),
-    new PolygonCollider({
-        layer: COLLISION_LAYERS.Foreground,
-        vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 0)],
-    }),
-    new MaskRenderer({
-        shape: MaskShape.Polygon,
-        vertexModel: [new Vector2(0, 0), new Vector2(128, 64), new Vector2(128, 60), new Vector2(6, 0)],
-        color: "#82aa28",
-        layer: RENDER_LAYERS.Foreground,
-    }),
-];

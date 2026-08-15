@@ -23,6 +23,7 @@ export class FollowPlayerCameraSystem extends GameSystem {
 
     private initialize(component: FollowPlayerCamera): void {
         const player = this.entityManager.search(NinjaMovement)[0];
+        if (!player) return;
         component.playerTransform = this.entityManager.getComponent(player.entity, Transform);
 
         const foreground = this.entityManager.search(TilemapRenderer)[0];

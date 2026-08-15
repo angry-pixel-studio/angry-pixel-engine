@@ -48,8 +48,8 @@
                  "type":"Goblin",
                  "visible":true,
                  "width":16,
-                 "x":688,
-                 "y":240
+                 "x":656,
+                 "y":272
                 }, 
                 {
                  "height":16,
@@ -59,41 +59,8 @@
                  "type":"Goblin",
                  "visible":true,
                  "width":16,
-                 "x":848,
-                 "y":240
-                }, 
-                {
-                 "height":16,
-                 "id":3,
-                 "name":"",
-                 "rotation":0,
-                 "type":"Torch",
-                 "visible":true,
-                 "width":16,
-                 "x":768,
-                 "y":208
-                }, 
-                {
-                 "height":16,
-                 "id":4,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"goblin",
-                         "type":"object",
-                         "value":1
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"TILED OBJECT"
-                        }],
-                 "rotation":0,
-                 "type":"Sign",
-                 "visible":true,
-                 "width":192,
-                 "x":684,
-                 "y":176
+                 "x":720,
+                 "y":272
                 }, 
                 {
                  "height":16,
@@ -104,6 +71,118 @@
                  "visible":false,
                  "width":16,
                  "x":608,
+                 "y":240
+                }, 
+                {
+                 "height":16,
+                 "id":7,
+                 "name":"Player",
+                 "rotation":0,
+                 "type":"Ninja",
+                 "visible":true,
+                 "width":16,
+                 "x":816,
+                 "y":272
+                }, 
+                {
+                 "height":64,
+                 "id":10,
+                 "name":"Slope",
+                 "rotation":0,
+                 "type":"Slope",
+                 "visible":true,
+                 "width":128,
+                 "x":896,
+                 "y":224
+                }, 
+                {
+                 "height":16,
+                 "id":12,
+                 "name":"Moving Platform",
+                 "properties":[
+                        {
+                         "name":"spot_1",
+                         "type":"object",
+                         "value":16
+                        }, 
+                        {
+                         "name":"spot_2",
+                         "type":"object",
+                         "value":17
+                        }],
+                 "rotation":0,
+                 "type":"MovingPlatform",
+                 "visible":true,
+                 "width":48,
+                 "x":720,
+                 "y":232
+                }, 
+                {
+                 "height":0,
+                 "id":16,
+                 "name":"Spot 1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Spot",
+                 "visible":true,
+                 "width":0,
+                 "x":656,
+                 "y":240
+                }, 
+                {
+                 "height":0,
+                 "id":17,
+                 "name":"Spot 2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Spot",
+                 "visible":true,
+                 "width":0,
+                 "x":976,
+                 "y":240
+                }, 
+                {
+                 "height":16,
+                 "id":18,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Goblin",
+                 "visible":true,
+                 "width":16,
+                 "x":368,
+                 "y":208
+                }, 
+                {
+                 "height":16,
+                 "id":19,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Goblin",
+                 "visible":true,
+                 "width":16,
+                 "x":544,
+                 "y":208
+                }, 
+                {
+                 "height":16,
+                 "id":20,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Goblin",
+                 "visible":true,
+                 "width":16,
+                 "x":112,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":21,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Goblin",
+                 "visible":true,
+                 "width":16,
+                 "x":1328,
                  "y":240
                 }],
          "opacity":1,
@@ -135,7 +214,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":7,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -422,22 +501,13 @@
                         {
                          "duration":200,
                          "tileid":42
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":4
                         }],
                  "id":44
                 }],
-         "tilewidth":16
-        }, 
-        {
-         "columns":64,
-         "firstgid":73,
-         "image":"..\/..\/..\/..\/..\/platformer\/dist\/image\/tileset\/brinstar-tiles.png",
-         "imageheight":720,
-         "imagewidth":1024,
-         "margin":0,
-         "name":"brinstar",
-         "spacing":0,
-         "tilecount":0,
-         "tileheight":16,
          "tilewidth":16
         }],
  "tilewidth":16,
