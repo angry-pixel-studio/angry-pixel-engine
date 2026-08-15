@@ -161,7 +161,7 @@ export class EntityManager {
 
         this.createComponentsForEntity(components, entity);
 
-        if (parent) this.setParent(entity, parent);
+        if (parent !== undefined) this.setParent(entity, parent);
 
         return entity;
     }
@@ -176,7 +176,7 @@ export class EntityManager {
     private createEntityFromArchetype(archetype: Archetype, parent?: Entity): Entity {
         const entity = this.createEntity();
 
-        if (parent) this.setParent(entity, parent);
+        if (parent !== undefined) this.setParent(entity, parent);
         this.addArchetype(entity, archetype);
 
         return entity;
@@ -235,7 +235,7 @@ export class EntityManager {
         this.manuallyDisabledEntities.delete(entity);
 
         const parent = this.getParent(entity);
-        if (parent) {
+        if (parent !== undefined) {
             this.childEntities.get(parent)?.delete(entity);
         }
         this.parentEntities.delete(entity);
@@ -451,7 +451,7 @@ export class EntityManager {
      */
     public removeParent(child: Entity): void {
         const parent = this.parentEntities.get(child);
-        if (parent) {
+        if (parent !== undefined) {
             this.parentEntities.delete(child);
             this.childEntities.get(parent).delete(child);
         }
