@@ -1,4 +1,5 @@
 import { Archetype, Component, Entity } from "@angry-pixel/ecs";
+import { Vector2 } from "@angry-pixel/math";
 
 /**
  * TiledWrapper component configuration
@@ -63,14 +64,29 @@ export class TiledWrapper {
      */
     objects: Map<string, TiledObjectBlueprint> = new Map();
     /** @internal */
+    _processed: boolean = false;
+    /** @internal */
     _objectsCreated: boolean = false;
     /** @internal */
     _animationsMapped: boolean = false;
+    /** The coordinates (in tiles) of the top-left corner of the rendered layer. @internal */
+    _origin: Vector2 = new Vector2();
     /** @internal */
     static componentName: string = "TiledWrapper";
 
     constructor(options?: Partial<TiledWrapperOptions>) {
         Object.assign(this, options);
+    }
+
+    /**
+     * Reads the tilemap again, to apply the changes made to it at runtime, such as rendering another layer.\
+     * The entities created from the objects of the tilemap are not created again.\
+     * The TilemapRenderer and the TilemapCollider of the entity need to be refreshed too.\
+     * This operation is expensive, avoid calling it on every frame.
+     */
+    public refresh(): void {
+        this._processed = false;
+        this._animationsMapped = false;
     }
 }
 
@@ -117,7 +133,7 @@ export interface TiledTilemap {
     width: number;
     height: number;
     infinite: boolean;
-    layers: (TiledLayer | TiledObjectLayer)[];
+    layers: (TiledLayer | TiledObjectLayer | TiledGroupLayer)[];
     renderorder: string;
     tilesets: TiledTileset[];
     tilewidth: number;
@@ -221,6 +237,27 @@ export interface TiledObjectLayer {
     visible: boolean;
     x: number;
     y: number;
+    offsetx?: number;
+    offsety?: number;
+    properties?: TiledProperty[];
+}
+
+/**
+ * A layer that groups other layers. Its offset and its visibility are applied to all of them.
+ * @public
+ * @category Components Configuration
+ */
+export interface TiledGroupLayer {
+    id: number;
+    name: string;
+    type: "group";
+    layers: (TiledLayer | TiledObjectLayer | TiledGroupLayer)[];
+    opacity: number;
+    visible: boolean;
+    x: number;
+    y: number;
+    offsetx?: number;
+    offsety?: number;
     properties?: TiledProperty[];
 }
 

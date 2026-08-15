@@ -11,6 +11,9 @@ import { BaseUpdateColliderShapeSystem } from "./BaseUpdateColliderShapeSystem";
 
 @injectable(SYSTEM_SYMBOLS.UpdateTilemapColliderShapeSystem)
 export class UpdateTilemapColliderShapeSystem extends BaseUpdateColliderShapeSystem implements System {
+    // the offset of the collider plus the offset of the tilemap it belongs to
+    private readonly offset: Vector2 = new Vector2();
+
     constructor(@inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager) {
         super();
     }
@@ -26,12 +29,10 @@ export class UpdateTilemapColliderShapeSystem extends BaseUpdateColliderShapeSys
                 else this.useBoxes(tilemapCollider, tilemapRenderer);
             }
 
+            Vector2.add(this.offset, tilemapCollider.offset, tilemapRenderer.offset);
+
             for (const shape of tilemapCollider.shapes) {
-                this.updatePositionAndVertices(
-                    shape,
-                    tilemapCollider.offset,
-                    this.entityManager.getComponent(entity, Transform),
-                );
+                this.updatePositionAndVertices(shape, this.offset, this.entityManager.getComponent(entity, Transform));
                 this.updateBoundingBox(shape);
                 this.updateProjectionAxes(shape);
             }

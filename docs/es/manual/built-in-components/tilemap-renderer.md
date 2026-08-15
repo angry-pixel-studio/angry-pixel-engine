@@ -21,6 +21,7 @@ Cada tile se referencia mediante un ID, donde `0` representa espacio vacío. Los
 | `maskColor` | `string` | — | Color de máscara aplicado a los tiles. |
 | `maskColorMix` | `number` | — | Opacidad del color de máscara entre `0` y `1`. |
 | `smooth` | `boolean` | `false` | Suaviza los píxeles. No recomendado para pixel art. |
+| `offset` | `Vector2` | `(0, 0)` | Desplazamiento en los ejes X-Y respecto de la posición de la entidad. |
 
 ### Tileset
 
@@ -98,3 +99,15 @@ this.entityManager.createEntity([
     }),
 ]);
 ```
+
+## Actualizar el tilemap en tiempo de ejecución
+
+Los datos de los tiles se procesan una sola vez: el arreglo `data` y el arreglo `chunks` se generan uno a partir del otro, y se resuelve la altura del tilemap. Después de cambiar los datos en tiempo de ejecución, hay que llamar a `refresh` para que se procesen de nuevo. El arreglo que fue generado a partir del otro se vacía, para que se genere nuevamente.
+
+```typescript
+const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
+tilemapRenderer.data = newData;
+tilemapRenderer.refresh();
+```
+
+Esta operación es costosa, no debe llamarse en cada frame. Cuando el tilemap proviene de Tiled, también hay que refrescar el [`TiledWrapper`](tiled-wrapper.md), y el [`TilemapCollider`](tilemap-collider.md) si la entidad tiene uno.

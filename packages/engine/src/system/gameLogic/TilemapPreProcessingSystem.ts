@@ -13,8 +13,13 @@ export class TilemapPreProcessingSystem implements System {
     public onUpdate(): void {
         this.entityManager.search(TilemapRenderer, (tilemapRenderer) => {
             if (!tilemapRenderer._processed) {
-                if (tilemapRenderer.chunks && tilemapRenderer.chunks.length > 0) this.chunksToData(tilemapRenderer);
-                else if (tilemapRenderer.data && tilemapRenderer.data.length > 0) this.dataToChunks(tilemapRenderer);
+                if (tilemapRenderer.chunks && tilemapRenderer.chunks.length > 0) {
+                    tilemapRenderer._dataFromChunks = true;
+                    this.chunksToData(tilemapRenderer);
+                } else if (tilemapRenderer.data && tilemapRenderer.data.length > 0) {
+                    tilemapRenderer._dataFromChunks = false;
+                    this.dataToChunks(tilemapRenderer);
+                }
 
                 tilemapRenderer.tileWidth = tilemapRenderer.tileWidth ?? tilemapRenderer.tileset.tileWidth;
                 tilemapRenderer.tileHeight = tilemapRenderer.tileHeight ?? tilemapRenderer.tileset.tileHeight;
@@ -25,7 +30,8 @@ export class TilemapPreProcessingSystem implements System {
     }
 
     private dataToChunks(tilemapRenderer: TilemapRenderer): void {
-        tilemapRenderer.height = Math.ceil(tilemapRenderer.data.length / tilemapRenderer.width);
+        tilemapRenderer.height =
+            tilemapRenderer.height || Math.ceil(tilemapRenderer.data.length / tilemapRenderer.width);
 
         const cx = Math.ceil(tilemapRenderer.width / chunkSize);
         const cy = Math.ceil(tilemapRenderer.height / chunkSize);
@@ -65,6 +71,7 @@ export class TilemapPreProcessingSystem implements System {
             }),
         );
 
-        tilemapRenderer.height = Math.ceil(tilemapRenderer.data.length / tilemapRenderer.width);
+        tilemapRenderer.height =
+            tilemapRenderer.height || Math.ceil(tilemapRenderer.data.length / tilemapRenderer.width);
     }
 }

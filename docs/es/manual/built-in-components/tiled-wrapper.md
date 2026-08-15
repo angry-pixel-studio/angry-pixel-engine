@@ -4,6 +4,11 @@ El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de ma
 
 > **Nota:** Solo se admiten mapas de Tiled ortogonales.
 
+## Limitaciones
+
+-   **Un tileset por tilemap.** El `TilemapRenderer` dibuja con un único tileset, por lo que los ids de tile de un mapa que usa más de uno no se traducen con el `firstgid` del tileset al que pertenecen. El soporte de múltiples tilesets en ambos componentes está planificado.
+-   **Los tiles volteados o rotados en Tiled todavía no están soportados.** Sus ids llevan los flags de volteo, por lo que no se renderizan como se espera. El soporte está planificado.
+
 ## Opciones
 
 | Opción | Tipo | Descripción |
@@ -33,6 +38,20 @@ this.entityManager.createEntity([
 
 El JSON de Tiled se carga a través del [Asset Manager](../asset-manager.md) con `loadJson`, normalmente en el método `loadAssets` de la escena. Consulta [`TilemapRenderer`](tilemap-renderer.md) para la configuración del tileset.
 
+## Capas
+
+La capa indicada en `layerToRender` se busca en todo el tilemap, incluso dentro de las capas de grupo. Estas propiedades de la capa se aplican al [`TilemapRenderer`](tilemap-renderer.md):
+
+| Propiedad de la capa | Se aplica como |
+|----------------------|----------------|
+| `offsetx` / `offsety` | El `offset` del renderer. Se le suma el offset de los grupos que contienen a la capa. También se aplica al `TilemapCollider`, para que los colliders acompañen a los tiles. |
+| `opacity` | La `opacity` del renderer. |
+| `tintcolor` | El `tintColor` del renderer. El canal alfa se descarta. |
+| `visible` | Una capa que no es visible, o que pertenece a un grupo que no es visible, no renderiza nada ni genera colliders. |
+| `startx` / `starty` | El origen de un tilemap infinito, cuyos chunks se ubican desde la esquina superior izquierda de la capa en lugar del origen del mapa, y pueden tener coordenadas negativas. |
+
+El tamaño del tilemap y el tamaño de sus tiles se toman del tilemap, y de los límites de la capa en el caso de los tilemaps infinitos.
+
 ## Tiles animados
 
 Los tiles animados en Tiled se mapean a las `animations` del tileset del [`TilemapRenderer`](tilemap-renderer.md) la primera vez que se procesa el componente, por lo que se reproducen sin ninguna configuración adicional.
@@ -42,6 +61,21 @@ Los ids de los tiles se traducen desde el tileset al que pertenecen: un tile se 
 Tiled permite una duración distinta para cada frame, mientras que el motor renderiza todos los frames de una animación al mismo ritmo. Se usa la duración promedio, lo que conserva la duración total de la animación y es exacto siempre que todos los frames duren lo mismo.
 
 > **Nota:** El tileset debe estar embebido en el mapa. Los tilesets externos (`.tsx`) se referencian por archivo y el motor no los lee.
+
+## Actualizar el tilemap en tiempo de ejecución
+
+El tilemap se lee una sola vez, y los datos de los tiles se procesan una sola vez. Para aplicar un cambio hecho en tiempo de ejecución, como renderizar otra capa, hay que llamar a `refresh` en los componentes involucrados:
+
+```typescript
+const tiledWrapper = this.entityManager.getComponent(entity, TiledWrapper);
+tiledWrapper.layerToRender = "Background";
+
+tiledWrapper.refresh();
+this.entityManager.getComponent(entity, TilemapRenderer).refresh();
+this.entityManager.getComponent(entity, TilemapCollider).refresh();
+```
+
+`refresh` vuelve a leer el tilemap, vuelve a procesar los datos de los tiles y vuelve a generar las formas de los colliders. Es una operación costosa, no debe llamarse en cada frame. Las entidades creadas a partir de los objetos del tilemap no se crean de nuevo.
 
 ## Crear entidades a partir de objetos de Tiled
 
@@ -82,13 +116,16 @@ Las propiedades de tipo `object` referencian a otro objeto de Tiled por su id. L
 
 La posición del `Transform` de la entidad se calcula a partir de las propiedades `x` e `y` del objeto, relativa al centro del tilemap, más la posición de la entidad que contiene el `TiledWrapper`. Si el blueprint no incluye un `Transform`, se le agrega uno.
 
-La posición se calcula desde el centro del objeto, en el espacio en el que se renderiza el tilemap: el tamaño y el tamaño de tile del [`TilemapRenderer`](tilemap-renderer.md), que no siempre coinciden con los declarados por Tiled. Un tilemap infinito se renderiza con el tamaño de sus chunks, y el tamaño de tile proviene del tileset. Cuando la entidad no tiene un `TilemapRenderer`, se usan los valores declarados en el tilemap.
+La posición se calcula desde el centro del objeto, en el espacio en el que se renderiza el tilemap: el tamaño y el tamaño de tile del [`TilemapRenderer`](tilemap-renderer.md), que no siempre coinciden con los declarados por Tiled. Un tilemap infinito se renderiza con el tamaño de sus chunks. Cuando la entidad no tiene un `TilemapRenderer`, se usan los valores declarados en el tilemap.
 
 Los tile objects (los objetos con `gid`) tienen su origen en la esquina inferior izquierda; el resto lo tiene en la esquina superior izquierda.
 
+La rotación del objeto también se aplica al `Transform`, y el centro del objeto rota alrededor de su origen, tal como sucede en Tiled. Una rotación de cero no se aplica, para que un blueprint pueda definir su propia rotación.
+
 ### Reglas
 
--   Los objetos se buscan por clase en todas las capas de objetos del tilemap, sin importar a qué capa pertenecen.
--   Los objetos con la visibilidad desactivada se ignoran, al igual que todos los objetos de una capa con la visibilidad desactivada.
+-   Los objetos se buscan por clase en todas las capas de objetos del tilemap, sin importar a qué capa pertenecen, incluidas las capas anidadas en grupos.
+-   Los objetos con la visibilidad desactivada se ignoran, al igual que todos los objetos de una capa o un grupo con la visibilidad desactivada.
+-   El offset de la capa de objetos, y el de los grupos que la contienen, se aplica a la posición del objeto.
 -   La relación padre-hijo entre objetos de Tiled no está soportada.
 -   Tiled 1.9 exporta la clase de un objeto como `class`, y el resto de las versiones como `type`. Ambas están soportadas.

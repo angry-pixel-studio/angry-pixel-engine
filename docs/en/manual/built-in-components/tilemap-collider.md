@@ -33,3 +33,13 @@ this.entityManager.createEntity([
     new TilemapCollider({ composite: true, layer: "Ground" }),
 ]);
 ```
+
+## Updating the colliders at runtime
+
+The collider shapes are generated once, from the tile data of the [`TilemapRenderer`](tilemap-renderer.md). After the tilemap changes at runtime, call `refresh` so they are generated again.
+
+```typescript
+this.entityManager.getComponent(entity, TilemapCollider).refresh();
+```
+
+This operation is expensive, do not call it on every frame.
