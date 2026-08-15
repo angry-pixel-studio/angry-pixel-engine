@@ -63,6 +63,13 @@ this.entityManager.removeComponent(entity, SpriteRenderer);
 this.entityManager.removeComponent(spriteRenderer);
 ```
 
+`addArchetype` attaches the contents of an [archetype](adding-entities-to-the-scene.md) to an existing entity: its components are cloned and added, and its children are created as new entities parented to it.
+
+```typescript
+const entity = this.entityManager.createEntity();
+this.entityManager.addArchetype(entity, playerArchetype);
+```
+
 ## Searching for entities
 
 `search` finds entities that have a given component type. It has two forms:

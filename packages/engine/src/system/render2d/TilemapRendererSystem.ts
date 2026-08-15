@@ -38,11 +38,11 @@ export class TilemapRendererSystem implements System {
 
                 renderData.type = RenderDataType.Tilemap;
                 renderData.orientation = TilemapOrientation.Center;
-                renderData.position = new Vector2();
                 renderData.layer = tilemapRenderer.layer;
 
+                // the render data represents a single chunk of the tilemap
                 renderData.tilemap.width = chunk.width;
-                renderData.tilemap.height = Math.ceil(tilemapRenderer.data.length / chunk.width);
+                renderData.tilemap.height = chunk.height;
                 renderData.tilemap.tileWidth = tilemapRenderer.tileWidth * Math.abs(transform.localScale.x);
                 renderData.tilemap.tileHeight = tilemapRenderer.tileHeight * Math.abs(transform.localScale.y);
                 renderData.tilemap.realWidth = renderData.tilemap.width * renderData.tilemap.tileWidth;
@@ -59,10 +59,12 @@ export class TilemapRendererSystem implements System {
 
                 renderData.position.x =
                     transform.localPosition.x +
+                    tilemapRenderer.offset.x * transform.localScale.x +
                     (chunk.x - tilemapRenderer.width / 2 + chunk.width / 2) * renderData.tilemap.tileWidth;
 
                 renderData.position.y =
                     transform.localPosition.y +
+                    tilemapRenderer.offset.y * transform.localScale.y +
                     (tilemapRenderer.height / 2 - chunk.y - chunk.height / 2) * renderData.tilemap.tileHeight;
 
                 this.renderManager.addRenderData(renderData);

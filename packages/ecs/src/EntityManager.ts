@@ -124,7 +124,10 @@ export class EntityManager {
     public createEntity(archetype: Archetype, parent?: Entity): Entity;
     public createEntity(arg1?: (ComponentType | Component)[] | Archetype, parent?: Entity): Entity {
         if (arg1 === undefined) {
-            return this.lastEntityId++;
+            const entity = this.lastEntityId++;
+            this.entities.add(entity);
+
+            return entity;
         }
 
         if (Array.isArray(arg1)) return this.createEntityFromArray(arg1, parent);
@@ -132,13 +135,33 @@ export class EntityManager {
         return this.createEntityFromArchetype(arg1, parent);
     }
 
+    /**
+     * Adds the components of an Archetype to an existing Entity.\
+     * Component instances are cloned, so the archetype can be reused.\
+     * Child archetypes are created as new entities parented to the given one.
+     * @param entity The entity to add the archetype to
+     * @param archetype The archetype to add
+     * @public
+     * @example
+     * ```js
+     * const entity = entityManager.createEntity();
+     * entityManager.addArchetype(entity, archetype);
+     * ```
+     */
+    public addArchetype(entity: Entity, { components, disabledComponents, children, enabled }: Archetype): void {
+        this.createComponentsForEntity(components, entity);
+        if (disabledComponents) this.createComponentsForEntity(disabledComponents, entity, true);
+
+        if (children) children.forEach((child) => this.createEntityFromArchetype(child, entity));
+        if (enabled === false) this.disableEntity(entity);
+    }
+
     private createEntityFromArray(components: (Component | ComponentType)[], parent?: Entity): Entity {
-        const entity = this.lastEntityId++;
-        this.entities.add(entity);
+        const entity = this.createEntity();
 
         this.createComponentsForEntity(components, entity);
 
-        if (parent) this.setParent(entity, parent);
+        if (parent !== undefined) this.setParent(entity, parent);
 
         return entity;
     }
@@ -150,19 +173,11 @@ export class EntityManager {
      * @returns The created Entity
      * @private
      */
-    private createEntityFromArchetype(
-        { components, disabledComponents, children, enabled }: Archetype,
-        parent?: Entity,
-    ): Entity {
-        const entity = this.lastEntityId++;
-        this.entities.add(entity);
+    private createEntityFromArchetype(archetype: Archetype, parent?: Entity): Entity {
+        const entity = this.createEntity();
 
-        this.createComponentsForEntity(components, entity);
-        if (disabledComponents) this.createComponentsForEntity(disabledComponents, entity, true);
-
-        if (parent) this.setParent(entity, parent);
-        if (children) children.forEach((child) => this.createEntityFromArchetype(child, entity));
-        if (enabled === false) this.disableEntity(entity);
+        if (parent !== undefined) this.setParent(entity, parent);
+        this.addArchetype(entity, archetype);
 
         return entity;
     }
@@ -220,7 +235,7 @@ export class EntityManager {
         this.manuallyDisabledEntities.delete(entity);
 
         const parent = this.getParent(entity);
-        if (parent) {
+        if (parent !== undefined) {
             this.childEntities.get(parent)?.delete(entity);
         }
         this.parentEntities.delete(entity);
@@ -436,7 +451,7 @@ export class EntityManager {
      */
     public removeParent(child: Entity): void {
         const parent = this.parentEntities.get(child);
-        if (parent) {
+        if (parent !== undefined) {
             this.parentEntities.delete(child);
             this.childEntities.get(parent).delete(child);
         }

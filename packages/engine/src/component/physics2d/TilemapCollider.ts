@@ -68,4 +68,12 @@ export class TilemapCollider implements Collider {
     constructor(options?: Partial<TilemapColliderOptions>) {
         Object.assign(this, options);
     }
+
+    /**
+     * Generates the collider shapes again, to apply the changes made to the tilemap at runtime.\
+     * This operation is expensive, avoid calling it on every frame.
+     */
+    public refresh(): void {
+        this.shapes = [];
+    }
 }

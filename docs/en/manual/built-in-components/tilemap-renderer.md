@@ -21,6 +21,7 @@ Each tile is referenced by an ID, where `0` represents empty space. The tile dat
 | `maskColor` | `string` | — | Mask color applied to the tiles. |
 | `maskColorMix` | `number` | — | Mask color opacity between `0` and `1`. |
 | `smooth` | `boolean` | `false` | Smooths pixels. Not recommended for pixel art. |
+| `offset` | `Vector2` | `(0, 0)` | X-Y axis offset from the entity position. |
 
 ### Tileset
 
@@ -53,6 +54,8 @@ A `TileAnimation` cycles a tile through a sequence of tileset tile IDs. The `ani
 |--------|------|---------|-------------|
 | `tiles` | `number[]` | `[]` | The sequence of tile IDs to cycle through. |
 | `fps` | `number` | `12` | Frames per second. |
+
+When the tilemap comes from Tiled, the tiles animated in the map editor are mapped to this map automatically. See [`TiledWrapper`](tiled-wrapper.md).
 
 ## Example
 
@@ -96,3 +99,22 @@ this.entityManager.createEntity([
     }),
 ]);
 ```
+
+## Updating the tilemap at runtime
+
+The tile data is processed once: the `data` array and the `chunks` array are generated from each other, and the height of the tilemap is resolved. After changing the data at runtime, call `refresh` so it is processed again.
+
+`refresh` keeps the array the tiles were given in and empties the one generated from it, so the change has to be made on the source array: `data` for a tilemap defined with tiles, and `chunks` for a tilemap defined with chunks, which is the case of the infinite tilemaps of Tiled. Assigning `data` on a tilemap defined with chunks has no effect, because `data` is generated again from the chunks.
+
+```typescript
+const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
+
+// a tilemap defined with tiles
+tilemapRenderer.data = newData;
+// a tilemap defined with chunks
+tilemapRenderer.chunks = newChunks;
+
+tilemapRenderer.refresh();
+```
+
+This operation is expensive, do not call it on every frame. When the tilemap comes from Tiled, the [`TiledWrapper`](tiled-wrapper.md) needs to be refreshed too, and so does the [`TilemapCollider`](tilemap-collider.md) if the entity has one.

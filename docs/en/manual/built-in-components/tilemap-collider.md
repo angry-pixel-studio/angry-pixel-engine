@@ -14,7 +14,7 @@ When `composite` is `false`, it creates an individual rectangle collider for eac
 | `physics` | `boolean` | `true` | If `true`, the collider interacts with rigid bodies. |
 | `ignoreCollisionsWithLayers` | `string[]` | `[]` | Layers this collider ignores. |
 
-> **Note:** The collider shapes are generated once and cannot be modified afterwards. To change them, create a new `TilemapCollider`.
+> **Note:** The collider shapes are generated once. To generate them again after the tilemap changes, call `refresh` (see below).
 
 ## Example
 
@@ -33,3 +33,13 @@ this.entityManager.createEntity([
     new TilemapCollider({ composite: true, layer: "Ground" }),
 ]);
 ```
+
+## Updating the colliders at runtime
+
+The collider shapes are generated once, from the tile data of the [`TilemapRenderer`](tilemap-renderer.md). After the tilemap changes at runtime, call `refresh` so they are generated again.
+
+```typescript
+this.entityManager.getComponent(entity, TilemapCollider).refresh();
+```
+
+This operation is expensive, do not call it on every frame.

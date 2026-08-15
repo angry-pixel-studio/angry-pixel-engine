@@ -1,6 +1,7 @@
 import { SystemType } from "@angry-pixel/ecs";
 import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 import { ButtonSystem } from "@system/gameLogic/ButtonSystem";
+import { TiledObjectSystem } from "@system/gameLogic/TiledObjectSystem";
 import { TiledWrapperSystem } from "@system/gameLogic/TiledWrapperSystem";
 import { TilemapPreProcessingSystem } from "@system/gameLogic/TilemapPreProcessingSystem";
 import { TransformSystem } from "@system/gameLogic/TransformSystem";
@@ -35,6 +36,7 @@ import { ApplyRepositionSystem } from "@system/physics2d/ApplyRepositionSystem";
 import { UpdateCollidersAfterRepositionSystem } from "@system/physics2d/collider/UpdateCollidersAfterRepositionSystem";
 import { DebugMousePositionSystem } from "@system/debug/DebugMousePositionSystem";
 import { DebugTextRendererSystem } from "@system/debug/DebugTextRendererSystem";
+import { DebugButtonSystem } from "@system/debug/DebugButtonSystem";
 
 export type SystemsByGroup = Map<SystemGroup, { name: symbol; type: SystemType }[]>;
 
@@ -50,6 +52,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEM_SYMBOLS.AudioPlayerSystem, type: AudioPlayerSystem },
             { name: SYSTEM_SYMBOLS.TiledWrapperSystem, type: TiledWrapperSystem },
             { name: SYSTEM_SYMBOLS.TilemapPreProcessingSystem, type: TilemapPreProcessingSystem },
+            { name: SYSTEM_SYMBOLS.TiledObjectSystem, type: TiledObjectSystem },
         ],
     ],
     [SystemGroup.Transform, [{ name: SYSTEM_SYMBOLS.TransformSystem, type: TransformSystem }]],
@@ -83,6 +86,7 @@ export const systemsByGroup: SystemsByGroup = new Map([
             { name: SYSTEM_SYMBOLS.DebugColliderRenderSystem, type: DebugColliderRenderSystem },
             { name: SYSTEM_SYMBOLS.DebugMousePositionSystem, type: DebugMousePositionSystem },
             { name: SYSTEM_SYMBOLS.DebugTextRendererSystem, type: DebugTextRendererSystem },
+            { name: SYSTEM_SYMBOLS.DebugButtonSystem, type: DebugButtonSystem },
             { name: SYSTEM_SYMBOLS.CullingSystem, type: CullingSystem },
             { name: SYSTEM_SYMBOLS.ClearScreenSystem, type: ClearScreenSystem },
             { name: SYSTEM_SYMBOLS.RenderSystem, type: RenderSystem },

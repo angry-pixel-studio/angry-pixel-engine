@@ -71,8 +71,12 @@ export interface GameConfig {
         mousePosition: boolean;
         /** Show text renderer bounding boxes */
         textRendererBoundingBoxes: boolean;
+        /** Show button shapes */
+        buttons?: boolean;
         /** Color of the colliders, default "#00FF00" (green) */
         collidersColor?: string;
+        /** Color of the button shapes, default "#FF00FF" (magenta) */
+        buttonColor?: string;
         /** Color of the text box, default "#0000FF" (blue) */
         textBoxColor?: string;
         /** Color of the text, default "#00FF00" (green) */
@@ -138,6 +142,7 @@ const setDefaultValues = (gameConfig: GameConfig) => {
     gameConfig.debug.collidersColor = gameConfig.debug.collidersColor ?? "#00FF00";
     gameConfig.debug.textColor = gameConfig.debug.textColor ?? "#00FF00";
     gameConfig.debug.textBoxColor = gameConfig.debug.textBoxColor ?? "#0000FF";
+    gameConfig.debug.buttonColor = gameConfig.debug.buttonColor ?? "#FF00FF";
     gameConfig.debug.textPosition = gameConfig.debug.textPosition ?? "bottom-left";
 
     gameConfig.collisions = gameConfig.collisions ?? {};

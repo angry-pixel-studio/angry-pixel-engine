@@ -2,6 +2,7 @@ export const SYSTEM_SYMBOLS = {
     // game logic
     AudioPlayerSystem: Symbol.for("AudioPlayerSystem"),
     ButtonSystem: Symbol.for("ButtonSystem"),
+    TiledObjectSystem: Symbol.for("TiledObjectSystem"),
     TiledWrapperSystem: Symbol.for("TiledWrapperSystem"),
     TilemapPreProcessingSystem: Symbol.for("TilemapPreProcessingSystem"),
     TransformSystem: Symbol.for("TransformSystem"),
@@ -35,6 +36,7 @@ export const SYSTEM_SYMBOLS = {
     TilemapRendererSystem: Symbol.for("TilemapRendererSystem"),
     VideoRendererSystem: Symbol.for("VideoRendererSystem"),
     // debug
+    DebugButtonSystem: Symbol.for("DebugButtonSystem"),
     DebugColliderRenderSystem: Symbol.for("DebugColliderRenderSystem"),
     DebugMousePositionSystem: Symbol.for("DebugMousePositionSystem"),
     DebugTextRendererSystem: Symbol.for("DebugTextRendererSystem"),

@@ -1,17 +1,4 @@
-import {
-    AudioPlayer,
-    GeometricRenderer,
-    GeometricShape,
-    randomInt,
-    Scene,
-    TextAlignment,
-    MaskRenderer,
-    MaskShape,
-    TextRenderer,
-    Transform,
-    Vector2,
-    VideoRenderer,
-} from "angry-pixel";
+import { AudioPlayer, Scene, TextRenderer, Transform } from "angry-pixel";
 import { FpsMetterSystem } from "@system/FpsMetterSystem";
 import { InputControllerSystem } from "@system/InputControllerSystem";
 import { MovingPlatformSystem } from "@system/MovingPlatformSystem";
@@ -22,15 +9,9 @@ import { NinjaMovementSystem } from "@system/ninja/NinjaMovementSystem";
 import { NinjaSfxSystem } from "@system/ninja/NinjaSfxSystem";
 import { ASSETS } from "@config/assets";
 import { InputController } from "@component/InputController";
-import { foregroundArchetype, slopePlatform } from "@entity/Foreground";
-import { ninjaArchetype } from "@entity/Ninja";
-import { movingPlatformArchetype } from "@entity/MovingPlatform";
+import { foregroundArchetype } from "@entity/Foreground";
 import { textArchetype } from "@entity/Text";
 import { FpsMetter } from "@component/FpsMetter";
-import { RENDER_LAYERS } from "@config/layers";
-import { goblinArchetype } from "@entity/Goblin";
-import { GoblinMovement } from "@component/goblin/GoblinMovement";
-import { MovingPlatform } from "@component/MovingPlatform";
 import { mainCameraArchetype, uiCameraArchetype } from "@entity/Camera";
 
 export class MainScene extends Scene {
@@ -60,7 +41,6 @@ export class MainScene extends Scene {
         this.setupGameObjects();
         this.setupUIText();
         this.setupAudioPlayer();
-        // this.entitiesForTesting();
     }
 
     private setupCameras(): void {
@@ -72,25 +52,6 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([InputController]);
 
         this.entityManager.createEntity(foregroundArchetype);
-
-        this.entityManager.createEntity(slopePlatform);
-
-        this.entityManager.createEntity(ninjaArchetype);
-
-        const movingPlatform = this.entityManager.createEntity(movingPlatformArchetype);
-        this.entityManager.updateComponentData(movingPlatform, MovingPlatform, (component) => {
-            component.spots = [new Vector2(-112, -72), new Vector2(168, -72)];
-        });
-
-        for (let i = 0; i < 50; i++) {
-            const goblin = this.entityManager.createEntity(goblinArchetype);
-            this.entityManager.updateComponentData(goblin, Transform, (component) => {
-                component.position.x = randomInt(-600, 192);
-            });
-            this.entityManager.updateComponentData(goblin, GoblinMovement, (component) => {
-                component.walkSpeed = randomInt(20, 60);
-            });
-        }
     }
 
     private setupUIText(): void {
@@ -116,82 +77,6 @@ export class MainScene extends Scene {
                 loop: true,
                 volume: 0.3,
                 action: "play",
-            }),
-        ]);
-    }
-
-    private entitiesForTesting(): void {
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(0, 0) }),
-            new VideoRenderer({
-                video: this.assetManager.getVideo(ASSETS.video.example),
-                loop: true,
-                volume: 0.3,
-                action: "play",
-                layer: RENDER_LAYERS.Darkness,
-                width: 1920 / 9,
-                height: 1080 / 9,
-            }),
-        ]);
-
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(128, -112) }),
-            new MaskRenderer({
-                shape: MaskShape.Circumference,
-                radius: 64,
-                color: "#597f1e",
-                layer: RENDER_LAYERS.Foreground,
-            }),
-        ]);
-
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(0, 0) }),
-            new TextRenderer({
-                text: "Ranma½ らんま½",
-                color: "#FF0000",
-                fontSize: 64,
-                width: 400,
-                height: 400,
-                opacity: 1,
-                layer: RENDER_LAYERS.UI,
-                font: "Arial",
-                textureAtlas: {
-                    charRanges: [32, 132, 161, 255, 0x3040, 0x309f],
-                    fontSize: 64,
-                    spacing: 0,
-                },
-                letterSpacing: 0,
-                alignment: TextAlignment.Left,
-            }),
-        ]);
-
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(-280, 0) }),
-            new GeometricRenderer({
-                shape: GeometricShape.Polygon,
-                color: "#00FF88",
-                layer: RENDER_LAYERS.Foreground,
-                vertexModel: [new Vector2(-36, -28), new Vector2(36, -28), new Vector2(44, 24), new Vector2(-44, 24)],
-            }),
-        ]);
-
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(0, -96) }),
-            new GeometricRenderer({
-                shape: GeometricShape.Line,
-                color: "#FFCC00",
-                layer: RENDER_LAYERS.Foreground,
-                vertexModel: [new Vector2(-80, -20), new Vector2(80, 20), new Vector2(-60, 30), new Vector2(60, -30)],
-            }),
-        ]);
-
-        this.entityManager.createEntity([
-            new Transform({ position: new Vector2(280, 0) }),
-            new GeometricRenderer({
-                shape: GeometricShape.Circumference,
-                color: "#66AAFF",
-                layer: RENDER_LAYERS.Foreground,
-                radius: 48,
             }),
         ]);
     }
