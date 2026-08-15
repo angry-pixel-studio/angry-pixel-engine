@@ -13,6 +13,7 @@ export class FollowPlayerCameraSystem extends GameSystem {
     public onUpdate(): void {
         this.entityManager.search(FollowPlayerCamera).forEach(({ entity, component }) => {
             if (!component.playerTransform || !component.boundaries) this.initialize(component);
+            if (!component.playerTransform || !component.boundaries) return;
 
             const transform = this.entityManager.getComponent(entity, Transform);
 
