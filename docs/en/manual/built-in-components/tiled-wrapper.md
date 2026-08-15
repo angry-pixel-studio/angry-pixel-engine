@@ -45,7 +45,7 @@ The layer named in `layerToRender` is searched in the whole tilemap, including i
 | Layer property | Applied as |
 |----------------|------------|
 | `offsetx` / `offsety` | The `offset` of the renderer. The offset of the groups that contain the layer is added to it. It is applied to the `TilemapCollider` too, so the colliders follow the tiles. |
-| `opacity` | The `opacity` of the renderer. |
+| `opacity` | The `opacity` of the renderer, multiplied by the opacity of the groups that contain the layer. |
 | `tintcolor` | The `tintColor` of the renderer. The alpha channel is discarded. |
 | `visible` | A layer that is not visible, or that belongs to a group that is not visible, renders nothing and generates no colliders. |
 | `startx` / `starty` | The origin of an infinite tilemap, whose chunks are placed from the top-left corner of the layer instead of the origin of the map, and can have negative coordinates. |
