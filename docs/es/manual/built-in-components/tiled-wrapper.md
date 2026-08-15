@@ -82,7 +82,9 @@ Las propiedades de tipo `object` referencian a otro objeto de Tiled por su id. L
 
 La posición del `Transform` de la entidad se calcula a partir de las propiedades `x` e `y` del objeto, relativa al centro del tilemap, más la posición de la entidad que contiene el `TiledWrapper`. Si el blueprint no incluye un `Transform`, se le agrega uno.
 
-La posición se calcula desde el centro del objeto, usando el tamaño de tile declarado en el tilemap. Los tile objects (los objetos con `gid`) tienen su origen en la esquina inferior izquierda; el resto lo tiene en la esquina superior izquierda.
+La posición se calcula desde el centro del objeto, en el espacio en el que se renderiza el tilemap: el tamaño y el tamaño de tile del [`TilemapRenderer`](tilemap-renderer.md), que no siempre coinciden con los declarados por Tiled. Un tilemap infinito se renderiza con el tamaño de sus chunks, y el tamaño de tile proviene del tileset. Cuando la entidad no tiene un `TilemapRenderer`, se usan los valores declarados en el tilemap.
+
+Los tile objects (los objetos con `gid`) tienen su origen en la esquina inferior izquierda; el resto lo tiene en la esquina superior izquierda.
 
 ### Reglas
 

@@ -2,6 +2,7 @@ export const SYSTEM_SYMBOLS = {
     // game logic
     AudioPlayerSystem: Symbol.for("AudioPlayerSystem"),
     ButtonSystem: Symbol.for("ButtonSystem"),
+    TiledObjectSystem: Symbol.for("TiledObjectSystem"),
     TiledWrapperSystem: Symbol.for("TiledWrapperSystem"),
     TilemapPreProcessingSystem: Symbol.for("TilemapPreProcessingSystem"),
     TransformSystem: Symbol.for("TransformSystem"),
