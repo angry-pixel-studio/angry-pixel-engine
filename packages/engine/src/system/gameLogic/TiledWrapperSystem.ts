@@ -47,19 +47,22 @@ export class TiledWrapperSystem implements System {
     private renderLayer(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, tilemapRenderer: TilemapRenderer): void {
         let layer: TiledLayer;
         let visible: boolean;
+        let opacity: number;
 
-        forEachTiledLayer(tilemap.layers, (candidate, offsetX, offsetY, layerVisible) => {
+        forEachTiledLayer(tilemap.layers, (candidate, offsetX, offsetY, layerVisible, layerOpacity) => {
             if (layer || candidate.type !== "tilelayer" || candidate.name !== tiledWrapper.layerToRender) return;
 
             layer = candidate;
             visible = layerVisible;
+            // the opacity of the groups that contain the layer is already applied
+            opacity = layerOpacity;
             // the y axis of Tiled points downwards
             tilemapRenderer.offset.set(offsetX, -offsetY);
         });
 
         if (!layer) return;
 
-        tilemapRenderer.opacity = layer.opacity ?? tilemapRenderer.opacity;
+        tilemapRenderer.opacity = opacity;
         if (layer.tintcolor) tilemapRenderer.tintColor = tiledTintColor(layer.tintcolor);
         tilemapRenderer.tileWidth = tilemapRenderer.tileWidth ?? tilemap.tilewidth;
         tilemapRenderer.tileHeight = tilemapRenderer.tileHeight ?? tilemap.tileheight;

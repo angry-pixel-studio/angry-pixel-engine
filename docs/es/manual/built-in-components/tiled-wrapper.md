@@ -45,7 +45,7 @@ La capa indicada en `layerToRender` se busca en todo el tilemap, incluso dentro 
 | Propiedad de la capa | Se aplica como |
 |----------------------|----------------|
 | `offsetx` / `offsety` | El `offset` del renderer. Se le suma el offset de los grupos que contienen a la capa. También se aplica al `TilemapCollider`, para que los colliders acompañen a los tiles. |
-| `opacity` | La `opacity` del renderer. |
+| `opacity` | La `opacity` del renderer, multiplicada por la opacidad de los grupos que contienen a la capa. |
 | `tintcolor` | El `tintColor` del renderer. El canal alfa se descarta. |
 | `visible` | Una capa que no es visible, o que pertenece a un grupo que no es visible, no renderiza nada ni genera colliders. |
 | `startx` / `starty` | El origen de un tilemap infinito, cuyos chunks se ubican desde la esquina superior izquierda de la capa en lugar del origen del mapa, y pueden tener coordenadas negativas. |

@@ -273,7 +273,7 @@ export interface TiledObject {
     name: string;
     rotation: number;
     /** The class of the object. Tiled 1.9 exports it as `class`, the other versions as `type` */
-    type: string;
+    type?: string;
     /** The class of the object, as exported by Tiled 1.9 */
     class?: string;
     visible: boolean;

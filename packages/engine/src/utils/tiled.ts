@@ -6,11 +6,12 @@ export type TiledLayerCallback = (
     offsetX: number,
     offsetY: number,
     visible: boolean,
+    opacity: number,
 ) => void;
 
 /**
  * Walks the layers of a tilemap, including the ones nested in group layers.\
- * The offset and the visibility of the groups are applied to the layers they contain.
+ * The offset, the visibility and the opacity of the groups are applied to the layers they contain.
  * @internal
  */
 export const forEachTiledLayer = (
@@ -19,16 +20,18 @@ export const forEachTiledLayer = (
     offsetX: number = 0,
     offsetY: number = 0,
     visible: boolean = true,
+    opacity: number = 1,
 ): void =>
     layers.forEach((layer) => {
         const layerOffsetX = offsetX + (layer.offsetx ?? 0);
         const layerOffsetY = offsetY + (layer.offsety ?? 0);
         const layerVisible = visible && layer.visible !== false;
+        const layerOpacity = opacity * (layer.opacity ?? 1);
 
         if (layer.type === "group") {
-            forEachTiledLayer(layer.layers, callback, layerOffsetX, layerOffsetY, layerVisible);
+            forEachTiledLayer(layer.layers, callback, layerOffsetX, layerOffsetY, layerVisible, layerOpacity);
         } else {
-            callback(layer, layerOffsetX, layerOffsetY, layerVisible);
+            callback(layer, layerOffsetX, layerOffsetY, layerVisible, layerOpacity);
         }
     });
 
