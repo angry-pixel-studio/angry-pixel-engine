@@ -30,23 +30,3 @@ jobs:
 
             - name: "[Run publish script]"
               run: yarn run publish
-
-            - name: "[Deploy builds to the CDN]"
-              env:
-                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-                  SERVER_HOST: ${{ secrets.SERVER_HOST }}
-                  SERVER_PORT: ${{ secrets.SERVER_PORT }}
-                  SERVER_USER: ${{ secrets.SERVER_USER }}
-                  DESTINATION_PATH: ${{ secrets.CDN_DESTINATION_PATH }}
-                  SKIP_BUILD: "1"
-              run: |
-                  chmod +x scripts/deploy-cdn-rsync.sh
-                  ./scripts/deploy-cdn-rsync.sh
-
-            - name: "[Purge Cloudflare cache]"
-              env:
-                  CLOUDFLARE_ZONE_ID: ${{ vars.CLOUDFLARE_ZONE_ID }}
-                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-              run: |
-                  chmod +x scripts/purge-cloudflare-cache.sh
-                  ./scripts/purge-cloudflare-cache.sh

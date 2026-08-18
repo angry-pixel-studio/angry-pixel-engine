@@ -1,0 +1,45 @@
+name: Deploy builds to the CDN (on Release)
+
+on:
+    release:
+        types: [published]
+    workflow_dispatch:
+
+jobs:
+    Setup:
+        uses: ./.github/workflows/setupNode.yml
+
+    Deploy:
+        needs: Setup
+        name: "[Deploy CDN]"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: "[Restore node modules]"
+              id: cache-node-modules
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nodemodules-
+
+            - name: "[Deploy builds to the CDN]"
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                  SERVER_HOST: ${{ vars.SERVER_HOST }}
+                  SERVER_PORT: ${{ vars.SERVER_PORT }}
+                  SERVER_USER: ${{ vars.SERVER_USER }}
+                  DESTINATION_PATH: ${{ vars.CDN_DESTINATION_PATH }}
+              run: |
+                  chmod +x scripts/deploy-cdn-rsync.sh
+                  ./scripts/deploy-cdn-rsync.sh
+
+            - name: "[Purge Cloudflare cache]"
+              env:
+                  CLOUDFLARE_ZONE_ID: ${{ vars.CLOUDFLARE_ZONE_ID }}
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+              run: |
+                  chmod +x scripts/purge-cloudflare-cache.sh
+                  ./scripts/purge-cloudflare-cache.sh
