@@ -18,6 +18,13 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}🔄 Cloudflare Cache Purge Tool${NC}"
 
+# A prerelease does not update the "latest" folder, so there is nothing to purge
+VERSION=$(node -p "require('./bundles/angry-pixel/package.json').version")
+if [[ "$VERSION" == *-* ]]; then
+    echo -e "${YELLOW}🏷️  Prerelease $VERSION, the 'latest' folder was not updated. Nothing to purge.${NC}"
+    exit 0
+fi
+
 # Check if required variables are set
 if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
     echo -e "${RED}❌ Error: CLOUDFLARE_API_TOKEN must be set!${NC}"
@@ -28,13 +35,6 @@ if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
     echo "You can find these values in your Cloudflare dashboard:"
     echo "- API Token: Dashboard > Profile > API Tokens > Create Token"
     exit 1
-fi
-
-# A prerelease does not update the "latest" folder, so there is nothing to purge
-VERSION=$(node -p "require('./bundles/angry-pixel/package.json').version")
-if [[ "$VERSION" == *-* ]]; then
-    echo -e "${YELLOW}🏷️  Prerelease $VERSION, the 'latest' folder was not updated. Nothing to purge.${NC}"
-    exit 0
 fi
 
 # Build the list of urls to purge, one per file of the latest folder
@@ -53,7 +53,6 @@ fi
 TARGET_URLS="[$TARGET_URLS]"
 
 echo -e "${YELLOW}📋 Zone ID: $CLOUDFLARE_ZONE_ID${NC}"
-echo -e "${YELLOW}🔑 API Token: ${CLOUDFLARE_API_TOKEN:0:10}...${NC}"
 echo -e "${YELLOW}🎯 Target URLs: $TARGET_URLS${NC}"
 echo ""
 
@@ -61,6 +60,7 @@ echo ""
 echo -e "${BLUE}🔄 Purging Cloudflare cache...${NC}"
 
 response=$(curl -X POST "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache" \
+    --connect-timeout 10 --max-time 60 \
     -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
     -H "Content-Type: application/json" \
     --data "{\"files\":$TARGET_URLS}" \
