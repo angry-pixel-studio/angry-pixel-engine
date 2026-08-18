@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.6] - 2026-08-18
+
+### Fixed
+
+#### Tiled
+
+-   `TiledWrapperSystem` kept processing the entity when the tilemap could not be resolved, and mapped the animations of a tilemap without tilesets, failing in both cases.
+
 ## [2.3.5] - 2026-08-15
 
 ### Added
