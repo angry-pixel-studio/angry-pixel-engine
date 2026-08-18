@@ -19,6 +19,8 @@ export class TiledWrapperSystem implements System {
             if (tiledWrapper._processed && tiledWrapper._animationsMapped) return;
 
             const tilemap = this.resolveTilemap(tiledWrapper);
+            if (!tilemap) return;
+
             const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
 
             if (!tiledWrapper._processed) {
@@ -27,7 +29,7 @@ export class TiledWrapperSystem implements System {
             }
 
             if (!tiledWrapper._animationsMapped) {
-                if (tilemapRenderer?.tileset) this.mapAnimations(tilemap, tilemapRenderer.tileset);
+                if (tilemap.tilesets && tilemapRenderer?.tileset) this.mapAnimations(tilemap, tilemapRenderer.tileset);
                 tiledWrapper._animationsMapped = true;
             }
         });
