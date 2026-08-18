@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.6] - 2026-08-18
+
+### Fixed
+
+#### Tiled
+
+-   `TiledWrapperSystem` failed when the `TiledWrapper` had no tilemap, and when mapping the animations of a tilemap that declares no tilesets.
+
 ## [2.3.5] - 2026-08-15
 
 ### Added

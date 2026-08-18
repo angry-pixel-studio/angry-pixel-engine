@@ -10,7 +10,7 @@
 
 ## Installation
 
-There are two ways to start a project: scaffold a new project from the official skeleton template, or install the engine manually into your own project.
+There are three ways to start a project: scaffold a new project from the official skeleton template, install the engine manually into your own project, or load the builds directly from the CDN.
 
 ### Official skeleton template
 
@@ -35,6 +35,107 @@ npm install angry-pixel
 The engine ships its own type definitions, so no additional packages are required for TypeScript.
 
 > **Note:** We recommend setting up your project with a bundler such as [Vite](https://vite.dev/), which provides a development server with hot reloading and a production build.
+
+### Using the engine from a CDN
+
+The engine builds are also published to `https://cdn.angrypixel.gg/engine/`, so they can be loaded directly by the browser without installing anything or setting up a build step.
+
+Every release is published under its version number, and `latest` points to the most recent stable release:
+
+```
+https://cdn.angrypixel.gg/engine/latest/index.js
+https://cdn.angrypixel.gg/engine/2.3.5/index.js
+```
+
+| File | Format | Loaded with |
+| ---- | ------ | ----------- |
+| `index.js` | UMD | `<script src="...">` |
+| `index.esm.js` | ES module | `<script type="module">` |
+
+> **Note:** Pin a specific version in anything you publish. The contents of `latest` change with every release.
+
+#### Classic script
+
+The UMD build exposes the engine as the global `angry-pixel`. Because the name contains a hyphen it is accessed with bracket notation:
+
+```html
+<div id="app"></div>
+
+<script src="https://cdn.angrypixel.gg/engine/latest/index.js"></script>
+<script>
+    const { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } = window["angry-pixel"];
+
+    class MainScene extends Scene {
+        createEntities() {
+            // camera
+            this.entityManager.createEntity([new Transform(), new Camera()]);
+
+            // a square in the center of the screen
+            this.entityManager.createEntity([
+                new Transform(),
+                new MaskRenderer({
+                    shape: MaskShape.Rectangle,
+                    width: 128,
+                    height: 128,
+                    color: "#D9008F",
+                }),
+            ]);
+        }
+    }
+
+    const game = new Game({
+        containerNode: document.getElementById("app"),
+        width: 800,
+        height: 600,
+        canvasColor: "#00D9D9",
+    });
+
+    game.addScene(MainScene, "MainScene", true);
+    game.start();
+</script>
+```
+
+#### ES module
+
+The ESM build is imported by URL inside a module script. No global is created:
+
+```html
+<div id="app"></div>
+
+<script type="module">
+    import { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } from "https://cdn.angrypixel.gg/engine/latest/index.esm.js";
+
+    class MainScene extends Scene {
+        createEntities() {
+            // camera
+            this.entityManager.createEntity([new Transform(), new Camera()]);
+
+            // a square in the center of the screen
+            this.entityManager.createEntity([
+                new Transform(),
+                new MaskRenderer({
+                    shape: MaskShape.Rectangle,
+                    width: 128,
+                    height: 128,
+                    color: "#D9008F",
+                }),
+            ]);
+        }
+    }
+
+    const game = new Game({
+        containerNode: document.getElementById("app"),
+        width: 800,
+        height: 600,
+        canvasColor: "#00D9D9",
+    });
+
+    game.addScene(MainScene, "MainScene", true);
+    game.start();
+</script>
+```
+
+> **Note:** Loading from the CDN is meant for quick tests, demos, and single-file examples. There are no type definitions available this way: for a TypeScript project, install the engine from npm as described above.
 
 ## Suggested folder structure
 

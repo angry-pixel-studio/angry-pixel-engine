@@ -38,6 +38,27 @@ or
 yarn add angry-pixel
 ```
 
+### Load from the CDN
+
+The builds are also published to `https://cdn.angrypixel.gg/engine/`, under the version number of each release and under `latest`.
+
+UMD build, exposed as the global `angry-pixel`:
+
+```html
+<script src="https://cdn.angrypixel.gg/engine/latest/index.js"></script>
+<script>
+    const { Game, Scene } = window["angry-pixel"];
+</script>
+```
+
+ES module build:
+
+```html
+<script type="module">
+    import { Game, Scene } from "https://cdn.angrypixel.gg/engine/latest/index.esm.js";
+</script>
+```
+
 ### Initialize
 
 First we create an instance of the `Game` class:
