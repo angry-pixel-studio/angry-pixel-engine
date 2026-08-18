@@ -39,6 +39,9 @@ VERSION=$(node -p "require('./bundles/angry-pixel/package.json').version")
 
 echo -e "${YELLOW}🚀 Starting deployment of angry-pixel $VERSION to cdn.angrypixel.gg using rsync...${NC}"
 
+# The ssh command used by rsync, with the deploy key when there is one
+SSH_COMMAND="ssh -p $SERVER_PORT"
+
 # Check if we're running in GitHub Actions (has SSH_PRIVATE_KEY secret)
 if [ -n "$SSH_PRIVATE_KEY" ]; then
     echo -e "${YELLOW}🔐 Setting up SSH key from GitHub secrets...${NC}"
@@ -47,9 +50,14 @@ if [ -n "$SSH_PRIVATE_KEY" ]; then
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
 
-    # Write the private key to a file
-    echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
+    # Write the private key to its own file, never to the default key of the machine,
+    # and remove it on every exit path
+    SSH_KEY_FILE=$(mktemp "${TMPDIR:-/tmp}/angry-pixel-deploy-key.XXXXXXXX")
+    trap 'rm -f "$SSH_KEY_FILE"' EXIT
+    chmod 600 "$SSH_KEY_FILE"
+    echo "$SSH_PRIVATE_KEY" > "$SSH_KEY_FILE"
+
+    SSH_COMMAND="$SSH_COMMAND -i $SSH_KEY_FILE"
 
     # Add the server to known_hosts to avoid host key verification
     ssh-keyscan -p $SERVER_PORT -H $SERVER_HOST >> ~/.ssh/known_hosts 2>/dev/null
@@ -94,7 +102,7 @@ echo ""
 for TARGET in $TARGETS; do
     echo -e "${YELLOW}📤 Uploading files to $DESTINATION_PATH/$TARGET...${NC}"
 
-    rsync -avz --delete -e "ssh -p $SERVER_PORT" \
+    rsync -avz --delete -e "$SSH_COMMAND" \
         --rsync-path="mkdir -p $DESTINATION_PATH/$TARGET && rsync" \
         $SOURCE_FOLDER/ $SERVER_USER@$SERVER_HOST:$DESTINATION_PATH/$TARGET
 
@@ -102,12 +110,6 @@ for TARGET in $TARGETS; do
     if [ $? -ne 0 ]; then
         echo -e "${RED}❌ Deployment failed!${NC}"
         echo "Please check your connection and try again."
-
-        # Clean up SSH key even on failure
-        if [ -n "$SSH_PRIVATE_KEY" ]; then
-            rm -f ~/.ssh/id_rsa
-        fi
-
         exit 1
     fi
 done
@@ -118,9 +120,3 @@ if [ "$TARGETS" != "$VERSION" ]; then
     echo -e "${GREEN}📦 And at: $URL/latest/index.js${NC}"
 fi
 echo -e "${GREEN}📊 Only changed files were transferred (incremental deployment)${NC}"
-
-# Clean up SSH key if we created it
-if [ -n "$SSH_PRIVATE_KEY" ]; then
-    rm -f ~/.ssh/id_rsa
-    echo -e "${GREEN}🧹 SSH key cleaned up${NC}"
-fi
