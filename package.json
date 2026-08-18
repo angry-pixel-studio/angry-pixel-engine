@@ -22,6 +22,7 @@
         "docs": "cd docs && mkdocs build",
         "deploy-docs": "scripts/deploy-docs-rsync.sh",
         "deploy-api-docs": "scripts/deploy-api-docs-rsync.sh",
+        "deploy-cdn": "scripts/deploy-cdn-rsync.sh",
         "demo:dev": "yarn workspace @angry-pixel/dev dev",
         "demo:move-and-bounce": "yarn workspace @angry-pixel/move-and-bounce dev"
     },

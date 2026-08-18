@@ -10,7 +10,7 @@
 
 ## Instalación
 
-Hay dos formas de iniciar un proyecto: generar un nuevo proyecto a partir de la plantilla oficial (skeleton), o instalar el motor manualmente en tu propio proyecto.
+Hay tres formas de iniciar un proyecto: generar un nuevo proyecto a partir de la plantilla oficial (skeleton), instalar el motor manualmente en tu propio proyecto, o cargar las compilaciones directamente desde el CDN.
 
 ### Plantilla oficial (skeleton)
 
@@ -35,6 +35,107 @@ npm install angry-pixel
 El motor incluye sus propias definiciones de tipos, por lo que no se necesitan paquetes adicionales para TypeScript.
 
 > **Nota:** Recomendamos configurar tu proyecto con un empaquetador como [Vite](https://vite.dev/), que proporciona un servidor de desarrollo con recarga en caliente y una compilación de producción.
+
+### Usar el motor desde el CDN
+
+Las compilaciones del motor también se publican en `https://cdn.angrypixel.gg/engine/`, por lo que pueden cargarse directamente en el navegador sin instalar nada ni configurar un proceso de compilación.
+
+Cada release se publica bajo su número de versión, y `latest` apunta a la última versión estable:
+
+```
+https://cdn.angrypixel.gg/engine/latest/index.js
+https://cdn.angrypixel.gg/engine/2.3.5/index.js
+```
+
+| Archivo | Formato | Se carga con |
+| ------- | ------- | ------------ |
+| `index.js` | UMD | `<script src="...">` |
+| `index.esm.js` | Módulo ES | `<script type="module">` |
+
+> **Nota:** Fija una versión específica en todo lo que publiques. El contenido de `latest` cambia con cada release.
+
+#### Script clásico
+
+La compilación UMD expone el motor como la variable global `angry-pixel`. Como el nombre contiene un guion, se accede a ella con notación de corchetes:
+
+```html
+<div id="app"></div>
+
+<script src="https://cdn.angrypixel.gg/engine/latest/index.js"></script>
+<script>
+    const { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } = window["angry-pixel"];
+
+    class MainScene extends Scene {
+        createEntities() {
+            // cámara
+            this.entityManager.createEntity([new Transform(), new Camera()]);
+
+            // un cuadrado en el centro de la pantalla
+            this.entityManager.createEntity([
+                new Transform(),
+                new MaskRenderer({
+                    shape: MaskShape.Rectangle,
+                    width: 128,
+                    height: 128,
+                    color: "#D9008F",
+                }),
+            ]);
+        }
+    }
+
+    const game = new Game({
+        containerNode: document.getElementById("app"),
+        width: 800,
+        height: 600,
+        canvasColor: "#00D9D9",
+    });
+
+    game.addScene(MainScene, "MainScene", true);
+    game.start();
+</script>
+```
+
+#### Módulo ES
+
+La compilación ESM se importa por URL dentro de un script de tipo módulo. No se crea ninguna variable global:
+
+```html
+<div id="app"></div>
+
+<script type="module">
+    import { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } from "https://cdn.angrypixel.gg/engine/latest/index.esm.js";
+
+    class MainScene extends Scene {
+        createEntities() {
+            // cámara
+            this.entityManager.createEntity([new Transform(), new Camera()]);
+
+            // un cuadrado en el centro de la pantalla
+            this.entityManager.createEntity([
+                new Transform(),
+                new MaskRenderer({
+                    shape: MaskShape.Rectangle,
+                    width: 128,
+                    height: 128,
+                    color: "#D9008F",
+                }),
+            ]);
+        }
+    }
+
+    const game = new Game({
+        containerNode: document.getElementById("app"),
+        width: 800,
+        height: 600,
+        canvasColor: "#00D9D9",
+    });
+
+    game.addScene(MainScene, "MainScene", true);
+    game.start();
+</script>
+```
+
+> **Nota:** Cargar el motor desde el CDN está pensado para pruebas rápidas, demos y ejemplos de un solo archivo. De esta forma no hay definiciones de tipos disponibles: para un proyecto en TypeScript, instala el motor desde npm como se describe más arriba.
 
 ## Estructura de carpetas sugerida
 
