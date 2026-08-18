@@ -6,7 +6,7 @@
 
 #### Tiled
 
--   `TiledWrapperSystem` kept processing the entity when the tilemap could not be resolved, and mapped the animations of a tilemap without tilesets, failing in both cases.
+-   `TiledWrapperSystem` failed when the `TiledWrapper` had no tilemap, and when mapping the animations of a tilemap that declares no tilesets.
 
 ## [2.3.5] - 2026-08-15
 
