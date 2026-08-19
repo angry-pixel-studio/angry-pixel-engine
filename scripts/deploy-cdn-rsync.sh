@@ -92,15 +92,12 @@ else
     TARGETS="$VERSION latest"
 fi
 
-echo -e "${YELLOW}📁 Source folder: $SOURCE_FOLDER${NC}"
-echo -e "${YELLOW}🌐 Destination: $SERVER_USER@$SERVER_HOST:$DESTINATION_PATH${NC}"
-echo -e "${YELLOW}🔌 Port: $SERVER_PORT${NC}"
 echo -e "${YELLOW}📦 Using rsync for incremental transfer...${NC}"
 echo ""
 
 # Deploy using rsync, one folder per target (the version and, for stable releases, latest)
 for TARGET in $TARGETS; do
-    echo -e "${YELLOW}📤 Uploading files to $DESTINATION_PATH/$TARGET...${NC}"
+    echo -e "${YELLOW}📤 Uploading files to the $TARGET folder...${NC}"
 
     rsync -avz --delete -e "$SSH_COMMAND" \
         --rsync-path="mkdir -p $DESTINATION_PATH/$TARGET && rsync" \
