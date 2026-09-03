@@ -22,52 +22,62 @@ export class TilemapRendererSystem implements System {
             const transform = this.entityManager.getComponent(entity, Transform);
             if (!transform) throw new Error("TilemapRenderer component needs a Transform");
 
-            if (typeof tilemapRenderer.tileset.image === "string") {
-                tilemapRenderer.tileset.image = this.assetManager.getImage(tilemapRenderer.tileset.image);
-                if (!tilemapRenderer.tileset.image) throw new Error(`Asset ${tilemapRenderer.tileset.image} not found`);
-            }
+            tilemapRenderer.tilesets.forEach((tileset) => {
+                if (typeof tileset.image === "string") {
+                    const image = this.assetManager.getImage(tileset.image);
+                    if (!image) throw new Error(`Asset ${tileset.image} not found`);
+
+                    tileset.image = image;
+                }
+            });
 
             if (!tilemapRenderer._processed) return;
 
-            // The complete property determines if the image was loaded
-            if (!tilemapRenderer.tileset.image || !tilemapRenderer.tileset.image.complete) return;
+            // the tiles of each tileset are rendered in a separate pass, so the tilesets are iterated first
+            // to keep the same texture bound for as many consecutive draws as possible
+            tilemapRenderer.tilesets.forEach((tileset, t) => {
+                // The complete property determines if the image was loaded
+                if (!tileset.image || !(tileset.image as HTMLImageElement).complete) return;
 
-            tilemapRenderer.chunks.forEach((chunk, i) => {
-                if (!tilemapRenderer._renderData[i]) tilemapRenderer._renderData[i] = renderDataFactory();
-                const renderData = tilemapRenderer._renderData[i];
+                tilemapRenderer.chunks.forEach((chunk, c) => {
+                    const i = t * tilemapRenderer.chunks.length + c;
 
-                renderData.type = RenderDataType.Tilemap;
-                renderData.orientation = TilemapOrientation.Center;
-                renderData.layer = tilemapRenderer.layer;
+                    if (!tilemapRenderer._renderData[i]) tilemapRenderer._renderData[i] = renderDataFactory();
+                    const renderData = tilemapRenderer._renderData[i];
 
-                // the render data represents a single chunk of the tilemap
-                renderData.tilemap.width = chunk.width;
-                renderData.tilemap.height = chunk.height;
-                renderData.tilemap.tileWidth = tilemapRenderer.tileWidth * Math.abs(transform.localScale.x);
-                renderData.tilemap.tileHeight = tilemapRenderer.tileHeight * Math.abs(transform.localScale.y);
-                renderData.tilemap.realWidth = renderData.tilemap.width * renderData.tilemap.tileWidth;
-                renderData.tilemap.realHeight = renderData.tilemap.height * renderData.tilemap.tileHeight;
+                    renderData.type = RenderDataType.Tilemap;
+                    renderData.orientation = TilemapOrientation.Center;
+                    renderData.layer = tilemapRenderer.layer;
 
-                renderData.tiles = chunk.data;
-                renderData.tileset = tilemapRenderer.tileset as Tileset;
-                renderData.opacity = tilemapRenderer.opacity;
-                renderData.rotation = transform.localRotation;
-                renderData.tintColor = tilemapRenderer.tintColor;
-                renderData.smooth = tilemapRenderer.smooth;
-                renderData.maskColor = tilemapRenderer.maskColor;
-                renderData.maskColorMix = tilemapRenderer.maskColorMix;
+                    // the render data represents a single chunk of the tilemap, rendered with a single tileset
+                    renderData.tilemap.width = chunk.width;
+                    renderData.tilemap.height = chunk.height;
+                    renderData.tilemap.tileWidth = tilemapRenderer.tileWidth * Math.abs(transform.localScale.x);
+                    renderData.tilemap.tileHeight = tilemapRenderer.tileHeight * Math.abs(transform.localScale.y);
+                    renderData.tilemap.realWidth = renderData.tilemap.width * renderData.tilemap.tileWidth;
+                    renderData.tilemap.realHeight = renderData.tilemap.height * renderData.tilemap.tileHeight;
 
-                renderData.position.x =
-                    transform.localPosition.x +
-                    tilemapRenderer.offset.x * transform.localScale.x +
-                    (chunk.x - tilemapRenderer.width / 2 + chunk.width / 2) * renderData.tilemap.tileWidth;
+                    renderData.tiles = chunk.data;
+                    renderData.tileset = tileset as Tileset;
+                    renderData.opacity = tilemapRenderer.opacity;
+                    renderData.rotation = transform.localRotation;
+                    renderData.tintColor = tilemapRenderer.tintColor;
+                    renderData.smooth = tilemapRenderer.smooth;
+                    renderData.maskColor = tilemapRenderer.maskColor;
+                    renderData.maskColorMix = tilemapRenderer.maskColorMix;
 
-                renderData.position.y =
-                    transform.localPosition.y +
-                    tilemapRenderer.offset.y * transform.localScale.y +
-                    (tilemapRenderer.height / 2 - chunk.y - chunk.height / 2) * renderData.tilemap.tileHeight;
+                    renderData.position.x =
+                        transform.localPosition.x +
+                        tilemapRenderer.offset.x * transform.localScale.x +
+                        (chunk.x - tilemapRenderer.width / 2 + chunk.width / 2) * renderData.tilemap.tileWidth;
 
-                this.renderManager.addRenderData(renderData);
+                    renderData.position.y =
+                        transform.localPosition.y +
+                        tilemapRenderer.offset.y * transform.localScale.y +
+                        (tilemapRenderer.height / 2 - chunk.y - chunk.height / 2) * renderData.tilemap.tileHeight;
+
+                    this.renderManager.addRenderData(renderData);
+                });
             });
         });
     }

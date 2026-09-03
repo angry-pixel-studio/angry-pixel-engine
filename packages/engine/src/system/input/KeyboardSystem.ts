@@ -8,7 +8,7 @@ import { InputManager } from "@manager/InputManager";
 @injectable(SYSTEM_SYMBOLS.KeyboardSystem)
 export class KeyboardSystem implements System {
     private readonly keyboard: Keyboard;
-    private pressedKeys: string[] = [];
+    private pressedKeys = new Set<string>();
 
     constructor(
         @inject(SYMBOLS.CanvasElement) canvas: HTMLCanvasElement,
@@ -17,16 +17,16 @@ export class KeyboardSystem implements System {
         this.keyboard = keyboard;
         canvas.addEventListener("keydown", this.eventHandler);
         canvas.addEventListener("keyup", this.eventHandler);
-        canvas.addEventListener("focusout", () => (this.pressedKeys = []));
+        canvas.addEventListener("focusout", () => this.pressedKeys.clear());
     }
 
     private eventHandler = (event: KeyboardEvent) => {
-        if (event.type === "keydown" && !this.pressedKeys.includes(event.code)) {
-            this.pressedKeys.push(event.code);
+        if (event.type === "keydown" && !this.pressedKeys.has(event.code)) {
+            this.pressedKeys.add(event.code);
         }
 
-        if (event.type === "keyup" && this.pressedKeys.includes(event.code)) {
-            this.pressedKeys.splice(this.pressedKeys.indexOf(event.code), 1);
+        if (event.type === "keyup" && this.pressedKeys.has(event.code)) {
+            this.pressedKeys.delete(event.code);
         }
     };
 

@@ -21,8 +21,9 @@ export class TilemapPreProcessingSystem implements System {
                     this.dataToChunks(tilemapRenderer);
                 }
 
-                tilemapRenderer.tileWidth = tilemapRenderer.tileWidth ?? tilemapRenderer.tileset.tileWidth;
-                tilemapRenderer.tileHeight = tilemapRenderer.tileHeight ?? tilemapRenderer.tileset.tileHeight;
+                // the size of the tile to render defaults to the one of the first tileset
+                tilemapRenderer.tileWidth = tilemapRenderer.tileWidth ?? tilemapRenderer.tilesets[0]?.tileWidth;
+                tilemapRenderer.tileHeight = tilemapRenderer.tileHeight ?? tilemapRenderer.tilesets[0]?.tileHeight;
 
                 tilemapRenderer._processed = true;
             }

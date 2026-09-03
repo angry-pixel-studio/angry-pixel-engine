@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.3.7] - 2026-09-03
+
+### Breaking changes
+
+#### Tilemap
+
+-   `TilemapRenderer.tileset` was replaced by `TilemapRenderer.tilesets`, which takes an array. The constructor throws when it is given a `tileset` option.
+
+### Added
+
+#### Tilemap
+
+-   Multiple tilesets per tilemap. Each tileset owns the range of tile ids that starts at its `firstgid` and covers as many tiles as the tileset has, the same criterion Tiled uses. A tile is drawn by the tileset whose range contains its id, and the ids outside every range are not drawn.
+-   `Tileset.firstgid`: the id of the first tile of the tileset, `1` by default.
+-   `Tileset.tileCount`: the number of tiles of the tileset, obtained from the image when it is not set.
+
+#### Tiled
+
+-   The `TiledWrapper` creates the tilesets of the `TilemapRenderer` from the ones embedded in the tilemap, with their image, tile size, margin, spacing, first tile id and number of tiles, so they no longer need to be declared. The image path stored by Tiled is relative to the tilemap file, so it is resolved against the URL the tilemap was loaded with.
+-   The tilesets declared by hand are kept, and matched by position with the ones of the tilemap to take the `firstgid` of each one.
+-   The tiles animated in Tiled are mapped to the animations of the tileset they belong to, instead of all of them to a single tileset.
+
+### Performance
+
+-   The tiles of each tileset are rendered in a separate pass, iterating the tilesets before the chunks so the same texture stays bound across consecutive draws. A pass that draws no tile issues no draw call.
+-   The sum over the tile data of every chunk was removed from the tilemap renderer, since the vertex generation already skips the chunks with nothing to draw.
+
 ## [2.3.6] - 2026-08-18
 
 ### Fixed

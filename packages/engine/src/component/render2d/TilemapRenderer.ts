@@ -10,13 +10,13 @@ import { TilemapRenderData } from "@angry-pixel/webgl";
  * ```js
  * const tilemapRenderer = new TilemapRenderer({
  *   layer: "Default",
- *   tileset: {
+ *   tilesets: [{
  *     image: this.assetManager.getImage("tileset.png"),
  *     tileWidth: 32,
  *     tileHeight: 32,
  *     margin: 0,
  *     spacing: 0
- *   },
+ *   }],
  *   data: [1, 2, 3, 4],
  *   chunks: [],
  *   width: 2,
@@ -33,7 +33,7 @@ import { TilemapRenderData } from "@angry-pixel/webgl";
  */
 export interface TilemapRendererOptions {
     layer: string;
-    tileset: Tileset;
+    tilesets: Tileset[];
     data: number[];
     chunks: Chunk[];
     width: number;
@@ -50,7 +50,8 @@ export interface TilemapRendererOptions {
 
 /**
  * The TilemapRenderer component renders 2D tile-based maps to the screen.\
- * It uses a tileset image as a source for individual tiles, which are arranged according to a provided array of tile IDs.\
+ * It uses one or more tileset images as a source for individual tiles, which are arranged according to a provided array of tile IDs.\
+ * Each tileset owns the range of ids that starts at its `firstgid` and covers as many tiles as the tileset has.\
  * The component supports features like tinting, masking, opacity control, and custom tile dimensions.\
  * Maps can be rendered in chunks for improved performance with large tilemaps, and tiles can be assigned to specific render layers.\
  * Each tile is referenced by an ID, with 0 representing empty space.
@@ -60,13 +61,13 @@ export interface TilemapRendererOptions {
  * ```js
  * const tilemapRenderer = new TilemapRenderer({
  *   layer: "Default",
- *   tileset: {
+ *   tilesets: [{
  *     image: this.assetManager.getImage("tileset.png"),
  *     tileWidth: 32,
  *     tileHeight: 32,
  *     margin: 0,
  *     spacing: 0
- *   },
+ *   }],
  *   data: [1, 2, 3, 4],
  *   chunks: [],
  *   width: 2,
@@ -84,8 +85,11 @@ export interface TilemapRendererOptions {
 export class TilemapRenderer {
     /** The render layer */
     layer: string = defaultRenderLayer;
-    /** The Tileset instance */
-    tileset: Tileset = undefined;
+    /**
+     * The tilesets used by the tilemap, each one owning a range of tile ids defined by its `firstgid`.\
+     * They are created by the TiledWrapper when the tilemap comes from Tiled.
+     */
+    tilesets: Tileset[] = [];
     /** Array of tiles. ID 0 (zero) represents empty space.*/
     data: number[] = [];
     /** Array of tile data split into chunks */
@@ -121,6 +125,10 @@ export class TilemapRenderer {
     static componentName: string = "TilemapRenderer";
 
     constructor(options?: Partial<TilemapRendererOptions>) {
+        if (options && "tileset" in options) {
+            throw new Error("TilemapRenderer.tileset was replaced by TilemapRenderer.tilesets, which takes an array");
+        }
+
         Object.assign(this, options);
     }
 
@@ -164,14 +172,14 @@ export interface TileAnimationOptions {
  * @example
  * ```js
  * const tilemapRenderer = new TilemapRenderer({
- *   tileset: {
+ *   tilesets: [{
  *     image: "tileset.png",
  *     tileWidth: 32,
  *     tileHeight: 32,
  *     animations: new Map([
  *       [3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]
  *     ])
- *   },
+ *   }],
  *   data: [1, 2, 3, 4],
  *   width: 2
  * });
@@ -198,8 +206,10 @@ export class TileAnimation {
 /**
  * The Tileset configuration defines the properties of a tileset used by the TilemapRenderer.\
  * It specifies the source image containing the tiles, the size of the individual tiles,\
- * and the optional margin and spacing of the image. The number of columns of the tileset\
- * is obtained from the image. The tileset cannot be updated at runtime.
+ * and the optional margin and spacing of the image. The number of columns and the number\
+ * of tiles of the tileset are obtained from the image. When a tilemap uses several tilesets,\
+ * each one needs a `firstgid`, the id of its first tile, following the same criteria as Tiled.\
+ * The tileset cannot be updated at runtime.
  * @public
  * @category Components Configuration
  * @example
@@ -211,6 +221,14 @@ export class TileAnimation {
  *   tileHeight: 16,
  *   margin: 1,
  *   spacing: 2
+ * };
+ *
+ * // a second tileset of 16x16 tiles, used by a tilemap whose first tileset has 72 tiles
+ * const anotherTileset = {
+ *   image: this.assetManager.getImage("another-tileset.png"),
+ *   tileWidth: 16,
+ *   tileHeight: 16,
+ *   firstgid: 73
  * };
  * ```
  */
@@ -225,6 +243,10 @@ export type Tileset = {
     margin?: number;
     /** Space in pixels between adjacent tiles */
     spacing?: number;
+    /** The id of the first tile of the tileset. Defaults to 1 */
+    firstgid?: number;
+    /** The number of tiles of the tileset. Obtained from the image if it is not set */
+    tileCount?: number;
     /** Animated tiles, keyed by the tile id to animate */
     animations?: Map<number, TileAnimation>;
     /** Maps each animated tile id to the tile id currently displayed. @internal */

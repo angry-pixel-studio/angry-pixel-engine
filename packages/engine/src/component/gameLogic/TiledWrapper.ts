@@ -32,7 +32,8 @@ export interface TiledWrapperOptions {
 /**
  * The TiledWrapper component wraps a Tiled map editor tilemap and handles rendering a specific layer.\
  * It provides an interface between Tiled's map format and the engine's tilemap rendering system.\
- * The tiles animated in Tiled are mapped to the animations of the TilemapRenderer tileset.\
+ * The tilesets of the TilemapRenderer are created from the ones embedded in the tilemap, unless they are declared.\
+ * The tiles animated in Tiled are mapped to the animations of the tileset they belong to.\
  * It can also create entities from the objects of the tilemap, matching them by class with the `objects` map.
  * @public
  * @category Components
@@ -69,8 +70,12 @@ export class TiledWrapper {
     _objectsCreated: boolean = false;
     /** @internal */
     _animationsMapped: boolean = false;
-    /** The coordinates (in tiles) of the top-left corner of the rendered layer. @internal */
+    /**  @internal The coordinates (in tiles) of the top-left corner of the rendered layer. */
     _origin: Vector2 = new Vector2();
+    /** @internal The URL of the tilemap asset, used to resolve the paths of the tileset images. */
+    _tilemapPath: string = undefined;
+    /** @internal TRUE if the tilesets of the TilemapRenderer were created from the tilemap. */
+    _tilesetsCreated: boolean = false;
     /** @internal */
     static componentName: string = "TiledWrapper";
 

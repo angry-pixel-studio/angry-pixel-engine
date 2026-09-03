@@ -36,6 +36,27 @@ export const forEachTiledLayer = (
     });
 
 /**
+ * Tiled stores the path of a tileset image relative to the tilemap file, while the assets are keyed\
+ * by the URL they were loaded with, so the path is resolved against the URL of the tilemap.\
+ * Absolute paths are left as they are, and so are relative ones when the URL of the tilemap is unknown.
+ * @internal
+ */
+export const resolveTiledPath = (tilemapPath: string, path: string): string => {
+    if (!tilemapPath || path.startsWith("/") || path.includes("://")) return path;
+
+    const segments: string[] = [];
+
+    `${tilemapPath.slice(0, tilemapPath.lastIndexOf("/") + 1)}${path}`.split("/").forEach((segment) => {
+        if (segment === ".") return;
+
+        if (segment === ".." && segments.length > 0 && segments[segments.length - 1] !== "..") segments.pop();
+        else segments.push(segment);
+    });
+
+    return segments.join("/");
+};
+
+/**
  * Tiled tint colors are hex-formatted, and include the alpha channel when it is not opaque.\
  * The engine has no alpha channel for the tint color, so it is discarded.
  * @internal
