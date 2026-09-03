@@ -47,7 +47,12 @@ export class TiledWrapperSystem implements System {
 
             // the paths of the tileset images are relative to the tilemap file
             tiledWrapper._tilemapPath = tiledWrapper.tilemap;
+            tiledWrapper._pathTilemap = tilemap;
             tiledWrapper.tilemap = tilemap;
+        } else if (tiledWrapper.tilemap !== tiledWrapper._pathTilemap) {
+            // another tilemap was assigned, the path of the previous one does not apply to it
+            tiledWrapper._tilemapPath = undefined;
+            tiledWrapper._pathTilemap = undefined;
         }
 
         return tiledWrapper.tilemap;

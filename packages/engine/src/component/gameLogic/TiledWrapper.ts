@@ -74,6 +74,8 @@ export class TiledWrapper {
     _origin: Vector2 = new Vector2();
     /** @internal The URL of the tilemap asset, used to resolve the paths of the tileset images. */
     _tilemapPath: string = undefined;
+    /** @internal The tilemap the URL belongs to, so the URL is dropped when another tilemap is assigned. */
+    _pathTilemap: TiledTilemap = undefined;
     /** @internal TRUE if the tilesets of the TilemapRenderer were created from the tilemap. */
     _tilesetsCreated: boolean = false;
     /** @internal */
