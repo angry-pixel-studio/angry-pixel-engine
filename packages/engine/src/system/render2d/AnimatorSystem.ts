@@ -100,7 +100,7 @@ export class AnimatorSystem implements System {
         } else {
             if (typeof this.animation.image === "string") return;
             const frame = this.animation.frames[animator.currentFrame];
-            const width = Math.floor(this.animation.image.naturalWidth / this.animation.slice.size.x);
+            const width = Math.ceil(this.animation.image.naturalWidth / this.animation.slice.size.x);
 
             spriteRenderer.image = this.animation.image;
             spriteRenderer.slice = {
