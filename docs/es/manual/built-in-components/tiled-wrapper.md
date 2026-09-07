@@ -2,11 +2,11 @@
 
 El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de mapas [Tiled](https://www.mapeditor.org/) y selecciona qué capa renderizar. Funciona junto con un [`TilemapRenderer`](tilemap-renderer.md) en la misma entidad, que dibuja los tiles usando los tilesets del mapa. También puede crear entidades a partir de los objetos ubicados en el tilemap.
 
-> **Nota:** Solo se admiten mapas de Tiled ortogonales.
-
 ## Limitaciones
 
+-   **Solo se admiten mapas ortogonales.** Las demás orientaciones no se traducen, por lo que los tiles de un mapa isométrico o hexagonal se ubican como si el mapa fuera ortogonal.
 -   **Los tiles volteados o rotados en Tiled todavía no están soportados.** Sus ids llevan los flags de volteo, por lo que no se renderizan como se espera. El soporte está planificado.
+-   **Las formas de colisión dibujadas sobre los tiles de un tileset no están soportadas.** El `objectgroup` que un tile lleva desde el Tile Collision Editor no se lee. Los colliders de un tilemap provienen del [`TilemapCollider`](tilemap-collider.md), que los genera a partir de los tiles que no están vacíos.
 
 ## Opciones
 

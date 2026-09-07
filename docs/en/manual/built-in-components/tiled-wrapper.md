@@ -2,11 +2,11 @@
 
 The `TiledWrapper` component wraps a tilemap exported from the [Tiled](https://www.mapeditor.org/) map editor and selects which layer to render. It works together with a [`TilemapRenderer`](tilemap-renderer.md) on the same entity, which draws the tiles using the tilesets of the map. It can also create entities from the objects placed in the tilemap.
 
-> **Note:** Only orthogonal Tiled maps are supported.
-
 ## Limitations
 
+-   **Only orthogonal maps are supported.** The other orientations are not translated, so the tiles of an isometric or hexagonal map are placed as if the map were orthogonal.
 -   **Tiles flipped or rotated in Tiled are not supported yet.** Their ids carry the flip flags, so they are not rendered as expected. Support is planned.
+-   **The collision shapes drawn on the tiles of a tileset are not supported.** The `objectgroup` a tile carries from the Tile Collision Editor is not read. The colliders of a tilemap come from the [`TilemapCollider`](tilemap-collider.md), which generates them from the tiles that are not empty.
 
 ## Options
 
