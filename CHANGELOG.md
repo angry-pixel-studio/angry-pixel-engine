@@ -1,12 +1,16 @@
 # Changelog
 
-## [2.3.7] - 2026-09-03
+## [2.3.7] - 2026-09-07
 
 ### Breaking changes
 
 #### Tilemap
 
 -   `TilemapRenderer.tileset` was replaced by `TilemapRenderer.tilesets`, which takes an array. The constructor throws when it is given a `tileset` option.
+
+#### Tiled
+
+-   `TiledWrapper.tilemap` was renamed to `TiledWrapper.tilemapPath`, and it only accepts the URL of the JSON tilemap exported from Tiled. A parsed `TiledTilemap` is no longer accepted, and the tilemap read from the JSON is kept in the component instead of replacing the URL.
 
 ### Added
 
@@ -18,6 +22,8 @@
 
 #### Tiled
 
+-   The `TiledWrapper` throws when the tilemap has no embedded tilesets and the `TilemapRenderer` declares none, instead of rendering nothing. A wrapper without a tilemap path is ignored.
+-   The tilemap is loaded when it is not among the loaded assets, and read as soon as it becomes available, so it no longer has to be loaded by the scene. Loading it in `loadAssets` is still recommended, since the scene waits for its assets before creating the entities.
 -   The `TiledWrapper` creates the tilesets of the `TilemapRenderer` from the ones embedded in the tilemap, with their image, tile size, margin, spacing, first tile id and number of tiles, so they no longer need to be declared. The image path stored by Tiled is relative to the tilemap file, so it is resolved against the URL the tilemap was loaded with.
 -   The tilesets declared by hand are kept, and matched by position with the ones of the tilemap to take the `firstgid` of each one.
 -   The tiles animated in Tiled are mapped to the animations of the tileset they belong to, instead of all of them to a single tileset.

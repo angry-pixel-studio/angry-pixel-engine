@@ -9,6 +9,9 @@ import { AssetManager } from "@manager/AssetManager";
 
 @injectable(SYSTEM_SYMBOLS.TiledWrapperSystem)
 export class TiledWrapperSystem implements System {
+    // the tilemaps whose load was requested, so it is not requested again on every frame while it is pending
+    private readonly requestedTilemaps: Set<string> = new Set();
+
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
@@ -40,35 +43,49 @@ export class TiledWrapperSystem implements System {
         });
     }
 
+    /**
+     * The tilemap is read from the assets, and loaded if the scene did not load it, in which case it is\
+     * read as soon as it becomes available. A wrapper without a tilemap path is ignored.
+     */
     private resolveTilemap(tiledWrapper: TiledWrapper): TiledTilemap {
-        if (typeof tiledWrapper.tilemap === "string") {
-            const tilemap = this.assetManager.getJson<TiledTilemap>(tiledWrapper.tilemap);
-            if (!tilemap) throw new Error(`Tilemap ${tiledWrapper.tilemap} not found`);
+        if (!tiledWrapper.tilemapPath) return undefined;
 
-            // the paths of the tileset images are relative to the tilemap file
-            tiledWrapper._tilemapPath = tiledWrapper.tilemap;
-            tiledWrapper._pathTilemap = tilemap;
-            tiledWrapper.tilemap = tilemap;
-        } else if (tiledWrapper.tilemap !== tiledWrapper._pathTilemap) {
-            // another tilemap was assigned, the path of the previous one does not apply to it
-            tiledWrapper._tilemapPath = undefined;
-            tiledWrapper._pathTilemap = undefined;
+        const tilemap = this.assetManager.getJson<TiledTilemap>(tiledWrapper.tilemapPath);
+
+        if (!tilemap) {
+            if (!this.requestedTilemaps.has(tiledWrapper.tilemapPath)) {
+                this.requestedTilemaps.add(tiledWrapper.tilemapPath);
+                this.assetManager.loadJson<TiledTilemap>(tiledWrapper.tilemapPath);
+            }
+
+            return undefined;
         }
 
-        return tiledWrapper.tilemap;
+        this.requestedTilemaps.delete(tiledWrapper.tilemapPath);
+        tiledWrapper._tilemap = tilemap;
+
+        return tilemap;
     }
 
     private resolveTilesets(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, tilemapRenderer: TilemapRenderer): void {
         if (tilemapRenderer.tilesets.length > 0 && !tiledWrapper._tilesetsCreated) {
             tilemapRenderer.tilesets.forEach((tileset, i) => {
-                tileset.firstgid = tileset.firstgid ?? tilemap.tilesets[i]?.firstgid ?? 1;
+                tileset.firstgid = tileset.firstgid ?? tilemap.tilesets?.[i]?.firstgid ?? 1;
             });
 
             return;
         }
 
+        if (!(tilemap.tilesets?.length > 0)) {
+            throw new Error(
+                `The tilemap ${tiledWrapper.tilemapPath} has no embedded tilesets. Export it from Tiled with ` +
+                    "its tilesets embedded, or declare the tilesets of the TilemapRenderer",
+            );
+        }
+
+        // the paths of the tileset images are relative to the tilemap file
         tilemapRenderer.tilesets = tilemap.tilesets.map((tileset) =>
-            this.createTileset(tileset, tiledWrapper._tilemapPath),
+            this.createTileset(tileset, tiledWrapper.tilemapPath),
         );
         tiledWrapper._tilesetsCreated = true;
     }
@@ -79,8 +96,9 @@ export class TiledWrapperSystem implements System {
     ): Tileset {
         if (!image) {
             throw new Error(
-                `The tileset ${name ?? source} is external, the engine does not read it. ` +
-                    "Declare the tilesets of the TilemapRenderer to render this tilemap",
+                `The tileset ${name ?? source} is not embedded in the tilemap, the engine does not read ` +
+                    "external tilesets. Export the tilemap with its tilesets embedded, or declare the " +
+                    "tilesets of the TilemapRenderer",
             );
         }
 
