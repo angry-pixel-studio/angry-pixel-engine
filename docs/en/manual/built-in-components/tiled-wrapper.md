@@ -12,7 +12,7 @@ The `TiledWrapper` component wraps a tilemap exported from the [Tiled](https://w
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `tilemap` | `TiledTilemap \| string` | The Tiled map data, as a parsed object or an asset URL/name string of a loaded JSON. |
+| `tilemapPath` | `string` | The URL of the JSON tilemap exported from Tiled. A wrapper without one is ignored. |
 | `layerToRender` | `string` | The name of the Tiled layer to render. |
 | `objects` | `Map<string, TiledObjectBlueprint>` | The entities to create from the objects of the tilemap, keyed by the class of the Tiled object. |
 
@@ -23,30 +23,32 @@ import { Transform, TiledWrapper, TilemapRenderer } from "angry-pixel";
 
 this.entityManager.createEntity([
     new Transform(),
-    new TiledWrapper({ tilemap: "map.json", layerToRender: "Ground" }),
+    new TiledWrapper({ tilemapPath: "tilemap/map.json", layerToRender: "Ground" }),
     // the tilesets are created from the ones embedded in the map
     new TilemapRenderer({ layer: "Foreground" }),
 ]);
 ```
 
-The Tiled JSON is loaded through the [asset manager](../asset-manager.md) with `loadJson`, typically in the scene's `loadAssets` method.
+The tilemap is referenced by the URL of its JSON export. It does not need to be loaded beforehand: when it is not among the loaded assets, the engine loads it and reads it as soon as it is available, so the map renders a few frames after the entity is created. Loading it in the scene's `loadAssets` method with the [asset manager](../asset-manager.md) is still recommended, because the scene waits for its assets before creating the entities, and the map is there from the first frame.
+
+```typescript
+loadAssets(): void {
+    this.assetManager.loadJson("tilemap/map.json");
+    this.assetManager.loadImage("image/tileset.png");
+}
+```
+
+The URL is also what the paths of the tileset images are resolved against, so reference the tilemap by its URL rather than by an asset name.
 
 ## Tilesets
 
 The tilesets of the [`TilemapRenderer`](tilemap-renderer.md) are created from the ones embedded in the map the first time the component is processed, with their image, tile size, margin, spacing, first tile id and number of tiles. A `TilemapRenderer` used with a `TiledWrapper` does not need to declare them.
 
-Tiled stores the path of a tileset image relative to the map file, so it is resolved against the URL the map was loaded with: a map loaded as `tilemap/map.json` that uses `../image/tileset.png` needs its image loaded as `image/tileset.png`.
+**The tilesets must be embedded in the JSON export.** Tiled can keep a tileset in its own `.tsx` file and reference it from the map; those tilesets are not read by the engine, because the map only carries their `firstgid` and the path of the `.tsx`. Embed them in the map with the *Embed Tileset* action of the Tilesets panel, or declare the tilesets of the `TilemapRenderer` by hand. Otherwise the component throws when it tries to create them — both for a map that declares no tilesets at all and for one whose tilesets are external — and the tiles animated in Tiled are not mapped either.
 
-```typescript
-this.assetManager.loadJson("tilemap/map.json");
-this.assetManager.loadImage("image/tileset.png");
-```
-
-When the map is given as a parsed object instead of an asset URL, there is no path to resolve against, so the path stored by Tiled is used as it is.
+Tiled stores the path of a tileset image relative to the map file, so it is resolved against the URL of the map: a map loaded as `tilemap/map.json` that uses `../image/tileset.png` needs its image loaded as `image/tileset.png`.
 
 The tilesets can still be declared by hand, which is needed when the images are loaded under a name that does not match their path, or to add [tile animations](tilemap-renderer.md#tile-animations) of your own. The declared tilesets are matched by position with the ones of the map, so they have to be listed in the same order, and the `firstgid` of each one is taken from the map unless it is set by hand.
-
-> **Note:** The tilesets must be embedded in the map. External tilesets (`.tsx`) are referenced by file and are not read by the engine, so a map that uses them needs the tilesets of the `TilemapRenderer` declared by hand.
 
 ## Layers
 
@@ -69,7 +71,6 @@ The tiles animated in Tiled are mapped to the `animations` of the [`TilemapRende
 A tile is keyed by the `firstgid` of its tileset plus the id it has within it. Animations already defined in the tileset take precedence over the ones declared in Tiled.
 
 Tiled allows a different duration for each frame, while the engine renders every frame of an animation at the same rate. The average duration is used, which keeps the total duration of the animation and is exact whenever every frame lasts the same.
-
 
 ## Updating the tilemap at runtime
 
@@ -110,7 +111,7 @@ const objects = new Map<string, TiledObjectBlueprint>([
     ["Door", (properties) => [new Door({ locked: properties.get("locked") as boolean })]],
 ]);
 
-new TiledWrapper({ tilemap: "map.json", layerToRender: "Ground", objects });
+new TiledWrapper({ tilemapPath: "tilemap/map.json", layerToRender: "Ground", objects });
 ```
 
 ### Object properties

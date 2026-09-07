@@ -8,12 +8,12 @@ import { Vector2 } from "@angry-pixel/math";
  * @example
  * ```js
  * const tiledWrapper = new TiledWrapper({
- *   tilemap: "tilemap.json",
+ *   tilemapPath: "tilemap.json",
  *   layerToRender: "Ground"
  * });
  *
  * const tiledWrapper = new TiledWrapper({
- *   tilemap: assetManager.getJson("tilemap.json"),
+ *   tilemapPath: "tilemap.json",
  *   layerToRender: "Ground",
  *   objects: new Map([
  *     ["Player", playerArchetype],
@@ -24,7 +24,7 @@ import { Vector2 } from "@angry-pixel/math";
  * ```
  */
 export interface TiledWrapperOptions {
-    tilemap: TiledTilemap | string;
+    tilemapPath: string;
     layerToRender: string;
     objects: Map<string, TiledObjectBlueprint>;
 }
@@ -32,7 +32,9 @@ export interface TiledWrapperOptions {
 /**
  * The TiledWrapper component wraps a Tiled map editor tilemap and handles rendering a specific layer.\
  * It provides an interface between Tiled's map format and the engine's tilemap rendering system.\
- * The tilesets of the TilemapRenderer are created from the ones embedded in the tilemap, unless they are declared.\
+ * The tilemap is referenced by the URL of its JSON export, and it is loaded if the scene did not load it.\
+ * The tilesets of the TilemapRenderer are created from the ones embedded in the tilemap, unless they are declared,\
+ * so the tilesets need to be embedded in the JSON export.\
  * The tiles animated in Tiled are mapped to the animations of the tileset they belong to.\
  * It can also create entities from the objects of the tilemap, matching them by class with the `objects` map.
  * @public
@@ -40,23 +42,14 @@ export interface TiledWrapperOptions {
  * @example
  * ```js
  * const tiledWrapper = new TiledWrapper({
- *   tilemap: {
- *     width: 10,
- *     height: 10,
- *     infinite: false,
- *     layers: [],
- *     renderorder: "right-down",
- *     tilesets: [{ firstgid: 1 }],
- *     tilewidth: 32,
- *     tileheight: 32
- *   },
+ *   tilemapPath: "tilemap/map.json",
  *   layerToRender: "Ground"
  * });
  * ```
  */
 export class TiledWrapper {
-    /** The tilemap to render. */
-    tilemap: TiledTilemap | string;
+    /** The URL of the JSON tilemap exported from Tiled. It is loaded if the scene did not load it. */
+    tilemapPath: string;
     /** The layer to render. */
     layerToRender: string;
     /**
@@ -72,10 +65,8 @@ export class TiledWrapper {
     _animationsMapped: boolean = false;
     /**  @internal The coordinates (in tiles) of the top-left corner of the rendered layer. */
     _origin: Vector2 = new Vector2();
-    /** @internal The URL of the tilemap asset, used to resolve the paths of the tileset images. */
-    _tilemapPath: string = undefined;
-    /** @internal The tilemap the URL belongs to, so the URL is dropped when another tilemap is assigned. */
-    _pathTilemap: TiledTilemap = undefined;
+    /** @internal The tilemap read from the JSON export. */
+    _tilemap: TiledTilemap = undefined;
     /** @internal TRUE if the tilesets of the TilemapRenderer were created from the tilemap. */
     _tilesetsCreated: boolean = false;
     /** @internal */

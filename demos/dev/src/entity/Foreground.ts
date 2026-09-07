@@ -61,7 +61,7 @@ export const foregroundArchetype: Archetype = {
         new Transform(),
         new TiledWrapper({
             layerToRender: "Foreground",
-            tilemap: ASSETS.tilemap.main,
+            tilemapPath: ASSETS.tilemap.main,
             objects: tiledObjects,
         }),
         // the tilesets are created by the TiledWrapper from the ones embedded in the tilemap

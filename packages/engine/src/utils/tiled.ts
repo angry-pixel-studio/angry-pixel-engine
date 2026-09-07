@@ -38,7 +38,7 @@ export const forEachTiledLayer = (
 /**
  * Tiled stores the path of a tileset image relative to the tilemap file, while the assets are keyed\
  * by the URL they were loaded with, so the path is resolved against the URL of the tilemap.\
- * Absolute paths are left as they are, and so are relative ones when the URL of the tilemap is unknown.
+ * Absolute paths and URLs are left as they are.
  * @internal
  */
 export const resolveTiledPath = (tilemapPath: string, path: string): string => {
