@@ -2,13 +2,16 @@ import { EntityManager, System } from "@angry-pixel/ecs";
 import { inject, injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "@config/dependencySymbols";
 import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
-import { TiledLayer, TiledTilemap, TiledWrapper } from "@component/gameLogic/TiledWrapper";
+import { TiledLayer, TiledTilemap, TiledTileset, TiledWrapper } from "@component/gameLogic/TiledWrapper";
 import { TileAnimation, TilemapRenderer, Tileset } from "@component/render2d/TilemapRenderer";
-import { forEachTiledLayer, tiledTintColor } from "@utils/tiled";
+import { forEachTiledLayer, resolveTiledPath, tiledTintColor } from "@utils/tiled";
 import { AssetManager } from "@manager/AssetManager";
 
 @injectable(SYSTEM_SYMBOLS.TiledWrapperSystem)
 export class TiledWrapperSystem implements System {
+    // the tilemaps whose load was requested, so it is not requested again on every frame while it is pending
+    private readonly requestedTilemaps: Set<string> = new Set();
+
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
@@ -24,26 +27,90 @@ export class TiledWrapperSystem implements System {
             const tilemapRenderer = this.entityManager.getComponent(entity, TilemapRenderer);
 
             if (!tiledWrapper._processed) {
-                if (tilemapRenderer) this.renderLayer(tiledWrapper, tilemap, tilemapRenderer);
+                if (tilemapRenderer) {
+                    this.resolveTilesets(tiledWrapper, tilemap, tilemapRenderer);
+                    this.renderLayer(tiledWrapper, tilemap, tilemapRenderer);
+                }
                 tiledWrapper._processed = true;
             }
 
             if (!tiledWrapper._animationsMapped) {
-                if (tilemap.tilesets && tilemapRenderer?.tileset) this.mapAnimations(tilemap, tilemapRenderer.tileset);
+                if (tilemap.tilesets && tilemapRenderer?.tilesets.length > 0) {
+                    this.mapAnimations(tilemap, tilemapRenderer.tilesets);
+                }
                 tiledWrapper._animationsMapped = true;
             }
         });
     }
 
+    /**
+     * The tilemap is read from the assets, and loaded if the scene did not load it, in which case it is\
+     * read as soon as it becomes available. A wrapper without a tilemap path is ignored.
+     */
     private resolveTilemap(tiledWrapper: TiledWrapper): TiledTilemap {
-        if (typeof tiledWrapper.tilemap === "string") {
-            const tilemap = this.assetManager.getJson<TiledTilemap>(tiledWrapper.tilemap);
-            if (!tilemap) throw new Error(`Tilemap ${tiledWrapper.tilemap} not found`);
+        if (!tiledWrapper.tilemapPath) return undefined;
 
-            tiledWrapper.tilemap = tilemap;
+        const tilemap = this.assetManager.getJson<TiledTilemap>(tiledWrapper.tilemapPath);
+
+        if (!tilemap) {
+            if (!this.requestedTilemaps.has(tiledWrapper.tilemapPath)) {
+                this.requestedTilemaps.add(tiledWrapper.tilemapPath);
+                this.assetManager.loadJson<TiledTilemap>(tiledWrapper.tilemapPath);
+            }
+
+            return undefined;
         }
 
-        return tiledWrapper.tilemap;
+        this.requestedTilemaps.delete(tiledWrapper.tilemapPath);
+        tiledWrapper._tilemap = tilemap;
+
+        return tilemap;
+    }
+
+    private resolveTilesets(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, tilemapRenderer: TilemapRenderer): void {
+        if (tilemapRenderer.tilesets.length > 0 && !tiledWrapper._tilesetsCreated) {
+            tilemapRenderer.tilesets.forEach((tileset, i) => {
+                tileset.firstgid = tileset.firstgid ?? tilemap.tilesets?.[i]?.firstgid ?? 1;
+            });
+
+            return;
+        }
+
+        if (!(tilemap.tilesets?.length > 0)) {
+            throw new Error(
+                `The tilemap ${tiledWrapper.tilemapPath} has no embedded tilesets. Export it from Tiled with ` +
+                    "its tilesets embedded, or declare the tilesets of the TilemapRenderer",
+            );
+        }
+
+        // the paths of the tileset images are relative to the tilemap file
+        tilemapRenderer.tilesets = tilemap.tilesets.map((tileset) =>
+            this.createTileset(tileset, tiledWrapper.tilemapPath),
+        );
+        tiledWrapper._tilesetsCreated = true;
+    }
+
+    private createTileset(
+        { firstgid, name, source, image, tilewidth, tileheight, margin, spacing, tilecount }: TiledTileset,
+        tilemapPath: string,
+    ): Tileset {
+        if (!image) {
+            throw new Error(
+                `The tileset ${name ?? source} is not embedded in the tilemap, the engine does not read ` +
+                    "external tilesets. Export the tilemap with its tilesets embedded, or declare the " +
+                    "tilesets of the TilemapRenderer",
+            );
+        }
+
+        return {
+            image: resolveTiledPath(tilemapPath, image),
+            tileWidth: tilewidth,
+            tileHeight: tileheight,
+            margin,
+            spacing,
+            firstgid,
+            tileCount: tilecount,
+        };
     }
 
     private renderLayer(tiledWrapper: TiledWrapper, tilemap: TiledTilemap, tilemapRenderer: TilemapRenderer): void {
@@ -99,9 +166,13 @@ export class TiledWrapperSystem implements System {
         }
     }
 
-    private mapAnimations(tilemap: TiledTilemap, tileset: Tileset): void {
+    private mapAnimations(tilemap: TiledTilemap, tilesets: Tileset[]): void {
         tilemap.tilesets.forEach(({ firstgid, tiles }) => {
             if (!tiles) return;
+
+            // the animations belong to the tileset that owns the animated tiles
+            const tileset = tilesets.find((candidate) => candidate.firstgid === firstgid);
+            if (!tileset) return;
 
             tiles.forEach(({ id, animation }) => {
                 if (!animation || animation.length === 0) return;

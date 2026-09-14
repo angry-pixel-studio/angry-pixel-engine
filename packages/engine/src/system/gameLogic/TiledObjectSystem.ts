@@ -31,9 +31,9 @@ export class TiledObjectSystem implements System {
         this.entityManager.search(TiledWrapper, (tiledWrapper, entity) => {
             if (tiledWrapper._objectsCreated || !(tiledWrapper.objects?.size > 0)) return;
             // the tilemap is resolved by the TiledWrapperSystem, which runs first
-            if (typeof tiledWrapper.tilemap === "string") return;
+            if (!tiledWrapper._tilemap) return;
 
-            this.createObjects(tiledWrapper, tiledWrapper.tilemap, entity);
+            this.createObjects(tiledWrapper, tiledWrapper._tilemap, entity);
             tiledWrapper._objectsCreated = true;
         });
     }

@@ -39,6 +39,10 @@ export type Tileset = {
     margin?: number;
     /** Space in pixels between adjacent tiles */
     spacing?: number;
+    /** The id of the first tile of the tileset. Defaults to 1 */
+    firstgid?: number;
+    /** The number of tiles of the tileset. Obtained from the image if it is not set */
+    tileCount?: number;
     /** Maps each animated tile id to the tile id currently displayed. @internal */
     _animationState?: Map<number, number>;
     /** Tileset values in texture coordinates. Computed once by the renderer. @internal */
@@ -52,6 +56,10 @@ export type Tileset = {
 type TilesetTexData = {
     /** The width of the tileset (in tiles) */
     columns: number;
+    /** The id of the first tile of the tileset */
+    firstgid: number;
+    /** The number of tiles of the tileset */
+    tileCount: number;
     /** The margin of the image */
     margin: Vector2;
     /** The distance between the origin of two adjacent tiles */
@@ -96,8 +104,6 @@ export class TilemapRenderer implements Renderer {
     }
 
     public render(renderData: TilemapRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
-        if (renderData.tiles.reduce((acc, tile) => acc + tile, 0) === 0) return false;
-
         this.processTileset(renderData.tileset);
         this.generateVertices(renderData);
 
@@ -176,9 +182,13 @@ export class TilemapRenderer implements Renderer {
 
         const margin = tileset.margin ?? 0;
         const spacing = tileset.spacing ?? 0;
+        const columns = Math.floor((naturalWidth - 2 * margin + spacing) / (tileset.tileWidth + spacing));
+        const rows = Math.floor((naturalHeight - 2 * margin + spacing) / (tileset.tileHeight + spacing));
 
         tileset._texData = {
-            columns: Math.floor((naturalWidth - 2 * margin + spacing) / (tileset.tileWidth + spacing)),
+            columns,
+            firstgid: tileset.firstgid ?? 1,
+            tileCount: tileset.tileCount ?? columns * rows,
             margin: new Vector2(margin / naturalWidth, margin / naturalHeight),
             step: new Vector2(
                 (tileset.tileWidth + spacing) / naturalWidth,
@@ -194,11 +204,12 @@ export class TilemapRenderer implements Renderer {
 
         if (!tileset._texData) return;
 
-        const { columns, margin, step, tileSize } = tileset._texData;
+        const { columns, firstgid, tileCount, margin, step, tileSize } = tileset._texData;
         const height = Math.floor(tiles.length / tilemap.width);
 
         tiles.forEach((tile, tilemapTile) => {
-            if (tile === 0) return;
+            // the tiles that do not belong to this tileset are rendered by the render data of the tileset that owns them
+            if (tile < firstgid || tile >= firstgid + tileCount) return;
 
             const tilesetTile = tileset._animationState?.get(tile) ?? tile;
 
@@ -215,8 +226,8 @@ export class TilemapRenderer implements Renderer {
                 px + 1, py
             )
 
-            const tx = margin.x + ((tilesetTile - 1) % columns) * step.x;
-            const ty = margin.y + Math.floor((tilesetTile - 1) / columns) * step.y;
+            const tx = margin.x + ((tilesetTile - firstgid) % columns) * step.x;
+            const ty = margin.y + Math.floor((tilesetTile - firstgid) / columns) * step.y;
 
             // prettier-ignore
             this.texVertices.push(

@@ -24,11 +24,13 @@ import { Transform, TilemapRenderer, TilemapCollider } from "angry-pixel";
 this.entityManager.createEntity([
     new Transform(),
     new TilemapRenderer({
-        tileset: {
-            image: this.assetManager.getImage("tileset.png"),
-            tileWidth: 16,
-            tileHeight: 16,
-        },
+        tilesets: [
+            {
+                image: this.assetManager.getImage("tileset.png"),
+                tileWidth: 16,
+                tileHeight: 16,
+            },
+        ],
     }),
     new TilemapCollider({ composite: true, layer: "Ground" }),
 ]);

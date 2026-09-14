@@ -17,8 +17,8 @@ export class TilemapAnimationSystem implements System {
 
     public onUpdate(): void {
         this.tilesets.clear();
-        this.entityManager.search(TilemapRenderer, ({ tileset }) => {
-            if (tileset) this.tilesets.add(tileset);
+        this.entityManager.search(TilemapRenderer, (tilemapRenderer) => {
+            tilemapRenderer.tilesets.forEach((tileset) => this.tilesets.add(tileset));
         });
 
         this.tilesets.forEach((tileset) => this.updateTileset(tileset));

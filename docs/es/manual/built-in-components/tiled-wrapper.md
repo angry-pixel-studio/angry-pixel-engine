@@ -1,19 +1,18 @@
 # TiledWrapper
 
-El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de mapas [Tiled](https://www.mapeditor.org/) y selecciona qué capa renderizar. Funciona junto con un [`TilemapRenderer`](tilemap-renderer.md) en la misma entidad, que dibuja los tiles usando un tileset. También puede crear entidades a partir de los objetos ubicados en el tilemap.
-
-> **Nota:** Solo se admiten mapas de Tiled ortogonales.
+El componente `TiledWrapper` envuelve un tilemap exportado desde el editor de mapas [Tiled](https://www.mapeditor.org/) y selecciona qué capa renderizar. Funciona junto con un [`TilemapRenderer`](tilemap-renderer.md) en la misma entidad, que dibuja los tiles usando los tilesets del mapa. También puede crear entidades a partir de los objetos ubicados en el tilemap.
 
 ## Limitaciones
 
--   **Un tileset por tilemap.** El `TilemapRenderer` dibuja con un único tileset, por lo que los ids de tile de un mapa que usa más de uno no se traducen con el `firstgid` del tileset al que pertenecen. El soporte de múltiples tilesets en ambos componentes está planificado.
+-   **Solo se admiten mapas ortogonales.** Las demás orientaciones no se traducen, por lo que los tiles de un mapa isométrico o hexagonal se ubican como si el mapa fuera ortogonal.
 -   **Los tiles volteados o rotados en Tiled todavía no están soportados.** Sus ids llevan los flags de volteo, por lo que no se renderizan como se espera. El soporte está planificado.
+-   **Las formas de colisión dibujadas sobre los tiles de un tileset no están soportadas.** El `objectgroup` que un tile lleva desde el Tile Collision Editor no se lee. Los colliders de un tilemap provienen del [`TilemapCollider`](tilemap-collider.md), que los genera a partir de los tiles que no están vacíos.
 
 ## Opciones
 
 | Opción | Tipo | Descripción |
 |--------|------|-------------|
-| `tilemap` | `TiledTilemap \| string` | Los datos del mapa de Tiled, como un objeto ya parseado o una cadena con la URL/nombre del recurso de un JSON cargado. |
+| `tilemapPath` | `string` | La URL del tilemap JSON exportado desde Tiled. Un wrapper que no la tiene se ignora. |
 | `layerToRender` | `string` | El nombre de la capa de Tiled a renderizar. |
 | `objects` | `Map<string, TiledObjectBlueprint>` | Las entidades a crear a partir de los objetos del tilemap, indexadas por la clase del objeto de Tiled. |
 
@@ -24,19 +23,32 @@ import { Transform, TiledWrapper, TilemapRenderer } from "angry-pixel";
 
 this.entityManager.createEntity([
     new Transform(),
-    new TiledWrapper({ tilemap: "map.json", layerToRender: "Ground" }),
-    new TilemapRenderer({
-        layer: "Foreground",
-        tileset: {
-            image: this.assetManager.getImage("tileset.png"),
-            tileWidth: 16,
-            tileHeight: 16,
-        },
-    }),
+    new TiledWrapper({ tilemapPath: "tilemap/map.json", layerToRender: "Ground" }),
+    // los tilesets se crean a partir de los que están embebidos en el mapa
+    new TilemapRenderer({ layer: "Foreground" }),
 ]);
 ```
 
-El JSON de Tiled se carga a través del [Asset Manager](../asset-manager.md) con `loadJson`, normalmente en el método `loadAssets` de la escena. Consulta [`TilemapRenderer`](tilemap-renderer.md) para la configuración del tileset.
+El tilemap se referencia con la URL de su exportación JSON. No hace falta cargarlo de antemano: cuando no está entre los recursos cargados, el motor lo carga y lo lee apenas está disponible, por lo que el mapa se renderiza unos cuadros después de crearse la entidad. De todos modos, se recomienda cargarlo en el método `loadAssets` de la escena con el [Asset Manager](../asset-manager.md), porque la escena espera a sus recursos antes de crear las entidades y el mapa está desde el primer cuadro.
+
+```typescript
+loadAssets(): void {
+    this.assetManager.loadJson("tilemap/map.json");
+    this.assetManager.loadImage("image/tileset.png");
+}
+```
+
+La URL es también contra lo que se resuelven las rutas de las imágenes de los tilesets, por lo que conviene referenciar el tilemap por su URL y no por un nombre de recurso.
+
+## Tilesets
+
+Los tilesets del [`TilemapRenderer`](tilemap-renderer.md) se crean a partir de los que están embebidos en el mapa la primera vez que se procesa el componente, con su imagen, tamaño de tile, margen, espaciado, id del primer tile y cantidad de tiles. Un `TilemapRenderer` usado con un `TiledWrapper` no necesita declararlos.
+
+**Los tilesets deben estar embebidos en la exportación JSON.** Tiled puede guardar un tileset en su propio archivo `.tsx` y referenciarlo desde el mapa; el motor no lee esos tilesets, porque el mapa solo lleva su `firstgid` y la ruta del `.tsx`. Hay que embeberlos en el mapa con la acción *Embed Tileset* del panel de Tilesets, o declarar a mano los tilesets del `TilemapRenderer`. De lo contrario el componente lanza un error al intentar crearlos —tanto para un mapa que no declara ningún tileset como para uno cuyos tilesets son externos— y los tiles animados en Tiled tampoco se mapean.
+
+Tiled guarda la ruta de la imagen de un tileset de forma relativa al archivo del mapa, por lo que se resuelve contra la URL del mapa: un mapa cargado como `tilemap/map.json` que usa `../image/tileset.png` necesita su imagen cargada como `image/tileset.png`.
+
+Los tilesets pueden declararse igualmente a mano, lo que es necesario cuando las imágenes se cargan con un nombre que no coincide con su ruta, o para agregar [animaciones de tiles](tilemap-renderer.md#animaciones-de-tiles) propias. Los tilesets declarados se corresponden por posición con los del mapa, por lo que deben listarse en el mismo orden, y el `firstgid` de cada uno se toma del mapa salvo que se defina a mano.
 
 ## Capas
 
@@ -54,13 +66,11 @@ El tamaño del tilemap y el tamaño de sus tiles se toman del tilemap, y de los 
 
 ## Tiles animados
 
-Los tiles animados en Tiled se mapean a las `animations` del tileset del [`TilemapRenderer`](tilemap-renderer.md) la primera vez que se procesa el componente, por lo que se reproducen sin ninguna configuración adicional.
+Los tiles animados en Tiled se mapean a las `animations` del tileset del [`TilemapRenderer`](tilemap-renderer.md) al que pertenecen la primera vez que se procesa el componente, por lo que se reproducen sin ninguna configuración adicional.
 
-Los ids de los tiles se traducen desde el tileset al que pertenecen: un tile se indexa con el `firstgid` de su tileset más el id que tiene dentro de él. Las animaciones ya definidas en el tileset tienen precedencia sobre las declaradas en Tiled.
+Un tile se indexa con el `firstgid` de su tileset más el id que tiene dentro de él. Las animaciones ya definidas en el tileset tienen precedencia sobre las declaradas en Tiled.
 
 Tiled permite una duración distinta para cada frame, mientras que el motor renderiza todos los frames de una animación al mismo ritmo. Se usa la duración promedio, lo que conserva la duración total de la animación y es exacto siempre que todos los frames duren lo mismo.
-
-> **Nota:** El tileset debe estar embebido en el mapa. Los tilesets externos (`.tsx`) se referencian por archivo y el motor no los lee.
 
 ## Actualizar el tilemap en tiempo de ejecución
 
@@ -101,7 +111,7 @@ const objects = new Map<string, TiledObjectBlueprint>([
     ["Door", (properties) => [new Door({ locked: properties.get("locked") as boolean })]],
 ]);
 
-new TiledWrapper({ tilemap: "map.json", layerToRender: "Ground", objects });
+new TiledWrapper({ tilemapPath: "tilemap/map.json", layerToRender: "Ground", objects });
 ```
 
 ### Propiedades de los objetos

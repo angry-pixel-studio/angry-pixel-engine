@@ -1,6 +1,6 @@
 # TilemapRenderer
 
-The `TilemapRenderer` component renders a tile-based map. It uses a tileset image as the source for individual tiles, arranged according to an array of tile IDs. It uses the entity's [`Transform`](transform.md) for position. See [Rendering](../rendering.md) for an overview.
+The `TilemapRenderer` component renders a tile-based map. It uses one or more tileset images as the source for individual tiles, arranged according to an array of tile IDs. It uses the entity's [`Transform`](transform.md) for position. See [Rendering](../rendering.md) for an overview.
 
 Each tile is referenced by an ID, where `0` represents empty space. The tile data can be provided directly, or populated from a Tiled map with the [`TiledWrapper`](tiled-wrapper.md) component.
 
@@ -8,7 +8,7 @@ Each tile is referenced by an ID, where `0` represents empty space. The tile dat
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `tileset` | `Tileset` | — | The tileset that provides the tiles (see below). |
+| `tilesets` | `Tileset[]` | `[]` | The tilesets that provide the tiles (see below). |
 | `data` | `number[]` | `[]` | Array of tile IDs. `0` is empty space. |
 | `chunks` | `Chunk[]` | `[]` | Tile data split into chunks, for large maps. |
 | `width` | `number` | `0` | Map width in tiles. |
@@ -32,19 +32,38 @@ Each tile is referenced by an ID, where `0` represents empty space. The tile dat
 | `tileHeight` | `number` | Tile height in pixels. |
 | `margin` | `number` | Space in pixels between the tiles and the four edges of the image. Defaults to `0`. |
 | `spacing` | `number` | Space in pixels between adjacent tiles. Defaults to `0`. |
+| `firstgid` | `number` | The ID of the first tile of the tileset. Defaults to `1`. |
+| `tileCount` | `number` | The number of tiles of the tileset. Obtained from the image if it is not set. |
 | `animations` | `Map<number, TileAnimation>` | Animated tiles, keyed by the tile ID to animate (see below). |
 
 For a tileset whose tiles are extruded by 1 pixel, the image has a margin of `1` and a spacing of `2`:
 
 ```typescript
-tileset: {
-    image: this.assetManager.getImage("tileset.png"),
-    tileWidth: 16,
-    tileHeight: 16,
-    margin: 1,
-    spacing: 2,
-}
+tilesets: [
+    {
+        image: this.assetManager.getImage("tileset.png"),
+        tileWidth: 16,
+        tileHeight: 16,
+        margin: 1,
+        spacing: 2,
+    },
+];
 ```
+
+### Multiple tilesets
+
+Each tileset owns a range of tile IDs: it starts at its `firstgid` and covers as many tiles as the tileset has. A tile is drawn by the tileset whose range contains its ID, and IDs outside every range are not drawn. This is the same criterion Tiled uses, so the ranges of a map exported from Tiled match its `firstgid` values.
+
+The `firstgid` of the first tileset defaults to `1`, and `tileCount` is obtained from the image, dividing it by the size of a tile. A tileset of 72 tiles starting at `1` is followed by a tileset starting at `73`:
+
+```typescript
+tilesets: [
+    { image: this.assetManager.getImage("ground.png"), tileWidth: 16, tileHeight: 16 },
+    { image: this.assetManager.getImage("props.png"), tileWidth: 16, tileHeight: 16, firstgid: 73 },
+];
+```
+
+The tiles of each tileset are rendered in a separate pass, so a map that uses several tilesets costs one draw call per tileset and chunk. When the tilemap comes from Tiled, the [`TiledWrapper`](tiled-wrapper.md) creates the tilesets from the ones embedded in the map, so they do not need to be declared.
 
 ### Tile animations
 
@@ -66,11 +85,13 @@ this.entityManager.createEntity([
     new Transform(),
     new TilemapRenderer({
         layer: "Default",
-        tileset: {
-            image: this.assetManager.getImage("tileset.png"),
-            tileWidth: 16,
-            tileHeight: 16,
-        },
+        tilesets: [
+            {
+                image: this.assetManager.getImage("tileset.png"),
+                tileWidth: 16,
+                tileHeight: 16,
+            },
+        ],
         data: [1, 2, 3, 4],
         width: 2,
         height: 2,
@@ -86,13 +107,15 @@ import { Transform, TilemapRenderer, TileAnimation } from "angry-pixel";
 this.entityManager.createEntity([
     new Transform(),
     new TilemapRenderer({
-        tileset: {
-            image: this.assetManager.getImage("tileset.png"),
-            tileWidth: 16,
-            tileHeight: 16,
-            // Every tile with ID 3 cycles through 3, 4, 5 at 6 fps.
-            animations: new Map([[3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]]),
-        },
+        tilesets: [
+            {
+                image: this.assetManager.getImage("tileset.png"),
+                tileWidth: 16,
+                tileHeight: 16,
+                // Every tile with ID 3 cycles through 3, 4, 5 at 6 fps.
+                animations: new Map([[3, new TileAnimation({ tiles: [3, 4, 5], fps: 6 })]]),
+            },
+        ],
         data: [1, 2, 3, 4],
         width: 2,
         height: 2,

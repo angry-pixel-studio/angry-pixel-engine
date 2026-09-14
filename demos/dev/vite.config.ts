@@ -5,7 +5,7 @@ export default defineConfig({
     plugins: [tsconfigPaths()],
     base: "./",
     server: {
-        port: 3000,
+        port: 3003,
         host: true,
     },
 });
