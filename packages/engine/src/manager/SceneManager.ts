@@ -99,22 +99,27 @@ export class SceneManager {
             this.currentSceneName = this.sceneNameToBeLoaded;
             this.sceneNameToBeLoaded = undefined;
 
-            this.scenes.get(this.currentSceneName).loadAssets();
-            this.scenes.get(this.currentSceneName).registerSystems();
+            const scene = this.scenes.get(this.currentSceneName);
+
+            scene.systems = [];
+            scene.loadAssets();
+            scene.registerSystems();
             this._loadingScene = true;
         }
 
         if (this._loadingScene && this.assetManager.getAssetsLoaded()) {
+            const scene = this.scenes.get(this.currentSceneName);
+
             this._loadingScene = false;
             this._sceneLoadedThisFrame = true;
 
-            this.scenes.get(this.currentSceneName).createEntities();
+            scene.createEntities();
 
             // update some components for the initial entities
             this.systemManager.update(SystemGroup.Transform);
             this.systemManager.update(SystemGroup.PreGameLogic);
 
-            this.scenes.get(this.currentSceneName).systems.forEach((systemType, index) => {
+            scene.systems.forEach((systemType, index) => {
                 this.systemFactory.createSystemIfNotExists(systemType);
                 this.systemManager.enableSystem(systemType);
                 this.systemManager.setExecutionOrder(systemType, index);
