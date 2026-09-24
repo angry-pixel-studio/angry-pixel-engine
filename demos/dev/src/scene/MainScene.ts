@@ -23,8 +23,8 @@ export class MainScene extends Scene {
         Object.values(ASSETS.tilemap).forEach((filename) => this.assetManager.loadJson(filename));
     }
 
-    public registerSystems(): void {
-        this.addSystems([
+    public setup(): void {
+        this.systems = [
             InputControllerSystem,
             MovingPlatformSystem,
             NinjaMovementSystem,
@@ -33,10 +33,8 @@ export class MainScene extends Scene {
             GoblinMovementSystem,
             FollowPlayerCameraSystem,
             FpsMetterSystem,
-        ]);
-    }
+        ];
 
-    public createEntities(): void {
         this.setupCameras();
         this.setupGameObjects();
         this.setupUIText();

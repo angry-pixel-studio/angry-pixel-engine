@@ -5,7 +5,7 @@ export class InputControllerSystem extends GameSystem {
     private keyboard: Keyboard;
     private gamepad: GamepadController;
 
-    public onCreate(): void {
+    public onSceneLoaded(): void {
         this.keyboard = this.inputManager.keyboard;
     }
 
