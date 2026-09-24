@@ -153,6 +153,9 @@ export class SceneManager {
 
         // intervals and timeouts are cleared to avoid any unwanted behavior
         this.timeManager.clearAllIntervals();
+
+        // the scene is fully torn down, so it is not destroyed again by the next load
+        this.currentSceneName = undefined;
     }
 }
 
