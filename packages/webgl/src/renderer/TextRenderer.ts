@@ -4,7 +4,14 @@ import { CameraData, RenderData, RenderDataType, Renderer } from "./Renderer";
 import { FontAtlas, FontAtlasFactory } from "../FontAtlasFactory";
 import { TextureManager } from "../texture/TextureManager";
 import { ProgramManager } from "../program/ProgramManager";
-import { hexToRgba, setProjectionMatrix } from "./utils";
+import {
+    createVertexBuffersRegistry,
+    growFloat32Array,
+    hexToRgba,
+    setProjectionMatrix,
+    VertexBuffers,
+    writeQuad,
+} from "./utils";
 
 /**
  * Alignment of the text.
@@ -43,16 +50,39 @@ export interface TextRenderData extends RenderData {
     alignment: TextAlignment;
 }
 
+/**
+ * GPU buffers of a single text render data, plus the snapshot of the inputs its vertices were generated from.
+ * @internal
+ */
+type TextVertexEntry = {
+    buffers: VertexBuffers;
+    vertexCount: number;
+    generated: boolean;
+    text: string;
+    font: FontFace | string;
+    fontSize: number;
+    letterSpacing: number;
+    lineHeight: number;
+    alignment: TextAlignment;
+    boundingBoxWidth: number;
+    boundingBoxHeight: number;
+    fontAtlasId: string;
+    fontAtlasWidth: number;
+    fontAtlasHeight: number;
+};
+
 export class TextRenderer implements Renderer {
     public readonly type: RenderDataType = RenderDataType.Text;
 
     private projectionMatrix: mat4;
     private modelMatrix: mat4;
     private textureMatrix: mat4;
-    private posVertices: number[] = [];
-    private texVertices: number[] = [];
-    private positionBuffer: WebGLBuffer;
-    private textureBuffer: WebGLBuffer;
+    private posVertices: Float32Array = new Float32Array(0);
+    private texVertices: Float32Array = new Float32Array(0);
+
+    // every render data owns its buffers, so the vertices are uploaded only when the text changes
+    private readonly entries: WeakMap<TextRenderData, TextVertexEntry> = new WeakMap();
+    private readonly buffersRegistry: FinalizationRegistry<VertexBuffers>;
 
     // cache
     private lastTexture: WebGLTexture = null;
@@ -67,16 +97,10 @@ export class TextRenderer implements Renderer {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
-        this.positionBuffer = this.gl.createBuffer();
-        this.textureBuffer = this.gl.createBuffer();
+        this.buffersRegistry = createVertexBuffersRegistry(this.gl);
     }
 
-    public render(
-        renderData: TextRenderData,
-        cameraData: CameraData,
-        lastRender: RenderDataType,
-        shadow: boolean = false,
-    ): boolean {
+    public render(renderData: TextRenderData, cameraData: CameraData, lastRender: RenderDataType): boolean {
         if (!renderData.text) return false;
 
         const fontAtlas = this.fontAtlasFactory.getOrCreate({
@@ -84,21 +108,21 @@ export class TextRenderer implements Renderer {
             ...renderData.textureAtlas,
         });
 
-        // If we are render the shadow text, we dont need to recalculate the vertices or re-enable buffers
-        if (!shadow) {
-            this.generateTextVertices(fontAtlas, renderData);
+        const entry = this.getOrCreateEntry(renderData);
+        if (this.isDirty(entry, renderData, fontAtlas)) this.updateVertices(entry, renderData, fontAtlas);
 
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.DYNAMIC_DRAW);
-            this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
-            this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+        if (entry.vertexCount === 0) return false;
 
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
-            this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
-            this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
-        }
+        // consecutive texts use different buffers, so the attributes are always set up
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.positionBuffer);
+        this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
+        this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.textureBuffer);
+        this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
+        this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
+
+        // the shadow is drawn with the vertices of the main text, only the position and the color change
         if (renderData.shadow) {
             const { color, offset, opacity } = renderData.shadow;
             const shadowRenderData = {
@@ -108,10 +132,22 @@ export class TextRenderer implements Renderer {
                 position: Vector2.add(this.shadowPosition, renderData.position, offset),
             };
             shadowRenderData.shadow = undefined;
-            this.render(shadowRenderData, cameraData, lastRender, true);
+            this.draw(shadowRenderData, entry, fontAtlas, cameraData, lastRender);
             lastRender = RenderDataType.Text;
         }
 
+        this.draw(renderData, entry, fontAtlas, cameraData, lastRender);
+
+        return true;
+    }
+
+    private draw(
+        renderData: TextRenderData,
+        entry: TextVertexEntry,
+        fontAtlas: FontAtlas,
+        cameraData: CameraData,
+        lastRender: RenderDataType,
+    ): void {
         this.modelMatrix = mat4.identity(this.modelMatrix);
 
         mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
@@ -152,14 +188,84 @@ export class TextRenderer implements Renderer {
         this.gl.uniform1i(this.programManager.useTintColorUniform, 1);
         this.gl.uniform4f(this.programManager.tintColorUniform, r, g, b, a);
 
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
-
-        return true;
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, entry.vertexCount);
     }
 
-    private generateTextVertices(fontAtlas: FontAtlas, renderData: TextRenderData): void {
-        this.posVertices = [];
-        this.texVertices = [];
+    private getOrCreateEntry(renderData: TextRenderData): TextVertexEntry {
+        let entry = this.entries.get(renderData);
+        if (entry) return entry;
+
+        entry = {
+            buffers: { positionBuffer: this.gl.createBuffer(), textureBuffer: this.gl.createBuffer() },
+            vertexCount: 0,
+            generated: false,
+            text: undefined,
+            font: undefined,
+            fontSize: undefined,
+            letterSpacing: undefined,
+            lineHeight: undefined,
+            alignment: undefined,
+            boundingBoxWidth: undefined,
+            boundingBoxHeight: undefined,
+            fontAtlasId: undefined,
+            fontAtlasWidth: undefined,
+            fontAtlasHeight: undefined,
+        };
+
+        this.entries.set(renderData, entry);
+        this.buffersRegistry.register(renderData, entry.buffers);
+
+        return entry;
+    }
+
+    /** Only the inputs that affect the vertices are compared: color, opacity, position, rotation, flip and shadow do not */
+    private isDirty(entry: TextVertexEntry, renderData: TextRenderData, fontAtlas: FontAtlas): boolean {
+        return (
+            !entry.generated ||
+            entry.text !== renderData.text ||
+            entry.font !== renderData.font ||
+            entry.fontSize !== renderData.fontSize ||
+            entry.letterSpacing !== renderData.letterSpacing ||
+            entry.lineHeight !== renderData.lineHeight ||
+            entry.alignment !== renderData.alignment ||
+            // the bounding box is a new object every frame, so its values are compared
+            entry.boundingBoxWidth !== renderData.boundingBox.width ||
+            entry.boundingBoxHeight !== renderData.boundingBox.height ||
+            entry.fontAtlasId !== fontAtlas.id ||
+            entry.fontAtlasWidth !== fontAtlas.canvas.width ||
+            entry.fontAtlasHeight !== fontAtlas.canvas.height
+        );
+    }
+
+    private updateVertices(entry: TextVertexEntry, renderData: TextRenderData, fontAtlas: FontAtlas): void {
+        entry.generated = true;
+        entry.text = renderData.text;
+        entry.font = renderData.font;
+        entry.fontSize = renderData.fontSize;
+        entry.letterSpacing = renderData.letterSpacing;
+        entry.lineHeight = renderData.lineHeight;
+        entry.alignment = renderData.alignment;
+        entry.boundingBoxWidth = renderData.boundingBox.width;
+        entry.boundingBoxHeight = renderData.boundingBox.height;
+        entry.fontAtlasId = fontAtlas.id;
+        entry.fontAtlasWidth = fontAtlas.canvas.width;
+        entry.fontAtlasHeight = fontAtlas.canvas.height;
+
+        const length = this.generateTextVertices(fontAtlas, renderData);
+        entry.vertexCount = length / 2;
+
+        if (length === 0) return;
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.positionBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.posVertices.subarray(0, length), this.gl.DYNAMIC_DRAW);
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.texVertices.subarray(0, length), this.gl.DYNAMIC_DRAW);
+    }
+
+    /** Writes the vertices into the scratch arrays and returns the number of values written to each of them */
+    private generateTextVertices(fontAtlas: FontAtlas, renderData: TextRenderData): number {
+        let length = 0;
 
         // TODO: cache this
         const processedText = this.preProcessText(fontAtlas, renderData);
@@ -185,15 +291,11 @@ export class TextRenderer implements Renderer {
                 if (glyph) {
                     const letterWidth = glyph.width / fontAtlas.fontSize;
 
-                    // prettier-ignore
-                    this.posVertices.push(
-                        x, y - 1,
-                        x + letterWidth, y - 1,
-                        x, y,
-                        x, y,
-                        x + letterWidth, y - 1,
-                        x + letterWidth, y
-                    )
+                    // 12 values per glyph: two triangles of two coordinates each
+                    this.posVertices = growFloat32Array(this.posVertices, length + 12, length);
+                    this.texVertices = growFloat32Array(this.texVertices, length + 12, length);
+
+                    writeQuad(this.posVertices, length, x, y - 1, x + letterWidth, y);
 
                     const gx = (glyph.id % fontAtlas.gridSize) * (fontAtlas.fontSize + fontAtlas.spacing);
                     const gy = ((glyph.id / fontAtlas.gridSize) | 0) * (fontAtlas.fontSize + fontAtlas.spacing);
@@ -203,15 +305,9 @@ export class TextRenderer implements Renderer {
                     const u2 = (gx + glyph.width) / fontAtlas.canvas.width;
                     const v2 = (gy + fontAtlas.fontSize) / fontAtlas.canvas.height;
 
-                    // prettier-ignore
-                    this.texVertices.push(
-                        u1, v2,
-                        u2, v2,
-                        u1, v1,
-                        u1, v1,
-                        u2, v2,
-                        u2, v1
-                    );
+                    writeQuad(this.texVertices, length, u1, v2, u2, v1);
+
+                    length += 12;
 
                     x += letterWidth + letterSpacing;
                 }
@@ -220,6 +316,8 @@ export class TextRenderer implements Renderer {
             x = -width / 2;
             y -= lineHeight;
         }
+
+        return length;
     }
 
     private preProcessText(

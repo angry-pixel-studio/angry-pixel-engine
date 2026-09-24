@@ -48,3 +48,49 @@ export const hexToRgba = (hex: string): Readonly<RGBA> | null => {
 
     return rgba;
 };
+
+/** The vertex buffers owned by a single render data object. */
+export type VertexBuffers = { positionBuffer: WebGLBuffer; textureBuffer: WebGLBuffer };
+
+/**
+ * Deletes the vertex buffers of a render data object once it is garbage collected.
+ * The held value must only reference the buffers, never the render data, or it would never be collected.
+ */
+export const createVertexBuffersRegistry = (gl: WebGL2RenderingContext): FinalizationRegistry<VertexBuffers> =>
+    new FinalizationRegistry<VertexBuffers>(({ positionBuffer, textureBuffer }) => {
+        gl.deleteBuffer(positionBuffer);
+        gl.deleteBuffer(textureBuffer);
+    });
+
+/** Returns an array with room for at least `length` elements, keeping the first `keep` elements of the given one. */
+export const growFloat32Array = (array: Float32Array, length: number, keep: number = 0): Float32Array => {
+    if (array.length >= length) return array;
+
+    const grown = new Float32Array(Math.max(length, array.length * 2));
+    if (keep > 0) grown.set(array.subarray(0, keep));
+
+    return grown;
+};
+
+/** Writes the two triangles of a quad (12 values) into the array, starting at the given offset. */
+export const writeQuad = (
+    array: Float32Array,
+    offset: number,
+    left: number,
+    bottom: number,
+    right: number,
+    top: number,
+): void => {
+    array[offset] = left;
+    array[offset + 1] = bottom;
+    array[offset + 2] = right;
+    array[offset + 3] = bottom;
+    array[offset + 4] = left;
+    array[offset + 5] = top;
+    array[offset + 6] = left;
+    array[offset + 7] = top;
+    array[offset + 8] = right;
+    array[offset + 9] = bottom;
+    array[offset + 10] = right;
+    array[offset + 11] = top;
+};

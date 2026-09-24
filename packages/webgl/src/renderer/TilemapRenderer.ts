@@ -3,7 +3,14 @@ import { Vector2 } from "@angry-pixel/math";
 import { CameraData, RenderData, RenderDataType, Renderer } from "./Renderer";
 import { ProgramManager } from "../program/ProgramManager";
 import { TextureManager } from "../texture/TextureManager";
-import { hexToRgba, setProjectionMatrix } from "./utils";
+import {
+    createVertexBuffersRegistry,
+    growFloat32Array,
+    hexToRgba,
+    setProjectionMatrix,
+    VertexBuffers,
+    writeQuad,
+} from "./utils";
 
 /**
  * Direction in which the tilemap will be rendered.
@@ -77,16 +84,38 @@ export type Tilemap = {
     realHeight: number;
 };
 
+/**
+ * GPU buffers of a single tilemap render data, plus the snapshot of the inputs its vertices were generated from.
+ * @internal
+ */
+type TilemapVertexEntry = {
+    buffers: VertexBuffers;
+    vertexCount: number;
+    generated: boolean;
+    tileset: Tileset;
+    texData: TilesetTexData;
+    width: number;
+    /** Float64 instead of Int32, so Tiled ids carrying the flip flags in their high bits are stored exactly */
+    tiles: Float64Array;
+    tilesLength: number;
+    /** Distinct ids of the tiles of this tileset present in the chunk */
+    tilesetTiles: Set<number>;
+    /** Tile displayed by each animated tile of the chunk, when the vertices were generated */
+    animationFrames: Map<number, number>;
+};
+
 export class TilemapRenderer implements Renderer {
     public readonly type: RenderDataType.Tilemap;
 
     private projectionMatrix: mat4;
     private modelMatrix: mat4;
     private textureMatrix: mat4;
-    private posVertices: number[] = [];
-    private texVertices: number[] = [];
-    private positionBuffer: WebGLBuffer;
-    private textureBuffer: WebGLBuffer;
+    private posVertices: Float32Array = new Float32Array(0);
+    private texVertices: Float32Array = new Float32Array(0);
+
+    // every render data owns its buffers, so the vertices are uploaded only when the tilemap changes
+    private readonly entries: WeakMap<TilemapRenderData, TilemapVertexEntry> = new WeakMap();
+    private readonly buffersRegistry: FinalizationRegistry<VertexBuffers>;
 
     // cache
     private lastTexture: WebGLTexture = null;
@@ -99,23 +128,23 @@ export class TilemapRenderer implements Renderer {
         this.projectionMatrix = mat4.create();
         this.modelMatrix = mat4.create();
         this.textureMatrix = mat4.create();
-        this.positionBuffer = this.gl.createBuffer();
-        this.textureBuffer = this.gl.createBuffer();
+        this.buffersRegistry = createVertexBuffersRegistry(this.gl);
     }
 
     public render(renderData: TilemapRenderData, cameraData: CameraData, lastRender?: RenderDataType): boolean {
         this.processTileset(renderData.tileset);
-        this.generateVertices(renderData);
 
-        if (this.posVertices.length === 0) return false;
+        const entry = this.getOrCreateEntry(renderData);
+        if (this.isDirty(entry, renderData)) this.updateVertices(entry, renderData);
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.posVertices), this.gl.DYNAMIC_DRAW);
+        if (entry.vertexCount === 0) return false;
+
+        // consecutive tilemaps use different buffers, so the attributes are always set up
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.positionBuffer);
         this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
         this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.texVertices), this.gl.DYNAMIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.textureBuffer);
         this.gl.enableVertexAttribArray(this.programManager.texCoordsAttr);
         this.gl.vertexAttribPointer(this.programManager.texCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
 
@@ -164,9 +193,93 @@ export class TilemapRenderer implements Renderer {
             this.gl.uniform1f(this.programManager.maskColorMixUniform, renderData.maskColorMix ?? 1);
         }
 
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, this.posVertices.length / 2);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, entry.vertexCount);
 
         return true;
+    }
+
+    private getOrCreateEntry(renderData: TilemapRenderData): TilemapVertexEntry {
+        let entry = this.entries.get(renderData);
+        if (entry) return entry;
+
+        entry = {
+            buffers: { positionBuffer: this.gl.createBuffer(), textureBuffer: this.gl.createBuffer() },
+            vertexCount: 0,
+            generated: false,
+            tileset: undefined,
+            texData: undefined,
+            width: undefined,
+            tiles: new Float64Array(0),
+            tilesLength: 0,
+            tilesetTiles: new Set(),
+            animationFrames: new Map(),
+        };
+
+        this.entries.set(renderData, entry);
+        this.buffersRegistry.register(renderData, entry.buffers);
+
+        return entry;
+    }
+
+    /**
+     * The engine mutates the same render data every frame, and the tiles can be edited in place,
+     * so the inputs are compared by value against the snapshot taken when the vertices were generated.
+     */
+    private isDirty(entry: TilemapVertexEntry, { tiles, tilemap, tileset }: TilemapRenderData): boolean {
+        if (
+            !entry.generated ||
+            entry.tileset !== tileset ||
+            entry.texData !== tileset._texData ||
+            entry.width !== tilemap.width ||
+            entry.tilesLength !== tiles.length
+        ) {
+            return true;
+        }
+
+        for (let i = 0; i < tiles.length; i++) {
+            if (entry.tiles[i] !== tiles[i]) return true;
+        }
+
+        return this.animationChanged(entry, tileset._animationState);
+    }
+
+    /** Only the animated tiles present in the chunk are checked, so chunks without them are never dirty */
+    private animationChanged(entry: TilemapVertexEntry, animationState: Map<number, number> | undefined): boolean {
+        if (!animationState || animationState.size === 0) return entry.animationFrames.size > 0;
+
+        let matched = 0;
+
+        for (const [tile, frame] of animationState) {
+            if (!entry.tilesetTiles.has(tile)) continue;
+            if (!entry.animationFrames.has(tile) || entry.animationFrames.get(tile) !== frame) return true;
+            matched++;
+        }
+
+        // an animated tile of the chunk is no longer animated
+        return matched !== entry.animationFrames.size;
+    }
+
+    private updateVertices(entry: TilemapVertexEntry, renderData: TilemapRenderData): void {
+        const { tiles, tilemap, tileset } = renderData;
+
+        entry.generated = true;
+        entry.tileset = tileset;
+        entry.texData = tileset._texData;
+        entry.width = tilemap.width;
+        entry.tilesLength = tiles.length;
+        if (entry.tiles.length < tiles.length) entry.tiles = new Float64Array(tiles.length);
+        entry.tiles.set(tiles);
+
+        const length = this.generateVertices(renderData, entry);
+        entry.vertexCount = length / 2;
+
+        if (length === 0) return;
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.positionBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.posVertices.subarray(0, length), this.gl.DYNAMIC_DRAW);
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffers.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.texVertices.subarray(0, length), this.gl.DYNAMIC_DRAW);
     }
 
     /**
@@ -198,46 +311,50 @@ export class TilemapRenderer implements Renderer {
         };
     }
 
-    private generateVertices({ tiles, tilemap, tileset }: TilemapRenderData): void {
-        this.posVertices = [];
-        this.texVertices = [];
+    /** Writes the vertices into the scratch arrays and returns the number of values written to each of them */
+    private generateVertices(
+        { tiles, tilemap, tileset }: TilemapRenderData,
+        { tilesetTiles, animationFrames }: TilemapVertexEntry,
+    ): number {
+        tilesetTiles.clear();
+        animationFrames.clear();
 
-        if (!tileset._texData) return;
+        if (!tileset._texData) return 0;
 
         const { columns, firstgid, tileCount, margin, step, tileSize } = tileset._texData;
         const height = Math.floor(tiles.length / tilemap.width);
+        const animationState = tileset._animationState;
 
-        tiles.forEach((tile, tilemapTile) => {
+        // 12 values per tile: two triangles of two coordinates each
+        this.posVertices = growFloat32Array(this.posVertices, tiles.length * 12);
+        this.texVertices = growFloat32Array(this.texVertices, tiles.length * 12);
+
+        let length = 0;
+
+        for (let tilemapTile = 0; tilemapTile < tiles.length; tilemapTile++) {
+            const tile = tiles[tilemapTile];
+
             // the tiles that do not belong to this tileset are rendered by the render data of the tileset that owns them
-            if (tile < firstgid || tile >= firstgid + tileCount) return;
+            if (tile < firstgid || tile >= firstgid + tileCount) continue;
 
-            const tilesetTile = tileset._animationState?.get(tile) ?? tile;
+            tilesetTiles.add(tile);
+            if (animationState?.has(tile)) animationFrames.set(tile, animationState.get(tile));
+
+            const tilesetTile = animationState?.get(tile) ?? tile;
 
             const px = (tilemapTile % tilemap.width) - tilemap.width / 2;
             const py = height / 2 - Math.floor(tilemapTile / tilemap.width);
 
-            // prettier-ignore
-            this.posVertices.push(
-                px, py - 1,
-                px + 1, py - 1,
-                px, py,
-                px, py,
-                px + 1, py - 1,
-                px + 1, py
-            )
+            writeQuad(this.posVertices, length, px, py - 1, px + 1, py);
 
             const tx = margin.x + ((tilesetTile - firstgid) % columns) * step.x;
             const ty = margin.y + Math.floor((tilesetTile - firstgid) / columns) * step.y;
 
-            // prettier-ignore
-            this.texVertices.push(
-                tx, ty + tileSize.y,
-                tx + tileSize.x, ty + tileSize.y,
-                tx, ty,
-                tx, ty,
-                tx + tileSize.x, ty + tileSize.y,
-                tx + tileSize.x, ty
-            );
-        });
+            writeQuad(this.texVertices, length, tx, ty + tileSize.y, tx + tileSize.x, ty);
+
+            length += 12;
+        }
+
+        return length;
     }
 }
