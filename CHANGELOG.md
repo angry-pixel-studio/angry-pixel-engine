@@ -8,6 +8,11 @@
 
 -   `Scene.registerSystems` and `Scene.createEntities` were replaced by a single `Scene.setup`, which registers the systems and creates the entities of the scene. It runs once the assets requested in `loadAssets` have finished loading. A scene that still defines the old methods compiles, but the engine never calls them.
 -   `Scene.addSystem` and `Scene.addSystems` were removed. The systems of a scene are assigned directly to the `systems` array, whose order is their execution order. The array is reset before `setup` runs.
+-   `SceneManager.loadScene` takes an options object as its second argument instead of a component type: `loadScene("Level2", { preserveEntitiesWithComponent: Persistent })`. `loadOpeningScene` accepts the same options.
+
+#### Entities
+
+-   `EntityManager.removeAllEntities` takes an options object instead of a component type: `removeAllEntities({ preserveEntitiesWithComponent: DontDestroy })`.
 
 #### Systems
 
