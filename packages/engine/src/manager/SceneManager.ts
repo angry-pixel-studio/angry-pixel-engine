@@ -55,22 +55,23 @@ export class SceneManager {
     /**
      * Loads a scene
      * @param name The name of the scene
-     * @param preserveEntitiesWithComponent Optional component type to preserve entities that have this component
+     * @param options Optional options object. See {@link LoadSceneOptions}
      * @public
      */
-    public loadScene(name: string, preserveEntitiesWithComponent?: ComponentType): void {
+    public loadScene(name: string, options?: LoadSceneOptions): void {
         if (!this.scenes.has(name)) throw new Error(`Invalid scene name: '${name}'`);
         this.sceneNameToBeLoaded = name;
-        this.preserveEntitiesWithComponent = preserveEntitiesWithComponent;
+        this.preserveEntitiesWithComponent = options?.preserveEntitiesWithComponent;
     }
 
     /**
      * Loads the opening scene
+     * @param options Optional options object. See {@link LoadSceneOptions}
      * @public
      */
-    public loadOpeningScene(): void {
+    public loadOpeningScene(options?: LoadSceneOptions): void {
         if (!this.openingSceneName) throw new Error("There is no opening scene");
-        this.sceneNameToBeLoaded = this.openingSceneName;
+        this.loadScene(this.openingSceneName, options);
     }
 
     /**
@@ -148,12 +149,26 @@ export class SceneManager {
             this.systemManager.disableSystem(systemType);
         });
 
-        this.entityManager.removeAllEntities(this.preserveEntitiesWithComponent);
+        this.entityManager.removeAllEntities({ preserveEntitiesWithComponent: this.preserveEntitiesWithComponent });
 
         // intervals and timeouts are cleared to avoid any unwanted behavior
         this.timeManager.clearAllIntervals();
     }
 }
+
+/**
+ * Options for the `loadScene` and `loadOpeningScene` methods of the SceneManager
+ * @public
+ * @category Managers
+ * @example
+ * ```js
+ * this.sceneManager.loadScene("Level2", { preserveEntitiesWithComponent: DontDestroy });
+ * ```
+ */
+export type LoadSceneOptions = {
+    /** The entities that have a component of this type are preserved across the scene transition */
+    preserveEntitiesWithComponent: ComponentType;
+};
 
 /**
  * This type represents a scene class

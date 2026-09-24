@@ -96,6 +96,20 @@ export type Archetype = {
 };
 
 /**
+ * Options for the `removeAllEntities` method of the EntityManager
+ * @public
+ * @category Entity-Component-System
+ * @example
+ * ```js
+ * entityManager.removeAllEntities({ preserveEntitiesWithComponent: DontDestroy });
+ * ```
+ */
+export type RemoveAllEntitiesOptions = {
+    /** The entities that have a component of this type are preserved instead of being removed */
+    preserveEntitiesWithComponent: ComponentType;
+};
+
+/**
  * This interface defines the core structure for system classes in the ECS architecture.\
  * Systems contain the game logic that operates on entities and their components.\
  * Dependencies like EntityManager can be injected using dependency injection decorators.\
