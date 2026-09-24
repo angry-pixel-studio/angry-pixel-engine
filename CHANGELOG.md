@@ -27,7 +27,7 @@
 
 #### Scenes
 
--   The current scene is destroyed when the game loop stops, so the `onSceneDestroyed` hooks run and the audio and video of the scene are stopped.
+-   The current scene is destroyed when the game loop stops, so the `onSceneDestroyed` hooks run and the videos are paused. Every audio source is stopped, including the ones that do not stop on scene transition.
 
 ### Fixed
 
