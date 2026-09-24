@@ -103,7 +103,6 @@ export class SceneManager {
 
             scene.systems = [];
             scene.loadAssets();
-            scene.registerSystems();
             this._loadingScene = true;
         }
 
@@ -113,7 +112,7 @@ export class SceneManager {
             this._loadingScene = false;
             this._sceneLoadedThisFrame = true;
 
-            scene.createEntities();
+            scene.setup();
 
             // update some components for the initial entities
             this.systemManager.update(SystemGroup.Transform);
@@ -123,25 +122,36 @@ export class SceneManager {
                 this.systemFactory.createSystemIfNotExists(systemType);
                 this.systemManager.enableSystem(systemType);
                 this.systemManager.setExecutionOrder(systemType, index);
+
+                const system = this.systemManager.getSystem(systemType);
+                if ("onSceneLoaded" in system && typeof system.onSceneLoaded === "function") {
+                    system.onSceneLoaded();
+                }
             });
         }
     }
 
-    private destroyCurrentScene(): void {
-        this.systemManager.disableSystem(AudioPlayerSystem);
-        this.systemManager.disableSystem(VideoRendererSystem);
+    /** @internal */
+    public destroyCurrentScene(): void {
+        if (!this.currentSceneName) return;
 
-        this.scenes
-            .get(this.currentSceneName)
-            .systems.forEach((systemType) => this.systemManager.disableSystem(systemType));
+        this.systemManager.getSystem(AudioPlayerSystem)?.onSceneDestroyed();
+        this.systemManager.getSystem(VideoRendererSystem)?.onSceneDestroyed();
+
+        if (this._loadingScene) return;
+
+        this.scenes.get(this.currentSceneName).systems.forEach((systemType) => {
+            const system = this.systemManager.getSystem(systemType);
+            if ("onSceneDestroyed" in system && typeof system.onSceneDestroyed === "function") {
+                system.onSceneDestroyed();
+            }
+            this.systemManager.disableSystem(systemType);
+        });
 
         this.entityManager.removeAllEntities(this.preserveEntitiesWithComponent);
 
         // intervals and timeouts are cleared to avoid any unwanted behavior
         this.timeManager.clearAllIntervals();
-
-        this.systemManager.enableSystem(AudioPlayerSystem);
-        this.systemManager.enableSystem(VideoRendererSystem);
     }
 }
 
@@ -167,14 +177,12 @@ export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityMan
  *      this.assetManager.loadImage("image.png");
  *   }
  *
- *   registerSystems() {
- *     this.systems.push(
+ *   setup() {
+ *     this.systems = [
  *         SomeSystem,
  *         AnotherSystem
- *     );
- *   }
+ *     ];
  *
- *   createEntities() {
  *     this.entityManager.createEntity([
  *       SomeComponent,
  *       AnotherComponent
@@ -192,38 +200,14 @@ export abstract class Scene {
     ) {}
 
     /**
-     * Override this method to register the systems that will be executed in the scene
-     * @public
-     */
-    public registerSystems(): void {}
-
-    /**
      * Override this method to load the assets needed for the scene
      * @public
      */
     public loadAssets(): void {}
 
     /**
-     * Override this method to create the entities needed for the scene
+     * Override this method to create the entities and register the systems that will be executed in the scene
      * @public
      */
-    public createEntities(): void {}
-
-    /**
-     * Adds a system to the scene
-     * @param system The system to add
-     * @public
-     */
-    protected addSystem(system: SystemType): void {
-        this.systems.push(system);
-    }
-
-    /**
-     * Adds multiple systems to the scene
-     * @param systems The systems to add
-     * @public
-     */
-    protected addSystems(systems: SystemType[]): void {
-        this.systems.push(...systems);
-    }
+    public setup(): void {}
 }

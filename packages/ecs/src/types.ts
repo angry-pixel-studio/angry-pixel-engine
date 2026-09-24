@@ -99,7 +99,7 @@ export type Archetype = {
  * This interface defines the core structure for system classes in the ECS architecture.\
  * Systems contain the game logic that operates on entities and their components.\
  * Dependencies like EntityManager can be injected using dependency injection decorators.\
- * Systems must implement onUpdate() and can optionally implement lifecycle hooks like onCreate(), onDestroy(), onEnabled() and onDisabled().
+ * Systems must implement onUpdate().
  * @public
  * @category Entity-Component-System
  * @example
@@ -116,26 +116,6 @@ export type Archetype = {
  * ```
  */
 export interface System {
-    /**
-     * This method is called the first time the system is enabled
-     * @public
-     */
-    onCreate?(): void;
-    /**
-     * This method is called when the system is destroyed
-     * @public
-     */
-    onDestroy?(): void;
-    /**
-     * This method is called when the system is disabled
-     * @public
-     */
-    onDisabled?(): void;
-    /**
-     * This method is called when the system is enabled
-     * @public
-     */
-    onEnabled?(): void;
     /**
      * This method is called once every frame
      * @public
