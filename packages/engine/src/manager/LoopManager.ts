@@ -44,8 +44,8 @@ export class LoopManager {
     public stop(): void {
         if (!this.running) return;
 
-        this.sceneManager.destroyCurrentScene();
         this.systemManager.getSystem(AudioPlayerSystem)?.onGameStopped();
+        this.sceneManager.destroyCurrentScene();
         this.systemManager.disableAllSystems();
         this.running = false;
     }
