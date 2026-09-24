@@ -12,7 +12,7 @@ export class NinjaMovementSystem extends GameSystem {
     private collider: BoxCollider;
     private transform: Transform;
 
-    public onEnabled(): void {
+    public onSceneLoaded(): void {
         this.inputController = this.entityManager.search(InputController)[0].component;
         ({ entity: this.entity, component: this.ninjaMovement } = this.entityManager.search(NinjaMovement)[0]);
         this.transform = this.entityManager.getComponent(this.entity, Transform);

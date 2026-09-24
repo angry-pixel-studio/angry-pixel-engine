@@ -30,19 +30,21 @@ Loading an unregistered name throws an error.
 
 ### Preserving entities across scenes
 
-`loadScene` accepts an optional component type as a second argument. Entities that have a component of that type are preserved across the transition instead of being removed. This is useful for entities that should persist between scenes, such as a player or a score holder.
+`loadScene` accepts an options object as a second argument. Entities that have a component of the type given in `preserveEntitiesWithComponent` are preserved across the transition instead of being removed. This is useful for entities that should persist between scenes, such as a player or a score holder.
 
 ```typescript
-import { Persistent } from "../component/Persistent";
+import { DontDestroy } from "../component/DontDestroy";
 
-this.sceneManager.loadScene("Level2", Persistent);
+this.sceneManager.loadScene("Level2", { preserveEntitiesWithComponent: DontDestroy });
 ```
+
+`loadOpeningScene` accepts the same options object.
 
 ## Scene loading state
 
 | Member | Description |
 |--------|-------------|
-| `loadScene(name, preserveEntitiesWithComponent?)` | Loads the scene registered under `name`. |
+| `loadScene(name, options?)` | Loads the scene registered under `name`. |
 | `loadingScene` | `true` while a scene is loading. |
 | `sceneLoadedThisFrame` | `true` on the frame the scene finished loading. |
 

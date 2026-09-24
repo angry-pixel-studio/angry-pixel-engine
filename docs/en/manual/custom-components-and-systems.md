@@ -62,28 +62,26 @@ A system can implement the following methods. Only `onUpdate` is required for mo
 
 | Method | When it runs |
 |--------|-------------|
-| `onCreate` | The first time the system is enabled. |
-| `onEnabled` | When the system is enabled. |
+| `onSceneLoaded` | When the scene finishes loading, after its entities have been created. |
 | `onUpdate` | Once every frame, while the system is enabled. |
-| `onDisabled` | When the system is disabled. |
-| `onDestroy` | When the system is destroyed. |
+| `onSceneDestroyed` | When the scene is destroyed, before its entities are removed. |
 
 ## Registering a system
 
-A system runs only after it is registered in a scene's `registerSystems` method:
+A system runs only after it is added to the `systems` array in a scene's `setup` method:
 
 ```typescript
 import { Scene } from "angry-pixel";
 import { PlayerSystem } from "../system/PlayerSystem";
 
 export class MainScene extends Scene {
-    registerSystems() {
-        this.addSystems([PlayerSystem]);
+    setup() {
+        this.systems = [PlayerSystem];
     }
 }
 ```
 
-Systems execute in the order they are registered.
+Systems execute in the order of the array.
 
 ## Execution phase
 

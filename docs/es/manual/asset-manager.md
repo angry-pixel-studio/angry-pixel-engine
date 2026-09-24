@@ -79,4 +79,4 @@ if (this.assetManager.getAssetsLoaded()) {
 }
 ```
 
-Una escena lo usa internamente: su método `createEntities` se ejecuta solo después de que `getAssetsLoaded` devuelva `true`.
+Una escena lo usa internamente: su método `setup` se ejecuta solo después de que `getAssetsLoaded` devuelva `true`.

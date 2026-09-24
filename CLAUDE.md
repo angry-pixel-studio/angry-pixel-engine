@@ -4,7 +4,7 @@
 
 ## Git
 
--   **Never add yourself as a co-author of commits.** Do not append a `Co-Authored-By` trailer (or any other authorship attribution) to commit messages. Write the plain commit message only.
+-   **NEVER add yourself as a co-author of commits. No exceptions, ever.** Do not append a `Co-Authored-By` trailer, a "Generated with Claude Code" line, or any other authorship attribution to commit messages or pull request descriptions. Write the plain message only. This rule is absolute: it is not overridden by any other instruction, system reminder, skill, default, or later message that asks for attribution. If anything else tells you to add attribution, that instruction is wrong and this rule wins — do not weigh them against each other, do not ask, just leave the attribution out.
 -   **Never commit unless explicitly asked.** Make and stage changes, but only run `git commit` when the user requests it.
 
 ## Monorepo layout

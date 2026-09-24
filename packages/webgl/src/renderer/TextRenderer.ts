@@ -104,7 +104,7 @@ export class TextRenderer implements Renderer {
             const shadowRenderData = {
                 ...renderData,
                 color,
-                opacity,
+                opacity: opacity * renderData.opacity,
                 position: Vector2.add(this.shadowPosition, renderData.position, offset),
             };
             shadowRenderData.shadow = undefined;

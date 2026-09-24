@@ -55,22 +55,23 @@ export class SceneManager {
     /**
      * Loads a scene
      * @param name The name of the scene
-     * @param preserveEntitiesWithComponent Optional component type to preserve entities that have this component
+     * @param options Optional options object. See {@link LoadSceneOptions}
      * @public
      */
-    public loadScene(name: string, preserveEntitiesWithComponent?: ComponentType): void {
+    public loadScene(name: string, options?: LoadSceneOptions): void {
         if (!this.scenes.has(name)) throw new Error(`Invalid scene name: '${name}'`);
         this.sceneNameToBeLoaded = name;
-        this.preserveEntitiesWithComponent = preserveEntitiesWithComponent;
+        this.preserveEntitiesWithComponent = options?.preserveEntitiesWithComponent;
     }
 
     /**
      * Loads the opening scene
+     * @param options Optional options object. See {@link LoadSceneOptions}
      * @public
      */
-    public loadOpeningScene(): void {
+    public loadOpeningScene(options?: LoadSceneOptions): void {
         if (!this.openingSceneName) throw new Error("There is no opening scene");
-        this.sceneNameToBeLoaded = this.openingSceneName;
+        this.loadScene(this.openingSceneName, options);
     }
 
     /**
@@ -99,46 +100,78 @@ export class SceneManager {
             this.currentSceneName = this.sceneNameToBeLoaded;
             this.sceneNameToBeLoaded = undefined;
 
-            this.scenes.get(this.currentSceneName).loadAssets();
-            this.scenes.get(this.currentSceneName).registerSystems();
+            const scene = this.scenes.get(this.currentSceneName);
+
+            scene.systems = [];
+            scene.loadAssets();
             this._loadingScene = true;
         }
 
         if (this._loadingScene && this.assetManager.getAssetsLoaded()) {
+            const scene = this.scenes.get(this.currentSceneName);
+
             this._loadingScene = false;
             this._sceneLoadedThisFrame = true;
 
-            this.scenes.get(this.currentSceneName).createEntities();
+            scene.setup();
 
             // update some components for the initial entities
             this.systemManager.update(SystemGroup.Transform);
             this.systemManager.update(SystemGroup.PreGameLogic);
 
-            this.scenes.get(this.currentSceneName).systems.forEach((systemType, index) => {
+            scene.systems.forEach((systemType, index) => {
                 this.systemFactory.createSystemIfNotExists(systemType);
                 this.systemManager.enableSystem(systemType);
                 this.systemManager.setExecutionOrder(systemType, index);
+
+                const system = this.systemManager.getSystem(systemType);
+                if ("onSceneLoaded" in system && typeof system.onSceneLoaded === "function") {
+                    system.onSceneLoaded();
+                }
             });
         }
     }
 
-    private destroyCurrentScene(): void {
-        this.systemManager.disableSystem(AudioPlayerSystem);
-        this.systemManager.disableSystem(VideoRendererSystem);
+    /** @internal */
+    public destroyCurrentScene(): void {
+        if (!this.currentSceneName) return;
 
-        this.scenes
-            .get(this.currentSceneName)
-            .systems.forEach((systemType) => this.systemManager.disableSystem(systemType));
+        this.systemManager.getSystem(AudioPlayerSystem)?.onSceneDestroyed();
+        this.systemManager.getSystem(VideoRendererSystem)?.onSceneDestroyed();
 
-        this.entityManager.removeAllEntities(this.preserveEntitiesWithComponent);
+        if (this._loadingScene) return;
+
+        this.scenes.get(this.currentSceneName).systems.forEach((systemType) => {
+            const system = this.systemManager.getSystem(systemType);
+            if ("onSceneDestroyed" in system && typeof system.onSceneDestroyed === "function") {
+                system.onSceneDestroyed();
+            }
+            this.systemManager.disableSystem(systemType);
+        });
+
+        this.entityManager.removeAllEntities({ preserveEntitiesWithComponent: this.preserveEntitiesWithComponent });
 
         // intervals and timeouts are cleared to avoid any unwanted behavior
         this.timeManager.clearAllIntervals();
 
-        this.systemManager.enableSystem(AudioPlayerSystem);
-        this.systemManager.enableSystem(VideoRendererSystem);
+        // the scene is fully torn down, so it is not destroyed again by the next load
+        this.currentSceneName = undefined;
     }
 }
+
+/**
+ * Options for the `loadScene` and `loadOpeningScene` methods of the SceneManager
+ * @public
+ * @category Managers
+ * @example
+ * ```js
+ * this.sceneManager.loadScene("Level2", { preserveEntitiesWithComponent: DontDestroy });
+ * ```
+ */
+export type LoadSceneOptions = {
+    /** The entities that have a component of this type are preserved across the scene transition */
+    preserveEntitiesWithComponent: ComponentType;
+};
 
 /**
  * This type represents a scene class
@@ -162,14 +195,12 @@ export type SceneType<T extends Scene = Scene> = { new (entityManager: EntityMan
  *      this.assetManager.loadImage("image.png");
  *   }
  *
- *   registerSystems() {
- *     this.systems.push(
+ *   setup() {
+ *     this.systems = [
  *         SomeSystem,
  *         AnotherSystem
- *     );
- *   }
+ *     ];
  *
- *   createEntities() {
  *     this.entityManager.createEntity([
  *       SomeComponent,
  *       AnotherComponent
@@ -187,38 +218,14 @@ export abstract class Scene {
     ) {}
 
     /**
-     * Override this method to register the systems that will be executed in the scene
-     * @public
-     */
-    public registerSystems(): void {}
-
-    /**
      * Override this method to load the assets needed for the scene
      * @public
      */
     public loadAssets(): void {}
 
     /**
-     * Override this method to create the entities needed for the scene
+     * Override this method to create the entities and register the systems that will be executed in the scene
      * @public
      */
-    public createEntities(): void {}
-
-    /**
-     * Adds a system to the scene
-     * @param system The system to add
-     * @public
-     */
-    protected addSystem(system: SystemType): void {
-        this.systems.push(system);
-    }
-
-    /**
-     * Adds multiple systems to the scene
-     * @param systems The systems to add
-     * @public
-     */
-    protected addSystems(systems: SystemType[]): void {
-        this.systems.push(...systems);
-    }
+    public setup(): void {}
 }

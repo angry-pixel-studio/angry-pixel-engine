@@ -37,9 +37,7 @@ export class VideoRendererSystem implements System {
         @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
         @inject(SYMBOLS.InputManager) private readonly inputManager: InputManager,
-    ) {}
-
-    public onCreate(): void {
+    ) {
         // pauses video when document is not visible
         document.addEventListener("visibilitychange", () => {
             this.entityManager.search(VideoRenderer, ({ video, playing }) => {
@@ -176,16 +174,16 @@ export class VideoRendererSystem implements System {
         if (action === "pause" && !video.paused) video.pause();
     }
 
-    public onDisabled(): void {
-        this.entityManager.search(VideoRenderer, (videoRenderer) => {
-            if (videoRenderer.video && typeof videoRenderer.video !== "string") {
-                videoRenderer.video.pause();
-                videoRenderer.video.currentTime = 0;
-            }
-        });
-    }
-
-    public onDestroy(): void {
-        this.onDisabled();
+    public onSceneDestroyed(): void {
+        this.entityManager.search(
+            VideoRenderer,
+            (videoRenderer) => {
+                if (videoRenderer.video && typeof videoRenderer.video !== "string") {
+                    videoRenderer.video.pause();
+                    videoRenderer.video.currentTime = 0;
+                }
+            },
+            true,
+        );
     }
 }

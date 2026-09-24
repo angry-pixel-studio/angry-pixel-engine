@@ -62,28 +62,26 @@ Un sistema puede implementar los siguientes métodos. Para la mayoría de los si
 
 | Método | Cuándo se ejecuta |
 |--------|-------------|
-| `onCreate` | La primera vez que se activa el sistema. |
-| `onEnabled` | Cuando se activa el sistema. |
+| `onSceneLoaded` | Cuando la escena termina de cargarse, después de que se hayan creado sus entidades. |
 | `onUpdate` | Una vez por frame, mientras el sistema está activado. |
-| `onDisabled` | Cuando se desactiva el sistema. |
-| `onDestroy` | Cuando se destruye el sistema. |
+| `onSceneDestroyed` | Cuando se destruye la escena, antes de que se eliminen sus entidades. |
 
 ## Registrar un sistema
 
-Un sistema se ejecuta solo después de registrarse en el método `registerSystems` de una escena:
+Un sistema se ejecuta solo después de agregarse al array `systems` en el método `setup` de una escena:
 
 ```typescript
 import { Scene } from "angry-pixel";
 import { PlayerSystem } from "../system/PlayerSystem";
 
 export class MainScene extends Scene {
-    registerSystems() {
-        this.addSystems([PlayerSystem]);
+    setup() {
+        this.systems = [PlayerSystem];
     }
 }
 ```
 
-Los sistemas se ejecutan en el orden en que se registran.
+Los sistemas se ejecutan en el orden del array.
 
 ## Fase de ejecución
 

@@ -5,6 +5,16 @@ import { legacyVertexShader } from "../shader/legacy/vertexShader";
 import { vertexShader } from "../shader/vertexShader";
 import { ProgramFactory } from "./ProgramFactory";
 
+// must match the size of the u_lights array declared in both fragment shaders (modern and legacy)
+export const MAX_LIGHTS = 64;
+
+export type LightUniforms = {
+    position: WebGLUniformLocation | null;
+    radius: WebGLUniformLocation | null;
+    smoothMode: WebGLUniformLocation | null;
+    intensity: WebGLUniformLocation | null;
+};
+
 export class ProgramManager {
     public program: WebGLProgram;
 
@@ -30,6 +40,7 @@ export class ProgramManager {
     // light uniforms
     public renderLightUniform: WebGLUniformLocation;
     public numLightsUniform: WebGLUniformLocation;
+    public lightUniforms: LightUniforms[] = [];
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -61,6 +72,16 @@ export class ProgramManager {
         this.alphaUniform = this.gl.getUniformLocation(this.program, "u_alpha");
         this.renderLightUniform = this.gl.getUniformLocation(this.program, "u_renderLight");
         this.numLightsUniform = this.gl.getUniformLocation(this.program, "u_numLights");
+
+        this.lightUniforms = [];
+        for (let i = 0; i < MAX_LIGHTS; i++) {
+            this.lightUniforms.push({
+                position: this.gl.getUniformLocation(this.program, `u_lights[${i}].position`),
+                radius: this.gl.getUniformLocation(this.program, `u_lights[${i}].radius`),
+                smoothMode: this.gl.getUniformLocation(this.program, `u_lights[${i}].smoothMode`),
+                intensity: this.gl.getUniformLocation(this.program, `u_lights[${i}].intensity`),
+            });
+        }
 
         this.gl.useProgram(this.program);
 
