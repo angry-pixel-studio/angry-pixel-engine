@@ -124,10 +124,14 @@ export class AudioPlayerSystem implements System {
     }
 
     public onSceneDestroyed(): void {
-        this.entityManager.search(AudioPlayer, (audioPlayer) => {
-            if (!audioPlayer.stopOnSceneTransition) return;
-            this.stopAudioPlayer(audioPlayer);
-        });
+        this.entityManager.search(
+            AudioPlayer,
+            (audioPlayer) => {
+                if (!audioPlayer.stopOnSceneTransition) return;
+                this.stopAudioPlayer(audioPlayer);
+            },
+            true,
+        );
     }
 
     /**
@@ -135,7 +139,7 @@ export class AudioPlayerSystem implements System {
      * @internal
      */
     public onGameStopped(): void {
-        this.entityManager.search(AudioPlayer, (audioPlayer) => this.stopAudioPlayer(audioPlayer));
+        this.entityManager.search(AudioPlayer, (audioPlayer) => this.stopAudioPlayer(audioPlayer), true);
     }
 
     private stopAudioPlayer(audioPlayer: AudioPlayer): void {

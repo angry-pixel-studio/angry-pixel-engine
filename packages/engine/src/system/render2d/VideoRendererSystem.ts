@@ -175,11 +175,15 @@ export class VideoRendererSystem implements System {
     }
 
     public onSceneDestroyed(): void {
-        this.entityManager.search(VideoRenderer, (videoRenderer) => {
-            if (videoRenderer.video && typeof videoRenderer.video !== "string") {
-                videoRenderer.video.pause();
-                videoRenderer.video.currentTime = 0;
-            }
-        });
+        this.entityManager.search(
+            VideoRenderer,
+            (videoRenderer) => {
+                if (videoRenderer.video && typeof videoRenderer.video !== "string") {
+                    videoRenderer.video.pause();
+                    videoRenderer.video.currentTime = 0;
+                }
+            },
+            true,
+        );
     }
 }
