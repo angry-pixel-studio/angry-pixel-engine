@@ -125,12 +125,23 @@ export class AudioPlayerSystem implements System {
 
     public onSceneDestroyed(): void {
         this.entityManager.search(AudioPlayer, (audioPlayer) => {
-            // TODO: ignore this guard when the game stops
             if (!audioPlayer.stopOnSceneTransition) return;
-            this.disposeSource(audioPlayer);
-            audioPlayer._pauseOffset = 0;
-            audioPlayer.state = "stopped";
+            this.stopAudioPlayer(audioPlayer);
         });
+    }
+
+    /**
+     * Stops every audio source when the game loop stops, including the ones that do not stop on scene transition
+     * @internal
+     */
+    public onGameStopped(): void {
+        this.entityManager.search(AudioPlayer, (audioPlayer) => this.stopAudioPlayer(audioPlayer));
+    }
+
+    private stopAudioPlayer(audioPlayer: AudioPlayer): void {
+        this.disposeSource(audioPlayer);
+        audioPlayer._pauseOffset = 0;
+        audioPlayer.state = "stopped";
     }
 
     private computePlaybackRate(audioPlayer: AudioPlayer): number {

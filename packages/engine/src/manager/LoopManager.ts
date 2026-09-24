@@ -5,6 +5,7 @@ import { SystemManager } from "@angry-pixel/ecs";
 import { SystemGroup } from "@system/SystemGroup";
 import { SceneManager } from "./SceneManager";
 import { systemsByGroup } from "@config/systemsByGroup";
+import { AudioPlayerSystem } from "@system/gameLogic/AudioPlayerSystem";
 
 /** @internal */
 export const nowInSeconds = (): number => window.performance.now() * 0.001;
@@ -44,6 +45,7 @@ export class LoopManager {
         if (!this.running) return;
 
         this.sceneManager.destroyCurrentScene();
+        this.systemManager.getSystem(AudioPlayerSystem)?.onGameStopped();
         this.systemManager.disableAllSystems();
         this.running = false;
     }
