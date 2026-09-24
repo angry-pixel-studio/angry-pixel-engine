@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.4.0] - 2026-09-23
+
+### Breaking changes
+
+#### Scenes
+
+-   `Scene.registerSystems` and `Scene.createEntities` were replaced by a single `Scene.setup`, which registers the systems and creates the entities of the scene. It runs once the assets requested in `loadAssets` have finished loading. A scene that still defines the old methods compiles, but the engine never calls them.
+-   `Scene.addSystem` and `Scene.addSystems` were removed. The systems of a scene are assigned directly to the `systems` array, whose order is their execution order. The array is reset before `setup` runs.
+
+#### Systems
+
+-   The `onCreate`, `onDestroy`, `onEnabled` and `onDisabled` hooks were removed from the `System` interface, and are no longer called by the `SystemManager`. A system that still defines them compiles, but they never run.
+-   `GameSystem.onSceneLoaded` and `GameSystem.onSceneDestroyed` replace them. `onSceneLoaded` runs when the scene finishes loading, after its entities have been created; `onSceneDestroyed` runs when the scene is destroyed, before its entities are removed. Both are optional, and are called on any system that defines them.
+
+### Added
+
+#### Systems
+
+-   `GameSystem` injects the `SystemManager`, alongside the managers it already provided.
+
+#### Scenes
+
+-   The current scene is destroyed when the game loop stops, so the `onSceneDestroyed` hooks run and the audio and video of the scene are stopped.
+
+### Fixed
+
+#### Scenes
+
+-   The `systems` array of a scene is reset before it is registered again, so reloading the same scene no longer accumulates duplicated systems on every load.
+
+#### Rendering
+
+-   The shadow of a `TextRenderer` is drawn with the opacity of the text it belongs to, instead of at full opacity.
+
 ## [2.3.7] - 2026-09-07
 
 ### Breaking changes
