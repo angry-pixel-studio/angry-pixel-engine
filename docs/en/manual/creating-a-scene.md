@@ -12,25 +12,20 @@ export class MainScene extends Scene {
         // load the assets used by the scene
     }
 
-    registerSystems() {
-        // register the systems that run in the scene
-    }
-
-    createEntities() {
-        // create the initial entities of the scene
+    setup() {
+        // register the systems and create the initial entities of the scene
     }
 }
 ```
 
-All three methods are optional; override only the ones the scene needs.
+Both methods are optional; override only the ones the scene needs.
 
 ## Lifecycle methods
 
 When a scene is loaded, the engine runs its lifecycle methods in the following order:
 
 1. **`loadAssets`** — load the assets the scene needs (images, audio, fonts, etc.) through the asset manager.
-2. **`registerSystems`** — register the systems that run while the scene is active.
-3. **`createEntities`** — create the scene's initial entities. This runs only after all assets requested in `loadAssets` have finished loading.
+2. **`setup`** — register the systems that run while the scene is active and create its initial entities. This runs only after all assets requested in `loadAssets` have finished loading.
 
 Inside a scene you have access to two protected members:
 
@@ -39,7 +34,7 @@ Inside a scene you have access to two protected members:
 
 ### Loading assets
 
-Use `this.assetManager` to request the assets the scene needs. The engine waits until they are fully loaded before calling `createEntities`.
+Use `this.assetManager` to request the assets the scene needs. The engine waits until they are fully loaded before calling `setup`.
 
 ```typescript
 loadAssets() {
@@ -47,28 +42,21 @@ loadAssets() {
 }
 ```
 
-### Registering systems
+### Setting up the scene
 
-The systems a scene runs are listed in the `systems` array. Add them directly, or use the `addSystem` and `addSystems` helpers.
+`setup` does two things: it assigns the systems the scene runs to the `systems` array, and it creates the entities that exist when the scene starts.
 
-```typescript
-import { PlayerSystem } from "../system/PlayerSystem";
-import { EnemySystem } from "../system/EnemySystem";
-
-registerSystems() {
-    this.addSystems([PlayerSystem, EnemySystem]);
-}
-```
-
-### Creating entities
-
-Use `this.entityManager` to create the entities that exist when the scene starts.
+The `systems` array is reset before `setup` runs, so assign it directly. The order of the array is the execution order of the systems.
 
 ```typescript
 import { Transform } from "angry-pixel";
 import { Player } from "../component/Player";
+import { PlayerSystem } from "../system/PlayerSystem";
+import { EnemySystem } from "../system/EnemySystem";
 
-createEntities() {
+setup() {
+    this.systems = [PlayerSystem, EnemySystem];
+
     this.entityManager.createEntity([new Transform(), new Player()]);
 }
 ```

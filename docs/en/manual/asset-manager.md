@@ -79,4 +79,4 @@ if (this.assetManager.getAssetsLoaded()) {
 }
 ```
 
-A scene uses this internally: its `createEntities` method runs only after `getAssetsLoaded` returns `true`.
+A scene uses this internally: its `setup` method runs only after `getAssetsLoaded` returns `true`.
