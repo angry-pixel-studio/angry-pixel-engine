@@ -25,7 +25,7 @@ export class ResolveCollisionSystem implements System {
     private collisions: Set<string> = new Set();
     private shapes: Shape[] = [];
     /** When set, O(1) layer-pair lookup instead of scanning collisionMatrix per neighbor */
-    private readonly layerNeighbors: Map<string, Set<string>> | null;
+    private readonly layerNeighbors: Map<string, Set<string>> | undefined;
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
@@ -34,7 +34,7 @@ export class ResolveCollisionSystem implements System {
         @inject(SYMBOLS.CollisionResolutionMethod) private collisionResolutionMethod: CollisionMethod,
         @inject(SYMBOLS.CollisionRepository) private collisionRepository: CollisionRepository,
     ) {
-        if (collisionMatrix !== undefined && collisionMatrix !== null) {
+        if (collisionMatrix) {
             const map = new Map<string, Set<string>>();
             for (let i = 0; i < collisionMatrix.length; i++) {
                 const [a, b] = collisionMatrix[i];
@@ -44,8 +44,6 @@ export class ResolveCollisionSystem implements System {
                 map.get(b)!.add(a);
             }
             this.layerNeighbors = map;
-        } else {
-            this.layerNeighbors = null;
         }
     }
 

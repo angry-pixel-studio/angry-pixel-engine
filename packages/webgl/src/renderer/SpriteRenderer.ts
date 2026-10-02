@@ -51,7 +51,7 @@ export class SpriteRenderer implements Renderer {
     private tiledPosVertices: Map<string, Float32Array> = new Map();
     private tiledTexVertices: Map<string, Float32Array> = new Map();
 
-    private lastTexture: WebGLTexture = null;
+    private lastTexture: WebGLTexture | undefined;
     private lastDrawMode: "sprite" | "tiled";
     private isTiled: boolean = false;
 

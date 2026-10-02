@@ -24,13 +24,13 @@ export class MainScene extends Scene {
 
 Los métodos de carga son:
 
-| Método | Parámetros | Devuelve |
-|--------|-----------|---------|
-| `loadImage` | `url`, `name?` | `HTMLImageElement` |
-| `loadAudio` | `url`, `name?` | `AudioSource \| null` |
-| `loadFont` | `family`, `url` | `FontFace` |
-| `loadVideo` | `url`, `name?` | `HTMLVideoElement` |
-| `loadJson<T>` | `url`, `name?` | `Promise<T>` |
+| Método        | Parámetros      | Devuelve                   |
+| ------------- | --------------- | -------------------------- |
+| `loadImage`   | `url`, `name?`  | `HTMLImageElement`         |
+| `loadAudio`   | `url`, `name?`  | `AudioSource \| undefined` |
+| `loadFont`    | `family`, `url` | `FontFace`                 |
+| `loadVideo`   | `url`, `name?`  | `HTMLVideoElement`         |
+| `loadJson<T>` | `url`, `name?`  | `Promise<T>`               |
 
 Cada recurso se identifica por su `url`. Los recursos de imagen, audio, vídeo y JSON también aceptan un `name` opcional, que puede usarse para obtenerlos más tarde en lugar de la URL. Las fuentes se identifican por su nombre de `family`.
 
@@ -48,13 +48,13 @@ const level = this.assetManager.getJson("level.json");
 
 Los métodos de obtención son:
 
-| Método | Parámetros | Devuelve |
-|--------|-----------|---------|
-| `getImage` | `url` o `name` | `HTMLImageElement` |
-| `getAudio` | `url` o `name` | `AudioSource` |
-| `getFont` | `family` | `FontFace` |
-| `getVideo` | `url` o `name` | `HTMLVideoElement` |
-| `getJson<T>` | `url` o `name` | `T` |
+| Método       | Parámetros     | Devuelve           |
+| ------------ | -------------- | ------------------ |
+| `getImage`   | `url` o `name` | `HTMLImageElement` |
+| `getAudio`   | `url` o `name` | `AudioSource`      |
+| `getFont`    | `family`       | `FontFace`         |
+| `getVideo`   | `url` o `name` | `HTMLVideoElement` |
+| `getJson<T>` | `url` o `name` | `T`                |
 
 ### Recursos de audio
 
@@ -67,7 +67,7 @@ interface AudioSource {
 }
 ```
 
-El `buffer` se rellena de forma asíncrona una vez finaliza la decodificación. En modo headless (sin contexto de audio) `loadAudio` devuelve `null`.
+El `buffer` se rellena de forma asíncrona una vez finaliza la decodificación. En modo headless (sin contexto de audio) `loadAudio` devuelve `undefined`.
 
 ## Comprobar el estado de carga
 

@@ -24,13 +24,13 @@ export class MainScene extends Scene {
 
 The load methods are:
 
-| Method | Parameters | Returns |
-|--------|-----------|---------|
-| `loadImage` | `url`, `name?` | `HTMLImageElement` |
-| `loadAudio` | `url`, `name?` | `AudioSource \| null` |
-| `loadFont` | `family`, `url` | `FontFace` |
-| `loadVideo` | `url`, `name?` | `HTMLVideoElement` |
-| `loadJson<T>` | `url`, `name?` | `Promise<T>` |
+| Method        | Parameters      | Returns                    |
+| ------------- | --------------- | -------------------------- |
+| `loadImage`   | `url`, `name?`  | `HTMLImageElement`         |
+| `loadAudio`   | `url`, `name?`  | `AudioSource \| undefined` |
+| `loadFont`    | `family`, `url` | `FontFace`                 |
+| `loadVideo`   | `url`, `name?`  | `HTMLVideoElement`         |
+| `loadJson<T>` | `url`, `name?`  | `Promise<T>`               |
 
 Each asset is identified by its `url`. Image, audio, video, and JSON assets also accept an optional `name`, which can be used to retrieve them later instead of the URL. Fonts are identified by their `family` name.
 
@@ -48,13 +48,13 @@ const level = this.assetManager.getJson("level.json");
 
 The retrieval methods are:
 
-| Method | Parameters | Returns |
-|--------|-----------|---------|
-| `getImage` | `url` or `name` | `HTMLImageElement` |
-| `getAudio` | `url` or `name` | `AudioSource` |
-| `getFont` | `family` | `FontFace` |
-| `getVideo` | `url` or `name` | `HTMLVideoElement` |
-| `getJson<T>` | `url` or `name` | `T` |
+| Method       | Parameters      | Returns            |
+| ------------ | --------------- | ------------------ |
+| `getImage`   | `url` or `name` | `HTMLImageElement` |
+| `getAudio`   | `url` or `name` | `AudioSource`      |
+| `getFont`    | `family`        | `FontFace`         |
+| `getVideo`   | `url` or `name` | `HTMLVideoElement` |
+| `getJson<T>` | `url` or `name` | `T`                |
 
 ### Audio assets
 
@@ -67,7 +67,7 @@ interface AudioSource {
 }
 ```
 
-The `buffer` is populated asynchronously once decoding finishes. In headless mode (no audio context) `loadAudio` returns `null`.
+The `buffer` is populated asynchronously once decoding finishes. In headless mode (no audio context) `loadAudio` returns `undefined`.
 
 ## Checking load status
 

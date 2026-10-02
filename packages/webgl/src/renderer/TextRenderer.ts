@@ -54,8 +54,7 @@ export class TextRenderer implements Renderer {
     private positionBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
 
-    // cache
-    private lastTexture: WebGLTexture = null;
+    private lastTexture: WebGLTexture | undefined;
     private shadowPosition: Vector2 = new Vector2();
 
     constructor(

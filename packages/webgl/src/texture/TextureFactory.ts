@@ -1,11 +1,7 @@
 export class TextureFactory {
     constructor(private readonly gl: WebGLRenderingContext) {}
 
-    public createFromImage(
-        image: HTMLImageElement,
-        smooth: boolean = false,
-        texture: WebGLTexture = null,
-    ): WebGLTexture {
+    public createFromImage(image: HTMLImageElement, smooth: boolean = false, texture?: WebGLTexture): WebGLTexture {
         texture = texture ?? this.gl.createTexture();
 
         if (image.naturalWidth) {
@@ -17,11 +13,7 @@ export class TextureFactory {
         return texture;
     }
 
-    public createFromCanvas(
-        canvas: HTMLCanvasElement,
-        smooth: boolean = false,
-        texture: WebGLTexture = null,
-    ): WebGLTexture {
+    public createFromCanvas(canvas: HTMLCanvasElement, smooth: boolean = false, texture?: WebGLTexture): WebGLTexture {
         texture = texture ?? this.gl.createTexture();
 
         this.createFromSource(canvas, texture, smooth);
