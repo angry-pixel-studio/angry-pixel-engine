@@ -25,25 +25,24 @@ export const setProjectionMatrix = (
 
 export type RGBA = { r: number; g: number; b: number; a: number };
 
-// unbounded: the color strings come from the game config, so the set of distinct values is expected to be small
-const rgbaCache: Map<string, Readonly<RGBA> | null> = new Map();
+const MAX_CACHED_COLORS = 1024;
+const rgbaCache: Map<string, Readonly<RGBA>> = new Map();
 
-export const hexToRgba = (hex: string): Readonly<RGBA> | null => {
-    // null is a cached miss (invalid string), undefined means the string was never parsed
+export const hexToRgba = (hex: string): Readonly<RGBA> => {
     const cached = rgbaCache.get(hex);
     if (cached !== undefined) return cached;
 
     const result: string[] = /^#?([a-f\d]{2})?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) throw new Error(`Invalid hex color: ${hex}`);
 
-    const rgba = result
-        ? Object.freeze({
-              r: parseInt(result[2], 16) / 255,
-              g: parseInt(result[3], 16) / 255,
-              b: parseInt(result[4], 16) / 255,
-              a: result[1] !== undefined ? parseInt(result[1], 16) / 255 : 1,
-          })
-        : null;
+    const rgba = Object.freeze({
+        r: parseInt(result[2], 16) / 255,
+        g: parseInt(result[3], 16) / 255,
+        b: parseInt(result[4], 16) / 255,
+        a: result[1] !== undefined ? parseInt(result[1], 16) / 255 : 1,
+    });
 
+    if (rgbaCache.size >= MAX_CACHED_COLORS) rgbaCache.clear();
     rgbaCache.set(hex, rgba);
 
     return rgba;
