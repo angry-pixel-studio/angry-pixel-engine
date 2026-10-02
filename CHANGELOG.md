@@ -19,6 +19,11 @@
 -   The `onCreate`, `onDestroy`, `onEnabled` and `onDisabled` hooks were removed from the `System` interface, and are no longer called by the `SystemManager`. A system that still defines them compiles, but they never run.
 -   `GameSystem.onSceneLoaded` and `GameSystem.onSceneDestroyed` replace them. `onSceneLoaded` runs when the scene finishes loading, after its entities have been created; `onSceneDestroyed` runs when the scene is destroyed, before its entities are removed. Both are optional, and are called on any system that defines them.
 
+#### Audio
+
+-   `AssetManager.loadAudio` returns `undefined` instead of `null` when there is no audio context (headless mode, or no Web Audio support).
+-   The `AudioContext` injected with `SYMBOLS.AudioContext` is `undefined` instead of `null` when there is no audio context.
+
 ### Added
 
 #### Systems
@@ -38,6 +43,14 @@
 #### Rendering
 
 -   The shadow of a `TextRenderer` is drawn with the opacity of the text it belongs to, instead of at full opacity.
+-   Hex colors are converted dividing each channel by `255` instead of `256`, so `#ffffff` is full white instead of `0.996`. Tint, mask, text, geometric, darkness and canvas colors are about 0.4% brighter.
+-   An invalid hex color throws an error that names the value, instead of failing while destructuring the color.
+-   The number of lights sent to the shader is capped at 64, the size of the lights array, so a darkness with more lights no longer makes the shader read past the lights that were set.
+
+### Performance
+
+-   The uniform locations of the 64 lights are looked up once when the shader program is loaded, instead of four lookups per light on every darkness draw.
+-   Parsed hex colors are cached, so each color string is parsed once instead of on every draw call that uses it. The cache holds up to 1024 colors and is cleared when it gets full, so colors generated at runtime do not grow it without limit.
 
 ## [2.3.7] - 2026-09-07
 
