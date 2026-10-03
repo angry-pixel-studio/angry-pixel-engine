@@ -11,6 +11,7 @@ export * from "./resolver/CircumferenceAABBResolver";
 export * from "./resolver/CircumferenceResolver";
 export * from "./resolver/CollisionResolver";
 export * from "./resolver/SatResolver";
+export * from "./resolver/CollisionResolutionPool";
 
 export * from "./Collider";
 export * from "./Collision";

@@ -7,6 +7,7 @@ import {
     CircumferenceResolver,
     CollisionMethods,
     CollisionRepository,
+    CollisionResolutionPool,
     QuadTree,
     SatMethod,
     SatResolver,
@@ -224,6 +225,7 @@ const setupPhysicsDependencies = (container: Container): void => {
         collisions: { collisionBroadPhaseMethod, collisionMatrix, collisionMethod },
     } = container.get<GameConfig>(SYMBOLS.GameConfig);
 
+    container.add(CollisionResolutionPool);
     container.add(CollisionRepository);
     container.add(CircumferenceResolver);
 

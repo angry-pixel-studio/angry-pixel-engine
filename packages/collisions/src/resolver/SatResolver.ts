@@ -1,8 +1,9 @@
-import { injectable } from "@angry-pixel/ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "../symbols";
 import { Vector2 } from "@angry-pixel/math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Circumference, Shape } from "../Shape";
+import { CollisionResolutionPool } from "./CollisionResolutionPool";
 
 type AxisProjection = {
     min: number;
@@ -11,6 +12,8 @@ type AxisProjection = {
 
 @injectable(SYMBOLS.CollisionSatResolver)
 export class SatResolver implements CollisionResolver {
+    @inject(SYMBOLS.CollisionResolutionPool) private readonly collisionResolutionPool: CollisionResolutionPool;
+
     private mergedAxes: Vector2[] = [];
     private projA: AxisProjection = { min: 0, max: 0 };
     private projB: AxisProjection = { min: 0, max: 0 };
@@ -20,8 +23,6 @@ export class SatResolver implements CollisionResolver {
     private invertAxis: boolean;
     private distance: Vector2 = new Vector2(Infinity, Infinity);
     private cache: Vector2 = new Vector2();
-    /** Reused return direction; callers that store CollisionResolution must copy `direction`. */
-    private readonly outDirection: Vector2 = new Vector2();
 
     public resolve(shapeA: Shape, shapeB: Shape): CollisionResolution {
         this.minOverlap = Infinity;
@@ -72,12 +73,11 @@ export class SatResolver implements CollisionResolver {
             }
         }
 
-        Vector2.scale(this.outDirection, this.smallestAxis, -1);
+        const resolution = this.collisionResolutionPool.get();
+        Vector2.scale(resolution.direction, this.smallestAxis, -1);
+        resolution.penetration = this.minOverlap;
 
-        return {
-            direction: this.outDirection,
-            penetration: this.minOverlap,
-        };
+        return resolution;
     }
 
     private mergeProjectionAxes(shapeA: Shape, shapeB: Shape): void {

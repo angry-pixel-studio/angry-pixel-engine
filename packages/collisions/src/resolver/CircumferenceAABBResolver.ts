@@ -1,16 +1,17 @@
-import { injectable } from "@angry-pixel/ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "../symbols";
 import { clamp, Vector2 } from "@angry-pixel/math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Circumference, Polygon } from "../Shape";
+import { CollisionResolutionPool } from "./CollisionResolutionPool";
 
 @injectable(SYMBOLS.CollisionCircumferenceAABBResolver)
 export class CircumferenceAABBResolver implements CollisionResolver {
+    @inject(SYMBOLS.CollisionResolutionPool) private readonly collisionResolutionPool: CollisionResolutionPool;
+
     private closestPoint: Vector2 = new Vector2();
     private distance: Vector2 = new Vector2();
     private direction: Vector2 = new Vector2();
-    /** Reused return direction; callers that store CollisionResolution must copy `direction`. */
-    private readonly outDirection: Vector2 = new Vector2();
 
     public resolve(shapeA: Circumference, shapeB: Polygon, invert: boolean = false): CollisionResolution {
         this.closestPoint.set(
@@ -25,12 +26,12 @@ export class CircumferenceAABBResolver implements CollisionResolver {
 
         Vector2.unit(this.direction, this.distance);
 
-        if (invert) Vector2.scale(this.outDirection, this.direction, -1);
-        else this.outDirection.copy(this.direction);
+        if (invert) Vector2.scale(this.direction, this.direction, -1);
 
-        return {
-            direction: this.outDirection,
-            penetration: shapeA.radius - len,
-        };
+        const resolution = this.collisionResolutionPool.get();
+        resolution.direction.copy(this.direction);
+        resolution.penetration = shapeA.radius - len;
+
+        return resolution;
     }
 }
