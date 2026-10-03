@@ -181,6 +181,7 @@ export class VideoRendererSystem implements System {
                 if (videoRenderer.video && typeof videoRenderer.video !== "string") {
                     videoRenderer.video.pause();
                     videoRenderer.video.currentTime = 0;
+                    videoRenderer.playing = false;
                 }
             },
             true,
