@@ -1,6 +1,19 @@
 # Changelog
 
-## [2.4.0] - 2026-09-23
+## [2.4.1] - 2026-10-03
+
+### Fixed
+
+#### Collisions
+
+-   With the SAT method, a shape whose projection is contained in the other shape's projection is pushed out through the nearest end. In one of the containment cases it was pushed the opposite way, so it stayed inside the other shape.
+-   Resolving a collision no longer flips the projection axes of the shapes, which made the result depend on the collisions resolved before it in the same physics step.
+-   A circumference centered exactly on a vertex of a polygon is pushed out by its radius. When the circumference was the local shape, the collision had no direction and no penetration.
+
+### Performance
+
+-   Polygons keep one projection axis per edge direction, since parallel edges project the same way: a box is tested on 2 axes instead of 4.
+-   Circumferences are projected directly from their center and radius, instead of rebuilding two vertices for every axis.
 
 ### Breaking changes
 
