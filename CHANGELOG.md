@@ -24,6 +24,10 @@
 -   `AssetManager.loadAudio` returns `undefined` instead of `null` when there is no audio context (headless mode, or no Web Audio support).
 -   The `AudioContext` injected with `SYMBOLS.AudioContext` is `undefined` instead of `null` when there is no audio context.
 
+#### Collisions
+
+-   `CollisionRepository.findAll()` was removed. The collisions of a collider are queried with `findCollisionsForCollider` or `findCollisionsForColliderAndLayer`.
+
 ### Added
 
 #### Systems
@@ -51,6 +55,10 @@
 
 -   The uniform locations of the 64 lights are looked up once when the shader program is loaded, instead of four lookups per light on every darkness draw.
 -   Parsed hex colors are cached, so each color string is parsed once instead of on every draw call that uses it. The cache holds up to 1024 colors and is cleared when it gets full, so colors generated at runtime do not grow it without limit.
+-   Each pair of colliding shapes is stored once instead of once per side. The queries return the collision oriented with the queried collider as the local one, so their results do not change, and both the queries and the repositioning of rigid bodies go through half as many collisions.
+-   A pair of shapes is tested once per physics step: a pair that does not collide is no longer tested again from the side of the other shape.
+-   The collisions and the collision resolutions are pooled and reused on every physics step, instead of allocating new objects for each collision.
+-   The results of a collider's query are computed once per physics step and shared by the calls made during that step. `findCollisionsForCollider` returns the same array to all of them, so it should not be modified.
 
 ## [2.3.7] - 2026-09-07
 
