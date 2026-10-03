@@ -1,5 +1,5 @@
 import { SYMBOLS } from "@config/dependencySymbols";
-import { EntityManager, System } from "@angry-pixel/ecs";
+import { EntityManager, System, SystemManager } from "@angry-pixel/ecs";
 import { inject } from "@angry-pixel/ioc";
 import { AssetManager } from "@manager/AssetManager";
 import { InputManager } from "@manager/InputManager";
@@ -10,13 +10,14 @@ import { GameConfig } from "@config/bootstrap";
 
 /**
  * Abstract base class for creating game systems with commonly needed dependencies injected.\
- * Provides access to the following core managers and services:\
- * - EntityManager: For managing game entities and components\
- * - AssetManager: For loading and managing game resources\
- * - SceneManager: For controlling scene transitions and state\
- * - TimeManager: For handling game timing and delta time\
- * - InputManager: For processing keyboard, mouse and touch input\
- * - CollisionRepository: For physics and collision detection\
+ * Provides access to the following core managers and services:
+ * - EntityManager: For managing game entities and components
+ * - SystemManager: For managing game systems
+ * - AssetManager: For loading and managing game resources
+ * - SceneManager: For controlling scene transitions and state
+ * - TimeManager: For handling game timing and delta time
+ * - InputManager: For processing keyboard, mouse and touch input
+ * - CollisionRepository: For physics and collision detection
  * - GameConfig: For accessing game configuration settings
  * @public
  * @category Core
@@ -31,6 +32,7 @@ import { GameConfig } from "@config/bootstrap";
  */
 export abstract class GameSystem implements System {
     @inject(SYMBOLS.EntityManager) protected readonly entityManager: EntityManager;
+    @inject(SYMBOLS.SystemManager) protected readonly systemManager: SystemManager;
     @inject(SYMBOLS.AssetManager) protected readonly assetManager: AssetManager;
     @inject(SYMBOLS.SceneManager) protected readonly sceneManager: SceneManager;
     @inject(SYMBOLS.TimeManager) protected readonly timeManager: TimeManager;
@@ -38,13 +40,21 @@ export abstract class GameSystem implements System {
     @inject(SYMBOLS.CollisionRepository) protected readonly collisionRepository: CollisionRepository;
     @inject(SYMBOLS.GameConfig) protected readonly gameConfig: GameConfig;
 
+    /**
+     * This method is called once every frame
+     * @public
+     */
     public onUpdate(): void {}
 
-    public onCreate(): void {}
+    /**
+     * This method is called when the scene finishes loading, after its entities have been created
+     * @public
+     */
+    public onSceneLoaded(): void {}
 
-    public onEnabled(): void {}
-
-    public onDisabled(): void {}
-
-    public onDestroy(): void {}
+    /**
+     * This method is called when the scene is destroyed, before its entities are removed
+     * @public
+     */
+    public onSceneDestroyed(): void {}
 }

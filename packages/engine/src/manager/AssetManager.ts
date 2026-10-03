@@ -25,7 +25,7 @@ interface Asset {
     type: AssetType;
     url: string;
     loaded: boolean;
-    element: AssetElement;
+    element?: AssetElement;
     family?: string;
     name?: string;
 }
@@ -59,7 +59,7 @@ interface Asset {
 export class AssetManager {
     private readonly assets: Asset[] = [];
 
-    constructor(@inject(SYMBOLS.AudioContext) private readonly audioContext: AudioContext | null) {}
+    constructor(@inject(SYMBOLS.AudioContext) private readonly audioContext: AudioContext | undefined) {}
 
     /**
      * Returns TRUE if the assets are loaded
@@ -95,9 +95,9 @@ export class AssetManager {
      * Loads an audio asset
      * @param url The asset URL
      * @param name The asset name [optional]
-     * @returns The {@link AudioSource} (with its `buffer` populated asynchronously), or `null` if no AudioContext is available.
+     * @returns The {@link AudioSource} (with its `buffer` populated asynchronously), or `undefined` if no AudioContext is available.
      */
-    public loadAudio(url: string, name?: string): AudioSource | null {
+    public loadAudio(url: string, name?: string): AudioSource | undefined {
         const existing = this.getAudio(url);
         if (existing) return existing;
 
@@ -105,7 +105,7 @@ export class AssetManager {
             // headless / no Web Audio support — treat as "loaded" so getAssetsLoaded doesn't hang.
             const asset = this.createAsset(url, AssetType.Audio, undefined, name);
             asset.loaded = true;
-            return null;
+            return undefined;
         }
 
         // HTMLAudioElement loads its own stream from the URL (browser cache dedupes the fetch below).
@@ -179,7 +179,7 @@ export class AssetManager {
     public async loadJson<T = Record<string, any>>(url: string, name?: string): Promise<T> {
         if (this.getJson(url)) return this.getJson(url);
 
-        const asset = this.createAsset(url, AssetType.Json, null, name);
+        const asset = this.createAsset(url, AssetType.Json, undefined, name);
         const response = await fetch(url);
         const json = await response.json();
 
@@ -270,7 +270,7 @@ export class AssetManager {
             ?.element as T;
     }
 
-    private createAsset(url: string, type: AssetType, element: AssetElement, name?: string): Asset {
+    private createAsset(url: string, type: AssetType, element?: AssetElement, name?: string): Asset {
         this.deleteAssetIfExists({ url, name });
         const asset: Asset = { type, url, element, loaded: false, name };
         this.assets.push(asset);

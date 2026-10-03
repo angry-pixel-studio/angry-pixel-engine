@@ -25,15 +25,25 @@ export const setProjectionMatrix = (
 
 export type RGBA = { r: number; g: number; b: number; a: number };
 
-export const hexToRgba = (hex: string): RGBA | null => {
-    const result: string[] = /^#?([a-f\d]{2})?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+const MAX_CACHED_COLORS = 1024;
+const rgbaCache: Map<string, Readonly<RGBA>> = new Map();
 
-    return result
-        ? {
-              r: parseInt(result[2], 16) / 256,
-              g: parseInt(result[3], 16) / 256,
-              b: parseInt(result[4], 16) / 256,
-              a: result[1] !== undefined ? parseInt(result[1], 16) / 256 : 1,
-          }
-        : null;
+export const hexToRgba = (hex: string): Readonly<RGBA> => {
+    const cached = rgbaCache.get(hex);
+    if (cached !== undefined) return cached;
+
+    const result: string[] = /^#?([a-f\d]{2})?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) throw new Error(`Invalid hex color: ${hex}`);
+
+    const rgba = Object.freeze({
+        r: parseInt(result[2], 16) / 255,
+        g: parseInt(result[3], 16) / 255,
+        b: parseInt(result[4], 16) / 255,
+        a: result[1] !== undefined ? parseInt(result[1], 16) / 255 : 1,
+    });
+
+    if (rgbaCache.size >= MAX_CACHED_COLORS) rgbaCache.clear();
+    rgbaCache.set(hex, rgba);
+
+    return rgba;
 };

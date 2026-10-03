@@ -12,7 +12,7 @@ export class QuadTree implements BroadPhaseResolver {
     private bounds: Rectangle;
     private depth: number;
     private rects: Map<number, Rectangle> = new Map();
-    private children: QuadTree[] = null;
+    private children: QuadTree[] | undefined;
 
     /** Root-only: dedupe ids across leaves (same scheme as SpatialGrid) */
     private seenGen: number[] = [];
@@ -48,7 +48,7 @@ export class QuadTree implements BroadPhaseResolver {
 
         if (this.children) {
             this.children.forEach((child) => child.clear());
-            this.children = null;
+            this.children = undefined;
         }
     }
 

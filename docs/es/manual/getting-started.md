@@ -66,7 +66,7 @@ La compilación UMD expone el motor como la variable global `angry-pixel`. Como 
     const { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } = window["angry-pixel"];
 
     class MainScene extends Scene {
-        createEntities() {
+        setup() {
             // cámara
             this.entityManager.createEntity([new Transform(), new Camera()]);
 
@@ -106,7 +106,7 @@ La compilación ESM se importa por URL dentro de un script de tipo módulo. No s
     import { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } from "https://cdn.angrypixel.gg/engine/latest/index.esm.js";
 
     class MainScene extends Scene {
-        createEntities() {
+        setup() {
             // cámara
             this.entityManager.createEntity([new Transform(), new Camera()]);
 

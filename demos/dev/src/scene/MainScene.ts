@@ -1,4 +1,4 @@
-import { AudioPlayer, Scene, TextRenderer, Transform } from "angry-pixel";
+import { AudioPlayer, randomInt, Scene, TextRenderer, Transform } from "angry-pixel";
 import { FpsMetterSystem } from "@system/FpsMetterSystem";
 import { InputControllerSystem } from "@system/InputControllerSystem";
 import { MovingPlatformSystem } from "@system/MovingPlatformSystem";
@@ -13,6 +13,8 @@ import { foregroundArchetype } from "@entity/Foreground";
 import { textArchetype } from "@entity/Text";
 import { FpsMetter } from "@component/FpsMetter";
 import { mainCameraArchetype, uiCameraArchetype } from "@entity/Camera";
+import { goblinArchetype } from "@entity/Goblin";
+import { GoblinMovement } from "@component/goblin/GoblinMovement";
 
 export class MainScene extends Scene {
     public loadAssets(): void {
@@ -23,8 +25,8 @@ export class MainScene extends Scene {
         Object.values(ASSETS.tilemap).forEach((filename) => this.assetManager.loadJson(filename));
     }
 
-    public registerSystems(): void {
-        this.addSystems([
+    public setup(): void {
+        this.systems = [
             InputControllerSystem,
             MovingPlatformSystem,
             NinjaMovementSystem,
@@ -33,10 +35,8 @@ export class MainScene extends Scene {
             GoblinMovementSystem,
             FollowPlayerCameraSystem,
             FpsMetterSystem,
-        ]);
-    }
+        ];
 
-    public createEntities(): void {
         this.setupCameras();
         this.setupGameObjects();
         this.setupUIText();
@@ -52,6 +52,8 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([InputController]);
 
         this.entityManager.createEntity(foregroundArchetype);
+
+        this.benchmarkGoblins(0);
     }
 
     private setupUIText(): void {
@@ -79,5 +81,18 @@ export class MainScene extends Scene {
                 action: "play",
             }),
         ]);
+    }
+
+    private benchmarkGoblins(amount: number): void {
+        if (amount <= 0) return;
+
+        for (let i = 0; i < amount; i++) {
+            const entity = this.entityManager.createEntity(goblinArchetype);
+            this.entityManager.updateComponentData(entity, Transform, ({ position }) =>
+                position.set(randomInt(-400, 400), 0),
+            );
+
+            this.entityManager.updateComponentData(entity, GoblinMovement, (c) => (c.walkSpeed = randomInt(40, 80)));
+        }
     }
 }

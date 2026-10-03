@@ -13,6 +13,7 @@ export class ApplyRepositionSystem implements System {
     // auxiliars
     private correction: Vector2 = new Vector2();
     private maxCorrection: Vector2 = new Vector2();
+    private aux: Vector2 = new Vector2();
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
@@ -22,7 +23,7 @@ export class ApplyRepositionSystem implements System {
 
     public onUpdate(): void {
         const collisions = this.collisionRepository
-            .findAll()
+            .getCollisions()
             .filter(
                 ({ localCollider, remoteCollider, remoteEntity, localEntity }) =>
                     localCollider.physics &&
@@ -39,16 +40,22 @@ export class ApplyRepositionSystem implements System {
             this.maxCorrection.set(0, 0);
 
             collisions
-                .filter(({ localEntity }) => entity === localEntity)
-                .forEach(({ remoteEntity, localCollider, remoteCollider, resolution: { direction, penetration } }) => {
-                    const remoteRigidBody = this.entityManager.getComponent(remoteEntity, RigidBody);
+                .filter(({ localEntity, remoteEntity }) => entity === localEntity || entity === remoteEntity)
+                .forEach((collision) => {
+                    const isRemote = collision.remoteEntity === entity;
+                    const remoteRigidBody = this.entityManager.getComponent(
+                        isRemote ? collision.localEntity : collision.remoteEntity,
+                        RigidBody,
+                    );
+                    const localLayer = isRemote ? collision.remoteCollider.layer : collision.localCollider.layer;
+                    const remoteLayer = isRemote ? collision.localCollider.layer : collision.remoteCollider.layer;
 
                     // this body behaves as static for a colliding Dynamic body's layer, so it is not repositioned
                     // by this collision (the other Dynamic body takes the whole correction). Static/Kinematic
                     // remotes are never repositioned, so this body must still take the full correction against them.
                     if (
                         remoteRigidBody.type === RigidBodyType.Dynamic &&
-                        rigidBody.staticForLayers.includes(remoteCollider.layer)
+                        rigidBody.staticForLayers.includes(remoteLayer)
                     ) {
                         return;
                     }
@@ -57,7 +64,12 @@ export class ApplyRepositionSystem implements System {
                     // behaves as static for this body's collider layer
                     const remoteActsAsStatic =
                         remoteRigidBody.type !== RigidBodyType.Dynamic ||
-                        remoteRigidBody.staticForLayers.includes(localCollider.layer);
+                        remoteRigidBody.staticForLayers.includes(localLayer);
+
+                    let penetration = collision.resolution.penetration;
+                    const direction = isRemote
+                        ? Vector2.scale(this.aux, collision.resolution.direction, -1)
+                        : collision.resolution.direction;
 
                     // if both bodies move, the correction distance is split so each is displaced by half the penetration
                     if (!remoteActsAsStatic) penetration /= 2;

@@ -7,4 +7,5 @@ export const SYMBOLS = {
     CollisionCircumferenceResolver: Symbol.for("CollisionCircumferenceResolver"),
     CollisionSatResolver: Symbol.for("CollisionSatResolver"),
     CollisionMatrix: Symbol.for("CollisionMatrix"),
+    CollisionResolutionPool: Symbol.for("CollisionResolutionPool"),
 };

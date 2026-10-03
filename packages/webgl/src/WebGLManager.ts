@@ -19,6 +19,8 @@ import { SYMBOLS } from "./symbols";
 
 @injectable(SYMBOLS.WebGLManager)
 export class WebGLManager {
+    public readonly fontAtlasFactory: FontAtlasFactory;
+
     private readonly renderers: Map<RenderDataType, Renderer> = new Map();
     private readonly canvasColorRenderer: CanvasColorRenderer;
 
@@ -30,10 +32,13 @@ export class WebGLManager {
         const contextVersion = contextManager.contextVersion;
         const programManager = new ProgramManager(gl, contextVersion, new ProgramFactory(gl, new ShaderLoader(gl)));
         const textureManager = new TextureManager(new TextureFactory(gl));
-        const fontFactoryAtlas = new FontAtlasFactory();
+        this.fontAtlasFactory = new FontAtlasFactory();
 
         this.renderers.set(RenderDataType.Sprite, new SpriteRenderer(gl, programManager, textureManager));
-        this.renderers.set(RenderDataType.Text, new TextRenderer(gl, programManager, textureManager, fontFactoryAtlas));
+        this.renderers.set(
+            RenderDataType.Text,
+            new TextRenderer(gl, programManager, textureManager, this.fontAtlasFactory),
+        );
         this.renderers.set(RenderDataType.Tilemap, new TilemapRenderer(gl, programManager, textureManager));
         this.renderers.set(RenderDataType.Geometric, new GeometricRenderer(gl, programManager));
         this.renderers.set(RenderDataType.Mask, new MaskRenderer(gl, programManager));

@@ -66,7 +66,7 @@ The UMD build exposes the engine as the global `angry-pixel`. Because the name c
     const { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } = window["angry-pixel"];
 
     class MainScene extends Scene {
-        createEntities() {
+        setup() {
             // camera
             this.entityManager.createEntity([new Transform(), new Camera()]);
 
@@ -106,7 +106,7 @@ The ESM build is imported by URL inside a module script. No global is created:
     import { Game, Scene, Transform, Camera, MaskRenderer, MaskShape } from "https://cdn.angrypixel.gg/engine/latest/index.esm.js";
 
     class MainScene extends Scene {
-        createEntities() {
+        setup() {
             // camera
             this.entityManager.createEntity([new Transform(), new Camera()]);
 

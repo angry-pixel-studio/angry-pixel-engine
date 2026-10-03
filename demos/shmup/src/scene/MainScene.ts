@@ -5,9 +5,7 @@ export class MainScene extends Scene {
         this.assetManager.loadAudio("music/spaceship-shooter.ogg");
     }
 
-    public registerSystems(): void {}
-
-    public createEntities(): void {
+    public setup(): void {
         this.entityManager.createEntity([new Camera({ debug: true }), new Transform()]);
 
         this.entityManager.createEntity([

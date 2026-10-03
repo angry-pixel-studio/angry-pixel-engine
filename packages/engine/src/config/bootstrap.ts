@@ -7,6 +7,7 @@ import {
     CircumferenceResolver,
     CollisionMethods,
     CollisionRepository,
+    CollisionResolutionPool,
     QuadTree,
     SatMethod,
     SatResolver,
@@ -123,10 +124,10 @@ export const bootstrap = (gameConfig: GameConfig): Container => {
     return container;
 };
 
-const createAudioContext = ({ headless }: GameConfig): AudioContext | null => {
-    if (headless) return null;
+const createAudioContext = ({ headless }: GameConfig): AudioContext | undefined => {
+    if (headless) return undefined;
     const Ctor = typeof window !== "undefined" ? window.AudioContext ?? (window as any).webkitAudioContext : undefined;
-    return Ctor ? new Ctor() : null;
+    return Ctor ? new Ctor() : undefined;
 };
 
 const setDefaultValues = (gameConfig: GameConfig) => {
@@ -224,6 +225,7 @@ const setupPhysicsDependencies = (container: Container): void => {
         collisions: { collisionBroadPhaseMethod, collisionMatrix, collisionMethod },
     } = container.get<GameConfig>(SYMBOLS.GameConfig);
 
+    container.add(CollisionResolutionPool);
     container.add(CollisionRepository);
     container.add(CircumferenceResolver);
 

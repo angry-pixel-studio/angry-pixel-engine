@@ -1,5 +1,65 @@
 # Changelog
 
+## [2.4.0] - 2026-09-23
+
+### Breaking changes
+
+#### Scenes
+
+-   `Scene.registerSystems` and `Scene.createEntities` were replaced by a single `Scene.setup`, which registers the systems and creates the entities of the scene. It runs once the assets requested in `loadAssets` have finished loading. A scene that still defines the old methods compiles, but the engine never calls them.
+-   `Scene.addSystem` and `Scene.addSystems` were removed. The systems of a scene are assigned directly to the `systems` array, whose order is their execution order. The array is reset before `setup` runs.
+-   `SceneManager.loadScene` takes an options object as its second argument instead of a component type: `loadScene("Level2", { preserveEntitiesWithComponent: Persistent })`. `loadOpeningScene` accepts the same options.
+
+#### Entities
+
+-   `EntityManager.removeAllEntities` takes an options object instead of a component type: `removeAllEntities({ preserveEntitiesWithComponent: DontDestroy })`.
+
+#### Systems
+
+-   The `onCreate`, `onDestroy`, `onEnabled` and `onDisabled` hooks were removed from the `System` interface, and are no longer called by the `SystemManager`. A system that still defines them compiles, but they never run.
+-   `GameSystem.onSceneLoaded` and `GameSystem.onSceneDestroyed` replace them. `onSceneLoaded` runs when the scene finishes loading, after its entities have been created; `onSceneDestroyed` runs when the scene is destroyed, before its entities are removed. Both are optional, and are called on any system that defines them.
+
+#### Audio
+
+-   `AssetManager.loadAudio` returns `undefined` instead of `null` when there is no audio context (headless mode, or no Web Audio support).
+-   The `AudioContext` injected with `SYMBOLS.AudioContext` is `undefined` instead of `null` when there is no audio context.
+
+#### Collisions
+
+-   `CollisionRepository.findAll()` was removed. The collisions of a collider are queried with `findCollisionsForCollider` or `findCollisionsForColliderAndLayer`.
+
+### Added
+
+#### Systems
+
+-   `GameSystem` injects the `SystemManager`, alongside the managers it already provided.
+
+#### Scenes
+
+-   The current scene is destroyed when the game loop stops, so the `onSceneDestroyed` hooks run and the videos are paused. Every audio source is stopped, including the ones that do not stop on scene transition.
+
+### Fixed
+
+#### Scenes
+
+-   The `systems` array of a scene is reset before it is registered again, so reloading the same scene no longer accumulates duplicated systems on every load.
+
+#### Rendering
+
+-   The shadow of a `TextRenderer` is drawn with the opacity of the text it belongs to, instead of at full opacity.
+-   Hex colors are converted dividing each channel by `255` instead of `256`, so `#ffffff` is full white instead of `0.996`. Tint, mask, text, geometric, darkness and canvas colors are about 0.4% brighter.
+-   An invalid hex color throws an error that names the value, instead of failing while destructuring the color.
+-   The number of lights sent to the shader is capped at 64, the size of the lights array, so a darkness with more lights no longer makes the shader read past the lights that were set.
+
+### Performance
+
+-   The uniform locations of the 64 lights are looked up once when the shader program is loaded, instead of four lookups per light on every darkness draw.
+-   Parsed hex colors are cached, so each color string is parsed once instead of on every draw call that uses it. The cache holds up to 1024 colors and is cleared when it gets full, so colors generated at runtime do not grow it without limit.
+-   Each pair of colliding shapes is stored once instead of once per side. The queries return the collision oriented with the queried collider as the local one, so their results do not change, and both the queries and the repositioning of rigid bodies go through half as many collisions.
+-   A pair of shapes is tested once per physics step: a pair that does not collide is no longer tested again from the side of the other shape.
+-   The collisions and the collision resolutions are pooled and reused on every physics step, instead of allocating new objects for each collision.
+-   The results of a collider's query are computed once per physics step and shared by the calls made during that step. `findCollisionsForCollider` returns the same array to all of them, so it should not be modified.
+
 ## [2.3.7] - 2026-09-07
 
 ### Breaking changes

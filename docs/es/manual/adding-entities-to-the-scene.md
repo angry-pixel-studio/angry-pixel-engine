@@ -1,6 +1,6 @@
 # Agregar entidades a la escena
 
-Las entidades iniciales de una escena se crean en su método `createEntities`, que se ejecuta una vez que los recursos de la escena han terminado de cargarse. Las entidades se crean mediante `this.entityManager`. Consulta [El Entity Manager](entity-manager.md) para la API completa.
+Las entidades iniciales de una escena se crean en su método `setup`, que se ejecuta una vez que los recursos de la escena han terminado de cargarse. Las entidades se crean mediante `this.entityManager`. Consulta [El Entity Manager](entity-manager.md) para la API completa.
 
 ## Crear entidades en línea
 
@@ -13,7 +13,7 @@ import { Scene, Transform, SpriteRenderer, Vector2 } from "angry-pixel";
 import { Player } from "../component/Player";
 
 export class MainScene extends Scene {
-    createEntities() {
+    setup() {
         this.entityManager.createEntity([
             new Transform({ position: new Vector2(0, 0) }),
             new SpriteRenderer(),
@@ -48,7 +48,7 @@ Un arquetipo se pasa a `createEntity` de la misma forma que una lista de compone
 ```typescript
 import { playerArchetype } from "../entity/Player";
 
-createEntities() {
+setup() {
     this.entityManager.createEntity(playerArchetype);
 }
 ```

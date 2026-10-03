@@ -78,11 +78,10 @@ const game = new Game(config);
 
 ### Create a Scene
 
-Then we will create the `MainScene` class, which extends the `Scene` base class. This class represents a scene in our game, and has three main functions:
+Then we will create the `MainScene` class, which extends the `Scene` base class. This class represents a scene in our game, and has two main functions:
 
 -   To load assets.
--   To create the initial entities.
--   To know which are the necessary systems.
+-   To register the necessary systems and create the initial entities.
 
 For the moment we only implement the function loadAssets to load an image that we will use later:
 
@@ -157,8 +156,8 @@ class MainScene extends Scene {
     }
 
     // within this method we register the systems of the scene
-    registerSystems(): void {
-        this.addSystem(MoveAndBounceSystem);
+    setup(): void {
+        this.systems = [MoveAndBounceSystem];
     }
 }
 ```
@@ -175,12 +174,10 @@ class MainScene extends Scene {
         this.assetManager.loadImage("sprite.png");
     }
 
-    registerSystems(): void {
-        this.addSystem(MoveAndBounceSystem);
-    }
+    // within this method we register the systems and create the entities
+    setup(): void {
+        this.systems = [MoveAndBounceSystem];
 
-    // within this method we create the entities
-    createEntities(): void {
         // camera
         this.entityManager.createEntity([new Transform(), new Camera({ layers: ["Sprite"] })]);
 

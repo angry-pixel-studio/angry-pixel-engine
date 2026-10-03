@@ -54,8 +54,7 @@ export class TextRenderer implements Renderer {
     private positionBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
 
-    // cache
-    private lastTexture: WebGLTexture = null;
+    private lastTexture: WebGLTexture | undefined;
     private shadowPosition: Vector2 = new Vector2();
 
     constructor(
@@ -104,7 +103,7 @@ export class TextRenderer implements Renderer {
             const shadowRenderData = {
                 ...renderData,
                 color,
-                opacity,
+                opacity: opacity * renderData.opacity,
                 position: Vector2.add(this.shadowPosition, renderData.position, offset),
             };
             shadowRenderData.shadow = undefined;

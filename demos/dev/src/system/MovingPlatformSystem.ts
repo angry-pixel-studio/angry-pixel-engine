@@ -2,7 +2,7 @@ import { GameSystem, RigidBody, Transform, Vector2 } from "angry-pixel";
 import { MovingPlatform } from "@component/MovingPlatform";
 
 export class MovingPlatformSystem extends GameSystem {
-    public onEnabled(): void {
+    public onSceneLoaded(): void {
         this.entityManager.search(MovingPlatform).forEach(({ entity, component: platform }) => {
             platform.spots = platform.spotEntities.map((spotEntity) => {
                 const spotTransform = this.entityManager.getComponent(spotEntity, Transform);

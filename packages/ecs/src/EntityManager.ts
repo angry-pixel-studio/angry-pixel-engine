@@ -1,5 +1,5 @@
 import { injectable } from "@angry-pixel/ioc";
-import { Archetype, Component, ComponentType, Entity, SearchResult } from "./types";
+import { Archetype, Component, ComponentType, Entity, RemoveAllEntitiesOptions, SearchResult } from "./types";
 import { deepClone } from "./utils";
 import { SYMBOLS } from "./symbols";
 
@@ -246,22 +246,24 @@ export class EntityManager {
 
     /**
      * Removes all Entities and all their Components
-     * @param preserveComponentType Optional component type to preserve entities that have this component
+     * @param options Optional options object. See {@link RemoveAllEntitiesOptions}
      * @public
      * @example
      * ```js
      * // Remove all entities
      * entityManager.removeAllEntities();
      *
-     * // Remove all entities except those that have a SpriteRenderer component
-     * entityManager.removeAllEntities(SpriteRenderer);
+     * // Remove all entities except those that have a component of type DontDestroy
+     * entityManager.removeAllEntities({ preserveEntitiesWithComponent: DontDestroy });
      * ```
      */
-    public removeAllEntities(preserveComponentType?: ComponentType): void {
-        const result = preserveComponentType ? this.search(preserveComponentType) : [];
+    public removeAllEntities(options?: RemoveAllEntitiesOptions): void {
+        const toPreserve = options?.preserveEntitiesWithComponent
+            ? this.search(options.preserveEntitiesWithComponent)
+            : [];
 
-        if (result.length > 0) {
-            const entitiesToPreserve = new Set(result.map(({ entity }) => entity));
+        if (toPreserve.length > 0) {
+            const entitiesToPreserve = new Set(toPreserve.map(({ entity }) => entity));
             for (const entity of this.entities) {
                 if (!entitiesToPreserve.has(entity)) this.removeEntity(entity);
             }

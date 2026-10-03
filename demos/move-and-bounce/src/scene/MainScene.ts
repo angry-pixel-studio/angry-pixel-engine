@@ -8,11 +8,9 @@ export class MainScene extends Scene {
         this.assetManager.loadImage("image/angry-pixel.png");
     }
 
-    registerSystems(): void {
-        this.addSystem(MoveAndBounceSystem);
-    }
+    setup(): void {
+        this.systems = [MoveAndBounceSystem];
 
-    createEntities(): void {
         this.entityManager.createEntity(camera);
         this.entityManager.createEntity(logo);
     }

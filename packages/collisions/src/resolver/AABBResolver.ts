@@ -1,18 +1,19 @@
-import { injectable } from "@angry-pixel/ioc";
+import { inject, injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "../symbols";
 import { Rectangle, Vector2 } from "@angry-pixel/math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
 import { Shape } from "../Shape";
+import { CollisionResolutionPool } from "./CollisionResolutionPool";
 
 @injectable(SYMBOLS.CollisionAABBResolver)
 export class AABBResolver implements CollisionResolver {
+    @inject(SYMBOLS.CollisionResolutionPool) private readonly collisionResolutionPool: CollisionResolutionPool;
+
     private overlapX: number;
     private overlapY: number;
     private minOverlap: number;
     private direction: Vector2 = new Vector2();
     private resolutionDirection: Vector2 = new Vector2();
-    /** Reused return direction; callers that store CollisionResolution must copy `direction`. */
-    private readonly outDirection: Vector2 = new Vector2();
 
     public resolve({ boundingBox: boxA }: Shape, { boundingBox: boxB }: Shape): CollisionResolution {
         this.overlapX = Math.min(boxA.x1, boxB.x1) - Math.max(boxA.x, boxB.x);
@@ -34,10 +35,11 @@ export class AABBResolver implements CollisionResolver {
             this.resolutionDirection.set(this.direction.x, this.overlapY === this.overlapX ? this.direction.y : 0);
         }
 
-        return {
-            direction: Vector2.unit(this.outDirection, this.resolutionDirection),
-            penetration: this.minOverlap,
-        };
+        const resolution = this.collisionResolutionPool.get();
+        Vector2.unit(resolution.direction, this.resolutionDirection);
+        resolution.penetration = this.minOverlap;
+
+        return resolution;
     }
 
     private checkOverlapForLines(boxA: Rectangle, boxB: Rectangle) {

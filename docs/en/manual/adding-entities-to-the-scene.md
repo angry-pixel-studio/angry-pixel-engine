@@ -1,6 +1,6 @@
 # Adding Entities to the Scene
 
-A scene's initial entities are created in its `createEntities` method, which runs once the scene's assets have finished loading. Entities are created through `this.entityManager`. See [The Entity Manager](entity-manager.md) for the full API.
+A scene's initial entities are created in its `setup` method, which runs once the scene's assets have finished loading. Entities are created through `this.entityManager`. See [The Entity Manager](entity-manager.md) for the full API.
 
 ## Creating entities inline
 
@@ -13,7 +13,7 @@ import { Scene, Transform, SpriteRenderer, Vector2 } from "angry-pixel";
 import { Player } from "../component/Player";
 
 export class MainScene extends Scene {
-    createEntities() {
+    setup() {
         this.entityManager.createEntity([
             new Transform({ position: new Vector2(0, 0) }),
             new SpriteRenderer(),
@@ -48,7 +48,7 @@ An archetype is passed to `createEntity` the same way as a component list:
 ```typescript
 import { playerArchetype } from "../entity/Player";
 
-createEntities() {
+setup() {
     this.entityManager.createEntity(playerArchetype);
 }
 ```

@@ -12,7 +12,7 @@ import { SYMBOLS } from "./symbols";
  */
 @injectable(SYMBOLS.SystemManager)
 export class SystemManager {
-    private systems: [System, SystemGroup, boolean, boolean][] = []; // [system, group, enabled, created]
+    private systems: [System, SystemGroup, boolean][] = []; // [system, group, enabled]
 
     /**
      * @param systemType The system class
@@ -33,7 +33,7 @@ export class SystemManager {
             throw new Error(`SystemManager already has an instance of ${system.constructor.name}.`);
         }
 
-        this.systems.push([system, group, false, false]);
+        this.systems.push([system, group, false]);
     }
 
     /**
@@ -72,8 +72,7 @@ export class SystemManager {
     }
 
     /**
-     * Enables a system by its type.\
-     * The method `onEnabled` of the system will be called. If the system is enabled for the first time, the method `onCreate` will also be called.
+     * Enables a system by its type.
      * @param systemType The system class
      * @public
      * @example
@@ -87,18 +86,11 @@ export class SystemManager {
 
         const system = this.systems[index];
 
-        if (system[3] === false) {
-            system[3] = true;
-            if (system[0].onCreate) system[0].onCreate();
-        }
-
         system[2] = true;
-        if (system[0].onEnabled) system[0].onEnabled();
     }
 
     /**
-     * Disables a system by its type.\
-     * The method `onDisabled` of the system will be called.
+     * Disables a system by its type.
      * @param systemType The system class
      * @public
      * @example
@@ -113,7 +105,6 @@ export class SystemManager {
         const system = this.systems[index];
 
         system[2] = false;
-        if (system[0].onDisabled) system[0].onDisabled();
     }
 
     /**
@@ -130,15 +121,13 @@ export class SystemManager {
 
     /**
      * Removes a system by its type.
-     * The method `onDestroy` of the system will be called.
      * @param systemType The system class
      * @internal
      */
     public removeSystem(systemType: SystemType): void {
         const index = this.findSystemIndex(systemType);
         if (index === -1) return;
-        const system = this.systems.splice(index, 1)[0][0];
-        if (system.onDestroy) system.onDestroy();
+        this.systems.splice(index, 1);
     }
 
     /**

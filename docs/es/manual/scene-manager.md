@@ -30,19 +30,21 @@ Cargar un nombre no registrado lanza un error.
 
 ### Conservar entidades entre escenas
 
-`loadScene` acepta un tipo de componente opcional como segundo argumento. Las entidades que tienen un componente de ese tipo se conservan durante la transición en lugar de eliminarse. Esto es útil para entidades que deben persistir entre escenas, como un jugador o un contenedor de la puntuación.
+`loadScene` acepta un objeto de opciones como segundo argumento. Las entidades que tienen un componente del tipo indicado en `preserveEntitiesWithComponent` se conservan durante la transición en lugar de eliminarse. Esto es útil para entidades que deben persistir entre escenas, como un jugador o un contenedor de la puntuación.
 
 ```typescript
-import { Persistent } from "../component/Persistent";
+import { DontDestroy } from "../component/DontDestroy";
 
-this.sceneManager.loadScene("Level2", Persistent);
+this.sceneManager.loadScene("Level2", { preserveEntitiesWithComponent: DontDestroy });
 ```
+
+`loadOpeningScene` acepta el mismo objeto de opciones.
 
 ## Estado de carga de la escena
 
 | Miembro | Descripción |
 |--------|-------------|
-| `loadScene(name, preserveEntitiesWithComponent?)` | Carga la escena registrada con el nombre `name`. |
+| `loadScene(name, options?)` | Carga la escena registrada con el nombre `name`. |
 | `loadingScene` | `true` mientras se está cargando una escena. |
 | `sceneLoadedThisFrame` | `true` en el frame en que la escena terminó de cargarse. |
 

@@ -31,9 +31,7 @@ export class AudioPlayerSystem implements System {
         @inject(SYMBOLS.TimeManager) private readonly timeManager: TimeManager,
         @inject(SYMBOLS.AssetManager) private readonly assetManager: AssetManager,
         @inject(SYMBOLS.AudioContext) private readonly audioContext: AudioContext,
-    ) {}
-
-    public onCreate(): void {
+    ) {
         // suspend the AudioContext when the document is hidden so audio doesn't keep playing in the background.
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
@@ -125,17 +123,29 @@ export class AudioPlayerSystem implements System {
         });
     }
 
-    public onDisabled(): void {
-        this.entityManager.search(AudioPlayer, (audioPlayer) => {
-            if (!audioPlayer.stopOnSceneTransition) return;
-            this.disposeSource(audioPlayer);
-            audioPlayer._pauseOffset = 0;
-            audioPlayer.state = "stopped";
-        });
+    public onSceneDestroyed(): void {
+        this.entityManager.search(
+            AudioPlayer,
+            (audioPlayer) => {
+                if (!audioPlayer.stopOnSceneTransition) return;
+                this.stopAudioPlayer(audioPlayer);
+            },
+            true,
+        );
     }
 
-    public onDestroy(): void {
-        this.onDisabled();
+    /**
+     * Stops every audio source when the game loop stops, including the ones that do not stop on scene transition
+     * @internal
+     */
+    public onGameStopped(): void {
+        this.entityManager.search(AudioPlayer, (audioPlayer) => this.stopAudioPlayer(audioPlayer), true);
+    }
+
+    private stopAudioPlayer(audioPlayer: AudioPlayer): void {
+        this.disposeSource(audioPlayer);
+        audioPlayer._pauseOffset = 0;
+        audioPlayer.state = "stopped";
     }
 
     private computePlaybackRate(audioPlayer: AudioPlayer): number {

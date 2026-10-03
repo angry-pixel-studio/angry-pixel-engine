@@ -96,7 +96,6 @@ El `CollisionRepository` informa de las colisiones detectadas en el frame actual
 |--------|-------------|
 | `findCollisionsForCollider(collider)` | Colisiones en las que el colisionador dado es el colisionador local. |
 | `findCollisionsForColliderAndLayer(collider, layer)` | Colisiones con un colisionador remoto en la capa indicada. |
-| `findAll()` | Todas las colisiones actuales. |
 
 ```typescript
 import { GameSystem, BoxCollider } from "angry-pixel";

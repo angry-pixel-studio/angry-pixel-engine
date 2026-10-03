@@ -88,8 +88,7 @@ export class TilemapRenderer implements Renderer {
     private positionBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
 
-    // cache
-    private lastTexture: WebGLTexture = null;
+    private lastTexture: WebGLTexture | undefined;
 
     constructor(
         private readonly gl: WebGL2RenderingContext,

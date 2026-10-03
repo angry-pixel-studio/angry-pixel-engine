@@ -1,7 +1,13 @@
 import { EntityManager, System } from "@angry-pixel/ecs";
 import { inject, injectable } from "@angry-pixel/ioc";
-import { Vector2 } from "@angry-pixel/math";
-import { BroadPhaseResolver, Collider, CollisionRepository, CollisionMethod, Shape } from "@angry-pixel/collisions";
+import {
+    BroadPhaseResolver,
+    Collider,
+    CollisionRepository,
+    CollisionMethod,
+    Shape,
+    CollisionResolutionPool,
+} from "@angry-pixel/collisions";
 import { SYMBOLS } from "@config/dependencySymbols";
 import { SYSTEM_SYMBOLS } from "@config/systemSymbols";
 import { BallCollider } from "@component/physics2d/BallCollider";
@@ -22,10 +28,10 @@ export class ResolveCollisionSystem implements System {
     // auxiliars
     private colliderTypes = [BallCollider, BoxCollider, PolygonCollider, EdgeCollider, TilemapCollider];
     private colliders: Collider[] = [];
-    private collisions: Set<string> = new Set();
+    private resolvedCollisions: Set<string> = new Set();
     private shapes: Shape[] = [];
     /** When set, O(1) layer-pair lookup instead of scanning collisionMatrix per neighbor */
-    private readonly layerNeighbors: Map<string, Set<string>> | null;
+    private readonly layerNeighbors: Map<string, Set<string>> | undefined;
 
     constructor(
         @inject(SYMBOLS.EntityManager) private readonly entityManager: EntityManager,
@@ -33,8 +39,9 @@ export class ResolveCollisionSystem implements System {
         @inject(SYMBOLS.CollisionMatrix) collisionMatrix: CollisionMatrix | undefined,
         @inject(SYMBOLS.CollisionResolutionMethod) private collisionResolutionMethod: CollisionMethod,
         @inject(SYMBOLS.CollisionRepository) private collisionRepository: CollisionRepository,
+        @inject(SYMBOLS.CollisionResolutionPool) private collisionResolutionPool: CollisionResolutionPool,
     ) {
-        if (collisionMatrix !== undefined && collisionMatrix !== null) {
+        if (collisionMatrix) {
             const map = new Map<string, Set<string>>();
             for (let i = 0; i < collisionMatrix.length; i++) {
                 const [a, b] = collisionMatrix[i];
@@ -44,16 +51,15 @@ export class ResolveCollisionSystem implements System {
                 map.get(b)!.add(a);
             }
             this.layerNeighbors = map;
-        } else {
-            this.layerNeighbors = null;
         }
     }
 
     public onUpdate(): void {
-        this.collisionRepository.removeAll();
-        this.colliders = [];
-        this.collisions.clear();
-        this.shapes = [];
+        this.collisionRepository.clear();
+        this.resolvedCollisions.clear();
+        this.collisionResolutionPool.clear();
+        this.colliders.length = 0;
+        this.shapes.length = 0;
 
         this.colliderTypes.forEach((type) =>
             this.entityManager.search<Collider>(type, (collider, entity) => {
@@ -114,44 +120,24 @@ export class ResolveCollisionSystem implements System {
                     !this.isResolved(local, neighbor),
             )
             .forEach((neighbor) => {
+                this.resolvedCollisions.add(`${local.id}-${neighbor.id}`);
+                this.resolvedCollisions.add(`${neighbor.id}-${local.id}`);
+
                 const resolution = this.collisionResolutionMethod.findCollision(local, neighbor);
 
                 if (resolution) {
-                    const penetration = resolution.penetration;
-                    const dirA = resolution.direction.clone();
-
-                    this.collisionRepository.persist({
-                        localCollider: this.colliders[local.collider],
-                        localEntity: local.entity,
-                        remoteCollider: this.colliders[neighbor.collider],
-                        remoteEntity: neighbor.entity,
-                        resolution: {
-                            direction: dirA,
-                            penetration,
-                        },
-                    });
-
-                    const dirB = resolution.direction.clone();
-                    Vector2.scale(dirB, dirB, -1);
-
-                    this.collisionRepository.persist({
-                        localCollider: this.colliders[neighbor.collider],
-                        localEntity: neighbor.entity,
-                        remoteCollider: this.colliders[local.collider],
-                        remoteEntity: local.entity,
-                        resolution: {
-                            direction: dirB,
-                            penetration,
-                        },
-                    });
-
-                    this.collisions.add(`${local.id}-${neighbor.id}`);
-                    this.collisions.add(`${neighbor.id}-${local.id}`);
+                    this.collisionRepository.persist(
+                        local.entity,
+                        this.colliders[local.collider],
+                        neighbor.entity,
+                        this.colliders[neighbor.collider],
+                        resolution,
+                    );
                 }
             });
     }
 
     private isResolved(local: Shape, neighbor: Shape): boolean {
-        return this.collisions.has(`${local.id}-${neighbor.id}`);
+        return this.resolvedCollisions.has(`${local.id}-${neighbor.id}`);
     }
 }

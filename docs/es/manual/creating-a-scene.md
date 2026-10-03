@@ -12,25 +12,20 @@ export class MainScene extends Scene {
         // cargar los recursos que usa la escena
     }
 
-    registerSystems() {
-        // registrar los sistemas que se ejecutan en la escena
-    }
-
-    createEntities() {
-        // crear las entidades iniciales de la escena
+    setup() {
+        // registrar los sistemas y crear las entidades iniciales de la escena
     }
 }
 ```
 
-Los tres métodos son opcionales; sobrescribe solo los que la escena necesite.
+Ambos métodos son opcionales; sobrescribe solo los que la escena necesite.
 
 ## Métodos del ciclo de vida
 
 Cuando se carga una escena, el motor ejecuta sus métodos del ciclo de vida en el siguiente orden:
 
 1. **`loadAssets`** — carga los recursos que necesita la escena (imágenes, audio, fuentes, etc.) a través del Asset Manager.
-2. **`registerSystems`** — registra los sistemas que se ejecutan mientras la escena está activa.
-3. **`createEntities`** — crea las entidades iniciales de la escena. Esto se ejecuta solo después de que todos los recursos solicitados en `loadAssets` hayan terminado de cargarse.
+2. **`setup`** — registra los sistemas que se ejecutan mientras la escena está activa y crea sus entidades iniciales. Esto se ejecuta solo después de que todos los recursos solicitados en `loadAssets` hayan terminado de cargarse.
 
 Dentro de una escena tienes acceso a dos miembros protegidos:
 
@@ -39,7 +34,7 @@ Dentro de una escena tienes acceso a dos miembros protegidos:
 
 ### Cargar recursos
 
-Usa `this.assetManager` para solicitar los recursos que necesita la escena. El motor espera a que estén completamente cargados antes de llamar a `createEntities`.
+Usa `this.assetManager` para solicitar los recursos que necesita la escena. El motor espera a que estén completamente cargados antes de llamar a `setup`.
 
 ```typescript
 loadAssets() {
@@ -47,28 +42,21 @@ loadAssets() {
 }
 ```
 
-### Registrar sistemas
+### Preparar la escena
 
-Los sistemas que ejecuta una escena se listan en el array `systems`. Agrégalos directamente, o usa los métodos auxiliares `addSystem` y `addSystems`.
+`setup` hace dos cosas: asigna al array `systems` los sistemas que ejecuta la escena, y crea las entidades que existen cuando la escena se inicia.
 
-```typescript
-import { PlayerSystem } from "../system/PlayerSystem";
-import { EnemySystem } from "../system/EnemySystem";
-
-registerSystems() {
-    this.addSystems([PlayerSystem, EnemySystem]);
-}
-```
-
-### Crear entidades
-
-Usa `this.entityManager` para crear las entidades que existen cuando la escena se inicia.
+El array `systems` se reinicia antes de que se ejecute `setup`, así que asígnalo directamente. El orden del array es el orden de ejecución de los sistemas.
 
 ```typescript
 import { Transform } from "angry-pixel";
 import { Player } from "../component/Player";
+import { PlayerSystem } from "../system/PlayerSystem";
+import { EnemySystem } from "../system/EnemySystem";
 
-createEntities() {
+setup() {
+    this.systems = [PlayerSystem, EnemySystem];
+
     this.entityManager.createEntity([new Transform(), new Player()]);
 }
 ```
