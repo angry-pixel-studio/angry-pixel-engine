@@ -13,12 +13,16 @@
 -   With the AABB method, a circumference whose center reaches a box is pushed out through the nearest face, by its radius plus the distance to that face. The collision had no direction, so the circumference was never pushed out and could sink through the box.
 -   With the AABB method, two boxes with the same center are pushed apart. The collision had no direction, so they never separated.
 -   With the AABB method, when the overlap of two boxes is the same on both axes, the collision is resolved on the y axis. It was resolved diagonally, which did not separate the boxes in a single step.
+-   With the quad tree broad phase, a shape with no width or no height on the outer edge of the world, such as an edge collider used as the ceiling, is always found. Depending on how its coordinates rounded, it could be left out of the tree and never collide.
 
 ### Performance
 
 -   Polygons keep one projection axis per edge direction, since parallel edges project the same way: a box is tested on 2 axes instead of 4.
 -   Circumferences are projected directly from their center and radius, instead of rebuilding two vertices for every axis.
 -   Collisions involving circumferences compare squared distances, so the square root is only computed when the shapes collide.
+-   The spatial grid (the default broad phase) sizes its cells from the shapes: a cell is at least as large as the average shape, there is at most about one cell per shape, and cells follow the proportions of the world. A pile of overlapping shapes no longer places every shape in every cell (300 stacked shapes took 137 ms per physics step, now under 1 ms), and scenes with thousands of shapes no longer clear millions of empty cells.
+-   The spatial grid keeps its cells between physics steps, instead of rebuilding them whenever a shape on the edge of the world moves, and tests each shape once per query.
+-   The quad tree broad phase is a classic quad tree: each shape is stored once, in the deepest node whose quadrant fully contains it, instead of being copied into every leaf it overlaps. More than 16 overlapping shapes, such as a pile or several areas covering the whole level, made the old tree split into tens of thousands of nodes: 17 stacked shapes took 450 ms per physics step and 300 froze the game; both now take under 1 ms. With 1,600 overlapping shapes walking along a floor, a physics step went from 14.6 ms to 1.7 ms.
 
 ## [2.4.0] - 2026-09-23
 
