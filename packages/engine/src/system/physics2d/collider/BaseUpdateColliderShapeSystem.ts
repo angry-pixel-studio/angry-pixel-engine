@@ -1,6 +1,6 @@
 import { Transform } from "@component/gameLogic/Transform";
 import { Vector2 } from "@angry-pixel/math";
-import { Circumference, Polygon, Shape } from "@angry-pixel/collisions";
+import { areAxesParallel, Circumference, Polygon, Shape } from "@angry-pixel/collisions";
 
 export abstract class BaseUpdateColliderShapeSystem {
     private auxMin: Vector2 = new Vector2();
@@ -87,15 +87,28 @@ export abstract class BaseUpdateColliderShapeSystem {
 
     protected updateProjectionAxes(shape: Shape): void {
         if (shape.vertices.length > 2) {
+            // only polygons have more than two vertices
+            const { edgeNormals, projectionAxes } = shape as Polygon;
+            projectionAxes.length = 0;
+
             for (let i = 0; i < shape.vertices.length; i++) {
                 Vector2.normal(
-                    shape.projectionAxes[i],
-                    Vector2.subtract(
-                        shape.projectionAxes[i],
-                        shape.vertices[i + 1] ?? shape.vertices[0],
-                        shape.vertices[i],
-                    ),
+                    edgeNormals[i],
+                    Vector2.subtract(edgeNormals[i], shape.vertices[i + 1] ?? shape.vertices[0], shape.vertices[i]),
                 );
+
+                // a zero-length edge has no direction
+                if (edgeNormals[i].x === 0 && edgeNormals[i].y === 0) continue;
+
+                // one axis per edge direction
+                let parallel = false;
+                for (let j = 0; j < projectionAxes.length; j++) {
+                    if (areAxesParallel(projectionAxes[j], edgeNormals[i])) {
+                        parallel = true;
+                        break;
+                    }
+                }
+                if (!parallel) projectionAxes.push(edgeNormals[i]);
             }
         } else {
             Vector2.normal(

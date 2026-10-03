@@ -2,7 +2,7 @@ import { inject, injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "../symbols";
 import { Vector2 } from "@angry-pixel/math";
 import { CollisionResolution, CollisionResolver } from "./CollisionResolver";
-import { Circumference, Shape } from "../Shape";
+import { areAxesParallel, Circumference, Shape } from "../Shape";
 import { CollisionResolutionPool } from "./CollisionResolutionPool";
 
 type AxisProjection = {
@@ -20,61 +20,55 @@ export class SatResolver implements CollisionResolver {
     private currentOverlap: number;
     private minOverlap: number;
     private smallestAxis: Vector2 = new Vector2();
-    private invertAxis: boolean;
     private distance: Vector2 = new Vector2(Infinity, Infinity);
     private cache: Vector2 = new Vector2();
 
     public resolve(shapeA: Shape, shapeB: Shape): CollisionResolution {
         this.minOverlap = Infinity;
 
-        if (shapeA instanceof Circumference) this.setCircumferenceAxis(shapeA, shapeB);
-        else if (shapeB instanceof Circumference) this.setCircumferenceAxis(shapeB, shapeA);
+        const circumferenceA = shapeA instanceof Circumference;
+        const circumferenceB = !circumferenceA && shapeB instanceof Circumference;
+
+        if (circumferenceA) this.setCircumferenceAxis(shapeA as Circumference, shapeB);
+        else if (circumferenceB) this.setCircumferenceAxis(shapeB as Circumference, shapeA);
 
         this.mergeProjectionAxes(shapeA, shapeB);
+        if (this.mergedAxes.length === 0) return undefined;
 
         for (let i = 0; i < this.mergedAxes.length; i++) {
             const axis = this.mergedAxes[i];
-            if (shapeA instanceof Circumference) this.setCircumferenceVertices(shapeA, axis);
-            else if (shapeB instanceof Circumference) this.setCircumferenceVertices(shapeB, axis);
 
-            this.projectShapeOntoAxis(this.projA, shapeA, axis);
-            this.projectShapeOntoAxis(this.projB, shapeB, axis);
+            if (circumferenceA) this.projectCircumferenceOntoAxis(this.projA, shapeA, axis);
+            else this.projectShapeOntoAxis(this.projA, shapeA, axis);
+
+            if (circumferenceB) this.projectCircumferenceOntoAxis(this.projB, shapeB, axis);
+            else this.projectShapeOntoAxis(this.projB, shapeB, axis);
 
             this.currentOverlap = Math.min(this.projA.max, this.projB.max) - Math.max(this.projA.min, this.projB.min);
 
             if (this.currentOverlap < 0) return undefined;
 
-            this.invertAxis = true;
-
-            // prevent containment
+            // containment: exit through the nearest end
             if (
                 (this.projA.max > this.projB.max && this.projA.min < this.projB.min) ||
                 (this.projA.max < this.projB.max && this.projA.min > this.projB.min)
             ) {
-                const mins = Math.abs(this.projA.min - this.projB.min);
-                const maxs = Math.abs(this.projA.max - this.projB.max);
-
-                if (mins < maxs) {
-                    this.currentOverlap += mins;
-                } else {
-                    this.currentOverlap += maxs;
-                    Vector2.scale(axis, axis, -1);
-                    this.invertAxis = false;
-                }
+                this.currentOverlap += Math.min(
+                    Math.abs(this.projA.min - this.projB.min),
+                    Math.abs(this.projA.max - this.projB.max),
+                );
             }
 
             if (this.currentOverlap < this.minOverlap) {
                 this.minOverlap = this.currentOverlap;
-                this.smallestAxis.copy(axis);
-
-                if (this.invertAxis && this.projA.max < this.projB.max) {
-                    Vector2.scale(this.smallestAxis, axis, -1);
-                }
+                // orient from A towards B; also picks the nearest end on containment
+                if (this.projA.min + this.projA.max < this.projB.min + this.projB.max) this.smallestAxis.copy(axis);
+                else Vector2.scale(this.smallestAxis, axis, -1);
             }
         }
 
         const resolution = this.collisionResolutionPool.get();
-        Vector2.scale(resolution.direction, this.smallestAxis, -1);
+        resolution.direction.copy(this.smallestAxis);
         resolution.penetration = this.minOverlap;
 
         return resolution;
@@ -85,13 +79,18 @@ export class SatResolver implements CollisionResolver {
         const bx = shapeB.projectionAxes;
         this.mergedAxes.length = 0;
         for (let i = 0; i < ax.length; i++) {
+            // a zero axis has no direction, e.g. a circumference centered on a vertex
+            if (ax[i].x === 0 && ax[i].y === 0) continue;
             this.mergedAxes.push(ax[i]);
         }
         for (let j = 0; j < bx.length; j++) {
             const pb = bx[j];
+            if (pb.x === 0 && pb.y === 0) continue;
+
             let duplicate = false;
             for (let k = 0; k < this.mergedAxes.length; k++) {
-                if (this.mergedAxes[k].equals(pb)) {
+                // opposite axes project the same way
+                if (areAxesParallel(this.mergedAxes[k], pb)) {
                     duplicate = true;
                     break;
                 }
@@ -133,8 +132,10 @@ export class SatResolver implements CollisionResolver {
         Vector2.unit(c.projectionAxes[0], this.distance);
     }
 
-    private setCircumferenceVertices(c: Circumference, axis: Vector2): void {
-        Vector2.add(c.vertices[0], c.position, Vector2.scale(this.cache, Vector2.unit(this.cache, axis), -c.radius));
-        Vector2.add(c.vertices[1], c.position, Vector2.scale(this.cache, Vector2.unit(this.cache, axis), c.radius));
+    private projectCircumferenceOntoAxis(projection: AxisProjection, { position, radius }: Shape, axis: Vector2): void {
+        const center = Vector2.dot(axis, position);
+
+        projection.min = center - radius;
+        projection.max = center + radius;
     }
 }
