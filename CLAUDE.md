@@ -31,6 +31,16 @@ Systems run on every frame, so anything allocated inside `onUpdate` is allocated
 
 -   **Prefer reusable class properties over per-call constants.** Whenever it is possible and worthwhile, hoist values that would otherwise be created on every update — vectors, arrays, maps, temporary objects — into properties of the system and reuse them, instead of declaring them as local constants inside the method. Trading a little RAM for less garbage collector activity is the right call here: dropped frames cost more than memory.
 
+## Inline comments
+
+-   **Only when necessary.** Write an inline comment only when the code cannot make clear on its own what it does or why. Prefer clearer names and simpler code over a comment.
+-   **As short as possible.** One short line, stating the non-obvious part only. Do not restate what the code already says.
+
+## TSDoc
+
+-   **Nothing inside `@internal` elements.** When an object, class, interface or type is marked `@internal`, do not add TSDoc comments to its members, and never add the `@internal` tag to them.
+-   **Follow the surrounding code in public elements.** Do not add TSDoc to a member of a public element when its other members have none, unless explicitly asked to.
+
 ## Common commands (repo root)
 
 -   `yarn build` — builds `@angry-pixel/engine` (tsc project refs + Rollup).
