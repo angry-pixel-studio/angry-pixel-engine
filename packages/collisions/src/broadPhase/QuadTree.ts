@@ -1,139 +1,154 @@
-import { Rectangle, Vector2 } from "@angry-pixel/math";
+import { Rectangle } from "@angry-pixel/math";
 import { BroadPhaseResolver } from "./IBroadPhaseResolver";
 import { Shape } from "../Shape";
 import { injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "../symbols";
 
-const MAX_DEPTH = 8;
-const MAX_RECTS = 16;
+const MAX_OBJECTS = 10;
+const MAX_LEVELS = 5;
 
 @injectable(SYMBOLS.CollisionBroadphaseResolver)
 export class QuadTree implements BroadPhaseResolver {
-    private bounds: Rectangle;
-    private depth: number;
-    private rects: Map<number, Rectangle> = new Map();
-    private children: QuadTree[] | undefined;
+    private objects: number[] = [];
+    private nodes: QuadTree[] = [];
+    private rects: Rectangle[];
 
-    /** Root-only: dedupe ids across leaves (same scheme as SpatialGrid) */
-    private seenGen: number[] = [];
-    private retrieveSerial = 0;
-
-    // cache
-    private minArea: Vector2 = new Vector2();
-    private maxArea: Vector2 = new Vector2();
-
-    constructor(bounds: Rectangle = new Rectangle(), depth: number = 0) {
-        this.bounds = bounds;
-        this.depth = depth;
+    constructor(
+        private bounds: Rectangle = new Rectangle(),
+        private level: number = 0,
+        rects: Rectangle[] = [],
+    ) {
+        this.rects = rects;
     }
 
     public update(shapes: Shape[]): void {
         this.clear();
-        if (shapes.length === 0) return;
-        this.resize(shapes);
-        this.ensureSeenCapacity(shapes.length);
-        shapes.forEach(({ id, boundingBox }) => this.insert(id, boundingBox));
-    }
+        this.rects.length = 0;
 
-    private ensureSeenCapacity(shapeCount: number): void {
-        if (this.seenGen.length < shapeCount) {
-            const start = this.seenGen.length;
-            this.seenGen.length = shapeCount;
-            this.seenGen.fill(0, start, shapeCount);
-        }
-    }
-
-    private clear(): void {
-        this.rects.clear();
-
-        if (this.children) {
-            this.children.forEach((child) => child.clear());
-            this.children = undefined;
-        }
-    }
-
-    private resize(shapes: Shape[]): void {
-        this.minArea.set(Infinity, Infinity);
-        this.maxArea.set(-Infinity, -Infinity);
-
-        shapes.forEach(({ boundingBox: box }) => {
-            this.minArea.set(Math.min(box.x, this.minArea.x), Math.min(box.y, this.minArea.y));
-            this.maxArea.set(Math.max(box.x1, this.maxArea.x), Math.max(box.y1, this.maxArea.y));
-        });
-
-        this.bounds.set(
-            this.minArea.x,
-            this.minArea.y,
-            this.maxArea.x - this.minArea.x,
-            this.maxArea.y - this.minArea.y,
-        );
-    }
-
-    private insert(id: number, rect: Rectangle): void {
-        if (!this.children && this.rects.size >= MAX_RECTS && this.depth < MAX_DEPTH) {
-            this.subdivide();
-            this.rects.forEach((value, key) =>
-                this.children.forEach((child) => {
-                    if (child.bounds.intersects(value)) {
-                        child.insert(key, value);
-                    }
-                }),
-            );
-            this.rects.clear();
+        if (shapes.length === 0) {
+            return;
         }
 
-        if (this.children) {
-            this.children.forEach((child) => {
-                if (child.bounds.intersects(rect)) {
-                    child.insert(id, rect);
-                }
-            });
-        } else {
-            this.rects.set(id, rect);
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+
+        for (const { id, boundingBox } of shapes) {
+            this.rects[id] = boundingBox;
+            minX = Math.min(minX, boundingBox.x);
+            minY = Math.min(minY, boundingBox.y);
+            maxX = Math.max(maxX, boundingBox.x1);
+            maxY = Math.max(maxY, boundingBox.y1);
         }
-    }
 
-    private subdivide(): void {
-        const x = this.bounds.x;
-        const y = this.bounds.y;
-        const width = this.bounds.width;
-        const height = this.bounds.height;
+        this.bounds.set(minX, minY, maxX - minX, maxY - minY);
 
-        const halfWidth = width / 2;
-        const halfHeight = height / 2;
-
-        this.children = [
-            new QuadTree(new Rectangle(x, y, halfWidth, halfHeight), this.depth + 1),
-            new QuadTree(new Rectangle(x + halfWidth, y, halfWidth, halfHeight), this.depth + 1),
-            new QuadTree(new Rectangle(x, y + halfHeight, halfWidth, halfHeight), this.depth + 1),
-            new QuadTree(new Rectangle(x + halfWidth, y + halfHeight, halfWidth, halfHeight), this.depth + 1),
-        ];
+        for (const { id } of shapes) {
+            this.insert(id);
+        }
     }
 
     public retrieve(rect: Rectangle): number[] {
-        if (++this.retrieveSerial === 0x7fffffff) {
-            this.retrieveSerial = 1;
-            this.seenGen.fill(0);
-        }
-        const neighbors: number[] = [];
-        this.retrieveFromNode(rect, neighbors, this.retrieveSerial, this.seenGen);
-        return neighbors;
+        const result: number[] = [];
+        this.query(rect, result);
+        return result;
     }
 
-    private retrieveFromNode(rect: Rectangle, result: number[], serial: number, seenGen: number[]): void {
-        if (this.children) {
-            this.children.forEach((child) => {
-                if (child.bounds.intersects(rect)) {
-                    child.retrieveFromNode(rect, result, serial, seenGen);
-                }
-            });
-        } else {
-            this.rects.forEach((value, key) => {
-                if (value.intersects(rect) && seenGen[key] !== serial) {
-                    seenGen[key] = serial;
-                    result.push(key);
-                }
-            });
+    private clear(): void {
+        this.objects = [];
+
+        for (const node of this.nodes) {
+            node.clear();
         }
+
+        this.nodes = [];
+    }
+
+    private split(): void {
+        const subWidth = this.bounds.width / 2;
+        const subHeight = this.bounds.height / 2;
+        const x = this.bounds.x;
+        const y = this.bounds.y;
+
+        this.nodes = [
+            new QuadTree(new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight), this.level + 1, this.rects),
+            new QuadTree(new Rectangle(x, y + subHeight, subWidth, subHeight), this.level + 1, this.rects),
+            new QuadTree(new Rectangle(x, y, subWidth, subHeight), this.level + 1, this.rects),
+            new QuadTree(new Rectangle(x + subWidth, y, subWidth, subHeight), this.level + 1, this.rects),
+        ];
+    }
+
+    // -1 when the rect crosses a midline and does not fit in a single quadrant
+    private getIndex(rect: Rectangle): number {
+        const verticalMidpoint = this.bounds.x + this.bounds.width / 2;
+        const horizontalMidpoint = this.bounds.y + this.bounds.height / 2;
+
+        const bottom = rect.y1 < horizontalMidpoint;
+        const top = rect.y > horizontalMidpoint;
+        const left = rect.x1 < verticalMidpoint;
+        const right = rect.x > verticalMidpoint;
+
+        if (top && right) return 0;
+        if (top && left) return 1;
+        if (bottom && left) return 2;
+        if (bottom && right) return 3;
+        return -1;
+    }
+
+    private insert(id: number): void {
+        if (this.nodes.length > 0) {
+            const index = this.getIndex(this.rects[id]);
+
+            if (index !== -1) {
+                this.nodes[index].insert(id);
+                return;
+            }
+        }
+
+        this.objects.push(id);
+
+        if (this.objects.length > MAX_OBJECTS && this.level < MAX_LEVELS) {
+            if (this.nodes.length === 0) {
+                this.split();
+            }
+
+            let i = 0;
+            while (i < this.objects.length) {
+                const index = this.getIndex(this.rects[this.objects[i]]);
+
+                if (index !== -1) {
+                    this.nodes[index].insert(this.objects.splice(i, 1)[0]);
+                } else {
+                    i++;
+                }
+            }
+        }
+    }
+
+    private query(rect: Rectangle, result: number[]): void {
+        for (const id of this.objects) {
+            if (this.rects[id].intersects(rect)) {
+                result.push(id);
+            }
+        }
+
+        if (this.nodes.length === 0) {
+            return;
+        }
+
+        // quadrants are chosen by the midpoints, as in insert, so rounding at the bounds cannot hide a rect
+        const verticalMidpoint = this.bounds.x + this.bounds.width / 2;
+        const horizontalMidpoint = this.bounds.y + this.bounds.height / 2;
+
+        const bottom = rect.y < horizontalMidpoint;
+        const top = rect.y1 > horizontalMidpoint;
+        const left = rect.x < verticalMidpoint;
+        const right = rect.x1 > verticalMidpoint;
+
+        if (top && right) this.nodes[0].query(rect, result);
+        if (top && left) this.nodes[1].query(rect, result);
+        if (bottom && left) this.nodes[2].query(rect, result);
+        if (bottom && right) this.nodes[3].query(rect, result);
     }
 }
