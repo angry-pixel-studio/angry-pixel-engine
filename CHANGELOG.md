@@ -9,11 +9,18 @@
 -   With the SAT method, a shape whose projection is contained in the other shape's projection is pushed out through the nearest end. In one of the containment cases it was pushed the opposite way, so it stayed inside the other shape.
 -   Resolving a collision no longer flips the projection axes of the shapes, which made the result depend on the collisions resolved before it in the same physics step.
 -   A circumference centered exactly on a vertex of a polygon is pushed out by its radius. When the circumference was the local shape, the collision had no direction and no penetration.
+-   Two circumferences with the same center are pushed apart. The collision had no direction, so they never separated.
+-   With the AABB method, a circumference whose center reaches a box is pushed out through the nearest face, by its radius plus the distance to that face. The collision had no direction, so the circumference was never pushed out and could sink through the box.
+-   With the AABB method, two boxes with the same center are pushed apart. The collision had no direction, so they never separated.
+-   With the AABB method, when the overlap of two boxes is the same on both axes, the collision is resolved on the y axis. It was resolved diagonally, which did not separate the boxes in a single step.
 
 ### Performance
 
 -   Polygons keep one projection axis per edge direction, since parallel edges project the same way: a box is tested on 2 axes instead of 4.
 -   Circumferences are projected directly from their center and radius, instead of rebuilding two vertices for every axis.
+-   Collisions involving circumferences compare squared distances, so the square root is only computed when the shapes collide.
+
+## [2.4.0] - 2026-09-23
 
 ### Breaking changes
 
