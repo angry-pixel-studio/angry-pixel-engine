@@ -14,13 +14,18 @@ export class CircumferenceResolver implements CollisionResolver {
     public resolve(shapeA: Circumference, shapeB: Circumference): CollisionResolution {
         Vector2.subtract(this.distance, shapeB.position, shapeA.position);
 
-        const len = this.distance.magnitude;
         const rSum = shapeA.radius + shapeB.radius;
-        if (len > rSum) return undefined;
+        const lenSq = this.distance.x * this.distance.x + this.distance.y * this.distance.y;
+        if (lenSq > rSum * rSum) return undefined;
+
+        const len = Math.sqrt(lenSq);
 
         const resolution = this.collisionResolutionPool.get();
         resolution.penetration = rSum - len;
-        Vector2.unit(resolution.direction, this.distance);
+
+        // concentric circumferences have no direction between them
+        if (len > 0) Vector2.unit(resolution.direction, this.distance);
+        else resolution.direction.set(1, 0);
 
         return resolution;
     }

@@ -27,12 +27,13 @@ export class AABBResolver implements CollisionResolver {
 
         this.preventContainment(boxA, boxB);
 
-        if (this.overlapY < this.overlapX) {
+        // a tie resolves on y; with the same center, either side is a valid exit
+        if (this.overlapY <= this.overlapX) {
             this.minOverlap = this.overlapY;
-            this.resolutionDirection.set(0, this.direction.y);
+            this.resolutionDirection.set(0, this.direction.y || 1);
         } else {
             this.minOverlap = this.overlapX;
-            this.resolutionDirection.set(this.direction.x, this.overlapY === this.overlapX ? this.direction.y : 0);
+            this.resolutionDirection.set(this.direction.x || 1, 0);
         }
 
         const resolution = this.collisionResolutionPool.get();

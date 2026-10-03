@@ -15,8 +15,8 @@
 - For tilemaps used as collision geometry, set `composite: true` on the [`TilemapCollider`](built-in-components/tilemap-collider.md) to generate connected edge segments instead of one collider per tile. For rendering large tilemaps, use the [`TilemapRenderer`](built-in-components/tilemap-renderer.md) `chunks` option.
 - For games with many physics entities, test different broad phase methods, such as quad tree or spatial grid. See [Physics](physics.md).
 - Evaluate the collision detection method:
-    - **AABB:** very fast, but limited to non-rotated rectangles and circles.
-    - **SAT:** more computationally expensive, but supports collisions between arbitrary polygons.
+    - **AABB:** very fast. Every collider except circles is tested by its bounding box, ignoring rotation, so it is exact only for non-rotated rectangles and circles.
+    - **SAT:** more computationally expensive, but supports rotated and convex polygons.
 
 ## Performance limitations in web games
 

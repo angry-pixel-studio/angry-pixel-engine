@@ -9,6 +9,7 @@ import {
     Transform,
     Vector2,
     Archetype,
+    BallCollider,
 } from "angry-pixel";
 import { COLLISION_LAYERS, RENDER_LAYERS } from "@config/layers";
 import { ASSETS } from "@config/assets";
@@ -66,10 +67,9 @@ export const ninjaArchetype: Archetype = {
             ]),
             animation: "idle",
         }),
-        new BoxCollider({
+        new BallCollider({
             layer: COLLISION_LAYERS.Ninja,
-            width: 8,
-            height: 16,
+            radius: 8,
         }),
         new RigidBody({ type: RigidBodyType.Dynamic }),
         NinjaMovement,

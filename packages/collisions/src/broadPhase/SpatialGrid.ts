@@ -1,30 +1,26 @@
-import { Rectangle, Vector2 } from "@angry-pixel/math";
+import { Rectangle } from "@angry-pixel/math";
 import { BroadPhaseResolver } from "./IBroadPhaseResolver";
 import { Shape } from "../Shape";
 import { injectable } from "@angry-pixel/ioc";
 import { SYMBOLS } from "../symbols";
 
-const MAX_COLLIDERS_PER_CELL = 16;
-
-const cell = (value: number, min: number, width: number, subdivisions: number): number =>
-    Math.min(((value - min) / width) | 0, subdivisions - 1);
+const cell = (value: number, min: number, size: number, count: number): number => {
+    const index = ((value - min) / size) | 0;
+    return index < 0 ? 0 : index >= count ? count - 1 : index;
+};
 
 type Coordinates = { x0: number; x1: number; y0: number; y1: number };
 
 @injectable(SYMBOLS.CollisionBroadphaseResolver)
 export class SpatialGrid implements BroadPhaseResolver {
     private area: Rectangle = new Rectangle();
-    private grid: number[][][] = [];
-    private rects: Map<number, Rectangle> = new Map();
-    private cellWidth: number;
-    private cellHeight: number;
-    private subdivisions: number = 0;
-
-    private lastAreaX = NaN;
-    private lastAreaY = NaN;
-    private lastAreaW = NaN;
-    private lastAreaH = NaN;
-    private lastSubdivisions = -1;
+    private cells: number[][] = [[]];
+    private usedCells: number[] = [];
+    private boxes: Rectangle[] = [];
+    private columns: number = 1;
+    private rows: number = 1;
+    private cellWidth: number = 0;
+    private cellHeight: number = 0;
 
     /** Dedupe in retrieve: generation stamp per id index */
     private seenGen: number[] = [];
@@ -32,23 +28,22 @@ export class SpatialGrid implements BroadPhaseResolver {
     private readonly retrieveResult: number[] = [];
 
     // cache
-    private minArea: Vector2 = new Vector2();
-    private maxArea: Vector2 = new Vector2();
     private coordinates: Coordinates = { x0: 0, x1: 0, y0: 0, y1: 0 };
 
     public update(shapes: Shape[]): void {
+        this.clearCells();
+        this.boxes.length = 0;
+
         if (shapes.length === 0) {
-            this.rects.clear();
-            if (this.grid.length > 0) {
-                this.clearGridCells();
-            }
             return;
         }
 
         this.resize(shapes);
         this.ensureSeenCapacity(shapes.length);
 
-        shapes.forEach(({ id, boundingBox }) => this.insert(id, boundingBox));
+        for (let i = 0; i < shapes.length; i++) {
+            this.insert(shapes[i].id, shapes[i].boundingBox);
+        }
     }
 
     private ensureSeenCapacity(shapeCount: number): void {
@@ -59,67 +54,46 @@ export class SpatialGrid implements BroadPhaseResolver {
         }
     }
 
-    private clearGridCells(): void {
-        for (let x = 0; x < this.subdivisions; x++) {
-            for (let y = 0; y < this.subdivisions; y++) {
-                this.grid[x][y].length = 0;
-            }
+    private clearCells(): void {
+        for (let i = 0; i < this.usedCells.length; i++) {
+            this.cells[this.usedCells[i]].length = 0;
         }
+        this.usedCells.length = 0;
     }
 
     private resize(shapes: Shape[]): void {
-        this.minArea.set(Infinity, Infinity);
-        this.maxArea.set(-Infinity, -Infinity);
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        let extentSum = 0;
 
-        shapes.forEach(({ boundingBox: box }) => {
-            this.minArea.set(Math.min(box.x, this.minArea.x), Math.min(box.y, this.minArea.y));
-            this.maxArea.set(Math.max(box.x1, this.maxArea.x), Math.max(box.y1, this.maxArea.y));
-        });
-
-        const ax = this.minArea.x;
-        const ay = this.minArea.y;
-        const aw = this.maxArea.x - this.minArea.x;
-        const ah = this.maxArea.y - this.minArea.y;
-
-        this.area.set(ax, ay, aw, ah);
-
-        const newSubdivisions = ((shapes.length / MAX_COLLIDERS_PER_CELL) | 0) + 1;
-
-        this.cellWidth = Math.ceil(this.area.width / newSubdivisions);
-        this.cellHeight = Math.ceil(this.area.height / newSubdivisions);
-
-        const reuse =
-            this.grid.length > 0 &&
-            newSubdivisions === this.lastSubdivisions &&
-            ax === this.lastAreaX &&
-            ay === this.lastAreaY &&
-            aw === this.lastAreaW &&
-            ah === this.lastAreaH;
-
-        if (reuse) {
-            this.clearGridCells();
-        } else {
-            this.subdivisions = newSubdivisions;
-            this.buildGrid();
-            this.lastSubdivisions = newSubdivisions;
-            this.lastAreaX = ax;
-            this.lastAreaY = ay;
-            this.lastAreaW = aw;
-            this.lastAreaH = ah;
+        for (let i = 0; i < shapes.length; i++) {
+            const box = shapes[i].boundingBox;
+            minX = Math.min(minX, box.x);
+            minY = Math.min(minY, box.y);
+            maxX = Math.max(maxX, box.x1);
+            maxY = Math.max(maxY, box.y1);
+            extentSum += Math.max(box.width, box.height);
         }
 
-        this.subdivisions = newSubdivisions;
-        this.rects.clear();
-    }
+        const width = maxX - minX;
+        const height = maxY - minY;
+        const count = shapes.length;
 
-    private buildGrid(): void {
-        this.grid = [];
-        for (let x = 0; x < this.subdivisions; x++) {
-            this.grid[x] = [];
+        this.area.set(minX, minY, width, height);
 
-            for (let y = 0; y < this.subdivisions; y++) {
-                this.grid[x][y] = [];
-            }
+        // at least the average shape size, and at most about one cell per shape
+        const cellSize =
+            Math.max(Math.sqrt((width * height) / count), Math.max(width, height) / count, extentSum / count) || 1;
+
+        this.columns = Math.ceil(width / cellSize) || 1;
+        this.rows = Math.ceil(height / cellSize) || 1;
+        this.cellWidth = width / this.columns;
+        this.cellHeight = height / this.rows;
+
+        for (let i = this.cells.length, total = this.columns * this.rows; i < total; i++) {
+            this.cells.push([]);
         }
     }
 
@@ -128,11 +102,15 @@ export class SpatialGrid implements BroadPhaseResolver {
 
         for (let x = this.coordinates.x0; x <= this.coordinates.x1; x++) {
             for (let y = this.coordinates.y0; y <= this.coordinates.y1; y++) {
-                this.grid[x][y].push(id);
+                const index = x * this.rows + y;
+                if (this.cells[index].length === 0) {
+                    this.usedCells.push(index);
+                }
+                this.cells[index].push(id);
             }
         }
 
-        this.rects.set(id, box);
+        this.boxes[id] = box;
     }
 
     public retrieve(box: Rectangle): number[] {
@@ -146,14 +124,15 @@ export class SpatialGrid implements BroadPhaseResolver {
 
         for (let x = this.coordinates.x0; x <= this.coordinates.x1; x++) {
             for (let y = this.coordinates.y0; y <= this.coordinates.y1; y++) {
-                const cellIds = this.grid[x][y];
+                const cellIds = this.cells[x * this.rows + y];
                 for (let i = 0, len = cellIds.length; i < len; i++) {
                     const id = cellIds[i];
-                    if (this.rects.get(id)!.intersects(box)) {
-                        if (this.seenGen[id] !== this.retrieveSerial) {
-                            this.seenGen[id] = this.retrieveSerial;
-                            this.retrieveResult.push(id);
-                        }
+                    if (this.seenGen[id] === this.retrieveSerial) {
+                        continue;
+                    }
+                    this.seenGen[id] = this.retrieveSerial;
+                    if (this.boxes[id].intersects(box)) {
+                        this.retrieveResult.push(id);
                     }
                 }
             }
@@ -163,9 +142,9 @@ export class SpatialGrid implements BroadPhaseResolver {
     }
 
     private updateCoordinates(area: Rectangle): void {
-        this.coordinates.x0 = cell(area.x, this.area.x, this.cellWidth, this.subdivisions);
-        this.coordinates.x1 = cell(area.x1, this.area.x, this.cellWidth, this.subdivisions);
-        this.coordinates.y0 = cell(area.y, this.area.y, this.cellHeight, this.subdivisions);
-        this.coordinates.y1 = cell(area.y1, this.area.y, this.cellHeight, this.subdivisions);
+        this.coordinates.x0 = cell(area.x, this.area.x, this.cellWidth, this.columns);
+        this.coordinates.x1 = cell(area.x1, this.area.x, this.cellWidth, this.columns);
+        this.coordinates.y0 = cell(area.y, this.area.y, this.cellHeight, this.rows);
+        this.coordinates.y1 = cell(area.y1, this.area.y, this.cellHeight, this.rows);
     }
 }
