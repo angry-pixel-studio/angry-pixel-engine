@@ -15,8 +15,8 @@
 - Para los tilemaps usados como geometría de colisión, establece `composite: true` en el [`TilemapCollider`](built-in-components/tilemap-collider.md) para generar segmentos de borde conectados en lugar de un colisionador por tile. Para renderizar tilemaps grandes, usa la opción `chunks` del [`TilemapRenderer`](built-in-components/tilemap-renderer.md).
 - Para juegos con muchas entidades físicas, prueba distintos métodos de fase amplia, como quad tree o spatial grid. Consulta [Física](physics.md).
 - Evalúa el método de detección de colisiones:
-    - **AABB:** muy rápido, pero limitado a rectángulos y círculos no rotados.
-    - **SAT:** computacionalmente más costoso, pero admite colisiones entre polígonos arbitrarios.
+    - **AABB:** muy rápido. Todos los colisionadores, salvo los círculos, se prueban por su caja delimitadora, ignorando la rotación, por lo que solo es exacto para rectángulos no rotados y círculos.
+    - **SAT:** computacionalmente más costoso, pero admite polígonos rotados y convexos.
 
 ## Limitaciones de rendimiento en juegos web
 
