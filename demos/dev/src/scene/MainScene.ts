@@ -86,7 +86,7 @@ export class MainScene extends Scene {
     private benchmarkGoblins(amount: number): void {
         if (amount <= 0) return;
 
-        for (let i = 0; i <= 350; i++) {
+        for (let i = 0; i < amount; i++) {
             const entity = this.entityManager.createEntity(goblinArchetype);
             this.entityManager.updateComponentData(entity, Transform, ({ position }) =>
                 position.set(randomInt(-400, 400), 0),
