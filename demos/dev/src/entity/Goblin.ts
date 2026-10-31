@@ -55,6 +55,7 @@ export const goblinArchetype: Archetype = {
             layer: RENDER_LAYERS.Darkness,
             smooth: true,
             intensity: 0.5,
+            steps: 4,
         }),
     ],
 };

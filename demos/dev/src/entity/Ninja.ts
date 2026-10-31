@@ -56,7 +56,9 @@ export const ninjaArchetype: Archetype = {
             radius: 64,
             layer: RENDER_LAYERS.Darkness,
             smooth: true,
-            intensity: 0.7,
+            intensity: 0.4,
+            steps: 6,
+            color: "#ea2dff",
         }),
         new Animator({
             animations: new Map([

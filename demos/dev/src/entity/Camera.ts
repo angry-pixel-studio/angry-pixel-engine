@@ -22,7 +22,7 @@ export const mainCameraArchetype: Archetype = {
             width: 1920,
             height: 1080,
             layer: RENDER_LAYERS.Darkness,
-            opacity: 0.7,
+            opacity: 0.9,
         }),
     ],
 };
