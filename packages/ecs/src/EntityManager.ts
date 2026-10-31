@@ -259,7 +259,7 @@ export class EntityManager {
      */
     public removeAllEntities(options?: RemoveAllEntitiesOptions): void {
         const toPreserve = options?.preserveEntitiesWithComponent
-            ? this.search(options.preserveEntitiesWithComponent)
+            ? this.search(options.preserveEntitiesWithComponent, true)
             : [];
 
         if (toPreserve.length > 0) {
@@ -677,6 +677,9 @@ export class EntityManager {
         if (typeof arg1 === "number" && !this.components.get(id)?.has(arg1)) return false;
 
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
+        // component doesn't belong to an entity
+        if (entity === undefined) return;
+
         return !this.disabledComponents.get(entity)?.has(id);
     }
 
