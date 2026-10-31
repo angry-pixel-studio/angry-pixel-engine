@@ -1,4 +1,4 @@
-export const legacyFragmentShader = `precision mediump float;
+export const legacyFragmentShader = (maxLights: number): string => `precision mediump float;
 
 varying vec2 texCoords;
 
@@ -13,17 +13,17 @@ uniform vec4 u_maskColor;
 uniform float u_maskColorMix;
 uniform float u_alpha;
 
-// light
-struct Light {
-    vec2 position;
-    float radius;
-    float smoothMode;
-    float intensity;
-};
-
+// light, packed in vec4 so each light takes exactly two uniform vectors
 uniform int u_renderLight;
-uniform Light u_lights[64];
+// xy: position, z: radius, w: steps (0 means a continuous fade, 1 means a hard edge)
+uniform vec4 u_lightGeometry[${maxLights}];
+// rgb: glow color, a: intensity
+uniform vec4 u_lightColor[${maxLights}];
 uniform int u_numLights;
+// screen pixels per light pixel
+uniform float u_lightPixelSize;
+// screen position of the world origin
+uniform vec2 u_lightGridOrigin;
 
 void main()
 {
@@ -46,21 +46,32 @@ void main()
     } else if (u_renderLight == 1) {
         vec2 fragCoord = gl_FragCoord.xy;
         float alpha = u_alpha;
+        vec3 glow = vec3(0.0);
 
-        for (int i = 0; i < 64; i++) {
-            if (u_lights[i].intensity == 0.0) continue;    
+        // every fragment in a light pixel uses the center of that pixel
+        fragCoord = (floor((fragCoord - u_lightGridOrigin) / u_lightPixelSize) + 0.5) * u_lightPixelSize + u_lightGridOrigin;
+
+        for (int i = 0; i < ${maxLights}; i++) {
+            if (i >= u_numLights) break;
             
-            Light light = u_lights[i];
-            float dist = distance(fragCoord, light.position);
-        
-            if (dist < light.radius) {
-                alpha -= (light.smoothMode > 0.0 ? 1.0 - smoothstep(0.0, light.radius, dist) : 1.0) * light.intensity;
+            vec4 geometry = u_lightGeometry[i];
+            vec4 color = u_lightColor[i];
+            float dist = distance(fragCoord, geometry.xy);
+
+            if (dist < geometry.z) {
+                float falloff = 1.0 - smoothstep(0.0, geometry.z, dist);
+                // the outer ring is kept even if the falloff rounds to 0 near the edge
+                if (geometry.w > 0.0) falloff = max(ceil(falloff * geometry.w), 1.0) / geometry.w;
+
+                alpha -= falloff * color.a;
+                glow += color.rgb * falloff * color.a;
             }
         }
 
         alpha = clamp(alpha, 0.0, u_alpha);
 
-        gl_FragColor = vec4(u_solidColor.rgb, alpha);
+        // premultiplied alpha output, see the blend function in the DarknessRenderer
+        gl_FragColor = vec4(u_solidColor.rgb * alpha + glow, alpha);
     } else {
         gl_FragColor =  vec4(u_solidColor.rgb, u_alpha);
     }

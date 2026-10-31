@@ -5,15 +5,11 @@ import { legacyVertexShader } from "../shader/legacy/vertexShader";
 import { vertexShader } from "../shader/vertexShader";
 import { ProgramFactory } from "./ProgramFactory";
 
-// must match the size of the u_lights array declared in both fragment shaders (modern and legacy)
-export const MAX_LIGHTS = 64;
-
-export type LightUniforms = {
-    position: WebGLUniformLocation | null;
-    radius: WebGLUniformLocation | null;
-    smoothMode: WebGLUniformLocation | null;
-    intensity: WebGLUniformLocation | null;
-};
+// upper limit for the light uniform arrays, the real size depends on the GPU uniform space
+const MAX_LIGHTS = 256;
+// uniform vectors used by each light, and kept for the rest of the fragment uniforms
+const LIGHT_UNIFORM_VECTORS = 2;
+const RESERVED_UNIFORM_VECTORS = 16;
 
 export class ProgramManager {
     public program: WebGLProgram;
@@ -40,7 +36,11 @@ export class ProgramManager {
     // light uniforms
     public renderLightUniform: WebGLUniformLocation;
     public numLightsUniform: WebGLUniformLocation;
-    public lightUniforms: LightUniforms[] = [];
+    public lightPixelSizeUniform: WebGLUniformLocation;
+    public lightGridOriginUniform: WebGLUniformLocation;
+    public lightGeometryUniform: WebGLUniformLocation;
+    public lightColorUniform: WebGLUniformLocation;
+    public maxLights: number;
 
     constructor(
         private readonly gl: WebGL2RenderingContext,
@@ -49,10 +49,16 @@ export class ProgramManager {
     ) {}
 
     public loadProgram(): void {
+        const maxUniformVectors: number = this.gl.getParameter(this.gl.MAX_FRAGMENT_UNIFORM_VECTORS);
+        this.maxLights = Math.max(
+            1,
+            Math.min(MAX_LIGHTS, Math.floor((maxUniformVectors - RESERVED_UNIFORM_VECTORS) / LIGHT_UNIFORM_VECTORS)),
+        );
+
         this.program =
             this.contextVersion === WebGLContextVersion.WebGL2
-                ? this.programFactory.create(vertexShader, fragmentShader)
-                : this.programFactory.create(legacyVertexShader, legacyFragmentShader);
+                ? this.programFactory.create(vertexShader, fragmentShader(this.maxLights))
+                : this.programFactory.create(legacyVertexShader, legacyFragmentShader(this.maxLights));
 
         this.positionCoordsAttr = this.gl.getAttribLocation(this.program, "positionCoords");
         this.texCoordsAttr = this.gl.getAttribLocation(this.program, "textureCoords");
@@ -72,16 +78,11 @@ export class ProgramManager {
         this.alphaUniform = this.gl.getUniformLocation(this.program, "u_alpha");
         this.renderLightUniform = this.gl.getUniformLocation(this.program, "u_renderLight");
         this.numLightsUniform = this.gl.getUniformLocation(this.program, "u_numLights");
+        this.lightPixelSizeUniform = this.gl.getUniformLocation(this.program, "u_lightPixelSize");
+        this.lightGridOriginUniform = this.gl.getUniformLocation(this.program, "u_lightGridOrigin");
 
-        this.lightUniforms = [];
-        for (let i = 0; i < MAX_LIGHTS; i++) {
-            this.lightUniforms.push({
-                position: this.gl.getUniformLocation(this.program, `u_lights[${i}].position`),
-                radius: this.gl.getUniformLocation(this.program, `u_lights[${i}].radius`),
-                smoothMode: this.gl.getUniformLocation(this.program, `u_lights[${i}].smoothMode`),
-                intensity: this.gl.getUniformLocation(this.program, `u_lights[${i}].intensity`),
-            });
-        }
+        this.lightGeometryUniform = this.gl.getUniformLocation(this.program, "u_lightGeometry");
+        this.lightColorUniform = this.gl.getUniformLocation(this.program, "u_lightColor");
 
         this.gl.useProgram(this.program);
 
