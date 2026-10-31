@@ -55,7 +55,7 @@ void main()
             float dist = distance(fragCoord, light.position);
         
             if (dist < light.radius) {
-                alpha -= (light.smoothMode > 0.0 ? smoothstep(light.radius, 0.0, dist) : 1.0) * light.intensity;
+                alpha -= (light.smoothMode > 0.0 ? 1.0 - smoothstep(0.0, light.radius, dist) : 1.0) * light.intensity;
             }
         }
 
