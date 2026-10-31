@@ -33,7 +33,12 @@
 #### Entities
 
 -   `EntityManager.removeAllEntities` preserves the disabled entities that have the `preserveEntitiesWithComponent` component.
+-   `EntityManager.removeAllEntities` preserves the children of a preserved entity, which were removed. A preserved entity whose parent is removed loses its parent, instead of being removed with it.
 -   `EntityManager.isComponentEnabled` no longer reports a component that does not belong to any entity as enabled.
+
+#### Transform
+
+-   The children of the entity with id `0`, usually the first one created in a scene, follow its `Transform`. They behaved as if they had no parent.
 
 ### Performance
 

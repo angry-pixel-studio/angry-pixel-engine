@@ -129,7 +129,7 @@ Las entidades pueden organizarse en jerarquías.
 | Método | Descripción |
 |--------|-------------|
 | `removeEntity(entity)` | Elimina una sola entidad. |
-| `removeAllEntities(options?)` | Elimina todas las entidades, conservando opcionalmente las que tienen el tipo de componente indicado en `preserveEntitiesWithComponent`. |
+| `removeAllEntities(options?)` | Elimina todas las entidades, conservando opcionalmente las que tienen el tipo de componente indicado en `preserveEntitiesWithComponent`, junto con sus hijos. |
 | `isEntity(entity)` | Indica si el identificador corresponde a una entidad existente. |
 
 ```typescript

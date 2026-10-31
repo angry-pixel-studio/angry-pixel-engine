@@ -32,6 +32,8 @@ Loading an unregistered name throws an error.
 
 `loadScene` accepts an options object as a second argument. Entities that have a component of the type given in `preserveEntitiesWithComponent` are preserved across the transition instead of being removed. This is useful for entities that should persist between scenes, such as a player or a score holder.
 
+The children of a preserved entity are preserved with it. A preserved entity whose parent is removed loses its parent and keeps its position and rotation in the world.
+
 ```typescript
 import { DontDestroy } from "../component/DontDestroy";
 
