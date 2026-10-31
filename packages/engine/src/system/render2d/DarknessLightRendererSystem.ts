@@ -58,7 +58,16 @@ export class DarknessLightRendererSystem implements System {
             }
 
             // light objects are reused between frames, only new ones are allocated
-            if (count === lights.length) lights.push({ position: undefined, radius: 0, smooth: false, steps: 0, intensity: 0, color: undefined });
+            if (count === lights.length) {
+                lights.push({
+                    position: undefined,
+                    radius: 0,
+                    smooth: false,
+                    steps: 0,
+                    intensity: 0,
+                    color: undefined,
+                });
+            }
 
             const light = lights[count++];
             light.position = lightRenderer._boundingBox.center;
