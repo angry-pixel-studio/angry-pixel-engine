@@ -65,6 +65,8 @@ export class MainScene extends Scene {
 
 The engine provides the following render components. See [Built-in Components](built-in-components/index.md) for the full options of each.
 
+Colors are hex strings: `#RRGGBB`, or `#RRGGBBAA` with transparency.
+
 | Component | Renders |
 |-----------|---------|
 | [`SpriteRenderer`](built-in-components/sprite-renderer.md) | Images (sprites). |

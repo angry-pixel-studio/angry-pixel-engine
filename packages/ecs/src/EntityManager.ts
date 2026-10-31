@@ -259,11 +259,19 @@ export class EntityManager {
      */
     public removeAllEntities(options?: RemoveAllEntitiesOptions): void {
         const toPreserve = options?.preserveEntitiesWithComponent
-            ? this.search(options.preserveEntitiesWithComponent)
+            ? this.search(options.preserveEntitiesWithComponent, true)
             : [];
 
         if (toPreserve.length > 0) {
-            const entitiesToPreserve = new Set(toPreserve.map(({ entity }) => entity));
+            const entitiesToPreserve = new Set<Entity>();
+            toPreserve.forEach(({ entity }) => this.addBranch(entity, entitiesToPreserve));
+
+            // otherwise removing the parent would also remove the preserved child
+            entitiesToPreserve.forEach((entity) => {
+                const parent = this.getParent(entity);
+                if (parent !== undefined && !entitiesToPreserve.has(parent)) this.removeParent(entity);
+            });
+
             for (const entity of this.entities) {
                 if (!entitiesToPreserve.has(entity)) this.removeEntity(entity);
             }
@@ -279,6 +287,11 @@ export class EntityManager {
             this.parentEntities.clear();
             this.childEntities.clear();
         }
+    }
+
+    private addBranch(entity: Entity, branch: Set<Entity>): void {
+        branch.add(entity);
+        this.getChildren(entity).forEach((child) => this.addBranch(child, branch));
     }
 
     /**
@@ -677,6 +690,9 @@ export class EntityManager {
         if (typeof arg1 === "number" && !this.components.get(id)?.has(arg1)) return false;
 
         const entity = typeof arg1 === "number" ? arg1 : this.getEntityForComponent(arg1);
+        // component doesn't belong to an entity
+        if (entity === undefined) return false;
+
         return !this.disabledComponents.get(entity)?.has(id);
     }
 

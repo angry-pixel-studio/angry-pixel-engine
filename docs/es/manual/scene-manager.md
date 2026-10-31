@@ -32,6 +32,8 @@ Cargar un nombre no registrado lanza un error.
 
 `loadScene` acepta un objeto de opciones como segundo argumento. Las entidades que tienen un componente del tipo indicado en `preserveEntitiesWithComponent` se conservan durante la transición en lugar de eliminarse. Esto es útil para entidades que deben persistir entre escenas, como un jugador o un contenedor de la puntuación.
 
+Los hijos de una entidad conservada se conservan con ella. Una entidad conservada cuyo padre se elimina pierde su padre y mantiene su posición y rotación en el mundo.
+
 ```typescript
 import { DontDestroy } from "../component/DontDestroy";
 

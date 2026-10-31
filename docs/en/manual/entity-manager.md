@@ -129,7 +129,7 @@ Entities can be organized into hierarchies.
 | Method | Description |
 |--------|-------------|
 | `removeEntity(entity)` | Removes a single entity. |
-| `removeAllEntities(options?)` | Removes all entities, optionally preserving those that have the component type given in `preserveEntitiesWithComponent`. |
+| `removeAllEntities(options?)` | Removes all entities, optionally preserving those that have the component type given in `preserveEntitiesWithComponent`, together with their children. |
 | `isEntity(entity)` | Returns whether the identifier refers to an existing entity. |
 
 ```typescript

@@ -10,16 +10,20 @@ import { defaultRenderLayer } from "./Camera";
  * const lightRenderer = new LightRenderer({
  *   radius: 100,
  *   smooth: true,
+ *   steps: 0,
  *   layer: "Default",
- *   intensity: 0.8
+ *   intensity: 0.8,
+ *   color: "#FF9900"
  * });
  * ```
  */
 export interface LightRendererOptions {
     radius: number;
     smooth: boolean;
+    steps: number;
     layer: string;
     intensity: number;
+    color: string;
 }
 
 /**
@@ -35,8 +39,10 @@ export interface LightRendererOptions {
  * const lightRenderer = new LightRenderer({
  *   radius: 100,
  *   smooth: true,
+ *   steps: 0,
  *   layer: "Default",
- *   intensity: 0.8
+ *   intensity: 0.8,
+ *   color: "#FF9900"
  * });
  * ```
  */
@@ -45,10 +51,14 @@ export class LightRenderer {
     radius: number = 0;
     /** Smooth */
     smooth: boolean = false;
+    /** Number of opacity steps of the smooth light, 0 means a continuous fade */
+    steps: number = 0;
     /** Darkness render layer */
     layer: string = defaultRenderLayer;
     /** Light intensitry between 0 and 1 */
     intensity: number = 1;
+    /** Light glow color in hexadecimal, its strength is set by the intensity. No glow if it's not set */
+    color: string;
 
     /** @internal */
     _boundingBox: Rectangle = new Rectangle();

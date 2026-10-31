@@ -53,7 +53,7 @@ export class MainScene extends Scene {
 
         this.entityManager.createEntity(foregroundArchetype);
 
-        this.benchmarkGoblins(0);
+        // this.benchmarkGoblins(200);
     }
 
     private setupUIText(): void {

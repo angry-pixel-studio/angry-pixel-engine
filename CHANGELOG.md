@@ -1,5 +1,51 @@
 # Changelog
 
+## [2.4.2] - 2026-10-31
+
+### Breaking changes
+
+#### Rendering
+
+-   Hex colors with 8 digits are read as `#RRGGBBAA`, the CSS order, with the alpha in the last two digits. They were read as `#AARRGGBB`. Colors with 6 digits are not affected. This applies to every color option: darkness, light, text, tint and mask colors, the mask and geometric renderers, and the canvas color.
+
+### Added
+
+#### Lights
+
+-   `LightRenderer.steps`: number of opacity rings of a smooth light. With `0`, the default, the light fades out continuously.
+-   `LightRenderer.color`: hex color of a glow added over the lit area, with the strength set by `intensity`. Lights without a color have no glow.
+-   Each `DarknessRenderer` draws up to 256 lights, depending on the uniform space of the GPU (about 100 on GPUs with the WebGL2 minimum). It was limited to 64.
+
+### Changed
+
+#### Lights
+
+-   Lights are calculated once per world unit, so they are drawn in pixels as large as the camera zoom, like the sprites. Light centers are snapped to whole world units. With a zoom of `1` nothing changes.
+
+### Fixed
+
+#### Lights
+
+-   The radius of a `LightRenderer` on an entity with a negative scale uses the largest absolute scale. With a scale of `(-2, 1)` it used `1`.
+-   With WebGL1, a `DarknessRenderer` that lost lights kept drawing the lights it had in the previous frames.
+-   The smooth falloff uses `smoothstep` with its edges in the order required by GLSL, whose result was undefined in the reverse order.
+
+#### Entities
+
+-   `EntityManager.removeAllEntities` preserves the disabled entities that have the `preserveEntitiesWithComponent` component.
+-   `EntityManager.removeAllEntities` preserves the children of a preserved entity, which were removed. A preserved entity whose parent is removed loses its parent, instead of being removed with it.
+-   `EntityManager.isComponentEnabled` no longer reports a component that does not belong to any entity as enabled.
+
+#### Transform
+
+-   The children of the entity with id `0`, usually the first one created in a scene, follow its `Transform`. They behaved as if they had no parent.
+
+### Performance
+
+-   The `DarknessLightRendererSystem` no longer allocates arrays, objects or callbacks on every frame.
+-   Lights outside the screen are skipped, so they no longer count towards the limit nor cost time on every pixel of the darkness.
+-   The lights of a `DarknessRenderer` are uploaded to the GPU in two calls, instead of five calls per light.
+
 ## [2.4.1] - 2026-10-03
 
 ### Fixed
