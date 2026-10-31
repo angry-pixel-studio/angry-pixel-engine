@@ -11,7 +11,7 @@ El componente `LightRenderer` renderiza una fuente de luz circular. Funciona ilu
 | `smooth` | `boolean` | `false` | Suaviza el borde de la luz. |
 | `steps` | `number` | `0` | Cantidad de anillos de opacidad de una luz suave. `0` significa un desvanecimiento continuo. |
 | `layer` | `string` | `"Default"` | La capa de oscuridad a la que afecta esta luz. |
-| `color` | `string` | `undefined` | Color del brillo en hexadecimal (`#RRGGBB`), sumado sobre la zona iluminada. Su fuerza la define `intensity`. Sin brillo si no se define. |
+| `color` | `string` | `undefined` | Color del brillo en hexadecimal (`#RRGGBB`), sumado sobre la zona iluminada. Su fuerza la define `intensity`, un canal alfa se ignora. Sin brillo si no se define. |
 
 ## Ejemplo
 

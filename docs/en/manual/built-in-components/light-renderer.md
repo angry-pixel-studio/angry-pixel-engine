@@ -11,7 +11,7 @@ The `LightRenderer` component renders a circular light source. It works by illum
 | `smooth` | `boolean` | `false` | Softens the light's edge. |
 | `steps` | `number` | `0` | Number of opacity rings of a smooth light. `0` means a continuous fade. |
 | `layer` | `string` | `"Default"` | The darkness layer this light affects. |
-| `color` | `string` | `undefined` | Glow color in hexadecimal (`#RRGGBB`), added over the lit area. Its strength is set by `intensity`. No glow if not set. |
+| `color` | `string` | `undefined` | Glow color in hexadecimal (`#RRGGBB`), added over the lit area. Its strength is set by `intensity`, an alpha channel is ignored. No glow if not set. |
 
 ## Example
 

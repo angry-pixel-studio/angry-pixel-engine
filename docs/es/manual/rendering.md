@@ -65,6 +65,8 @@ export class MainScene extends Scene {
 
 El motor proporciona los siguientes componentes de renderizado. Consulta [Componentes integrados](built-in-components/index.md) para las opciones completas de cada uno.
 
+Los colores son cadenas hexadecimales: `#RRGGBB`, o `#RRGGBBAA` con transparencia.
+
 | Componente | Renderiza |
 |-----------|---------|
 | [`SpriteRenderer`](built-in-components/sprite-renderer.md) | Imágenes (sprites). |
