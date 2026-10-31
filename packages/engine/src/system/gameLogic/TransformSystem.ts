@@ -16,7 +16,7 @@ export class TransformSystem implements System {
             .forEach(({ component: transform, entity }) => {
                 const parentEntity = this.entityManager.getParent(entity);
                 if (
-                    !parentEntity ||
+                    parentEntity === undefined ||
                     !this.entityManager.isEntityEnabled(parentEntity) ||
                     !this.entityManager.isComponentEnabled(parentEntity, Transform)
                 ) {
@@ -39,7 +39,7 @@ export class TransformSystem implements System {
 
     private getBranchLength(entity: Entity): number {
         const parent = this.entityManager.getParent(entity);
-        return parent ? 1 + this.getBranchLength(parent) : 0;
+        return parent !== undefined ? 1 + this.getBranchLength(parent) : 0;
     }
 
     private removeParent(transform: Transform): void {
