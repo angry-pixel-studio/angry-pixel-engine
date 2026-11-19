@@ -1,4 +1,4 @@
-import { AudioPlayer, randomInt, Scene, TextRenderer, Transform } from "angry-pixel";
+import { AudioPlayer, MaskRenderer, MaskShape, randomInt, Scene, TextRenderer, Transform, Vector2 } from "angry-pixel";
 import { FpsMetterSystem } from "@system/FpsMetterSystem";
 import { InputControllerSystem } from "@system/InputControllerSystem";
 import { MovingPlatformSystem } from "@system/MovingPlatformSystem";
@@ -15,6 +15,7 @@ import { FpsMetter } from "@component/FpsMetter";
 import { mainCameraArchetype, uiCameraArchetype } from "@entity/Camera";
 import { goblinArchetype } from "@entity/Goblin";
 import { GoblinMovement } from "@component/goblin/GoblinMovement";
+import { RENDER_LAYERS } from "@config/layers";
 
 export class MainScene extends Scene {
     public loadAssets(): void {
@@ -52,6 +53,8 @@ export class MainScene extends Scene {
         this.entityManager.createEntity([InputController]);
 
         this.entityManager.createEntity(foregroundArchetype);
+
+        this.createPolygonMask();
 
         // this.benchmarkGoblins(200);
     }
@@ -94,5 +97,28 @@ export class MainScene extends Scene {
 
             this.entityManager.updateComponentData(entity, GoblinMovement, (c) => (c.walkSpeed = randomInt(40, 80)));
         }
+    }
+
+    private createPolygonMask(): void {
+        this.entityManager.createEntity([
+            new Transform({ position: new Vector2(0, 0) }),
+            new MaskRenderer({
+                color: "#ffdf29",
+                shape: MaskShape.Polygon,
+                layer: RENDER_LAYERS.Background,
+                vertexModel: [
+                    new Vector2(0, 100),
+                    new Vector2(-23.51, 32.36),
+                    new Vector2(-95.11, 30.9),
+                    new Vector2(-38.04, -12.36),
+                    new Vector2(-58.78, -80.9),
+                    new Vector2(0, -40),
+                    new Vector2(58.78, -80.9),
+                    new Vector2(38.04, -12.36),
+                    new Vector2(95.11, 30.9),
+                    new Vector2(23.51, 32.36),
+                ],
+            }),
+        ]);
     }
 }
