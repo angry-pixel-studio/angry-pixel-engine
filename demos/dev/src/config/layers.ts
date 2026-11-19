@@ -1,4 +1,5 @@
 export const RENDER_LAYERS = {
+    Background: "Background",
     Foreground: "Foreground",
     Goblin: "Goblin",
     Ninja: "Ninja",

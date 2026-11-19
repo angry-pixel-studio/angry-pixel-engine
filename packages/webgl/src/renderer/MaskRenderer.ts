@@ -37,6 +37,7 @@ export class MaskRenderer implements Renderer {
     private rectanglePositionBuffer: WebGLBuffer;
     private circumferencePositionBuffer: WebGLBuffer;
     private polygonPositionBuffer: WebGLBuffer;
+    private polygonVertices: Float32Array = new Float32Array(2);
     private lastShape: MaskShape;
 
     constructor(
@@ -157,20 +158,18 @@ export class MaskRenderer implements Renderer {
     private renderPolygon(renderData: MaskRenderData, cameraData: CameraData, lastRender?: RenderDataType): void {
         if (lastRender !== RenderDataType.Mask || this.lastShape !== MaskShape.Polygon) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.polygonPositionBuffer);
-            this.gl.bufferData(
-                this.gl.ARRAY_BUFFER,
-                new Float32Array(renderData.vertices.reduce((a, v) => [...a, v.x, v.y], [0, 0])),
-                this.gl.DYNAMIC_DRAW,
-            );
 
             this.gl.enableVertexAttribArray(this.programManager.positionCoordsAttr);
             this.gl.vertexAttribPointer(this.programManager.positionCoordsAttr, 2, this.gl.FLOAT, false, 0, 0);
         }
 
-        this.modelMatrix = mat4.identity(this.modelMatrix);
+        // each polygon has its own vertices, so the buffer is uploaded on every draw
+        const length = this.updatePolygonVertices(renderData.vertices);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.polygonVertices, this.gl.DYNAMIC_DRAW, 0, length);
 
+        // vertices arrive already rotated
+        this.modelMatrix = mat4.identity(this.modelMatrix);
         mat4.translate(this.modelMatrix, this.modelMatrix, [renderData.position.x, renderData.position.y, 0]);
-        mat4.rotateZ(this.modelMatrix, this.modelMatrix, renderData.rotation ?? 0);
         setProjectionMatrix(this.projectionMatrix, this.gl, cameraData.zoom, cameraData.position);
 
         this.gl.uniformMatrix4fv(this.programManager.projectionMatrixUniform, false, this.projectionMatrix);
@@ -189,6 +188,29 @@ export class MaskRenderer implements Renderer {
         this.gl.uniform4f(this.programManager.solidColorUniform, r, g, b, a);
         this.gl.uniform1f(this.programManager.alphaUniform, renderData.opacity ?? 1);
 
-        this.gl.drawArrays(this.gl.TRIANGLE_FAN, 0, renderData.vertices.length + 1);
+        this.gl.drawArrays(
+            this.gl.TRIANGLE_FAN,
+            0,
+            renderData.vertices.length > 0 ? renderData.vertices.length + 2 : 0,
+        );
+    }
+
+    // center, vertices, and the first vertex again to close the fan
+    private updatePolygonVertices(vertices: Vector2[]): number {
+        if (vertices.length === 0) return 0;
+
+        const length = (vertices.length + 2) * 2;
+        if (this.polygonVertices.length < length) this.polygonVertices = new Float32Array(length);
+
+        this.polygonVertices[0] = 0;
+        this.polygonVertices[1] = 0;
+
+        for (let i = 0; i <= vertices.length; i++) {
+            const vertex = vertices[i % vertices.length];
+            this.polygonVertices[2 + i * 2] = vertex.x;
+            this.polygonVertices[3 + i * 2] = vertex.y;
+        }
+
+        return length;
     }
 }

@@ -6,11 +6,12 @@ export const mainCameraArchetype: Archetype = {
     components: [
         new Camera({
             layers: [
+                RENDER_LAYERS.Background,
                 RENDER_LAYERS.Foreground,
                 RENDER_LAYERS.Goblin,
                 RENDER_LAYERS.Ninja,
-                RENDER_LAYERS.Darkness,
                 RENDER_LAYERS.Overlayer,
+                RENDER_LAYERS.Darkness,
             ],
             zoom: 4,
             debug: true,
