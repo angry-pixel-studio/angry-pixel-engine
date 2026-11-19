@@ -52,13 +52,13 @@ export class MaskRendererSystem implements System {
                     ),
                 );
 
-                // translate vertices
-                if (transform.localRotation !== 0) {
+                // rotated here instead of in the renderer so culling gets the real bounds
+                if (maskRenderer._renderData.rotation !== 0) {
+                    const cos = Math.cos(maskRenderer._renderData.rotation);
+                    const sin = Math.sin(maskRenderer._renderData.rotation);
+
                     maskRenderer._renderData.vertices.forEach((vertex) =>
-                        vertex.set(
-                            vertex.x * Math.cos(transform.localRotation) - vertex.y * Math.sin(transform.localRotation),
-                            vertex.x * Math.sin(transform.localRotation) + vertex.y * Math.cos(transform.localRotation),
-                        ),
+                        vertex.set(vertex.x * cos - vertex.y * sin, vertex.x * sin + vertex.y * cos),
                     );
                 }
             }
