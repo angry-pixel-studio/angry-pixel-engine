@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.4.3] - 2026-11-19
+
+### Fixed
+
+#### Rendering
+
+-   A `MaskRenderer` with the `MaskShape.Polygon` shape draws the triangle between its last and first vertices. That slice of the polygon was missing.
+-   Consecutive polygon masks are drawn with their own vertices. A polygon mask drawn right after another one used the vertices of the first.
+-   A polygon mask on a rotated entity is rotated by the `Transform` rotation once. It was rotated twice.
+-   The culling of a polygon mask uses its vertices rotated by `MaskRenderer.rotation`. It used the vertices without that rotation, so a rotated polygon mask could be culled while visible.
+
+### Performance
+
+-   Polygon masks no longer allocate a new array per vertex when they are uploaded to the GPU.
+
 ## [2.4.2] - 2026-10-31
 
 ### Breaking changes
